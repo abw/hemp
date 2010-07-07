@@ -44,7 +44,7 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_hemp_test_OBJECTS = hemp_test.$(OBJEXT) memory.$(OBJEXT) \
-	debug.$(OBJEXT)
+	slab.$(OBJEXT) pool.$(OBJEXT) debug.$(OBJEXT) test.$(OBJEXT)
 hemp_test_OBJECTS = $(am_hemp_test_OBJECTS)
 hemp_test_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/include@am__isrc@
@@ -143,7 +143,14 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-hemp_test_SOURCES = hemp_test.c memory.c debug.c
+hemp_test_SOURCES = \
+    hemp_test.c \
+    memory.c \
+    slab.c \
+    pool.c \
+    debug.c \
+    test.c
+
 all: all-am
 
 .SUFFIXES:
@@ -213,6 +220,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pool.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/slab.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
