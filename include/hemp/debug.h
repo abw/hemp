@@ -7,6 +7,8 @@
 
 void    debug       (char *format, ...);
 void    debug_col   (char *col, char *format, ...);
+void    debug_on();
+void    debug_off();
 
 #define ANSI_RED        "\e[31m"
 #define ANSI_GREEN      "\e[32m"

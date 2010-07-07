@@ -1,24 +1,50 @@
 #include "hemp/debug.h"
 
+#ifdef DEBUG
+int debugging = 1;
+#else
+int debugging = 0;
+#endif
+
+
+void debug_on() {
+#ifdef DEBUG
+    debugging = 1;
+#endif
+}
+
+
+void debug_off() {
+#ifdef DEBUG
+    debugging = 0;
+#endif
+}
+
 
 void debug(char *format, ...)
 {
 #ifdef DEBUG
-    va_list args;
-    va_start(args, format);
-    vfprintf(stderr, format, args);
-    va_end(args);
-#endif /* DEBUG */
+    if (debugging) {
+        va_list args;
+        va_start(args, format);
+        vfprintf(stderr, format, args);
+        va_end(args);
+    }
+#endif
 }
+
 
 void debug_col(char *col, char *format, ...) 
 {
 #ifdef DEBUG
-   va_list args;
-   va_start(args, format);
-   fprintf(stderr, "%s", col);
-   vfprintf(stderr, format, args);
-   fprintf(stderr, ANSI_RESET);
-   va_end(args);
-#endif /* DEBUG */
+    if (debugging) {
+        va_list args;
+        va_start(args, format);
+        fprintf(stderr, "%s", col);
+        vfprintf(stderr, format, args);
+        fprintf(stderr, ANSI_RESET);
+        va_end(args);
+    }
+#endif
 }
+
