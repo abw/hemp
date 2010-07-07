@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "config.h"
 #include "hemp.h"
 
 void test_debug();

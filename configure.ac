@@ -20,5 +20,23 @@ AC_CONFIG_FILES([
 # Checks for library functions.
 AC_FUNC_VPRINTF
 
+
+CFLAGS="${CFLAGS=}"
+dnl this macro is used to get the arguments supplied
+dnl to the configure script (./configure --enable-debug)
+dnl Check if we have enable debug support.
+
+AC_MSG_CHECKING(whether to enable debugging)
+AC_ARG_ENABLE(
+    debug, [  --enable-debug=[no/yes] turn on debugging],, enable_debug=yes)
+if test "x$enable_debug" = "xyes"; then
+    CFLAGS="$CFLAGS -g -DDEBUG"
+    AC_MSG_RESULT(yes)
+else
+    CFLAGS="$CFLAGS -O3"
+    AC_MSG_RESULT(no)
+fi
+
+
 AC_OUTPUT
 

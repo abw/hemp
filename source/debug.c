@@ -1,10 +1,9 @@
 #include "hemp/debug.h"
 
-int debugging = DEBUG;
 
 void debug(char *format, ...)
 {
-#if DEBUG
+#ifdef DEBUG
     va_list args;
     va_start(args, format);
     vfprintf(stderr, format, args);
@@ -14,7 +13,7 @@ void debug(char *format, ...)
 
 void debug_col(char *col, char *format, ...) 
 {
-#if DEBUG
+#ifdef DEBUG
    va_list args;
    va_start(args, format);
    fprintf(stderr, "%s", col);

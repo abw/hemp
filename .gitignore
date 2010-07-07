@@ -1,0 +1,6 @@
+Makefile
+config.log
+config.status
+source/*.o
+source/.deps
+source/hemp_test
