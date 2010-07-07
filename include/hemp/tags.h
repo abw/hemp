@@ -2,6 +2,9 @@
 #define HEMP_TAGS_H
 
 #include "hemp/ptree.h"
+#include "hemp/element.h"
+
+#define HEMP_DEFAULT_TAGSET_SIZE 8
 
 typedef struct hemp_tag    *hemp_tag_t;
 typedef struct hemp_tagset *hemp_tagset_t;
@@ -22,6 +25,7 @@ struct hemp_tag {
 };
 
 struct hemp_tagset {
+   hemp_etype_t     text_element;
    hemp_ptree_t     inline_tags;
    hemp_ptree_t     outline_tags;
 };

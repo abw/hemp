@@ -10,6 +10,7 @@ void test_pool();
 void test_ptree();
 void test_element();
 void test_tags();
+void test_scanner();
 
 int
 main(int argc, char **argv, char **env)
@@ -20,9 +21,10 @@ main(int argc, char **argv, char **env)
     test_slab();
     test_pool();
     test_ptree();
-*/
     test_element();
     test_tags();
+*/
+    test_scanner();
 
     return 0;
 }
@@ -159,9 +161,7 @@ void test_element() {
 }
 
 
-void test_tags() {
-    debug("test_tags()\n");
-
+hemp_tagset_t make_tagset() {
     hemp_tagset_t tagset = hemp_tagset_init();
     
     hemp_tagset_add_inline_tag(tagset, HempTagInline);
@@ -169,10 +169,28 @@ void test_tags() {
     hemp_tagset_add_inline_tag(tagset, HempTagControl);
     hemp_tagset_add_inline_tag(tagset, HempTagVariable);
     hemp_tagset_add_inline_tag(tagset, HempTagEmbed);
-
     hemp_tagset_add_outline_tag(tagset, HempTagOutline);
+    
+    return tagset;
+}
 
+    
+void test_tags() {
+    debug("test_tags()\n");
+    hemp_tagset_t tagset = make_tagset();
     hemp_tagset_dump(tagset);
+    hemp_tagset_free(tagset);
+}
+
+
+void test_scanner() {
+    debug("test_scanner()\n");
+    hemp_tagset_t tagset = make_tagset();
+    hemp_tagset_dump(tagset);
+
+    hemp_text_t text = (hemp_text_t) "The [#cat#] %sat\n%on $the mat\nand [%shat%]\nand it was [? phat ?] Oh ${my}!\n[foo] and [% bar %] then [? baz ?] but not [! wibble !] or [frusset pouch] The End";
+    hemp_scan_text(text, tagset);
+
     hemp_tagset_free(tagset);
 }
 

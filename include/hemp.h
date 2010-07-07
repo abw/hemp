@@ -11,7 +11,9 @@ extern "C" {
 #include "hemp/pool.h"
 #include "hemp/ptree.h"
 #include "hemp/element.h"
+#include "hemp/elements.h"
 #include "hemp/tags.h"
+#include "hemp/scanner.h"
 #include "hemp/debug.h"
 #include "hemp/test.h"
 

@@ -1,7 +1,6 @@
 #include "hemp/tags.h"
+#include "hemp/elements.h"
 #include "hemp/debug.h"
-
-#define HEMP_DEFAULT_TAGSET_SIZE 8
 
 void hemp_scan_tag();                  // TODO: args
 
@@ -11,6 +10,7 @@ hemp_tagset_init() {
     hemp_tagset_t tagset;
 
     if ((tagset = (hemp_tagset_t) hemp_mem_init(sizeof(struct hemp_tagset)))) {
+        tagset->text_element = HempElementText;
         tagset->inline_tags  = hemp_ptree_init(HEMP_DEFAULT_TAGSET_SIZE);
         tagset->outline_tags = hemp_ptree_init(HEMP_DEFAULT_TAGSET_SIZE);
         
@@ -54,8 +54,8 @@ hemp_tagset_add_inline_tag(
 ) {
     return hemp_ptree_insert(
         tagset->inline_tags, 
-        tag->start, 
-        (hemp_ptr_t) tag
+        (hemp_text_t) tag->start, 
+        (hemp_ptr_t)  tag
     );
 }
 
@@ -67,8 +67,8 @@ hemp_tagset_add_outline_tag(
 ) {
     return hemp_ptree_insert(
         tagset->outline_tags, 
-        tag->start, 
-        (hemp_ptr_t) tag
+        (hemp_text_t) tag->start, 
+        (hemp_ptr_t)  tag
     );
 }
 

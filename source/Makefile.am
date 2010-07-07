@@ -6,6 +6,8 @@ hemp_test_SOURCES = \
     pool.c \
     ptree.c \
     element.c \
+    elements.c \
     tags.c \
+    scanner.c \
     debug.c \
     test.c
