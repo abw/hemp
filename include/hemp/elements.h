@@ -37,6 +37,9 @@ void hemp_elements_free(hemp_elements_t elements);
 void hemp_elements_dump(hemp_elements_t elements);
 
 
+// TODO: these should be moved to elements/core
+
+
 extern hemp_etype_t HempElementBase;
 extern hemp_etype_t HempElementSpace;
 extern hemp_etype_t HempElementText;

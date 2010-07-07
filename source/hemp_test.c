@@ -188,7 +188,7 @@ void test_scanner() {
     hemp_tagset_t tagset = make_tagset();
     hemp_tagset_dump(tagset);
 
-    hemp_text_t text = (hemp_text_t) "The [#cat#] %sat\n%on $the mat\nand [%shat%]\nand it was [? phat ?] Oh ${my}!\n[foo] and [% bar %] then [? baz ?] but not [! wibble !] or [frusset pouch] The End";
+    hemp_text_t text = (hemp_text_t) "The [#cat#] %sat\n%%on $the mat\n%and [%shat%]\nand it was [? phat ?] Oh ${my}!\n[foo] and [% bar %] then [? baz ?] but not [! wibble !] or [frusset pouch] The End";
     hemp_scan_text(text, tagset);
 
     hemp_tagset_free(tagset);

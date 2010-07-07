@@ -102,6 +102,8 @@ hemp_elements_dump(
     
 
 
+// TODO: these should be moved to elements/core
+
 
 
 hemp_text_t hemp_element_text_text(hemp_element_t element);
