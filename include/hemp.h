@@ -7,7 +7,11 @@ extern "C" {
 
 #include "hemp/types.h"
 #include "hemp/memory.h"
+#include "hemp/slab.h"
+#include "hemp/pool.h"
 #include "hemp/debug.h"
+#include "hemp/test.h"
+
 /*
 #include "attic/memory.h"
 #include "attic/element.h"
