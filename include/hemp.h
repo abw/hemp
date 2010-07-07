@@ -9,14 +9,13 @@ extern "C" {
 #include "hemp/memory.h"
 #include "hemp/slab.h"
 #include "hemp/pool.h"
+#include "hemp/ptree.h"
+#include "hemp/element.h"
+#include "hemp/tags.h"
 #include "hemp/debug.h"
 #include "hemp/test.h"
 
 /*
-#include "attic/memory.h"
-#include "attic/element.h"
-#include "attic/ptree.h"
-#include "attic/tags.h"
 #include "attic/scanner.h"
 */
 

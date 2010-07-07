@@ -7,6 +7,9 @@ void test_debug();
 void test_memory();
 void test_slab();
 void test_pool();
+void test_ptree();
+void test_element();
+void test_tags();
 
 int
 main(int argc, char **argv, char **env)
@@ -15,8 +18,11 @@ main(int argc, char **argv, char **env)
     test_debug();
     test_memory();
     test_slab();
-*/
     test_pool();
+    test_ptree();
+*/
+    test_element();
+    test_tags();
 
     return 0;
 }
@@ -60,6 +66,7 @@ void test_slab() {
     }
     pass("released slab");
 }
+
 
 void test_pool() {
     hemp_pool_t pool = hemp_pool_init(4, 2);
@@ -107,4 +114,65 @@ void test_pool() {
     pass("released pool");
 }
 
+
+void test_ptree() {
+    hemp_ptree_t ptree;
+    hemp_pnode_t pnode;
+    int i;
+
+    debug("test_ptree()\n");
+    
+    ptree = hemp_ptree_init(8);
+
+    pass("created ptree at %p", ptree);
+
+    hemp_ptree_insert(ptree, "for", "tt.command.for");
+    hemp_ptree_insert(ptree, "foreach", "tt.command.foreach");
+    hemp_ptree_insert(ptree, "fill", "tt.command.fill");
+    hemp_ptree_insert(ptree, "form", "tt.command.form");
+    hemp_ptree_insert(ptree, "bar", "tt.example.bar");
+    hemp_ptree_insert(ptree, "baz", "tt.example.baz");
+    hemp_ptree_insert(ptree, "happy", "tt.silly.happy");
+    hemp_ptree_insert(ptree, "hippy", "tt.silly.hippy");
+    hemp_ptree_insert(ptree, "brazen", "tt.silly.brazen");
+    hemp_ptree_insert(ptree, "hiphiphooray", "tt.silly.hiphip");
+    
+    hemp_ptree_dump(ptree);
+    
+    hemp_ptree_free(ptree);
+//    for (i = 0; i < 10; i++) {
+//        pnode = attic_ptree_node(ptree);
+//        debug("%d: %p\n", i, pnode);
+//    }
+    
+}
+
+
+void test_element() {
+    debug("test_element()\n");
+    hemp_element_t element = hemp_element_init();
+    element 
+        ? pass("created element at %p", element)
+        : fail("could not created element");
+    hemp_element_free(element);
+    pass("freed element");
+}
+
+
+void test_tags() {
+    debug("test_tags()\n");
+
+    hemp_tagset_t tagset = hemp_tagset_init();
+    
+    hemp_tagset_add_inline_tag(tagset, HempTagInline);
+    hemp_tagset_add_inline_tag(tagset, HempTagComment);
+    hemp_tagset_add_inline_tag(tagset, HempTagControl);
+    hemp_tagset_add_inline_tag(tagset, HempTagVariable);
+    hemp_tagset_add_inline_tag(tagset, HempTagEmbed);
+
+    hemp_tagset_add_outline_tag(tagset, HempTagOutline);
+
+    hemp_tagset_dump(tagset);
+    hemp_tagset_free(tagset);
+}
 

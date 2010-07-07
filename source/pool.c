@@ -45,7 +45,7 @@ hemp_pool_take(hemp_pool_t pool) {
     if (pool->used == pool->capacity)
         hemp_pool_grow(pool);
 
-    debug_yellow("Returning pool item %d\n", pool->used);
+    // debug_cyan("Returning pool item %d at %p\n", pool->used, pool->next);
 
     value = pool->next;
     pool->next += pool->size;

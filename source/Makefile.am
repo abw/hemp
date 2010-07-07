@@ -4,5 +4,8 @@ hemp_test_SOURCES = \
     memory.c \
     slab.c \
     pool.c \
+    ptree.c \
+    element.c \
+    tags.c \
     debug.c \
     test.c

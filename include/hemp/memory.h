@@ -12,9 +12,9 @@
  * if available, or use our own version if not.
  */
 #ifdef HAVE_MEMMOVE
-#  define hemp_mem_copy(src, dest, len) memmove(dest, src, len)
+#   define hemp_mem_copy(src, dest, len) memmove(dest, src, len)
 #elif HAVE_BCOPY
-#  define hemp_mem_copy(src, dest, len) bcopy(src, dest, len)
+#   define hemp_mem_copy(src, dest, len) bcopy(src, dest, len)
 #else
 hemp_ptr_t hemp_mem_copy(
     hemp_mem_t  src,
