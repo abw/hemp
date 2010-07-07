@@ -11,7 +11,7 @@ AC_CHECK_HEADERS([stdlib.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
-AC_CONFIG_HEADERS([include/hemp/config.h])
+AC_CONFIG_HEADERS([include/config.h])
 AC_CONFIG_FILES([
     Makefile
     source/Makefile
