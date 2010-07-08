@@ -58,7 +58,7 @@ hemp_template_compile(
         debug_green("scanned OK\n");
     }
     else {
-        debug_red("did not scan\n");
+        debug_red("scan failed\n");
     }
 }
 

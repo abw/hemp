@@ -6,12 +6,9 @@
 void test_debug();
 void test_memory();
 void test_slab();
-void test_pool();
 void test_ptree();
-void test_element();
 //void test_tags();
 //void test_scanner();
-void test_sources();
 
 int
 main(int argc, char **argv, char **env)
@@ -20,14 +17,10 @@ main(int argc, char **argv, char **env)
     test_debug();
     test_memory();
     test_slab();
-    test_pool();
     test_ptree();
-    test_element();
     test_tags();
     test_scanner();
 */
-
-    test_sources();
 
     return 0;
 }
@@ -73,53 +66,6 @@ void test_slab() {
 }
 
 
-void test_pool() {
-    hemp_pool_t pool = hemp_pool_init(4, 2);
-    hemp_ptr_t item;
-    assert(pool);
-
-    pass("created pool");
-
-    pool->capacity == 2
-        ? pass("pool capacity is %d", 2)
-        : fail("pool capacity is not %d", 2);
-
-    (item = hemp_pool_take(pool))
-        ? pass("took a pool item at %p", item)
-        : fail("could not take a pool item");
-
-    (item = hemp_pool_take(pool))
-        ? pass("took another pool item at %p", item)
-        : fail("could not take another pool item");
-
-    pool->capacity == 2
-        ? pass("pool capacity is still %d", 2)
-        : fail("pool capacity is no longer %d", 2);
-
-    pool->used == 2
-        ? pass("pool has used %d items", 2)
-        : fail("pool has not used %d items", 2);
-
-    (item = hemp_pool_take(pool))
-        ? pass("took a third pool item at %p", item)
-        : fail("could not take a third pool item");
-
-    pool->capacity == 4
-        ? pass("pool capacity has grown to %d", 4)
-        : fail("pool capacity has not grown to %d", 4);
-
-    hemp_pool_grow(pool);
-
-    pool->capacity == 8
-        ? pass("pool capacity is %d", 8)
-        : fail("pool capacity is not %d", 8);
-
-    hemp_pool_free(pool);
-
-    pass("released pool");
-}
-
-
 void test_ptree() {
     hemp_ptree_t ptree;
     hemp_pnode_t pnode;
@@ -153,16 +99,6 @@ void test_ptree() {
 }
 
 
-void test_element() {
-    debug("test_element()\n");
-    hemp_element_t element = hemp_element_init();
-    element 
-        ? pass("created element at %p", element)
-        : fail("could not created element");
-    hemp_element_free(element);
-    pass("freed element");
-}
-
 
 
 //void test_tags() {
@@ -189,39 +125,3 @@ void test_scanner() {
 }
 */
 
-void test_sources() {
-    debug("test_sources()\n");
-    hemp_scheme_t scheme;
-    hemp_source_t source;
-    hemp_text_t   text;
-    
-    (source = hemp_source(HEMP_TEXT, "source/text.html"))
-        ? pass("created text source")
-        : fail("could not create text source");
-    
-    (text = hemp_source_read(source))
-        ? pass("read text: %s", text)
-        : fail("could not read text");
-
-    /* second time around the text should be cached in source->text */
-    (text = hemp_source_read(source))
-        ? pass("read text again: %s", text)
-        : fail("could not read text again");
-    
-    hemp_source_free(source);
-
-
-    (source = hemp_source(HEMP_FILE, "source/file.html"))
-        ? pass("created file source")
-        : fail("could not create file source");
-    
-    (text = hemp_source_read(source))
-        ? pass("read file: %s", text)
-        : fail("could not read file");
-
-    (text = hemp_source_read(source))
-        ? pass("read file again: %s", text)
-        : fail("could not read file again");
-
-    hemp_source_free(source);
-}

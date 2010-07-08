@@ -31,8 +31,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = hash$(EXEEXT) hemp$(EXEEXT) dialect$(EXEEXT) \
-	template$(EXEEXT)
+check_PROGRAMS = dialect$(EXEEXT) element$(EXEEXT) hash$(EXEEXT) \
+	hemp$(EXEEXT) pool$(EXEEXT) sources$(EXEEXT) template$(EXEEXT)
 subdir = tests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -48,12 +48,21 @@ CONFIG_CLEAN_FILES =
 am_dialect_OBJECTS = dialect.$(OBJEXT)
 dialect_OBJECTS = $(am_dialect_OBJECTS)
 dialect_DEPENDENCIES = ../source/libhemp.a
+am_element_OBJECTS = element.$(OBJEXT)
+element_OBJECTS = $(am_element_OBJECTS)
+element_DEPENDENCIES = ../source/libhemp.a
 am_hash_OBJECTS = hash.$(OBJEXT)
 hash_OBJECTS = $(am_hash_OBJECTS)
 hash_DEPENDENCIES = ../source/libhemp.a
 am_hemp_OBJECTS = hemp.$(OBJEXT)
 hemp_OBJECTS = $(am_hemp_OBJECTS)
 hemp_DEPENDENCIES = ../source/libhemp.a
+am_pool_OBJECTS = pool.$(OBJEXT)
+pool_OBJECTS = $(am_pool_OBJECTS)
+pool_DEPENDENCIES = ../source/libhemp.a
+am_sources_OBJECTS = sources.$(OBJEXT)
+sources_OBJECTS = $(am_sources_OBJECTS)
+sources_DEPENDENCIES = ../source/libhemp.a
 am_template_OBJECTS = template.$(OBJEXT)
 template_OBJECTS = $(am_template_OBJECTS)
 template_DEPENDENCIES = ../source/libhemp.a
@@ -69,9 +78,11 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(dialect_SOURCES) $(hash_SOURCES) $(hemp_SOURCES) \
+SOURCES = $(dialect_SOURCES) $(element_SOURCES) $(hash_SOURCES) \
+	$(hemp_SOURCES) $(pool_SOURCES) $(sources_SOURCES) \
 	$(template_SOURCES)
-DIST_SOURCES = $(dialect_SOURCES) $(hash_SOURCES) $(hemp_SOURCES) \
+DIST_SOURCES = $(dialect_SOURCES) $(element_SOURCES) $(hash_SOURCES) \
+	$(hemp_SOURCES) $(pool_SOURCES) $(sources_SOURCES) \
 	$(template_SOURCES)
 ETAGS = etags
 CTAGS = ctags
@@ -187,12 +198,18 @@ top_srcdir = @top_srcdir@
 TESTS = $(check_PROGRAMS)
 dialect_SOURCES = dialect.c
 dialect_LDADD = ../source/libhemp.a
-template_SOURCES = template.c
-template_LDADD = ../source/libhemp.a
+element_SOURCES = element.c
+element_LDADD = ../source/libhemp.a
 hash_SOURCES = hash.c
 hash_LDADD = ../source/libhemp.a
 hemp_SOURCES = hemp.c
 hemp_LDADD = ../source/libhemp.a
+pool_SOURCES = pool.c
+pool_LDADD = ../source/libhemp.a
+sources_SOURCES = sources.c
+sources_LDADD = ../source/libhemp.a
+template_SOURCES = template.c
+template_LDADD = ../source/libhemp.a
 all: all-am
 
 .SUFFIXES:
@@ -236,12 +253,21 @@ clean-checkPROGRAMS:
 dialect$(EXEEXT): $(dialect_OBJECTS) $(dialect_DEPENDENCIES) 
 	@rm -f dialect$(EXEEXT)
 	$(LINK) $(dialect_OBJECTS) $(dialect_LDADD) $(LIBS)
+element$(EXEEXT): $(element_OBJECTS) $(element_DEPENDENCIES) 
+	@rm -f element$(EXEEXT)
+	$(LINK) $(element_OBJECTS) $(element_LDADD) $(LIBS)
 hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES) 
 	@rm -f hash$(EXEEXT)
 	$(LINK) $(hash_OBJECTS) $(hash_LDADD) $(LIBS)
 hemp$(EXEEXT): $(hemp_OBJECTS) $(hemp_DEPENDENCIES) 
 	@rm -f hemp$(EXEEXT)
 	$(LINK) $(hemp_OBJECTS) $(hemp_LDADD) $(LIBS)
+pool$(EXEEXT): $(pool_OBJECTS) $(pool_DEPENDENCIES) 
+	@rm -f pool$(EXEEXT)
+	$(LINK) $(pool_OBJECTS) $(pool_LDADD) $(LIBS)
+sources$(EXEEXT): $(sources_OBJECTS) $(sources_DEPENDENCIES) 
+	@rm -f sources$(EXEEXT)
+	$(LINK) $(sources_OBJECTS) $(sources_LDADD) $(LIBS)
 template$(EXEEXT): $(template_OBJECTS) $(template_DEPENDENCIES) 
 	@rm -f template$(EXEEXT)
 	$(LINK) $(template_OBJECTS) $(template_LDADD) $(LIBS)
@@ -253,8 +279,11 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialect.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/element.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pool.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Po@am__quote@
 
 .c.o:

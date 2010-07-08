@@ -10,7 +10,10 @@ source/hemp
 source/hemp_test
 tests/*.o
 tests/dialect
+tests/element
 tests/hash
 tests/hemp
+tests/pool
+tests/sources
 tests/template
 .deps
