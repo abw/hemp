@@ -1,6 +1,9 @@
 /* include/config.h.  Generated from config.h.in by configure.  */
 /* include/config.h.in.  Generated from configure.ac by autoheader.  */
 
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#define HAVE_DLFCN_H 1
+
 /* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
 /* #undef HAVE_DOPRNT */
 
@@ -9,6 +12,9 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
+
+/* Define to 1 if you have the `memset,strdup' function. */
+/* #undef HAVE_MEMSET_STRDUP */
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
@@ -33,6 +39,10 @@
 
 /* Define to 1 if you have the `vprintf' function. */
 #define HAVE_VPRINTF 1
+
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#define LT_OBJDIR ".libs/"
 
 /* Name of package */
 #define PACKAGE "hemp"

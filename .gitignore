@@ -1,6 +1,11 @@
 Makefile
 config.log
 config.status
+source/*.a
 source/*.o
+source/*.la
+source/*.lo
 source/.deps
+source/hemp
 source/hemp_test
+tests/*.o
