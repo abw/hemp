@@ -59,9 +59,10 @@ ARFLAGS = cru
 libhemp_a_AR = $(AR) $(ARFLAGS)
 libhemp_a_LIBADD =
 am_libhemp_a_OBJECTS = memory.$(OBJEXT) slab.$(OBJEXT) pool.$(OBJEXT) \
-	ptree.$(OBJEXT) element.$(OBJEXT) elements.$(OBJEXT) \
-	tags.$(OBJEXT) sources.$(OBJEXT) scanner.$(OBJEXT) \
-	template.$(OBJEXT) debug.$(OBJEXT) test.$(OBJEXT)
+	hash.$(OBJEXT) ptree.$(OBJEXT) element.$(OBJEXT) \
+	elements.$(OBJEXT) tags.$(OBJEXT) sources.$(OBJEXT) \
+	dialect.$(OBJEXT) template.$(OBJEXT) scanner.$(OBJEXT) \
+	debug.$(OBJEXT) test.$(OBJEXT)
 libhemp_a_OBJECTS = $(am_libhemp_a_OBJECTS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
@@ -201,13 +202,15 @@ lib_LIBRARIES = libhemp.a
 libhemp_a_SOURCES = memory.c   \
                       slab.c     \
                       pool.c     \
+                      hash.c     \
                       ptree.c    \
                       element.c  \
                       elements.c \
                       tags.c     \
                       sources.c  \
-                      scanner.c  \
+                      dialect.c  \
                       template.c \
+                      scanner.c  \
                       debug.c    \
                       test.c
 
@@ -323,8 +326,10 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialect.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/element.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/elements.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory.Po@am__quote@

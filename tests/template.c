@@ -12,10 +12,12 @@ main(int argc, char **argv, char **env)
 
 
 void test_template() {
-    hemp_template_t tmpl = hemp_template_init(HEMP_TEXT, "hello world!");
+    hemp_template_t tmpl = hemp_template_init(HEMP_TEXT, "hello world!", NULL);
     
     tmpl 
         ? pass("created template")
         : fail("could not create template");
+    
+    hemp_template_compile(tmpl);
 
 }

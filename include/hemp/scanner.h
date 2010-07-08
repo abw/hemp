@@ -10,7 +10,7 @@
 #define LF 10
 
 void hemp_scan_text(
-    hemp_text_t     text, 
+    hemp_text_t     text,
     hemp_tagset_t   tags
 );
 

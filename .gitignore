@@ -10,4 +10,5 @@ source/hemp
 source/hemp_test
 tests/*.o
 tests/template
+tests/hash
 .deps

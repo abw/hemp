@@ -2,13 +2,15 @@ lib_LIBRARIES       = libhemp.a
 libhemp_a_SOURCES   = memory.c   \
                       slab.c     \
                       pool.c     \
+                      hash.c     \
                       ptree.c    \
                       element.c  \
                       elements.c \
                       tags.c     \
                       sources.c  \
-                      scanner.c  \
+                      dialect.c  \
                       template.c \
+                      scanner.c  \
                       debug.c    \
                       test.c
 

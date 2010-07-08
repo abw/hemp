@@ -8,7 +8,7 @@
 
 typedef struct hemp_tag    *hemp_tag_t;
 typedef struct hemp_tagset *hemp_tagset_t;
-typedef void (* hemp_scan_fn)();          // TODO: args
+typedef void (* hemp_tag_scan_fn)();          // TODO: args
 
 extern hemp_tag_t HempTagInline;
 extern hemp_tag_t HempTagOutline;
@@ -21,7 +21,7 @@ struct hemp_tag {
    hemp_ident_t     name;
    hemp_ident_t     start;
    hemp_ident_t     end;
-   hemp_scan_fn     scan;
+   hemp_tag_scan_fn scan;
 };
 
 struct hemp_tagset {

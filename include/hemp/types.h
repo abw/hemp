@@ -17,4 +17,6 @@ typedef unsigned long         hemp_pos_t;       /* position in a string     */
 //typedef time_t                hemp_time_t;    
   /* seconds since epoch      */
 
+typedef struct hemp_template * hemp_template_t;
+
 #endif /* HEMP_TYPES_H */
