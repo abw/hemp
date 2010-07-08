@@ -14,9 +14,8 @@ typedef long                  hemp_flags_t;     /* bitmask                  */
 typedef long                  hemp_offset_t;    /* -ve/+ve offset into list */
 typedef unsigned long         hemp_size_t;      /* +ve size of list         */
 typedef unsigned long         hemp_pos_t;       /* position in a string     */
-//typedef time_t                hemp_time_t;    
-  /* seconds since epoch      */
 
+// this needs to be here to avoid the chicken and egg between dialect.h and template.h
 typedef struct hemp_template * hemp_template_t;
 
 #endif /* HEMP_TYPES_H */

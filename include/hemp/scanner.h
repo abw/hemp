@@ -3,22 +3,15 @@
 
 #include "hemp/element.h"
 #include "hemp/elements.h"
+#include "hemp/ptree.h"
 #include "hemp/tags.h"
+#include "hemp/template.h"
 #include "hemp/debug.h"
 
 #define CR 13
 #define LF 10
 
-void hemp_scan_text(
-    hemp_text_t     text,
-    hemp_tagset_t   tags
-);
-
-/*
-ATTIC_TAG attic_scan_text_pnode(
-    ATTIC_PNODE pnode, 
-    ATTIC_TEXT *srcptr
-);
-*/
+hemp_bool_t hemp_scan_text(hemp_template_t);
+hemp_tag_t  hemp_scan_tag_start(hemp_pnode_t, hemp_text_t *);
 
 #endif /* HEMP_SCANNER_H */

@@ -9,6 +9,8 @@ source/.deps
 source/hemp
 source/hemp_test
 tests/*.o
-tests/template
+tests/dialect
 tests/hash
+tests/hemp
+tests/template
 .deps

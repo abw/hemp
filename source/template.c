@@ -1,4 +1,5 @@
 #include "hemp/template.h"
+#include "hemp/dialect.h"
 #include "hemp/debug.h"
 
 
@@ -11,7 +12,7 @@ hemp_template_init(
     hemp_template_t tmpl;
     
     if (! dialect)
-        dialect = HempDialectTT3;
+        dialect = hemp_dialect_tt3();
 
     if ((tmpl = (hemp_template_t) hemp_mem_init(sizeof(struct hemp_template)))) {
         tmpl->source   = hemp_source(scheme, source);

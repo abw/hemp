@@ -5,18 +5,14 @@
 #include "hemp/scanner.h"
 
 
-hemp_tag_t
-hemp_scan_tag_start(
-    hemp_pnode_t pnode, 
-    hemp_text_t  *src
-);
 
-
-void hemp_scan_text(
-    hemp_text_t     text, 
-    hemp_tagset_t   tagset
+hemp_bool_t
+hemp_scan_text(
+    hemp_template_t tmpl
 ) {
-    hemp_text_t     src      = text,
+    hemp_tagset_t   tagset   = tmpl->dialect->tagset;
+    hemp_text_t     text     = hemp_source_read(tmpl->source),
+                    src      = text,
                     from     = text,
                     cmptr, 
                     tag_pos;
@@ -26,7 +22,7 @@ void hemp_scan_text(
     hemp_pnode_t    *inhead  = tagset->inline_tags->head,
                     *outhead = tagset->outline_tags->head,
                     pnode;
-    hemp_elements_t elements = hemp_elements_init(0);
+    hemp_elements_t elements = tmpl->elements;
 
     debug_magenta("-- source ---\n%s\n------------\n", text);
     
@@ -114,7 +110,9 @@ void hemp_scan_text(
     
     hemp_elements_eof(elements, src, pos);
     hemp_elements_dump(elements);
-    hemp_elements_free(elements);
+//  hemp_elements_free(elements);
+    
+    return 1;
 }
 
 
@@ -173,3 +171,4 @@ hemp_scan_tag_start(
 
     return tag;
 }
+

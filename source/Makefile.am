@@ -12,6 +12,7 @@ libhemp_a_SOURCES   = memory.c   \
                       template.c \
                       scanner.c  \
                       debug.c    \
+                      hemp_obj.c \
                       test.c
 
 bin_PROGRAMS        = hemp hemp_test

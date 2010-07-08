@@ -62,7 +62,7 @@ am_libhemp_a_OBJECTS = memory.$(OBJEXT) slab.$(OBJEXT) pool.$(OBJEXT) \
 	hash.$(OBJEXT) ptree.$(OBJEXT) element.$(OBJEXT) \
 	elements.$(OBJEXT) tags.$(OBJEXT) sources.$(OBJEXT) \
 	dialect.$(OBJEXT) template.$(OBJEXT) scanner.$(OBJEXT) \
-	debug.$(OBJEXT) test.$(OBJEXT)
+	debug.$(OBJEXT) hemp_obj.$(OBJEXT) test.$(OBJEXT)
 libhemp_a_OBJECTS = $(am_libhemp_a_OBJECTS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
@@ -212,6 +212,7 @@ libhemp_a_SOURCES = memory.c   \
                       template.c \
                       scanner.c  \
                       debug.c    \
+                      hemp_obj.c \
                       test.c
 
 hemp_SOURCES = hemp.c
@@ -331,6 +332,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/elements.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp_obj.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pool.Po@am__quote@

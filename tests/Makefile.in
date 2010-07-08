@@ -31,7 +31,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = template$(EXEEXT) hash$(EXEEXT)
+check_PROGRAMS = hash$(EXEEXT) hemp$(EXEEXT) dialect$(EXEEXT) \
+	template$(EXEEXT)
 subdir = tests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -44,9 +45,15 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES =
+am_dialect_OBJECTS = dialect.$(OBJEXT)
+dialect_OBJECTS = $(am_dialect_OBJECTS)
+dialect_DEPENDENCIES = ../source/libhemp.a
 am_hash_OBJECTS = hash.$(OBJEXT)
 hash_OBJECTS = $(am_hash_OBJECTS)
 hash_DEPENDENCIES = ../source/libhemp.a
+am_hemp_OBJECTS = hemp.$(OBJEXT)
+hemp_OBJECTS = $(am_hemp_OBJECTS)
+hemp_DEPENDENCIES = ../source/libhemp.a
 am_template_OBJECTS = template.$(OBJEXT)
 template_OBJECTS = $(am_template_OBJECTS)
 template_DEPENDENCIES = ../source/libhemp.a
@@ -62,8 +69,10 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(hash_SOURCES) $(template_SOURCES)
-DIST_SOURCES = $(hash_SOURCES) $(template_SOURCES)
+SOURCES = $(dialect_SOURCES) $(hash_SOURCES) $(hemp_SOURCES) \
+	$(template_SOURCES)
+DIST_SOURCES = $(dialect_SOURCES) $(hash_SOURCES) $(hemp_SOURCES) \
+	$(template_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -176,10 +185,14 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 TESTS = $(check_PROGRAMS)
+dialect_SOURCES = dialect.c
+dialect_LDADD = ../source/libhemp.a
 template_SOURCES = template.c
 template_LDADD = ../source/libhemp.a
 hash_SOURCES = hash.c
 hash_LDADD = ../source/libhemp.a
+hemp_SOURCES = hemp.c
+hemp_LDADD = ../source/libhemp.a
 all: all-am
 
 .SUFFIXES:
@@ -220,9 +233,15 @@ clean-checkPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
+dialect$(EXEEXT): $(dialect_OBJECTS) $(dialect_DEPENDENCIES) 
+	@rm -f dialect$(EXEEXT)
+	$(LINK) $(dialect_OBJECTS) $(dialect_LDADD) $(LIBS)
 hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES) 
 	@rm -f hash$(EXEEXT)
 	$(LINK) $(hash_OBJECTS) $(hash_LDADD) $(LIBS)
+hemp$(EXEEXT): $(hemp_OBJECTS) $(hemp_DEPENDENCIES) 
+	@rm -f hemp$(EXEEXT)
+	$(LINK) $(hemp_OBJECTS) $(hemp_LDADD) $(LIBS)
 template$(EXEEXT): $(template_OBJECTS) $(template_DEPENDENCIES) 
 	@rm -f template$(EXEEXT)
 	$(LINK) $(template_OBJECTS) $(template_LDADD) $(LIBS)
@@ -233,7 +252,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialect.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Po@am__quote@
 
 .c.o:

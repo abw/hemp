@@ -7,9 +7,10 @@
 int
 main(int argc, char **argv, char **env)
 {
-    char *a = hemp_mem_init(100);
-    sprintf(a, "Hello %s!\n", "World");
-    debug_green(a);
+    hemp_t hemp = hemp_init();
     printf("hemp >\n");
+    hemp_free(hemp);
     return 0;
 }
+
+
