@@ -3,6 +3,7 @@ AC_INIT([hemp], [0.01], [make@gnu.org])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AUTOMAKE_OPTIONS = color-tests
 
 AC_PROG_CC
 AC_PROG_LIBTOOL

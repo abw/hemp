@@ -1,4 +1,5 @@
-#include "hemp/template.h"
+#include "hemp.h"
+#include "hemp/debug.h"
 
 
 hemp_template_t 

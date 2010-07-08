@@ -46,7 +46,7 @@ CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES =
 am_template_OBJECTS = template.$(OBJEXT)
 template_OBJECTS = $(am_template_OBJECTS)
-template_DEPENDENCIES = $(srcdir)/libhemp.la
+template_DEPENDENCIES = ../source/libhemp.a
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/include@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -174,7 +174,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 TESTS = $(check_PROGRAMS)
 template_SOURCES = template.c
-template_LDADD = $(srcdir)/libhemp.la
+template_LDADD = ../source/libhemp.a
 all: all-am
 
 .SUFFIXES:
