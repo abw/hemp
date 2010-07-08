@@ -15,12 +15,9 @@ extern "C" {
 #include "hemp/tags.h"
 #include "hemp/sources.h"
 #include "hemp/scanner.h"
+#include "hemp/template.h"
 #include "hemp/debug.h"
 #include "hemp/test.h"
-
-/*
-#include "attic/scanner.h"
-*/
 
 #if defined(__cplusplus)
 }  /* extern "C" { */

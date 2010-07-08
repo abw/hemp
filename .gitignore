@@ -9,3 +9,4 @@ source/.deps
 source/hemp
 source/hemp_test
 tests/*.o
+.deps

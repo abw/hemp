@@ -31,7 +31,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = test1$(EXEEXT)
+check_PROGRAMS = template$(EXEEXT)
 subdir = tests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -44,9 +44,9 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES =
-am_test1_OBJECTS = test1.$(OBJEXT)
-test1_OBJECTS = $(am_test1_OBJECTS)
-test1_LDADD = $(LDADD)
+am_template_OBJECTS = template.$(OBJEXT)
+template_OBJECTS = $(am_template_OBJECTS)
+template_DEPENDENCIES = $(srcdir)/libhemp.la
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/include@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -59,8 +59,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(test1_SOURCES)
-DIST_SOURCES = $(test1_SOURCES)
+SOURCES = $(template_SOURCES)
+DIST_SOURCES = $(template_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -173,7 +173,8 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 TESTS = $(check_PROGRAMS)
-test1_SOURCES = test1.c
+template_SOURCES = template.c
+template_LDADD = $(srcdir)/libhemp.la
 all: all-am
 
 .SUFFIXES:
@@ -214,9 +215,9 @@ clean-checkPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-test1$(EXEEXT): $(test1_OBJECTS) $(test1_DEPENDENCIES) 
-	@rm -f test1$(EXEEXT)
-	$(LINK) $(test1_OBJECTS) $(test1_LDADD) $(LIBS)
+template$(EXEEXT): $(template_OBJECTS) $(template_DEPENDENCIES) 
+	@rm -f template$(EXEEXT)
+	$(LINK) $(template_OBJECTS) $(template_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -224,7 +225,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test1.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

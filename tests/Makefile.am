@@ -1,6 +1,7 @@
-check_PROGRAMS = test1
+check_PROGRAMS  = template
 
 TESTS = $(check_PROGRAMS)
 
-test1_SOURCES = test1.c
+template_SOURCES = template.c
+template_LDADD   = $(srcdir)/libhemp.la
 
