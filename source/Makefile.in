@@ -46,7 +46,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am_hemp_test_OBJECTS = hemp_test.$(OBJEXT) memory.$(OBJEXT) \
 	slab.$(OBJEXT) pool.$(OBJEXT) ptree.$(OBJEXT) \
 	element.$(OBJEXT) elements.$(OBJEXT) tags.$(OBJEXT) \
-	scanner.$(OBJEXT) debug.$(OBJEXT) test.$(OBJEXT)
+	sources.$(OBJEXT) scanner.$(OBJEXT) debug.$(OBJEXT) \
+	test.$(OBJEXT)
 hemp_test_OBJECTS = $(am_hemp_test_OBJECTS)
 hemp_test_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/include@am__isrc@
@@ -154,6 +155,7 @@ hemp_test_SOURCES = \
     element.c \
     elements.c \
     tags.c \
+    sources.c \
     scanner.c \
     debug.c \
     test.c
@@ -233,6 +235,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ptree.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/slab.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tags.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test.Po@am__quote@
 

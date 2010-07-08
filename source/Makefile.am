@@ -8,6 +8,7 @@ hemp_test_SOURCES = \
     element.c \
     elements.c \
     tags.c \
+    sources.c \
     scanner.c \
     debug.c \
     test.c

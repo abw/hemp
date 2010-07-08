@@ -13,6 +13,7 @@ extern "C" {
 #include "hemp/element.h"
 #include "hemp/elements.h"
 #include "hemp/tags.h"
+#include "hemp/sources.h"
 #include "hemp/scanner.h"
 #include "hemp/debug.h"
 #include "hemp/test.h"

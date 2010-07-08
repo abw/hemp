@@ -87,7 +87,7 @@ void
 hemp_elements_dump(
     hemp_elements_t elements
 ) {
-    debug("ELEMENTS\n--------\n");
+    debug("\n-- Elements --\n");
     hemp_element_t e = elements->head;
     hemp_element_t n = e->next;
 
