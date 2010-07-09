@@ -1,5 +1,5 @@
 AC_PREREQ(2.61)
-AC_INIT([hemp], [0.01], [make@gnu.org])
+AC_INIT([hemp], [0.01], [hemp@wardley.org])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
@@ -8,14 +8,15 @@ AUTOMAKE_OPTIONS = color-tests
 AC_PROG_CC
 AC_PROG_LIBTOOL
 
-AC_CONFIG_HEADERS([
-    include/config.h
-])
+AC_CONFIG_HEADERS([include/config.h])
 AC_CONFIG_FILES([
-    Makefile
-    source/Makefile
+    Makefile 
+    source/Makefile 
     tests/Makefile
+    modules/Makefile
+    extra/libltdl/Makefile
 ])
+
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -50,6 +51,9 @@ else
     AC_MSG_RESULT(yes)
 fi
 
+# Configure libtool with dlopen support if possible
+LT_CONFIG_LTDL_DIR([extra/libltdl])
+LT_INIT([dlopen])
+LTDL_INIT([recursive])
 
 AC_OUTPUT
-

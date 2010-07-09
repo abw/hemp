@@ -4,6 +4,7 @@ check_PROGRAMS  = debug     \
                   hash      \
                   hemp      \
                   memory    \
+                  module    \
                   pool      \
                   slab      \
                   sources   \
@@ -29,6 +30,9 @@ hemp_LDADD       = ../source/libhemp.la
 
 memory_SOURCES   = memory.c tap.c
 memory_LDADD     = ../source/libhemp.la
+
+module_SOURCES   = module.c tap.c
+module_LDADD     = ../source/libhemp.la
 
 pool_SOURCES     = pool.c tap.c
 pool_LDADD       = ../source/libhemp.la

@@ -1,5 +1,5 @@
 EXTRA_DIST = INSTALL
-SUBDIRS = source . tests
+SUBDIRS = source extra/libltdl modules . tests
 dist_doc_DATA = README
 
 include_HEADERS = include/hemp.h

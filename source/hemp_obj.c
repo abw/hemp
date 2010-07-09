@@ -47,3 +47,9 @@ hemp_register_dialect(
     debug_cyan("registering dialect %s => %p\n", name, builder);
     return HEMP_TRUE;
 }
+
+
+void
+hemp_hello() {
+    printf("Hello world!\n");
+}

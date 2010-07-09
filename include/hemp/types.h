@@ -52,6 +52,7 @@ typedef hemp_bool_t            (* hemp_scan_fn)(hemp_template_t);
 typedef hemp_cstr_t            (* hemp_source_text_fn)(hemp_source_t);
 typedef hemp_bool_t            (* hemp_source_bool_fn)(hemp_source_t);
 typedef hemp_bool_t            (* hemp_build_fn)(hemp_t);
+typedef hemp_bool_t            (* hemp_onload_fn)(hemp_t);
 typedef void                   (* hemp_tag_scan_fn)();          // TODO: args
 
 

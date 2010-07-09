@@ -27,6 +27,7 @@ void test_dialect() {
     hemp_dialect_free(dialect);
 }
 
+
 void test_dialect_registration() {
     hemp_t hemp = hemp_init();
     ok( 

@@ -57,6 +57,7 @@ void    debug_off();
 #  define debug_magenta(format, ...)  
 #  define debug_cyan(format, ...)     
 #  define debug_mem(format, ...)      
+#  define debug_load(format, ...)
 #endif
 
 #endif /* HEMP_DEBUG_H */

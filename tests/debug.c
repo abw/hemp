@@ -24,7 +24,7 @@ void test_debug() {
     debug_cyan("This is cyan\n");
     debug("Turning debugging off for a moment\n");
     debug_off();
-    debug("!!! FAIL !!! - You shouldn't see this message\n");
+    debug_red("!!! FAIL !!! - You shouldn't see this message\n");
     debug_on();
     debug("Turned debugging back on\n");
     debug_mem("Memory debugging\n");

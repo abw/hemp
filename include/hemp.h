@@ -18,6 +18,7 @@ extern "C" {
 #include "hemp/dialect.h"
 #include "hemp/scanner.h"
 #include "hemp/template.h"
+#include "hemp/module.h"
 #include "hemp/debug.h"
 //#include "hemp/test.h"
 
@@ -30,6 +31,8 @@ struct hemp {
 hemp_t      hemp_init();
 void        hemp_free(hemp_t);
 hemp_bool_t hemp_register_dialect(hemp_t, hemp_cstr_t, hemp_build_fn);
+void        hemp_hello();
+
 
 #define hemp_null(h)    \
     hemp_free(h);       \

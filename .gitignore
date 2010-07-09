@@ -17,6 +17,7 @@ tests/element
 tests/hash
 tests/hemp
 tests/memory
+tests/module
 tests/pool
 tests/slab
 tests/sources
