@@ -7,10 +7,7 @@ hemp_element_init() {
     hemp_element_t element;
 
     if ((element = (hemp_element_t) hemp_mem_init(sizeof(struct hemp_element)))) {
-        debug_cyan(
-            "Allocated new element at %p\n", 
-            element
-        );
+        debug_mem("Allocated new element at %p\n", element);
     }
     
     return element;
@@ -20,7 +17,7 @@ hemp_element_init() {
 void
 hemp_element_free(hemp_element_t element) {
     if (element) {
-        debug_cyan("Releasing element at %p\n", element);
+        debug_mem("Releasing element at %p\n", element);
         hemp_mem_free(element);
     }
 }

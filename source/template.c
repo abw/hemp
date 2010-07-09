@@ -5,8 +5,8 @@
 
 hemp_template_t 
 hemp_template_init(
-    hemp_text_t    scheme, 
-    hemp_text_t    source,
+    hemp_cstr_t    scheme, 
+    hemp_cstr_t    source,
     hemp_dialect_t dialect
 ) {
     hemp_template_t tmpl;
@@ -20,14 +20,13 @@ hemp_template_init(
         tmpl->dialect  = dialect;
         
         if (tmpl->source && tmpl->elements) {
-            debug_cyan(
+            debug_mem(
                 "Allocated %s %s template at %p\n", 
                 dialect->name, scheme, tmpl
             );
         }
         else {
-            hemp_template_free(tmpl);
-            tmpl = NULL;
+            hemp_template_null(tmpl);
         }
     }
 

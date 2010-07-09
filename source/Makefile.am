@@ -1,5 +1,5 @@
-lib_LIBRARIES       = libhemp.a
-libhemp_a_SOURCES   = memory.c   \
+lib_LTLIBRARIES     = libhemp.la
+libhemp_la_SOURCES  = memory.c   \
                       slab.c     \
                       pool.c     \
                       hash.c     \
@@ -12,14 +12,10 @@ libhemp_a_SOURCES   = memory.c   \
                       template.c \
                       scanner.c  \
                       debug.c    \
-                      hemp_obj.c \
-                      test.c
+                      hemp_obj.c 
 
-bin_PROGRAMS        = hemp hemp_test
+bin_PROGRAMS        = hemp
 
 hemp_SOURCES        = hemp.c
-hemp_LDADD          = libhemp.a
+hemp_LDADD          = libhemp.la
 
-hemp_test_SOURCES   = hemp_test.c
-hemp_test_LDADD     = libhemp.a
-     

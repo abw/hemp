@@ -11,7 +11,7 @@ hemp_scan_text(
     hemp_template_t tmpl
 ) {
     hemp_tagset_t   tagset   = tmpl->dialect->tagset;
-    hemp_text_t     text     = hemp_source_read(tmpl->source),
+    hemp_cstr_t     text     = hemp_source_read(tmpl->source),
                     src      = text,
                     from     = text,
                     cmptr, 
@@ -119,12 +119,12 @@ hemp_scan_text(
 hemp_tag_t
 hemp_scan_tag_start(
     hemp_pnode_t pnode, 
-    hemp_text_t  *srcptr
+    hemp_cstr_t  *srcptr
 ) {
 //  debug_blue("hemp_scan_tag_start(%p[%s])]", pnode, pnode->key);
 
-    hemp_text_t cmptr  = pnode->key;
-    hemp_text_t src    = *srcptr;
+    hemp_cstr_t cmptr  = pnode->key;
+    hemp_cstr_t src    = *srcptr;
     hemp_tag_t  tag    = NULL;
 
     // nuisance: we do the first comparison twice

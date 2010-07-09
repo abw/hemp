@@ -31,8 +31,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = dialect$(EXEEXT) element$(EXEEXT) hash$(EXEEXT) \
-	hemp$(EXEEXT) pool$(EXEEXT) sources$(EXEEXT) template$(EXEEXT)
+check_PROGRAMS = debug$(EXEEXT) dialect$(EXEEXT) element$(EXEEXT) \
+	hash$(EXEEXT) hemp$(EXEEXT) memory$(EXEEXT) pool$(EXEEXT) \
+	slab$(EXEEXT) sources$(EXEEXT) template$(EXEEXT)
 subdir = tests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -45,27 +46,36 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES =
-am_dialect_OBJECTS = dialect.$(OBJEXT)
+am_debug_OBJECTS = debug.$(OBJEXT) tap.$(OBJEXT)
+debug_OBJECTS = $(am_debug_OBJECTS)
+debug_DEPENDENCIES = ../source/libhemp.la
+am_dialect_OBJECTS = dialect.$(OBJEXT) tap.$(OBJEXT)
 dialect_OBJECTS = $(am_dialect_OBJECTS)
-dialect_DEPENDENCIES = ../source/libhemp.a
-am_element_OBJECTS = element.$(OBJEXT)
+dialect_DEPENDENCIES = ../source/libhemp.la
+am_element_OBJECTS = element.$(OBJEXT) tap.$(OBJEXT)
 element_OBJECTS = $(am_element_OBJECTS)
-element_DEPENDENCIES = ../source/libhemp.a
-am_hash_OBJECTS = hash.$(OBJEXT)
+element_DEPENDENCIES = ../source/libhemp.la
+am_hash_OBJECTS = hash.$(OBJEXT) tap.$(OBJEXT)
 hash_OBJECTS = $(am_hash_OBJECTS)
-hash_DEPENDENCIES = ../source/libhemp.a
-am_hemp_OBJECTS = hemp.$(OBJEXT)
+hash_DEPENDENCIES = ../source/libhemp.la
+am_hemp_OBJECTS = hemp.$(OBJEXT) tap.$(OBJEXT)
 hemp_OBJECTS = $(am_hemp_OBJECTS)
-hemp_DEPENDENCIES = ../source/libhemp.a
-am_pool_OBJECTS = pool.$(OBJEXT)
+hemp_DEPENDENCIES = ../source/libhemp.la
+am_memory_OBJECTS = memory.$(OBJEXT) tap.$(OBJEXT)
+memory_OBJECTS = $(am_memory_OBJECTS)
+memory_DEPENDENCIES = ../source/libhemp.la
+am_pool_OBJECTS = pool.$(OBJEXT) tap.$(OBJEXT)
 pool_OBJECTS = $(am_pool_OBJECTS)
-pool_DEPENDENCIES = ../source/libhemp.a
-am_sources_OBJECTS = sources.$(OBJEXT)
+pool_DEPENDENCIES = ../source/libhemp.la
+am_slab_OBJECTS = slab.$(OBJEXT) tap.$(OBJEXT)
+slab_OBJECTS = $(am_slab_OBJECTS)
+slab_DEPENDENCIES = ../source/libhemp.la
+am_sources_OBJECTS = sources.$(OBJEXT) tap.$(OBJEXT)
 sources_OBJECTS = $(am_sources_OBJECTS)
-sources_DEPENDENCIES = ../source/libhemp.a
-am_template_OBJECTS = template.$(OBJEXT)
+sources_DEPENDENCIES = ../source/libhemp.la
+am_template_OBJECTS = template.$(OBJEXT) tap.$(OBJEXT)
 template_OBJECTS = $(am_template_OBJECTS)
-template_DEPENDENCIES = ../source/libhemp.a
+template_DEPENDENCIES = ../source/libhemp.la
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/include@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -78,11 +88,13 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(dialect_SOURCES) $(element_SOURCES) $(hash_SOURCES) \
-	$(hemp_SOURCES) $(pool_SOURCES) $(sources_SOURCES) \
+SOURCES = $(debug_SOURCES) $(dialect_SOURCES) $(element_SOURCES) \
+	$(hash_SOURCES) $(hemp_SOURCES) $(memory_SOURCES) \
+	$(pool_SOURCES) $(slab_SOURCES) $(sources_SOURCES) \
 	$(template_SOURCES)
-DIST_SOURCES = $(dialect_SOURCES) $(element_SOURCES) $(hash_SOURCES) \
-	$(hemp_SOURCES) $(pool_SOURCES) $(sources_SOURCES) \
+DIST_SOURCES = $(debug_SOURCES) $(dialect_SOURCES) $(element_SOURCES) \
+	$(hash_SOURCES) $(hemp_SOURCES) $(memory_SOURCES) \
+	$(pool_SOURCES) $(slab_SOURCES) $(sources_SOURCES) \
 	$(template_SOURCES)
 ETAGS = etags
 CTAGS = ctags
@@ -195,21 +207,28 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+#                 tests
 TESTS = $(check_PROGRAMS)
-dialect_SOURCES = dialect.c
-dialect_LDADD = ../source/libhemp.a
-element_SOURCES = element.c
-element_LDADD = ../source/libhemp.a
-hash_SOURCES = hash.c
-hash_LDADD = ../source/libhemp.a
-hemp_SOURCES = hemp.c
-hemp_LDADD = ../source/libhemp.a
-pool_SOURCES = pool.c
-pool_LDADD = ../source/libhemp.a
-sources_SOURCES = sources.c
-sources_LDADD = ../source/libhemp.a
-template_SOURCES = template.c
-template_LDADD = ../source/libhemp.a
+debug_SOURCES = debug.c tap.c
+debug_LDADD = ../source/libhemp.la
+dialect_SOURCES = dialect.c tap.c
+dialect_LDADD = ../source/libhemp.la
+element_SOURCES = element.c tap.c
+element_LDADD = ../source/libhemp.la
+hash_SOURCES = hash.c tap.c
+hash_LDADD = ../source/libhemp.la
+hemp_SOURCES = hemp.c tap.c
+hemp_LDADD = ../source/libhemp.la
+memory_SOURCES = memory.c tap.c
+memory_LDADD = ../source/libhemp.la
+pool_SOURCES = pool.c tap.c
+pool_LDADD = ../source/libhemp.la
+slab_SOURCES = slab.c tap.c
+slab_LDADD = ../source/libhemp.la
+sources_SOURCES = sources.c tap.c
+sources_LDADD = ../source/libhemp.la
+template_SOURCES = template.c tap.c
+template_LDADD = ../source/libhemp.la
 all: all-am
 
 .SUFFIXES:
@@ -250,6 +269,9 @@ clean-checkPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
+debug$(EXEEXT): $(debug_OBJECTS) $(debug_DEPENDENCIES) 
+	@rm -f debug$(EXEEXT)
+	$(LINK) $(debug_OBJECTS) $(debug_LDADD) $(LIBS)
 dialect$(EXEEXT): $(dialect_OBJECTS) $(dialect_DEPENDENCIES) 
 	@rm -f dialect$(EXEEXT)
 	$(LINK) $(dialect_OBJECTS) $(dialect_LDADD) $(LIBS)
@@ -262,9 +284,15 @@ hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES)
 hemp$(EXEEXT): $(hemp_OBJECTS) $(hemp_DEPENDENCIES) 
 	@rm -f hemp$(EXEEXT)
 	$(LINK) $(hemp_OBJECTS) $(hemp_LDADD) $(LIBS)
+memory$(EXEEXT): $(memory_OBJECTS) $(memory_DEPENDENCIES) 
+	@rm -f memory$(EXEEXT)
+	$(LINK) $(memory_OBJECTS) $(memory_LDADD) $(LIBS)
 pool$(EXEEXT): $(pool_OBJECTS) $(pool_DEPENDENCIES) 
 	@rm -f pool$(EXEEXT)
 	$(LINK) $(pool_OBJECTS) $(pool_LDADD) $(LIBS)
+slab$(EXEEXT): $(slab_OBJECTS) $(slab_DEPENDENCIES) 
+	@rm -f slab$(EXEEXT)
+	$(LINK) $(slab_OBJECTS) $(slab_LDADD) $(LIBS)
 sources$(EXEEXT): $(sources_OBJECTS) $(sources_DEPENDENCIES) 
 	@rm -f sources$(EXEEXT)
 	$(LINK) $(sources_OBJECTS) $(sources_LDADD) $(LIBS)
@@ -278,12 +306,16 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialect.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/element.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pool.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/slab.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Po@am__quote@
 
 .c.o:
@@ -565,6 +597,9 @@ uninstall-am:
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am
 
+
+#tests_SOURCES = tests.c tap.c
+#tests_LDADD   = ../source/libhemp.la
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

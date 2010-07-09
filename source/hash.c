@@ -64,8 +64,14 @@ hemp_hash_init() {
         table->columns = (hemp_hash_entry_t *) hemp_mem_init(
             table->width * sizeof(hemp_hash_entry_t)
         );
-        for(w = 0; w < table->width; w++) {
-            table->columns[w] = (hemp_hash_entry_t) NULL;
+        if (table->columns) {
+            for(w = 0; w < table->width; w++) {
+                table->columns[w] = (hemp_hash_entry_t) NULL;
+            }
+            debug_mem("Allocated hash at %p\n", table);
+        }
+        else {
+            hemp_hash_null(table);
         }
     }
     return table;
@@ -78,6 +84,8 @@ hemp_hash_free(
 ) {
     hemp_hash_entry_t entry, next;
     int i;
+
+    debug_mem("Releasing hash at %p\n", table);
 
     if (table) {
         for(i = 0; i < table->width; i++) {
@@ -107,7 +115,7 @@ hemp_hash_resize(
     if (width == wider)
         return width;  /* can't go any bigger */
 
-    debug_cyan("Resizing hash from %d to %d\n", width, wider);
+    debug_mem("Resizing hash at %p from %d to %d\n", table, width, wider);
 
     columns = (hemp_hash_entry_t *) hemp_mem_init(wider * sizeof(hemp_hash_entry_t));
     
@@ -129,7 +137,7 @@ hemp_hash_resize(
 
 
 hemp_hash_entry_t
-hemp_hash_store(hemp_hash_t table, hemp_text_t key, hemp_ptr_t value) {
+hemp_hash_store(hemp_hash_t table, hemp_cstr_t key, hemp_ptr_t value) {
     hemp_hash_entry_t entry;
     hemp_size_t hash, column;
 
@@ -160,7 +168,7 @@ hemp_hash_store(hemp_hash_t table, hemp_text_t key, hemp_ptr_t value) {
 
 
 hemp_ptr_t
-hemp_hash_fetch(hemp_hash_t table, hemp_text_t key) {
+hemp_hash_fetch(hemp_hash_t table, hemp_cstr_t key) {
     hemp_hash_entry_t entry = NULL;
     hemp_size_t hash, column;
     hash   = (table->hasher)(key);
@@ -219,7 +227,7 @@ hemp_hash_each(
 
 
 /*
-hemp_text_t
+hemp_cstr_t
 hemp_hash_as_text(hemp_hash_t table) {
     hemp_size_t i, s = table->size;
     hemp_hash_entry_t entry;
@@ -265,7 +273,7 @@ hemp_hash_print(hemp_hash_t table) {
  *---------------------------------------------------------------------*/
 
 hemp_size_t
-hemp_hash_function(register hemp_text_t s) {
+hemp_hash_function(register hemp_cstr_t s) {
     register int c;
     register unsigned int val = 0;
 
@@ -306,7 +314,7 @@ typedef  unsigned     char  u1;
 }
 
 hemp_size_t
-hemp_hash_function_jenkins32(register hemp_text_t key) {
+hemp_hash_function_jenkins32(register hemp_cstr_t key) {
    register u4 a,b,c;           /* the internal state */
    hemp_size_t length, remain;  /* total length, remaining left to process */
 

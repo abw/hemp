@@ -1,49 +1,52 @@
 #include <stdio.h>
 #include "hemp.h"
+#include "tap.h"
 
 void test_sources();
+
 
 int
 main(int argc, char **argv, char **env)
 {
+    plan_tests(6);
     test_sources();
-    return 0;
+    return exit_status();
 }
 
 
 void test_sources() {
-    debug("test_sources()\n");
     hemp_scheme_t scheme;
     hemp_source_t source;
-    hemp_text_t   text;
-    
-    (source = hemp_source(HEMP_TEXT, "source/text.html"))
-        ? pass("created text source")
-        : fail("could not create text source");
-    
-    (text = hemp_source_read(source))
-        ? pass("read text: %s", text)
-        : fail("could not read text");
+    hemp_cstr_t   text;
 
-    /* second time around the text should be cached in source->text */
-    (text = hemp_source_read(source))
-        ? pass("read text again: %s", text)
-        : fail("could not read text again");
-    
+    ok(
+        (source = hemp_source(HEMP_TEXT, "source/text.html")),
+        "created text source"
+    );
+    ok( 
+        (text = hemp_source_read(source)),
+        "read text: %s", text
+    );
+    ok(
+        /* second time around the text should be cached in source->text */
+        (text = hemp_source_read(source)),
+        "read text again: %s", text
+    );
+
     hemp_source_free(source);
 
-
-    (source = hemp_source(HEMP_FILE, "source/file.html"))
-        ? pass("created file source")
-        : fail("could not create file source");
-    
-    (text = hemp_source_read(source))
-        ? pass("read file: %s", text)
-        : fail("could not read file");
-
-    (text = hemp_source_read(source))
-        ? pass("read file again: %s", text)
-        : fail("could not read file again");
+    ok(
+        (source = hemp_source(HEMP_FILE, "source/file.html")),
+        "created file source"
+    );
+    ok( 
+        (text = hemp_source_read(source)),
+        "read file: %s", text
+    );
+    ok( 
+        (text = hemp_source_read(source)),
+        "read file again: %s", text
+    );
 
     hemp_source_free(source);
 }

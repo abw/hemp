@@ -21,14 +21,13 @@ hemp_pool_init(
             pool->size     = size;
             pool->capacity = capacity;
             pool->used     = 0;
-            debug_cyan(
+            debug_mem(
                 "Allocated pool buffer of %d x %d = %d bytes\n", 
                 size, capacity, size * capacity
             );
         }
         else {
-            hemp_pool_free(pool);
-            pool = NULL;
+            hemp_pool_null(pool);
         }
     }
     
@@ -65,7 +64,7 @@ hemp_pool_grow(
     pool->slab = slab;
     pool->next = slab->data;
     pool->capacity *= 2;
-    debug_yellow("Increased pool capacity to %d\n", pool->capacity);
+    debug_mem("Increased pool capacity to %d\n", pool->capacity);
 }
 
 
@@ -73,9 +72,10 @@ void
 hemp_pool_free(
     hemp_pool_t pool
 ) {
-    if (pool->slab) {
-        debug_cyan("Releasing pool slab\n");
+    debug_mem("Releasing pool at %p\n", pool);
+
+    if (pool->slab)
         hemp_slab_free(pool->slab);
-    }
+
     hemp_mem_free(pool);
 }

@@ -1,13 +1,17 @@
 #include <stdio.h>
 #include "hemp.h"
+#include "tap.h"
+
 
 void test_template();
+
 
 int
 main(int argc, char **argv, char **env)
 {
+    plan_tests(2);
     test_template();
-    return 0;
+    return exit_status();
 }
 
 
@@ -18,9 +22,6 @@ void test_template() {
         NULL
     );
     
-    tmpl 
-        ? pass("created template")
-        : fail("could not create template");
-    
-    hemp_template_compile(tmpl);
+    ok( tmpl , "created template" );
+    ok( hemp_template_compile(tmpl), "compiled template" );
 }

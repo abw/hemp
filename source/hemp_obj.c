@@ -11,14 +11,10 @@ hemp_init() {
     if ((hemp = (hemp_t) hemp_mem_init(sizeof(struct hemp)))) {
         hemp->dialects = hemp_hash_init();
         if (hemp->dialects) {
-            debug_cyan(
-                "Allocated new hemp at %p\n", 
-                hemp
-            );
+            debug_mem("Allocated hemp at %p\n", hemp);
         }
         else {
-            hemp_free(hemp);
-            hemp = NULL;
+            hemp_null(hemp);
         }
     }
     
@@ -32,10 +28,22 @@ void
 hemp_free(
     hemp_t hemp
 ) {
+    debug_mem("Releasing hemp at %p\n", hemp);
+
     if (hemp->dialects) {
         hemp_hash_free(hemp->dialects);
     }
+
     hemp_mem_free(hemp);
 }
 
 
+hemp_bool_t
+hemp_register_dialect(
+    hemp_t          hemp,
+    hemp_cstr_t     name,
+    hemp_build_fn   builder
+) {
+    debug_cyan("registering dialect %s => %p\n", name, builder);
+    return HEMP_TRUE;
+}

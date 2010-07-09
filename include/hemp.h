@@ -19,18 +19,21 @@ extern "C" {
 #include "hemp/scanner.h"
 #include "hemp/template.h"
 #include "hemp/debug.h"
-#include "hemp/test.h"
+//#include "hemp/test.h"
 
-
-typedef struct hemp * hemp_t;
 
 struct hemp {
     hemp_hash_t dialects;
+    hemp_hash_t dialect_factory;
 };
 
-hemp_t  hemp_init();
-void    hemp_free(hemp_t);
+hemp_t      hemp_init();
+void        hemp_free(hemp_t);
+hemp_bool_t hemp_register_dialect(hemp_t, hemp_cstr_t, hemp_build_fn);
 
+#define hemp_null(h)    \
+    hemp_free(h);       \
+    h = NULL;                
 
 #define hemp_dialect(hemp, name) \
     (hemp_dialect_t) hemp_hash_fetch(hemp->dialects, name)

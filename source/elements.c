@@ -16,14 +16,13 @@ hemp_elements_init(hemp_size_t capacity) {
         if ((elements->pool = hemp_pool_init(sizeof(struct hemp_element), capacity))) {
             elements->head = NULL;
             elements->tail = NULL;
-            debug_cyan(
+            debug_mem(
                 "Allocated pool of %d elements at %p\n", 
                 capacity, elements->pool
             );
         }
         else {
-            hemp_elements_free(elements);
-            elements = NULL;
+            hemp_elements_null(elements);
         }
     }
 
@@ -34,10 +33,12 @@ hemp_elements_init(hemp_size_t capacity) {
 
 void
 hemp_elements_free(hemp_elements_t elements) {
+    debug_mem("Releasing elements at %p\n", elements);
+
     if (elements->pool) {
         hemp_pool_free(elements->pool);
     }
-    debug_cyan("Releasing element pool at %p\n", elements->pool);
+
     hemp_mem_free(elements);
 }
 
@@ -46,7 +47,7 @@ hemp_element_t
 hemp_elements_append(
     hemp_elements_t elements,
     hemp_etype_t    type,
-    hemp_text_t     token,
+    hemp_cstr_t     token,
     hemp_pos_t      position,
     hemp_size_t     length
 ) {
@@ -73,7 +74,7 @@ hemp_elements_append(
 hemp_element_t
 hemp_elements_eof(
     hemp_elements_t elements,
-    hemp_text_t     token,
+    hemp_cstr_t     token,
     hemp_pos_t      position
 ) {
     return hemp_elements_append(
@@ -106,8 +107,8 @@ hemp_elements_dump(
 
 
 
-hemp_text_t hemp_element_text_text(hemp_element_t element);
-hemp_text_t hemp_element_eof_text(hemp_element_t element);
+hemp_cstr_t hemp_element_text_text(hemp_element_t element);
+hemp_cstr_t hemp_element_eof_text(hemp_element_t element);
 
 
 static struct hemp_etype
@@ -156,7 +157,7 @@ hemp_etype_t HempElementTagEnd    = &hemp_element_tag_end;
 hemp_etype_t HempElementEof       = &hemp_element_eof;
 
 
-hemp_text_t
+hemp_cstr_t
 hemp_element_text_text(hemp_element_t element) {
     static char buffer[1000];   // quick hack
     strncpy(buffer, (char *) element->token, element->length); 
@@ -165,7 +166,7 @@ hemp_element_text_text(hemp_element_t element) {
 }
 
 
-hemp_text_t
+hemp_cstr_t
 hemp_element_eof_text(hemp_element_t element) {
     static char nullstr = '\0';
     return &nullstr;

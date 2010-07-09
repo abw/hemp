@@ -7,17 +7,10 @@
 #define HEMP_TEXT "text"
 #define HEMP_FILE "file"
 
-typedef struct hemp_scheme * hemp_scheme_t;
-typedef struct hemp_source * hemp_source_t;
-
-typedef hemp_text_t (* hemp_source_text_fn)(hemp_source_t);
-typedef hemp_bool_t (* hemp_source_bool_fn)(hemp_source_t);
-
-extern hemp_scheme_t HempSchemeText;
-extern hemp_scheme_t HempSchemeFile;
-
 
 /*--------------------------------------------------------------------------
+ * data structures
+ *
  * A scheme is the part before the first colon in a URI/URL
  * e.g.
  *    "file:/path/to/file"              # file scheme
@@ -46,33 +39,53 @@ struct hemp_scheme {
 
 struct hemp_source {
     hemp_scheme_t scheme;           /* e.g. text, file, etc          */
-    hemp_text_t   name;             /* path to file or source text   */
-    hemp_text_t   text;             /* file contents or source text  */
+    hemp_cstr_t   name;             /* path to file or source text   */
+    hemp_cstr_t   text;             /* file contents or source text  */
 };
 
 
-/* scheme prototypes */
 
-hemp_text_t hemp_scheme_text_namer  ( hemp_source_t );
-hemp_text_t hemp_scheme_text_reader ( hemp_source_t );
-hemp_bool_t hemp_scheme_text_checker( hemp_source_t );
+/*--------------------------------------------------------------------------
+ * function prototypes
+ *--------------------------------------------------------------------------*/
 
-hemp_text_t hemp_scheme_file_namer  ( hemp_source_t );
-hemp_text_t hemp_scheme_file_reader ( hemp_source_t );
-hemp_bool_t hemp_scheme_file_checker( hemp_source_t );
+/* text: scheme prototypes */
+hemp_cstr_t     hemp_scheme_text_namer  ( hemp_source_t );
+hemp_cstr_t     hemp_scheme_text_reader ( hemp_source_t );
+hemp_bool_t     hemp_scheme_text_checker( hemp_source_t );
 
+/* file: scheme prototypes */
+hemp_cstr_t     hemp_scheme_file_namer  ( hemp_source_t );
+hemp_cstr_t     hemp_scheme_file_reader ( hemp_source_t );
+hemp_bool_t     hemp_scheme_file_checker( hemp_source_t );
 
 /* source prototypes */
+hemp_source_t   hemp_source( hemp_cstr_t, hemp_cstr_t );
+hemp_source_t   hemp_source_init( hemp_scheme_t, hemp_cstr_t );
+void            hemp_source_free( hemp_source_t );
 
-hemp_source_t hemp_source( hemp_text_t, hemp_text_t );
-hemp_source_t hemp_source_init( hemp_scheme_t, hemp_text_t );
-void          hemp_source_free( hemp_source_t );
+
+/*--------------------------------------------------------------------------
+ * macros
+ *--------------------------------------------------------------------------*/
+
+#define hemp_source_null(source)            \
+    hemp_source_free(source);               \
+    source = NULL
 
 #define hemp_source_read(source) (          \
     source->text                            \
         ? source->text                      \
         : source->scheme->reader(source)    \
 )                                           
+
+
+/*--------------------------------------------------------------------------
+ * externals
+ *--------------------------------------------------------------------------*/
+
+extern hemp_scheme_t HempSchemeText;
+extern hemp_scheme_t HempSchemeFile;
 
 
 #endif /* HEMP_SOURCES_H */

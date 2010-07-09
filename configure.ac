@@ -38,13 +38,16 @@ dnl Check if we have enable debug support.
 
 AC_MSG_CHECKING(whether to enable debugging)
 AC_ARG_ENABLE(
-    debug, [  --enable-debug=[no/yes] turn on debugging],, enable_debug=yes)
+    debug, [  --enable-debug=[no/yes/N] turn on debugging],, enable_debug=no)
 if test "x$enable_debug" = "xyes"; then
     CFLAGS="$CFLAGS -g -DDEBUG"
     AC_MSG_RESULT(yes)
-else
+elif test "x$enable_debug" = "xno"; then
     CFLAGS="$CFLAGS -O3"
     AC_MSG_RESULT(no)
+else
+    CFLAGS="$CFLAGS -g -DDEBUG=$enable_debug"
+    AC_MSG_RESULT(yes)
 fi
 
 

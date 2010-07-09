@@ -16,18 +16,13 @@ hemp_slab_init(
         if ((slab->data = hemp_mem_init(size))) {
             slab->size  = size;
             slab->next  = NULL;
-            debug_cyan(
+            debug_mem(
                 "Allocated slab of %d bytes at %p\n", 
                 size, slab->data
             );
         }
         else {
-            debug_red(
-                "Failed to allocated slab of %d bytes at %p\n", 
-                size, slab->data
-            );
-            hemp_slab_free(slab);
-            slab = NULL;
+            hemp_slab_null(slab);
         }
     }
 
@@ -47,7 +42,7 @@ hemp_slab_free(
         next_slab = slab->next;
 
         if (slab->data) {
-            debug_cyan(
+            debug_mem(
                 "Releasing slab buffer of %d bytes at %p\n", 
                 slab->size, slab->data
             );

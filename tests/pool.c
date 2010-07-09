@@ -1,59 +1,63 @@
 #include <stdio.h>
-#include <assert.h>
 #include "hemp.h"
+#include "tap.h"
 
 void test_pool();
 
 int
 main(int argc, char **argv, char **env)
 {
+    plan_tests(10);
     test_pool();
-    return 0;
+    return exit_status();
 }
+
 
 void test_pool() {
     hemp_pool_t pool = hemp_pool_init(4, 2);
     hemp_ptr_t item;
-    assert(pool);
 
-    pass("created pool");
-
-    pool->capacity == 2
-        ? pass("pool capacity is %d", 2)
-        : fail("pool capacity is not %d", 2);
-
-    (item = hemp_pool_take(pool))
-        ? pass("took a pool item at %p", item)
-        : fail("could not take a pool item");
-
-    (item = hemp_pool_take(pool))
-        ? pass("took another pool item at %p", item)
-        : fail("could not take another pool item");
-
-    pool->capacity == 2
-        ? pass("pool capacity is still %d", 2)
-        : fail("pool capacity is no longer %d", 2);
-
-    pool->used == 2
-        ? pass("pool has used %d items", 2)
-        : fail("pool has not used %d items", 2);
-
-    (item = hemp_pool_take(pool))
-        ? pass("took a third pool item at %p", item)
-        : fail("could not take a third pool item");
-
-    pool->capacity == 4
-        ? pass("pool capacity has grown to %d", 4)
-        : fail("pool capacity has not grown to %d", 4);
+    ok( 
+        pool, 
+        "created pool" 
+    );
+    ok( 
+        pool->capacity == 2, 
+        "pool capacity is %d", pool->capacity 
+    );
+    ok( 
+        (item = hemp_pool_take(pool)), 
+        "took a pool item at %p", item 
+    );
+    ok( 
+        (item = hemp_pool_take(pool)),
+        "took another pool item at %p", item 
+    );
+    ok( 
+        pool->capacity == 2, 
+        "pool capacity is still %d", pool->capacity 
+    );
+    ok( 
+        pool->used == 2, 
+        "pool has used %d items", pool->used 
+    );
+    ok( 
+        (item = hemp_pool_take(pool)), 
+        "took a third item at %p", item 
+    );
+    ok( 
+        pool->capacity == 4, 
+        "pool capacity has grown to %d", pool->capacity
+    );
 
     hemp_pool_grow(pool);
 
-    pool->capacity == 8
-        ? pass("pool capacity is %d", 8)
-        : fail("pool capacity is not %d", 8);
+    ok( 
+        pool->capacity == 8, 
+        "pool capacity forced to grow to %d", pool->capacity
+    );
 
     hemp_pool_free(pool);
-
     pass("released pool");
 }
 

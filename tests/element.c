@@ -1,21 +1,20 @@
 #include <stdio.h>
 #include "hemp.h"
+#include "tap.h"
 
 void test_element();
 
 int
 main(int argc, char **argv, char **env)
 {
+    plan_tests(2);
     test_element();
-    return 0;
+    return exit_status();
 }
 
 void test_element() {
-    debug("test_element()\n");
     hemp_element_t element = hemp_element_init();
-    element 
-        ? pass("created element at %p", element)
-        : fail("could not created element");
+    ok( element, "created element" );
     hemp_element_free(element);
-    pass("freed element");
+    pass("released element");
 }

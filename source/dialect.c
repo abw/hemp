@@ -21,14 +21,10 @@ hemp_dialect_init(
         dialect->scanner = &hemp_scan_text;
 
         if (dialect->name && dialect->tagset) {
-            debug_cyan(
-                "Allocated new %s dialect at %p\n", 
-                name, dialect
-            );
+            debug_mem("Allocated new %s dialect at %p\n", name, dialect);
         }
         else {
-            hemp_dialect_free(dialect);
-            dialect = NULL;
+            hemp_dialect_null(dialect);
         }
     }
     
@@ -42,13 +38,16 @@ void
 hemp_dialect_free(
     hemp_dialect_t dialect
 ) {
+    debug_mem("Releasing dialect at %p\n", dialect);
+
     if (dialect->name)
         hemp_mem_free(dialect->name);
+
     if (dialect->tagset)
         hemp_tagset_free(dialect->tagset);
+
     hemp_mem_free(dialect);
 }
-
 
 
 // tmp hack until we can build a tagset into a dialect

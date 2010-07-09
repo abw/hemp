@@ -7,8 +7,10 @@
 #include "hemp/elements.h"
 #include "hemp/sources.h"
 
-typedef struct hemp_dialect * hemp_dialect_t;
-typedef hemp_bool_t (* hemp_scan_fn)(hemp_template_t);
+
+/*--------------------------------------------------------------------------
+ * data structures
+ *--------------------------------------------------------------------------*/
 
 struct hemp_dialect {
     hemp_ident_t    name;
@@ -17,10 +19,31 @@ struct hemp_dialect {
 };
 
 
-hemp_dialect_t  hemp_dialect_init(hemp_ident_t);
-hemp_dialect_t  hemp_dialect_tt3();
-void            hemp_dialect_free(hemp_dialect_t);
+/*--------------------------------------------------------------------------
+ * function prototypes
+ *--------------------------------------------------------------------------*/
 
+hemp_dialect_t  
+    hemp_dialect_init(
+        hemp_ident_t
+    );
+
+hemp_dialect_t  
+    hemp_dialect_tt3();
+    
+void
+    hemp_dialect_free(
+        hemp_dialect_t
+    );
+
+
+/*--------------------------------------------------------------------------
+ * macros
+ *--------------------------------------------------------------------------*/
+
+#define hemp_dialect_null(d) \
+    hemp_dialect_free(d);    \
+    d = NULL;
 
 
 #endif /* HEMP_DIALECT_H */

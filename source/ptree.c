@@ -6,20 +6,20 @@
 
 
 hemp_ptree_t
-hemp_ptree_init(hemp_size_t capacity) {
+hemp_ptree_init(
+    hemp_size_t capacity
+) {
     hemp_ptree_t ptree;
-
-    debug_blue("hemp_ptree_init()\n");
 
     if ((ptree = (hemp_ptree_t) hemp_mem_init(sizeof(struct hemp_ptree)))) {
         if ((ptree->pool = hemp_pool_init(sizeof(struct hemp_pnode), capacity))) {
-            debug_cyan(
+            debug_mem(
                 "Allocated ptree of %d nodes at %p\n", 
                 capacity, ptree->pool
             );
         }
         else {
-            hemp_ptree_free(ptree);
+            hemp_ptree_null(ptree);
         }
     }
     
@@ -30,21 +30,26 @@ hemp_ptree_init(hemp_size_t capacity) {
 
 
 void
-hemp_ptree_free(hemp_ptree_t ptree) {
-    if (ptree->pool) {
-        debug_cyan(
-            "Releasing ptree of %d nodes at %p\n", 
-            ptree->pool->capacity, ptree->pool->capacity
-        );
+hemp_ptree_free(
+    hemp_ptree_t ptree
+) {
+    debug_mem("Releasing ptree at %p\n", ptree);
+
+    if (ptree->pool)
         hemp_pool_free(ptree->pool);
-    }
+
     hemp_mem_free(ptree);
 }
 
 
 hemp_pnode_t
-hemp_ptree_node(hemp_ptree_t ptree, hemp_text_t key, hemp_ptr_t value) {
-    hemp_pnode_t pnode = (hemp_pnode_t) hemp_pool_take(ptree->pool);
+hemp_ptree_node(
+    hemp_ptree_t    ptree, 
+    hemp_cstr_t     key, 
+    hemp_ptr_t      value
+) {
+    hemp_pnode_t    pnode = (hemp_pnode_t) hemp_pool_take(ptree->pool);
+    
     pnode->key     = key;
     pnode->value   = value;
     pnode->before  = 
@@ -55,13 +60,17 @@ hemp_ptree_node(hemp_ptree_t ptree, hemp_text_t key, hemp_ptr_t value) {
 
 
 hemp_pnode_t
-hemp_ptree_insert(hemp_ptree_t ptree, hemp_text_t key, hemp_ptr_t value) {
-    hemp_pnode_t pnode    = ptree->head[(unsigned char) *key];
-    hemp_text_t  keyptr   = key;
-    hemp_text_t  cmptr;
-    hemp_pnode_t new_node;
+hemp_ptree_insert(
+    hemp_ptree_t    ptree, 
+    hemp_cstr_t     key, 
+    hemp_ptr_t      value
+) {
+    hemp_pnode_t    pnode    = ptree->head[(unsigned char) *key];
+    hemp_cstr_t     keyptr   = key;
+    hemp_cstr_t     cmptr;
+    hemp_pnode_t    new_node;
 
-    debug_blue("hemp_ptree_insert(%s, %p)\n", key, value);
+//    debug_blue("hemp_ptree_insert(%s, %p)\n", key, value);
 
     if (! pnode) {
         // new top level node
@@ -127,74 +136,6 @@ hemp_ptree_insert(hemp_ptree_t ptree, hemp_text_t key, hemp_ptr_t value) {
             }
             else {
                 return (pnode->after = hemp_ptree_node(ptree, keyptr, value));
-            }
-        }
-    }
-    
-    // not reached
-    return pnode;
-}
-
-
-
-/* NOT USED */
-hemp_pnode_t
-hemp_pnode_match_more(hemp_pnode_t head, hemp_text_t key) {
-    hemp_pnode_t pnode    = head;
-    hemp_text_t  keyptr   = key;
-    hemp_text_t  cmptr    = pnode->key;
-
-    debug("pnode_match_more(%s, %s)\n", head->key, key);
-
-    cmptr = pnode->key;
-
-    while (1) {
-        debug("pnode[%s]: %p \n", pnode->key, pnode);
-
-        while (*keyptr == *cmptr) {
-            keyptr++;
-            cmptr++;
-
-            if (! *keyptr) {
-                // We've reached the end of the search key.
-   //             debug("reached end of key: %s\n", key);
-                return pnode->value;
-            }
-            
-            if (pnode->equal) {
-                // Traverse to existing follow-on equal pnode
- //               debug("traversing to equal pnode[%s] for %s\n", pnode->key, key);
-                pnode = pnode->equal;
-                cmptr = pnode->key;
-            }
-            else if (*cmptr) {
-                // match the rest of the key...
-            }
-            else {
-                // no match, or perhaps a previous match
-            }
-        }
-
-        // we've reached a character that doesn't match
-        if (*keyptr < *cmptr) {
-            // traverse to existing before node or create a new one
-            if (pnode->before) {
-                pnode = pnode->before;
-                cmptr = pnode->key;
-            }
-            else {
-                return NULL;
-            }
-        }
-        else {
-            // traverse to existing after node or create a new one
-            if (pnode->after != NULL) {
-//                debug("traversing to existing node after %s for %s\n", pnode->key, key);
-                pnode = pnode->after;
-                cmptr = pnode->key;
-            }
-            else {
-                return NULL;
             }
         }
     }

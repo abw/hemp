@@ -3,11 +3,13 @@
 
 #include "hemp/pool.h"
 
-typedef struct hemp_pnode * hemp_pnode_t;
-typedef struct hemp_ptree * hemp_ptree_t;
+
+/*--------------------------------------------------------------------------
+ * data structures
+ *--------------------------------------------------------------------------*/
 
 struct hemp_pnode {
-   hemp_text_t      key;
+   hemp_cstr_t      key;
    hemp_ptr_t       value;
    hemp_pnode_t     before;
    hemp_pnode_t     equal;
@@ -19,11 +21,48 @@ struct hemp_ptree {
     hemp_pool_t     pool;
 };
 
-hemp_ptree_t hemp_ptree_init(hemp_size_t capacity);
-void         hemp_ptree_free(hemp_ptree_t ptree);
-hemp_pnode_t hemp_ptree_node(hemp_ptree_t ptree, hemp_text_t key, hemp_ptr_t value);
-hemp_pnode_t hemp_ptree_insert(hemp_ptree_t ptree, hemp_text_t key, hemp_ptr_t value);
 
-void hemp_ptree_dump(hemp_ptree_t ptree);
+/*--------------------------------------------------------------------------
+ * function prototypes
+ *--------------------------------------------------------------------------*/
+
+hemp_ptree_t 
+    hemp_ptree_init(
+        hemp_size_t capacity
+    );
+
+void
+    hemp_ptree_free(
+        hemp_ptree_t ptree
+    );
+
+hemp_pnode_t
+    hemp_ptree_node(
+        hemp_ptree_t ptree, 
+        hemp_cstr_t  key, 
+        hemp_ptr_t  value
+    );
+
+hemp_pnode_t
+    hemp_ptree_insert(
+        hemp_ptree_t ptree, 
+        hemp_cstr_t  key, 
+        hemp_ptr_t  value
+    );
+
+void 
+    hemp_ptree_dump(
+        hemp_ptree_t ptree
+    );
+
+
+/*--------------------------------------------------------------------------
+ * macros
+ *--------------------------------------------------------------------------*/
+
+#define hemp_ptree_null(p)  \
+    hemp_ptree_free(p);     \
+    p = NULL;                
+
 
 #endif /* HEMP_PTREE_H */

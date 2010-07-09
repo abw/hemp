@@ -15,14 +15,13 @@ hemp_tagset_init() {
         tagset->outline_tags = hemp_ptree_init(HEMP_DEFAULT_TAGSET_SIZE);
         
         if (tagset->inline_tags && tagset->outline_tags) {
-            debug_cyan(
+            debug_mem(
                 "Allocated new tagset at %p for %d inline/outline tags\n", 
                 tagset, HEMP_DEFAULT_TAGSET_SIZE
             );
         }
         else {
-            hemp_tagset_free(tagset);
-            tagset = NULL;
+            hemp_tagset_null(tagset);
         }
     }
     
@@ -31,18 +30,22 @@ hemp_tagset_init() {
     return tagset;
 }
 
+
 void
 hemp_tagset_free(
     hemp_tagset_t tagset
 ) {
+    debug_mem("Releasing tagset at %p\n", tagset);
+
     if (tagset->inline_tags) {
-        debug_cyan("Releasing tagset inline tags at %p\n", tagset->inline_tags);
+        debug_mem("Releasing tagset inline tags at %p\n", tagset->inline_tags);
         hemp_ptree_free(tagset->inline_tags);
     }
     if (tagset->outline_tags) {
-        debug_cyan("Releasing tagset outline tags at %p\n", tagset->outline_tags);
+        debug_mem("Releasing tagset outline tags at %p\n", tagset->outline_tags);
         hemp_ptree_free(tagset->outline_tags);
     }
+    
     hemp_mem_free(tagset);
 }
 
@@ -54,7 +57,7 @@ hemp_tagset_add_inline_tag(
 ) {
     return hemp_ptree_insert(
         tagset->inline_tags, 
-        (hemp_text_t) tag->start, 
+        (hemp_cstr_t) tag->start, 
         (hemp_ptr_t)  tag
     );
 }
@@ -67,7 +70,7 @@ hemp_tagset_add_outline_tag(
 ) {
     return hemp_ptree_insert(
         tagset->outline_tags, 
-        (hemp_text_t) tag->start, 
+        (hemp_cstr_t) tag->start, 
         (hemp_ptr_t)  tag
     );
 }

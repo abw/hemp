@@ -3,7 +3,10 @@
 
 #include "hemp/memory.h"
 
-typedef struct hemp_slab * hemp_slab_t;
+
+/*--------------------------------------------------------------------------
+ * data structures
+ *--------------------------------------------------------------------------*/
 
 struct hemp_slab {
     hemp_ptr_t  data;       /* pointer to memory            */
@@ -11,8 +14,30 @@ struct hemp_slab {
     hemp_slab_t next;       /* next slab in linked list     */
 };
 
-hemp_slab_t hemp_slab_init(hemp_size_t size);
-void        hemp_slab_free(hemp_slab_t slab);
+
+/*--------------------------------------------------------------------------
+ * function prototypes
+ *--------------------------------------------------------------------------*/
+
+hemp_slab_t 
+    hemp_slab_init(
+        hemp_size_t size
+    );
+
+void
+    hemp_slab_free(
+        hemp_slab_t slab
+    );
+
+
+/*--------------------------------------------------------------------------
+ * macros
+ *--------------------------------------------------------------------------*/
+
+#define hemp_slab_null(s)   \
+    hemp_slab_free(s);      \
+    s = NULL;
+
 
 #endif /* HEMP_SLAB_H */
 

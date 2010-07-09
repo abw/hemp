@@ -1,32 +1,48 @@
-check_PROGRAMS  = dialect   \
+check_PROGRAMS  = debug     \
+                  dialect   \
                   element   \
                   hash      \
                   hemp      \
+                  memory    \
                   pool      \
+                  slab      \
                   sources   \
-                  template
+                  template  
+#                 tests
 
 TESTS = $(check_PROGRAMS)
 
-dialect_SOURCES  = dialect.c
-dialect_LDADD    = ../source/libhemp.a
+debug_SOURCES    = debug.c tap.c
+debug_LDADD      = ../source/libhemp.la
 
-element_SOURCES  = element.c
-element_LDADD    = ../source/libhemp.a
+dialect_SOURCES  = dialect.c tap.c
+dialect_LDADD    = ../source/libhemp.la
 
-hash_SOURCES     = hash.c
-hash_LDADD       = ../source/libhemp.a
+element_SOURCES  = element.c tap.c
+element_LDADD    = ../source/libhemp.la
 
-hemp_SOURCES     = hemp.c
-hemp_LDADD       = ../source/libhemp.a
+hash_SOURCES     = hash.c tap.c
+hash_LDADD       = ../source/libhemp.la
 
-pool_SOURCES     = pool.c
-pool_LDADD       = ../source/libhemp.a
+hemp_SOURCES     = hemp.c tap.c
+hemp_LDADD       = ../source/libhemp.la
 
-sources_SOURCES  = sources.c
-sources_LDADD    = ../source/libhemp.a
+memory_SOURCES   = memory.c tap.c
+memory_LDADD     = ../source/libhemp.la
 
-template_SOURCES = template.c
-template_LDADD   = ../source/libhemp.a
+pool_SOURCES     = pool.c tap.c
+pool_LDADD       = ../source/libhemp.la
+
+slab_SOURCES     = slab.c tap.c
+slab_LDADD       = ../source/libhemp.la
+
+sources_SOURCES  = sources.c tap.c
+sources_LDADD    = ../source/libhemp.la
+
+template_SOURCES = template.c tap.c
+template_LDADD   = ../source/libhemp.la
+
+#tests_SOURCES = tests.c tap.c
+#tests_LDADD   = ../source/libhemp.la
 
 
