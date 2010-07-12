@@ -34,8 +34,10 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = debug$(EXEEXT) dialect$(EXEEXT) element$(EXEEXT) \
-	hash$(EXEEXT) hemp$(EXEEXT) memory$(EXEEXT) module$(EXEEXT) \
-	pool$(EXEEXT) slab$(EXEEXT) sources$(EXEEXT) template$(EXEEXT)
+	error$(EXEEXT) hash$(EXEEXT) hemp$(EXEEXT) list$(EXEEXT) \
+	memory$(EXEEXT) module$(EXEEXT) pool$(EXEEXT) scanner$(EXEEXT) \
+	slab$(EXEEXT) sources$(EXEEXT) filesystem$(EXEEXT) \
+	template$(EXEEXT)
 subdir = tests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -59,12 +61,22 @@ dialect_DEPENDENCIES = ../source/libhemp.la
 am_element_OBJECTS = element.$(OBJEXT) tap.$(OBJEXT)
 element_OBJECTS = $(am_element_OBJECTS)
 element_DEPENDENCIES = ../source/libhemp.la
+am_error_OBJECTS = error.$(OBJEXT) tap.$(OBJEXT)
+error_OBJECTS = $(am_error_OBJECTS)
+error_DEPENDENCIES = ../source/libhemp.la
+am_filesystem_OBJECTS = filesystem-filesystem.$(OBJEXT) \
+	filesystem-tap.$(OBJEXT)
+filesystem_OBJECTS = $(am_filesystem_OBJECTS)
+filesystem_DEPENDENCIES = ../source/libhemp.la
 am_hash_OBJECTS = hash.$(OBJEXT) tap.$(OBJEXT)
 hash_OBJECTS = $(am_hash_OBJECTS)
 hash_DEPENDENCIES = ../source/libhemp.la
 am_hemp_OBJECTS = hemp.$(OBJEXT) tap.$(OBJEXT)
 hemp_OBJECTS = $(am_hemp_OBJECTS)
 hemp_DEPENDENCIES = ../source/libhemp.la
+am_list_OBJECTS = list.$(OBJEXT) tap.$(OBJEXT)
+list_OBJECTS = $(am_list_OBJECTS)
+list_DEPENDENCIES = ../source/libhemp.la
 am_memory_OBJECTS = memory.$(OBJEXT) tap.$(OBJEXT)
 memory_OBJECTS = $(am_memory_OBJECTS)
 memory_DEPENDENCIES = ../source/libhemp.la
@@ -74,6 +86,9 @@ module_DEPENDENCIES = ../source/libhemp.la
 am_pool_OBJECTS = pool.$(OBJEXT) tap.$(OBJEXT)
 pool_OBJECTS = $(am_pool_OBJECTS)
 pool_DEPENDENCIES = ../source/libhemp.la
+am_scanner_OBJECTS = scanner-scanner.$(OBJEXT) scanner-tap.$(OBJEXT)
+scanner_OBJECTS = $(am_scanner_OBJECTS)
+scanner_DEPENDENCIES = ../source/libhemp.la
 am_slab_OBJECTS = slab.$(OBJEXT) tap.$(OBJEXT)
 slab_OBJECTS = $(am_slab_OBJECTS)
 slab_DEPENDENCIES = ../source/libhemp.la
@@ -97,13 +112,15 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(debug_SOURCES) $(dialect_SOURCES) $(element_SOURCES) \
-	$(hash_SOURCES) $(hemp_SOURCES) $(memory_SOURCES) \
-	$(module_SOURCES) $(pool_SOURCES) $(slab_SOURCES) \
-	$(sources_SOURCES) $(template_SOURCES)
+	$(error_SOURCES) $(filesystem_SOURCES) $(hash_SOURCES) \
+	$(hemp_SOURCES) $(list_SOURCES) $(memory_SOURCES) \
+	$(module_SOURCES) $(pool_SOURCES) $(scanner_SOURCES) \
+	$(slab_SOURCES) $(sources_SOURCES) $(template_SOURCES)
 DIST_SOURCES = $(debug_SOURCES) $(dialect_SOURCES) $(element_SOURCES) \
-	$(hash_SOURCES) $(hemp_SOURCES) $(memory_SOURCES) \
-	$(module_SOURCES) $(pool_SOURCES) $(slab_SOURCES) \
-	$(sources_SOURCES) $(template_SOURCES)
+	$(error_SOURCES) $(filesystem_SOURCES) $(hash_SOURCES) \
+	$(hemp_SOURCES) $(list_SOURCES) $(memory_SOURCES) \
+	$(module_SOURCES) $(pool_SOURCES) $(scanner_SOURCES) \
+	$(slab_SOURCES) $(sources_SOURCES) $(template_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 am__tty_colors = \
@@ -238,26 +255,40 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 #                 tests
 TESTS = $(check_PROGRAMS)
+
+# I bet there's some really easy way to set these values for all files, 
+# but I'm a complete autoconf/automake noob, so I'm just sticking with the
+# tediously repetitive way for now
 debug_SOURCES = debug.c tap.c
 debug_LDADD = ../source/libhemp.la
 dialect_SOURCES = dialect.c tap.c
 dialect_LDADD = ../source/libhemp.la
 element_SOURCES = element.c tap.c
 element_LDADD = ../source/libhemp.la
+error_SOURCES = error.c tap.c
+error_LDADD = ../source/libhemp.la
 hash_SOURCES = hash.c tap.c
 hash_LDADD = ../source/libhemp.la
 hemp_SOURCES = hemp.c tap.c
 hemp_LDADD = ../source/libhemp.la
+list_SOURCES = list.c tap.c
+list_LDADD = ../source/libhemp.la
 memory_SOURCES = memory.c tap.c
 memory_LDADD = ../source/libhemp.la
 module_SOURCES = module.c tap.c
 module_LDADD = ../source/libhemp.la
 pool_SOURCES = pool.c tap.c
 pool_LDADD = ../source/libhemp.la
+scanner_SOURCES = scanner.c tap.c
+scanner_LDADD = ../source/libhemp.la
+scanner_CPPFLAGS = -DTESTDIR='"$(abs_top_srcdir)/tests"'
 slab_SOURCES = slab.c tap.c
 slab_LDADD = ../source/libhemp.la
 sources_SOURCES = sources.c tap.c
 sources_LDADD = ../source/libhemp.la
+filesystem_SOURCES = filesystem.c tap.c 
+filesystem_LDADD = ../source/libhemp.la
+filesystem_CPPFLAGS = -DTESTDIR='"$(abs_top_srcdir)/tests"'
 template_SOURCES = template.c tap.c
 template_LDADD = ../source/libhemp.la
 all: all-am
@@ -312,12 +343,21 @@ dialect$(EXEEXT): $(dialect_OBJECTS) $(dialect_DEPENDENCIES)
 element$(EXEEXT): $(element_OBJECTS) $(element_DEPENDENCIES) 
 	@rm -f element$(EXEEXT)
 	$(LINK) $(element_OBJECTS) $(element_LDADD) $(LIBS)
+error$(EXEEXT): $(error_OBJECTS) $(error_DEPENDENCIES) 
+	@rm -f error$(EXEEXT)
+	$(LINK) $(error_OBJECTS) $(error_LDADD) $(LIBS)
+filesystem$(EXEEXT): $(filesystem_OBJECTS) $(filesystem_DEPENDENCIES) 
+	@rm -f filesystem$(EXEEXT)
+	$(LINK) $(filesystem_OBJECTS) $(filesystem_LDADD) $(LIBS)
 hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES) 
 	@rm -f hash$(EXEEXT)
 	$(LINK) $(hash_OBJECTS) $(hash_LDADD) $(LIBS)
 hemp$(EXEEXT): $(hemp_OBJECTS) $(hemp_DEPENDENCIES) 
 	@rm -f hemp$(EXEEXT)
 	$(LINK) $(hemp_OBJECTS) $(hemp_LDADD) $(LIBS)
+list$(EXEEXT): $(list_OBJECTS) $(list_DEPENDENCIES) 
+	@rm -f list$(EXEEXT)
+	$(LINK) $(list_OBJECTS) $(list_LDADD) $(LIBS)
 memory$(EXEEXT): $(memory_OBJECTS) $(memory_DEPENDENCIES) 
 	@rm -f memory$(EXEEXT)
 	$(LINK) $(memory_OBJECTS) $(memory_LDADD) $(LIBS)
@@ -327,6 +367,9 @@ module$(EXEEXT): $(module_OBJECTS) $(module_DEPENDENCIES)
 pool$(EXEEXT): $(pool_OBJECTS) $(pool_DEPENDENCIES) 
 	@rm -f pool$(EXEEXT)
 	$(LINK) $(pool_OBJECTS) $(pool_LDADD) $(LIBS)
+scanner$(EXEEXT): $(scanner_OBJECTS) $(scanner_DEPENDENCIES) 
+	@rm -f scanner$(EXEEXT)
+	$(LINK) $(scanner_OBJECTS) $(scanner_LDADD) $(LIBS)
 slab$(EXEEXT): $(slab_OBJECTS) $(slab_DEPENDENCIES) 
 	@rm -f slab$(EXEEXT)
 	$(LINK) $(slab_OBJECTS) $(slab_LDADD) $(LIBS)
@@ -346,11 +389,17 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialect.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/element.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filesystem-filesystem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filesystem-tap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/module.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pool.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner-scanner.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner-tap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/slab.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tap.Po@am__quote@
@@ -376,6 +425,62 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+filesystem-filesystem.o: filesystem.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filesystem_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT filesystem-filesystem.o -MD -MP -MF $(DEPDIR)/filesystem-filesystem.Tpo -c -o filesystem-filesystem.o `test -f 'filesystem.c' || echo '$(srcdir)/'`filesystem.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/filesystem-filesystem.Tpo $(DEPDIR)/filesystem-filesystem.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='filesystem.c' object='filesystem-filesystem.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filesystem_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o filesystem-filesystem.o `test -f 'filesystem.c' || echo '$(srcdir)/'`filesystem.c
+
+filesystem-filesystem.obj: filesystem.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filesystem_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT filesystem-filesystem.obj -MD -MP -MF $(DEPDIR)/filesystem-filesystem.Tpo -c -o filesystem-filesystem.obj `if test -f 'filesystem.c'; then $(CYGPATH_W) 'filesystem.c'; else $(CYGPATH_W) '$(srcdir)/filesystem.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/filesystem-filesystem.Tpo $(DEPDIR)/filesystem-filesystem.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='filesystem.c' object='filesystem-filesystem.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filesystem_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o filesystem-filesystem.obj `if test -f 'filesystem.c'; then $(CYGPATH_W) 'filesystem.c'; else $(CYGPATH_W) '$(srcdir)/filesystem.c'; fi`
+
+filesystem-tap.o: tap.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filesystem_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT filesystem-tap.o -MD -MP -MF $(DEPDIR)/filesystem-tap.Tpo -c -o filesystem-tap.o `test -f 'tap.c' || echo '$(srcdir)/'`tap.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/filesystem-tap.Tpo $(DEPDIR)/filesystem-tap.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tap.c' object='filesystem-tap.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filesystem_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o filesystem-tap.o `test -f 'tap.c' || echo '$(srcdir)/'`tap.c
+
+filesystem-tap.obj: tap.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filesystem_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT filesystem-tap.obj -MD -MP -MF $(DEPDIR)/filesystem-tap.Tpo -c -o filesystem-tap.obj `if test -f 'tap.c'; then $(CYGPATH_W) 'tap.c'; else $(CYGPATH_W) '$(srcdir)/tap.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/filesystem-tap.Tpo $(DEPDIR)/filesystem-tap.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tap.c' object='filesystem-tap.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filesystem_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o filesystem-tap.obj `if test -f 'tap.c'; then $(CYGPATH_W) 'tap.c'; else $(CYGPATH_W) '$(srcdir)/tap.c'; fi`
+
+scanner-scanner.o: scanner.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(scanner_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT scanner-scanner.o -MD -MP -MF $(DEPDIR)/scanner-scanner.Tpo -c -o scanner-scanner.o `test -f 'scanner.c' || echo '$(srcdir)/'`scanner.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/scanner-scanner.Tpo $(DEPDIR)/scanner-scanner.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='scanner.c' object='scanner-scanner.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(scanner_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o scanner-scanner.o `test -f 'scanner.c' || echo '$(srcdir)/'`scanner.c
+
+scanner-scanner.obj: scanner.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(scanner_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT scanner-scanner.obj -MD -MP -MF $(DEPDIR)/scanner-scanner.Tpo -c -o scanner-scanner.obj `if test -f 'scanner.c'; then $(CYGPATH_W) 'scanner.c'; else $(CYGPATH_W) '$(srcdir)/scanner.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/scanner-scanner.Tpo $(DEPDIR)/scanner-scanner.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='scanner.c' object='scanner-scanner.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(scanner_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o scanner-scanner.obj `if test -f 'scanner.c'; then $(CYGPATH_W) 'scanner.c'; else $(CYGPATH_W) '$(srcdir)/scanner.c'; fi`
+
+scanner-tap.o: tap.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(scanner_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT scanner-tap.o -MD -MP -MF $(DEPDIR)/scanner-tap.Tpo -c -o scanner-tap.o `test -f 'tap.c' || echo '$(srcdir)/'`tap.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/scanner-tap.Tpo $(DEPDIR)/scanner-tap.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tap.c' object='scanner-tap.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(scanner_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o scanner-tap.o `test -f 'tap.c' || echo '$(srcdir)/'`tap.c
+
+scanner-tap.obj: tap.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(scanner_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT scanner-tap.obj -MD -MP -MF $(DEPDIR)/scanner-tap.Tpo -c -o scanner-tap.obj `if test -f 'tap.c'; then $(CYGPATH_W) 'tap.c'; else $(CYGPATH_W) '$(srcdir)/tap.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/scanner-tap.Tpo $(DEPDIR)/scanner-tap.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tap.c' object='scanner-tap.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(scanner_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o scanner-tap.obj `if test -f 'tap.c'; then $(CYGPATH_W) 'tap.c'; else $(CYGPATH_W) '$(srcdir)/tap.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -676,8 +781,8 @@ uninstall-am:
 	tags uninstall uninstall-am
 
 
-#tests_SOURCES = tests.c tap.c
-#tests_LDADD   = ../source/libhemp.la
+#tests_SOURCES      = tests.c tap.c
+#tests_LDADD        = ../source/libhemp.la
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

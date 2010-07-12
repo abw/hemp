@@ -9,7 +9,7 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_etype {
-    hemp_ident_t    name;
+    hemp_name_t     name;
     hemp_cstr_t     (*text)();
 };
 

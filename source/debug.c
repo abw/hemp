@@ -48,3 +48,18 @@ void debug_col(char *col, char *format, ...)
 #endif
 }
 
+void 
+debug_token(
+    hemp_cstr_t type,
+    hemp_cstr_t str,
+    hemp_pos_t  len
+) {
+    static char buffer[80];
+    if (len > 79)
+        len = 79;
+    strncpy(buffer, str, len);
+    buffer[len] = '\0';
+    debug_scan("[%s:%s]\n", type, buffer);
+} 
+
+

@@ -69,10 +69,13 @@ void
 
 extern hemp_etype_t HempElementBase;
 extern hemp_etype_t HempElementSpace;
+extern hemp_etype_t HempElementComment;
 extern hemp_etype_t HempElementText;
 extern hemp_etype_t HempElementTagStart;
 extern hemp_etype_t HempElementTagEnd;
 extern hemp_etype_t HempElementEof;
+extern hemp_etype_t HempElementWord;
+extern hemp_etype_t HempElementNumber;
 
 
 #endif /* HEMP_ELEMENTS_H */

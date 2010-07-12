@@ -71,7 +71,7 @@ am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-hemp_foo_la_LIBADD =
+hemp_foo_la_DEPENDENCIES = ../source/libhemp.la
 am_hemp_foo_la_OBJECTS = foo.lo
 hemp_foo_la_OBJECTS = $(am_hemp_foo_la_OBJECTS)
 hemp_foo_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -224,7 +224,9 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = hemp_foo.la
 hemp_foo_la_SOURCES = foo.c 
-hemp_foo_la_LDFLAGS = -module
+#hemp_foo_la_LDFLAGS  = -module
+hemp_foo_la_LDFLAGS = -no-undefined -module -avoid-version -export-dynamic
+hemp_foo_la_LIBADD = ../source/libhemp.la
 all: all-am
 
 .SUFFIXES:
@@ -529,6 +531,8 @@ uninstall-am: uninstall-libLTLIBRARIES
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-libLTLIBRARIES
 
+
+#AM_CPPFLAGS          = -I$(srcdir)/../libloader
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -15,7 +15,7 @@ hemp_scan_text(
                     src      = text,
                     from     = text,
                     cmptr, 
-                    tag_pos;
+                    tagstr;
     hemp_pos_t      pos      = 0,
                     line     = 0;
     hemp_tag_t      tag;
@@ -33,23 +33,20 @@ hemp_scan_text(
 
         if ((pnode = outhead[(unsigned char) *src])) {
             debug_yellow("OUTLINE:%c", *src);
-            tag_pos = src;
+            tagstr = src;
             
             if ((tag = hemp_scan_tag_start(pnode, &src))) {
-                if (tag_pos > from) {
+                if (tagstr > from) {
                     hemp_elements_append(
                         elements, tagset->text_element,
-                        from, pos, tag_pos - from
+                        from, pos, tagstr - from
                     );
-                    pos += tag_pos - from;
-                    from = tag_pos;
+                    pos += tagstr - from;
+                    from = tagstr;
                 }
-                hemp_elements_append(
-                    elements, HempElementTagStart,
-                    tag_pos, pos, src - tag_pos
-                );
+                tag->scan(tmpl, tag, tagstr, pos, &src);
                 from = src;
-                pos += src - tag_pos;
+                pos += src - tagstr;
             }
         }
         
@@ -67,23 +64,20 @@ hemp_scan_text(
             else if ((pnode = inhead[(unsigned char) *src])) {
                 debug_yellow("INLINE:%c", *src);
 
-                tag_pos = src;
+                tagstr = src;
 
                 if ((tag = hemp_scan_tag_start(pnode, &src))) {
-                    if (tag_pos > from) {
+                    if (tagstr > from) {
                         hemp_elements_append(
                             elements, tagset->text_element,
-                            from, pos, tag_pos - from
+                            from, pos, tagstr - from
                         );
-                        pos += tag_pos - from;
-                        from = tag_pos;
+                        pos += tagstr - from;
+                        from = tagstr;
                     }
-                    hemp_elements_append(
-                        elements, HempElementTagStart,
-                        tag_pos, pos, src - tag_pos
-                    );
+                    tag->scan(tmpl, tag, tagstr, pos, &src);
                     from = src;
-                    pos += src - tag_pos;
+                    pos += src - tagstr;
                 }
                 else {
                     src++;
@@ -118,8 +112,8 @@ hemp_scan_text(
 
 hemp_tag_t
 hemp_scan_tag_start(
-    hemp_pnode_t pnode, 
-    hemp_cstr_t  *srcptr
+    hemp_pnode_t    pnode, 
+    hemp_cstr_t     *srcptr
 ) {
 //  debug_blue("hemp_scan_tag_start(%p[%s])]", pnode, pnode->key);
 

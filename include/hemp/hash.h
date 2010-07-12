@@ -100,7 +100,7 @@ void
 
 #define hemp_hash_null(h) \
     hemp_hash_free(h);    \
-    h = NULL;                
+    h = NULL;
 
 
 #endif /* HEMP_HASH_H */

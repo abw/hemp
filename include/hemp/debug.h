@@ -4,14 +4,20 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "hemp/types.h"
 
-void    debug       (char *format, ...);
-void    debug_col   (char *col, char *format, ...);
-void    debug_on();
-void    debug_off();
+void debug       (char *format, ...);
+void debug_col   (char *col, char *format, ...);
+void debug_on();
+void debug_off();
+void debug_token(hemp_cstr_t type, hemp_cstr_t str, hemp_pos_t len);
+
 
 #define DEBUG_MEM       0x0002
-#define DEBUG_LOAD      0x0004
+#define DEBUG_CALL      0x0004
+#define DEBUG_LOAD      0x0008
+#define DEBUG_FILE      0x0010
+#define DEBUG_SCAN      0x0020
 #define DEBUG_ALL       0xFFFF
 
 #define ANSI_RED        "\e[31m"
@@ -38,9 +44,15 @@ void    debug_off();
 #  define debug_cyan(format, ...)     debug_col(ANSI_CYAN,    format, ##__VA_ARGS__)
 #
 #  if DEBUG & DEBUG_MEM
-#    define debug_mem(format, ...)    debug_col(ANSI_CYAN,    format, ##__VA_ARGS__)
+#    define debug_mem(format, ...)    debug_col(ANSI_CYAN, format, ##__VA_ARGS__)
 #  else 
 #    define debug_mem(format, ...)
+#  endif
+#
+#  if DEBUG & DEBUG_CALL
+#    define debug_call(format, ...)   debug_col(ANSI_BLUE, format, ##__VA_ARGS__)
+#  else 
+#    define debug_call(format, ...)
 #  endif
 #
 #  if DEBUG & DEBUG_LOAD
@@ -48,6 +60,19 @@ void    debug_off();
 #  else 
 #    define debug_load(format, ...)
 #  endif
+#
+#  if DEBUG & DEBUG_FILE
+#    define debug_file(format, ...)   debug_yellow(format, ##__VA_ARGS__)
+#  else 
+#    define debug_file(format, ...)
+#  endif
+#
+#  if DEBUG & DEBUG_SCAN
+#    define debug_scan(format, ...)   debug_col(ANSI_GREEN, format, ##__VA_ARGS__)
+#  else 
+#    define debug_scan(format, ...)
+#  endif
+#
 #
 #else
 #  define debug_red(format, ...)      
@@ -57,7 +82,10 @@ void    debug_off();
 #  define debug_magenta(format, ...)  
 #  define debug_cyan(format, ...)     
 #  define debug_mem(format, ...)      
+#  define debug_call(format, ...)
 #  define debug_load(format, ...)
+#  define debug_file(format, ...)
+#  define debug_scan(format, ...)
 #endif
 
 #endif /* HEMP_DEBUG_H */

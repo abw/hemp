@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "hemp.h"
+#include "hemp/debug.h"
 
 hemp_bool_t 
 hemp_onload(
@@ -16,6 +17,8 @@ hemp_onload(
     else {
         printf("cannot find hemp_hello()\n");
     }
+    printf("calling direct...\n");
+    hemp_hello(hemp);
     return HEMP_TRUE;
 }
 

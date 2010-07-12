@@ -42,10 +42,10 @@ hemp_source(
 
     // quick hack - should eventually be replaced by a hash array with 
     // methods for adding new schemes
-    if (hemp_str_eq(scheme_name, HEMP_FILE)) {
+    if (hemp_cstr_eq(scheme_name, HEMP_FILE)) {
         scheme = HempSchemeFile;
     }
-    else if (hemp_str_eq(scheme_name, HEMP_TEXT)) {
+    else if (hemp_cstr_eq(scheme_name, HEMP_TEXT)) {
         scheme = HempSchemeText;
     }
     else {

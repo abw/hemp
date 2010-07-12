@@ -48,7 +48,7 @@ hash_has(hemp_hash_t table, char *key, char *expect)
 {
     hemp_ptr_t value = hemp_hash_fetch(table, key);
     ok( 
-        value && hemp_str_eq(value, expect),
+        value && hemp_cstr_eq(value, expect),
         "found %s => %s", key, value
     );
 }

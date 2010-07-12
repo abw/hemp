@@ -30,7 +30,7 @@
  *-------------------------------------------------------------------------*/
 
 struct hemp_scheme {
-    hemp_ident_t        name;
+    hemp_name_t         name;
     hemp_source_text_fn namer;
     hemp_source_bool_fn checker;
     hemp_source_text_fn reader;

@@ -1,3 +1,5 @@
+#include <limits.h>
+#include <errno.h>
 #include "hemp/tags.h"
 
 
@@ -23,8 +25,10 @@ hemp_scan_inline_tag(
     hemp_cstr_t     src    = *srcptr,
                     from   = src,
                     point;
-    hemp_ident_t    tagend = tag->end;
+    hemp_name_t     tagend = tag->end;
     hemp_size_t     endlen = strlen(tagend);
+    long            integer;
+    double          floater;
     char tmp[100];
 
     debug_call("hemp_scan_tag()\n");
@@ -57,28 +61,44 @@ hemp_scan_inline_tag(
             break;
         }
         else if (isdigit(*src)) {                       // TODO: leading '.' ?
-            point = NULL;
-        
-            /* 0x1234ABCD hexadecimal numbers */
-            if (*src == '0' && *(src + 1) == 'x') {
-                hemp_todo("hexadecimal numbers");
+            integer = strtol(src, &src, 0);
+            
+            if (errno) {
+                switch (errno) {
+                    case EINVAL:
+                        debug_red("invalid number\n");          // TODO: proper handling
+                        break;
+                    case ERANGE:
+                        debug_red("number out of range\n");     // TODO: proper handling
+                        break;
+                    default:
+                        debug_red("unknown error parsing number\n");
+                        perror("num");
+                        break;
+                }
             }
-
-            /* consume integral part */
-            do { ++src; } while (isdigit(*src));
-
+            
             /* look for decimal point and consume fractional part but only if
              * the next character is numeric, so we can support 123.method */
-            if (*src == '.' && isdigit(*(src + 1))) {
-                point = src;
-                do { src++; } while (isdigit(*src));
-            } 
-            
-            if (*src == 'e') {
-                hemp_todo("numbers with exponents");
+            if (
+                (*src == '.' && isdigit(*(src + 1)))
+             || (*src == 'e' || *src == 'E')
+            )  {
+                debug_yellow("found decimal point\n");
+                floater = strtod(from, &src);
+                if (from == src) {
+                    debug_red("invalid floating point number"); // TODO
+                }
+                else {
+                    debug_token("FLOAT", from, src-from);
+                    debug_yellow("[VALUE: %lf]\n", floater);
+                }
+            }
+            else {
+                debug_token("INTEGER", from, src-from);
+                debug_yellow("[VALUE: %ld]", integer);
             }
                 
-            debug_token("NUMBER", from, src-from);
             hemp_elements_append(
                 tmpl->elements, HempElementNumber,
                 from, pos, src - from

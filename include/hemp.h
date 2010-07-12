@@ -10,6 +10,7 @@ extern "C" {
 #include "hemp/slab.h"
 #include "hemp/pool.h"
 #include "hemp/hash.h"
+#include "hemp/list.h"
 #include "hemp/ptree.h"
 #include "hemp/element.h"
 #include "hemp/elements.h"
@@ -19,14 +20,21 @@ extern "C" {
 #include "hemp/scanner.h"
 #include "hemp/template.h"
 #include "hemp/module.h"
+#include "hemp/utils.h"
+#include "hemp/error.h"
+#include "hemp/filesystem.h"
 #include "hemp/debug.h"
-//#include "hemp/test.h"
+#include "hemp/os.h"
+#include "hemp/type.h"
+#include "hemp/value.h"
 
 
 struct hemp {
-    hemp_hash_t dialects;
-    hemp_hash_t dialect_factory;
+    hemp_hash_t     dialects;
+    hemp_hash_t     dialect_factory;
+    hemp_jump_t     *jump;
 };
+
 
 hemp_t      hemp_init();
 void        hemp_free(hemp_t);

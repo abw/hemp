@@ -1,0 +1,14 @@
+-- test integers
+[% 0 01 123 12345 %]
+
+-- test hexadecimal
+[% 0x1234 %]
+
+-- test fractionals
+[% 0.1 01.0123 123.456 12345 %]
+
+-- test fractionals with exponents
+[% 0.1e3 01.0123e-2 123.456E-2 1.2345e-13 %]
+
+-- test numerical overflow
+[% 123123871263876187236123876 1.2345 12345.123456789 %]

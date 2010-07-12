@@ -1,8 +1,14 @@
 #ifndef HEMP_TAGS_H
 #define HEMP_TAGS_H
 
+#include <ctype.h>
+#include <string.h>
 #include "hemp/ptree.h"
 #include "hemp/element.h"
+#include "hemp/elements.h"
+#include "hemp/template.h"
+#include "hemp/utils.h"
+
 
 #define HEMP_DEFAULT_TAGSET_SIZE 8
 
@@ -12,9 +18,9 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_tag {
-   hemp_ident_t     name;
-   hemp_ident_t     start;
-   hemp_ident_t     end;
+   hemp_name_t      name;
+   hemp_name_t      start;
+   hemp_name_t      end;
    hemp_tag_scan_fn scan;
 };
 
@@ -46,6 +52,20 @@ hemp_pnode_t
         hemp_tagset_t   tagset, 
         hemp_tag_t      tag
     );
+
+#define HEMP_SCAN_TAG_ARGS      \
+    hemp_template_t     tmpl,   \
+    hemp_tag_t          tag,    \
+    hemp_cstr_t         tagtok, \
+    hemp_pos_t          pos,    \
+    hemp_cstr_t         *srcptr
+
+void hemp_scan_inline_tag(  HEMP_SCAN_TAG_ARGS );
+void hemp_scan_outline_tag( HEMP_SCAN_TAG_ARGS );
+void hemp_scan_comment_tag( HEMP_SCAN_TAG_ARGS );
+void hemp_scan_control_tag( HEMP_SCAN_TAG_ARGS );
+void hemp_scan_variable_tag( HEMP_SCAN_TAG_ARGS );
+void hemp_scan_embed_tag(   HEMP_SCAN_TAG_ARGS );
 
 
 /*--------------------------------------------------------------------------

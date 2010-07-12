@@ -93,7 +93,7 @@ hemp_elements_dump(
     hemp_element_t n = e->next;
 
     while (e) {
-        debug("%03d %p %-20s %s%s%s\n", (int) e->position, e, e->type->name, ANSI_YELLOW, e->type->text(e), ANSI_RESET);
+        debug("%03d:%02d %-12s |%s%s%s|\n", (int) e->position, (int) e->length, e->type->name, ANSI_YELLOW, e->type->text(e), ANSI_RESET);
         if (e->type == HempElementEof) {
             break;
         }
@@ -123,6 +123,12 @@ static struct hemp_etype
         &hemp_element_text_text
     };
 
+static struct hemp_etype 
+    hemp_element_comment = { 
+        "comment",
+        &hemp_element_text_text
+    };
+
 static struct hemp_etype
     hemp_element_text = { 
         "text",
@@ -147,14 +153,29 @@ static struct hemp_etype
         &hemp_element_eof_text
     };
 
+static struct hemp_etype
+    hemp_element_word = { 
+        "word",
+        &hemp_element_text_text
+    };
+
+static struct hemp_etype
+    hemp_element_number = { 
+        "number",
+        &hemp_element_text_text
+    };
+
 
 
 hemp_etype_t HempElementBase      = &hemp_element_base;
 hemp_etype_t HempElementSpace     = &hemp_element_space;
+hemp_etype_t HempElementComment   = &hemp_element_comment;
 hemp_etype_t HempElementText      = &hemp_element_text;
 hemp_etype_t HempElementTagStart  = &hemp_element_tag_start;
 hemp_etype_t HempElementTagEnd    = &hemp_element_tag_end;
 hemp_etype_t HempElementEof       = &hemp_element_eof;
+hemp_etype_t HempElementWord      = &hemp_element_word;
+hemp_etype_t HempElementNumber    = &hemp_element_number;
 
 
 hemp_cstr_t

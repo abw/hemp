@@ -1,8 +1,17 @@
+#include <ctype.h>
+#include <string.h>
 #include "hemp/tags.h"
 #include "hemp/elements.h"
+#include "hemp/template.h"
 #include "hemp/debug.h"
 
 void hemp_scan_tag();                  // TODO: args
+void 
+debug_token(
+    hemp_cstr_t type,
+    hemp_cstr_t str,
+    hemp_pos_t  len
+);
 
 
 hemp_tagset_t
@@ -83,66 +92,5 @@ hemp_tagset_dump(
     hemp_ptree_dump(tagset->inline_tags);
     hemp_ptree_dump(tagset->outline_tags);
 }
-
-
-
-/*=======================================================================*/
-
-
-static struct hemp_tag 
-    hemp_inline_tag = { 
-        "tt.tag.inline", 
-        "[%", "%]", 
-        &hemp_scan_tag 
-    };
-
-static struct hemp_tag 
-    hemp_outline_tag = { 
-        "tt.tag.outline", 
-        "%%", "\n", 
-        &hemp_scan_tag
-    };
-
-static struct hemp_tag 
-    hemp_comment_tag = { 
-        "tt.tag.comment",
-        "[#", "#]",
-        &hemp_scan_tag
-    };
-
-static struct hemp_tag 
-    hemp_control_tag = { 
-        "tt.tag.control",
-        "[?", "?]",
-        &hemp_scan_tag
-    };
-
-static struct hemp_tag 
-    hemp_variable_tag = { 
-        "tt.tag.variable",
-        "$", NULL,
-        &hemp_scan_tag
-    };
-
-static struct hemp_tag 
-    hemp_embed_tag = { 
-        "tt.tag.embed",
-        "${", "}",
-        &hemp_scan_tag
-    };
-
-
-hemp_tag_t  HempTagInline   = &hemp_inline_tag;
-hemp_tag_t  HempTagOutline  = &hemp_outline_tag;
-hemp_tag_t  HempTagComment  = &hemp_comment_tag;
-hemp_tag_t  HempTagControl  = &hemp_control_tag;
-hemp_tag_t  HempTagVariable = &hemp_variable_tag;
-hemp_tag_t  HempTagEmbed    = &hemp_embed_tag;
-
-
-void hemp_scan_tag() {
-    debug_red("TODO: hemp_scan_tag()\n");
-}
-
 
 

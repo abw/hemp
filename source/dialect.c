@@ -11,7 +11,7 @@
 
 hemp_dialect_t 
 hemp_dialect_init(
-    hemp_ident_t name
+    hemp_name_t name
 ) {
     hemp_dialect_t dialect;
     

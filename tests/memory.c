@@ -22,7 +22,7 @@ void test_memory() {
     ok( b, "Allocated more memory" );
 
     hemp_mem_copy(a, b, 100);
-    ok( hemp_str_eq(a, b), "strings match" );
+    ok( hemp_cstr_eq(a, b), "strings match" );
     
     hemp_mem_free(a);
     hemp_mem_free(b);

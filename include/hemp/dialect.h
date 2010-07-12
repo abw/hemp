@@ -13,7 +13,7 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_dialect {
-    hemp_ident_t    name;
+    hemp_name_t     name;
     hemp_scan_fn    scanner;
     hemp_tagset_t   tagset;
 };
@@ -25,7 +25,7 @@ struct hemp_dialect {
 
 hemp_dialect_t  
     hemp_dialect_init(
-        hemp_ident_t
+        hemp_name_t
     );
 
 hemp_dialect_t  
