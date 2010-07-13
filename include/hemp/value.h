@@ -7,7 +7,7 @@
 
 #define HEMP_VALUE_BASE     \
     hemp_type_t  type;      \
-    hemp_flags_t  flags;    \
+    hemp_flags_t flags;     \
     hemp_value_t next;
     
 struct hemp_value {

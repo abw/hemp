@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "hemp/types.h"
+#include "hemp/cstr.h"
 #include "hemp/memory.h"
 #include "hemp/slab.h"
 #include "hemp/pool.h"

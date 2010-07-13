@@ -11,6 +11,7 @@
 struct hemp_etype {
     hemp_name_t     name;
     hemp_cstr_t     (*text)();
+    hemp_cstr_t     (*number)();
 };
 
 struct hemp_element {
@@ -19,7 +20,26 @@ struct hemp_element {
     hemp_pos_t      position;
     hemp_size_t     length;
     hemp_element_t  next;
+    hemp_evalue_t   value;
 };
+
+union hemp_evalue {
+    hemp_value_t    constant;
+    hemp_value_t    variable;
+    hemp_unary_t    unary;
+    hemp_binary_t   binary;
+};
+
+struct hemp_unary {
+    hemp_element_t  expr;
+    // TODO: args
+};
+
+struct hemp_binary {
+    hemp_element_t  lhs;
+    hemp_element_t  rhs;
+};
+
 
 
 /*--------------------------------------------------------------------------

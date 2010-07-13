@@ -2,7 +2,7 @@
 #define HEMP_SOURCES_H
 
 #include "hemp/memory.h"
-#include "hemp/text.h"
+#include "hemp/cstr.h"
 
 #define HEMP_TEXT "text"
 #define HEMP_FILE "file"

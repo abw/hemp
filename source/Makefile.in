@@ -74,9 +74,10 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libhemp_la_LIBADD =
-am_libhemp_la_OBJECTS = dialect.lo debug.lo element.lo elements.lo \
+am_libhemp_la_OBJECTS = cstr.lo dialect.lo debug.lo element.lo \
+	elements.lo dquote.lo integer.lo number.lo squote.lo text.lo \
 	filesystem.lo hash.lo hemp_obj.lo list.lo memory.lo module.lo \
-	pool.lo ptree.lo scanner.lo slab.lo sources.lo text.lo tags.lo \
+	pool.lo ptree.lo scanner.lo slab.lo sources.lo tags.lo \
 	comment.lo control.lo embed.lo inline.lo outline.lo \
 	variable.lo template.lo utils.lo
 libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
@@ -230,30 +231,35 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libhemp.la
-libhemp_la_SOURCES = dialect.c         \
-                      debug.c           \
-                      element.c         \
-                      elements.c        \
-                      filesystem.c      \
-                      hash.c            \
-                      hemp_obj.c        \
-                      list.c            \
-                      memory.c          \
-                      module.c          \
-                      pool.c            \
-                      ptree.c           \
-                      scanner.c         \
-                      slab.c            \
-                      sources.c         \
-                      text.c            \
-                      tags.c            \
-                      tag/comment.c     \
-                      tag/control.c     \
-                      tag/embed.c       \
-                      tag/inline.c      \
-                      tag/outline.c     \
-                      tag/variable.c    \
-                      template.c        \
+libhemp_la_SOURCES = cstr.c                \
+                      dialect.c             \
+                      debug.c               \
+                      element.c             \
+                      elements.c            \
+                      element/dquote.c      \
+                      element/integer.c     \
+                      element/number.c      \
+                      element/squote.c      \
+                      element/text.c        \
+                      filesystem.c          \
+                      hash.c                \
+                      hemp_obj.c            \
+                      list.c                \
+                      memory.c              \
+                      module.c              \
+                      pool.c                \
+                      ptree.c               \
+                      scanner.c             \
+                      slab.c                \
+                      sources.c             \
+                      tags.c                \
+                      tag/comment.c         \
+                      tag/control.c         \
+                      tag/embed.c           \
+                      tag/inline.c          \
+                      tag/outline.c         \
+                      tag/variable.c        \
+                      template.c            \
                       utils.c
 
 hemp_SOURCES = hemp.c
@@ -380,8 +386,10 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/comment.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/control.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cstr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialect.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dquote.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/element.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/elements.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/embed.Plo@am__quote@
@@ -390,15 +398,18 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp_obj.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inline.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/integer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/module.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/number.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/outline.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pool.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ptree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/slab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/squote.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tags.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Plo@am__quote@
@@ -425,6 +436,41 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+dquote.lo: element/dquote.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dquote.lo -MD -MP -MF $(DEPDIR)/dquote.Tpo -c -o dquote.lo `test -f 'element/dquote.c' || echo '$(srcdir)/'`element/dquote.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/dquote.Tpo $(DEPDIR)/dquote.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/dquote.c' object='dquote.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dquote.lo `test -f 'element/dquote.c' || echo '$(srcdir)/'`element/dquote.c
+
+integer.lo: element/integer.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT integer.lo -MD -MP -MF $(DEPDIR)/integer.Tpo -c -o integer.lo `test -f 'element/integer.c' || echo '$(srcdir)/'`element/integer.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/integer.Tpo $(DEPDIR)/integer.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/integer.c' object='integer.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o integer.lo `test -f 'element/integer.c' || echo '$(srcdir)/'`element/integer.c
+
+number.lo: element/number.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT number.lo -MD -MP -MF $(DEPDIR)/number.Tpo -c -o number.lo `test -f 'element/number.c' || echo '$(srcdir)/'`element/number.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/number.Tpo $(DEPDIR)/number.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/number.c' object='number.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o number.lo `test -f 'element/number.c' || echo '$(srcdir)/'`element/number.c
+
+squote.lo: element/squote.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT squote.lo -MD -MP -MF $(DEPDIR)/squote.Tpo -c -o squote.lo `test -f 'element/squote.c' || echo '$(srcdir)/'`element/squote.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/squote.Tpo $(DEPDIR)/squote.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/squote.c' object='squote.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o squote.lo `test -f 'element/squote.c' || echo '$(srcdir)/'`element/squote.c
+
+text.lo: element/text.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT text.lo -MD -MP -MF $(DEPDIR)/text.Tpo -c -o text.lo `test -f 'element/text.c' || echo '$(srcdir)/'`element/text.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/text.Tpo $(DEPDIR)/text.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/text.c' object='text.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o text.lo `test -f 'element/text.c' || echo '$(srcdir)/'`element/text.c
 
 comment.lo: tag/comment.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT comment.lo -MD -MP -MF $(DEPDIR)/comment.Tpo -c -o comment.lo `test -f 'tag/comment.c' || echo '$(srcdir)/'`tag/comment.c

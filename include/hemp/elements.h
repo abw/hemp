@@ -51,6 +51,20 @@ void
         hemp_elements_t elements
     );
 
+/*--------------------------------------------------------------------------
+ * function prototypes for sepecific element types
+ *--------------------------------------------------------------------------*/
+
+hemp_cstr_t                                                     /* text */
+    hemp_element_text_text(
+        hemp_element_t element
+    );
+
+hemp_cstr_t
+    hemp_element_eof_text(
+        hemp_element_t element
+    );
+
 
 /*--------------------------------------------------------------------------
  * macros
@@ -75,7 +89,11 @@ extern hemp_etype_t HempElementTagStart;
 extern hemp_etype_t HempElementTagEnd;
 extern hemp_etype_t HempElementEof;
 extern hemp_etype_t HempElementWord;
+
 extern hemp_etype_t HempElementNumber;
+extern hemp_etype_t HempElementInteger;
+extern hemp_etype_t HempElementSQuote;
+extern hemp_etype_t HempElementDQuote;
 
 
 #endif /* HEMP_ELEMENTS_H */

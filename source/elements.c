@@ -106,11 +106,6 @@ hemp_elements_dump(
 // TODO: these should be moved to elements/core
 
 
-
-hemp_cstr_t hemp_element_text_text(hemp_element_t element);
-hemp_cstr_t hemp_element_eof_text(hemp_element_t element);
-
-
 static struct hemp_etype
     hemp_element_base = { 
         "element",
@@ -126,12 +121,6 @@ static struct hemp_etype
 static struct hemp_etype 
     hemp_element_comment = { 
         "comment",
-        &hemp_element_text_text
-    };
-
-static struct hemp_etype
-    hemp_element_text = { 
-        "text",
         &hemp_element_text_text
     };
 
@@ -159,23 +148,14 @@ static struct hemp_etype
         &hemp_element_text_text
     };
 
-static struct hemp_etype
-    hemp_element_number = { 
-        "number",
-        &hemp_element_text_text
-    };
-
-
 
 hemp_etype_t HempElementBase      = &hemp_element_base;
 hemp_etype_t HempElementSpace     = &hemp_element_space;
 hemp_etype_t HempElementComment   = &hemp_element_comment;
-hemp_etype_t HempElementText      = &hemp_element_text;
 hemp_etype_t HempElementTagStart  = &hemp_element_tag_start;
 hemp_etype_t HempElementTagEnd    = &hemp_element_tag_end;
 hemp_etype_t HempElementEof       = &hemp_element_eof;
 hemp_etype_t HempElementWord      = &hemp_element_word;
-hemp_etype_t HempElementNumber    = &hemp_element_number;
 
 
 hemp_cstr_t

@@ -13,7 +13,7 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_dialect {
-    hemp_name_t     name;
+    hemp_cstr_t     name;
     hemp_scan_fn    scanner;
     hemp_tagset_t   tagset;
 };

@@ -13,6 +13,8 @@ typedef unsigned char             hemp_bool_t;    /* boolean true/false       */
 typedef unsigned char             hemp_char_t;    /* single character         */
 typedef long                      hemp_flags_t;   /* bitmask                  */
 typedef long                      hemp_offset_t;  /* -ve/+ve offset           */
+typedef long                      hemp_int_t;     /* generic integer          */
+typedef double                    hemp_num_t;     /* generic fp number        */
 typedef unsigned long             hemp_size_t;    /* +ve size of list         */
 typedef unsigned long             hemp_pos_t;     /* +ve posn. in string/list */
 typedef const void              * hemp_mem_t;     /* generic memory pointer   */
@@ -45,6 +47,9 @@ typedef struct hemp_tagset      * hemp_tagset_t;
 typedef struct hemp_template    * hemp_template_t;
 typedef struct hemp_type        * hemp_type_t;
 typedef struct hemp_value       * hemp_value_t;
+typedef union  hemp_evalue      * hemp_evalue_t;
+typedef struct hemp_unary       * hemp_unary_t;
+typedef struct hemp_binary      * hemp_binary_t;
 
 
 /*--------------------------------------------------------------------------

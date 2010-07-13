@@ -9,8 +9,12 @@
 
 /* TODO: rename this to cstr.h */
 
-#define hemp_cstr_eq(s1, s2) (  \
-    strcmp(s1, s2) == 0         \
+#define hemp_cstr_eq(s1, s2) (      \
+    strcmp(s1, s2) == 0             \
+)
+
+#define hemp_cstrn_eq(s1, s2, n) (  \
+    strncmp(s1, s2, n) == 0         \
 )
 
 hemp_list_t 

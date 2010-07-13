@@ -1,7 +1,5 @@
-#include "hemp/text.h"
+#include "hemp/cstr.h"
 #include "hemp/debug.h"
-
-/* TODO: rename this cstr.c */
 
 
 hemp_cstr_t

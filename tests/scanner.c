@@ -21,6 +21,7 @@ void test_scanner() {
     hemp_cstr_t scripts = hemp_filesystem_join_path(TESTDIR, "scripts");
     
     test_script( scripts, "numbers" );
+    test_script( scripts, "quotes" );
     
     hemp_mem_free(scripts);
 }

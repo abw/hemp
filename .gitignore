@@ -14,11 +14,15 @@ tests/*.o
 tests/debug
 tests/dialect
 tests/element
+tests/error
+tests/filesystem
 tests/hash
 tests/hemp
+tests/list
 tests/memory
 tests/module
 tests/pool
+tests/scanner
 tests/slab
 tests/sources
 tests/tests

@@ -3,7 +3,7 @@
 
 #include <string.h>
 #include "hemp/memory.h"
-#include "hemp/text.h"
+#include "hemp/cstr.h"
 
 #define HEMP_HASH_DENSITY  5    /* max entries/width before increasing width */
 

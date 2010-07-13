@@ -60,12 +60,12 @@ hemp_pnode_t
     hemp_pos_t          pos,    \
     hemp_cstr_t         *srcptr
 
-void hemp_scan_inline_tag(  HEMP_SCAN_TAG_ARGS );
-void hemp_scan_outline_tag( HEMP_SCAN_TAG_ARGS );
-void hemp_scan_comment_tag( HEMP_SCAN_TAG_ARGS );
-void hemp_scan_control_tag( HEMP_SCAN_TAG_ARGS );
-void hemp_scan_variable_tag( HEMP_SCAN_TAG_ARGS );
-void hemp_scan_embed_tag(   HEMP_SCAN_TAG_ARGS );
+void hemp_scan_inline_tag   ( HEMP_SCAN_TAG_ARGS );
+void hemp_scan_outline_tag  ( HEMP_SCAN_TAG_ARGS );
+void hemp_scan_comment_tag  ( HEMP_SCAN_TAG_ARGS );
+void hemp_scan_control_tag  ( HEMP_SCAN_TAG_ARGS );
+void hemp_scan_variable_tag ( HEMP_SCAN_TAG_ARGS );
+void hemp_scan_embed_tag    ( HEMP_SCAN_TAG_ARGS );
 
 
 /*--------------------------------------------------------------------------
@@ -75,6 +75,9 @@ void hemp_scan_embed_tag(   HEMP_SCAN_TAG_ARGS );
 #define hemp_tagset_null(t)            \
     hemp_tagset_free(t);               \
     t = NULL
+
+#define hemp_scan_while(src, cmp)     \
+    do { src++; } while ( cmp(*src) );
 
 
 /*--------------------------------------------------------------------------
