@@ -5,9 +5,11 @@
 static struct hemp_etype
     hemp_element_text = { 
         "text",
-        &hemp_element_skip_space,
-        &hemp_literal_parse_expr,
-        &hemp_element_text_text
+        &hemp_element_dont_skip,                 /* not skippable */
+        &hemp_element_dont_skip,
+        &hemp_element_dont_skip,
+        &hemp_element_literal_parse_expr,
+        &hemp_element_literal_text
     };
 
 

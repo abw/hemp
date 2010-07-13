@@ -13,14 +13,13 @@
 #define hemp_mem_free(memory)       free(memory)
 #define hemp_mem_size(memory, size) realloc(memory, size)
 
-#ifdef HAVE_MEMMOVE
+#if  HAVE_memmove
 #   define hemp_mem_copy(src, dest, len) memmove(dest, src, len)
-#elif HAVE_BCOPY
+#elif HAVE_bcopy
 #   define hemp_mem_copy(src, dest, len) bcopy(src, dest, len)
 #else
 #   define HEMP_ADD_MEM_COPY 1
-#   define hemp_mem_copy(src, dest, len) _hem_mem_copy(src, dest, len)
-    hemp_ptr_t _hemp_mem_copy(
+    hemp_ptr_t hemp_mem_copy(
         hemp_mem_t  src,
         hemp_ptr_t  dest,
         hemp_size_t len

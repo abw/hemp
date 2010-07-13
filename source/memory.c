@@ -21,7 +21,8 @@ hemp_mem_copy(
     hemp_cstr_t s = (hemp_cstr_t) src;
     hemp_cstr_t d = (hemp_cstr_t) dest;
 
-    debug_red("WARNING: using hemp_mem_copy() is a bad idea\n");
+    debug_mem("WARNING: using hemp_mem_copy() is probably a bad idea\n");
+
     if (d > s) {
         d += len;
         s += len;

@@ -1,0 +1,20 @@
+An incomplete list of things TODO, in no particular order.
+
+* hemp_element_parse_block() and various other methods need access to the 
+  elements factory.  I think this should probably be encasulated in the 
+  scope object.
+
+* double and single quoted strings need to check for backslashes and 
+  and generate constant values on demand.
+
+* Control tags and double quoted strings need to have tokens hanging off
+  a BRANCH (or we need to figure out a different way to skin this cat 
+  compared to how the Perl TT3 prototype works).  next() might need to 
+  become a method dispatched via the element vtable.
+
+* Figure out what needs to go into the element data structure value union
+  to represent all the various different element types.
+
+* Decide how to represent values and implement.  I want to try and unify as 
+  much of the API between elements and values as possible.
+

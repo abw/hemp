@@ -4,6 +4,7 @@ libhemp_la_SOURCES  = cstr.c                \
                       debug.c               \
                       element.c             \
                       elements.c            \
+                      element/block.c       \
                       element/dquote.c      \
                       element/integer.c     \
                       element/literal.c     \
@@ -11,6 +12,7 @@ libhemp_la_SOURCES  = cstr.c                \
                       element/space.c       \
                       element/squote.c      \
                       element/text.c        \
+                      element/word.c        \
                       filesystem.c          \
                       hash.c                \
                       hemp_obj.c            \

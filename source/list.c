@@ -21,6 +21,7 @@ void
 hemp_list_free(hemp_list_t list) {
     if (list->items) {
         if (list->cleaner) {
+            debug("*** invoking cleaner on list\n");
             debug_mem("invoking cleaner on list\n");
             hemp_list_each(list, list->cleaner);
         }
@@ -36,6 +37,7 @@ hemp_list_push(
     hemp_list_t list, 
     hemp_ptr_t  item
 ) {
+    // debug("hemp_list_push()\n");
     if (list->length == list->capacity) {
         if ((list->items = hemp_mem_size(list->items, (list->capacity + 1) * sizeof(hemp_ptr_t)))) {
             list->capacity++;

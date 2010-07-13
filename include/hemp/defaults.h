@@ -1,0 +1,7 @@
+#ifndef HEMP_DEFAULTS_H
+#define HEMP_DEFAULTS_H
+
+#define HEMP_DEFAULT_ELEMENTS_SIZE  32
+
+
+#endif /* HEMP_DEFAULTS_H */

@@ -4,11 +4,12 @@
 -- test double quoted strings
 [% "foo" "foo bar" "" %]
 
+-- test multiple tags
+Some text [% 123 %] more text [% '456' %]
+
 -- test unterminated single quoted string
 [% 'oops %]
 
 -- test unterminated double quoted string
 [% "cripey! %]
 
--- test other stuff
-Hello [% world %]

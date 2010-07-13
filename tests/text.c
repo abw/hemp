@@ -9,7 +9,7 @@ void test_text();
 int
 main(int argc, char **argv, char **env)
 {
-    plan_tests(23);
+    plan_tests(31);
     test_text();
     return exit_status();
 }
@@ -98,5 +98,24 @@ void test_text() {
     hemp_text_free(message);
     hemp_text_free(badger);
     hemp_text_free(copycat);
+
+    message = hemp_text_init(3);
+    ok( message->capacity == 3, "capacity is %d", message->capacity );
+    hemp_text_append_cstrn(message, "foobar", 3);
+    ok( message->capacity == 3, "capacity is still %d", message->capacity );
+    ok( hemp_cstr_eq(message->string, "foo"), "added foo" );
+
+    hemp_text_append_cstrn(message, "pow", 1);
+    ok( message->capacity == 4, "capacity is now %d", message->capacity );
+    ok( hemp_cstr_eq(message->string, "foop"), message->string );
+
+    hemp_text_append_cstrn(message, "wow", 0);
+    ok( message->capacity == 4, "added nothing, capacity is %d", message->capacity );
+
+    hemp_text_append_cstr(message, "");
+    ok( message->length   == 4, "added nothing again, length is %d", message->length );
+    ok( message->capacity == 4, "added nothing again, capacity is %d", message->capacity );
+
+    hemp_text_free(message);
 
 }

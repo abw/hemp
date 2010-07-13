@@ -18,6 +18,7 @@ void debug_token(hemp_cstr_t type, hemp_cstr_t str, hemp_pos_t len);
 #define DEBUG_LOAD      0x0008
 #define DEBUG_FILE      0x0010
 #define DEBUG_SCAN      0x0020
+#define DEBUG_PARSE     0x0040
 #define DEBUG_ALL       0xFFFF
 
 #define ANSI_RED        "\e[31m"
@@ -73,6 +74,12 @@ void debug_token(hemp_cstr_t type, hemp_cstr_t str, hemp_pos_t len);
 #    define debug_scan(format, ...)
 #  endif
 #
+#  if DEBUG & DEBUG_PARSE
+#    define debug_parse(format, ...)   debug_col(ANSI_GREEN, format, ##__VA_ARGS__)
+#  else 
+#    define debug_parse(format, ...)
+#  endif
+#
 #
 #else
 #  define debug_red(format, ...)      
@@ -86,6 +93,7 @@ void debug_token(hemp_cstr_t type, hemp_cstr_t str, hemp_pos_t len);
 #  define debug_load(format, ...)
 #  define debug_file(format, ...)
 #  define debug_scan(format, ...)
+#  define debug_parse(format, ...)
 #endif
 
 #endif /* HEMP_DEBUG_H */

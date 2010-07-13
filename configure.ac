@@ -9,6 +9,13 @@ AM_PROG_CC_C_O
 AC_PROG_LIBTOOL
 
 AC_CONFIG_HEADERS([include/config.h])
+AC_CONFIG_FILES([
+    Makefile 
+    source/Makefile 
+    tests/Makefile
+    modules/Makefile
+    extra/libltdl/Makefile
+])
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -46,13 +53,5 @@ fi
 LT_CONFIG_LTDL_DIR([extra/libltdl])
 LT_INIT([dlopen])
 LTDL_INIT([recursive])
-
-AC_CONFIG_FILES([
-    Makefile 
-    source/Makefile 
-    tests/Makefile
-    modules/Makefile
-    extra/libltdl/Makefile
-])
 
 AC_OUTPUT

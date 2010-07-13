@@ -49,6 +49,7 @@ hemp_template_free(
     hemp_mem_free(tmpl);
 }
 
+
 hemp_bool_t
 hemp_template_compile(
     hemp_template_t tmpl

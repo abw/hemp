@@ -65,6 +65,7 @@ hemp_scan_inline_tag(
         }
         else if (isdigit(*src)) {
             /* number - try integer first */
+            errno   = 0;
             int_val = strtol(src, &src, 0);
             is_int  = HEMP_TRUE;
 

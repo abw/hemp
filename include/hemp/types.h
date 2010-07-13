@@ -50,9 +50,12 @@ typedef struct hemp_template    * hemp_template_t;
 typedef struct hemp_text        * hemp_text_t;
 typedef struct hemp_type        * hemp_type_t;
 typedef struct hemp_value       * hemp_value_t;
+
+/* don't think these should be pointers */
 typedef union  hemp_evalue      * hemp_evalue_t;
 typedef struct hemp_unary       * hemp_unary_t;
 typedef struct hemp_binary      * hemp_binary_t;
+typedef struct hemp_block       * hemp_block_t;
 
 
 /*--------------------------------------------------------------------------
@@ -70,10 +73,11 @@ typedef hemp_bool_t     (* hemp_list_each_fn)(hemp_list_t, hemp_pos_t, hemp_ptr_
 typedef hemp_value_t    (* hemp_init_fn)();
 typedef void            (* hemp_free_fn)(hemp_value_t);
 typedef hemp_bool_t     (* hemp_truth_fn)(hemp_value_t);
-typedef hemp_value_t    (* hemp_text_fn)(hemp_value_t);     // TODO: return more specific text type
 typedef hemp_value_t    (* hemp_unary_fn)(hemp_value_t);
 typedef hemp_value_t    (* hemp_binary_fn)(hemp_value_t, hemp_value_t);
 typedef hemp_value_t    (* hemp_ternary_fn)(hemp_value_t, hemp_value_t, hemp_value_t);
+
+typedef hemp_text_t     (* hemp_text_fn)(hemp_element_t, hemp_text_t);
 
 typedef void 
     (* hemp_tag_scan_fn)(
@@ -86,13 +90,11 @@ typedef void
 
 typedef hemp_element_t 
     (* hemp_skip_fn)(
-        hemp_element_t  element,        /* this element */
         hemp_element_t *elemptr         /* pointer to element, may be advanced */
     );
 
 typedef hemp_element_t 
     (* hemp_parse_fn)(
-        hemp_element_t  element,        /* this element */
         hemp_element_t *elemptr,        /* pointer to element, may be advanced */
         hemp_scope_t    scope,          /* pointer to current scope            */
         hemp_prec_t     precedence,     /* operator precedence level           */

@@ -76,13 +76,14 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libhemp_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libhemp_la_OBJECTS = cstr.lo dialect.lo debug.lo element.lo \
-	elements.lo element/dquote.lo element/integer.lo \
-	element/literal.lo element/number.lo element/space.lo \
-	element/squote.lo element/text.lo filesystem.lo hash.lo \
-	hemp_obj.lo list.lo memory.lo module.lo pool.lo ptree.lo \
-	scanner.lo slab.lo sources.lo tags.lo tag/comment.lo \
-	tag/control.lo tag/embed.lo tag/inline.lo tag/outline.lo \
-	tag/variable.lo text.lo template.lo utils.lo
+	elements.lo element/block.lo element/dquote.lo \
+	element/integer.lo element/literal.lo element/number.lo \
+	element/space.lo element/squote.lo element/text.lo \
+	element/word.lo filesystem.lo hash.lo hemp_obj.lo list.lo \
+	memory.lo module.lo pool.lo ptree.lo scanner.lo slab.lo \
+	sources.lo tags.lo tag/comment.lo tag/control.lo tag/embed.lo \
+	tag/inline.lo tag/outline.lo tag/variable.lo text.lo \
+	template.lo utils.lo
 libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
 PROGRAMS = $(bin_PROGRAMS)
 am_hemp_OBJECTS = hemp.$(OBJEXT)
@@ -239,6 +240,7 @@ libhemp_la_SOURCES = cstr.c                \
                       debug.c               \
                       element.c             \
                       elements.c            \
+                      element/block.c       \
                       element/dquote.c      \
                       element/integer.c     \
                       element/literal.c     \
@@ -246,6 +248,7 @@ libhemp_la_SOURCES = cstr.c                \
                       element/space.c       \
                       element/squote.c      \
                       element/text.c        \
+                      element/word.c        \
                       filesystem.c          \
                       hash.c                \
                       hemp_obj.c            \
@@ -341,6 +344,8 @@ element/$(am__dirstamp):
 element/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) element/$(DEPDIR)
 	@: > element/$(DEPDIR)/$(am__dirstamp)
+element/block.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
 element/dquote.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
 element/integer.lo: element/$(am__dirstamp) \
@@ -354,6 +359,8 @@ element/space.lo: element/$(am__dirstamp) \
 element/squote.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
 element/text.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+element/word.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
 tag/$(am__dirstamp):
 	@$(MKDIR_P) tag
@@ -418,6 +425,8 @@ hemp$(EXEEXT): $(hemp_OBJECTS) $(hemp_DEPENDENCIES)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f element/block.$(OBJEXT)
+	-rm -f element/block.lo
 	-rm -f element/dquote.$(OBJEXT)
 	-rm -f element/dquote.lo
 	-rm -f element/integer.$(OBJEXT)
@@ -432,6 +441,8 @@ mostlyclean-compile:
 	-rm -f element/squote.lo
 	-rm -f element/text.$(OBJEXT)
 	-rm -f element/text.lo
+	-rm -f element/word.$(OBJEXT)
+	-rm -f element/word.lo
 	-rm -f tag/comment.$(OBJEXT)
 	-rm -f tag/comment.lo
 	-rm -f tag/control.$(OBJEXT)
@@ -469,6 +480,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/block.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/dquote.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/integer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/literal.Plo@am__quote@
@@ -476,6 +488,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/space.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/squote.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/text.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/word.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/comment.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/control.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/embed.Plo@am__quote@

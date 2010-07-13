@@ -8,7 +8,6 @@ void test_file1();
 
 int
 main(int argc, char **argv, char **env) {
-    printf("test dir is %s\n", TESTDIR);
     plan_tests(7);
     test_filesystem();
     test_file1();
