@@ -1,13 +1,22 @@
 Hemp is a template toolkit written in C.
 
-The aim is to implement a similar framework to TT3 and provide a 
-default implementation of the TT3 template dialect.  However, the
-framework should also be extensible and allow other template dialects
-to be plugged in.
+The aim is to implement a similar framework to TT3 (of which a prototype
+written in Perl already exists) and provide a default implementation of 
+the TT3 template dialect.  However, the framework should also be extensible 
+and allow other template dialects to be plugged in.  Library wrappers will 
+eventually provide access to it from Perl, and perhaps other languages like 
+Python, Ruby, Javascript and even PHP.  Well, that's if it ever gets anywhere.
+If it does, there's a good chance it'll end up being re-written on top of 
+Parrot, or something else that's better than the hodge-podge of code I've 
+thrown together to get things working.  But that's a long way off yet.  It 
+still might come to nothing. 
 
-Development is at a very early stage.  At present it's focussed on 
-tokenising and parsing templates into an element tree (a cross between
-a document object model as used in HTML/XML and an opcode tree as used
-to implement various programming languages).
+Development is at a very early "playground" stage.  At present it is focussed 
+on tokenising and parsing templates into an element tree (a cross between a 
+document object model as used in HTML/XML) and an opcode tree (as used to 
+implement various programming languages).  There are a few tests, but nothing 
+really worth looking at just yet, unless perhaps if you've got a particular 
+interest in implementing mini-languages or the challenges of parsing templates.
+If that's not you then please move along now.  There's nothing to see. 
 
 Andy Wardley, July 2010
