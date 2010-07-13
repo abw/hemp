@@ -28,12 +28,27 @@ hemp_element_literal_text(
 ) {
     debug_call("hemp_element_literal_text()\n");
 
-    if (! text) {
+    if (! text)
         text = hemp_text_init(element->length);
-        debug_mem("created new text buffer at %p\n", text);
-    }
     
     hemp_text_append_cstrn(text, element->token, element->length);
+
+    return text;
+}
+
+
+hemp_text_t
+hemp_element_quoted_text(
+    hemp_element_t  element,
+    hemp_text_t     text
+) {
+    debug_call("hemp_element_quoted_text()\n");
+
+    if (! text)
+        text = hemp_text_init(element->length);
+    
+    /* "pinch" in the ends of the token range to avoid the quotes */
+    hemp_text_append_cstrn(text, element->token + 1, element->length - 2);
 
     return text;
 }

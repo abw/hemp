@@ -5,7 +5,12 @@ An incomplete list of things TODO, in no particular order.
   scope object.
 
 * double and single quoted strings need to check for backslashes and 
-  and generate constant values on demand.
+  and generate constant values on demand.  The default text  method for 
+  quoted strings (hemp_element_quoted_text()) returns the source token 
+  "tucked in" by one character at each end to remove the quotes.  Once we've 
+  got proper tokenisation working (i.e. identifying escaped characters and
+  interpolated variables) then we can mark quoted values as literal or 
+  otherwise and only generate a value for non-literal strings when required.
 
 * Control tags and double quoted strings need to have tokens hanging off
   a BRANCH (or we need to figure out a different way to skin this cat 
@@ -17,4 +22,8 @@ An incomplete list of things TODO, in no particular order.
 
 * Decide how to represent values and implement.  I want to try and unify as 
   much of the API between elements and values as possible.
+
+* This is my first time using autotools, and I'm sure I've made plenty of
+  nooby mistakes.  The whole autoconf/automake/libtool setup needs cleaning
+  up, ideally by someone more familiar with the tools than me.
 

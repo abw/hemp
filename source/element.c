@@ -202,6 +202,22 @@ hemp_element_parse_expr(
 
 
 
+hemp_text_t
+hemp_element_token(
+    hemp_element_t  element,
+    hemp_text_t     text
+) {
+    debug_call("hemp_element_token()\n");
+
+    if (! text)
+        text = hemp_text_init(element->length);
+    
+    hemp_text_append_cstrn(text, element->token, element->length);
+
+    return text;
+}
+
+
 /*--------------------------------------------------------------------------
  * debugging functions
  *--------------------------------------------------------------------------*/

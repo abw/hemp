@@ -9,7 +9,7 @@ static struct hemp_etype
         &hemp_element_dont_skip,
         &hemp_element_dont_skip,
         &hemp_element_literal_parse_expr,
-        &hemp_element_literal_text
+        &hemp_element_quoted_text
     };
 
 

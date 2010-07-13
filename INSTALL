@@ -1,3 +1,14 @@
-$ ./configure
-$ make
+To build hemp:
+
+    $ ./configure
+    $ make
+    $ make check
+
+Please be aware of the fact that this is my first time using GNU autotools
+to manage the build process.  There's a fair amount of gnarly stuff going
+on that I don't really understand.  It builds on my system, but I can't make
+any guarantees that it'll build on yours.  Any help improving this side of 
+things would be most welcome.
+
+-- Andy Wardley, July 2010
 

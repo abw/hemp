@@ -182,6 +182,12 @@ hemp_text_t                                                     /* text */
         hemp_text_t     text
     );
 
+hemp_text_t
+    hemp_element_quoted_text(
+        hemp_element_t  element,
+        hemp_text_t     text
+    );
+
 hemp_text_t                                                     /* EOF */
     hemp_element_eof_text(
         hemp_element_t element,
