@@ -14,7 +14,6 @@ AC_CONFIG_HEADERS([include/config.h])
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h])
 
-
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
@@ -55,6 +54,5 @@ AC_CONFIG_FILES([
     modules/Makefile
     extra/libltdl/Makefile
 ])
-
 
 AC_OUTPUT
