@@ -48,5 +48,11 @@ hemp_bool_t
     hemp_template_free(t);               \
     t = NULL
 
+#define hemp_template_first_element(t)  \
+    t->elements->head
+
+#define hemp_template_last_element(t)  \
+    t->elements->tail
+
 
 #endif /* HEMP_TEMPLATE_H */

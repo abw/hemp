@@ -6,7 +6,9 @@ libhemp_la_SOURCES  = cstr.c                \
                       elements.c            \
                       element/dquote.c      \
                       element/integer.c     \
+                      element/literal.c     \
                       element/number.c      \
+                      element/space.c       \
                       element/squote.c      \
                       element/text.c        \
                       filesystem.c          \
@@ -27,11 +29,11 @@ libhemp_la_SOURCES  = cstr.c                \
                       tag/inline.c          \
                       tag/outline.c         \
                       tag/variable.c        \
+                      text.c                \
                       template.c            \
                       utils.c
 
 bin_PROGRAMS        = hemp
-
 hemp_SOURCES        = hemp.c
 hemp_LDADD          = libhemp.la
 

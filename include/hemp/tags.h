@@ -72,12 +72,9 @@ void hemp_scan_embed_tag    ( HEMP_SCAN_TAG_ARGS );
  * macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_tagset_null(t)            \
-    hemp_tagset_free(t);               \
+#define hemp_tagset_null(t)             \
+    hemp_tagset_free(t);                \
     t = NULL
-
-#define hemp_scan_while(src, cmp)     \
-    do { src++; } while ( cmp(*src) );
 
 
 /*--------------------------------------------------------------------------

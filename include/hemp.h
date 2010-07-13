@@ -26,7 +26,9 @@ extern "C" {
 #include "hemp/filesystem.h"
 #include "hemp/debug.h"
 #include "hemp/os.h"
+#include "hemp/scope.h"
 #include "hemp/type.h"
+#include "hemp/text.h"
 #include "hemp/value.h"
 
 

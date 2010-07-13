@@ -1,5 +1,5 @@
-#ifndef HEMP_TEXT_H
-#define HEMP_TEXT_H
+#ifndef HEMP_CSTR_H
+#define HEMP_CSTR_H
 
 #include <string.h>
 #include <stdlib.h>
@@ -24,4 +24,4 @@ hemp_list_t
     );
 
 
-#endif /* HEMP_TEXT_H */
+#endif /* HEMP_CSTR_H */

@@ -26,6 +26,15 @@ hemp_elements_t
     hemp_elements_init(hemp_size_t capacity);
 
 hemp_element_t
+    hemp_elements_create(
+        hemp_elements_t elements,
+        hemp_etype_t    type,
+        hemp_cstr_t     token,
+        hemp_pos_t      position,
+        hemp_size_t     length
+    );
+
+hemp_element_t
     hemp_elements_append(
         hemp_elements_t elements,
         hemp_etype_t    type,
@@ -52,7 +61,7 @@ void
     );
 
 /*--------------------------------------------------------------------------
- * function prototypes for sepecific element types
+ * function prototypes for specific element types
  *--------------------------------------------------------------------------*/
 
 hemp_cstr_t                                                     /* text */
@@ -63,6 +72,11 @@ hemp_cstr_t                                                     /* text */
 hemp_cstr_t
     hemp_element_eof_text(
         hemp_element_t element
+    );
+
+hemp_element_t
+    hemp_space_parse_expr(
+        HEMP_PARSE_PROTO
     );
 
 

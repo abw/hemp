@@ -12,7 +12,7 @@ void test_script(hemp_cstr_t, hemp_cstr_t);
 int
 main(int argc, char **argv, char **env)
 {
-    plan_tests(10);
+    plan_tests(20);
     test_scanner();
     return exit_status();
 }

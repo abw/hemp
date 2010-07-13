@@ -5,6 +5,8 @@
 static struct hemp_etype
     hemp_element_squote = { 
         "squote",
+        &hemp_element_skip_space,
+        &hemp_element_parse_expr,
         &hemp_element_text_text
     };
 

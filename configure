@@ -2927,7 +2927,6 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 
 
 
-AUTOMAKE_OPTIONS = color-tests
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -3909,6 +3908,132 @@ else
 fi
 
 
+if test "x$CC" != xcc; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $CC and cc understand -c and -o together" >&5
+$as_echo_n "checking whether $CC and cc understand -c and -o together... " >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether cc understands -c and -o together" >&5
+$as_echo_n "checking whether cc understands -c and -o together... " >&6; }
+fi
+set dummy $CC; ac_cc=`$as_echo "$2" |
+		      sed 's/[^a-zA-Z0-9_]/_/g;s/^[0-9]/_/'`
+if { as_var=ac_cv_prog_cc_${ac_cc}_c_o; eval "test \"\${$as_var+set}\" = set"; }; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+# Make sure it works both with $CC and with simple cc.
+# We do the test twice because some compilers refuse to overwrite an
+# existing .o file with -o, though they will create one.
+ac_try='$CC -c conftest.$ac_ext -o conftest2.$ac_objext >&5'
+rm -f conftest2.*
+if { { case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } &&
+   test -f conftest2.$ac_objext && { { case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; };
+then
+  eval ac_cv_prog_cc_${ac_cc}_c_o=yes
+  if test "x$CC" != xcc; then
+    # Test first that cc exists at all.
+    if { ac_try='cc -c conftest.$ac_ext >&5'
+  { { case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }; then
+      ac_try='cc -c conftest.$ac_ext -o conftest2.$ac_objext >&5'
+      rm -f conftest2.*
+      if { { case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } &&
+	 test -f conftest2.$ac_objext && { { case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; };
+      then
+	# cc works too.
+	:
+      else
+	# cc exists but doesn't like -o.
+	eval ac_cv_prog_cc_${ac_cc}_c_o=no
+      fi
+    fi
+  fi
+else
+  eval ac_cv_prog_cc_${ac_cc}_c_o=no
+fi
+rm -f core conftest*
+
+fi
+if eval test \$ac_cv_prog_cc_${ac_cc}_c_o = yes; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+$as_echo "#define NO_MINUS_C_MINUS_O 1" >>confdefs.h
+
+fi
+
+# FIXME: we rely on the cache variable name because
+# there is no other way.
+set dummy $CC
+am_cc=`echo $2 | sed 's/[^a-zA-Z0-9_]/_/g;s/^[0-9]/_/'`
+eval am_t=\$ac_cv_prog_cc_${am_cc}_c_o
+if test "$am_t" != yes; then
+   # Losing compiler, so override with the script.
+   # FIXME: It is wrong to rewrite CC.
+   # But if we don't then we get into trouble of one sort or another.
+   # A longer-term fix would be to have automake use am__CC in this case,
+   # and then we could set am__CC="\$(top_srcdir)/compile \$(CC)"
+   CC="$am_aux_dir/compile $CC"
+fi
+
+
 case `pwd` in
   *\ * | *\	*)
     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&5
@@ -4589,13 +4714,13 @@ if test "${lt_cv_nm_interface+set}" = set; then :
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:4592: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:4717: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:4595: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:4720: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:4598: output\"" >&5)
+  (eval echo "\"\$as_me:4723: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -5801,7 +5926,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 5804 "configure"' > conftest.$ac_ext
+  echo '#line 5929 "configure"' > conftest.$ac_ext
   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7331,11 +7456,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7334: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7459: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7338: \$? = $ac_status" >&5
+   echo "$as_me:7463: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7670,11 +7795,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7673: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7798: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7677: \$? = $ac_status" >&5
+   echo "$as_me:7802: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7775,11 +7900,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7778: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7903: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7782: \$? = $ac_status" >&5
+   echo "$as_me:7907: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -7830,11 +7955,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7833: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7958: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7837: \$? = $ac_status" >&5
+   echo "$as_me:7962: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10197,7 +10322,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 10200 "configure"
+#line 10325 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10293,7 +10418,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 10296 "configure"
+#line 10421 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10522,9 +10647,6 @@ CC="$lt_save_CC"
 
 
 ac_config_headers="$ac_config_headers include/config.h"
-
-ac_config_files="$ac_config_files Makefile source/Makefile tests/Makefile modules/Makefile extra/libltdl/Makefile"
-
 
 
 # Checks for header files.
@@ -10793,7 +10915,7 @@ fi
 done
 
 
-for ac_func in memset strdup
+for ac_func in strdup, memset, bcopy, memmove
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -11288,7 +11410,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 11291 "configure"
+#line 11413 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11888,6 +12010,10 @@ LTDLOPEN=`eval "\\$ECHO \"$libname_spec\""`
 
 
 # Only expand once:
+
+
+
+ac_config_files="$ac_config_files Makefile source/Makefile tests/Makefile modules/Makefile extra/libltdl/Makefile"
 
 
 

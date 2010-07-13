@@ -12,7 +12,8 @@ check_PROGRAMS  = debug         \
                   slab          \
                   sources       \
                   filesystem    \
-                  template  
+                  template      \
+                  text
 #                 tests
 
 TESTS = $(check_PROGRAMS)
@@ -68,6 +69,9 @@ filesystem_CPPFLAGS = -DTESTDIR='"$(abs_top_srcdir)/tests"'
 
 template_SOURCES    = template.c tap.c
 template_LDADD      = ../source/libhemp.la
+
+text_SOURCES        = text.c tap.c
+text_LDADD          = ../source/libhemp.la
 
 #tests_SOURCES      = tests.c tap.c
 #tests_LDADD        = ../source/libhemp.la

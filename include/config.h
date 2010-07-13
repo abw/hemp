@@ -25,6 +25,9 @@
 /* Define to 1 if you have the `argz_stringify' function. */
 /* #undef HAVE_ARGZ_STRINGIFY */
 
+/* Define to 1 if you have the `bcopy' function. */
+/* #undef HAVE_BCOPY */
+
 /* Define to 1 if you have the `closedir' function. */
 #define HAVE_CLOSEDIR 1
 
@@ -74,11 +77,14 @@
 /* Define to 1 if you have the <mach-o/dyld.h> header file. */
 #define HAVE_MACH_O_DYLD_H 1
 
+/* Define to 1 if you have the `memmove' function. */
+#define HAVE_MEMMOVE 1
+
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the `memset' function. */
-#define HAVE_MEMSET 1
+/* #undef HAVE_MEMSET */
 
 /* Define to 1 if you have the `opendir' function. */
 #define HAVE_OPENDIR 1
@@ -99,7 +105,7 @@
 #define HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the `strdup' function. */
-#define HAVE_STRDUP 1
+/* #undef HAVE_STRDUP */
 
 /* Define to 1 if you have the <strings.h> header file. */
 #define HAVE_STRINGS_H 1
@@ -153,6 +159,9 @@
 
 /* Define if dlsym() requires a leading underscore in symbol names. */
 /* #undef NEED_USCORE */
+
+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
+/* #undef NO_MINUS_C_MINUS_O */
 
 /* Name of package */
 #define PACKAGE "hemp"

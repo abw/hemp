@@ -2,21 +2,13 @@ AC_PREREQ(2.61)
 AC_INIT([hemp], [0.01], [hemp@wardley.org])
 AC_CONFIG_MACRO_DIR([m4])
 
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
-AUTOMAKE_OPTIONS = color-tests
+AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects color-tests])
 
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_PROG_LIBTOOL
 
 AC_CONFIG_HEADERS([include/config.h])
-AC_CONFIG_FILES([
-    Makefile 
-    source/Makefile 
-    tests/Makefile
-    modules/Makefile
-    extra/libltdl/Makefile
-])
-
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -29,7 +21,7 @@ AC_C_CONST
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([memset strdup])
+AC_CHECK_FUNCS([strdup, memset, bcopy, memmove])
 
 
 CFLAGS="${CFLAGS=}"
@@ -55,5 +47,14 @@ fi
 LT_CONFIG_LTDL_DIR([extra/libltdl])
 LT_INIT([dlopen])
 LTDL_INIT([recursive])
+
+AC_CONFIG_FILES([
+    Makefile 
+    source/Makefile 
+    tests/Makefile
+    modules/Makefile
+    extra/libltdl/Makefile
+])
+
 
 AC_OUTPUT

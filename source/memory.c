@@ -9,6 +9,8 @@
  * memmove() or bcopy().
  */
 
+#ifdef HEMP_ADD_MEM_COPY
+
 hemp_ptr_t
 hemp_mem_copy(
     hemp_mem_t  src,
@@ -34,3 +36,4 @@ hemp_mem_copy(
     }
 }
 
+#endif

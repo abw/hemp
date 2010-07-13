@@ -1,0 +1,14 @@
+-- test single quoted strings
+[% 'foo' 'foo bar' '' %]
+
+-- test double quoted strings
+[% "foo" "foo bar" "" %]
+
+-- test unterminated single quoted string
+[% 'oops %]
+
+-- test unterminated double quoted string
+[% "cripey! %]
+
+-- test other stuff
+Hello [% world %]

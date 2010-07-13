@@ -10,6 +10,25 @@
 
 #define CR 13
 #define LF 10
+#define HEMP_CHAR_SQUOTE    '\''
+#define HEMP_CHAR_DQUOTE    '"'
+
+
+#define hemp_scan_while(src, cmp)       \
+    do { src++; } while ( cmp(*src) );
+
+#define hemp_scan_until(src, val)       \
+    do { src++; } while ( cmp(*src) );
+
+#define hemp_scan_to(src, c)            \
+    do { src++; } while ( *src && *src != c );
+
+#define hemp_is_char(c1, c2)            \
+    (c1 == c2)
+
+#define hemp_not_char(c1, c2)           \
+    (c1 != c2)
+
 
 
 /*--------------------------------------------------------------------------

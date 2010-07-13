@@ -2,6 +2,7 @@
 #define HEMP_ELEMENT_H
 
 #include "hemp/memory.h"
+#include "hemp/cstr.h"
 
 
 /*--------------------------------------------------------------------------
@@ -10,6 +11,8 @@
 
 struct hemp_etype {
     hemp_name_t     name;
+    hemp_skip_fn    skip_space;
+    hemp_parse_fn   parse_expr;
     hemp_cstr_t     (*text)();
     hemp_cstr_t     (*number)();
 };
@@ -46,6 +49,21 @@ struct hemp_binary {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
+#define HEMP_PARSE_PROTO        \
+    hemp_element_t  element,    \
+    hemp_element_t *elemptr,    \
+    hemp_scope_t    scope,      \
+    hemp_prec_t     precedence, \
+    hemp_bool_t     force
+
+#define HEMP_SKIP_PROTO         \
+    hemp_element_t  element,    \
+    hemp_element_t *elemptr
+
+#define HEMP_PARSE_ARGS         \
+    element, elemptr, scope, precedence, force
+
+
 hemp_element_t  
     hemp_element_new(
         hemp_etype_t, 
@@ -63,13 +81,61 @@ void
     );
 
 
+hemp_element_t
+    hemp_element_skip_space(
+        HEMP_SKIP_PROTO
+    );
+
+hemp_element_t
+    hemp_element_next_skip_space(
+        HEMP_SKIP_PROTO
+    );
+
+hemp_element_t
+    hemp_element_parse(
+        hemp_element_t   // TODO: add scope
+    );
+
+hemp_element_t
+    hemp_element_parse_block(
+        HEMP_PARSE_PROTO
+    );
+
+hemp_element_t
+    hemp_element_parse_exprs(
+        HEMP_PARSE_PROTO
+    );
+
+hemp_element_t
+    hemp_element_parse_expr(
+        HEMP_PARSE_PROTO
+    );
+
+hemp_element_t
+    hemp_literal_parse_expr(
+        HEMP_PARSE_PROTO
+        );
+
+hemp_bool_t
+    hemp_element_dump(
+        hemp_element_t element
+    );
+
+
+
 /*--------------------------------------------------------------------------
  * macros
  *--------------------------------------------------------------------------*/
 
 #define hemp_element_null(e) \
     hemp_element_free(e);    \
-    e = NULL;                
+    e = NULL;
+
+#define hemp_parse_expr(ep, sc, pr, fr) \
+    (*ep)->type->parse_expr(*ep, ep, sc, pr, fr)
+
+#define hemp_skip_space(el, ep) \
+    el->type->skip_space(el, ep)
 
 
 #endif /* HEMP_ELEMENT_H */

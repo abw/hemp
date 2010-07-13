@@ -37,7 +37,7 @@ check_PROGRAMS = debug$(EXEEXT) dialect$(EXEEXT) element$(EXEEXT) \
 	error$(EXEEXT) hash$(EXEEXT) hemp$(EXEEXT) list$(EXEEXT) \
 	memory$(EXEEXT) module$(EXEEXT) pool$(EXEEXT) scanner$(EXEEXT) \
 	slab$(EXEEXT) sources$(EXEEXT) filesystem$(EXEEXT) \
-	template$(EXEEXT)
+	template$(EXEEXT) text$(EXEEXT)
 subdir = tests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -98,6 +98,9 @@ sources_DEPENDENCIES = ../source/libhemp.la
 am_template_OBJECTS = template.$(OBJEXT) tap.$(OBJEXT)
 template_OBJECTS = $(am_template_OBJECTS)
 template_DEPENDENCIES = ../source/libhemp.la
+am_text_OBJECTS = text.$(OBJEXT) tap.$(OBJEXT)
+text_OBJECTS = $(am_text_OBJECTS)
+text_DEPENDENCIES = ../source/libhemp.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -115,16 +118,31 @@ SOURCES = $(debug_SOURCES) $(dialect_SOURCES) $(element_SOURCES) \
 	$(error_SOURCES) $(filesystem_SOURCES) $(hash_SOURCES) \
 	$(hemp_SOURCES) $(list_SOURCES) $(memory_SOURCES) \
 	$(module_SOURCES) $(pool_SOURCES) $(scanner_SOURCES) \
-	$(slab_SOURCES) $(sources_SOURCES) $(template_SOURCES)
+	$(slab_SOURCES) $(sources_SOURCES) $(template_SOURCES) \
+	$(text_SOURCES)
 DIST_SOURCES = $(debug_SOURCES) $(dialect_SOURCES) $(element_SOURCES) \
 	$(error_SOURCES) $(filesystem_SOURCES) $(hash_SOURCES) \
 	$(hemp_SOURCES) $(list_SOURCES) $(memory_SOURCES) \
 	$(module_SOURCES) $(pool_SOURCES) $(scanner_SOURCES) \
-	$(slab_SOURCES) $(sources_SOURCES) $(template_SOURCES)
+	$(slab_SOURCES) $(sources_SOURCES) $(template_SOURCES) \
+	$(text_SOURCES)
 ETAGS = etags
 CTAGS = ctags
+# If stdout is a non-dumb tty, use colors.  If test -t is not supported,
+# then this fails; a conservative approach.  Of course do not redirect
+# stdout here, just stderr.
 am__tty_colors = \
-red=; grn=; lgn=; blu=; std=
+red=; grn=; lgn=; blu=; std=; \
+test "X$(AM_COLOR_TESTS)" != Xno \
+&& test "X$$TERM" != Xdumb \
+&& { test "X$(AM_COLOR_TESTS)" = Xalways || test -t 1 2>/dev/null; } \
+&& { \
+  red='[0;31m'; \
+  grn='[0;32m'; \
+  lgn='[1;32m'; \
+  blu='[1;34m'; \
+  std='[m'; \
+}
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -291,6 +309,8 @@ filesystem_LDADD = ../source/libhemp.la
 filesystem_CPPFLAGS = -DTESTDIR='"$(abs_top_srcdir)/tests"'
 template_SOURCES = template.c tap.c
 template_LDADD = ../source/libhemp.la
+text_SOURCES = text.c tap.c
+text_LDADD = ../source/libhemp.la
 all: all-am
 
 .SUFFIXES:
@@ -379,6 +399,9 @@ sources$(EXEEXT): $(sources_OBJECTS) $(sources_DEPENDENCIES)
 template$(EXEEXT): $(template_OBJECTS) $(template_DEPENDENCIES) 
 	@rm -f template$(EXEEXT)
 	$(LINK) $(template_OBJECTS) $(template_LDADD) $(LIBS)
+text$(EXEEXT): $(text_OBJECTS) $(text_DEPENDENCIES) 
+	@rm -f text$(EXEEXT)
+	$(LINK) $(text_OBJECTS) $(text_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -404,24 +427,28 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Po@am__quote@
 
 .c.o:
-@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c $<
+@am__fastdepCC_FALSE@	$(COMPILE) -c -o $@ $<
 
 .c.obj:
-@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+@am__fastdepCC_FALSE@	$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 .c.lo:
-@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
+@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Plo
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<

@@ -53,11 +53,20 @@ hemp_bool_t
 hemp_template_compile(
     hemp_template_t tmpl
 ) {
+    hemp_element_t element;
+    
     if (tmpl->dialect->scanner(tmpl)) {
         debug_green("scanned OK\n");
     }
     else {
         debug_red("scan failed\n");
+        return;
     }
+    
+    hemp_element_parse(
+        hemp_template_first_element(tmpl)
+    );
+    
+    return HEMP_TRUE;
 }
 

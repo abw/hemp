@@ -1,6 +1,7 @@
 #include <limits.h>
 #include <errno.h>
 #include "hemp/tags.h"
+#include "hemp/scanner.h"
 
 
 static struct hemp_tag 
@@ -60,7 +61,7 @@ hemp_scan_inline_tag(
                 from, pos, endlen
             );
             src += endlen;
-            break;
+            break;                                          /* ESCAPE ROUTE */
         }
         else if (isdigit(*src)) {
             /* number - try integer first */
@@ -74,9 +75,8 @@ hemp_scan_inline_tag(
              * character is not a digit.  This is required to support methods
              * called against numeric constants, e.g. 12345.hex 
              */
-            if (
-                (*src == '.' && isdigit(*(src + 1)))
-             || (*src == 'e' || *src == 'E')
+            if ( ( *src == '.' && isdigit(*(src + 1)) )
+              || ( *src == 'e' || *src == 'E' )
             )  {
                 num_val = strtod(from, &src);
                 is_int  = HEMP_FALSE;
@@ -113,43 +113,54 @@ hemp_scan_inline_tag(
         else if (isalpha(*src)) {
             /* word */
             hemp_scan_while(src, isalnum);
+            // TODO: lookup keyword
             debug_token("WORD", from, src-from);
             hemp_elements_append(
                 tmpl->elements, HempElementWord,
                 from, pos, src - from
             );
         }
-        else if (*src == '\'') {
+        else if (*src == HEMP_CHAR_SQUOTE) {
             /* single quotes */
             // TODO: check for escaped quotes and backslashes
-            do { src++; } while ( *src && *src != '\'' );
-            src++;
-            // hemp_scan_while(src, isalnum);
-            debug_token("SQUOTE", from, src-from);
-            hemp_todo("single quoted strings");
-            hemp_elements_append(
-                tmpl->elements, HempElementSQuote,
-                from, pos, src - from
-            );
+            hemp_scan_to(src, HEMP_CHAR_SQUOTE);
+            if (*src == HEMP_CHAR_SQUOTE) {
+                src++;
+                debug_token("SQUOTE", from, src-from);
+                hemp_todo("single quoted strings");
+                hemp_elements_append(
+                    tmpl->elements, HempElementSQuote,
+                    from, pos, src - from
+                );
+            }
+            else {
+                debug_red("unterminated single quoted string: %s", from);
+            }
+            
         }
-        else if (*src == '"') {
+        else if (*src == HEMP_CHAR_DQUOTE) {
             /* double quotes */
             // TODO: check for escaped quotes, backslashes and \n, \t, etc
-            do { src++; } while ( *src && *src != '"' );
-            src++;  // TODO: check runnaways
-            // hemp_scan_while(src, isalnum);
-            debug_token("DQUOTE", from, src-from);
-            hemp_todo("double quoted strings");
-            hemp_elements_append(
-                tmpl->elements, HempElementDQuote,
-                from, pos, src - from
-            );
+            hemp_scan_to(src, HEMP_CHAR_DQUOTE);
+
+            if (*src == HEMP_CHAR_DQUOTE) {
+                src++;
+                debug_token("DQUOTE", from, src-from);
+                hemp_todo("double quoted strings");
+                hemp_elements_append(
+                    tmpl->elements, HempElementDQuote,
+                    from, pos, src - from
+                );
+            }
+            else {
+                debug_red("unterminated double quoted string: %s", from);
+            }
         }
 
         // TODO: comment, checking for tag end
         // TODO: operators
         else {
-            debug_yellow("something else\n");
+            debug_red("unrecognised token\n");
             break;
         }
 
@@ -159,8 +170,4 @@ hemp_scan_inline_tag(
     
     *srcptr = src;
 }
-
-
-
-
 

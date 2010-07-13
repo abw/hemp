@@ -24,6 +24,9 @@
 /* Define to 1 if you have the `argz_stringify' function. */
 #undef HAVE_ARGZ_STRINGIFY
 
+/* Define to 1 if you have the `bcopy' function. */
+#undef HAVE_BCOPY
+
 /* Define to 1 if you have the `closedir' function. */
 #undef HAVE_CLOSEDIR
 
@@ -72,6 +75,9 @@
 
 /* Define to 1 if you have the <mach-o/dyld.h> header file. */
 #undef HAVE_MACH_O_DYLD_H
+
+/* Define to 1 if you have the `memmove' function. */
+#undef HAVE_MEMMOVE
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -152,6 +158,9 @@
 
 /* Define if dlsym() requires a leading underscore in symbol names. */
 #undef NEED_USCORE
+
+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
+#undef NO_MINUS_C_MINUS_O
 
 /* Name of package */
 #undef PACKAGE
