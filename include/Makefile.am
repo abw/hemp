@@ -13,8 +13,9 @@ nobase_include_HEADERS  = hemp/cstr.h           \
                           hemp/list.h           \
                           hemp/memory.h         \
                           hemp/module.h         \
-                          hemp/os               \
                           hemp/os.h             \
+                          hemp/os/unix.h        \
+                          hemp/os/win32.h       \
                           hemp/pool.h           \
                           hemp/ptree.h          \
                           hemp/scanner.h        \
@@ -24,8 +25,8 @@ nobase_include_HEADERS  = hemp/cstr.h           \
                           hemp/tags.h           \
                           hemp/template.h       \
                           hemp/text.h           \
-                          hemp/type             \
                           hemp/type.h           \
+                          hemp/type/number.h    \
                           hemp/types.h          \
                           hemp/utils.h          \
                           hemp/value.h
