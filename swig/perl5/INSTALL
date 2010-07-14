@@ -1,0 +1,19 @@
+To build and install the Perl5 interface to the hemp library you must first
+build the hemp library by running './configure', 'make' and 'make install'
+in the top-level directory for this project.  
+
+You'll also need to install SWIG (for now at least).  See http://www.swig.org
+
+Then run the following commands:
+
+    $ ./mkswig
+    $ perl Makefile.PL
+    $ make
+    $ make test
+    $ sudo make install
+
+Don't expect anything to work.  At the moment it's little more than a 
+placeholder for future effort.
+
+
+-- Andy Wardley, July 2010
