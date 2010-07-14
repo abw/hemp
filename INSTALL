@@ -7,10 +7,10 @@ To build and install hemp:
 
 Please be aware of the fact that this is my first time using GNU autotools
 to manage the build process.  There's a fair amount of gnarly stuff going
-on that I don't fully understand.  It builds on my system (OSX), but I can't 
-make any guarantees that it'll build on yours, especially if you're on a 
-non-Unix platform.  Any help improving this side of things would be most 
-welcome.
+on that I don't fully understand.  It builds on my systems (OSX and Ubuntu
+Linux)), but I can't make any guarantees that it'll build on yours, especially
+if you're on a non-Unix/Mac platform.  Any help improving this side of things 
+would be most welcome.
 
 The commands shown above will install the hemp library, header files and the 
 hemp program on your system.  The hemp program doesn't do anything useful yet, 
