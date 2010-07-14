@@ -29,7 +29,7 @@ hemp_scan_text(
     while (*src) {
         /* at start of line */
         line++;
-        debug("\n%d (%02d) : ", line, src - text);
+        debug_scan("\n%d (%02d) : ", line, src - text);
 
         if ((pnode = outhead[(unsigned char) *src])) {
             debug_yellow("OUTLINE:%c", *src);
@@ -87,7 +87,7 @@ hemp_scan_text(
                  */
             }
             else {
-                debug("%c", *src);
+                //debug("%c", *src);
                 src++;
             }
         }
@@ -103,7 +103,10 @@ hemp_scan_text(
     }
     
     hemp_elements_eof(elements, src, pos);
+
+#if DEBUG
     hemp_elements_dump(elements);
+#endif
 //  hemp_elements_free(elements);
     
     return 1;

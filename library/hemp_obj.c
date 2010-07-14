@@ -55,3 +55,29 @@ void
 hemp_hello() {
     printf("Hello world!\n");
 }
+
+
+hemp_cstr_t
+hemp_render(
+    hemp_cstr_t    scheme, 
+    hemp_cstr_t    source
+) {
+    hemp_template_t tmpl = hemp_template_init(scheme, source, NULL);
+
+    if (! tmpl) {
+        hemp_fatal("could not initialise %s template", scheme);
+        return;
+    }
+    
+    debug("got %s %s template\n", tmpl->dialect->name, scheme);
+    
+    hemp_text_t text = hemp_template_render(tmpl);
+
+    if (! text) {
+        hemp_fatal("could not render template output");
+        return;
+    }
+        
+    puts(text->string);
+    return text->string;                // ...and leak memory
+}

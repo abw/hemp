@@ -92,7 +92,6 @@ hemp_template_compile(
 ) {
     hemp_element_t element = hemp_template_tokens(tmpl);
     tmpl->tree = hemp_element_parse(element);
-    debug("got tree: %p\n", tmpl->tree);
     // TODO: proper error handling
     return HEMP_TRUE;
 }

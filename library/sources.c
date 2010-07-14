@@ -122,6 +122,7 @@ hemp_cstr_t
 hemp_scheme_text_reader(
     hemp_source_t source
 ) {
+    // I think this is the cause of SWIG failing...
     return (source->text = source->name);
 }
 

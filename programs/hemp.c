@@ -5,16 +5,17 @@
 #include "hemp.h"
 #include "hemp/debug.h"
 
-#define HEMP_OPTION_SIG "vdhf:"
+#define HEMP_OPTION_SIG "vdhtqf:"
 
-static int    wibble = 0;                       // just testing getopt_long
+static int    be_quiet  = 0;
+static int    read_text = 0;
 static struct option hemp_options[] = {
-    {"verbose", no_argument,        NULL,   'v' },
-    {"debug",   no_argument,        NULL,   'd' },
-    {"help",    no_argument,        NULL,   'h' },
-    {"file",    required_argument,  NULL,   'f' },
-    {"wibble",  optional_argument,  &wibble, 99 },
-    {"wobble",  optional_argument,  &wibble, 101},
+    {"quiet",   no_argument,        NULL, 'q' },
+    {"verbose", no_argument,        NULL, 'v' },
+    {"debug",   no_argument,        NULL, 'd' },
+    {"help",    no_argument,        NULL, 'h' },
+    {"file",    required_argument,  NULL, 'f' },
+    {"text",    no_argument,        NULL, 't' },
     {0, 0, 0, 0}
 };
 
@@ -37,17 +38,28 @@ int main(int argc, char **argv, char **env) {
     hemp_t          hemp = hemp_init();
     hemp_cstr_t     filename;
     hemp_template_t template;
-    hemp_text_t     output;
+    hemp_text_t     input, output;
     
-    hemp_banner();
     hemp_getopt(hemp, argc, argv);
 
-    if (optind < argc) {
-        while (optind < argc) {
-            filename = argv[optind++];
-            hemp_verbose(hemp, "loading file: %s", filename);
+    if (! be_quiet)
+        hemp_banner();
 
-            template = hemp_template_init(HEMP_FILE, filename, NULL);
+    if (optind < argc) {
+        if (read_text) {
+            filename = "input text";
+            input    = hemp_text_init(80);
+            if (! input)
+                hemp_fatal("could not initialise input text");
+
+            while (optind < argc) {
+                filename = argv[optind++];
+                hemp_text_append_cstr(input, filename);
+                hemp_text_append_cstr(input, " ");
+            }
+            // hemp_verbose(hemp, "loaded text: %s", input->string);
+            template = hemp_template_init(HEMP_TEXT, input->string, NULL);
+            
             if (! template)
                 hemp_fatal("could not load template: %s", filename);
 
@@ -57,8 +69,28 @@ int main(int argc, char **argv, char **env) {
 
             puts(output->string);
             
+            hemp_text_free(input);
             hemp_text_free(output);
             hemp_template_free(template);
+        }
+        else {
+            while (optind < argc) {
+                filename = argv[optind++];
+                hemp_verbose(hemp, "loading file: %s", filename);
+
+                template = hemp_template_init(HEMP_FILE, filename, NULL);
+                if (! template)
+                    hemp_fatal("could not load template: %s", filename);
+
+                output = hemp_template_render(template);
+                if (! output)
+                    hemp_fatal("could not render template output: %s", filename);
+
+                puts(output->string);
+            
+                hemp_text_free(output);
+                hemp_template_free(template);
+            }
         }
     }
     else {
@@ -70,6 +102,7 @@ int main(int argc, char **argv, char **env) {
     hemp_free(hemp);
     return 0;
 }
+
 
 
 
@@ -140,15 +173,26 @@ hemp_getopt(
                 hemp->debug = HEMP_TRUE;
                 break;
 
+            case 't':
+                read_text = 1;
+                break;
+
+            case 'q':
+                be_quiet = 1;
+                break;
+
             case 'f':
                 hemp_todo("option -f %s", optarg);
                 break;
 
             case 'h':
+                hemp_banner();
                 hemp_help();
                 exit(HEMP_ERRNO_HELP);
 
             case '?':
+                fprintf(stderr, "Type '%s --help' for help\n", HEMP_NAME);
+                
             default:
                 exit(HEMP_ERRNO_GETOPT);
                 break;
@@ -159,16 +203,18 @@ hemp_getopt(
 void hemp_help() {
     fprintf(
         stderr,
-        "\nUsage: %s [options] file1 file2 ... file<n>\n", 
+        "\nUsage:\n"
+        "    %s [options] file1 file2 ... file<n>\n", 
         HEMP_NAME
     );
     fprintf(
         stderr,
-        "\nOptions: \n"
-        "\n"
-        "   -v      --verbose           enable verbose messages\n"
-        "   -d      --debug             enable debugging messages\n"
-        "   -h      --help              this help\n"
+        "\nOptions:\n"
+        "    -t      --text              read text from comment line arguments\n"
+        "    -q      --quiet             quiet mode - no messages\n"
+        "    -v      --verbose           enable verbose messages\n"
+        "    -d      --debug             enable debugging messages\n"
+        "    -h      --help              this help\n"
     );
 }
 

@@ -153,8 +153,10 @@ hemp_element_parse_exprs(
 
     hemp_element_t expr;
     hemp_list_t    exprs = hemp_list_init();
-    
+
+#if DEBUG
     debug("\n-- EXPRS --\n");
+#endif
 
     while (1) {
         // todo: skip delimiter
@@ -168,7 +170,9 @@ hemp_element_parse_exprs(
             break;
 
         // debug_parse("parsed %s expression:\n", expr->type->name);
+#if DEBUG
         hemp_element_dump(expr);
+#endif
         hemp_list_push(exprs, expr);
     }
 
