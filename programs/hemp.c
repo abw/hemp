@@ -23,7 +23,7 @@ void hemp_banner() {
 void hemp_prompt() {
     fprintf(
         stderr, "%s%s%s >%s ",
-        ANSI_GREEN, PACKAGE_NAME,
+        ANSI_GREEN, HEMP_PROMPT,
         ANSI_YELLOW, ANSI_RESET
     );
 }

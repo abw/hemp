@@ -21,7 +21,6 @@ void
 hemp_list_free(hemp_list_t list) {
     if (list->items) {
         if (list->cleaner) {
-            debug("*** invoking cleaner on list\n");
             debug_mem("invoking cleaner on list\n");
             hemp_list_each(list, list->cleaner);
         }
