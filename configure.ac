@@ -1,7 +1,7 @@
 AC_PREREQ(2.61)
 AC_INIT([hemp], [0.01], [hemp@wardley.org])
-AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR(build)
+AC_CONFIG_MACRO_DIR([build/m4])
 
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects color-tests])
 
@@ -19,7 +19,7 @@ AC_CONFIG_FILES([
     programs/Makefile 
     tests/Makefile
     modules/Makefile
-    extra/libltdl/Makefile
+    build/libltdl/Makefile
 ])
 
 # Checks for header files.
@@ -55,7 +55,7 @@ else
 fi
 
 # Configure libtool with dlopen support if possible
-LT_CONFIG_LTDL_DIR([extra/libltdl])
+LT_CONFIG_LTDL_DIR([build/libltdl])
 LT_INIT([dlopen])
 LTDL_INIT([recursive])
 

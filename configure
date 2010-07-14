@@ -678,7 +678,7 @@ fi
 
 
 
-lt_ltdl_dir='extra/libltdl'
+lt_ltdl_dir='build/libltdl'
 
 test -n "$DJDIR" || exec 7<&0 </dev/null
 exec 6>&1
@@ -2424,7 +2424,6 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-
 ac_aux_dir=
 for ac_dir in build "$srcdir"/build; do
   for ac_t in install-sh install.sh shtool; do
@@ -2446,6 +2445,7 @@ fi
 ac_config_guess="$SHELL $ac_aux_dir/config.guess"  # Please don't use this var.
 ac_config_sub="$SHELL $ac_aux_dir/config.sub"  # Please don't use this var.
 ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
+
 
 
 
@@ -10648,7 +10648,7 @@ CC="$lt_save_CC"
 
 ac_config_headers="$ac_config_headers include/config.h"
 
-ac_config_files="$ac_config_files Makefile include/Makefile library/Makefile programs/Makefile tests/Makefile modules/Makefile extra/libltdl/Makefile"
+ac_config_files="$ac_config_files Makefile include/Makefile library/Makefile programs/Makefile tests/Makefile modules/Makefile build/libltdl/Makefile"
 
 
 # Checks for header files.
@@ -13013,7 +13013,7 @@ do
     "programs/Makefile") CONFIG_FILES="$CONFIG_FILES programs/Makefile" ;;
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
     "modules/Makefile") CONFIG_FILES="$CONFIG_FILES modules/Makefile" ;;
-    "extra/libltdl/Makefile") CONFIG_FILES="$CONFIG_FILES extra/libltdl/Makefile" ;;
+    "build/libltdl/Makefile") CONFIG_FILES="$CONFIG_FILES build/libltdl/Makefile" ;;
 
   *) as_fn_error "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
