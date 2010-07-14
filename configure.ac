@@ -14,8 +14,8 @@ AC_CONFIG_HEADERS([
 AC_CONFIG_FILES([
     Makefile 
     include/Makefile 
-    lib/Makefile 
-    src/Makefile 
+    library/Makefile 
+    programs/Makefile 
     tests/Makefile
     modules/Makefile
     extra/libltdl/Makefile

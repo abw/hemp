@@ -16,6 +16,6 @@ check_PROGRAMS  = debug         \
                   text
 
 TESTS           = $(check_PROGRAMS)
-LDADD           = ../lib/libhemp.la tap.o
+LDADD           = ../library/libhemp.la tap.o
 CPPFLAGS        = -DTESTDIR='"$(abs_top_srcdir)/tests"'
 

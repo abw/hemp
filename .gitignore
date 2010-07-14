@@ -8,16 +8,7 @@ config.status
 .deps
 .libs
 .dirstamp
-source/hemp
-source/hemp_test
-source/element/*.a
-source/element/*.o
-source/element/*.la
-source/element/*.lo
-source/element.deps
-source/.libs
-tests/.libs
-tests/*.o
+programs/hemp
 tests/debug
 tests/dialect
 tests/element
@@ -35,4 +26,3 @@ tests/sources
 tests/tests
 tests/text
 tests/template
-.deps

@@ -71,7 +71,7 @@ am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-hemp_foo_la_DEPENDENCIES = ../lib/libhemp.la
+hemp_foo_la_DEPENDENCIES = ../library/libhemp.la
 am_hemp_foo_la_OBJECTS = foo.lo
 hemp_foo_la_OBJECTS = $(am_hemp_foo_la_OBJECTS)
 hemp_foo_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -226,7 +226,7 @@ lib_LTLIBRARIES = hemp_foo.la
 hemp_foo_la_SOURCES = foo.c 
 #hemp_foo_la_LDFLAGS  = -module
 hemp_foo_la_LDFLAGS = -no-undefined -module -avoid-version -export-dynamic
-hemp_foo_la_LIBADD = ../lib/libhemp.la
+hemp_foo_la_LIBADD = ../library/libhemp.la
 all: all-am
 
 .SUFFIXES:
