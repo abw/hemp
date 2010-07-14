@@ -43,6 +43,8 @@ hemp_template_free(
         hemp_source_free(tmpl->source);
     }
     if (tmpl->elements) {
+        // TODO: add custom destructors to elements so they can clean up
+        // any additional memory they allocated
         hemp_elements_free(tmpl->elements);
     }
     debug_cyan("Releasing %s template at %p\n", tmpl->source->scheme->name, tmpl);

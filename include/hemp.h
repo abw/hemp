@@ -40,11 +40,15 @@ extern "C" {
 #define HEMP_PROMPT     HEMP_NAME
 #define HEMP_AUTHOR     "Andy Wardley"
 
+#define HEMP_ERRNO_HELP     1
+#define HEMP_ERRNO_GETOPT   2
 
 struct hemp {
     hemp_hash_t     dialects;
     hemp_hash_t     dialect_factory;
     hemp_jump_t     *jump;
+    hemp_bool_t     verbose;
+    hemp_bool_t     debug;
 };
 
 

@@ -12,6 +12,8 @@ hemp_init() {
         hemp->dialects = hemp_hash_init();
         if (hemp->dialects) {
             debug_mem("Allocated hemp at %p\n", hemp);
+            hemp->verbose = HEMP_FALSE;
+            hemp->debug   = HEMP_FALSE;
         }
         else {
             hemp_null(hemp);

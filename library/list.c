@@ -6,6 +6,7 @@ hemp_list_t
 hemp_list_init() {
     hemp_list_t list;
 
+    /* TODO: allow capacity to be specified and allocate heads from a pool */
     if ((list = (hemp_list_t) hemp_mem_init(sizeof(struct hemp_list)))) {
         list->items    = NULL;
         list->length   = 0;
@@ -38,6 +39,8 @@ hemp_list_push(
 ) {
     // debug("hemp_list_push()\n");
     if (list->length == list->capacity) {
+        // TODO: slab allocate with overflow to avoid repeated realloc
+        // (or just plug in an off-the-shelf list library...)
         if ((list->items = hemp_mem_size(list->items, (list->capacity + 1) * sizeof(hemp_ptr_t)))) {
             list->capacity++;
         }
