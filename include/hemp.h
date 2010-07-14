@@ -5,32 +5,32 @@
 extern "C" {
 #endif
 
-#include "hemp/defaults.h"
-#include "hemp/types.h"
-#include "hemp/cstr.h"
-#include "hemp/memory.h"
-#include "hemp/slab.h"
-#include "hemp/pool.h"
-#include "hemp/hash.h"
-#include "hemp/list.h"
-#include "hemp/ptree.h"
-#include "hemp/element.h"
-#include "hemp/elements.h"
-#include "hemp/tags.h"
-#include "hemp/sources.h"
-#include "hemp/dialect.h"
-#include "hemp/scanner.h"
-#include "hemp/template.h"
-#include "hemp/module.h"
-#include "hemp/utils.h"
-#include "hemp/error.h"
-#include "hemp/filesystem.h"
-#include "hemp/debug.h"
-#include "hemp/os.h"
-#include "hemp/scope.h"
-#include "hemp/type.h"
-#include "hemp/text.h"
-#include "hemp/value.h"
+#include <hemp/defaults.h>
+#include <hemp/types.h>
+#include <hemp/cstr.h>
+#include <hemp/memory.h>
+#include <hemp/slab.h>
+#include <hemp/pool.h>
+#include <hemp/hash.h>
+#include <hemp/list.h>
+#include <hemp/ptree.h>
+#include <hemp/element.h>
+#include <hemp/elements.h>
+#include <hemp/tags.h>
+#include <hemp/sources.h>
+#include <hemp/dialect.h>
+#include <hemp/scanner.h>
+#include <hemp/template.h>
+#include <hemp/module.h>
+#include <hemp/utils.h>
+#include <hemp/error.h>
+#include <hemp/filesystem.h>
+#include <hemp/debug.h>
+#include <hemp/os.h>
+#include <hemp/scope.h>
+#include <hemp/type.h>
+#include <hemp/text.h>
+#include <hemp/value.h>
 
 
 struct hemp {

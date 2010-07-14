@@ -8,10 +8,14 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 AC_PROG_LIBTOOL
 
-AC_CONFIG_HEADERS([include/config.h])
+AC_CONFIG_HEADERS([
+    include/config.h
+])
 AC_CONFIG_FILES([
     Makefile 
-    source/Makefile 
+    include/Makefile 
+    lib/Makefile 
+    src/Makefile 
     tests/Makefile
     modules/Makefile
     extra/libltdl/Makefile

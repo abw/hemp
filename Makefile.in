@@ -15,7 +15,6 @@
 
 @SET_MAKE@
 
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -37,11 +36,9 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(dist_doc_DATA) \
-	$(include_HEADERS) $(nobase_include_HEADERS) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(top_srcdir)/configure $(top_srcdir)/include/config.h.in \
-	INSTALL compile config.guess config.sub depcomp install-sh \
-	ltmain.sh missing
+	$(top_srcdir)/configure INSTALL TODO compile config.guess \
+	config.sub depcomp install-sh ltmain.sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/argz.m4 \
 	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltdl.m4 \
@@ -86,10 +83,8 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(docdir)" "$(DESTDIR)$(includedir)" \
-	"$(DESTDIR)$(includedir)"
+am__installdirs = "$(DESTDIR)$(docdir)"
 DATA = $(dist_doc_DATA)
-HEADERS = $(include_HEADERS) $(nobase_include_HEADERS)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
@@ -262,14 +257,8 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 EXTRA_DIST = INSTALL
-SUBDIRS = source extra/libltdl modules . tests
+SUBDIRS = include lib src extra/libltdl modules . tests
 dist_doc_DATA = README
-include_HEADERS = include/hemp.h
-nobase_include_HEADERS = \
-    include/hemp/types.h  \
-    include/hemp/memory.h \
-    include/hemp/debug.h
-
 ACLOCAL_AMFLAGS = -I m4
 all: all-recursive
 
@@ -309,23 +298,6 @@ $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
 
-include/config.h: include/stamp-h1
-	@if test ! -f $@; then \
-	  rm -f include/stamp-h1; \
-	  $(MAKE) $(AM_MAKEFLAGS) include/stamp-h1; \
-	else :; fi
-
-include/stamp-h1: $(top_srcdir)/include/config.h.in $(top_builddir)/config.status
-	@rm -f include/stamp-h1
-	cd $(top_builddir) && $(SHELL) ./config.status include/config.h
-$(top_srcdir)/include/config.h.in:  $(am__configure_deps) 
-	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
-	rm -f include/stamp-h1
-	touch $@
-
-distclean-hdr:
-	-rm -f include/config.h include/stamp-h1
-
 mostlyclean-libtool:
 	-rm -f *.lo
 
@@ -354,49 +326,6 @@ uninstall-dist_docDATA:
 	test -n "$$files" || exit 0; \
 	echo " ( cd '$(DESTDIR)$(docdir)' && rm -f" $$files ")"; \
 	cd "$(DESTDIR)$(docdir)" && rm -f $$files
-install-includeHEADERS: $(include_HEADERS)
-	@$(NORMAL_INSTALL)
-	test -z "$(includedir)" || $(MKDIR_P) "$(DESTDIR)$(includedir)"
-	@list='$(include_HEADERS)'; test -n "$(includedir)" || list=; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(includedir)'"; \
-	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(includedir)" || exit $$?; \
-	done
-
-uninstall-includeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(include_HEADERS)'; test -n "$(includedir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(includedir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(includedir)" && rm -f $$files
-install-nobase_includeHEADERS: $(nobase_include_HEADERS)
-	@$(NORMAL_INSTALL)
-	test -z "$(includedir)" || $(MKDIR_P) "$(DESTDIR)$(includedir)"
-	@list='$(nobase_include_HEADERS)'; test -n "$(includedir)" || list=; \
-	$(am__nobase_list) | while read dir files; do \
-	  xfiles=; for file in $$files; do \
-	    if test -f "$$file"; then xfiles="$$xfiles $$file"; \
-	    else xfiles="$$xfiles $(srcdir)/$$file"; fi; done; \
-	  test -z "$$xfiles" || { \
-	    test "x$$dir" = x. || { \
-	      echo "$(MKDIR_P) '$(DESTDIR)$(includedir)/$$dir'"; \
-	      $(MKDIR_P) "$(DESTDIR)$(includedir)/$$dir"; }; \
-	    echo " $(INSTALL_HEADER) $$xfiles '$(DESTDIR)$(includedir)/$$dir'"; \
-	    $(INSTALL_HEADER) $$xfiles "$(DESTDIR)$(includedir)/$$dir" || exit $$?; }; \
-	done
-
-uninstall-nobase_includeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(nobase_include_HEADERS)'; test -n "$(includedir)" || list=; \
-	$(am__nobase_strip_setup); files=`$(am__nobase_strip)`; \
-	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(includedir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(includedir)" && rm -f $$files
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -710,10 +639,10 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(DATA) $(HEADERS)
+all-am: Makefile $(DATA)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(docdir)" "$(DESTDIR)$(includedir)" "$(DESTDIR)$(includedir)"; do \
+	for dir in "$(DESTDIR)$(docdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -748,8 +677,8 @@ clean-am: clean-generic clean-libtool mostlyclean-am
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic distclean-hdr \
-	distclean-libtool distclean-tags
+distclean-am: clean-am distclean-generic distclean-libtool \
+	distclean-tags
 
 dvi: dvi-recursive
 
@@ -763,8 +692,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-dist_docDATA install-includeHEADERS \
-	install-nobase_includeHEADERS
+install-data-am: install-dist_docDATA
 
 install-dvi: install-dvi-recursive
 
@@ -810,8 +738,7 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-dist_docDATA uninstall-includeHEADERS \
-	uninstall-nobase_includeHEADERS
+uninstall-am: uninstall-dist_docDATA
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) ctags-recursive \
 	install-am install-strip tags-recursive
@@ -820,21 +747,18 @@ uninstall-am: uninstall-dist_docDATA uninstall-includeHEADERS \
 	all all-am am--refresh check check-am clean clean-generic \
 	clean-libtool ctags ctags-recursive dist dist-all dist-bzip2 \
 	dist-gzip dist-lzma dist-shar dist-tarZ dist-xz dist-zip \
-	distcheck distclean distclean-generic distclean-hdr \
-	distclean-libtool distclean-tags distcleancheck distdir \
-	distuninstallcheck dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am \
-	install-dist_docDATA install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am \
-	install-includeHEADERS install-info install-info-am \
-	install-man install-nobase_includeHEADERS install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am \
-	uninstall-dist_docDATA uninstall-includeHEADERS \
-	uninstall-nobase_includeHEADERS
+	distcheck distclean distclean-generic distclean-libtool \
+	distclean-tags distcleancheck distdir distuninstallcheck dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-data install-data-am install-dist_docDATA install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am tags tags-recursive uninstall uninstall-am \
+	uninstall-dist_docDATA
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

@@ -35,8 +35,3 @@ libhemp_la_SOURCES  = cstr.c                \
                       template.c            \
                       utils.c
 
-bin_PROGRAMS        = hemp
-hemp_SOURCES        = hemp.c
-hemp_LDADD          = libhemp.la
-
-

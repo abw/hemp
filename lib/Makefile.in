@@ -34,7 +34,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = modules
+subdir = lib
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/argz.m4 \
@@ -71,12 +71,18 @@ am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-hemp_foo_la_DEPENDENCIES = ../lib/libhemp.la
-am_hemp_foo_la_OBJECTS = foo.lo
-hemp_foo_la_OBJECTS = $(am_hemp_foo_la_OBJECTS)
-hemp_foo_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(hemp_foo_la_LDFLAGS) $(LDFLAGS) -o $@
+libhemp_la_LIBADD =
+am__dirstamp = $(am__leading_dot)dirstamp
+am_libhemp_la_OBJECTS = cstr.lo dialect.lo debug.lo element.lo \
+	elements.lo element/block.lo element/dquote.lo \
+	element/integer.lo element/literal.lo element/number.lo \
+	element/space.lo element/squote.lo element/text.lo \
+	element/word.lo filesystem.lo hash.lo hemp_obj.lo list.lo \
+	memory.lo module.lo pool.lo ptree.lo scanner.lo slab.lo \
+	sources.lo tags.lo tag/comment.lo tag/control.lo tag/embed.lo \
+	tag/inline.lo tag/outline.lo tag/variable.lo text.lo \
+	template.lo utils.lo
+libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -90,8 +96,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(hemp_foo_la_SOURCES)
-DIST_SOURCES = $(hemp_foo_la_SOURCES)
+SOURCES = $(libhemp_la_SOURCES)
+DIST_SOURCES = $(libhemp_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -222,11 +228,43 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-lib_LTLIBRARIES = hemp_foo.la
-hemp_foo_la_SOURCES = foo.c 
-#hemp_foo_la_LDFLAGS  = -module
-hemp_foo_la_LDFLAGS = -no-undefined -module -avoid-version -export-dynamic
-hemp_foo_la_LIBADD = ../lib/libhemp.la
+lib_LTLIBRARIES = libhemp.la
+libhemp_la_SOURCES = cstr.c                \
+                      dialect.c             \
+                      debug.c               \
+                      element.c             \
+                      elements.c            \
+                      element/block.c       \
+                      element/dquote.c      \
+                      element/integer.c     \
+                      element/literal.c     \
+                      element/number.c      \
+                      element/space.c       \
+                      element/squote.c      \
+                      element/text.c        \
+                      element/word.c        \
+                      filesystem.c          \
+                      hash.c                \
+                      hemp_obj.c            \
+                      list.c                \
+                      memory.c              \
+                      module.c              \
+                      pool.c                \
+                      ptree.c               \
+                      scanner.c             \
+                      slab.c                \
+                      sources.c             \
+                      tags.c                \
+                      tag/comment.c         \
+                      tag/control.c         \
+                      tag/embed.c           \
+                      tag/inline.c          \
+                      tag/outline.c         \
+                      tag/variable.c        \
+                      text.c                \
+                      template.c            \
+                      utils.c
+
 all: all-am
 
 .SUFFIXES:
@@ -240,9 +278,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign modules/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign lib/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign modules/Makefile
+	  $(AUTOMAKE) --foreign lib/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -292,16 +330,116 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-hemp_foo.la: $(hemp_foo_la_OBJECTS) $(hemp_foo_la_DEPENDENCIES) 
-	$(hemp_foo_la_LINK) -rpath $(libdir) $(hemp_foo_la_OBJECTS) $(hemp_foo_la_LIBADD) $(LIBS)
+element/$(am__dirstamp):
+	@$(MKDIR_P) element
+	@: > element/$(am__dirstamp)
+element/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) element/$(DEPDIR)
+	@: > element/$(DEPDIR)/$(am__dirstamp)
+element/block.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+element/dquote.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+element/integer.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+element/literal.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+element/number.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+element/space.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+element/squote.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+element/text.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+element/word.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+tag/$(am__dirstamp):
+	@$(MKDIR_P) tag
+	@: > tag/$(am__dirstamp)
+tag/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tag/$(DEPDIR)
+	@: > tag/$(DEPDIR)/$(am__dirstamp)
+tag/comment.lo: tag/$(am__dirstamp) tag/$(DEPDIR)/$(am__dirstamp)
+tag/control.lo: tag/$(am__dirstamp) tag/$(DEPDIR)/$(am__dirstamp)
+tag/embed.lo: tag/$(am__dirstamp) tag/$(DEPDIR)/$(am__dirstamp)
+tag/inline.lo: tag/$(am__dirstamp) tag/$(DEPDIR)/$(am__dirstamp)
+tag/outline.lo: tag/$(am__dirstamp) tag/$(DEPDIR)/$(am__dirstamp)
+tag/variable.lo: tag/$(am__dirstamp) tag/$(DEPDIR)/$(am__dirstamp)
+libhemp.la: $(libhemp_la_OBJECTS) $(libhemp_la_DEPENDENCIES) 
+	$(LINK) -rpath $(libdir) $(libhemp_la_OBJECTS) $(libhemp_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f element/block.$(OBJEXT)
+	-rm -f element/block.lo
+	-rm -f element/dquote.$(OBJEXT)
+	-rm -f element/dquote.lo
+	-rm -f element/integer.$(OBJEXT)
+	-rm -f element/integer.lo
+	-rm -f element/literal.$(OBJEXT)
+	-rm -f element/literal.lo
+	-rm -f element/number.$(OBJEXT)
+	-rm -f element/number.lo
+	-rm -f element/space.$(OBJEXT)
+	-rm -f element/space.lo
+	-rm -f element/squote.$(OBJEXT)
+	-rm -f element/squote.lo
+	-rm -f element/text.$(OBJEXT)
+	-rm -f element/text.lo
+	-rm -f element/word.$(OBJEXT)
+	-rm -f element/word.lo
+	-rm -f tag/comment.$(OBJEXT)
+	-rm -f tag/comment.lo
+	-rm -f tag/control.$(OBJEXT)
+	-rm -f tag/control.lo
+	-rm -f tag/embed.$(OBJEXT)
+	-rm -f tag/embed.lo
+	-rm -f tag/inline.$(OBJEXT)
+	-rm -f tag/inline.lo
+	-rm -f tag/outline.$(OBJEXT)
+	-rm -f tag/outline.lo
+	-rm -f tag/variable.$(OBJEXT)
+	-rm -f tag/variable.lo
 
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/foo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cstr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/debug.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialect.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/element.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/elements.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filesystem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp_obj.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/module.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pool.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ptree.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/slab.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tags.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/block.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/dquote.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/integer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/literal.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/number.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/space.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/squote.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/text.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/word.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/comment.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/control.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/embed.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/inline.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/outline.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/variable.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -332,6 +470,8 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf element/.libs element/_libs
+	-rm -rf tag/.libs tag/_libs
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -443,6 +583,10 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f element/$(DEPDIR)/$(am__dirstamp)
+	-rm -f element/$(am__dirstamp)
+	-rm -f tag/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tag/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -453,7 +597,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR)
+	-rm -rf ./$(DEPDIR) element/$(DEPDIR) tag/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -499,7 +643,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR)
+	-rm -rf ./$(DEPDIR) element/$(DEPDIR) tag/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -534,8 +678,6 @@ uninstall-am: uninstall-libLTLIBRARIES
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-libLTLIBRARIES
 
-
-#AM_CPPFLAGS          = -I$(srcdir)/../libloader
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
