@@ -161,6 +161,12 @@ hemp_bool_t
         hemp_element_t element
     );
 
+hemp_text_t
+    hemp_element_block_text(
+        hemp_element_t  element,
+        hemp_text_t     text
+    );
+
 
 /*--------------------------------------------------------------------------
  * function prototypes for specific element types

@@ -22,17 +22,23 @@ hemp_element_block_text(
     hemp_text_t     text
 ) {
     debug_call("hemp_element_block_text()\n");
+//  debug("*** hemp_element_block_text()\n");
     hemp_list_t     exprs = element->value.block.exprs;
     hemp_element_t  expr;
     hemp_size_t     n;
     
-    if (! text)
+    if (! text) {
+//      debug("new text item\n");
         text = hemp_text_init(0);
+    }
 
     for (n = 0; n < exprs->length; n++) {
         expr = hemp_list_item(exprs, n);
+//      debug("calling %s text method\n", expr->type->name);
         expr->type->text(expr, text);
     }
+
+//  debug("returning block text (%d bytes): %p\n", text->length, text);
 
     return text;
 }

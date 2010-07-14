@@ -50,24 +50,74 @@ hemp_template_free(
 }
 
 
-hemp_bool_t
-hemp_template_compile(
+hemp_element_t
+hemp_template_tokens(
     hemp_template_t tmpl
 ) {
-    hemp_element_t element;
+    if (! tmpl->elements->head) {
+        if (tmpl->dialect->scanner(tmpl)) {
+            debug_green("scanned OK\n");
+        }
+        else {
+            debug_red("scan failed\n");
+        }
+    }
+    return tmpl->elements->head;
+}
+
+
+hemp_bool_t
+hemp_template_scan(
+    hemp_template_t tmpl
+) {
+    hemp_bool_t result = tmpl->dialect->scanner(tmpl);
     
-    if (tmpl->dialect->scanner(tmpl)) {
+    if (result) {
+        // TODO: proper exception handling
         debug_green("scanned OK\n");
     }
     else {
         debug_red("scan failed\n");
-        return;
     }
-    
-    hemp_element_parse(
-        hemp_template_first_element(tmpl)
-    );
-    
+
+    return result;
+}
+
+
+hemp_bool_t
+hemp_template_compile(
+    hemp_template_t tmpl
+) {
+    hemp_element_t element = hemp_template_tokens(tmpl);
+    tmpl->tree = hemp_element_parse(element);
+    debug("got tree: %p\n", tmpl->tree);
+    // TODO: proper error handling
     return HEMP_TRUE;
+}
+
+
+hemp_element_t
+hemp_template_tree(
+    hemp_template_t tmpl
+) {
+    if (! tmpl->tree)
+        hemp_template_compile(tmpl);
+        
+    return tmpl->tree;
+}
+
+
+hemp_text_t
+hemp_template_render(
+    hemp_template_t tmpl
+) {
+    hemp_element_t  root = hemp_template_tree(tmpl);
+
+    if (! root)
+        hemp_fatal("template does not have a root element");
+        
+    hemp_text_fn tfn = root->type->text;
+    hemp_text_t text = root->type->text(root, NULL);
+    return text;
 }
 

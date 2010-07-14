@@ -3,6 +3,7 @@
 #include "tap.h"
 
 #define TEST_MARKER "-- test"
+#define EXPECT_MARKER "-- expect"
 
 
 void test_scanner();
@@ -33,10 +34,10 @@ void test_script(
 ) {
     hemp_cstr_t     path = hemp_filesystem_join_path(scripts, script);
     hemp_cstr_t     text = hemp_filesystem_read_file(path);
-    hemp_cstr_t     test, name;
+    hemp_cstr_t     test, name, expect;
     hemp_list_t     list;
     hemp_template_t tmpl;
-    hemp_pos_t      n;
+    hemp_size_t     n;
 
     if (! text) {
         fail("could not read test script: %s", path);
@@ -50,7 +51,7 @@ void test_script(
     
     /* skip over first -- test */
     test += strlen(TEST_MARKER);
-    list = hemp_cstr_split(test, "-- test");
+    list = hemp_cstr_split(test, TEST_MARKER);
     debug("found %d tests in %s\n", list->length, script);
     
     for (n = 0; n < list->length; n++) {
@@ -62,28 +63,48 @@ void test_script(
         }
         
         name = test;
-        do {
-            test++;
-        }
-        while (*test != LF && *test != CR);
+        do      { test++; }
+        while   (*test != LF && *test != CR);
 
         /* NUL terminate test name */
         *test = '\0';
         
-        do {
-            test++;
+        do      { test++; }
+        while   (*test == LF || *test == CR);
+        
+        if ((expect = strstr(test, EXPECT_MARKER))) {
+            *expect = '\0';
+            expect += strlen(EXPECT_MARKER);
+            while   (*expect != LF && *expect != CR)
+                    { expect++; }
+            do      { expect++; }
+            while   (*expect == LF || *expect == CR);
+//            expect++;
         }
-        while (*test == LF || *test == CR);
 
+/*
         printf(">> test %d: %s\n", n, name);
+
+        if (expect)
+            printf(">> expect [%s]\n", expect);
+*/
         
         tmpl = hemp_template_init(
             HEMP_TEXT, 
             test,
             NULL
         );
-        ok( tmpl , "created template" );
-        ok( hemp_template_compile(tmpl), "compiled template" );
+        hemp_text_t output = hemp_template_render(tmpl);
+        ok( output, "%s rendered", name);
+        if (expect) {
+            if (hemp_cstr_eq(output->string, expect)) {
+                ok(1, "%s output matches expected", name);
+            }
+            else {
+                ok(0, "%s output does not match expected", name);
+            }
+        }
+                
     }
         
     //printf("TESTS: %s\n", hemp_list_dump(list));

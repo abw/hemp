@@ -39,7 +39,7 @@ hemp_element_parse(
         0, 
         HEMP_FALSE
     );
-    
+/*    
     if (block) {
         hemp_text_t text = block->type->text(block, NULL);
         debug("OUTPUT: %s\n", text->string);
@@ -48,9 +48,9 @@ hemp_element_parse(
     else {
         debug_red("did not parse a block\n");
     }
+*/
     
     return block;
-        
 }
 
 

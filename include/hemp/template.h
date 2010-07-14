@@ -15,6 +15,7 @@ struct hemp_template {
     hemp_dialect_t  dialect;
     hemp_source_t   source;
     hemp_elements_t elements;
+    hemp_element_t  tree;
 };
 
 
@@ -37,6 +38,11 @@ void
 hemp_bool_t 
     hemp_template_compile(
         hemp_template_t
+    );
+
+hemp_text_t
+    hemp_template_render(
+        hemp_template_t tmpl
     );
 
 
