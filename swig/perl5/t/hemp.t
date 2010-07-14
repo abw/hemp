@@ -16,7 +16,7 @@ use warnings;
 
 use lib qw( ./lib ./blib ./blib/arch ../lib ../blib ../blib/arch );
 use Badger::Test 
-    tests => 3,
+    tests => 7,
     args  => \@ARGV;
 
 my ($pkg, $obj);
@@ -30,6 +30,13 @@ ok( $hemp, "created hemp object: $hemp");
 
 hemp::hemp_free($hemp);
 pass("freed hemp object");
+
+my $text = hemp::hemp_text_from_cstr("foo bar");
+ok( $text, "created text: $text" );
+is( $text->swig_string_get, "foo bar", "got text back" );
+is( $text->swig_capacity_get, 7, "capacity is 7" );
+is( $text->swig_length_get, 7, "length is 7" );
+
 
 
 __END__
