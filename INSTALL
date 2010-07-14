@@ -1,14 +1,46 @@
-To build hemp:
+To build and install hemp:
 
     $ ./configure
     $ make
     $ make check
+    $ sudo make install
 
 Please be aware of the fact that this is my first time using GNU autotools
 to manage the build process.  There's a fair amount of gnarly stuff going
-on that I don't really understand.  It builds on my system, but I can't make
-any guarantees that it'll build on yours.  Any help improving this side of 
-things would be most welcome.
+on that I don't fully understand.  It builds on my system (OSX), but I can't 
+make any guarantees that it'll build on yours, especially if you're on a 
+non-Unix platform.  Any help improving this side of things would be most 
+welcome.
+
+The commands shown above will install the hemp library, header files and the 
+hemp program on your system.  The hemp program doesn't do anything useful yet, 
+other that demonstrate that the program has compiled and linked correctly with 
+the library.  Note also that the hemp library itself doesn't yet do anything 
+particularly useful either, so most of this is academic.
+
+    $ hemp                              # stub program for now
+
+You should be able to compile the hemp library into your own C programs.
+Here's a simple example as a proof of concept:
+
+    #include <stdio.h>
+    #include <hemp.h>
+
+    int main(int argc, char **argv, char **env) {
+        hemp_t hemp = hemp_init();
+        printf("created a hemp engine: %p\n", hemp);
+        hemp_free(hemp);
+        return 0;
+    }
+
+Assuming the above is saved in 'example.c', you would compile and link it
+using a command something like this:
+
+    $ gcc -o example -lhemp example.c
+
+If the program compiles and run then you've successfully linked in the hemp
+library.  Now you just have to twiddle your thumbs for a while until I've 
+had the chance to add the functionality to makes it useful and usuable.
 
 -- Andy Wardley, July 2010
 

@@ -32,6 +32,18 @@ extern "C" {
 #include <hemp/text.h>
 #include <hemp/value.h>
 
+/*
+    hmmm... how do I define new values as alias for existing cpp values?
+    #define HEMP_NAME                   #PACKAGE_NAME
+    #define HEMP_VERSION                #PACKAGE_VERSION
+    #define HEMP_EMAIL                  #PACKAGE_BUGREPORT
+*/
+
+#define HEMP_NAME                   "hemp"
+#define HEMP_VERSION                "0.01"
+#define HEMP_EMAIL                  "hemp@wardley.org"
+#define HEMP_AUTHOR                 "Andy Wardley"
+
 
 struct hemp {
     hemp_hash_t     dialects;

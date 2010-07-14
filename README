@@ -1,15 +1,17 @@
-Hemp is a template toolkit written in C.
+Hemp is a template processing toolkit/framework written in C.  Or will be, 
+one day.  Maybe.
 
 The aim is to implement a similar framework to TT3 (of which a prototype
 written in Perl already exists) and provide a default implementation of 
-the TT3 template dialect.  However, the framework should also be extensible 
-and allow other template dialects to be plugged in.  Library wrappers will 
-eventually provide access to it from Perl, and perhaps other languages like 
-Python, Ruby, Javascript and even PHP.  Well, that's if it ever gets anywhere.
-If it does, there's a good chance it'll end up being re-written on top of 
-Parrot, or something else that's better than the hodge-podge of code I've 
-thrown together to get things working.  But that's a long way off yet.  It 
-still might come to nothing. 
+the TT3 template language.  However, the framework should also be extensible 
+and allow other template langauges (aka "dialects") to be plugged in.  
+
+Library wrappers will eventually (maybe) provide access to it from Perl, and 
+perhaps other languages like Python, Ruby, Javascript and even PHP (gak!).  
+Well, that's if it ever gets anywhere.  If it does, there's a good chance 
+it'll end up being re-written on top of Parrot, or something else that's 
+better than the hodge-podge of code I've thrown together to get things 
+working.  But that's a long way off yet.  It still might come to nothing. 
 
 Development is at a very early "playground" stage.  At present it is focussed 
 on tokenising and parsing templates into an element tree (a cross between a 
@@ -19,4 +21,9 @@ really worth looking at just yet, unless perhaps if you've got a particular
 interest in implementing mini-languages or the challenges of parsing templates.
 If that's not you then please move along now.  There's nothing to see. 
 
-Andy Wardley, July 2010
+You still here?  Oh, right.  Well if you're really keen then you could have 
+a look at the INSTALL file for instructions on building the hemp library and 
+test programs.  But don't blame me if it doesn't work, or when you realise 
+that it doesn't do anything useful yet.
+
+-- Andy Wardley, July 2010

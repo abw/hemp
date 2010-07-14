@@ -37,8 +37,9 @@ host_triplet = @host@
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(dist_doc_DATA) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(top_srcdir)/configure INSTALL TODO compile config.guess \
-	config.sub depcomp install-sh ltmain.sh missing
+	$(top_srcdir)/configure INSTALL TODO build/compile \
+	build/config.guess build/config.sub build/depcomp \
+	build/install-sh build/ltmain.sh build/missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/argz.m4 \
 	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltdl.m4 \

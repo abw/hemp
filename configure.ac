@@ -1,6 +1,7 @@
 AC_PREREQ(2.61)
 AC_INIT([hemp], [0.01], [hemp@wardley.org])
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR(build)
 
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects color-tests])
 
