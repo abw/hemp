@@ -83,7 +83,7 @@ am_libhemp_la_OBJECTS = cstr.lo dialect.lo debug.lo element.lo \
 	element/word.lo filesystem.lo hash.lo hemp_obj.lo list.lo \
 	memory.lo module.lo pool.lo ptree.lo scanner.lo slab.lo \
 	sources.lo tags.lo tag/comment.lo tag/control.lo tag/embed.lo \
-	tag/inline.lo tag/outline.lo tag/variable.lo text.lo \
+	tag/inline.lo tag/outline.lo tag/variable.lo text.lo type.lo \
 	template.lo utils.lo
 libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include
@@ -265,6 +265,7 @@ libhemp_la_SOURCES = cstr.c                \
                       tag/outline.c         \
                       tag/variable.c        \
                       text.c                \
+                      type.c                \
                       template.c            \
                       utils.c
 
@@ -427,6 +428,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tags.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/type.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/block.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/dquote.Plo@am__quote@

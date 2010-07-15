@@ -13,6 +13,7 @@ check_PROGRAMS  = debug         \
                   sources       \
                   filesystem    \
                   template      \
+                  type          \
                   text
 
 TESTS           = $(check_PROGRAMS)

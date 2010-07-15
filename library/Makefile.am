@@ -32,6 +32,7 @@ libhemp_la_SOURCES  = cstr.c                \
                       tag/outline.c         \
                       tag/variable.c        \
                       text.c                \
+                      type.c                \
                       template.c            \
                       utils.c
 

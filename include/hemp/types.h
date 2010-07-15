@@ -1,6 +1,9 @@
 #ifndef HEMP_TYPES_H
 #define HEMP_TYPES_H
 
+#include <stdarg.h>
+
+
 #define HEMP_TRUE  1
 #define HEMP_FALSE 0
 
@@ -70,7 +73,7 @@ typedef hemp_bool_t     (* hemp_build_fn)(hemp_t);
 typedef hemp_bool_t     (* hemp_onload_fn)(hemp_t);
 typedef hemp_bool_t     (* hemp_list_each_fn)(hemp_list_t, hemp_pos_t, hemp_ptr_t);
 
-typedef hemp_value_t    (* hemp_init_fn)();
+//typedef hemp_value_t    (* hemp_init_fn)();
 typedef void            (* hemp_free_fn)(hemp_value_t);
 typedef hemp_bool_t     (* hemp_truth_fn)(hemp_value_t);
 typedef hemp_value_t    (* hemp_unary_fn)(hemp_value_t);
@@ -78,6 +81,9 @@ typedef hemp_value_t    (* hemp_binary_fn)(hemp_value_t, hemp_value_t);
 typedef hemp_value_t    (* hemp_ternary_fn)(hemp_value_t, hemp_value_t, hemp_value_t);
 
 typedef hemp_text_t     (* hemp_text_fn)(hemp_element_t, hemp_text_t);
+
+typedef hemp_ptr_t      (* hemp_init_fn)(hemp_type_t, va_list *args);
+typedef void            (* hemp_wipe_fn)(hemp_ptr_t);
 
 typedef void 
     (* hemp_tag_scan_fn)(

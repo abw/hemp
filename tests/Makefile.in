@@ -37,7 +37,7 @@ check_PROGRAMS = debug$(EXEEXT) dialect$(EXEEXT) element$(EXEEXT) \
 	error$(EXEEXT) hash$(EXEEXT) hemp$(EXEEXT) list$(EXEEXT) \
 	memory$(EXEEXT) module$(EXEEXT) pool$(EXEEXT) scanner$(EXEEXT) \
 	slab$(EXEEXT) sources$(EXEEXT) filesystem$(EXEEXT) \
-	template$(EXEEXT) text$(EXEEXT)
+	template$(EXEEXT) type$(EXEEXT) text$(EXEEXT)
 subdir = tests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -119,6 +119,10 @@ text_SOURCES = text.c
 text_OBJECTS = text.$(OBJEXT)
 text_LDADD = $(LDADD)
 text_DEPENDENCIES = ../library/libhemp.la tap.o
+type_SOURCES = type.c
+type_OBJECTS = type.$(OBJEXT)
+type_LDADD = $(LDADD)
+type_DEPENDENCIES = ../library/libhemp.la tap.o
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -134,10 +138,10 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = debug.c dialect.c element.c error.c filesystem.c hash.c \
 	hemp.c list.c memory.c module.c pool.c scanner.c slab.c \
-	sources.c template.c text.c
+	sources.c template.c text.c type.c
 DIST_SOURCES = debug.c dialect.c element.c error.c filesystem.c hash.c \
 	hemp.c list.c memory.c module.c pool.c scanner.c slab.c \
-	sources.c template.c text.c
+	sources.c template.c text.c type.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -376,6 +380,9 @@ template$(EXEEXT): $(template_OBJECTS) $(template_DEPENDENCIES)
 text$(EXEEXT): $(text_OBJECTS) $(text_DEPENDENCIES) 
 	@rm -f text$(EXEEXT)
 	$(LINK) $(text_OBJECTS) $(text_LDADD) $(LIBS)
+type$(EXEEXT): $(type_OBJECTS) $(type_DEPENDENCIES) 
+	@rm -f type$(EXEEXT)
+	$(LINK) $(type_OBJECTS) $(type_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -399,6 +406,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/type.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

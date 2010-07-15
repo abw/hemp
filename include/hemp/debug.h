@@ -19,6 +19,7 @@ void debug_token(hemp_cstr_t type, hemp_cstr_t str, hemp_pos_t len);
 #define DEBUG_FILE      0x0010
 #define DEBUG_SCAN      0x0020
 #define DEBUG_PARSE     0x0040
+#define DEBUG_TYPE      0x0080
 #define DEBUG_ALL       0xFFFF
 
 #define ANSI_RED        "\e[31m"
@@ -37,47 +38,53 @@ void debug_token(hemp_cstr_t type, hemp_cstr_t str, hemp_pos_t len);
 #endif
 
 #if DEBUG
-#  define debug_red(format, ...)      debug_col(ANSI_RED,     format, ##__VA_ARGS__)
-#  define debug_green(format, ...)    debug_col(ANSI_GREEN,   format, ##__VA_ARGS__)
-#  define debug_yellow(format, ...)   debug_col(ANSI_YELLOW,  format, ##__VA_ARGS__)
-#  define debug_blue(format, ...)     debug_col(ANSI_BLUE,    format, ##__VA_ARGS__)
-#  define debug_magenta(format, ...)  debug_col(ANSI_MAGENTA, format, ##__VA_ARGS__)
-#  define debug_cyan(format, ...)     debug_col(ANSI_CYAN,    format, ##__VA_ARGS__)
+#  define debug_red(format, ...)        debug_col(ANSI_RED,     format, ##__VA_ARGS__)
+#  define debug_green(format, ...)      debug_col(ANSI_GREEN,   format, ##__VA_ARGS__)
+#  define debug_yellow(format, ...)     debug_col(ANSI_YELLOW,  format, ##__VA_ARGS__)
+#  define debug_blue(format, ...)       debug_col(ANSI_BLUE,    format, ##__VA_ARGS__)
+#  define debug_magenta(format, ...)    debug_col(ANSI_MAGENTA, format, ##__VA_ARGS__)
+#  define debug_cyan(format, ...)       debug_col(ANSI_CYAN,    format, ##__VA_ARGS__)
 #
 #  if DEBUG & DEBUG_MEM
-#    define debug_mem(format, ...)    debug_col(ANSI_CYAN, format, ##__VA_ARGS__)
+#    define debug_mem(format, ...)      debug_col(ANSI_CYAN, format, ##__VA_ARGS__)
 #  else 
 #    define debug_mem(format, ...)
 #  endif
 #
 #  if DEBUG & DEBUG_CALL
-#    define debug_call(format, ...)   debug_col(ANSI_BLUE, format, ##__VA_ARGS__)
+#    define debug_call(format, ...)     debug_col(ANSI_BLUE, format, ##__VA_ARGS__)
 #  else 
 #    define debug_call(format, ...)
 #  endif
 #
 #  if DEBUG & DEBUG_LOAD
-#    define debug_load(format, ...)   debug_col(ANSI_MAGENTA, format, ##__VA_ARGS__)
+#    define debug_load(format, ...)     debug_col(ANSI_MAGENTA, format, ##__VA_ARGS__)
 #  else 
 #    define debug_load(format, ...)
 #  endif
 #
 #  if DEBUG & DEBUG_FILE
-#    define debug_file(format, ...)   debug_yellow(format, ##__VA_ARGS__)
+#    define debug_file(format, ...)     debug_yellow(format, ##__VA_ARGS__)
 #  else 
 #    define debug_file(format, ...)
 #  endif
 #
 #  if DEBUG & DEBUG_SCAN
-#    define debug_scan(format, ...)   debug_col(ANSI_GREEN, format, ##__VA_ARGS__)
+#    define debug_scan(format, ...)     debug_col(ANSI_GREEN, format, ##__VA_ARGS__)
 #  else 
 #    define debug_scan(format, ...)
 #  endif
 #
 #  if DEBUG & DEBUG_PARSE
-#    define debug_parse(format, ...)   debug_col(ANSI_GREEN, format, ##__VA_ARGS__)
+#    define debug_parse(format, ...)    debug_col(ANSI_GREEN, format, ##__VA_ARGS__)
 #  else 
 #    define debug_parse(format, ...)
+#  endif
+#
+#  if DEBUG & DEBUG_TYPE
+#    define debug_type(format, ...)     debug_col(ANSI_MAGENTA, format, ##__VA_ARGS__)
+#  else 
+#    define debug_type(format, ...)
 #  endif
 #
 #
@@ -94,6 +101,7 @@ void debug_token(hemp_cstr_t type, hemp_cstr_t str, hemp_pos_t len);
 #  define debug_file(format, ...)
 #  define debug_scan(format, ...)
 #  define debug_parse(format, ...)
+#  define debug_type(format, ...)
 #endif
 
 #endif /* HEMP_DEBUG_H */
