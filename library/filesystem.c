@@ -69,7 +69,7 @@ hemp_filesystem_cwd(
     // context of a virtual filesystem
     hemp_cstr_t cwd = getcwd(NULL, 0);
     if (! cwd)
-        hemp_fatal(HEMP_MEMORY_ERROR_MSG, HEMP_CWD_NAME);
+        hemp_fatal(HEMP_ERRMSG_MALLOC, HEMP_CWD_NAME);
     return cwd;
 }
 

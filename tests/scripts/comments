@@ -1,0 +1,17 @@
+-- test single line comments
+[% # this is a comment
+   'hello world'
+%]
+
+-- expect
+hello world
+
+-- test inline comment with tag at end
+[% 'hello world'
+   # this is a comment %]
+
+-- expect
+hello world
+
+
+

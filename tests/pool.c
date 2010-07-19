@@ -3,12 +3,14 @@
 #include "tap.h"
 
 void test_pool();
+void test_pool_type();
 
 int
 main(int argc, char **argv, char **env)
 {
     plan_tests(10);
-    test_pool();
+//    test_pool();
+    test_pool_type();
     return exit_status();
 }
 
@@ -61,3 +63,23 @@ void test_pool() {
     pass("released pool");
 }
 
+
+
+void test_pool_type() {
+    hemp_type_t Pool = hemp_pool_type();
+    ok( Pool, "got %s type", Pool->name );
+
+    hemp_pool_t pool = hemp_new(Pool, 4, 2);
+    hemp_ptr_t item;
+
+    ok( 
+        pool, 
+        "created pool from type" 
+    );
+    ok( 
+        pool->capacity == 2, 
+        "pool capacity is %d", pool->capacity 
+    );
+
+    hemp_old(pool);
+}

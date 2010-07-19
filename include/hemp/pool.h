@@ -2,6 +2,7 @@
 #define HEMP_POOL_H
 
 #include "hemp/slab.h"
+#include "hemp/type.h"
 
 
 /*--------------------------------------------------------------------------
@@ -20,6 +21,20 @@ struct hemp_pool {
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
+
+hemp_type_t
+    hemp_pool_type();
+
+hemp_bool_t 
+    hemp_pool_prepare(
+        hemp_pool_t pool,
+        HEMP_ARGS
+    );
+
+hemp_bool_t
+    hemp_pool_cleanup(
+        hemp_pool_t pool
+    );
 
 hemp_pool_t 
     hemp_pool_init(

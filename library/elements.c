@@ -58,6 +58,7 @@ hemp_elements_create(
     element->token      = token;
     element->position   = position;
     element->length     = length;
+    element->flags      = 0;
 
     return element;
 }
@@ -78,6 +79,7 @@ hemp_elements_append(
     element->token      = token;
     element->position   = position;
     element->length     = length;
+    element->flags      = 0;
 
     if (elements->tail) {
         elements->tail->next = element;

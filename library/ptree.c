@@ -5,6 +5,12 @@
 #include "hemp/debug.h"
 
 
+/*--------------------------------------------------------------------------
+ *  hemp_ptree_init(capacity)
+ *
+ *  Create a new tree.
+ *--------------------------------------------------------------------------*/
+
 hemp_ptree_t
 hemp_ptree_init(
     hemp_size_t capacity
@@ -29,6 +35,12 @@ hemp_ptree_init(
 }
 
 
+/*--------------------------------------------------------------------------
+ *  hemp_ptree_free(ptree)
+ *
+ *  Cleanup and release the memory used by a ptree.
+ *--------------------------------------------------------------------------*/
+
 void
 hemp_ptree_free(
     hemp_ptree_t ptree
@@ -42,14 +54,20 @@ hemp_ptree_free(
 }
 
 
+
+/*--------------------------------------------------------------------------
+ *  hemp_ptree_node(ptree, key, value)
+ *
+ *  Allocate a new node for inserting into a ptree.
+ *--------------------------------------------------------------------------*/
+
 hemp_pnode_t
 hemp_ptree_node(
     hemp_ptree_t    ptree, 
     hemp_cstr_t     key, 
     hemp_ptr_t      value
 ) {
-    hemp_pnode_t    pnode = (hemp_pnode_t) hemp_pool_take(ptree->pool);
-    
+    hemp_pnode_t pnode = (hemp_pnode_t) hemp_pool_take(ptree->pool);
     pnode->key     = key;
     pnode->value   = value;
     pnode->before  = 
@@ -59,26 +77,34 @@ hemp_ptree_node(
 }
 
 
+
+/*--------------------------------------------------------------------------
+ *  hemp_ptree_store(ptree, key, value)
+ *
+ *  Store a value in a ptree indexed by a key.
+ *--------------------------------------------------------------------------*/
+
 hemp_pnode_t
-hemp_ptree_insert(
+hemp_ptree_store(
     hemp_ptree_t    ptree, 
     hemp_cstr_t     key, 
     hemp_ptr_t      value
 ) {
-    hemp_pnode_t    pnode    = ptree->head[(unsigned char) *key];
+    hemp_pnode_t    pnode    = ptree->head[(hemp_char_t) *key];
     hemp_cstr_t     keyptr   = key;
     hemp_cstr_t     cmptr;
     hemp_pnode_t    new_node;
 
-//    debug_blue("hemp_ptree_insert(%s, %p)\n", key, value);
+    debug_call("hemp_ptree_store(%s, %p)\n", key, value);
 
-    if (! pnode) {
-        // new top level node
-        return (ptree->head[(unsigned char) *key] = hemp_ptree_node(ptree, key, value));
-    }
+    if (! pnode)
+        return (
+            ptree->head[ (hemp_char_t) *key ] = hemp_ptree_node(
+                ptree, key, value
+            )
+        );
 
-    // cmptr is a pointer into the string in the current pnode that we're 
-    // comparing the insert key against
+    /* ptr into string in current pnode that we're comparing to insert key */
     cmptr = pnode->key;
 
     while (1) {
@@ -87,39 +113,41 @@ hemp_ptree_insert(
             cmptr++;
 
             if (! *keyptr) {
-                // We've reached the end of the insert key.  If the current 
-                // node has a payload then it a duplicate error (TODO: make
-                // overwrites optional)
+                /* We've reached the end of the insert key */
                 if (pnode->value) {
+                    /* If current node has a payload then its a duplicate */
+                    /* TODO: make overwrites optional */
                     return NULL;
                 }
                 else {
-                    // Success - added value to an existing pnode
+                    /* Success - added value to an existing pnode */
                     pnode->value = value;
                     return pnode;
                 }
             }
             
             if (pnode->equal) {
-                // Traverse to existing follow-on equal pnode
+                /* Traverse to existing follow-on equal pnode */
                 pnode = pnode->equal;
                 cmptr = pnode->key;
             }
             else if (*cmptr) {
-                // Branch node with > 1 characters in the key to create new equal pnode
+                /* Branch node with > 1 characters in the key to create a new
+                 * "equal" pnode
+                 */
                 new_node = pnode->equal = hemp_ptree_node(ptree, cmptr, pnode->value);
                 pnode->value  = NULL;
                 pnode = new_node;
             }
             else {
-                // Insert key extends existing pnode as new follow-on equal pnode
+                /* Insert key extends existing pnode via new equal pnode */
                 return (pnode->equal = hemp_ptree_node(ptree, keyptr, value));
             }
         }
 
-        // we've reached a character that doesn't match
+        /* we've reached a character that doesn't match */
         if (*keyptr < *cmptr) {
-            // traverse to existing before node or create a new one
+            /* traverse to existing before node or create a new one */
             if (pnode->before) {
                 pnode = pnode->before;
                 cmptr = pnode->key;
@@ -129,7 +157,7 @@ hemp_ptree_insert(
             }
         }
         else {
-            // traverse to existing after node or create a new one
+            /* traverse to existing after node or create a new one */
             if (pnode->after != NULL) {
                 pnode = pnode->after;
                 cmptr = pnode->key;
@@ -140,15 +168,59 @@ hemp_ptree_insert(
         }
     }
     
-    // not reached
+    /* not reached */
     return pnode;
 }
+
+
+
+hemp_ptr_t
+hemp_ptree_fetch(
+    hemp_ptree_t ptree,
+    hemp_cstr_t  key
+) {
+    hemp_pnode_t pnode = ptree->head[(hemp_char_t) *key];
+
+    debug_call("hemp_ptree_fetch(%s)\n", key);
+
+    while (pnode) {
+        debug_yellow("[%c] == [%c]\n", *key, *(pnode->key));
+        key++;
+
+        if (pnode->equal) {
+            pnode = pnode->equal;
+
+            while (pnode && *key != *(pnode->key)) {
+                if (*key < *(pnode->key)) {
+                    debug_yellow("[%c] < [%c]\n", *key, *(pnode->key));
+                    pnode = pnode->before;
+                }
+                else {
+                    debug_yellow("[%c] > [%c]\n", *key, *(pnode->key));
+                    pnode = pnode->after;
+                }
+            }
+        }
+        else if (hemp_cstr_eq(key, pnode->key + 1)) {
+            debug_green("[%s] == [%s]\n", key, pnode->key + 1);
+            return pnode->value;
+        }
+        else {
+            debug_red("[%s] != [%s]\n", key, pnode->key + 1);
+            return NULL;
+        }
+    }
+
+    debug_red("no match [%s]\n", key);
+    return NULL;
+} 
+
 
 
 void
 hemp_pnode_dump(hemp_pnode_t pnode, int indent) {
     char pad[100];
-    int len = indent * 4;
+    int len = indent * 2;
 
     memset(pad, ' ', len);
     pad[len] = '\0';
@@ -156,15 +228,15 @@ hemp_pnode_dump(hemp_pnode_t pnode, int indent) {
     debug("%s => %p [%p]\n", pnode->key, pnode->value, pnode);
 
     if (pnode->before) {
-        debug("%s  < ", pad);
+        debug("%s < ", pad);
         hemp_pnode_dump(pnode->before, indent + 1);
     }
     if (pnode->equal) {
-        debug("%s  = ", pad);
+        debug("%s = ", pad);
         hemp_pnode_dump(pnode->equal, indent + 1);
     }
     if (pnode->after) {
-        debug("%s  > ", pad);
+        debug("%s > ", pad);
         hemp_pnode_dump(pnode->after, indent + 1);
     }
 }

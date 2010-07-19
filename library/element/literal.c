@@ -46,9 +46,14 @@ hemp_element_quoted_text(
 
     if (! text)
         text = hemp_text_init(element->length);
-    
-    /* "pinch" in the ends of the token range to avoid the quotes */
-    hemp_text_append_cstrn(text, element->token + 1, element->length - 2);
+
+    if (hemp_has_flag(element, HEMP_FLAG_FIXED)) {
+        /* "pinch" in the ends of the token range to avoid the quotes */
+        hemp_text_append_cstrn(text, element->token + 1, element->length - 2);
+    }
+    else {
+        hemp_text_append_cstr(text, element->value.text);
+    }
 
     return text;
 }

@@ -2,6 +2,7 @@
 #define HEMP_PTREE_H
 
 #include "hemp/pool.h"
+#include "hemp/cstr.h"
 
 
 /*--------------------------------------------------------------------------
@@ -44,10 +45,17 @@ hemp_pnode_t
     );
 
 hemp_pnode_t
-    hemp_ptree_insert(
+    hemp_ptree_store(
         hemp_ptree_t ptree, 
         hemp_cstr_t  key, 
         hemp_ptr_t  value
+    );
+
+
+hemp_ptr_t
+    hemp_ptree_fetch(
+        hemp_ptree_t ptree,
+        hemp_cstr_t  key
     );
 
 void 

@@ -27,3 +27,5 @@ An incomplete list of things TODO, in no particular order.
   nooby mistakes.  The whole autoconf/automake/libtool setup needs cleaning
   up, ideally by someone more familiar with the tools than me.
 
+* Add cleanup methods for squote and dquote to release the text memory when
+  HEMP_FLAG_FIXED is not set.

@@ -168,7 +168,10 @@ hemp_hash_store(hemp_hash_t table, hemp_cstr_t key, hemp_ptr_t value) {
 
 
 hemp_ptr_t
-hemp_hash_fetch(hemp_hash_t table, hemp_cstr_t key) {
+hemp_hash_fetch(
+    hemp_hash_t table, 
+    hemp_cstr_t key
+) {
     hemp_hash_entry_t entry = NULL;
     hemp_size_t hash, column;
     hash   = (table->hasher)(key);

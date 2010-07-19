@@ -8,11 +8,19 @@
 #include "hemp/template.h"
 #include "hemp/debug.h"
 
+// these are used in the source in various places - replace with those below
 #define CR 13
 #define LF 10
+
+#define HEMP_CHAR_NUL       '\0'
 #define HEMP_CHAR_SQUOTE    '\''
 #define HEMP_CHAR_DQUOTE    '"'
-
+#define HEMP_CHAR_SLASH     '\\'
+#define HEMP_CHAR_COMMENT   '#'
+#define HEMP_CHAR_TAB       9
+#define HEMP_CHAR_NL        10
+#define HEMP_CHAR_LF        10
+#define HEMP_CHAR_CR        13
 
 #define hemp_scan_while(src, cmp)       \
     do { src++; } while ( cmp(*src) );

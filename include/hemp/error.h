@@ -20,6 +20,7 @@ typedef enum {
 } hemp_error_t;
 
 
+#define HEMP_ERRMSG_MALLOC      "Failed to allocate memory for a new %s"
 
 #define HEMP_MEMORY_ERROR_MSG "Failed to allocate memory for %s"
 

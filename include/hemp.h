@@ -69,7 +69,6 @@ hemp_cstr_t hemp_render(hemp_cstr_t scheme, hemp_cstr_t source);
 #define hemp_add_dialect(hemp, name, dialect) \
     hemp_hash_store(hemp->dialects, name, (hemp_ptr_t) dialect)
 
-
 #if defined(__cplusplus)
 }  /* extern "C" { */
 #endif

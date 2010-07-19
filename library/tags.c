@@ -64,7 +64,7 @@ hemp_tagset_add_inline_tag(
     hemp_tagset_t   tagset, 
     hemp_tag_t      tag
 ) {
-    return hemp_ptree_insert(
+    return hemp_ptree_store(
         tagset->inline_tags, 
         (hemp_cstr_t) tag->start, 
         (hemp_ptr_t)  tag
@@ -77,7 +77,7 @@ hemp_tagset_add_outline_tag(
     hemp_tagset_t   tagset, 
     hemp_tag_t      tag
 ) {
-    return hemp_ptree_insert(
+    return hemp_ptree_store(
         tagset->outline_tags, 
         (hemp_cstr_t) tag->start, 
         (hemp_ptr_t)  tag

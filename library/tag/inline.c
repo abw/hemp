@@ -1,5 +1,6 @@
 #include <limits.h>
 #include <errno.h>
+#include "hemp/element.h"
 #include "hemp/tags.h"
 #include "hemp/scanner.h"
 
@@ -32,7 +33,7 @@ hemp_scan_inline_tag(
     hemp_element_t  element;
     hemp_num_t      num_val;
     hemp_int_t      int_val;
-    hemp_bool_t     is_int;
+    hemp_bool_t     is_int, is_fixed;
 
     debug_call("hemp_scan_inline_tag()\n");
 
@@ -123,45 +124,146 @@ hemp_scan_inline_tag(
         }
         else if (*src == HEMP_CHAR_SQUOTE) {
             /* single quotes */
-            // TODO: check for escaped quotes and backslashes
-            hemp_scan_to(src, HEMP_CHAR_SQUOTE);
-            if (*src == HEMP_CHAR_SQUOTE) {
-                src++;
-                debug_token("SQUOTE", from, src-from);
-                hemp_todo("single quoted strings");
-                hemp_elements_append(
-                    tmpl->elements, HempElementSQuote,
-                    from, pos, src - from
-                );
+            is_fixed = HEMP_TRUE;
+
+            /* walk to the end */
+            while ( * ++src && *src != HEMP_CHAR_SQUOTE ) {
+                if (*src == HEMP_CHAR_SLASH) {
+                    src++;
+                    is_fixed = HEMP_FALSE;
+                }
+            }
+
+            /* check we hit a quote and not the end of string */
+            if (! *src)
+                hemp_fatal("unterminated single quoted string: %s", from);
+
+            src++;
+
+            debug_token("SQUOTE", from, src-from);
+
+            element = hemp_elements_append(
+                tmpl->elements, HempElementSQuote,
+                from, pos, src - from
+            );
+
+            if (is_fixed) {
+                /* we can generate the output text from the source token */
+                hemp_set_flag(element, HEMP_FLAG_FIXED);
             }
             else {
-                debug_red("unterminated single quoted string: %s", from);
+                /* we need to create a new string with escapes resolved */
+                hemp_cstr_t squote = 
+                element->value.text = hemp_mem_init(src - from - 1);
+                hemp_cstr_t sqfrom = from + 1;
+                    
+                while (sqfrom < src) {
+                    /* skip past the '\' if we've got "\\" or "\'" */
+                    if (*sqfrom == HEMP_CHAR_SLASH 
+                    && ( *(sqfrom + 1) == HEMP_CHAR_SQUOTE 
+                    ||   *(sqfrom + 1) == HEMP_CHAR_SLASH ))
+                        sqfrom++;
+
+                    *squote++ = *sqfrom++;
+                }
+                *--squote = HEMP_CHAR_NUL;
             }
-            
         }
         else if (*src == HEMP_CHAR_DQUOTE) {
             /* double quotes */
-            // TODO: check for escaped quotes, backslashes and \n, \t, etc
-            hemp_scan_to(src, HEMP_CHAR_DQUOTE);
+            is_fixed = HEMP_TRUE;
 
-            if (*src == HEMP_CHAR_DQUOTE) {
-                src++;
-                debug_token("DQUOTE", from, src-from);
-                hemp_todo("double quoted strings");
-                hemp_elements_append(
-                    tmpl->elements, HempElementDQuote,
-                    from, pos, src - from
-                );
+            /* walk to the end */
+            while ( * ++src && *src != HEMP_CHAR_DQUOTE ) {
+                if (*src == HEMP_CHAR_SLASH) {
+                    src++;
+                    is_fixed = HEMP_FALSE;
+                }
+                /* TODO: also look for embedded vars, e.g. $foo */
+            } 
+
+            /* check we hit a quote and not the end of string */
+            if (! *src)
+                hemp_fatal("unterminated double quoted string: %s", from);
+
+            src++;
+
+            debug_token("DQUOTE", from, src-from);
+
+            element = hemp_elements_append(
+                tmpl->elements, HempElementDQuote,
+                from, pos, src - from
+            );
+
+            if (is_fixed) {
+                /* we can generate the output text from the source token */
+                hemp_set_flag(element, HEMP_FLAG_FIXED);
             }
             else {
-                debug_red("unterminated double quoted string: %s", from);
+                /* we need to create a new string with escapes resolved */
+                hemp_cstr_t dquote  = 
+                element->value.text = hemp_mem_init(src - from - 1);
+                hemp_cstr_t dqfrom  = from + 1;
+
+                while (dqfrom < src) {
+                    /* skip past the '\' if we've got "\\" or "\'" */
+                    if (*dqfrom == HEMP_CHAR_SLASH) {
+                        switch (*(dqfrom + 1)) {
+                            case HEMP_CHAR_DQUOTE:
+                            case HEMP_CHAR_SLASH:
+                                /* \" or \\  =>  " or \ */
+                                dqfrom++;
+                                break;
+
+                            case 'n':
+                                /* \n => newline (currently just LF) */
+                                *dquote++ = HEMP_CHAR_NL;
+                                dqfrom += 2;
+                                break;
+
+                            case 't':
+                                /* \t => tab */
+                                *dquote++ = HEMP_CHAR_TAB;
+                                dqfrom += 2;
+                                break;
+
+                            /* \X => X */
+                            default:
+                                *dquote++ = *dqfrom++;
+                        }
+                    }
+                    else {
+                        *dquote++ = *dqfrom++;
+                    }
+                }
+                *--dquote = HEMP_CHAR_NUL;
             }
         }
-
-        // TODO: comment, checking for tag end
-        // TODO: operators
+        else if (*src == HEMP_CHAR_COMMENT) {
+            /* walk to the end of line or end of tag */
+            while (* ++src) {
+                if (*src == HEMP_CHAR_LF) {
+                    src++;
+                    break;
+                }
+                else if (*src == HEMP_CHAR_CR) {
+                    src++;
+                    if (*src == HEMP_CHAR_LF)
+                        src++;
+                    break;
+                }
+                else if (*src == *tagend && hemp_cstrn_eq(src, tagend, endlen)) {
+                    break;
+                }
+            }
+            hemp_elements_append(
+                tmpl->elements, HempElementComment,
+                from, pos, src - from
+            );
+        }
         else {
-            debug_red("unrecognised token\n");
+            // TODO: operators
+            hemp_fatal("unrecognised token\n");
             break;
         }
 

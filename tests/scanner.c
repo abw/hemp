@@ -21,8 +21,9 @@ main(int argc, char **argv, char **env)
 void test_scanner() {
     hemp_cstr_t scripts = hemp_filesystem_join_path(TESTDIR, "scripts");
     
-    test_script( scripts, "numbers" );
-    test_script( scripts, "quotes" );
+//    test_script( scripts, "numbers" );
+//    test_script( scripts, "quotes" );
+    test_script( scripts, "comments" );
     
     hemp_mem_free(scripts);
 }
@@ -96,6 +97,7 @@ void test_script(
         );
         hemp_text_t output = hemp_template_render(tmpl);
         ok( output, "%s rendered", name);
+        debug_cyan("OUTPUT: [%s]\n", output->string);
         if (expect) {
             if (hemp_cstr_eq(output->string, expect)) {
                 ok(1, "%s output matches expected", name);

@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "hemp/memory.h"
+#include "hemp/type.h"
 #include "hemp/debug.h"
+
+
 
 
 /* hemp_memory_copy(src, dest, length) 

@@ -9,6 +9,9 @@
  * macros
  *--------------------------------------------------------------------------*/
 
+/* these are named for historical reasons, but I think they should be renamed
+ * hemp_malloc(), hemp_free() and hemp_realloc() 
+ */
 #define hemp_mem_init(size)         malloc(size)
 #define hemp_mem_free(memory)       free(memory)
 #define hemp_mem_size(memory, size) realloc(memory, size)

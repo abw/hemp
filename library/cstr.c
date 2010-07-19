@@ -1,6 +1,52 @@
 #include "hemp/cstr.h"
+#include "hemp/type.h"
 #include "hemp/debug.h"
 
+
+/* cstr is a C string, i.e. a char * pointer */
+
+/* hstr is a hemp string - a chunk of text copied from a cstr.  We provide 
+ * basic object methods prepare/cleanup to handle the memory management
+ */
+
+hemp_type_t
+hemp_hstr_type() {
+    hemp_type_t hstr = hemp_type_init("HStr", sizeof(hemp_hstr_t));
+    hstr->prepare = &hemp_hstr_prepare;
+    hstr->cleanup = &hemp_hstr_cleanup;
+    return hstr;
+}
+
+hemp_bool_t
+hemp_hstr_prepare(
+    hemp_item_t item,
+    HEMP_ARGS
+) {
+    hemp_hstr_t hstr = (hemp_hstr_t) item;
+    hemp_cstr_t cstr = HEMP_ARG(hemp_cstr_t);
+    hemp_size_t size = strlen(cstr);
+    *hstr = hemp_mem_init(strlen(cstr));
+    debug_mem("Allocated %d bytes for hstr at %p\n", size, *hstr);
+    strcpy(*hstr, cstr);
+    return HEMP_TRUE;
+}
+
+hemp_bool_t
+hemp_hstr_cleanup(
+    hemp_item_t item
+) {
+    hemp_hstr_t hstr = (hemp_hstr_t) item;
+    if (*hstr) {
+        debug_mem("Releasing memory for hstr at %p\n", *hstr);
+        hemp_mem_free(*hstr);
+    }
+    return HEMP_TRUE;
+}
+
+
+/*--------------------------------------------------------------------------
+ * basic c string manipulation functions
+ *--------------------------------------------------------------------------*/
 
 hemp_cstr_t
 hemp_cstr_extract(

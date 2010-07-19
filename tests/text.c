@@ -10,8 +10,21 @@ int
 main(int argc, char **argv, char **env)
 {
     plan_tests(31);
-    test_text();
+    test_hstr();
+//    test_text();
     return exit_status();
+}
+
+
+void test_hstr() {
+    hemp_type_t HStr = hemp_hstr_type();
+    ok( HStr, "created HStr hemp string type" );
+    
+    hemp_hstr_t hs1 = hemp_new(HStr, "Hello World!");
+    ok( hs1, "created first string: %s", *hs1);
+    
+    hemp_old(hs1);
+    hemp_type_free(HStr);
 }
 
 

@@ -7,6 +7,9 @@
 #include "hemp/text.h"
 #include "hemp/list.h"
 
+#define HEMP_FLAG_FIXED     0x0001
+#define HEMP_FLAG_STATIC    0x0002
+
 
 /*--------------------------------------------------------------------------
  * data structures
@@ -20,6 +23,7 @@ struct hemp_etype {
     hemp_parse_fn   parse_expr;
     hemp_text_fn    text;
     hemp_cstr_t     (*number)();
+    hemp_flags_t    flags;
 };
 
 struct hemp_unary {
@@ -38,8 +42,9 @@ struct hemp_block {
 
 
 union hemp_evalue {
-    hemp_value_t    constant;
-    hemp_value_t    variable;
+    hemp_cstr_t         text;
+    hemp_int_t          integer;
+    hemp_num_t          number;
     struct hemp_unary   unary;
     struct hemp_binary  binary;
     struct hemp_block   block;
@@ -50,6 +55,7 @@ struct hemp_element {
     hemp_cstr_t     token;
     hemp_pos_t      position;
     hemp_size_t     length;
+    hemp_flags_t    flags;
     hemp_element_t  next;
     union hemp_evalue value;
 };
@@ -236,6 +242,15 @@ hemp_text_t
 
 #define hemp_at_eof(ep) \
     (*ep)->type == HempElementEof
+
+#define hemp_set_flag(item, flag) \
+    item->flags |= flag
+
+#define hemp_clear_flag(flags, flag) \
+    item->flags &= ~flag
+
+#define hemp_has_flag(item, flag) \
+    item->flags & flag
 
 #define hemp_element_skip_space     hemp_element_self
 #define hemp_element_skip_delimiter hemp_element_self

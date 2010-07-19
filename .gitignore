@@ -27,3 +27,5 @@ tests/tests
 tests/text
 tests/template
 tests/type
+tests/benchmark
+tests/ptree

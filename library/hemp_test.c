@@ -48,16 +48,16 @@ void test_ptree() {
 
     pass("created ptree at %p", ptree);
 
-    hemp_ptree_insert(ptree, "for", "tt.command.for");
-    hemp_ptree_insert(ptree, "foreach", "tt.command.foreach");
-    hemp_ptree_insert(ptree, "fill", "tt.command.fill");
-    hemp_ptree_insert(ptree, "form", "tt.command.form");
-    hemp_ptree_insert(ptree, "bar", "tt.example.bar");
-    hemp_ptree_insert(ptree, "baz", "tt.example.baz");
-    hemp_ptree_insert(ptree, "happy", "tt.silly.happy");
-    hemp_ptree_insert(ptree, "hippy", "tt.silly.hippy");
-    hemp_ptree_insert(ptree, "brazen", "tt.silly.brazen");
-    hemp_ptree_insert(ptree, "hiphiphooray", "tt.silly.hiphip");
+    hemp_ptree_store(ptree, "for", "tt.command.for");
+    hemp_ptree_store(ptree, "foreach", "tt.command.foreach");
+    hemp_ptree_store(ptree, "fill", "tt.command.fill");
+    hemp_ptree_store(ptree, "form", "tt.command.form");
+    hemp_ptree_store(ptree, "bar", "tt.example.bar");
+    hemp_ptree_store(ptree, "baz", "tt.example.baz");
+    hemp_ptree_store(ptree, "happy", "tt.silly.happy");
+    hemp_ptree_store(ptree, "hippy", "tt.silly.hippy");
+    hemp_ptree_store(ptree, "brazen", "tt.silly.brazen");
+    hemp_ptree_store(ptree, "hiphiphooray", "tt.silly.hiphip");
     
     hemp_ptree_dump(ptree);
     

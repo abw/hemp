@@ -23,6 +23,7 @@ typedef unsigned long             hemp_pos_t;     /* +ve posn. in string/list */
 typedef unsigned short int        hemp_prec_t;    /* operator precedence      */
 typedef const void              * hemp_mem_t;     /* generic memory pointer   */
 typedef void                    * hemp_ptr_t;     /* mutable memory pointer   */
+typedef void                    * hemp_item_t;    /* alias for typed data ptr */
 typedef char                    * hemp_cstr_t;    /* C string                 */
 typedef const char              * hemp_name_t;    /* immutable C string       */
 
@@ -82,8 +83,17 @@ typedef hemp_value_t    (* hemp_ternary_fn)(hemp_value_t, hemp_value_t, hemp_val
 
 typedef hemp_text_t     (* hemp_text_fn)(hemp_element_t, hemp_text_t);
 
+/* old object type methods, being replace by those below... */
 typedef hemp_ptr_t      (* hemp_init_fn)(hemp_type_t, va_list *args);
 typedef void            (* hemp_wipe_fn)(hemp_ptr_t);
+
+
+/* new object type methods */
+typedef hemp_item_t     (* hemp_acquire_fn)(hemp_type_t type);
+typedef hemp_bool_t     (* hemp_prepare_fn)(hemp_item_t item, va_list *args);
+typedef hemp_bool_t     (* hemp_cleanup_fn)(hemp_item_t item);
+typedef void            (* hemp_release_fn)(hemp_item_t item);
+
 
 typedef void 
     (* hemp_tag_scan_fn)(
