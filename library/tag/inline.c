@@ -7,6 +7,7 @@
 
 static struct hemp_tag 
     hemp_inline_tag = { 
+        HEMP_INLINE_TAG,
         "hemp.tag.inline", 
         "[%", "%]", 
         &hemp_scan_inline_tag 

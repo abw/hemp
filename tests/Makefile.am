@@ -1,4 +1,4 @@
-check_PROGRAMS  =  scanner 
+check_PROGRAMS  =  memtrace value
 
 #                  debug         \
 #                  benchmark  
@@ -7,6 +7,7 @@ check_PROGRAMS  =  scanner
 #                  error         \
 #                  hash          \
 #                  hemp          \
+#                  hub          \
 #                  list          \
 #                  memory        \
 #                  module        \

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "hemp/memory.h"
+#include "hemp/type.h"
 
 
 /*--------------------------------------------------------------------------
@@ -34,6 +35,10 @@ hemp_text_t hemp_text_insert_cstr(hemp_text_t text, hemp_offset_t offset, hemp_c
 int hemp_string_equals(HEMP_STRING a, HEMP_STRING b);
 unsigned int hemp_string_hash(HEMP_STRING s);
 */
+
+
+extern hemp_type_t HempText;
+
 
 /*--------------------------------------------------------------------------
  * macros

@@ -3,6 +3,7 @@
 
 static struct hemp_tag 
     hemp_control_tag = { 
+        HEMP_INLINE_TAG,
         "hemp.tag.control",
         "[?", "?]",
         &hemp_scan_control_tag

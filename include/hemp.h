@@ -30,6 +30,8 @@ extern "C" {
 #include <hemp/scope.h>
 #include <hemp/type.h>
 #include <hemp/text.h>
+#include <hemp/hub.h>
+#include <hemp/context.h>
 #include <hemp/value.h>
 
 

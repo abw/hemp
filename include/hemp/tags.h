@@ -17,7 +17,16 @@
  * data structures
  *--------------------------------------------------------------------------*/
 
+enum hemp_tag_line {
+    HEMP_INLINE_TAG     = 1,
+    HEMP_OUTLINE_TAG    = 2
+};
+
+typedef enum hemp_tag_line hemp_tag_line_t;
+
+
 struct hemp_tag {
+   hemp_tag_line_t  line;
    hemp_name_t      name;
    hemp_name_t      start;
    hemp_name_t      end;

@@ -22,6 +22,7 @@
 #define HEMP_CHAR_LF        10
 #define HEMP_CHAR_CR        13
 
+
 #define hemp_scan_while(src, cmp)       \
     do { src++; } while ( cmp(*src) );
 

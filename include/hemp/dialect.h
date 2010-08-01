@@ -15,6 +15,7 @@
 struct hemp_dialect {
     hemp_cstr_t     name;
     hemp_scan_fn    scanner;
+    hemp_hash_t     tags;
     hemp_tagset_t   tagset;
 };
 
@@ -34,6 +35,12 @@ hemp_dialect_t
 void
     hemp_dialect_free(
         hemp_dialect_t
+    );
+
+hemp_bool_t
+    hemp_dialect_add_tag(
+        hemp_name_t name,
+        hemp_tag_t  tag
     );
 
 

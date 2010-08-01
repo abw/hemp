@@ -3,6 +3,7 @@
 
 static struct hemp_tag 
     hemp_variable_tag = { 
+        HEMP_INLINE_TAG,
         "hemp.tag.variable", 
         "$", NULL, 
         &hemp_scan_variable_tag

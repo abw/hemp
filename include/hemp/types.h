@@ -33,6 +33,7 @@ typedef const char              * hemp_name_t;    /* immutable C string       */
  *--------------------------------------------------------------------------*/
 
 typedef struct hemp             * hemp_t;
+typedef struct hemp_context     * hemp_context_t;
 typedef struct hemp_dialect     * hemp_dialect_t;
 typedef struct hemp_etype       * hemp_etype_t;
 typedef struct hemp_element     * hemp_element_t;
@@ -40,6 +41,7 @@ typedef struct hemp_elements    * hemp_elements_t;
 typedef struct hemp_filesystem  * hemp_filesystem_t;
 typedef struct hemp_hash        * hemp_hash_t;
 typedef struct hemp_hash_entry  * hemp_hash_entry_t;
+typedef struct hemp_hub         * hemp_hub_t;
 typedef struct hemp_list        * hemp_list_t;
 typedef struct hemp_pool        * hemp_pool_t;
 typedef struct hemp_pnode       * hemp_pnode_t;
@@ -53,6 +55,8 @@ typedef struct hemp_tagset      * hemp_tagset_t;
 typedef struct hemp_template    * hemp_template_t;
 typedef struct hemp_text        * hemp_text_t;
 typedef struct hemp_type        * hemp_type_t;
+typedef struct hemp_vtype       * hemp_vtype_t;
+typedef struct hemp_vtypes      * hemp_vtypes_t;
 typedef struct hemp_value       * hemp_value_t;
 
 /* don't think these should be pointers */

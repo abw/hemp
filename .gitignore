@@ -29,3 +29,6 @@ tests/template
 tests/type
 tests/benchmark
 tests/ptree
+tests/hub
+tests/memtrace
+tests/value

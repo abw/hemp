@@ -55,7 +55,11 @@ hemp_hash_init() {
     hemp_hash_t table;
     hemp_size_t w;
 
+    debug_mem("Allocating hash table\n");
+    
     if ((table = (hemp_hash_t) hemp_mem_init(sizeof(struct hemp_hash)))) {
+        debug_mem("Allocated hash table at %p\n", table);
+
         table->width   = hemp_hash_wider(0);
         table->hasher  = &hemp_hash_function;
 //      table->hasher  = &hemp_hash_function_jenkins32;

@@ -29,3 +29,14 @@ An incomplete list of things TODO, in no particular order.
 
 * Add cleanup methods for squote and dquote to release the text memory when
   HEMP_FLAG_FIXED is not set.
+
+
+---------
+Short term stack:
+  * clean up memtrace and memory allocation: hemp_malloc() and hemp_free()
+  * start renaming types: hemp_xxx_s for structs and hemp_xxx_p for pointers.
+    (more for the sake of avoiding namespace collision rather than being
+     pseudo-hungarian notation of sorts)
+  * start moving tags, elements, dialects, etc into hub-managed resources
+    (should the hub have a generic resource pool rather than specific ones?)
+

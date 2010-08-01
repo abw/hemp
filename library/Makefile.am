@@ -1,5 +1,6 @@
 lib_LTLIBRARIES     = libhemp.la
 libhemp_la_SOURCES  = cstr.c                \
+                      context.c             \
                       dialect.c             \
                       debug.c               \
                       element.c             \
@@ -16,6 +17,7 @@ libhemp_la_SOURCES  = cstr.c                \
                       filesystem.c          \
                       hash.c                \
                       hemp_obj.c            \
+                      hub.c                 \
                       list.c                \
                       memory.c              \
                       module.c              \
@@ -34,5 +36,7 @@ libhemp_la_SOURCES  = cstr.c                \
                       text.c                \
                       type.c                \
                       template.c            \
-                      utils.c
+                      utils.c               \
+                      value.c               \
+                      vtypes/hemp.c
 

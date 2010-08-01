@@ -3,6 +3,7 @@
 
 static struct hemp_tag 
     hemp_outline_tag = { 
+        HEMP_OUTLINE_TAG,
         "hemp.tag.outline", 
         "%%", "\n", 
         &hemp_scan_outline_tag

@@ -2,7 +2,8 @@
 
 
 static struct hemp_tag 
-    hemp_embed_tag = { 
+    hemp_embed_tag = {
+        HEMP_INLINE_TAG,
         "hemp.tag.embed", 
         "${", "}", 
         &hemp_scan_embed_tag

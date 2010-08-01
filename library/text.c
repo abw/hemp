@@ -2,6 +2,19 @@
 #include "hemp/debug.h"
 
 
+//static struct hemp_type hemp_type_text = { 
+//    "text", 
+//    sizeof(struct hemp_text),
+//    NULL,
+//    &hemp_item_acquire,
+//    &hemp_text_prepare,
+//    &hemp_text_cleanup,
+//    &hemp_item_release
+//};
+//
+//static hemp_type_t HempText = &hemp_type_text;
+
+
 hemp_text_t
 hemp_text_init(
     hemp_size_t size

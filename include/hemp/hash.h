@@ -4,6 +4,7 @@
 #include <string.h>
 #include "hemp/memory.h"
 #include "hemp/cstr.h"
+#include "hemp/debug.h"
 
 #define HEMP_HASH_DENSITY  5    /* max entries/width before increasing width */
 
@@ -82,6 +83,12 @@ hemp_size_t
 hemp_size_t
     hemp_hash_function_jenkins32(
         hemp_cstr_t key
+    );
+
+void
+    hemp_hash_each(
+        hemp_hash_t table, 
+        void (* callback)(hemp_hash_entry_t)
     );
 
 // for testing
