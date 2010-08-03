@@ -22,7 +22,9 @@ tests/module
 tests/pool
 tests/scanner
 tests/slab
-tests/sources
+tests/source
+tests/tag
+tests/tagset
 tests/tests
 tests/text
 tests/template
