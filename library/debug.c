@@ -1,4 +1,4 @@
-#include "hemp/debug.h"
+#include "hemp/core.h"
 
 #ifdef DEBUG
 int debugging = 1;
@@ -50,8 +50,8 @@ void debug_col(char *col, char *format, ...)
 
 void 
 debug_token(
-    hemp_cstr_t type,
-    hemp_cstr_t str,
+    hemp_cstr_p type,
+    hemp_cstr_p str,
     hemp_pos_t  len
 ) {
     static char buffer[80];

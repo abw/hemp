@@ -33,10 +33,29 @@ An incomplete list of things TODO, in no particular order.
 
 ---------
 Short term stack:
-  * clean up memtrace and memory allocation: hemp_malloc() and hemp_free()
   * start renaming types: hemp_xxx_s for structs and hemp_xxx_p for pointers.
     (more for the sake of avoiding namespace collision rather than being
      pseudo-hungarian notation of sorts)
+
   * start moving tags, elements, dialects, etc into hub-managed resources
     (should the hub have a generic resource pool rather than specific ones?)
+    (on second thoughts: move them into hemp - no need for the extra level
+    of indirection - it's a throwback to Perl's handling of circular references
+    which requires a sentinel facade object to explicitly destroy the hub when
+    it goes out of scope and gets garbage collected)
 
+  * inline tag, depends on template and elements
+
+  * add grammar to tag
+
+  * have dialects construct a tagset from the tags defined in hemp->tags, 
+    grammars in hemp->grammars, etc.
+
+  * decide on names for various decompositions.
+     - system/setup/language/framework:  hemp, tt3  # core definitions
+     - profile: combination of languages/dialects/etc in different places
+     - language/dialect: tt3   # defines tags, tag styles, grammar, config options, 
+     - grammar: tt3 html pod etc
+     - tagset: runtime collection of tags, must be safely mutable (e.g. when 
+       used with [? tags XXX ?]
+     

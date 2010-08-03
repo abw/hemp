@@ -1,12 +1,11 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
-#include "hemp.h"
-#include "hemp/debug.h"
+#include "hemp/core.h"
 
 hemp_bool_t 
 hemp_onload(
-    hemp_t hemp
+    hemp_p hemp
 ) {
     printf("hemp.foo loaded: %p\n", hemp);
     void (*hi)(void) = dlsym(RTLD_NEXT, "hemp_hello");

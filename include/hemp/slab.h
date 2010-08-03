@@ -1,17 +1,17 @@
 #ifndef HEMP_SLAB_H
 #define HEMP_SLAB_H
 
-#include "hemp/memory.h"
+#include <hemp/core.h>
 
 
 /*--------------------------------------------------------------------------
  * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_slab {
-    hemp_ptr_t  data;       /* pointer to memory            */
+struct hemp_slab_s {
+    hemp_mem_p  data;       /* pointer to memory            */
     hemp_size_t size;       /* size of allocated memory     */
-    hemp_slab_t next;       /* next slab in linked list     */
+    hemp_slab_p next;       /* next slab in linked list     */
 };
 
 
@@ -19,24 +19,8 @@ struct hemp_slab {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_slab_t 
-    hemp_slab_init(
-        hemp_size_t size
-    );
-
-void
-    hemp_slab_free(
-        hemp_slab_t slab
-    );
-
-
-/*--------------------------------------------------------------------------
- * macros
- *--------------------------------------------------------------------------*/
-
-#define hemp_slab_null(s)   \
-    hemp_slab_free(s);      \
-    s = NULL;
+hemp_slab_p hemp_slab_init(hemp_size_t);
+void        hemp_slab_free(hemp_slab_p);
 
 
 #endif /* HEMP_SLAB_H */

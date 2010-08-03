@@ -1,17 +1,16 @@
 #ifndef HEMP_POOL_H
 #define HEMP_POOL_H
 
-#include "hemp/slab.h"
-#include "hemp/type.h"
+#include <hemp/slab.h>
 
 
 /*--------------------------------------------------------------------------
  * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_pool {
-    hemp_slab_t slab;           /* pointer to slab(s) of memory         */
-    hemp_ptr_t  next;           /* next available memory record         */
+struct hemp_pool_s {
+    hemp_slab_p slab;           /* pointer to slab(s) of memory         */
+    hemp_mem_p  next;           /* next available memory record         */
     hemp_size_t size;           /* size of each memory record           */
     hemp_size_t used;           /* number of records in use             */
     hemp_size_t capacity;       /* allocated storage capacity           */
@@ -22,49 +21,26 @@ struct hemp_pool {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_type_t
-    hemp_pool_type();
-
-hemp_bool_t 
-    hemp_pool_prepare(
-        hemp_pool_t pool,
-        HEMP_ARGS
-    );
-
-hemp_bool_t
-    hemp_pool_cleanup(
-        hemp_pool_t pool
-    );
-
-hemp_pool_t 
+hemp_pool_p
     hemp_pool_init(
         hemp_size_t size,
         hemp_size_t capacity
     );
 
-hemp_ptr_t
+hemp_mem_p
     hemp_pool_take(
-        hemp_pool_t pool
+        hemp_pool_p pool
     );
 
 void 
     hemp_pool_grow(
-        hemp_pool_t pool
+        hemp_pool_p pool
     );
 
 void 
     hemp_pool_free(
-        hemp_pool_t pool
+        hemp_pool_p pool
     );
-
-
-/*--------------------------------------------------------------------------
- * macros
- *--------------------------------------------------------------------------*/
-
-#define hemp_pool_null(p)   \
-    hemp_pool_free(p);      \
-    p = NULL;                
 
 
 #endif /* HEMP_POOL_H */

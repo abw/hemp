@@ -36,6 +36,8 @@
 
 #include "tap.h"
 #include "hemp/debug.h"
+#define DEBUG DEBUG_MEM
+#include "hemp/memory.h"
 
 #ifdef TAP_COLOR
 # define PASS_COL ANSI_GREEN
@@ -458,4 +460,27 @@ _cleanup(void)
              failures, test_count);
 
     UNLOCK;
+}
+
+
+/* extra stuff added for hemp */
+
+void
+hemp_mem_trace_ok(void)
+{
+    char *debug = getenv("HEMP_MEMORY_TRACE");
+    hemp_size_t size = hemp_mem_trace_report(
+        debug && hemp_cstr_eq(debug, "1")
+    );
+
+    if (size == 0) {
+        pass("all memory freed");
+    }
+    else if (size == -1) {
+        pass("memory checks disabled (%d)", size);
+    }
+    else {
+        fail("memory unfreed: %u bytes", size);
+        hemp_mem_trace_report(HEMP_TRUE);
+    }
 }

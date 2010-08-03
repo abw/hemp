@@ -1,9 +1,5 @@
-#include <stdio.h>
-#include <stdarg.h>
+#include <hemp.h>
 #include <getopt.h>
-#include "config.h"
-#include "hemp.h"
-#include "hemp/debug.h"
 
 #define HEMP_OPTION_SIG "vdhtqf:"
 
@@ -35,8 +31,8 @@ void hemp_getopt(hemp_t hemp, int argc, char **argv);
 
 
 int main(int argc, char **argv, char **env) {
-    hemp_t          hemp = hemp_init();
-    hemp_cstr_t     filename;
+    hemp_p          hemp = hemp_init();
+    hemp_cstr_p     filename;
     hemp_template_t template;
     hemp_text_t     input, output;
     

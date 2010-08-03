@@ -1,21 +1,21 @@
-#include <stdio.h>
-#include "hemp.h"
+#include <hemp.h>
 #include "tap.h"
 
 void test_list();
-hemp_cstr_t list_as_text(hemp_list_t);
+hemp_cstr_p list_as_text(hemp_list_p);
 
 
 int
 main(int argc, char **argv, char **env) {
-    plan_tests(6);
+    plan_tests(7);
     test_list();
+    hemp_mem_trace_ok();
     return exit_status();
 }
 
 
 void test_list() {
-    hemp_list_t list = hemp_list_init();
+    hemp_list_p list = hemp_list_init();
     pass("created list");
 
     hemp_list_push(list, "foo");
@@ -46,9 +46,9 @@ char buffer[255];
 
 hemp_bool_t 
 hemp_text_append(
-    hemp_list_t list, 
-    hemp_pos_t  pos, 
-    hemp_ptr_t  item
+    hemp_list_p  list, 
+    hemp_pos_t   pos, 
+    hemp_mem_p   item
 ) {
     if (buffer[0])
         strcat(buffer, ", ");
@@ -57,9 +57,9 @@ hemp_text_append(
 }
 
 
-hemp_cstr_t
+hemp_cstr_p
 list_as_text(
-    hemp_list_t list
+    hemp_list_p list
 ) {
     buffer[0] = '\0';
     hemp_list_each(list, &hemp_text_append);

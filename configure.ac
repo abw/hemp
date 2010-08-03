@@ -5,34 +5,44 @@ AC_CONFIG_MACRO_DIR([build/m4])
 
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects color-tests])
 
-AC_PROG_CC
-AM_PROG_CC_C_O
-AC_PROG_LIBTOOL
+AC_CONFIG_HEADERS([include/hemp/config.h])
 
-AC_CONFIG_HEADERS([
-    include/config.h
-])
 AC_CONFIG_FILES([
     Makefile 
     include/Makefile 
     library/Makefile 
     programs/Makefile 
     tests/Makefile
-    modules/Makefile
     build/libltdl/Makefile
 ])
 
+#    modules/Makefile
+
+# Checks for programs
+AC_PROG_CC
+AM_PROG_CC_C_O
+AC_PROG_CPP
+AC_PROG_LIBTOOL
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_RANLIB
+
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([stdlib.h string.h])
+AC_CHECK_HEADERS([argz.h limits.h stddef.h stdlib.h string.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
+AC_TYPE_SIZE_T
 
 # Checks for library functions.
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([strdup, memset, bcopy, memmove])
+AC_FUNC_STRTOD
+AC_CHECK_FUNCS([atexit bcopy getcwd memmove memset strchr strdup strrchr strstr strtol])
 
 
 CFLAGS="${CFLAGS=}"

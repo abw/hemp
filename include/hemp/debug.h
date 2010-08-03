@@ -4,13 +4,13 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "hemp/types.h"
+#include <hemp/types.h>
 
 void debug       (char *format, ...);
 void debug_col   (char *col, char *format, ...);
 void debug_on();
 void debug_off();
-void debug_token(hemp_cstr_t type, hemp_cstr_t str, hemp_pos_t len);
+void debug_token(hemp_cstr_p type, hemp_cstr_p str, hemp_pos_t len);
 
 
 #define DEBUG_MEM       0x0002

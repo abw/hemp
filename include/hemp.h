@@ -5,71 +5,81 @@
 extern "C" {
 #endif
 
-#include <hemp/defaults.h>
-#include <hemp/types.h>
-#include <hemp/cstr.h>
-#include <hemp/memory.h>
-#include <hemp/slab.h>
+#include <hemp/core.h>
 #include <hemp/pool.h>
-#include <hemp/hash.h>
-#include <hemp/list.h>
-#include <hemp/ptree.h>
-#include <hemp/element.h>
-#include <hemp/elements.h>
-#include <hemp/tags.h>
-#include <hemp/sources.h>
-#include <hemp/dialect.h>
-#include <hemp/scanner.h>
-#include <hemp/template.h>
-#include <hemp/module.h>
-#include <hemp/utils.h>
-#include <hemp/error.h>
-#include <hemp/filesystem.h>
-#include <hemp/debug.h>
-#include <hemp/os.h>
-#include <hemp/scope.h>
-#include <hemp/type.h>
 #include <hemp/text.h>
-#include <hemp/hub.h>
-#include <hemp/context.h>
-#include <hemp/value.h>
+#include <hemp/hash.h>
+#include <hemp/ptree.h>
+#include <hemp/scheme.h>
+#include <hemp/source.h>
+#include <hemp/tag.h>
+#include <hemp/tagset.h>
 
+    
+//#include <hemp/ptree.h>
+//#include <hemp/element.h>
+//#include <hemp/elements.h>
+//#include <hemp/dialect.h>
+//#include <hemp/scanner.h>
+//#include <hemp/template.h>
+//#include <hemp/module.h>
+//#include <hemp/utils.h>
+//#include <hemp/error.h>
+//#include <hemp/filesystem.h>
+//#include <hemp/scope.h>
+//#include <hemp/type.h>
+//#include <hemp/hub.h>
+//#include <hemp/context.h>
+//#include <hemp/value.h>
 
-#define HEMP_NAME       PACKAGE_NAME
-#define HEMP_VERSION    PACKAGE_VERSION
-#define HEMP_EMAIL      PACKAGE_BUGREPORT
-#define HEMP_URL        PACKAGE_URL
-#define HEMP_PROMPT     HEMP_NAME
-#define HEMP_AUTHOR     "Andy Wardley"
-
-#define HEMP_ERRNO_HELP     1
-#define HEMP_ERRNO_GETOPT   2
-
-struct hemp {
-    hemp_hash_t     dialects;
-    hemp_hash_t     dialect_factory;
-    hemp_jump_t     *jump;
+struct hemp_s {
+    hemp_hash_p     schemes;
+    hemp_hash_p     tags;
     hemp_bool_t     verbose;
     hemp_bool_t     debug;
+//  hemp_hash_t dialects;
+//  hemp_hash_t dialect_factory;
+//  hemp_jump_t     *jump;
+
+
 };
 
 
-hemp_t      hemp_init();
-void        hemp_free(hemp_t);
-hemp_bool_t hemp_register_dialect(hemp_t, hemp_cstr_t, hemp_build_fn);
-void        hemp_hello();
-hemp_cstr_t hemp_render(hemp_cstr_t scheme, hemp_cstr_t source);
+/* hemp initialisation and cleanup functions */
+hemp_p          hemp_init();
+void            hemp_free(hemp_p);
+
+/* scheme functions */
+void            hemp_init_schemes(hemp_p);
+void            hemp_add_scheme(hemp_p, hemp_scheme_p);
+hemp_bool_t     hemp_free_scheme(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
+
+#define         hemp_scheme(hemp, name) \
+                    (hemp_scheme_p) hemp_hash_fetch(hemp->schemes, name)
+
+/* source functions */
+hemp_source_p   hemp_source(hemp_p, hemp_cstr_p, hemp_cstr_p);
+
+/* tag functions */
+void            hemp_init_tags(hemp_p);
+void            hemp_add_tag(hemp_p, hemp_tag_p);
+hemp_bool_t     hemp_free_tag(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
+
+#define         hemp_tag(hemp, name) \
+                    (hemp_tag_p) hemp_hash_fetch(hemp->tags, name)
 
 
-#define hemp_null(h)    \
-    hemp_free(h);       \
-    h = NULL;                
-
-#define hemp_dialect(hemp, name) \
-    (hemp_dialect_t) hemp_hash_fetch(hemp->dialects, name)
-
-#define hemp_add_dialect(hemp, name, dialect) \
-    hemp_hash_store(hemp->dialects, name, (hemp_ptr_t) dialect)
+//hemp_bool_t hemp_register_dialect(hemp_t, hemp_cstr_t, hemp_build_fn);
+//void        hemp_hello();
+//hemp_cstr_t hemp_render(hemp_cstr_t scheme, hemp_cstr_t source);
+//
+//
+//#define hemp_dialect(hemp, name) \
+//    (hemp_dialect_t) hemp_hash_fetch(hemp->dialects, name)
+//
+//#define hemp_add_dialect(hemp, name, dialect) \
+//    hemp_hash_store(hemp->dialects, name, (hemp_ptr_t) dialect)
+//
 
 #if defined(__cplusplus)
 }  /* extern "C" { */

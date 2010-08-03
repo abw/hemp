@@ -1,28 +1,33 @@
-check_PROGRAMS  =  memtrace value
+check_PROGRAMS  =   hash        \
+                    list        \
+                    memory      \
+                    pool        \
+                    ptree       \
+                    source      \
+                    slab        \
+                    tag         \
+                    tagset      \
+                    text
+                    
 
 #                  debug         \
 #                  benchmark  
 #                  dialect       \
 #                  element       \
 #                  error         \
-#                  hash          \
 #                  hemp          \
 #                  hub          \
-#                  list          \
-#                  memory        \
 #                  module        \
-#                  pool          \
 #                  ptree         \
 #                  scanner       \
-#                  slab          \
-#                  sources       \
 #                  filesystem    \
 #                  template      \
 #                  type          \
-#                  text
+#                  value
 
 
 TESTS           = $(check_PROGRAMS)
 LDADD           = ../library/libhemp.la tap.o
+CFLAGS          = -I../include
 CPPFLAGS        = -DTESTDIR='"$(abs_top_srcdir)/tests"'
 

@@ -102,3 +102,7 @@ void todo_start(char *, ...);
 void todo_end(void);
 
 int exit_status(void);
+
+/* extra stuff added for hemp */
+void hemp_mem_trace_ok(void);
+

@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include "hemp.h"
-#include "hemp/text.h"
+#include <hemp.h>
 #include "tap.h"
 
 void test_text();
@@ -9,28 +7,17 @@ void test_text();
 int
 main(int argc, char **argv, char **env)
 {
-    plan_tests(31);
-    test_hstr();
-//    test_text();
+    plan_tests(32);
+    test_text();
+    hemp_mem_trace_ok();
     return exit_status();
 }
 
 
-void test_hstr() {
-    hemp_type_t HStr = hemp_hstr_type();
-    ok( HStr, "created HStr hemp string type" );
-    
-    hemp_hstr_t hs1 = hemp_new(HStr, "Hello World!");
-    ok( hs1, "created first string: %s", *hs1);
-    
-    hemp_old(hs1);
-    hemp_type_free(HStr);
-}
-
 
 void test_text() {
-    hemp_text_t message = hemp_text_init(25);
-    hemp_text_t badger, copycat;
+    hemp_text_p message = hemp_text_init(25);
+    hemp_text_p badger, copycat;
 
     ok( message, "created message" );
     ok( message->length   == 0, "length is %d", message->length );
@@ -59,6 +46,7 @@ void test_text() {
     ok( message->capacity == 42, "capacity is now %d", message->capacity );
 
     hemp_text_free(message);
+
 
     message = hemp_text_from_cstr("Hello ");
     ok( message->length == 6, message->string );

@@ -48,7 +48,7 @@ am__aclocal_m4_deps = $(top_srcdir)/build/m4/argz.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/include/config.h
+CONFIG_HEADER = $(top_builddir)/include/hemp/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -75,12 +75,12 @@ am__base_list = \
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 hemp_foo_la_DEPENDENCIES = ../library/libhemp.la
-am_hemp_foo_la_OBJECTS = foo.lo
+am_hemp_foo_la_OBJECTS = hemp_foo_la-foo.lo
 hemp_foo_la_OBJECTS = $(am_hemp_foo_la_OBJECTS)
 hemp_foo_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(hemp_foo_la_LDFLAGS) $(LDFLAGS) -o $@
-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(hemp_foo_la_CFLAGS) \
+	$(CFLAGS) $(hemp_foo_la_LDFLAGS) $(LDFLAGS) -o $@
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/hemp
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
@@ -164,6 +164,7 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+POW_LIB = @POW_LIB@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
@@ -230,6 +231,7 @@ hemp_foo_la_SOURCES = foo.c
 #hemp_foo_la_LDFLAGS  = -module
 hemp_foo_la_LDFLAGS = -no-undefined -module -avoid-version -export-dynamic
 hemp_foo_la_LIBADD = ../library/libhemp.la
+hemp_foo_la_CFLAGS = -I../include
 all: all-am
 
 .SUFFIXES:
@@ -304,7 +306,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/foo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp_foo_la-foo.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -329,6 +331,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+hemp_foo_la-foo.lo: foo.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hemp_foo_la_CFLAGS) $(CFLAGS) -MT hemp_foo_la-foo.lo -MD -MP -MF $(DEPDIR)/hemp_foo_la-foo.Tpo -c -o hemp_foo_la-foo.lo `test -f 'foo.c' || echo '$(srcdir)/'`foo.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/hemp_foo_la-foo.Tpo $(DEPDIR)/hemp_foo_la-foo.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='foo.c' object='hemp_foo_la-foo.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hemp_foo_la_CFLAGS) $(CFLAGS) -c -o hemp_foo_la-foo.lo `test -f 'foo.c' || echo '$(srcdir)/'`foo.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

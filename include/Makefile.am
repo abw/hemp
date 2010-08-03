@@ -1,9 +1,10 @@
 include_HEADERS         = hemp.h
-nobase_include_HEADERS  = hemp/cstr.h           \
-                          hemp/debug.h          \
+nobase_include_HEADERS  = hemp/config.h         \
+                          hemp/core.h           \
                           hemp/cstr.h           \
                           hemp/debug.h          \
-                          hemp/defaults.h       \
+                          hemp/debug.h          \
+                          hemp/defines.h        \
                           hemp/dialect.h        \
                           hemp/element.h        \
                           hemp/elements.h       \
@@ -19,10 +20,12 @@ nobase_include_HEADERS  = hemp/cstr.h           \
                           hemp/pool.h           \
                           hemp/ptree.h          \
                           hemp/scanner.h        \
+                          hemp/scheme.h         \
                           hemp/scope.h          \
                           hemp/slab.h           \
-                          hemp/sources.h        \
-                          hemp/tags.h           \
+                          hemp/source.h         \
+                          hemp/tag.h            \
+                          hemp/tagset.h         \
                           hemp/template.h       \
                           hemp/text.h           \
                           hemp/type.h           \

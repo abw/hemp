@@ -1,25 +1,13 @@
-#include "hemp/tags.h"
-
-
-static struct hemp_tag 
-    hemp_control_tag = { 
-        HEMP_INLINE_TAG,
-        "hemp.tag.control",
-        "[?", "?]",
-        &hemp_scan_control_tag
-    };
-
-
-hemp_tag_t HempTagControl = &hemp_control_tag;
+#include <hemp/tag.h>
 
 
 void 
 hemp_scan_control_tag(
-    hemp_template_t tmpl,
-    hemp_tag_t      tag,
-    hemp_cstr_t     tagtok,
+//    hemp_template_t tmpl,
+    hemp_tag_p      tag,
+    hemp_cstr_p     tagtok,
     hemp_pos_t      pos,
-    hemp_cstr_t     *srcptr
+    hemp_cstr_p     *srcptr
 ) {
     hemp_todo("control tag");
 }

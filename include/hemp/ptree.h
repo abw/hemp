@@ -1,76 +1,77 @@
-#ifndef HEMP_PTREE_H
-#define HEMP_PTREE_H
+#ifndef HEMP_TREE_H
+#define HEMP_TREE_H
 
-#include "hemp/pool.h"
-#include "hemp/cstr.h"
+#include <hemp/core.h>
+#include <hemp/pool.h>
 
 
 /*--------------------------------------------------------------------------
  * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_pnode {
-   hemp_cstr_t      key;
-   hemp_ptr_t       value;
-   hemp_pnode_t     before;
-   hemp_pnode_t     equal;
-   hemp_pnode_t     after;
+struct hemp_ptree_s {
+    hemp_pnode_p    head[HEMP_PTREE_SIZE];
+    hemp_pool_p     pool;
 };
 
-struct hemp_ptree {
-    hemp_pnode_t    head[256];
-    hemp_pool_t     pool;
+struct hemp_pnode_s {
+   hemp_cstr_p      key;
+   hemp_mem_p       value;
+   hemp_pnode_p     before;
+   hemp_pnode_p     equal;
+   hemp_pnode_p     after;
 };
+
 
 
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_ptree_t 
+hemp_ptree_p 
     hemp_ptree_init(
         hemp_size_t capacity
     );
 
 void
     hemp_ptree_free(
-        hemp_ptree_t ptree
+        hemp_ptree_p ptree
     );
 
-hemp_pnode_t
+hemp_pnode_p
     hemp_ptree_node(
-        hemp_ptree_t ptree, 
-        hemp_cstr_t  key, 
-        hemp_ptr_t  value
+        hemp_ptree_p ptree, 
+        hemp_cstr_p  key, 
+        hemp_mem_p  value
     );
 
-hemp_pnode_t
+hemp_pnode_p
     hemp_ptree_store(
-        hemp_ptree_t ptree, 
-        hemp_cstr_t  key, 
-        hemp_ptr_t  value
+        hemp_ptree_p ptree, 
+        hemp_cstr_p  key, 
+        hemp_mem_p   value
     );
 
-
-hemp_ptr_t
+hemp_mem_p
     hemp_ptree_fetch(
-        hemp_ptree_t ptree,
-        hemp_cstr_t  key
+        hemp_ptree_p ptree,
+        hemp_cstr_p  key
     );
 
 void 
     hemp_ptree_dump(
-        hemp_ptree_t ptree
+        hemp_ptree_p ptree
     );
 
+int 
+    hemp_ptree_max_depth(
+        hemp_ptree_p ptree
+    );
 
-/*--------------------------------------------------------------------------
- * macros
- *--------------------------------------------------------------------------*/
-
-#define hemp_ptree_null(p)  \
-    hemp_ptree_free(p);     \
-    p = NULL;                
+int
+    hemp_ptree_count_nodes(
+        hemp_ptree_p ptree
+    );
 
 
 #endif /* HEMP_PTREE_H */

@@ -1,25 +1,12 @@
-#include "hemp/tags.h"
-
-
-static struct hemp_tag 
-    hemp_outline_tag = { 
-        HEMP_OUTLINE_TAG,
-        "hemp.tag.outline", 
-        "%%", "\n", 
-        &hemp_scan_outline_tag
-    };
-
-
-hemp_tag_t HempTagOutline = &hemp_outline_tag;
-
+#include <hemp/tag.h>
 
 void 
 hemp_scan_outline_tag(
-    hemp_template_t tmpl,
-    hemp_tag_t      tag,
-    hemp_cstr_t     tagtok,
+//    hemp_template_t tmpl,
+    hemp_tag_p      tag,
+    hemp_cstr_p     tagtok,
     hemp_pos_t      pos,
-    hemp_cstr_t     *srcptr
+    hemp_cstr_p     *srcptr
 ) {
     hemp_todo("outline tag");
 }
