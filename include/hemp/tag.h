@@ -2,10 +2,10 @@
 #define HEMP_TAG_H
 
 #include <hemp/core.h>
+#include <hemp/element.h>
 
 /*
 #include "hemp/ptree.h"
-#include "hemp/element.h"
 #include "hemp/elements.h"
 #include "hemp/template.h"
 #include "hemp/utils.h"
@@ -89,18 +89,12 @@ void
 
 //    hemp_template_t     tmpl,   \
 
-#define HEMP_SCAN_TAG_ARGS      \
-    hemp_tag_p          tag,    \
-    hemp_cstr_p         tagtok, \
-    hemp_pos_t          pos,    \
-    hemp_cstr_p         *srcptr
-
-void hemp_scan_inline_tag   ( HEMP_SCAN_TAG_ARGS );
-void hemp_scan_outline_tag  ( HEMP_SCAN_TAG_ARGS );
-void hemp_scan_comment_tag  ( HEMP_SCAN_TAG_ARGS );
-void hemp_scan_control_tag  ( HEMP_SCAN_TAG_ARGS );
-void hemp_scan_variable_tag ( HEMP_SCAN_TAG_ARGS );
-void hemp_scan_embed_tag    ( HEMP_SCAN_TAG_ARGS );
+void hemp_scan_inline_tag   ( HEMP_TAG_SCAN_ARGS );
+void hemp_scan_outline_tag  ( HEMP_TAG_SCAN_ARGS );
+void hemp_scan_comment_tag  ( HEMP_TAG_SCAN_ARGS );
+void hemp_scan_control_tag  ( HEMP_TAG_SCAN_ARGS );
+void hemp_scan_variable_tag ( HEMP_TAG_SCAN_ARGS );
+void hemp_scan_embed_tag    ( HEMP_TAG_SCAN_ARGS );
 
 
 

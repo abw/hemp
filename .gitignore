@@ -9,10 +9,13 @@ config.status
 .libs
 .dirstamp
 programs/hemp
+tests/action
 tests/debug
 tests/dialect
 tests/element
+tests/elements
 tests/error
+tests/factory
 tests/filesystem
 tests/hash
 tests/hemp
@@ -33,4 +36,5 @@ tests/benchmark
 tests/ptree
 tests/hub
 tests/memtrace
+tests/utils
 tests/value

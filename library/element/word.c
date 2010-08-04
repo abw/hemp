@@ -1,10 +1,11 @@
-#include "hemp/elements.h"
-#include "hemp/debug.h"
+#include <hemp/element.h>
 
 
-static struct hemp_etype
+static struct hemp_etype_s
     hemp_element_word = { 
         "word",
+        0,
+        NULL,
         &hemp_element_dont_skip,
         &hemp_element_dont_skip,
         &hemp_element_dont_skip,
@@ -13,5 +14,5 @@ static struct hemp_etype
         &hemp_element_literal_text
     };
 
-hemp_etype_t HempElementWord = &hemp_element_word;
+hemp_etype_p HempElementWord = &hemp_element_word;
 

@@ -199,7 +199,7 @@ hemp_mem_trace_realloc(
     }
     else {
         /* pointer has moved */
-        hmt->size = 0;
+//      hmt->size = 0;
         hmt->status = HEMP_MEM_MOVED;
 
         hmt = hemp_mem_new_trace();
@@ -246,8 +246,8 @@ hemp_mem_trace_free(
     hemp_mem_trace_p hmt = hemp_mem_get_trace(ptr);
     free(hmt->ptr);
     hmt->status = HEMP_MEM_FREE;
-    hmt->size   = 0;
-//    hmt->ptr    = NULL;
+//  hmt->size   = 0;
+    hmt->ptr    = NULL;
 }
 
 
@@ -265,7 +265,7 @@ hemp_mem_trace_report(
     int r, i;
     char *status, *cptr, c;
     char buffer[HEMP_MEM_PEEKLEN + 1];
-    hemp_size_t count = 0;
+    hemp_size_t count = 0, total = 0;
 
     if (verbose) {
         debug_magenta("\nSTATUS    ID         LOCATION       SIZE            MREC\n");
@@ -274,7 +274,11 @@ hemp_mem_trace_report(
 
     for(r = 0; r < hemp_mem_used; r++) {
         hmt = &(hemp_mem_traces[r]);
-        count += hmt->size;
+
+        if (hmt->status == HEMP_MEM_MALLOC)
+            count += hmt->size;
+
+        total += hmt->size;
 
         if (! verbose) {
             continue;
@@ -282,9 +286,14 @@ hemp_mem_trace_report(
 
         cptr = (char *) hmt->ptr;
 
-        for (i = 0; i < (hmt->size < HEMP_MEM_PEEKLEN ? hmt->size : HEMP_MEM_PEEKLEN); i++) {
-            c = *(cptr + i);
-            buffer[i] = c >= ' ' && c <= '~' ? c : ' ';
+        i = 0;
+        if (cptr) {
+            for (i = 0; i < (hmt->size < HEMP_MEM_PEEKLEN ? hmt->size : HEMP_MEM_PEEKLEN); i++) {
+                c = *(cptr + i);
+                if (c == 0)
+                    break;
+                buffer[i] = c >= ' ' && c <= '~' ? c : ' ';
+            }
         }
         buffer[i] = '\0';
 
@@ -309,7 +318,8 @@ hemp_mem_trace_report(
 
     if (verbose) {
         debug_magenta("--------------------------------------------------------\n");
-        debug_yellow("Memory allocated: %8lu\n", count);
+        debug_green("Memory used: %8lu\n", total);
+        debug_yellow("Memory wild: %8lu\n", count);
     }
     
     return count;
@@ -323,6 +333,16 @@ hemp_mem_trace_reset() {
 
     hemp_mem_used     = 0;
     hemp_mem_capacity = 0;
+    hemp_mem_traces   = NULL;
+}
+
+#else  /* DEBUG & DEBUG_MEM */
+
+hemp_size_t
+hemp_mem_trace_report(
+    hemp_bool_t verbose
+) {
+    return -1;
 }
 
 #endif  /* DEBUG & DEBUG_MEM */

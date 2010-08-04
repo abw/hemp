@@ -7,11 +7,21 @@
 hello world
 
 -- test inline comment with tag at end
-[% 'hello world'
+[% 'hello again world'
    # this is a comment %]
 
 -- expect
-hello world
+hello again world
+
+-- test comment tag
+hello [# this is a 
+        dirty great
+        big comment #]world[#
+        and this 
+        is another one 
+#] once more
 
 
+-- expect
+hello world once more
 

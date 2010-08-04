@@ -1,27 +1,33 @@
-check_PROGRAMS  =   hash        \
+#check_PROGRAMS  =   error
+
+check_PROGRAMS  =   action      \
+                    dialect     \
+                    element     \
+                    elements    \
+                    error       \
+                    factory     \
+                    filesystem  \
+                    hash        \
                     list        \
                     memory      \
                     pool        \
                     ptree       \
+                    scanner     \
                     source      \
                     slab        \
                     tag         \
                     tagset      \
-                    text
+                    template    \
+                    text        \
+                    utils
+ 
                     
-
 #                  debug         \
 #                  benchmark  
-#                  dialect       \
-#                  element       \
-#                  error         \
 #                  hemp          \
 #                  hub          \
 #                  module        \
 #                  ptree         \
-#                  scanner       \
-#                  filesystem    \
-#                  template      \
 #                  type          \
 #                  value
 
@@ -29,5 +35,6 @@ check_PROGRAMS  =   hash        \
 TESTS           = $(check_PROGRAMS)
 LDADD           = ../library/libhemp.la tap.o
 CFLAGS          = -I../include
+#CPPFLAGS        = -DDEBUG=2 -DTESTDIR='"$(abs_top_srcdir)/tests"'
 CPPFLAGS        = -DTESTDIR='"$(abs_top_srcdir)/tests"'
 

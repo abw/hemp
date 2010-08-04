@@ -30,6 +30,17 @@ An incomplete list of things TODO, in no particular order.
 * Add cleanup methods for squote and dquote to release the text memory when
   HEMP_FLAG_FIXED is not set.
 
+* filesystem is a quick hack... needs doing properly
+
+* Factory used named passed as argument to cache instance in hash.  We
+  can't guarantee that it's statically allocated.  Previous we used the 
+  allocated name in, e.g. dialect->name
+
+* Figure out a nice way to implement exceptions.  Ideally we want the 
+  flexibility of the Perl/Badger approach that allows a main error type to
+  be defined (e.g. parse error), along with sub-type and any arguments.
+  This should result in a nice error message being generated from the 
+  type/subtype and args.
 
 ---------
 Short term stack:
@@ -44,7 +55,17 @@ Short term stack:
     which requires a sentinel facade object to explicitly destroy the hub when
     it goes out of scope and gets garbage collected)
 
-  * inline tag, depends on template and elements
+  * dialect needs hemp pointer, dialect_factory needs to provide it
+    - reworking this to use newfactory object
+ 
+  * template needs fixing wrt to dialect
+  
+  * templates collective for templates.  pointer from template to templates
+    to hemp... on second thoughts, put this straight into the hemp object
+
+  * dialect tagset
+  
+  * dialects in hemp
 
   * add grammar to tag
 

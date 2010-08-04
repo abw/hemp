@@ -1,77 +1,69 @@
-#include "hemp/template.h"
-#include "hemp/dialect.h"
-#include "hemp/debug.h"
+#include <hemp/template.h>
 
 
-hemp_template_t 
+hemp_template_p
 hemp_template_init(
-    hemp_cstr_t    scheme, 
-    hemp_cstr_t    source,
-    hemp_dialect_t dialect
+    hemp_dialect_p dialect,
+    hemp_source_p  source
 ) {
-    hemp_template_t tmpl;
-    
-    if (! dialect)
-        dialect = hemp_dialect_tt3();
+    hemp_template_p tmpl = (hemp_template_p) hemp_mem_alloc(
+        sizeof(struct hemp_template_s)
+    );
 
-    if ((tmpl = (hemp_template_t) hemp_mem_init(sizeof(struct hemp_template)))) {
-        tmpl->source   = hemp_source(scheme, source);
-        tmpl->elements = hemp_elements_init(0);
-        tmpl->dialect  = dialect;
+    if (! tmpl)
+        hemp_mem_fail("template");
+
+    tmpl->dialect  = dialect;
+    tmpl->source   = source;
+    tmpl->tagset   = hemp_tagset_init();
+    tmpl->elements = hemp_elements_init(0);
+    tmpl->tree     = NULL;
         
-        if (tmpl->source && tmpl->elements) {
-            debug_mem(
-                "Allocated %s %s template at %p\n", 
-                dialect->name, scheme, tmpl
-            );
-        }
-        else {
-            hemp_template_null(tmpl);
-        }
-    }
-
-    // TODO handle tmpl == NULL
     return tmpl;
 }
 
 
 void
 hemp_template_free(
-    hemp_template_t tmpl
+    hemp_template_p tmpl
 ) {
-    if (tmpl->source) {
-        hemp_source_free(tmpl->source);
-    }
-    if (tmpl->elements) {
-        // TODO: add custom destructors to elements so they can clean up
-        // any additional memory they allocated
-        hemp_elements_free(tmpl->elements);
-    }
-    debug_cyan("Releasing %s template at %p\n", tmpl->source->scheme->name, tmpl);
+    /* first call any custom cleanup code for the dialect */
+    if (tmpl->dialect->cleanup)
+        tmpl->dialect->cleanup(tmpl);
+
+    /* then call any cleanup handler defined for the expression tree */
+    if (tmpl->tree && tmpl->tree->type->cleanup)
+        tmpl->tree->type->cleanup(tmpl->tree);
+
+    /* the elements cleaner will take care of cleaning any other tokens */
+    hemp_elements_free(tmpl->elements);
+
+    /* free the source, the tagset and then the template object itself */
+    hemp_source_free(tmpl->source);
+    hemp_tagset_free(tmpl->tagset);
     hemp_mem_free(tmpl);
 }
 
 
-hemp_element_t
+hemp_element_p
 hemp_template_tokens(
-    hemp_template_t tmpl
+    hemp_template_p tmpl
 ) {
-    if (! tmpl->elements->head) {
-        if (tmpl->dialect->scanner(tmpl)) {
-            debug_green("scanned OK\n");
-        }
-        else {
-            debug_red("scan failed\n");
-        }
-    }
+    debug_call("hemp_template_tokens(%p)\n", tmpl);
+
+    if (! tmpl->elements->head)
+        hemp_template_scan(tmpl);
+
     return tmpl->elements->head;
 }
 
 
 hemp_bool_t
 hemp_template_scan(
-    hemp_template_t tmpl
+    hemp_template_p tmpl
 ) {
+    debug_call("hemp_template_scan(%p)\n", tmpl);
+    
     hemp_bool_t result = tmpl->dialect->scanner(tmpl);
     
     if (result) {
@@ -88,19 +80,24 @@ hemp_template_scan(
 
 hemp_bool_t
 hemp_template_compile(
-    hemp_template_t tmpl
+    hemp_template_p tmpl
 ) {
-    hemp_element_t element = hemp_template_tokens(tmpl);
+    debug_call("hemp_template_compile(%p)\n", tmpl);
+    
+    hemp_element_p element = hemp_template_tokens(tmpl);
     tmpl->tree = hemp_element_parse(element);
+
     // TODO: proper error handling
     return HEMP_TRUE;
 }
 
 
-hemp_element_t
+hemp_element_p
 hemp_template_tree(
-    hemp_template_t tmpl
+    hemp_template_p tmpl
 ) {
+    debug_call("hemp_template_tree(%p)\n", tmpl);
+
     if (! tmpl->tree)
         hemp_template_compile(tmpl);
         
@@ -108,17 +105,17 @@ hemp_template_tree(
 }
 
 
-hemp_text_t
+hemp_text_p
 hemp_template_render(
-    hemp_template_t tmpl
+    hemp_template_p tmpl
 ) {
-    hemp_element_t  root = hemp_template_tree(tmpl);
+    debug_call("hemp_template_render(%p)\n", tmpl);
+
+    hemp_element_p root = hemp_template_tree(tmpl);
 
     if (! root)
         hemp_fatal("template does not have a root element");
         
-    hemp_text_fn tfn = root->type->text;
-    hemp_text_t text = root->type->text(root, NULL);
-    return text;
+    return root->type->text(root, NULL);
 }
 

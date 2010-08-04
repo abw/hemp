@@ -5,9 +5,9 @@
 #include <hemp/hash.h>
 #include <hemp/ptree.h>
 #include <hemp/tag.h>
+#include <hemp/element.h>
 
 /*
-#include "hemp/element.h"
 #include "hemp/elements.h"
 #include "hemp/template.h"
 #include "hemp/utils.h"
@@ -19,7 +19,7 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_tagset_s {
-/*   hemp_etype_t     text_element; */
+   hemp_etype_p     text_element;
    hemp_hash_p      tags;
    hemp_ptree_p     inline_tags;
    hemp_ptree_p     outline_tags;

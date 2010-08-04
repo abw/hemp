@@ -10,11 +10,11 @@ hemp_tagset_init() {
     if (! tagset)
         hemp_mem_fail("tagset");
 
-//  tagset->text_element = HempElementText;
+    tagset->text_element = HempElementText;
     tagset->tags         = hemp_hash_init();
     tagset->inline_tags  = hemp_ptree_init(HEMP_TAGSET_SIZE);
     tagset->outline_tags = hemp_ptree_init(HEMP_TAGSET_SIZE);
-        
+
     return tagset;
 }
 

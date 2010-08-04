@@ -2,23 +2,73 @@
 #define HEMP_ERROR_H
 
 #include <setjmp.h>
+#include <hemp/types.h>
 
-typedef jmp_buf hemp_jump_buf_t;
-typedef struct hemp_jump hemp_jump_t;
+typedef jmp_buf                 hemp_jump_b;
+typedef struct hemp_jump_s      hemp_jump_t;
+typedef struct hemp_jump_s    * hemp_jump_p;
 
-struct hemp_jump {
-    hemp_pos_t      depth;
-    hemp_jump_buf_t buffer;
-    hemp_jump_t     *parent;
+typedef enum { 
+    HEMP_ERROR_NONE = 0,
+    HEMP_ERROR_UNKNOWN,
+    HEMP_ERROR_MEMORY,
+    HEMP_ERROR_MISSING,
+    HEMP_ERROR_INVALID,
+    HEMP_ERROR_MAX
+} hemp_errno_e;
+
+
+static hemp_cstr_p hemp_errmsg[] = {
+    "No error",
+    "Unknown error",
+    "Memory allocation failed",
+    "No %s specified",
+    "Invalid %s specified: %s"
+};
+
+struct hemp_jump_s {
+    hemp_pos_t  depth;
+    hemp_jump_b buffer;
+    hemp_jump_p parent;
+};
+
+struct hemp_error_s {
+    hemp_errno_e  number;
+    hemp_cstr_p   message;
+    hemp_error_p  parent;
 };
 
 
-typedef enum { 
-    HEMP_ERROR_ONE = 1,
-    HEMP_ERROR_TWO,
-    HEMP_ERROR_THREE
-} hemp_error_t;
+hemp_error_p
+    hemp_error_new(
+        hemp_errno_e number
+    );
 
+
+hemp_error_p
+    hemp_error_init(
+        hemp_errno_e errno,
+        hemp_cstr_p  message
+    );
+
+hemp_error_p
+    hemp_error_initf(
+        hemp_errno_e errno,
+        hemp_cstr_p  format,
+        ...
+    );
+
+hemp_error_p
+    hemp_error_initfv(
+        hemp_errno_e errno,
+        hemp_cstr_p  format,
+        va_list     *args
+    );
+
+void
+    hemp_error_free(
+        hemp_error_p error
+    );
 
 /* these macros are for testing */
 
@@ -64,9 +114,15 @@ typedef enum {
             case e:                                 \
                 /* exception handling code goes here */
 
+#define HEMP_CATCH_ALL                              \
+                break;                              \
+            default:                                \
+                /* default exception handling code goes here */
+
 #define HEMP_END                                    \
                 break;                              \
         }                                           \
+        hemp->jump = hemp->jump->parent;            \
     } while (0);
 
 

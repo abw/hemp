@@ -1,10 +1,11 @@
-#include "hemp/elements.h"
-#include "hemp/debug.h"
+#include <hemp/elements.h>
 
 
-static struct hemp_etype
+static struct hemp_etype_s
     hemp_element_squote = { 
         "squote",
+        HEMP_IS_STATIC,
+        &hemp_element_text_clean,
         &hemp_element_dont_skip,         /* not skippable as whitespace... */
         &hemp_element_dont_skip,         /* ...delimiter...                */
         &hemp_element_dont_skip,         /* ...or separator                */
@@ -13,5 +14,5 @@ static struct hemp_etype
     };
 
 
-hemp_etype_t HempElementSQuote = &hemp_element_squote;
+hemp_etype_p HempElementSQuote = &hemp_element_squote;
 

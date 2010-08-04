@@ -8,14 +8,14 @@ void test_hemp_tags();
 int
 main(int argc, char **argv, char **env)
 {
-    plan_tests(16);
+    plan_tests(13);
 
     test_tag();
     hemp_mem_trace_ok();
     hemp_mem_trace_reset();
 
-    test_hemp_tags();
-    hemp_mem_trace_ok();
+//    test_hemp_tags();
+//    hemp_mem_trace_ok();
 
     return exit_status();
 }
@@ -67,13 +67,13 @@ void test_tag() {
 }
 
 
-void test_hemp_tags() {
-    hemp_p hemp = hemp_init();
-    ok( hemp, "got hemp object" );
-
-    hemp_tag_p comment_tag = hemp_tag(hemp, "comment");
-    ok( comment_tag, "got comment tag" );
-    
-    hemp_free(hemp);
-}
+//void test_hemp_tags() {
+//    hemp_p hemp = hemp_init();
+//    ok( hemp, "got hemp object" );
+//
+//    hemp_tag_p comment_tag = hemp_tag(hemp, "comment");
+//    ok( comment_tag, "got comment tag" );
+//    
+//    hemp_free(hemp);
+//}
 

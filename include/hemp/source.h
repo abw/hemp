@@ -12,9 +12,10 @@
  *-------------------------------------------------------------------------*/
 
 struct hemp_source_s {
-    hemp_scheme_p scheme;           /* e.g. text, file, etc          */
-    hemp_cstr_p   name;             /* path to file or source text   */
-    hemp_cstr_p   text;             /* file contents or source text  */
+    hemp_scheme_p scheme;           /* e.g. text, file, etc                 */
+    hemp_cstr_p   md5;              /* MD5 hex digest of template uri       */
+    hemp_cstr_p   name;             /* path to file or source text          */
+    hemp_cstr_p   text;             /* file contents or source text         */
 };
 
 

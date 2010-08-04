@@ -1,25 +1,23 @@
-#include <stdio.h>
-#include "hemp/filesystem.h"
-#include "hemp/debug.h"
+#include <hemp/filesystem.h>
 
 
-hemp_filesystem_t
+hemp_filesystem_p
 hemp_filesystem_init(
-    hemp_t      hemp,
-    hemp_cstr_t path
+    hemp_p      hemp,
+    hemp_cstr_p path
 ) {
-    hemp_filesystem_t filesystem;
+    hemp_filesystem_p filesystem = (hemp_filesystem_p) hemp_mem_alloc( 
+        sizeof(struct hemp_filesystem_s)
+    );
 
-    if (
-        (filesystem = (hemp_filesystem_t) 
-            hemp_mem_init( sizeof(struct hemp_filesystem) )
-        )
-    ) {
-        filesystem->hemp = hemp;
-        filesystem->path = NULL;
-        if (path)
-            hemp_filesystem_set_path(filesystem, path);
-    }
+    if (! filesystem)
+        hemp_mem_fail("filesystem");
+
+    filesystem->hemp = hemp;
+    filesystem->path = NULL;
+
+    if (path)
+        hemp_filesystem_set_path(filesystem, path);
     
     return filesystem;
 }
@@ -27,7 +25,7 @@ hemp_filesystem_init(
 
 void
 hemp_filesystem_free(
-    hemp_filesystem_t filesystem
+    hemp_filesystem_p filesystem
 ) {
     hemp_filesystem_clear_path(filesystem);
     hemp_mem_free(filesystem);
@@ -50,8 +48,8 @@ hemp_filesystem_free(
 
 void
 hemp_filesystem_set_path(
-    hemp_filesystem_t filesystem,
-    hemp_cstr_t path
+    hemp_filesystem_p filesystem,
+    hemp_cstr_p path
 ) {
     hemp_filesystem_clear_path(filesystem);             // TODO: free strings
     debug_file("setting filesystem path to %s\n", path);
@@ -60,24 +58,24 @@ hemp_filesystem_set_path(
 }
 
 
-hemp_cstr_t
+hemp_cstr_p
 hemp_filesystem_cwd(
-    hemp_filesystem_t filesystem
+    hemp_filesystem_p filesystem
 ) {
     // HMM... not sure about this - see comments on cwd in 
     // Badger::Filesystem::Virtual... it doesn't really make sense in the 
     // context of a virtual filesystem
-    hemp_cstr_t cwd = getcwd(NULL, 0);
+    hemp_cstr_p cwd = getcwd(NULL, 0);
     if (! cwd)
         hemp_fatal(HEMP_ERRMSG_MALLOC, HEMP_CWD_NAME);
     return cwd;
 }
 
 
-hemp_cstr_t
+hemp_cstr_p
 hemp_filesystem_join_path(
-    hemp_cstr_t base,
-    hemp_cstr_t path
+    hemp_cstr_p base,
+    hemp_cstr_p path
 ) {
     // quick hack to get something working - this needs doing properly to
     // clean up the generated path to make it canonical (e.g. collapse 
@@ -85,11 +83,11 @@ hemp_filesystem_join_path(
     hemp_size_t baselen = strlen(base);
     hemp_bool_t slashb  = baselen && base[baselen - 1] == *HEMP_DIR_SEPARATOR;
     hemp_bool_t slashp  = *path == *HEMP_DIR_SEPARATOR;
-    hemp_cstr_t joined  = hemp_mem_init(
+    hemp_cstr_p joined  = hemp_mem_alloc(
         baselen + strlen(path) + 3              /* terminating NUL and extra slashes */
     );
     if (! joined)
-        hemp_fatal(HEMP_MEMORY_ERROR_MSG, HEMP_FS_PATH_NAME);
+        hemp_mem_fail(HEMP_FS_PATH_NAME);
     
     /* always add a leading slash */
     if (*base == *HEMP_ROOT_DIR) {
@@ -116,10 +114,10 @@ hemp_filesystem_join_path(
 }
 
 
-hemp_cstr_t
+hemp_cstr_p
 hemp_filesystem_absolute_path(
-    hemp_filesystem_t   filesystem,
-    hemp_cstr_t         path
+    hemp_filesystem_p   filesystem,
+    hemp_cstr_p         path
 ) {
     return hemp_filesystem_is_path_absolute(filesystem, path)
         ? path                              // bugger!  can't do this - don't know what we can free
@@ -130,13 +128,13 @@ hemp_filesystem_absolute_path(
 }
 
 
-hemp_cstr_t
+hemp_cstr_p
 hemp_filesystem_readable_path(
-    hemp_filesystem_t   filesystem,
-    hemp_cstr_t         path
+    hemp_filesystem_p   filesystem,
+    hemp_cstr_p         path
 ) {
     int n;
-    hemp_cstr_t root, full;
+    hemp_cstr_p root, full;
     
     for (n = 0; n < filesystem->path->length; n++) {
         root = hemp_list_item(filesystem->path, n);
@@ -150,18 +148,18 @@ hemp_filesystem_readable_path(
         
 
 
-hemp_cstr_t 
+hemp_cstr_p
 hemp_filesystem_read_file(
-    hemp_cstr_t path
+    hemp_cstr_p path
 ) {
-    hemp_cstr_t text = NULL;
+    hemp_cstr_p text = NULL;
     hemp_size_t size = 0;
     FILE *fp = fopen(path,"r");
     struct stat stat_buf;
 
     if (fp) {
         fstat(fileno(fp), &stat_buf);
-        text = hemp_mem_init(stat_buf.st_size + 1);
+        text = hemp_mem_alloc(stat_buf.st_size + 1);
 
         if (fread(text, stat_buf.st_size, 1, fp)) {
             text[stat_buf.st_size] = '\0';

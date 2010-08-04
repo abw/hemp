@@ -1,21 +1,42 @@
 -- test single quoted strings
-[% 'foo' 'foo bar' '' %]
+[% 'foo' ' ' 'foo bar' '' %]
+
+-- expect
+foo foo bar
+
 
 -- test single quoted strings with escapes
-[% 'Tom O\'Tommy' 'foo\\bar' 'wiz\bang' %]
+[% 'Tom O\'Tommy' ' and ' 'foo\\bar' ' and ' 'wiz\bang' %]
+
+-- expect
+Tom O'Tommy and foo\bar and wiz\bang
+
 
 -- test double quoted strings
-[% "foo" "foo bar" "" %]
+[% "foo" " foo bar" "" %]
+
+-- expect
+foo foo bar
+
 
 -- test double quoted strings with escapes
 [% "foo\\bar" %] [% "new\nline" %] [% "tab\tstop" %] [% "11\" long" %]
 
+-- expect
+foo\bar new
+line tab	stop 11" long
+
+
 -- test multiple tags
 Some text [% 123 %] more text [% '456' %]
 
+-- expect --
+Some text 123 more text 456
+
+
 -- test unterminated single quoted string
-[% 'oops %]
+TODO: [%# 'oops %]
 
 -- test unterminated double quoted string
-[% "cripey! %]
+TODO: [%# "cripey! %]
 

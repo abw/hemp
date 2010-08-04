@@ -1,50 +1,51 @@
-#include <stdio.h>
-#include "hemp.h"
-#include "tap.h"
+#include <hemp.h>
+#include <tap.h>
 
 #define TEST_MARKER "-- test"
 #define EXPECT_MARKER "-- expect"
 
 
 void test_scanner();
-void test_script(hemp_cstr_t, hemp_cstr_t);
+void test_script(hemp_cstr_p);
 
 
 int
-main(int argc, char **argv, char **env)
-{
-    plan_tests(20);
+main(
+    int  argc, 
+    char **argv, 
+    char **env
+) {
+    plan_tests(30);
     test_scanner();
     return exit_status();
 }
 
 void test_scanner() {
-    hemp_cstr_t scripts = hemp_filesystem_join_path(TESTDIR, "scripts");
-    
-//    test_script( scripts, "numbers" );
-//    test_script( scripts, "quotes" );
-    test_script( scripts, "comments" );
-    
-    hemp_mem_free(scripts);
+    test_script( "hello" );
+    test_script( "comments" );
+    test_script( "numbers" );
+    test_script( "quotes" );
 }
 
 
 void test_script(
-    hemp_cstr_t scripts,
-    hemp_cstr_t script
+    hemp_cstr_p script
 ) {
-    hemp_cstr_t     path = hemp_filesystem_join_path(scripts, script);
-    hemp_cstr_t     text = hemp_filesystem_read_file(path);
-    hemp_cstr_t     test, name, expect;
-    hemp_list_t     list;
-    hemp_template_t tmpl;
+    hemp_mem_trace_reset();
+    hemp_p          hemp = hemp_init();
+    hemp_cstr_p     dir  = hemp_filesystem_join_path(TESTDIR, "scripts");
+    hemp_cstr_p     path = hemp_filesystem_join_path(dir, script);
+    hemp_cstr_p     text = hemp_filesystem_read_file(path);
+    hemp_cstr_p     test, name, expect;
+    hemp_list_p     list;
+    hemp_template_p tmpl;
     hemp_size_t     n;
 
     if (! text) {
         fail("could not read test script: %s", path);
         return;
     }
-    
+
     test = strstr(text, TEST_MARKER);
 
     if (! test)
@@ -65,51 +66,69 @@ void test_script(
         
         name = test;
         do      { test++; }
-        while   (*test != LF && *test != CR);
+        while   (*test != HEMP_LF && *test != HEMP_CR);
 
         /* NUL terminate test name */
         *test = '\0';
         
         do      { test++; }
-        while   (*test == LF || *test == CR);
+        while   (*test == HEMP_LF || *test == HEMP_CR);
         
         if ((expect = strstr(test, EXPECT_MARKER))) {
             *expect = '\0';
             expect += strlen(EXPECT_MARKER);
-            while   (*expect != LF && *expect != CR)
+            while   (*expect != HEMP_LF && *expect != HEMP_CR)
                     { expect++; }
             do      { expect++; }
-            while   (*expect == LF || *expect == CR);
+            while   (*expect == HEMP_LF || *expect == HEMP_CR);
 //            expect++;
         }
 
-/*
-        printf(">> test %d: %s\n", n, name);
+        hemp_cstr_chomp(test);
 
-        if (expect)
-            printf(">> expect [%s]\n", expect);
-*/
-        
-        tmpl = hemp_template_init(
+//        printf(">> test %d: %s\n", n, name);
+
+//        if (expect)
+//            printf(">> expect [%s]\n", expect);
+
+        tmpl = hemp_template(
+            hemp,
+            HEMP_TT3,
             HEMP_TEXT, 
-            test,
-            NULL
+            test
         );
-        hemp_text_t output = hemp_template_render(tmpl);
+
+        hemp_text_p output = hemp_template_render(tmpl);
         ok( output, "%s rendered", name);
-        debug_cyan("OUTPUT: [%s]\n", output->string);
+
         if (expect) {
+            hemp_cstr_chomp(output->string);
+            hemp_cstr_chomp(expect);
+
             if (hemp_cstr_eq(output->string, expect)) {
+//              printf("EXPECT: [%s%s%s]\n", ANSI_YELLOW, expect, ANSI_RESET);
+//              printf("OUTPUT: [%s%s%s]\n", ANSI_GREEN, output->string, ANSI_RESET);
                 ok(1, "%s output matches expected", name);
             }
             else {
+                printf("EXPECT: [%s%s%s]\n", ANSI_YELLOW, expect, ANSI_RESET);
+                printf("OUTPUT: [%s%s%s]\n", ANSI_RED, output->string, ANSI_RESET);
                 ok(0, "%s output does not match expected", name);
             }
         }
+        
+        hemp_text_free(output);
                 
     }
-        
-    //printf("TESTS: %s\n", hemp_list_dump(list));
+
+    hemp_mem_free(dir);
+    hemp_mem_free(path);
+    hemp_mem_free(text);
+    
+    hemp_list_free(list);
+    hemp_free(hemp);
+
+    hemp_mem_trace_ok();
 }
 
     

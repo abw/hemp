@@ -1,10 +1,11 @@
-#include "hemp/elements.h"
-#include "hemp/debug.h"
+#include <hemp/element.h>
 
 
-static struct hemp_etype
+static struct hemp_etype_s
     hemp_element_integer = { 
         "integer",
+        HEMP_IS_STATIC,
+        NULL,
         &hemp_element_dont_skip,
         &hemp_element_dont_skip,
         &hemp_element_dont_skip,
@@ -13,5 +14,5 @@ static struct hemp_etype
     };
 
 
-hemp_etype_t HempElementInteger = &hemp_element_integer;
+hemp_etype_p HempElementInteger = &hemp_element_integer;
 

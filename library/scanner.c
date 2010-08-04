@@ -1,28 +1,24 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <string.h>
-#include "hemp/scanner.h"
+#include <hemp/scanner.h>
 
 
 
 hemp_bool_t
 hemp_scan_text(
-    hemp_template_t tmpl
+    hemp_template_p tmpl
 ) {
-    hemp_tagset_t   tagset   = tmpl->dialect->tagset;
-    hemp_cstr_t     text     = hemp_source_read(tmpl->source),
+    hemp_tagset_p   tagset   = tmpl->tagset;
+    hemp_cstr_p     text     = hemp_source_read(tmpl->source),
                     src      = text,
                     from     = text,
                     cmptr, 
                     tagstr;
     hemp_pos_t      pos      = 0,
                     line     = 0;
-    hemp_tag_t      tag;
-    hemp_pnode_t    *inhead  = tagset->inline_tags->head,
+    hemp_tag_p      tag;
+    hemp_pnode_p    *inhead  = tagset->inline_tags->head,
                     *outhead = tagset->outline_tags->head,
                     pnode;
-    hemp_elements_t elements = tmpl->elements;
+    hemp_elements_p elements = tmpl->elements;
 
     debug_magenta("-- source ---\n%s\n------------\n", text);
     
@@ -31,7 +27,7 @@ hemp_scan_text(
         line++;
         debug_scan("\n%d (%02d) : ", line, src - text);
 
-        if ((pnode = outhead[(unsigned char) *src])) {
+        if ((pnode = outhead[(hemp_char_t) *src % HEMP_PTREE_SIZE])) {
             debug_yellow("OUTLINE:%c", *src);
             tagstr = src;
             
@@ -51,17 +47,17 @@ hemp_scan_text(
         }
         
         while (*src) {
-            if (*src == LF) {
+            if (*src == HEMP_LF) {
                 src++;
                 break;
             }
-            else if (*src == CR) {
+            else if (*src == HEMP_CR) {
                 src++;
-                if (*src == LF)
+                if (*src == HEMP_LF)
                     src++;
                 break;
             }
-            else if ((pnode = inhead[(unsigned char) *src])) {
+            else if ((pnode = inhead[(hemp_char_t) *src % HEMP_PTREE_SIZE])) {
                 debug_yellow("INLINE:%c", *src);
 
                 tagstr = src;
@@ -102,27 +98,27 @@ hemp_scan_text(
         pos += src - from;
     }
     
-    hemp_elements_eof(elements, src, pos);
+    hemp_elements_eof(elements, pos);
 
 #if DEBUG
     hemp_elements_dump(elements);
 #endif
 //  hemp_elements_free(elements);
     
-    return 1;
+    return HEMP_TRUE;
 }
 
 
-hemp_tag_t
+hemp_tag_p
 hemp_scan_tag_start(
-    hemp_pnode_t    pnode, 
-    hemp_cstr_t     *srcptr
+    hemp_pnode_p    pnode, 
+    hemp_cstr_p     *srcptr
 ) {
 //  debug_blue("hemp_scan_tag_start(%p[%s])]", pnode, pnode->key);
 
-    hemp_cstr_t cmptr  = pnode->key;
-    hemp_cstr_t src    = *srcptr;
-    hemp_tag_t  tag    = NULL;
+    hemp_cstr_p cmptr  = pnode->key;
+    hemp_cstr_p src    = *srcptr;
+    hemp_tag_p  tag    = NULL;
 
     // nuisance: we do the first comparison twice
     while (1) {

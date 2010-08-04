@@ -1,15 +1,12 @@
 #include <hemp/tag.h>
+#include <hemp/template.h>
 
 
 void 
 hemp_scan_comment_tag(
-//    hemp_template_t tmpl,
-    hemp_tag_p      tag,
-    hemp_cstr_p     tagtok,
-    hemp_pos_t      pos,
-    hemp_cstr_p     *srcptr
+    HEMP_TAG_SCAN_ARGS
 ) {
-    hemp_cstr_p     to = strstr(*srcptr, tag->end);
+    hemp_cstr_p to = strstr(*srcptr, tag->end);
     
     if (! to)
         hemp_fatal("missing end of comment tag");
@@ -17,13 +14,12 @@ hemp_scan_comment_tag(
     to += strlen(tag->end);
 
     debug_token("comment", tagtok, to - tagtok);
-    hemp_todo("comment tag");
 
-//    hemp_elements_append(
-//        tmpl->elements, HempElementComment,
-//        tagtok, pos, to - tagtok
-//    );
-//    
+    hemp_elements_append(
+        tmpl->elements, HempElementComment,
+        tagtok, pos, to - tagtok
+    );
+
     *srcptr = to;
 }
 

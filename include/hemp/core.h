@@ -15,6 +15,7 @@
 #include <hemp/config.h>            /* local system configuration           */
 #include <hemp/defines.h>           /* various data definitions             */
 #include <hemp/debug.h>             /* debugging functions/definitions      */
+#include <hemp/error.h>             /* error handling                       */
 #include <hemp/os.h>                /* operating system specific items      */
 #include <hemp/types.h>             /* type definitions                     */
 #include <hemp/memory.h>            /* memory managment                     */

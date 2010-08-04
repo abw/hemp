@@ -15,10 +15,7 @@ main(int argc, char **argv, char **env)
 
 
 void test1_scan(
-    hemp_tag_p  tag,
-    hemp_cstr_p start, 
-    hemp_pos_t  pos, 
-    hemp_cstr_p *src
+    HEMP_TAG_SCAN_ARGS
 ) {
     debug("custom scanner");
 }

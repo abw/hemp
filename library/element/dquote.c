@@ -1,10 +1,11 @@
-#include "hemp/elements.h"
-#include "hemp/debug.h"
+#include <hemp/elements.h>
 
 
-static struct hemp_etype
+static struct hemp_etype_s
     hemp_element_dquote = { 
         "dquote",
+        0,
+        &hemp_element_text_clean,
         &hemp_element_dont_skip,
         &hemp_element_dont_skip,
         &hemp_element_dont_skip,
@@ -13,5 +14,5 @@ static struct hemp_etype
     };
 
 
-hemp_etype_t HempElementDQuote = &hemp_element_dquote;
+hemp_etype_p HempElementDQuote = &hemp_element_dquote;
 

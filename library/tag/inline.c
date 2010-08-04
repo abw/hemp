@@ -1,37 +1,24 @@
 #include <limits.h>
 #include <errno.h>
-#include "hemp/element.h"
-#include "hemp/tags.h"
-#include "hemp/scanner.h"
-
-
-static struct hemp_tag 
-    hemp_inline_tag = { 
-        HEMP_INLINE_TAG,
-        "hemp.tag.inline", 
-        "[%", "%]", 
-        &hemp_scan_inline_tag 
-    };
-
-
-hemp_tag_t HempTagInline = &hemp_inline_tag;
-
+#include <hemp/element.h>
+#include <hemp/tag.h>
+#include <hemp/scanner.h>
 
 
 void 
 hemp_scan_inline_tag(
-    hemp_template_t tmpl,
-    hemp_tag_t      tag,
-    hemp_cstr_t     tagtok,
+    hemp_template_p tmpl,
+    hemp_tag_p      tag,
+    hemp_cstr_p     tagtok,
     hemp_pos_t      pos,
-    hemp_cstr_t     *srcptr
+    hemp_cstr_p     *srcptr
 ) {
-    hemp_cstr_t     src    = *srcptr,
+    hemp_cstr_p     src    = *srcptr,
                     from   = src,
                     point;
-    hemp_name_t     tagend = tag->end;
+    hemp_cstr_p     tagend = tag->end;
     hemp_size_t     endlen = strlen(tagend);
-    hemp_element_t  element;
+    hemp_element_p  element;
     hemp_num_t      num_val;
     hemp_int_t      int_val;
     hemp_bool_t     is_int, is_fixed;
@@ -123,13 +110,13 @@ hemp_scan_inline_tag(
                 from, pos, src - from
             );
         }
-        else if (*src == HEMP_CHAR_SQUOTE) {
+        else if (*src == HEMP_SQUOTE) {
             /* single quotes */
             is_fixed = HEMP_TRUE;
 
             /* walk to the end */
-            while ( * ++src && *src != HEMP_CHAR_SQUOTE ) {
-                if (*src == HEMP_CHAR_SLASH) {
+            while ( * ++src && *src != HEMP_SQUOTE ) {
+                if (*src == HEMP_BACKSLASH) {
                     src++;
                     is_fixed = HEMP_FALSE;
                 }
@@ -150,33 +137,33 @@ hemp_scan_inline_tag(
 
             if (is_fixed) {
                 /* we can generate the output text from the source token */
-                hemp_set_flag(element, HEMP_FLAG_FIXED);
+                hemp_set_flag(element, HEMP_IS_FIXED);
             }
             else {
                 /* we need to create a new string with escapes resolved */
-                hemp_cstr_t squote = 
-                element->value.text = hemp_mem_init(src - from - 1);
-                hemp_cstr_t sqfrom = from + 1;
+                hemp_cstr_p squote  = 
+                element->value.text = (hemp_cstr_p) hemp_mem_alloc(src - from - 1);
+                hemp_cstr_p sqfrom  = from + 1;
                     
                 while (sqfrom < src) {
                     /* skip past the '\' if we've got "\\" or "\'" */
-                    if (*sqfrom == HEMP_CHAR_SLASH 
-                    && ( *(sqfrom + 1) == HEMP_CHAR_SQUOTE 
-                    ||   *(sqfrom + 1) == HEMP_CHAR_SLASH ))
+                    if (*sqfrom == HEMP_BACKSLASH 
+                    && ( *(sqfrom + 1) == HEMP_SQUOTE 
+                    ||   *(sqfrom + 1) == HEMP_BACKSLASH ))
                         sqfrom++;
 
                     *squote++ = *sqfrom++;
                 }
-                *--squote = HEMP_CHAR_NUL;
+                *--squote = HEMP_NUL;
             }
         }
-        else if (*src == HEMP_CHAR_DQUOTE) {
+        else if (*src == HEMP_DQUOTE) {
             /* double quotes */
             is_fixed = HEMP_TRUE;
 
             /* walk to the end */
-            while ( * ++src && *src != HEMP_CHAR_DQUOTE ) {
-                if (*src == HEMP_CHAR_SLASH) {
+            while ( * ++src && *src != HEMP_DQUOTE ) {
+                if (*src == HEMP_BACKSLASH) {
                     src++;
                     is_fixed = HEMP_FALSE;
                 }
@@ -198,33 +185,33 @@ hemp_scan_inline_tag(
 
             if (is_fixed) {
                 /* we can generate the output text from the source token */
-                hemp_set_flag(element, HEMP_FLAG_FIXED);
+                hemp_set_flag(element, HEMP_IS_FIXED);
             }
             else {
                 /* we need to create a new string with escapes resolved */
-                hemp_cstr_t dquote  = 
-                element->value.text = hemp_mem_init(src - from - 1);
-                hemp_cstr_t dqfrom  = from + 1;
+                hemp_cstr_p dquote  = 
+                element->value.text = hemp_mem_alloc(src - from - 1);
+                hemp_cstr_p dqfrom  = from + 1;
 
                 while (dqfrom < src) {
                     /* skip past the '\' if we've got "\\" or "\'" */
-                    if (*dqfrom == HEMP_CHAR_SLASH) {
+                    if (*dqfrom == HEMP_BACKSLASH) {
                         switch (*(dqfrom + 1)) {
-                            case HEMP_CHAR_DQUOTE:
-                            case HEMP_CHAR_SLASH:
+                            case HEMP_DQUOTE:
+                            case HEMP_BACKSLASH:
                                 /* \" or \\  =>  " or \ */
                                 dqfrom++;
                                 break;
 
                             case 'n':
                                 /* \n => newline (currently just LF) */
-                                *dquote++ = HEMP_CHAR_NL;
+                                *dquote++ = HEMP_NL;
                                 dqfrom += 2;
                                 break;
 
                             case 't':
                                 /* \t => tab */
-                                *dquote++ = HEMP_CHAR_TAB;
+                                *dquote++ = HEMP_TAB;
                                 dqfrom += 2;
                                 break;
 
@@ -237,19 +224,19 @@ hemp_scan_inline_tag(
                         *dquote++ = *dqfrom++;
                     }
                 }
-                *--dquote = HEMP_CHAR_NUL;
+                *--dquote = HEMP_NUL;
             }
         }
-        else if (*src == HEMP_CHAR_COMMENT) {
+        else if (*src == HEMP_COMMENT) {
             /* walk to the end of line or end of tag */
             while (* ++src) {
-                if (*src == HEMP_CHAR_LF) {
+                if (*src == HEMP_LF) {
                     src++;
                     break;
                 }
-                else if (*src == HEMP_CHAR_CR) {
+                else if (*src == HEMP_CR) {
                     src++;
-                    if (*src == HEMP_CHAR_LF)
+                    if (*src == HEMP_LF)
                         src++;
                     break;
                 }

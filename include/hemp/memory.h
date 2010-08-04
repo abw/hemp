@@ -82,7 +82,7 @@ void hemp_mem_fail(hemp_cstr_p);
     #define hemp_mem_resize(memory, size)   realloc(memory, size)
     #define hemp_mem_free(memory)           free(memory)
     #define hemp_cstr_copy(src)             strdup(src)
-    #define hemp_mem_trace_report(verbose) -1
+//    #define hemp_mem_trace_report(verbose) -1
     #define hemp_mem_trace_reset()
 #endif
 
