@@ -1,9 +1,11 @@
 #include <hemp.h>
 
 
+void hemp_init_extra(hemp_p);
+
 
 /*--------------------------------------------------------------------------
- * hemp object initialisation and cleanup functions
+ * hemp object initialisation functions
  *--------------------------------------------------------------------------*/
 
 hemp_p
@@ -15,13 +17,17 @@ hemp_init() {
     if (! hemp)
         hemp_mem_fail("hemp");
 
+    hemp->schemes  = hemp_hash_init();
     hemp->elements = hemp_factory_init();
-    hemp_element_constructor(
-        hemp, "hemp.number.*", (hemp_actor_f) &hemp_element_number_constructor
-    );
+    hemp->grammars = hemp_factory_init();
+    hemp->dialects = hemp_factory_init();
 
-    hemp_init_schemes(hemp);
-    hemp_init_dialects(hemp);
+    /* install the cleaners to automatically tidy up */
+    hemp->elements->cleaner = &hemp_free_element;
+    hemp->grammars->cleaner = &hemp_free_grammar;
+    hemp->dialects->cleaner = &hemp_free_dialect;
+
+    hemp_init_extra(hemp);
     hemp_init_templates(hemp);
 
     /* install error messages - may want to localise these one day */
@@ -48,17 +54,55 @@ hemp_init() {
 
 
 void
+hemp_init_extra(
+    hemp_p hemp
+) {
+    /* extra initialisation stuff that should eventually be moved out into
+     * a separate language initialisation function
+     */
+
+    hemp_add_scheme(
+        hemp,
+        hemp_scheme_init(
+            HEMP_TEXT,
+            &hemp_scheme_text_namer,
+            &hemp_scheme_text_checker,
+            &hemp_scheme_text_reader
+        )
+    );
+
+    hemp_add_scheme(
+        hemp,
+        hemp_scheme_init(
+            HEMP_FILE,
+            &hemp_scheme_file_namer,
+            &hemp_scheme_file_checker,
+            &hemp_scheme_file_reader
+        )
+    );
+
+    hemp_element_constructor(
+        hemp, "hemp.number.*", (hemp_actor_f) &hemp_element_number_constructor
+    );
+
+    hemp_dialect_constructor(
+        hemp, HEMP_TT3, (hemp_actor_f) &hemp_dialect_tt3
+    );
+
+}
+
+
+/*--------------------------------------------------------------------------
+ * hemp object cleanup functions
+ *--------------------------------------------------------------------------*/
+
+void
 hemp_free(
     hemp_p hemp
 ) {
     /* templates */
     hemp_hash_each(hemp->templates, &hemp_free_template);
     hemp_hash_free(hemp->templates);
-
-    /* dialects */
-    hemp_hash_each(hemp->dialects, &hemp_free_dialect);
-    hemp_hash_free(hemp->dialects);
-    hemp_hash_free(hemp->dialect_registry);
 
     /* tags */
 //  hemp_hash_each(hemp->tags, &hemp_tagset_free_tag);
@@ -68,8 +112,10 @@ hemp_free(
     hemp_hash_each(hemp->schemes, &hemp_free_scheme);
     hemp_hash_free(hemp->schemes);
 
-    /* elements */
+    /* free factories */
     hemp_factory_free(hemp->elements);
+    hemp_factory_free(hemp->grammars);
+    hemp_factory_free(hemp->dialects);
 
     /* free parent jump buffer, discard all others (statically allocated) */
     hemp_jump_p j = hemp->jump;
@@ -93,34 +139,58 @@ hemp_free(
 }
 
 
+hemp_bool_t
+hemp_free_element(
+    hemp_hash_p         elements,
+    hemp_pos_t          position,
+    hemp_hash_item_p    item
+) {
+//    debug("cleaning %s element\n", ((hemp_etype_p) item->value)->name);
+//    hemp_element_free( (hemp_element_p) item->value );
+    return HEMP_TRUE;
+}
+
+
+hemp_bool_t
+hemp_free_dialect(
+    hemp_hash_p         dialects,
+    hemp_pos_t          position,
+    hemp_hash_item_p    item
+) {
+    debug("cleaning %s dialect\n", ((hemp_dialect_p) item->value)->name);
+    hemp_dialect_free( (hemp_dialect_p) item->value );
+    return HEMP_TRUE;
+}
+
+
+hemp_bool_t
+hemp_free_grammar(
+    hemp_hash_p         grammars,
+    hemp_pos_t          position,
+    hemp_hash_item_p    item
+) {
+    debug("cleaning %s grammar\n", ((hemp_grammar_p) item->value)->name);
+    hemp_grammar_free( (hemp_grammar_p) item->value );
+    return HEMP_TRUE;
+}
+
+
+hemp_bool_t
+hemp_free_scheme(
+    hemp_hash_p         schemes,
+    hemp_pos_t          position,
+    hemp_hash_item_p    item
+) {
+    debug("cleaning %s scheme\n", ((hemp_scheme_p) item->value)->name);
+    hemp_scheme_free( (hemp_scheme_p) item->value );
+    return HEMP_TRUE;
+}
+
+
+
 /*--------------------------------------------------------------------------
  * dialect management
  *--------------------------------------------------------------------------*/
-
-void
-hemp_init_dialects(
-    hemp_p hemp
-) {
-    hemp->dialects         = hemp_hash_init();
-    hemp->dialect_registry = hemp_hash_init();
-
-    hemp_register_dialect(
-        hemp,
-        HEMP_TT3,
-        &hemp_dialect_tt3
-    );
-}
-
-
-void 
-hemp_register_dialect(
-    hemp_p         hemp,
-    hemp_cstr_p    name,
-    hemp_dialect_f constructor
-) {
-    hemp_hash_store(hemp->dialect_registry, name, constructor);
-}
-
 
 void 
 hemp_add_dialect(
@@ -132,84 +202,10 @@ hemp_add_dialect(
     if (old)
         hemp_dialect_free(old);
 
+    hemp_todo("hemp_add_dialect()");
     debug("adding dialect: %s\n", dialect->name);
 
     hemp_hash_store(hemp->dialects, dialect->name, dialect);
-}
-
-
-hemp_dialect_p
-hemp_dialect(
-    hemp_p      hemp,
-    hemp_cstr_p name
-    // TODO: options
-) {
-    hemp_dialect_p dialect = hemp_hash_fetch(
-        hemp->dialects, name
-    );
-
-    if (! dialect) {
-        /* see if there's a dialect constructor registered which can 
-         * create the dialect for us
-         */
-        hemp_dialect_f constructor = hemp_hash_fetch(
-            hemp->dialect_registry, name
-        );
-
-        if (constructor) {
-            dialect = constructor( hemp_dialect_init(hemp, name) );
-            hemp_hash_store(hemp->dialects, dialect->name, dialect);
-        }
-        else {
-            hemp_fatal("Invalid dialect: %s", name);
-        }
-    }
-    
-    return dialect;
-}
-
-
-hemp_bool_t
-hemp_free_dialect(
-    hemp_hash_p         dialects,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
-) {
-    hemp_dialect_free( (hemp_dialect_p) item->value );
-    return HEMP_TRUE;
-}
-
-
-
-/*--------------------------------------------------------------------------
- * scheme management
- *--------------------------------------------------------------------------*/
-
-void
-hemp_init_schemes(
-    hemp_p hemp
-) {
-    hemp->schemes = hemp_hash_init();
-
-    hemp_add_scheme(
-        hemp,
-        hemp_scheme_init(
-            HEMP_TEXT,
-            &hemp_scheme_text_namer,
-            &hemp_scheme_text_checker,
-            &hemp_scheme_text_reader
-        )
-    );
-
-    hemp_add_scheme(
-        hemp,
-        hemp_scheme_init(
-            HEMP_FILE,
-            &hemp_scheme_file_namer,
-            &hemp_scheme_file_checker,
-            &hemp_scheme_file_reader
-        )
-    );
 }
 
 
@@ -224,17 +220,6 @@ hemp_add_scheme(
         hemp_scheme_free(old);
 
     hemp_hash_store(hemp->schemes, scheme->name, scheme);
-}
-
-
-hemp_bool_t
-hemp_free_scheme(
-    hemp_hash_p         schemes,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
-) {
-    hemp_scheme_free( (hemp_scheme_p) item->value );
-    return HEMP_TRUE;
 }
 
 
@@ -355,7 +340,7 @@ hemp_throw(
 
     va_list args;
     va_start(args, number);
-    hemp_error_p error = hemp_error_initfv(number, format, args);
+    hemp_error_p error = hemp_error_initfv(number, format, &args);
     va_end(args);
 
     error->parent = hemp->error;

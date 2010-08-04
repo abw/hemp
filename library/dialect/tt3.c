@@ -4,8 +4,11 @@
 
 hemp_dialect_p
 hemp_dialect_tt3(
-    hemp_dialect_p dialect
+    hemp_p      hemp,
+    hemp_cstr_p name
 ) {
+    hemp_dialect_p dialect = hemp_dialect_init(hemp, name);
+    
     dialect->prepare = &hemp_dialect_tt3_prepare;
     dialect->scanner = &hemp_scan_text;
     dialect->cleanup = NULL; // &hemp_dialect_tt3_cleanup;

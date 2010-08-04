@@ -40,7 +40,15 @@ An incomplete list of things TODO, in no particular order.
   flexibility of the Perl/Badger approach that allows a main error type to
   be defined (e.g. parse error), along with sub-type and any arguments.
   This should result in a nice error message being generated from the 
-  type/subtype and args.
+  type/subtype and args.  UPDATE: got some of the way there with hemp_throw()
+  and hemp_error_init() functions.  Now need to be able to add things like
+  source position / scope for parse errors.
+
+* Decide what to do about HempElementTagStart, HempElementComment, etc.
+  Ideally they should be encapsulated in a grammar definition, but we also
+  want the commonly used elements to be readily available.  We don't want to
+  be doing a hash lookup for known elements, only for dynamically assigned
+  keywords, operators, etc.
 
 ---------
 Short term stack:

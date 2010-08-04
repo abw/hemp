@@ -50,6 +50,7 @@ typedef struct hemp_etype_s     * hemp_etype_p;
 typedef struct hemp_error_s     * hemp_error_p;
 typedef struct hemp_factory_s   * hemp_factory_p;
 typedef struct hemp_filesystem_s *hemp_filesystem_p;
+typedef struct hemp_grammar_s   * hemp_grammar_p;
 typedef struct hemp_hash_s      * hemp_hash_p;
 typedef struct hemp_hash_item_s * hemp_hash_item_p;
 typedef struct hemp_list_s      * hemp_list_p;

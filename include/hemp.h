@@ -12,6 +12,7 @@ extern "C" {
 #include <hemp/elements.h>
 #include <hemp/factory.h>
 #include <hemp/filesystem.h>
+#include <hemp/grammar.h>
 #include <hemp/hash.h>
 #include <hemp/pool.h>
 #include <hemp/ptree.h>
@@ -37,9 +38,8 @@ extern "C" {
 
 struct hemp_s {
     hemp_factory_p   elements;
-    // TODO: replace these with dialects factory
-    hemp_hash_p      dialects;
-    hemp_hash_p      dialect_registry;
+    hemp_factory_p   grammars;
+    hemp_factory_p   dialects;
 
     hemp_hash_p      schemes;
 //  hemp_hash_p      tags;
@@ -58,26 +58,27 @@ struct hemp_s {
 /* hemp initialisation and cleanup functions */
 hemp_p          hemp_init();
 void            hemp_free(hemp_p);
+hemp_bool_t     hemp_free_element(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
+hemp_bool_t     hemp_free_grammar(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
+hemp_bool_t     hemp_free_dialect(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
+hemp_bool_t     hemp_free_scheme(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
+hemp_bool_t     hemp_free_template(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
 
 /* scheme functions */
 void            hemp_init_schemes(hemp_p);
 void            hemp_add_scheme(hemp_p, hemp_scheme_p);
-hemp_bool_t     hemp_free_scheme(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
 
 #define         hemp_scheme(hemp, name) \
                     (hemp_scheme_p) hemp_hash_fetch(hemp->schemes, name)
 
-/* dialect functions */
-void            hemp_init_dialects(hemp_p);
-void            hemp_register_dialect(hemp_p, hemp_cstr_p, hemp_dialect_f);
-void            hemp_add_dialect(hemp_p, hemp_dialect_p);
-hemp_bool_t     hemp_free_dialect(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
-
-hemp_dialect_p  hemp_dialect(hemp_p, hemp_cstr_p);
-
-
 /* source functions */
 hemp_source_p   hemp_source(hemp_p, hemp_cstr_p, hemp_cstr_p);
+
+/* template functions */
+void            hemp_init_templates(hemp_p);
+hemp_template_p hemp_template(hemp_p, hemp_cstr_p, hemp_cstr_p, hemp_cstr_p);
+
+void            hemp_throw(hemp_p, hemp_errno_e, ...);
 
 /* tag functions */
 //void            hemp_init_tags(hemp_p);
@@ -88,15 +89,9 @@ hemp_source_p   hemp_source(hemp_p, hemp_cstr_p, hemp_cstr_p);
 //                    (hemp_tag_p) hemp_hash_fetch(hemp->tags, name)
 
 
-/* template functions */
-void            hemp_init_templates(hemp_p);
-hemp_bool_t     hemp_free_template(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
-hemp_template_p hemp_template(hemp_p, hemp_cstr_p, hemp_cstr_p, hemp_cstr_p);
 
 
-/* element functions */
-//void            hemp_element_constructor(hemp_p, hemp_cstr_p, hemp_actor_f);
-//void            hemp_element_instance(hemp_p, hemp_cstr_p);
+/* element macros */
 
 #define hemp_element_constructor(hemp,name,constructor)     \
     hemp_factory_constructor(                               \
@@ -116,8 +111,58 @@ hemp_template_p hemp_template(hemp_p, hemp_cstr_p, hemp_cstr_p, hemp_cstr_p);
         hemp_element_p _elem = (hemp_element_p) hemp_factory_instance(      \
             hemp->elements, name                                            \
         );                                                                  \
-        if (! _elem) HEMP_THROW(HEMP_ERROR_INVALID);                       \
-        _elem;   \
+        if (! _elem) hemp_throw(hemp, HEMP_ERROR_INVALID, "element", name); \
+        _elem;                                                              \
+    })
+
+
+/* grammar macros */
+
+#define hemp_grammar_constructor(hemp,name,constructor)     \
+    hemp_factory_constructor(                               \
+        hemp->grammars,                                     \
+        name,                                               \
+        constructor,                                        \
+        hemp                                                \
+    )
+
+#define hemp_grammar_instance(hemp,name)                    \
+    hemp_factory_instance(                                  \
+        hemp->grammars,                                     \
+        name                                                \
+    )
+
+#define hemp_grammar(hemp,name) ({                                          \
+        hemp_grammar_p _gram = (hemp_grammar_p) hemp_factory_instance(      \
+            hemp->grammars, name                                            \
+        );                                                                  \
+        if (! _gram) hemp_throw(hemp, HEMP_ERROR_INVALID, "grammar", name); \
+        _gram;                                                              \
+    })
+
+
+/* dialect macros */
+
+#define hemp_dialect_constructor(hemp,name,constructor)     \
+    hemp_factory_constructor(                               \
+        hemp->dialects,                                     \
+        name,                                               \
+        constructor,                                        \
+        hemp                                                \
+    )
+
+#define hemp_dialect_instance(hemp,name)                    \
+    hemp_factory_instance(                                  \
+        hemp->dialects,                                     \
+        name                                                \
+    )
+
+#define hemp_dialect(hemp,name) ({                                          \
+        hemp_dialect_p _dial = (hemp_dialect_p) hemp_factory_instance(      \
+            hemp->dialects, name                                            \
+        );                                                                  \
+        if (! _dial) hemp_throw(hemp, HEMP_ERROR_INVALID, "dialect", name); \
+        _dial;                                                              \
     })
 
 
@@ -125,14 +170,7 @@ hemp_template_p hemp_template(hemp_p, hemp_cstr_p, hemp_cstr_p, hemp_cstr_p);
 //hemp_bool_t hemp_register_dialect(hemp_t, hemp_cstr_t, hemp_build_fn);
 //void        hemp_hello();
 //hemp_cstr_t hemp_render(hemp_cstr_t scheme, hemp_cstr_t source);
-//
-//
-//#define hemp_dialect(hemp, name) \
-//    (hemp_dialect_t) hemp_hash_fetch(hemp->dialects, name)
-//
-//#define hemp_add_dialect(hemp, name, dialect) \
-//    hemp_hash_store(hemp->dialects, name, (hemp_ptr_t) dialect)
-//
+
 
 #if defined(__cplusplus)
 }  /* extern "C" { */

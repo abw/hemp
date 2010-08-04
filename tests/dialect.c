@@ -21,10 +21,10 @@ void test_dialect() {
     hemp_p hemp = hemp_init();
     ok( hemp, "created hemp object" );
 
-    hemp_dialect_p dialect = hemp_dialect(hemp, "tt3");
+    hemp_dialect_p dialect = hemp_dialect_instance(hemp, "tt3");
     ok( dialect, "fetched %s dialect", dialect->name );
 
-    dialect = hemp_dialect(hemp, "tt3");
+    dialect = hemp_dialect_instance(hemp, "tt3");
     ok( dialect, "fetched %s dialect again", dialect->name );
 
     hemp_free(hemp);

@@ -35,13 +35,14 @@
 #define HEMP_TT3            "tt3"
 
 /* default setting for various internals */
-#define HEMP_BUFFER_SIZE    256
-#define HEMP_MESSAGE_SIZE   2048
-#define HEMP_ELEMENTS_SIZE  32
+#define HEMP_BUFFER_SIZE    256     /* size of uri/name lookup buffers      */
+#define HEMP_MESSAGE_SIZE   2048    /* size of message/error buffers        */
+#define HEMP_HASH_DENSITY   5       /* max hash density before resizing     */
+#define HEMP_ELEMENTS_SIZE  32      /* # of elements allocated per slab     */
+#define HEMP_OPERATORS_SIZE 32      /* # of operators allocated per slab    */
+#define HEMP_PTREE_SIZE     8       /* # of bucket chains in a ptree        */
 #define HEMP_VTYPES_SIZE    8
 #define HEMP_TAGSET_SIZE    8
-#define HEMP_PTREE_SIZE     8
-#define HEMP_HASH_DENSITY   5    /* max entries/width before increasing width */
 
 /* element flags */
 #define HEMP_IS_FIXED       0x0001
