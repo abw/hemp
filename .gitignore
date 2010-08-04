@@ -17,6 +17,7 @@ tests/elements
 tests/error
 tests/factory
 tests/filesystem
+tests/grammar
 tests/hash
 tests/hemp
 tests/list
