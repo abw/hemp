@@ -35,12 +35,18 @@ hemp_bool_t
         hemp_hash_item_p    item
     );
 
-void
-    hemp_factory_constructor(    /* register an instance constructor action */
+hemp_action_p
+    hemp_factory_register(      /* register a constructor action            */
         hemp_factory_p  factory,
         hemp_cstr_p     name,
         hemp_actor_f    actor,
         hemp_mem_p      script
+    );
+
+hemp_action_p
+    hemp_factory_constructor(   /* fetch a constructor action               */
+        hemp_factory_p  factory,
+        hemp_cstr_p     name
     );
 
 hemp_mem_p

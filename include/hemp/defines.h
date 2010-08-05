@@ -34,6 +34,10 @@
 #define HEMP_FILE           "file"
 #define HEMP_TT3            "tt3"
 
+/* dummy arguments(s) as a fallback for generating error messages */
+#define HEMP_WTF            "<?>"
+#define HEMP_WTFS           HEMP_WTF, HEMP_WTF, HEMP_WTF, HEMP_WTF, HEMP_WTF
+
 /* default setting for various internals */
 #define HEMP_BUFFER_SIZE    256     /* size of uri/name lookup buffers      */
 #define HEMP_MESSAGE_SIZE   2048    /* size of message/error buffers        */

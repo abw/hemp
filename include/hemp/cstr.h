@@ -20,6 +20,12 @@ typedef struct hemp_cstr_split_s * hemp_cstr_split_p;
     strncmp(s1, s2, n) == 0         \
 )
 
+#define hemp_cstr_clone(s,n) ({             \
+    hemp_cstr_p _clone = hemp_cstr_copy(s); \
+    if (! _clone) hemp_mem_fail(n);         \
+    _clone;                                 \
+})
+
 hemp_list_p
     hemp_cstr_split(
         hemp_cstr_p source,

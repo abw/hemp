@@ -48,27 +48,5 @@ hemp_template_p
     );
 
 
-/*--------------------------------------------------------------------------
- * function prototypes for specific dialects
- *--------------------------------------------------------------------------*/
-
-hemp_dialect_p
-    hemp_dialect_tt3();
-
-hemp_template_p
-    hemp_dialect_tt3_prepare(
-        hemp_template_p tmpl
-    );
-
-hemp_bool_t
-    hemp_dialect_tt3_scanner(
-        hemp_template_p tmpl
-    );
-
-void
-    hemp_dialect_tt3_cleanup(
-        hemp_template_p tmpl
-    );
-
 
 #endif /* HEMP_DIALECT_H */

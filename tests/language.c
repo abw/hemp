@@ -1,9 +1,7 @@
 #include <hemp.h>
 #include <tap.h>
 
-void test_grammar();
-void test_hemp_grammar();
-void test_hemp_grammar_hemp();
+void test_language();
 
 
 int
@@ -13,7 +11,7 @@ main(
     char **env
 ) {
     plan_tests(14);
-    test_grammar();
+    test_language();
     hemp_mem_trace_ok();
     hemp_mem_trace_reset();
 
@@ -33,24 +31,10 @@ void test_grammar() {
     hemp_p hemp = hemp_init();
     ok( hemp, "created hemp object" );
     
-    hemp_grammar_p language = hemp_language(hemp, HEMP_TT3);
-    hemp_grammar_p grammar;
+    hemp_grammar_p grammar = hemp_grammar(hemp, HEMP_TT3);
+    ok( grammar, "got grammar" );
+    ok( hemp_cstr_eq(grammar->name, "tt3"), "grammar name is tt3" );
 
-    /* calling this multiple times has no effect */
-    hemp_language(hemp, HEMP_TT3);
-    hemp_language(hemp, HEMP_TT3);
-    hemp_language(hemp, HEMP_TT3);
-    hemp_language(hemp, HEMP_TT3);
-    hemp_language(hemp, HEMP_TT3);
-
-    HEMP_TRY;
-        hemp_grammar_p grammar = hemp_grammar(hemp, "tt3.core");
-        ok( grammar, "got grammar" );
-        is( grammar->name, "tt3.core", "grammar name is tt3.core" );
-    HEMP_CATCH_ALL;
-        fail("caught error: %s", hemp->error->message);
-    HEMP_END;
-        
     HEMP_TRY;
         hemp_grammar(hemp, "dud");
         fail("there should be no grammar called 'dud'");
@@ -111,7 +95,6 @@ void test_hemp_grammar() {
     hemp_p hemp = hemp_init();
     ok( hemp, "created hemp object at %p", hemp );
 
-//    hemp_language(hemp, HEMP_TT3);
     hemp_register_grammar(
         hemp, "test", (hemp_actor_f) &hemp_grammar_test
     );

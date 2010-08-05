@@ -35,7 +35,7 @@ void test_element_factory() {
     hemp_p hemp = hemp_init();
     ok( hemp, "created hemp" );
     
-    hemp_element_p elem = hemp_element_instance(hemp, "hemp.number.add");
+    hemp_element_p elem = hemp_element(hemp, "hemp.number.add");
     ok( elem, "got hemp.number.add element" );
     printf("ELEM: %s\n", (char *) elem);
 

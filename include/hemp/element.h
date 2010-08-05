@@ -197,17 +197,34 @@ hemp_text_p
         HEMP_TEXT_PROTO
     );
 
+hemp_text_p
+hemp_element_block_source(
+    hemp_element_p  element,
+    hemp_text_p     text
+);
+
 hemp_mem_p
     hemp_element_number_constructor(
         hemp_p      hemp,
         hemp_cstr_p name
     );
 
+hemp_text_p
+hemp_element_no_text(
+    hemp_element_p  element,
+    hemp_text_p     text
+);
+
 
 void
     hemp_element_text_clean(
         hemp_element_p element
     );
+
+void
+hemp_element_block_clean(
+    hemp_element_p element
+);
 
 
 /*--------------------------------------------------------------------------

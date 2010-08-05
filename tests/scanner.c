@@ -41,6 +41,8 @@ void test_script(
     hemp_template_p tmpl;
     hemp_size_t     n;
 
+    hemp_language(hemp, "tt3");
+
     if (! text) {
         fail("could not read test script: %s", path);
         return;

@@ -5,6 +5,13 @@
  * static element structures
  *--------------------------------------------------------------------------*/
 
+/* NOTE: I'm experimenting with replacing these with constructor functions
+ * (see language/hemp) which generate the element types (now called symbols)
+ * on demand when they are added to a grammar.  This allows us to also define
+ * precedence values at the same time without having to hard-code them for 
+ * all possible uses
+ */
+
 static struct hemp_etype_s
     hemp_element_space = { 
         "space",
@@ -110,5 +117,18 @@ hemp_element_eof_text(
         text = hemp_text_init(8);           // TODO: have a dedicate empty string
 
     hemp_text_append_cstr(text, "--EOF--");
+    return text;
+}
+
+hemp_text_p
+hemp_element_no_text(
+    hemp_element_p  element,
+    hemp_text_p     text
+) {
+    debug_call("hemp_element_no_text()\n");
+    
+    if (! text)
+        text = hemp_text_init(0);           // TODO: have a dedicate empty string
+
     return text;
 }

@@ -20,14 +20,8 @@ hemp_dialect_init(
     dialect->scanner = NULL;
     dialect->cleanup = NULL;
     dialect->hemp    = hemp;
-    dialect->name    = hemp_cstr_copy(name);
+    dialect->name    = hemp_cstr_clone(name, "dialect name");
     dialect->tags    = hemp_hash_init();
-
-    if (! dialect->name)
-        hemp_mem_fail("dialect name");
-
-    if (! dialect->tags)
-        hemp_mem_fail("dialect tags");
 
 //    dialect->tagset  = hemp_tagset_init();
 //    dialect->scanner = &hemp_scan_text;

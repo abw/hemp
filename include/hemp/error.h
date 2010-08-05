@@ -1,12 +1,8 @@
 #ifndef HEMP_ERROR_H
 #define HEMP_ERROR_H
 
-#include <setjmp.h>
 #include <hemp/types.h>
 
-typedef jmp_buf                 hemp_jump_b;
-typedef struct hemp_jump_s      hemp_jump_t;
-typedef struct hemp_jump_s    * hemp_jump_p;
 
 typedef enum { 
     HEMP_ERROR_NONE = 0,
@@ -14,6 +10,7 @@ typedef enum {
     HEMP_ERROR_MEMORY,
     HEMP_ERROR_MISSING,
     HEMP_ERROR_INVALID,
+    HEMP_ERROR_DUPLICATE,
     HEMP_ERROR_MAX
 } hemp_errno_e;
 
@@ -23,7 +20,9 @@ static hemp_cstr_p hemp_errmsg[] = {
     "Unknown error",
     "Memory allocation failed",
     "No %s specified",
-    "Invalid %s specified: %s"
+    "Invalid %s specified: %s",
+    "Duplicate %s specified: %s",
+    NULL
 };
 
 struct hemp_jump_s {

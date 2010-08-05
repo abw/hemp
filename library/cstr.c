@@ -6,6 +6,7 @@
  * basic c string manipulation functions
  *--------------------------------------------------------------------------*/
 
+
 hemp_cstr_p
 hemp_cstr_extract(
     hemp_cstr_p from,

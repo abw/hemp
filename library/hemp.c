@@ -17,50 +17,37 @@ hemp_init() {
     if (! hemp)
         hemp_mem_fail("hemp");
 
-    hemp->schemes  = hemp_hash_init();
-    hemp->elements = hemp_factory_init();
-    hemp->grammars = hemp_factory_init();
-    hemp->dialects = hemp_factory_init();
+    hemp->schemes   = hemp_hash_init();
+    hemp->languages = hemp_factory_init();
+    hemp->dialects  = hemp_factory_init();
+    hemp->grammars  = hemp_factory_init();
+    hemp->elements  = hemp_factory_init();
 
     /* install the cleaners to automatically tidy up */
-    hemp->elements->cleaner = &hemp_free_element;
-    hemp->grammars->cleaner = &hemp_free_grammar;
-    hemp->dialects->cleaner = &hemp_free_dialect;
+    hemp->languages->cleaner = &hemp_free_language;
+    hemp->dialects->cleaner  = &hemp_free_dialect;
+    hemp->grammars->cleaner  = &hemp_free_grammar;
+    hemp->elements->cleaner  = &hemp_free_element;
 
-    hemp_init_extra(hemp);
+    hemp_init_schemes(hemp);
     hemp_init_templates(hemp);
+    hemp_init_errors(hemp);
 
-    /* install error messages - may want to localise these one day */
-    hemp->errmsg = hemp_errmsg;
-    hemp->error  = NULL;
+//    hemp_language_hemp_inite_hemp_init(hemp);
+    HEMP_LANGUAGE("hemp", &hemp_language_hemp_init);
+    HEMP_LANGUAGE("tt3",  &hemp_language_tt3_init);
 
-    /* define parent longjmp buffer for error handling */
-    hemp->jump = (hemp_jump_p) hemp_mem_alloc(
-        sizeof(hemp_jump_t)
-    );
-    if (! hemp->jump)
-        hemp_mem_fail("jump buffer");
-    
-    hemp->jump->parent = NULL;
-    hemp->jump->depth  = 0;
-
-    hemp_errno_e e = setjmp(hemp->jump->buffer);
-    if (e) {
-        hemp_fatal("uncaught error: %d", e);
-    }
+    hemp_language_p language = hemp_language(hemp, "hemp");
+//  debug_magenta("LANGUAGE: %s v%0.2f\n", language->name, language->version);
 
     return hemp;
 }
 
 
 void
-hemp_init_extra(
+hemp_init_schemes(
     hemp_p hemp
 ) {
-    /* extra initialisation stuff that should eventually be moved out into
-     * a separate language initialisation function
-     */
-
     hemp_add_scheme(
         hemp,
         hemp_scheme_init(
@@ -80,15 +67,43 @@ hemp_init_extra(
             &hemp_scheme_file_reader
         )
     );
+}
 
-    hemp_element_constructor(
-        hemp, "hemp.number.*", (hemp_actor_f) &hemp_element_number_constructor
+
+void
+hemp_init_errors(
+    hemp_p hemp
+) {
+    /* install error messages - may want to localise these one day */
+    hemp->errmsg = hemp_errmsg;
+    hemp->error  = NULL;
+
+    /* define parent longjmp buffer for error handling */
+    hemp->jump = (hemp_jump_p) hemp_mem_alloc(
+        sizeof(hemp_jump_t)
     );
+    if (! hemp->jump)
+        hemp_mem_fail("jump buffer");
+    
+    hemp->jump->parent = NULL;
+    hemp->jump->depth  = 0;
 
-    hemp_dialect_constructor(
-        hemp, HEMP_TT3, (hemp_actor_f) &hemp_dialect_tt3
-    );
+//  debug("setting error handling jump point in hemp at %p\n", hemp);
 
+    hemp_errno_e e = setjmp(hemp->jump->buffer);
+
+    if (e) {
+//        debug("uncaught error in hemp at %p\n", hemp);
+//        if (hemp->error && hemp->error->message) {
+//            hemp_fatal(hemp->error->message);
+//        }
+////        else if (e > 0 && e < HEMP_ERROR_MAX) {
+////            hemp_fatal("%s", hemp_errmsg[e], HEMP_WTFS);
+////        }
+//        else {
+            hemp_fatal("uncaught error code: %d", e);
+//        }
+    }
 }
 
 
@@ -108,14 +123,15 @@ hemp_free(
 //  hemp_hash_each(hemp->tags, &hemp_tagset_free_tag);
 //  hemp_hash_free(hemp->tags);
 
-    /* schemes */
-    hemp_hash_each(hemp->schemes, &hemp_free_scheme);
-    hemp_hash_free(hemp->schemes);
-
     /* free factories */
     hemp_factory_free(hemp->elements);
     hemp_factory_free(hemp->grammars);
     hemp_factory_free(hemp->dialects);
+    hemp_factory_free(hemp->languages);
+
+    /* schemes */
+    hemp_hash_each(hemp->schemes, &hemp_free_scheme);
+    hemp_hash_free(hemp->schemes);
 
     /* free parent jump buffer, discard all others (statically allocated) */
     hemp_jump_p j = hemp->jump;
@@ -139,6 +155,54 @@ hemp_free(
 }
 
 
+
+hemp_bool_t
+hemp_free_scheme(
+    hemp_hash_p         schemes,
+    hemp_pos_t          position,
+    hemp_hash_item_p    item
+) {
+//  debug("cleaning %s scheme\n", ((hemp_scheme_p) item->value)->name);
+    hemp_scheme_free( (hemp_scheme_p) item->value );
+    return HEMP_TRUE;
+}
+
+
+hemp_bool_t
+hemp_free_language(
+    hemp_hash_p         languages,
+    hemp_pos_t          position,
+    hemp_hash_item_p    item
+) {
+    hemp_language_free( (hemp_language_p) item->value );
+    return HEMP_TRUE;
+}
+
+
+hemp_bool_t
+hemp_free_dialect(
+    hemp_hash_p         dialects,
+    hemp_pos_t          position,
+    hemp_hash_item_p    item
+) {
+//  debug("cleaning %s dialect\n", ((hemp_dialect_p) item->value)->name);
+    hemp_dialect_free( (hemp_dialect_p) item->value );
+    return HEMP_TRUE;
+}
+
+
+hemp_bool_t
+hemp_free_grammar(
+    hemp_hash_p         grammars,
+    hemp_pos_t          position,
+    hemp_hash_item_p    item
+) {
+//  debug("cleaning %s grammar\n", ((hemp_grammar_p) item->value)->name);
+    hemp_grammar_free( (hemp_grammar_p) item->value );
+    return HEMP_TRUE;
+}
+
+
 hemp_bool_t
 hemp_free_element(
     hemp_hash_p         elements,
@@ -151,41 +215,24 @@ hemp_free_element(
 }
 
 
-hemp_bool_t
-hemp_free_dialect(
-    hemp_hash_p         dialects,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
+
+
+/*--------------------------------------------------------------------------
+ * element management
+ *--------------------------------------------------------------------------*/
+
+void 
+hemp_register_elements(
+    hemp_p         hemp, 
+    hemp_symbols_p symbols
 ) {
-    debug("cleaning %s dialect\n", ((hemp_dialect_p) item->value)->name);
-    hemp_dialect_free( (hemp_dialect_p) item->value );
-    return HEMP_TRUE;
+    while (symbols && symbols->name) {
+        hemp_factory_register(
+            hemp->elements, symbols->name, (hemp_actor_f) symbols->constructor, hemp
+        );
+        symbols++;
+    }
 }
-
-
-hemp_bool_t
-hemp_free_grammar(
-    hemp_hash_p         grammars,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
-) {
-    debug("cleaning %s grammar\n", ((hemp_grammar_p) item->value)->name);
-    hemp_grammar_free( (hemp_grammar_p) item->value );
-    return HEMP_TRUE;
-}
-
-
-hemp_bool_t
-hemp_free_scheme(
-    hemp_hash_p         schemes,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
-) {
-    debug("cleaning %s scheme\n", ((hemp_scheme_p) item->value)->name);
-    hemp_scheme_free( (hemp_scheme_p) item->value );
-    return HEMP_TRUE;
-}
-
 
 
 /*--------------------------------------------------------------------------

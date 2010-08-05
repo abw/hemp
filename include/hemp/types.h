@@ -26,6 +26,8 @@ typedef unsigned long           hemp_uint_t;    /* generic unsigned int     */
 typedef unsigned long           hemp_size_t;    /* +ve size of list         */
 typedef unsigned long           hemp_pos_t;     /* +ve posn. in string/list */
 typedef unsigned short int      hemp_prec_t;    /* operator precedence      */
+typedef jmp_buf                 hemp_jump_b;    /* longjmp buffer           */
+typedef struct hemp_jump_s      hemp_jump_t;    /* longjmp call chain       */ 
 
 
 /*--------------------------------------------------------------------------
@@ -53,6 +55,8 @@ typedef struct hemp_filesystem_s *hemp_filesystem_p;
 typedef struct hemp_grammar_s   * hemp_grammar_p;
 typedef struct hemp_hash_s      * hemp_hash_p;
 typedef struct hemp_hash_item_s * hemp_hash_item_p;
+typedef struct hemp_jump_s      * hemp_jump_p;
+typedef struct hemp_language_s  * hemp_language_p;
 typedef struct hemp_list_s      * hemp_list_p;
 typedef struct hemp_pnode_s     * hemp_pnode_p;
 typedef struct hemp_pool_s      * hemp_pool_p;
@@ -61,6 +65,8 @@ typedef struct hemp_scheme_s    * hemp_scheme_p;
 typedef struct hemp_scope_s     * hemp_scope_p;
 typedef struct hemp_slab_s      * hemp_slab_p;
 typedef struct hemp_source_s    * hemp_source_p;
+typedef struct hemp_symbol_s    * hemp_symbol_p;
+typedef struct hemp_symbols_s   * hemp_symbols_p;
 typedef struct hemp_tag_s       * hemp_tag_p;
 typedef struct hemp_tagset_s    * hemp_tagset_p;
 typedef struct hemp_template_s  * hemp_template_p;
@@ -90,6 +96,30 @@ typedef struct hemp_value       * hemp_value_t;
 typedef struct hemp_templates_s * hemp_templates_p;
 */
 
+
+/*--------------------------------------------------------------------------
+ * main hemp data structure
+ *--------------------------------------------------------------------------*/
+
+struct hemp_s {
+    hemp_factory_p   languages;
+    hemp_factory_p   elements;
+    hemp_factory_p   grammars;
+    hemp_factory_p   dialects;
+
+    hemp_hash_p      schemes;
+//  hemp_hash_p      tags;
+    hemp_hash_p      templates;
+    hemp_dialect_p   dialect;
+
+    hemp_bool_t      verbose;
+    hemp_bool_t      debug;
+//  hemp_hash_t dialect_factory;
+    hemp_jump_p      jump;
+    hemp_error_p     error;
+    hemp_cstr_p     *errmsg;
+};
+
 /*--------------------------------------------------------------------------
  * function pointers
  *--------------------------------------------------------------------------*/
@@ -106,6 +136,12 @@ typedef hemp_bool_t
         hemp_hash_p      hash,      /* pointer to hash                      */ 
         hemp_pos_t       index,     /* 0-based index of item in hash        */
         hemp_hash_item_p item       /* pointer to hash item entry           */
+    );
+
+typedef hemp_symbol_p
+    (* hemp_symbol_f)(
+        hemp_p        hemp,         /* pointer to current hemp context      */
+        hemp_symbol_p symbol        /* pointer to new symbol to initialise  */
     );
 
 typedef hemp_dialect_p 

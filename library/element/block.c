@@ -21,6 +21,14 @@ static struct hemp_etype_s
 
 hemp_etype_p HempElementBlock = &hemp_element_block;
 
+hemp_text_p
+hemp_element_block_source(
+    hemp_element_p  element,
+    hemp_text_p     text
+) {
+    hemp_todo("hemp_element_block_source()\n");
+}
+
 
 hemp_text_p
 hemp_element_block_text(

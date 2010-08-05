@@ -21,7 +21,9 @@ main(
 void test_template() {
     hemp_p hemp = hemp_init();
     ok( hemp, "created hemp object" );
-    
+
+    hemp_language(hemp, "tt3");
+
     hemp_template_p tmpl = hemp_template(
         hemp, HEMP_TT3, HEMP_TEXT, "Hello World!"
     );

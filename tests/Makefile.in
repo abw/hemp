@@ -37,10 +37,10 @@ build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = action$(EXEEXT) dialect$(EXEEXT) element$(EXEEXT) \
 	elements$(EXEEXT) error$(EXEEXT) factory$(EXEEXT) \
-	filesystem$(EXEEXT) hash$(EXEEXT) list$(EXEEXT) \
-	memory$(EXEEXT) pool$(EXEEXT) ptree$(EXEEXT) scanner$(EXEEXT) \
-	source$(EXEEXT) slab$(EXEEXT) tag$(EXEEXT) tagset$(EXEEXT) \
-	template$(EXEEXT) text$(EXEEXT) utils$(EXEEXT)
+	filesystem$(EXEEXT) grammar$(EXEEXT) hash$(EXEEXT) \
+	list$(EXEEXT) memory$(EXEEXT) pool$(EXEEXT) ptree$(EXEEXT) \
+	scanner$(EXEEXT) source$(EXEEXT) slab$(EXEEXT) tag$(EXEEXT) \
+	tagset$(EXEEXT) template$(EXEEXT) text$(EXEEXT) utils$(EXEEXT)
 subdir = tests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -86,6 +86,10 @@ filesystem_SOURCES = filesystem.c
 filesystem_OBJECTS = filesystem.$(OBJEXT)
 filesystem_LDADD = $(LDADD)
 filesystem_DEPENDENCIES = ../library/libhemp.la tap.o
+grammar_SOURCES = grammar.c
+grammar_OBJECTS = grammar.$(OBJEXT)
+grammar_LDADD = $(LDADD)
+grammar_DEPENDENCIES = ../library/libhemp.la tap.o
 hash_SOURCES = hash.c
 hash_OBJECTS = hash.$(OBJEXT)
 hash_LDADD = $(LDADD)
@@ -152,12 +156,13 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = action.c dialect.c element.c elements.c error.c factory.c \
-	filesystem.c hash.c list.c memory.c pool.c ptree.c scanner.c \
-	slab.c source.c tag.c tagset.c template.c text.c utils.c
-DIST_SOURCES = action.c dialect.c element.c elements.c error.c \
-	factory.c filesystem.c hash.c list.c memory.c pool.c ptree.c \
+	filesystem.c grammar.c hash.c list.c memory.c pool.c ptree.c \
 	scanner.c slab.c source.c tag.c tagset.c template.c text.c \
 	utils.c
+DIST_SOURCES = action.c dialect.c element.c elements.c error.c \
+	factory.c filesystem.c grammar.c hash.c list.c memory.c pool.c \
+	ptree.c scanner.c slab.c source.c tag.c tagset.c template.c \
+	text.c utils.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -379,6 +384,9 @@ factory$(EXEEXT): $(factory_OBJECTS) $(factory_DEPENDENCIES)
 filesystem$(EXEEXT): $(filesystem_OBJECTS) $(filesystem_DEPENDENCIES) 
 	@rm -f filesystem$(EXEEXT)
 	$(LINK) $(filesystem_OBJECTS) $(filesystem_LDADD) $(LIBS)
+grammar$(EXEEXT): $(grammar_OBJECTS) $(grammar_DEPENDENCIES) 
+	@rm -f grammar$(EXEEXT)
+	$(LINK) $(grammar_OBJECTS) $(grammar_LDADD) $(LIBS)
 hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES) 
 	@rm -f hash$(EXEEXT)
 	$(LINK) $(hash_OBJECTS) $(hash_LDADD) $(LIBS)
@@ -432,6 +440,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/factory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filesystem.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/grammar.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory.Po@am__quote@

@@ -21,6 +21,9 @@ libhemp_la_SOURCES  =   action.c              \
                         grammar.c             \
                         hash.c                \
                         hemp.c                \
+                        language.c            \
+                        language/hemp.c       \
+                        language/tt3.c        \
                         list.c                \
                         memory.c              \
                         pool.c                \
@@ -29,6 +32,7 @@ libhemp_la_SOURCES  =   action.c              \
                         scheme.c              \
                         slab.c                \
                         source.c              \
+                        symbol.c              \
                         tag.c                 \
                         tag/comment.c         \
                         tag/control.c         \

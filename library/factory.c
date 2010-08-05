@@ -36,8 +36,8 @@ hemp_factory_free(
 }
 
 
-void 
-hemp_factory_constructor(
+hemp_action_p
+hemp_factory_register(
     hemp_factory_p  factory,
     hemp_cstr_p     name,
     hemp_actor_f    actor,
@@ -46,16 +46,85 @@ hemp_factory_constructor(
     hemp_action_p action = hemp_hash_fetch(
         factory->constructors, name
     );
-    
+
     if (action)
         hemp_action_free(action);
 
     action = hemp_action_init(
         actor, script
     );
+
+//    debug("registering %s action at %p in %p\n", name, action, factory->constructors);
+
     hemp_hash_store(
         factory->constructors, name, action
     );
+    
+    return action;
+}
+
+
+hemp_action_p
+hemp_factory_constructor(
+    hemp_factory_p  factory,
+    hemp_cstr_p     name
+) {
+    debug_call("hemp_factory_constructor(F, %s)\n", name);
+    
+    static hemp_char_t  wildname[HEMP_BUFFER_SIZE];
+    hemp_list_p splits;
+    
+    hemp_action_p constructor = hemp_hash_fetch(
+        factory->constructors, name
+    );
+
+    if (constructor)
+        return constructor;
+
+    /* if we didn't find a constructor for what we wanted, e.g. foo.bar.baz
+     * then we look for a wildcard entry, longest first and give it a chance
+     * to construct the constructor, e.g. ask foo.bar.* to construct baz, and 
+     * if it declines, see if there's a foo.* to construct bar.baz
+     */
+    if ((splits = hemp_cstr_splits(name, HEMP_DOT))) {
+        int n;
+        hemp_cstr_split_p split;
+        hemp_action_p wildcard;
+            
+        for (n = splits->length - 1; n >= 0; n--) {
+            split = (hemp_cstr_split_p) hemp_list_item(splits, n);
+            snprintf(wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
+
+            /* look for a wildcard meta-constructor */
+            wildcard = hemp_hash_fetch(
+                factory->constructors, wildname
+            );
+            if (! wildcard)
+                continue;               /* no dice, try again               */
+
+//          debug_yellow("got wildcard action for %s\n", name);
+
+            /* see if it can generate a constructor */
+            constructor = hemp_action_run(
+//                wildcard, split->right
+                wildcard, name
+            );
+            if (constructor) {
+                hemp_hash_store(
+                    factory->constructors, name, constructor
+                );
+                break;
+            }
+        }
+        hemp_list_free(splits);
+    }
+
+//    if (constructor)
+//        debug_green("returning constructor for %s at %p\n", name, constructor);
+//    else
+//        debug_red("no constructor for %s\n", name);
+
+    return constructor;
 }
 
 
@@ -76,42 +145,20 @@ hemp_factory_instance(
     if (instance)
         return instance;
 
-    hemp_action_p constructor = hemp_hash_fetch(
-        factory->constructors, name
+    hemp_action_p constructor = hemp_factory_constructor(
+        factory, name
     );
 
     if (constructor) {
         instance = hemp_action_run(
             constructor, name
         );
-    }
-    else if ((splits = hemp_cstr_splits(name, HEMP_DOT))) {
-        int n;
-        hemp_cstr_split_p split;
-            
-        for (n = splits->length - 1; n >= 0; n--) {
-            split = (hemp_cstr_split_p) hemp_list_item(splits, n);
-            snprintf(wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
 
-            constructor = hemp_hash_fetch(
-                factory->constructors, wildname
-            );
-            if (! constructor)
-                continue;
-                
-            instance = hemp_action_run(
-                constructor, split->right
-            );
-            if (instance)
-                break;
-        }
-        hemp_list_free(splits);
+        /* TODO: not sure about name.  We used to use dialect->name which is 
+        * guaranteed to be locally duplicated in a dialect */
+        if (instance)
+            hemp_hash_store(factory->instances, name, instance);
     }
-
-    /* TODO: not sure about name.  We used to use dialect->name which is 
-     * guaranteed to be locally duplicated in a dialect */
-    if (instance)
-        hemp_hash_store(factory->instances, name, instance);
 
     return instance;
 }

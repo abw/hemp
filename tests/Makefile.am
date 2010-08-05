@@ -7,6 +7,7 @@ check_PROGRAMS  =   action      \
                     error       \
                     factory     \
                     filesystem  \
+                    grammar     \
                     hash        \
                     list        \
                     memory      \

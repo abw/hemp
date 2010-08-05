@@ -88,6 +88,16 @@
 
 # define skip_end } while(0);
 
+# define is(a, b, msg) (                                                     \
+    (strcmp(a, b) == 0)                                                      \
+        ? _gen_result(1, __func__, __FILE__, __LINE__, msg)                  \
+        : _gen_result(0, __func__, __FILE__, __LINE__,                       \
+            "%s\n%sEXPECT: [%s%s%s]\nOUTPUT: [%s%s%s]",                      \
+            msg, ANSI_CYAN, ANSI_YELLOW, b, ANSI_CYAN, ANSI_RED, a, ANSI_CYAN) \
+    )
+
+
+
 unsigned int _gen_result(int, const char *, char *, unsigned int, char *, ...);
 
 int plan_no_plan(void);
