@@ -21,7 +21,8 @@ An incomplete list of things TODO, in no particular order.
   to represent all the various different element types.
 
 * Decide how to represent values and implement.  I want to try and unify as 
-  much of the API between elements and values as possible.
+  much of the API between elements and values as possible.  Consider
+  nanboxing.
 
 * This is my first time using autotools, and I'm sure I've made plenty of
   nooby mistakes.  The whole autoconf/automake/libtool setup needs cleaning
@@ -49,42 +50,9 @@ An incomplete list of things TODO, in no particular order.
   want the commonly used elements to be readily available.  We don't want to
   be doing a hash lookup for known elements, only for dynamically assigned
   keywords, operators, etc.
-
----------
-Short term stack:
-  * start renaming types: hemp_xxx_s for structs and hemp_xxx_p for pointers.
-    (more for the sake of avoiding namespace collision rather than being
-     pseudo-hungarian notation of sorts)
-
-  * start moving tags, elements, dialects, etc into hub-managed resources
-    (should the hub have a generic resource pool rather than specific ones?)
-    (on second thoughts: move them into hemp - no need for the extra level
-    of indirection - it's a throwback to Perl's handling of circular references
-    which requires a sentinel facade object to explicitly destroy the hub when
-    it goes out of scope and gets garbage collected)
-
-  * dialect needs hemp pointer, dialect_factory needs to provide it
-    - reworking this to use newfactory object
  
-  * template needs fixing wrt to dialect
-  
-  * templates collective for templates.  pointer from template to templates
-    to hemp... on second thoughts, put this straight into the hemp object
+* Add a fallback mechanism to the various factories.  e.g. if a tt3 dialect
+  is requested and not found then the fallback should call hemp_language("tt3")
+  to give it a chance to load it.  Just got to be careful we don't end up in
+  a deathly spiral if we then re-attempt the lookup and it fails again.
 
-  * dialect tagset
-  
-  * dialects in hemp
-
-  * add grammar to tag
-
-  * have dialects construct a tagset from the tags defined in hemp->tags, 
-    grammars in hemp->grammars, etc.
-
-  * decide on names for various decompositions.
-     - system/setup/language/framework:  hemp, tt3  # core definitions
-     - profile: combination of languages/dialects/etc in different places
-     - language/dialect: tt3   # defines tags, tag styles, grammar, config options, 
-     - grammar: tt3 html pod etc
-     - tagset: runtime collection of tags, must be safely mutable (e.g. when 
-       used with [? tags XXX ?]
-     

@@ -37,5 +37,6 @@ tests/benchmark
 tests/ptree
 tests/hub
 tests/memtrace
+tests/tt3
 tests/utils
 tests/value

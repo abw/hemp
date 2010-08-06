@@ -32,21 +32,29 @@ void test_element() {
 
 
 void test_element_factory() {
+    hemp_symbol_p symbol;
+
     hemp_p hemp = hemp_init();
     ok( hemp, "created hemp" );
-    
-    hemp_element_p elem = hemp_element(hemp, "hemp.number.add");
-    ok( elem, "got hemp.number.add element" );
-    printf("ELEM: %s\n", (char *) elem);
-
-    elem = hemp_element(hemp, "hemp.number.add");
-    ok( elem, "got it again" );
-    printf("ELEM: %s\n", (char *) elem);
 
     HEMP_TRY;
-        elem = hemp_element(hemp, "blah.blah");
+        symbol = hemp_symbol(hemp, "hemp.numop.inc", "+");
+        ok( symbol, "got %s symbol", symbol->name );
+        hemp_symbol_free(symbol);
+
+        symbol = hemp_symbol(hemp, "hemp.numop.inc", "+");
+        ok( symbol, "got it again" );
+        hemp_symbol_free(symbol);
+    HEMP_CATCH_ALL;
+        fail("unexpected error: %s", hemp->error->message);
+    HEMP_END;
+
+    HEMP_TRY;
+        symbol = hemp_symbol(hemp, "blah.blah", "dud");
     HEMP_CATCH(HEMP_ERROR_INVALID);
-        pass("caught invalid error");
+        pass("error as expected: %s", hemp->error->message);
+    HEMP_CATCH_ALL;
+        fail("unexpected error: %s", hemp->error->message);
     HEMP_END;
     
     hemp_free(hemp);

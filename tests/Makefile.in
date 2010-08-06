@@ -15,7 +15,7 @@
 
 @SET_MAKE@
 
-#check_PROGRAMS  =   grammar
+#check_PROGRAMS  =   tt3
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -40,7 +40,8 @@ check_PROGRAMS = action$(EXEEXT) dialect$(EXEEXT) element$(EXEEXT) \
 	filesystem$(EXEEXT) grammar$(EXEEXT) hash$(EXEEXT) \
 	list$(EXEEXT) memory$(EXEEXT) pool$(EXEEXT) ptree$(EXEEXT) \
 	scanner$(EXEEXT) source$(EXEEXT) slab$(EXEEXT) tag$(EXEEXT) \
-	tagset$(EXEEXT) template$(EXEEXT) text$(EXEEXT) utils$(EXEEXT)
+	tagset$(EXEEXT) template$(EXEEXT) text$(EXEEXT) tt3$(EXEEXT) \
+	utils$(EXEEXT)
 subdir = tests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -138,6 +139,10 @@ text_SOURCES = text.c
 text_OBJECTS = text.$(OBJEXT)
 text_LDADD = $(LDADD)
 text_DEPENDENCIES = ../library/libhemp.la tap.o
+tt3_SOURCES = tt3.c
+tt3_OBJECTS = tt3.$(OBJEXT)
+tt3_LDADD = $(LDADD)
+tt3_DEPENDENCIES = ../library/libhemp.la tap.o
 utils_SOURCES = utils.c
 utils_OBJECTS = utils.$(OBJEXT)
 utils_LDADD = $(LDADD)
@@ -158,11 +163,11 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 SOURCES = action.c dialect.c element.c elements.c error.c factory.c \
 	filesystem.c grammar.c hash.c list.c memory.c pool.c ptree.c \
 	scanner.c slab.c source.c tag.c tagset.c template.c text.c \
-	utils.c
+	tt3.c utils.c
 DIST_SOURCES = action.c dialect.c element.c elements.c error.c \
 	factory.c filesystem.c grammar.c hash.c list.c memory.c pool.c \
 	ptree.c scanner.c slab.c source.c tag.c tagset.c template.c \
-	text.c utils.c
+	text.c tt3.c utils.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -423,6 +428,9 @@ template$(EXEEXT): $(template_OBJECTS) $(template_DEPENDENCIES)
 text$(EXEEXT): $(text_OBJECTS) $(text_DEPENDENCIES) 
 	@rm -f text$(EXEEXT)
 	$(LINK) $(text_OBJECTS) $(text_LDADD) $(LIBS)
+tt3$(EXEEXT): $(tt3_OBJECTS) $(tt3_DEPENDENCIES) 
+	@rm -f tt3$(EXEEXT)
+	$(LINK) $(tt3_OBJECTS) $(tt3_LDADD) $(LIBS)
 utils$(EXEEXT): $(utils_OBJECTS) $(utils_DEPENDENCIES) 
 	@rm -f utils$(EXEEXT)
 	$(LINK) $(utils_OBJECTS) $(utils_LDADD) $(LIBS)
@@ -453,6 +461,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tagset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tt3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Po@am__quote@
 
 .c.o:

@@ -1,4 +1,4 @@
-#check_PROGRAMS  =   grammar
+#check_PROGRAMS  =   tt3
 
 check_PROGRAMS  =   action      \
                     dialect     \
@@ -20,6 +20,7 @@ check_PROGRAMS  =   action      \
                     tagset      \
                     template    \
                     text        \
+                    tt3         \
                     utils
  
                     

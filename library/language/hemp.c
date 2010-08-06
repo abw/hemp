@@ -183,23 +183,32 @@ void           hemp_grammar_add_hemp_alpha(hemp_grammar_p);
 void           hemp_grammar_add_hemp_bravo(hemp_grammar_p);
 
 
+/* When debugging is turned off, the TODO function return NULL.  It appears 
+ * to be the result of a compiler optimisation gone awry.  I tried adding
+ * __attribute__ ((noinline)) but it didn't help.  Adding asm("") appears to
+ * do the trick. See http://tinyurl.com/279zm6a
+ * This is only a temporary measure anyway, so don't sweat it.
+ */
+
+#define DONT_OPTIMISE_ME_AWAY  asm("");
+
+
 
 hemp_language_p
 hemp_language_hemp_init(
     hemp_p      hemp,
     hemp_cstr_p name
 ) {
-    debug("initialising %s language\n", name);
-    hemp_language_p language = hemp_language_init(hemp, name, HEMP_LANGUAGE_VERSION);
+    debug_call("hemp_language_hemp_init(%p, %s)\n", hemp, name);
 
-//    hemp_register_element(
-//        hemp, "hemp.number.*", (hemp_actor_f) &hemp_element_number_constructor
-//    );
+    hemp_language_p language = hemp_language_init(
+        hemp, name, HEMP_LANGUAGE_VERSION
+    );
 
     /* register all the basic symbols */
     HEMP_ELEMENTS(hemp_symbols_hemp);
 
-    /* register handlers for boolop and numop symbols */
+    /* register handlers for boolean, number and text operator symbols */
     HEMP_ELEMENT("hemp.boolop.*", &hemp_element_boolop_symbols);
     HEMP_ELEMENT("hemp.numop.*",  &hemp_element_numop_symbols);
     HEMP_ELEMENT("hemp.textop.*", &hemp_element_textop_symbols);
@@ -207,14 +216,6 @@ hemp_language_hemp_init(
     /* register grammars */
     HEMP_GRAMMAR("hemp.alpha", &hemp_grammar_hemp_alpha);
     HEMP_GRAMMAR("hemp.bravo", &hemp_grammar_hemp_bravo);
-
-//    hemp_register_dialect(
-//        hemp, HEMP_TT3, (hemp_actor_f) &hemp_dialect_tt3
-//    );
-//
-//    hemp_register_grammar(
-//        hemp, HEMP_TT3, (hemp_actor_f) &hemp_grammar_tt3
-//    );
 
     return language;
 }
@@ -415,47 +416,50 @@ hemp_element_boolop_symbols(
 
 
 hemp_symbol_p
+hemp_element_boolop_TODO_symbol(
+    hemp_p        hemp,
+    hemp_symbol_p symbol
+) {
+    debug_todo("boolop constructor for %s symbol", symbol->name);
+    DONT_OPTIMISE_ME_AWAY;
+    return symbol;
+}
+
+
+hemp_symbol_p
 hemp_element_boolop_not_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_boolop_TODO_symbol(hemp, symbol);
+    return hemp_element_boolop_TODO_symbol(hemp, symbol);
 }
+
 
 hemp_symbol_p
 hemp_element_boolop_and_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_boolop_TODO_symbol(hemp, symbol);
+    return hemp_element_boolop_TODO_symbol(hemp, symbol);
 }
+
 
 hemp_symbol_p
 hemp_element_boolop_or_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_boolop_TODO_symbol(hemp, symbol);
+    return hemp_element_boolop_TODO_symbol(hemp, symbol);
 }
+
 
 hemp_symbol_p
 hemp_element_boolop_nor_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_boolop_TODO_symbol(hemp, symbol);
+    return hemp_element_boolop_TODO_symbol(hemp, symbol);
 }
-
-
-hemp_symbol_p
-hemp_element_boolop_TODO_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    debug("TODO: boolop constructor for %s symbol\n", symbol->name);
-    return symbol;
-}
-
 
 
 
@@ -482,11 +486,22 @@ hemp_element_numop_symbols(
 
 
 hemp_symbol_p
+hemp_element_numop_TODO_symbol(
+    hemp_p        hemp,
+    hemp_symbol_p symbol
+) {
+    debug_todo("numop constructor for %s symbol", symbol->name);
+    DONT_OPTIMISE_ME_AWAY;
+    return symbol;
+}
+
+
+hemp_symbol_p
 hemp_element_numop_inc_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -495,7 +510,7 @@ hemp_element_numop_dec_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -504,7 +519,7 @@ hemp_element_numop_plus_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -513,7 +528,7 @@ hemp_element_numop_minus_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -521,16 +536,15 @@ hemp_symbol_p hemp_element_numop_power_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
-
 
 
 hemp_symbol_p hemp_element_numop_multiply_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -538,7 +552,7 @@ hemp_symbol_p hemp_element_numop_divide_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -546,7 +560,7 @@ hemp_symbol_p hemp_element_numop_divint_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -554,14 +568,15 @@ hemp_symbol_p hemp_element_numop_modulus_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
+
 
 hemp_symbol_p hemp_element_numop_compare_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -569,7 +584,7 @@ hemp_symbol_p hemp_element_numop_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -577,7 +592,7 @@ hemp_symbol_p hemp_element_numop_not_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -585,21 +600,23 @@ hemp_symbol_p hemp_element_numop_less_than_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
+
 
 hemp_symbol_p hemp_element_numop_more_than_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
+
 
 hemp_symbol_p hemp_element_numop_less_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -607,18 +624,9 @@ hemp_symbol_p hemp_element_numop_more_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
-
-hemp_symbol_p
-hemp_element_numop_TODO_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    debug("TODO: numop constructor for %s symbol\n", symbol->name);
-    return symbol;
-}
 
 
 /*--------------------------------------------------------------------------
@@ -643,26 +651,39 @@ hemp_element_textop_symbols(
 
 
 hemp_symbol_p
+hemp_element_textop_TODO_symbol(
+    hemp_p        hemp,
+    hemp_symbol_p symbol
+) {
+    debug_todo("textop constructor for %s symbol", symbol->name);
+    DONT_OPTIMISE_ME_AWAY;
+    return symbol;
+}
+
+
+hemp_symbol_p
 hemp_element_textop_concat_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_textop_TODO_symbol(hemp, symbol);
 }
+
 
 hemp_symbol_p
 hemp_element_textop_compare_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_textop_TODO_symbol(hemp, symbol);
 }
+
 
 hemp_symbol_p hemp_element_textop_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_textop_TODO_symbol(hemp, symbol);
+    return hemp_element_textop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -670,7 +691,7 @@ hemp_symbol_p hemp_element_textop_not_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_textop_TODO_symbol(hemp, symbol);
+    return hemp_element_textop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -678,21 +699,23 @@ hemp_symbol_p hemp_element_textop_less_than_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_textop_TODO_symbol(hemp, symbol);
+    return hemp_element_textop_TODO_symbol(hemp, symbol);
 }
+
 
 hemp_symbol_p hemp_element_textop_more_than_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_textop_TODO_symbol(hemp, symbol);
+    return hemp_element_textop_TODO_symbol(hemp, symbol);
 }
+
 
 hemp_symbol_p hemp_element_textop_less_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_textop_TODO_symbol(hemp, symbol);
+    return hemp_element_textop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -700,16 +723,7 @@ hemp_symbol_p hemp_element_textop_more_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_element_textop_TODO_symbol(hemp, symbol);
-}
-
-hemp_symbol_p
-hemp_element_textop_TODO_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    debug("TODO: textop constructor for %s symbol\n", symbol->name);
-    return symbol;
+    return hemp_element_textop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -723,7 +737,7 @@ hemp_grammar_hemp_alpha(
     hemp_p      hemp,
     hemp_cstr_p name
 ) {
-    debug("constructing hemp alpha grammar\n");
+    debug_call("hemp_grammar_hemp_alpha(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = (hemp_grammar_p) hemp_grammar_init(hemp, name);
     hemp_grammar_add_hemp_alpha(grammar);
     return grammar;
@@ -734,7 +748,7 @@ hemp_grammar_hemp_bravo(
     hemp_p      hemp,
     hemp_cstr_p name
 ) {
-    debug("constructing hemp bravo grammar\n");
+    debug_call("hemp_grammar_hemp_bravo(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = (hemp_grammar_p) hemp_grammar_init(hemp, name);
     hemp_grammar_add_hemp_alpha(grammar);
     hemp_grammar_add_hemp_bravo(grammar);
@@ -746,7 +760,7 @@ void
 hemp_grammar_add_hemp_alpha(
     hemp_grammar_p grammar
 ) {
-//  debug("constructing hemp grammar alpha\n");
+    debug_call("hemp_grammar_add_hemp_alpha(%p)\n", grammar);
     HEMP_SYMBOL("hemp.text",    "_TEXT",    0, 0);
     HEMP_SYMBOL("hemp.space",   "_SPACE",   0, 0);
     HEMP_SYMBOL("hemp.comment", "_COMMENT", 0, 0);
@@ -756,7 +770,7 @@ void
 hemp_grammar_add_hemp_bravo(
     hemp_grammar_p grammar
 ) {
-//  debug("constructing hemp grammar bravo\n");
+    debug_call("hemp_grammar_add_hemp_bravo(%p)\n", grammar);
 
 //    [ '$'       => sig_item         =>   0, 350 ],      # $foo
 //    [ '@'       => sig_list         =>   0, 350 ],      # @foo
@@ -772,7 +786,7 @@ hemp_grammar_add_hemp_bravo(
     HEMP_SYMBOL("hemp.numop.divide",        "/",        280,    0);
     HEMP_SYMBOL("hemp.numop.modulus",       "mod",      280,    0);
 //  HEMP_SYMBOL("hemp.numop.divint",        "div",      280,    0);
-                
+
     HEMP_SYMBOL("hemp.textop.concat",       "~",        270,  270);
                 
     HEMP_SYMBOL("hemp.numop.compare",       "<=>",      260,    0);
@@ -818,7 +832,6 @@ hemp_grammar_add_hemp_bravo(
 //    [ '&&='     => bool_and_set     => 200,   0 ],      # foo &&= bar
 //    [ '||='     => bool_or_set      => 200,   0 ],      # foo ||= bar
 //    [ '!!='     => bool_nor_set     => 200,   0 ],      # foo !!= bar
-
 
     HEMP_SYMBOL("hemp.boolop.not",          "not",        0,  190);
     HEMP_SYMBOL("hemp.boolop.and",          "and",      180,    0);

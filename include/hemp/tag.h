@@ -27,10 +27,10 @@ typedef enum hemp_tag_style_e hemp_tag_style_t;
 struct hemp_tag_s {
    hemp_cstr_p      name;
    hemp_tag_style_t style;
-   hemp_tag_scan_f  scan;
    hemp_cstr_p      start;
    hemp_cstr_p      end;
-   /* TODO: add grammar */
+   hemp_tag_scan_f  scan;
+   hemp_grammar_p   grammar;
 };
 
 
@@ -42,9 +42,10 @@ hemp_tag_p
     hemp_tag_init(
         hemp_cstr_p      name,
         hemp_tag_style_t style,
-        hemp_tag_scan_f  scan,
         hemp_cstr_p      start,
-        hemp_cstr_p      end
+        hemp_cstr_p      end,
+        hemp_tag_scan_f  scan,
+        hemp_grammar_p   grammar
     );
 
 hemp_tag_p

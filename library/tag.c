@@ -5,9 +5,10 @@ hemp_tag_p
 hemp_tag_init(
     hemp_cstr_p      name,
     hemp_tag_style_t style,
-    hemp_tag_scan_f  scan,
     hemp_cstr_p      start,
-    hemp_cstr_p      end
+    hemp_cstr_p      end,
+    hemp_tag_scan_f  scan,
+    hemp_grammar_p   grammar
 ) {
     hemp_tag_p tag = (hemp_tag_p) hemp_mem_alloc(
         sizeof(struct hemp_tag_s)
@@ -16,11 +17,12 @@ hemp_tag_init(
     if (! tag)
         hemp_mem_fail("tag");
 
-    tag->style = style;
-    tag->scan  = scan;
-    tag->name  = hemp_cstr_copy(name);
-    tag->start = hemp_cstr_copy(start);
-    tag->end   = end ? hemp_cstr_copy(end) : NULL;
+    tag->style   = style;
+    tag->name    = hemp_cstr_copy(name);
+    tag->start   = hemp_cstr_copy(start);
+    tag->end     = end ? hemp_cstr_copy(end) : NULL;
+    tag->scan    = scan;
+    tag->grammar = grammar;
 
     if (! tag->name || ! tag->start || (end && ! tag->end))
         hemp_mem_fail("tag");
@@ -36,9 +38,10 @@ hemp_tag_copy(
     return hemp_tag_init(
         tag->name,
         tag->style,
-        tag->scan,
         tag->start,
-        tag->end
+        tag->end,
+        tag->scan,
+        tag->grammar
     );
 }
 

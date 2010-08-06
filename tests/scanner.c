@@ -120,7 +120,6 @@ void test_script(
         }
         
         hemp_text_free(output);
-                
     }
 
     hemp_mem_free(dir);

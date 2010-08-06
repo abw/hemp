@@ -4,7 +4,7 @@
 void hemp_todo(char *format, ...) {
     va_list args;
     va_start(args, format);
-    fprintf(stderr, "%sTODO: ", ANSI_RED);
+    fprintf(stderr, "%sTODO: %s", ANSI_RED, ANSI_YELLOW);
     vfprintf(stderr, format, args);
     fprintf(stderr, "%s\n", ANSI_RESET);
     va_end(args);

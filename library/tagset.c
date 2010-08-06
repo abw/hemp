@@ -65,13 +65,14 @@ hemp_tagset_new_tag(
     hemp_tagset_p    tagset, 
     hemp_cstr_p      name,
     hemp_tag_style_t style,
-    hemp_tag_scan_f  scan,
     hemp_cstr_p      start,
-    hemp_cstr_p      end
+    hemp_cstr_p      end,
+    hemp_tag_scan_f  scan,
+    hemp_grammar_p   grammar
 ) {
     return hemp_tagset_add_tag(
         tagset,
-        hemp_tag_init(name, style, scan, start, end)
+        hemp_tag_init(name, style, start, end, scan, grammar)
     );
 }
 

@@ -46,9 +46,14 @@ hemp_grammar_new_symbol(
         etype, token
     );
 
-    return (hemp_symbol_p) hemp_action_run(
+    symbol = (hemp_symbol_p) hemp_action_run(
         constructor, symbol 
     );
+
+    if (! symbol)
+        hemp_throw(grammar->hemp, HEMP_ERROR_INVALID, "element", etype);
+
+    return symbol;
 }
 
 
@@ -69,6 +74,7 @@ hemp_grammar_add_symbol(
         hemp_throw(grammar->hemp, HEMP_ERROR_DUPLICATE, "symbol", token);
 
     hemp_symbol_p symbol = hemp_grammar_new_symbol(grammar, etype, token);
+
     symbol->lprec = lprec;
     symbol->rprec = rprec;
 

@@ -78,24 +78,23 @@ libhemp_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-cstr.lo \
 	libhemp_la-debug.lo libhemp_la-dialect.lo \
-	dialect/libhemp_la-tt3.lo libhemp_la-elements.lo \
-	libhemp_la-element.lo element/libhemp_la-block.lo \
-	element/libhemp_la-dquote.lo element/libhemp_la-integer.lo \
-	element/libhemp_la-literal.lo element/libhemp_la-number.lo \
-	element/libhemp_la-space.lo element/libhemp_la-squote.lo \
-	element/libhemp_la-text.lo element/libhemp_la-word.lo \
-	libhemp_la-error.lo libhemp_la-factory.lo \
-	libhemp_la-filesystem.lo libhemp_la-grammar.lo \
-	libhemp_la-hash.lo libhemp_la-hemp.lo libhemp_la-language.lo \
-	language/libhemp_la-hemp.lo language/libhemp_la-tt3.lo \
-	libhemp_la-list.lo libhemp_la-memory.lo libhemp_la-pool.lo \
-	libhemp_la-ptree.lo libhemp_la-scanner.lo libhemp_la-scheme.lo \
-	libhemp_la-slab.lo libhemp_la-source.lo libhemp_la-symbol.lo \
-	libhemp_la-tag.lo tag/libhemp_la-comment.lo \
-	tag/libhemp_la-control.lo tag/libhemp_la-inline.lo \
-	tag/libhemp_la-outline.lo libhemp_la-tagset.lo \
-	libhemp_la-template.lo libhemp_la-text.lo libhemp_la-type.lo \
-	libhemp_la-utils.lo
+	libhemp_la-elements.lo libhemp_la-element.lo \
+	element/libhemp_la-block.lo element/libhemp_la-dquote.lo \
+	element/libhemp_la-integer.lo element/libhemp_la-literal.lo \
+	element/libhemp_la-number.lo element/libhemp_la-space.lo \
+	element/libhemp_la-squote.lo element/libhemp_la-text.lo \
+	element/libhemp_la-word.lo libhemp_la-error.lo \
+	libhemp_la-factory.lo libhemp_la-filesystem.lo \
+	libhemp_la-grammar.lo libhemp_la-hash.lo libhemp_la-hemp.lo \
+	libhemp_la-language.lo language/libhemp_la-hemp.lo \
+	language/libhemp_la-tt3.lo libhemp_la-list.lo \
+	libhemp_la-memory.lo libhemp_la-pool.lo libhemp_la-ptree.lo \
+	libhemp_la-scanner.lo libhemp_la-scheme.lo libhemp_la-slab.lo \
+	libhemp_la-source.lo libhemp_la-symbol.lo libhemp_la-tag.lo \
+	tag/libhemp_la-comment.lo tag/libhemp_la-control.lo \
+	tag/libhemp_la-inline.lo tag/libhemp_la-outline.lo \
+	libhemp_la-tagset.lo libhemp_la-template.lo libhemp_la-text.lo \
+	libhemp_la-type.lo libhemp_la-utils.lo
 libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
 libhemp_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libhemp_la_CFLAGS) \
@@ -251,7 +250,6 @@ libhemp_la_SOURCES = action.c              \
                         cstr.c                \
                         debug.c               \
                         dialect.c             \
-                        dialect/tt3.c         \
                         elements.c            \
                         element.c             \
                         element/block.c       \
@@ -358,14 +356,6 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-dialect/$(am__dirstamp):
-	@$(MKDIR_P) dialect
-	@: > dialect/$(am__dirstamp)
-dialect/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) dialect/$(DEPDIR)
-	@: > dialect/$(DEPDIR)/$(am__dirstamp)
-dialect/libhemp_la-tt3.lo: dialect/$(am__dirstamp) \
-	dialect/$(DEPDIR)/$(am__dirstamp)
 element/$(am__dirstamp):
 	@$(MKDIR_P) element
 	@: > element/$(am__dirstamp)
@@ -419,8 +409,6 @@ libhemp.la: $(libhemp_la_OBJECTS) $(libhemp_la_DEPENDENCIES)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f dialect/libhemp_la-tt3.$(OBJEXT)
-	-rm -f dialect/libhemp_la-tt3.lo
 	-rm -f element/libhemp_la-block.$(OBJEXT)
 	-rm -f element/libhemp_la-block.lo
 	-rm -f element/libhemp_la-dquote.$(OBJEXT)
@@ -483,7 +471,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-text.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-type.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-utils.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@dialect/$(DEPDIR)/libhemp_la-tt3.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-block.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-dquote.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-integer.Plo@am__quote@
@@ -551,13 +538,6 @@ libhemp_la-dialect.lo: dialect.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dialect.c' object='libhemp_la-dialect.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-dialect.lo `test -f 'dialect.c' || echo '$(srcdir)/'`dialect.c
-
-dialect/libhemp_la-tt3.lo: dialect/tt3.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT dialect/libhemp_la-tt3.lo -MD -MP -MF dialect/$(DEPDIR)/libhemp_la-tt3.Tpo -c -o dialect/libhemp_la-tt3.lo `test -f 'dialect/tt3.c' || echo '$(srcdir)/'`dialect/tt3.c
-@am__fastdepCC_TRUE@	$(am__mv) dialect/$(DEPDIR)/libhemp_la-tt3.Tpo dialect/$(DEPDIR)/libhemp_la-tt3.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='dialect/tt3.c' object='dialect/libhemp_la-tt3.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o dialect/libhemp_la-tt3.lo `test -f 'dialect/tt3.c' || echo '$(srcdir)/'`dialect/tt3.c
 
 libhemp_la-elements.lo: elements.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-elements.lo -MD -MP -MF $(DEPDIR)/libhemp_la-elements.Tpo -c -o libhemp_la-elements.lo `test -f 'elements.c' || echo '$(srcdir)/'`elements.c
@@ -837,7 +817,6 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-	-rm -rf dialect/.libs dialect/_libs
 	-rm -rf element/.libs element/_libs
 	-rm -rf language/.libs language/_libs
 	-rm -rf tag/.libs tag/_libs
@@ -952,8 +931,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-rm -f dialect/$(DEPDIR)/$(am__dirstamp)
-	-rm -f dialect/$(am__dirstamp)
 	-rm -f element/$(DEPDIR)/$(am__dirstamp)
 	-rm -f element/$(am__dirstamp)
 	-rm -f language/$(DEPDIR)/$(am__dirstamp)
@@ -970,7 +947,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) dialect/$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) tag/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) tag/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -1016,7 +993,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) dialect/$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) tag/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) tag/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

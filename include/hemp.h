@@ -90,7 +90,7 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
     )
 
 #define hemp_language(hemp,name) ({                                          \
-        hemp_element_p _lang = (hemp_element_p) hemp_factory_instance(       \
+        hemp_language_p _lang = (hemp_language_p) hemp_factory_instance(     \
             hemp->languages, name                                            \
         );                                                                   \
         if (! _lang) hemp_throw(hemp, HEMP_ERROR_INVALID, "language", name); \
@@ -108,12 +108,21 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
         hemp                                                \
     )
 
-#define hemp_element(hemp,name) ({                                      \
-        hemp_element_p _cons = (hemp_element_p) hemp_factory_instance(     \
-            hemp->elements, name                                            \
-        );                                                                  \
-        if (! _cons) hemp_throw(hemp, HEMP_ERROR_INVALID, "element", name); \
-        _cons;                                    \
+/* this is wrongly named */
+//#define hemp_element(hemp,name) ({                                          \
+//        hemp_element_p _cons = (hemp_element_p) hemp_factory_instance(      \
+//            hemp->elements, name                                            \
+//        );                                                                  \
+//        if (! _cons) hemp_throw(hemp, HEMP_ERROR_INVALID, "element", name); \
+//        _cons;                                                              \
+//    })
+
+#define hemp_symbol(hemp,type,token) ({                                      \
+        hemp_action_p _cons = (hemp_action_p) hemp_factory_constructor(      \
+            hemp->elements, type                                             \
+        );                                                                   \
+        if (! _cons) hemp_throw(hemp, HEMP_ERROR_INVALID, "element", type);  \
+        (hemp_symbol_p) hemp_action_run(_cons, hemp_symbol_init(type, token)); \
     })
 
 
@@ -183,7 +192,7 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
     hemp_action_p item (hemp_p, hemp_cstr_p);
 
 #define HEMP_ELEMENT_PROTO(item) \
-    hemp_symbol_p item (hemp_p, hemp_symbol_p);
+    hemp_symbol_p item (hemp_p, hemp_symbol_p)  __attribute__((noinline));
 
 
 

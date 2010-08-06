@@ -47,9 +47,10 @@ hemp_pnode_p
         hemp_tagset_p    tagset, 
         hemp_cstr_p      name,
         hemp_tag_style_t style,
-        hemp_tag_scan_f  scan,
         hemp_cstr_p      start,
-        hemp_cstr_p      end
+        hemp_cstr_p      end,
+        hemp_tag_scan_f  scan,
+        hemp_grammar_p   grammar
     );
 
 hemp_bool_t

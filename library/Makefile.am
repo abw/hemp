@@ -3,7 +3,6 @@ libhemp_la_SOURCES  =   action.c              \
                         cstr.c                \
                         debug.c               \
                         dialect.c             \
-                        dialect/tt3.c         \
                         elements.c            \
                         element.c             \
                         element/block.c       \

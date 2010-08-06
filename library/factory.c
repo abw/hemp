@@ -106,7 +106,7 @@ hemp_factory_constructor(
 
             /* see if it can generate a constructor */
             constructor = hemp_action_run(
-//                wildcard, split->right
+//              wildcard, split->right
                 wildcard, name
             );
             if (constructor) {
