@@ -17,7 +17,7 @@ hemp_element_new() {
 hemp_element_p
 hemp_element_init(
     hemp_element_p  element,
-    hemp_etype_p    type, 
+    hemp_symbol_p   type, 
     hemp_cstr_p     token, 
     hemp_pos_t      position, 
     hemp_size_t     length
@@ -157,7 +157,7 @@ hemp_element_parse_block(
         // debug("got list of %d exprs\n", list->length);
         block = hemp_element_init(
             NULL,
-            HempElementBlock, 
+            HempSymbolBlock, 
             element->token,  
             element->position,
             element->length
@@ -186,14 +186,24 @@ hemp_element_parse_exprs(
         // todo: skip delimiter
         //debug_parse("about to skip delimiter:\n");
         hemp_skip_delimiter(elemptr);
-        //debug_parse("about to parse expr:\n");
+
+//      debug_parse("about to parse expr:\n");
+
+        /* tmp hack to catch TODO stuff while developing */
+        if (! (*elemptr)->type->parse_expr) {
+            hemp_symbol_dump((*elemptr)->type);
+            hemp_fatal(
+                "%s does not define a parse_expr() method",
+                (*elemptr)->type->name
+            );
+        }
 
         expr = hemp_parse_expr(elemptr, scope, precedence, HEMP_FALSE);
         
         if (! expr)
             break;
 
-        // debug_parse("parsed %s expression:\n", expr->type->name);
+//      debug_parse("parsed %s expression:\n", expr->type->name);
 #if DEBUG
         hemp_element_dump(expr);
 #endif
@@ -225,8 +235,54 @@ hemp_element_p
 hemp_element_parse_expr(
     HEMP_PARSE_PROTO
 ) {
-    debug_call("hemp_element_parse_expr()\n");
+    debug_todo("hemp_element_parse_expr()\n");
     return NULL;
+}
+
+
+hemp_element_p
+hemp_element_parse_binary(       // infix left
+    HEMP_PARSE_PROTO, 
+    hemp_element_p lhs
+) {
+    debug_blue("hemp_element_parse_binary()\n");
+    hemp_element_p self = *elemptr;
+    hemp_symbol_p  type = self->type;
+
+    if (precedence && type->lprec <= precedence) {
+        debug(
+            "precedence of %s (%d) is lower than %s (%d), returning preceding element\n",
+            type->name, type->lprec, lhs->type->name, precedence
+        );
+        return lhs;
+    }
+    else {
+        debug(
+            "precedence of %s (%d) is higher than %s (%d), continuing...\n",
+            type->name, type->lprec, lhs->type->name, precedence
+        );
+    }
+
+    self->value.binary.lhs = lhs;
+//    debug_cyan("set lhs to %p / %p\n", self->value.binary.lhs, lhs);
+    hemp_go_next(elemptr);
+
+    hemp_element_p rhs = hemp_parse_expr(
+        elemptr, scope, type->lprec, 1
+    );
+
+    if (! rhs)
+        hemp_fatal("missing expression on rhs of %s\n", type->token);
+        
+    self->value.binary.rhs = rhs;
+//    debug_cyan("set rhs to %p / %p\n", self->value.binary.rhs, rhs);
+    
+    hemp_skip_space(elemptr);
+
+    return hemp_parse_infix(
+        elemptr, scope, precedence, 0,
+        self
+    );
 }
 
 
@@ -247,6 +303,43 @@ hemp_element_token(
 }
 
 
+hemp_text_p
+hemp_element_binary_text(
+    hemp_element_p  element,
+    hemp_text_p     text
+) {
+    debug_call("hemp_element_binary_text()\n");
+
+    if (! text)
+        text = hemp_text_init(element->length);
+
+    struct hemp_binary_s exprs = element->value.binary;
+    hemp_element_p lhs = exprs.lhs;
+    hemp_element_p rhs = exprs.rhs;
+
+    // debugging
+    hemp_text_append_cstr(text, "(");
+
+    if (lhs && lhs->type->text) {
+        lhs->type->text(lhs, text);
+    }
+    else 
+        hemp_text_append_cstr(text, "[LHS]");
+        
+    hemp_text_append_cstr(text, " ");
+    hemp_text_append_cstrn(text, element->token, element->length);
+    hemp_text_append_cstr(text, " ");
+
+    if (rhs && rhs->type->text)
+        rhs->type->text(rhs, text);
+    else 
+        hemp_text_append_cstr(text, "[RHS]");
+
+    hemp_text_append_cstr(text, ")");
+
+    return text;
+}
+
 /*--------------------------------------------------------------------------
  * debugging functions
  *--------------------------------------------------------------------------*/
@@ -255,10 +348,22 @@ hemp_bool_t
 hemp_element_dump(
     hemp_element_p e
 ) {
-    hemp_text_p text = e->type->text(e, NULL);
+    if (! e->type->text)
+        hemp_fatal("%s type does not define a text() method", e->type->name);
+
+//    debug("calling text() method for %s\n", e->type->name);
+
+    hemp_text_p text = e->type->source
+        ? e->type->source(e, NULL)
+        : e->type->text(e, NULL);
+
     hemp_cstr_p cstr = text ? text->string : "-- NO OUTPUT --";
     
-    debug("%03d:%02d %-12s |%s%s%s|\n", (int) e->position, (int) e->length, e->type->name, ANSI_YELLOW, cstr, ANSI_RESET);
+    debug(
+        "%03d:%02d %-20s %s[%s%s%s]%s\n", 
+        (int) e->position, (int) e->length, e->type->name, 
+        ANSI_BLUE, ANSI_YELLOW, cstr, ANSI_BLUE, ANSI_RESET
+    );
 
     if (text) {
         hemp_text_free(text);

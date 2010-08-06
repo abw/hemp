@@ -3,6 +3,7 @@
 
 #include <hemp/element.h>
 #include <hemp/pool.h>
+#include <hemp/symbol.h>
 
 
 /*--------------------------------------------------------------------------
@@ -10,6 +11,7 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_elements_s {
+    hemp_p          hemp;
     hemp_pool_p     pool;
     hemp_element_p  head;
     hemp_element_p  tail;
@@ -22,13 +24,14 @@ struct hemp_elements_s {
 
 hemp_elements_p
     hemp_elements_init(
-        hemp_size_t capacity
+        hemp_p          hemp,
+        hemp_size_t     capacity
     );
 
 hemp_element_p
     hemp_elements_create(
         hemp_elements_p elements,
-        hemp_etype_p    type,
+        hemp_symbol_p   type,
         hemp_cstr_p     token,
         hemp_pos_t      position,
         hemp_size_t     length
@@ -37,7 +40,7 @@ hemp_element_p
 hemp_element_p
     hemp_elements_append(
         hemp_elements_p elements,
-        hemp_etype_p    type,
+        hemp_symbol_p   type,
         hemp_cstr_p     token,
         hemp_pos_t      position,
         hemp_size_t     length

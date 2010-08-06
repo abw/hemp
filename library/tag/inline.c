@@ -1,8 +1,16 @@
 #include <limits.h>
 #include <errno.h>
+#include <hemp/core.h>
+#include <hemp/ptree.h>
 #include <hemp/element.h>
 #include <hemp/tag.h>
 #include <hemp/scanner.h>
+#include <hemp/symbol.h>
+#include <hemp/grammar.h>
+
+
+#define HEMP_IN_PTREE(head,src) \
+    head[(hemp_char_t) *src % HEMP_PTREE_SIZE]
 
 
 void 
@@ -22,12 +30,15 @@ hemp_scan_inline_tag(
     hemp_num_t      num_val;
     hemp_int_t      int_val;
     hemp_bool_t     is_int, is_fixed;
+    hemp_pnode_p    pnode;
+    hemp_pnode_p    *ophead  = tag->grammar->operators->head;
+    hemp_symbol_p   symbol;
 
     debug_call("hemp_scan_inline_tag()\n");
 
     // add the tag start token
     hemp_elements_append(
-        tmpl->elements, HempElementTagStart,
+        tmpl->elements, HempSymbolTagStart,
         tagtok, pos, src - tagtok
     );
     pos += src - tagtok;
@@ -38,7 +49,7 @@ hemp_scan_inline_tag(
             hemp_scan_while(src, isspace);
             debug_token("SPACE", from, src-from);
             hemp_elements_append(
-                tmpl->elements, HempElementSpace,
+                tmpl->elements, HempSymbolSpace,
                 from, pos, src - from
             );
         }
@@ -46,7 +57,7 @@ hemp_scan_inline_tag(
             /* tag end */
             debug_token("TAG END", from, endlen);
             hemp_elements_append(
-                tmpl->elements, HempElementTagEnd,
+                tmpl->elements, HempSymbolTagEnd,
                 from, pos, endlen
             );
             src += endlen;
@@ -86,7 +97,7 @@ hemp_scan_inline_tag(
             else if (is_int) {
                 debug_token("INTEGER", from, src-from);
                 hemp_elements_append(
-                    tmpl->elements, HempElementInteger,
+                    tmpl->elements, HempSymbolInteger,
                     from, pos, src - from
                 );
                 // TODO: pre-set value of element to int_val
@@ -94,7 +105,7 @@ hemp_scan_inline_tag(
             else {
                 debug_token("NUMBER", from, src-from);
                 hemp_elements_append(
-                    tmpl->elements, HempElementNumber,
+                    tmpl->elements, HempSymbolNumber,
                     from, pos, src - from
                 );
                 // TODO: pre-set value of element to num_val
@@ -103,10 +114,11 @@ hemp_scan_inline_tag(
         else if (isalpha(*src)) {
             /* word */
             hemp_scan_while(src, isalnum);
+            // TODO: check for ':' following after, e.g. file:/blah/blah
             // TODO: lookup keyword
             debug_token("WORD", from, src-from);
             hemp_elements_append(
-                tmpl->elements, HempElementWord,
+                tmpl->elements, HempSymbolWord,
                 from, pos, src - from
             );
         }
@@ -131,7 +143,7 @@ hemp_scan_inline_tag(
             debug_token("SQUOTE", from, src-from);
 
             element = hemp_elements_append(
-                tmpl->elements, HempElementSQuote,
+                tmpl->elements, HempSymbolSQuote,
                 from, pos, src - from
             );
 
@@ -179,7 +191,7 @@ hemp_scan_inline_tag(
             debug_token("DQUOTE", from, src-from);
 
             element = hemp_elements_append(
-                tmpl->elements, HempElementDQuote,
+                tmpl->elements, HempSymbolDQuote,
                 from, pos, src - from
             );
 
@@ -245,7 +257,17 @@ hemp_scan_inline_tag(
                 }
             }
             hemp_elements_append(
-                tmpl->elements, HempElementComment,
+                tmpl->elements, HempSymbolComment,
+                from, pos, src - from
+            );
+        }
+        else if (
+            (pnode  = HEMP_IN_PTREE(ophead, src))
+        &&  (symbol = (hemp_symbol_p) hemp_pnode_match_more(pnode, &src))
+        ) {
+            debug("[matched operator: %s]\n", symbol->name);
+            hemp_elements_append(
+                tmpl->elements, symbol,
                 from, pos, src - from
             );
         }

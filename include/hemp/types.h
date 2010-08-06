@@ -201,11 +201,20 @@ typedef hemp_element_p
     );
 
 typedef hemp_element_p  
-    (* hemp_parse_f )(
+    (* hemp_expr_f )(
         hemp_element_p *current,    /* pointer to current element pointer   */
         hemp_scope_p    scope,      /* current lexical scope                */
         hemp_prec_t     precedence, /* operator precedence level            */
         hemp_bool_t     force       /* yes, really parse something          */
+);
+
+typedef hemp_element_p  
+    (* hemp_infix_f )(
+        hemp_element_p *current,    /* pointer to current element pointer   */
+        hemp_scope_p    scope,      /* current lexical scope                */
+        hemp_prec_t     precedence, /* operator precedence level            */
+        hemp_bool_t     force,      /* yes, really parse something          */
+        hemp_element_p  element     /* preceding element                    */
 );
 
 typedef hemp_text_p 

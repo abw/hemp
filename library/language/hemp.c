@@ -244,7 +244,7 @@ hemp_element_space_symbol(
     hemp_symbol_p symbol
 ) {
     symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN;
-    symbol->skip       = HempSkipAll;
+    symbol->skip       = &hemp_skip_all_vtable;
     symbol->parse_expr = &hemp_element_space_parse_expr;
     symbol->source     = &hemp_element_literal_text;
     symbol->text       = &hemp_element_no_text;
@@ -258,7 +258,7 @@ hemp_element_comment_symbol(
     hemp_symbol_p symbol
 ) {
     symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN;
-    symbol->skip       = HempSkipAll;
+    symbol->skip       = &hemp_skip_all_vtable;
     symbol->parse_expr = &hemp_element_space_parse_expr,
     symbol->source     = &hemp_element_literal_text;
     symbol->text       = &hemp_element_no_text;
@@ -293,7 +293,7 @@ hemp_element_tag_end_symbol(
     hemp_symbol_p symbol
 ) {
     symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN;
-    symbol->skip       = HempSkipDelimiter;        // NOT SURE
+    symbol->skip       = &hemp_skip_delimiter_vtable;       // NOT SURE
     symbol->parse_expr = &hemp_element_space_parse_expr,
     symbol->source     = &hemp_element_literal_text;
     symbol->text       = &hemp_element_no_text;
@@ -307,7 +307,7 @@ hemp_element_number_symbol(
     hemp_symbol_p symbol
 ) {
     symbol->flags      = HEMP_IS_STATIC;
-    symbol->parse_expr = &hemp_element_literal_parse_expr,
+    symbol->parse_expr = &hemp_element_number_parse_expr,
     symbol->source     = &hemp_element_literal_text;
     symbol->text       = &hemp_element_literal_text;
     return symbol;
@@ -519,7 +519,12 @@ hemp_element_numop_plus_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    // not quite right - needs to accept expr as well...
+    symbol->parse  = &hemp_parse_binary_vtable;
+    symbol->source = &hemp_element_literal_text;
+    symbol->text   = &hemp_element_binary_text;
+    return symbol;
+//    return hemp_element_numop_TODO_symbol(hemp, symbol);
 }
 
 
@@ -528,15 +533,27 @@ hemp_element_numop_minus_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    // not quite right - needs to accept expr as well...
+    symbol->parse = &hemp_parse_binary_vtable;
+    return symbol;
 }
 
+
+hemp_symbol_p hemp_element_numop_binary_symbol(
+    hemp_p        hemp,
+    hemp_symbol_p symbol
+) {
+    symbol->parse  = &hemp_parse_binary_vtable;
+    symbol->source = &hemp_element_literal_text;
+    symbol->text   = &hemp_element_binary_text;
+    return symbol;
+}
 
 hemp_symbol_p hemp_element_numop_power_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -544,7 +561,7 @@ hemp_symbol_p hemp_element_numop_multiply_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -552,7 +569,7 @@ hemp_symbol_p hemp_element_numop_divide_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -560,7 +577,7 @@ hemp_symbol_p hemp_element_numop_divint_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -568,7 +585,7 @@ hemp_symbol_p hemp_element_numop_modulus_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -576,7 +593,7 @@ hemp_symbol_p hemp_element_numop_compare_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -584,7 +601,7 @@ hemp_symbol_p hemp_element_numop_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -592,7 +609,7 @@ hemp_symbol_p hemp_element_numop_not_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -600,7 +617,7 @@ hemp_symbol_p hemp_element_numop_less_than_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -608,7 +625,7 @@ hemp_symbol_p hemp_element_numop_more_than_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -616,7 +633,7 @@ hemp_symbol_p hemp_element_numop_less_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 
@@ -624,7 +641,7 @@ hemp_symbol_p hemp_element_numop_more_equal_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    return hemp_element_numop_TODO_symbol(hemp, symbol);
+    return hemp_element_numop_binary_symbol(hemp, symbol);
 }
 
 

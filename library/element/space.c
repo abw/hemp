@@ -12,79 +12,81 @@
  * all possible uses
  */
 
-static struct hemp_etype_s
-    hemp_element_space = { 
-        "space",
-        HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,
-        NULL,
-        &hemp_element_next_skip_space,
-        &hemp_element_next_skip_delimiter,
-        &hemp_element_next_skip_separator,
-        &hemp_element_space_parse_expr,
-        &hemp_element_literal_text
+static struct hemp_symbol_s
+    hemp_symbol_space = { 
+        "space",                                            /* name  */
+        "space:",                                           /* token */
+        HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,    /* flags */
+        0, 0,                                               /* precedence */
+        NULL, NULL,                                         /* scanner, cleaner */
+        &hemp_skip_all_vtable,                              /* skip */
+        NULL, NULL,                                         /* parse, source */
+        &hemp_element_literal_text,                         /* text */
+        &hemp_element_space_parse_expr                      /* parse */
     };
 
 
-static struct hemp_etype_s
-    hemp_element_comment = { 
+
+static struct hemp_symbol_s
+    hemp_symbol_comment = { 
         "comment",
+        "comment:",
         HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,
-        NULL,
-        &hemp_element_next_skip_space,
-        &hemp_element_next_skip_delimiter,
-        &hemp_element_next_skip_separator,
-        &hemp_element_space_parse_expr,
-        &hemp_element_literal_text
+        0, 0, NULL, NULL,
+        &hemp_skip_all_vtable,
+        NULL, NULL,
+        &hemp_element_literal_text,
+        &hemp_element_space_parse_expr
     };
 
 
-static struct hemp_etype_s
-    hemp_element_tag_start = { 
+static struct hemp_symbol_s
+    hemp_symbol_tag_start = { 
         "tag_start",
+        "tag_start:",
         HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,
-        NULL,
-        &hemp_element_next_skip_space,
-        &hemp_element_next_skip_delimiter,      /* tag start is a statement delimiter... */
-        &hemp_element_dont_skip,                /* ...but not an expression separator    */
-        &hemp_element_space_parse_expr,  // or force delimiter skip?
-        &hemp_element_literal_text
+        0, 0, NULL, NULL,
+        &hemp_skip_nonsep_vtable,
+        NULL, NULL,
+        &hemp_element_literal_text,
+        &hemp_element_space_parse_expr
     };
 
-static struct hemp_etype_s
-    hemp_element_tag_end = { 
+static struct hemp_symbol_s
+    hemp_symbol_tag_end = { 
         "tag_end",
+        "tag_start:",
         HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,
-        NULL,
-        &hemp_element_dont_skip,                /* slightly different for tag end */
-        &hemp_element_next_skip_delimiter,      
-        &hemp_element_dont_skip,
-        &hemp_element_dont_parse,
-        &hemp_element_literal_text
+        0, 0, NULL, NULL,
+        &hemp_skip_delimiter_vtable,
+        NULL, NULL,
+        &hemp_element_literal_text,
+        &hemp_element_dont_parse
     };
 
 
-static struct hemp_etype_s
-    hemp_element_eof = { 
+static struct hemp_symbol_s
+    hemp_symbol_eof = { 
         "EOF",
+        "--EOF--",
         HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN | HEMP_IS_EOF,
-        NULL,
-        &hemp_element_dont_skip,                /* can't skip over EOF */
-        &hemp_element_dont_skip,
-        &hemp_element_dont_skip,
-        &hemp_element_dont_parse,
-        &hemp_element_eof_text
+        0, 0, NULL, NULL,
+        &hemp_skip_none_vtable,
+        NULL, NULL,
+        &hemp_element_eof_text,
+        &hemp_element_dont_parse
     };
 
 
 /*--------------------------------------------------------------------------
- * static element types
+ * static symbol types
  *--------------------------------------------------------------------------*/
 
-hemp_etype_p HempElementSpace     = &hemp_element_space;
-hemp_etype_p HempElementTagStart  = &hemp_element_tag_start;
-hemp_etype_p HempElementTagEnd    = &hemp_element_tag_end;
-hemp_etype_p HempElementComment   = &hemp_element_comment;
-hemp_etype_p HempElementEof       = &hemp_element_eof;
+hemp_symbol_p HempSymbolSpace     = &hemp_symbol_space;
+hemp_symbol_p HempSymbolTagStart  = &hemp_symbol_tag_start;
+hemp_symbol_p HempSymbolTagEnd    = &hemp_symbol_tag_end;
+hemp_symbol_p HempSymbolComment   = &hemp_symbol_comment;
+hemp_symbol_p HempSymbolEof       = &hemp_symbol_eof;
 
 
 /*--------------------------------------------------------------------------
@@ -95,6 +97,7 @@ hemp_element_p
 hemp_element_space_parse_expr(
     HEMP_PARSE_PROTO
 ) {
+    debug("hemp_element_space_parse_expr()\n");
     debug_call("hemp_element_space_parse_expr()\n");
 
     /* Advance the pointer to the next element after this one and then skip

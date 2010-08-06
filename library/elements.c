@@ -3,6 +3,7 @@
 
 hemp_elements_p
 hemp_elements_init(
+    hemp_p      hemp,
     hemp_size_t capacity
 ) {
     hemp_elements_p elements = (hemp_elements_p) hemp_mem_alloc(
@@ -20,6 +21,7 @@ hemp_elements_init(
         capacity
     );
 
+    elements->hemp = hemp;
     elements->head = NULL;
     elements->tail = NULL;
 
@@ -49,7 +51,7 @@ hemp_elements_free(
 hemp_element_p
 hemp_elements_create(
     hemp_elements_p elements,
-    hemp_etype_p    type,
+    hemp_symbol_p   type,
     hemp_cstr_p     token,
     hemp_pos_t      position,
     hemp_size_t     length
@@ -72,7 +74,7 @@ hemp_elements_create(
 hemp_element_p
 hemp_elements_append(
     hemp_elements_p elements,
-    hemp_etype_p    type,
+    hemp_symbol_p   type,
     hemp_cstr_p     token,
     hemp_pos_t      position,
     hemp_size_t     length
@@ -100,7 +102,7 @@ hemp_elements_eof(
     hemp_pos_t      position
 ) {
     return hemp_elements_append(
-        elements, HempElementEof,
+        elements, HempSymbolEof,
         NULL, position, 0
     );
 }

@@ -1,27 +1,27 @@
-#check_PROGRAMS  =   tt3
+check_PROGRAMS  =   scanner
 
-check_PROGRAMS  =   action      \
-                    dialect     \
-                    element     \
-                    elements    \
-                    error       \
-                    factory     \
-                    filesystem  \
-                    grammar     \
-                    hash        \
-                    list        \
-                    memory      \
-                    pool        \
-                    ptree       \
-                    scanner     \
-                    source      \
-                    slab        \
-                    tag         \
-                    tagset      \
-                    template    \
-                    text        \
-                    tt3         \
-                    utils
+#check_PROGRAMS  =   action      \
+#                    dialect     \
+#                    element     \
+#                    elements    \
+#                    error       \
+#                    factory     \
+#                    filesystem  \
+#                    grammar     \
+#                    hash        \
+#                    list        \
+#                    memory      \
+#                    pool        \
+#                    ptree       \
+#                    scanner     \
+#                    source      \
+#                    slab        \
+#                    tag         \
+#                    tagset      \
+#                    template    \
+#                    text        \
+#                    tt3         \
+#                    utils
  
                     
 #                  debug         \

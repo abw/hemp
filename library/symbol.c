@@ -10,7 +10,7 @@
  * any skip messages during parsing
  */
 
-static struct hemp_skip_s
+struct hemp_skip_s
     hemp_skip_none_vtable = { 
         HEMP_FALSE,
         &hemp_element_dont_skip,
@@ -22,7 +22,7 @@ static struct hemp_skip_s
  * over them by forwarding the message to the next element 
  */
 
-static struct hemp_skip_s
+struct hemp_skip_s
     hemp_skip_all_vtable = { 
         HEMP_FALSE,
         &hemp_element_next_skip_space,
@@ -35,7 +35,7 @@ static struct hemp_skip_s
  * item from another so they're not quite as ignorable as whitespace
  */
 
-static struct hemp_skip_s
+struct hemp_skip_s
     hemp_skip_delimiter_vtable = { 
         HEMP_FALSE,
         &hemp_element_dont_skip,
@@ -49,7 +49,7 @@ static struct hemp_skip_s
  * special handling.
  */
 
-static struct hemp_skip_s
+struct hemp_skip_s
     hemp_skip_separator_vtable = { 
         HEMP_FALSE,
         &hemp_element_dont_skip,
@@ -57,11 +57,32 @@ static struct hemp_skip_s
         &hemp_element_next_skip_separator,
     };
 
+struct hemp_skip_s
+    hemp_skip_nonsep_vtable = { 
+        HEMP_FALSE,
+        &hemp_element_next_skip_space,
+        &hemp_element_next_skip_delimiter,
+        &hemp_element_dont_skip,
+    };
+
 
 hemp_skip_v HempSkipNone      = &hemp_skip_none_vtable;
 hemp_skip_v HempSkipAll       = &hemp_skip_all_vtable;
 hemp_skip_v HempSkipDelimiter = &hemp_skip_delimiter_vtable;
 hemp_skip_v HempSkipSeparator = &hemp_skip_separator_vtable;
+hemp_skip_v HempSkipNonSep    = &hemp_skip_nonsep_vtable;
+
+
+/*--------------------------------------------------------------------------
+ * parse vtables
+ *--------------------------------------------------------------------------*/
+
+struct hemp_parse_s
+    hemp_parse_binary_vtable = { 
+        HEMP_FALSE,
+        &hemp_element_dont_parse,
+        &hemp_element_parse_binary
+    };
 
 
 
@@ -89,11 +110,12 @@ hemp_symbol_init(
     symbol->rprec   = 0;
     symbol->scanner = NULL;
     symbol->cleanup = NULL;
-    symbol->source  = NULL;
-    symbol->text    = NULL;
-//    symbol->number  = NULL;
+//  symbol->number  = NULL;
     symbol->skip    = HempSkipNone;
-    symbol->parse   = NULL;             /* TODO */
+    symbol->parse   = NULL;
+    symbol->source  = NULL;
+    symbol->text    = &hemp_element_literal_text;       // tmp
+    symbol->parse_expr = &hemp_element_dont_parse;             /* TODO */
 
     return symbol;
 }
@@ -126,6 +148,31 @@ hemp_symbol_skip_vtable(
 }
 
 
+hemp_parse_v
+hemp_symbol_parse_vtable(
+    hemp_symbol_p symbol,
+    hemp_expr_f   expr,
+    hemp_infix_f  infix
+) {
+    hemp_parse_v  parse = symbol->parse;
+
+    /* create a new mutable parse vtable if we're using a default shared set */
+    if (! parse->mutable) {
+        parse = symbol->parse = hemp_mem_alloc( sizeof( struct hemp_parse_s ) );
+
+        if (! parse)
+            hemp_mem_fail("symbol parse vtable");
+
+        parse->mutable = HEMP_TRUE;
+    }
+    
+    parse->expr  = expr;
+    parse->infix = infix;
+
+    return parse;
+}
+
+
 void
 hemp_symbol_free(
     hemp_symbol_p symbol
@@ -141,5 +188,25 @@ hemp_symbol_free(
 
 //  hemp_mem_free(symbol->name);                // now static
     hemp_mem_free(symbol);
+}
+
+
+void 
+hemp_symbol_dump(
+    hemp_symbol_p symbol
+) {
+    debug("symbol at %p\n", symbol->name, symbol);
+    debug("       name: %s\n", symbol->name);
+    debug("      token: %s\n", symbol->token);
+    debug("      flags: %04x\n", symbol->flags);
+    debug("      lprec: %dx\n", symbol->lprec);
+    debug("      rprec: %dx\n", symbol->rprec);
+    debug("    scanner: %px\n", symbol->scanner);
+    debug("    cleanup: %px\n", symbol->cleanup);
+    debug("       skip: %px\n", symbol->skip);
+    debug("      parse: %px\n", symbol->parse);
+    debug("     source: %px\n", symbol->source);
+    debug("       text: %px\n", symbol->text);
+    debug(" parse_expr: %px\n", symbol->parse_expr);
 }
 

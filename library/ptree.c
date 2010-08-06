@@ -233,6 +233,55 @@ hemp_ptree_fetch(
 
 
 
+hemp_mem_p
+hemp_pnode_match_more(
+    hemp_pnode_p    pnode, 
+    hemp_cstr_p     *srcptr
+) {
+    hemp_cstr_p cmptr  = pnode->key;
+    hemp_cstr_p src    = *srcptr;
+    hemp_mem_p  value  = NULL;
+
+    while (1) {
+        if (*src == *cmptr) {
+            src++;
+
+            if (pnode->equal) {
+//              debug_yellow("[%c->equal]", *cmptr);
+                value = pnode->value;     // payload - but only if pnode is set - don't want to trash previous match
+                pnode = pnode->equal;
+                cmptr = pnode->key;
+            }
+            else if (* ++cmptr) {
+//              debug_yellow("[%c->more => %c]", *(cmptr - 1), cmptr);
+            }
+            else {
+                value = pnode->value;
+                break;
+            }
+        }
+        else if (*src < *cmptr && pnode->before) {
+//          debug_blue("[%c is before %c]", *src, *cmptr);
+            pnode = pnode->before;
+            cmptr = pnode->key;
+        }
+        else if (*src > *cmptr && pnode->after) {
+//          debug_blue("[%c is after %c]", *src, *cmptr);
+            pnode = pnode->after;
+            cmptr = pnode->key;
+        }
+        else {
+            break;
+        }
+    }
+  
+    if (value)
+        *srcptr = src;
+
+    return value;
+}
+
+
 void
 hemp_pnode_dump(
     hemp_pnode_p pnode, 

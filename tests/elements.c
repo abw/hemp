@@ -6,14 +6,17 @@ void test_elements();
 int
 main(int argc, char **argv, char **env)
 {
-    plan_tests(4);
+    plan_tests(5);
     test_elements();
     hemp_mem_trace_ok();
     return exit_status();
 }
 
 void test_elements() {
-    hemp_elements_p elements = hemp_elements_init(0);
+    hemp_p hemp = hemp_init();
+    ok( hemp, "created hemp" );
+
+    hemp_elements_p elements = hemp_elements_init(hemp, 0);
     ok( elements, "created elements" );
     
     hemp_element_p eof = hemp_elements_eof(elements, 0);
@@ -21,4 +24,5 @@ void test_elements() {
     ok( hemp_has_flag(eof, HEMP_IS_EOF), "HEMP_IS_EOF is set" );
     
     hemp_elements_free(elements);
+    hemp_free(hemp);
 }

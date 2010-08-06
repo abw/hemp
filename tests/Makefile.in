@@ -14,8 +14,6 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
-#check_PROGRAMS  =   tt3
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -35,13 +33,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = action$(EXEEXT) dialect$(EXEEXT) element$(EXEEXT) \
-	elements$(EXEEXT) error$(EXEEXT) factory$(EXEEXT) \
-	filesystem$(EXEEXT) grammar$(EXEEXT) hash$(EXEEXT) \
-	list$(EXEEXT) memory$(EXEEXT) pool$(EXEEXT) ptree$(EXEEXT) \
-	scanner$(EXEEXT) source$(EXEEXT) slab$(EXEEXT) tag$(EXEEXT) \
-	tagset$(EXEEXT) template$(EXEEXT) text$(EXEEXT) tt3$(EXEEXT) \
-	utils$(EXEEXT)
+check_PROGRAMS = scanner$(EXEEXT)
 subdir = tests
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -59,94 +51,10 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/hemp/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-action_SOURCES = action.c
-action_OBJECTS = action.$(OBJEXT)
-action_LDADD = $(LDADD)
-action_DEPENDENCIES = ../library/libhemp.la tap.o
-dialect_SOURCES = dialect.c
-dialect_OBJECTS = dialect.$(OBJEXT)
-dialect_LDADD = $(LDADD)
-dialect_DEPENDENCIES = ../library/libhemp.la tap.o
-element_SOURCES = element.c
-element_OBJECTS = element.$(OBJEXT)
-element_LDADD = $(LDADD)
-element_DEPENDENCIES = ../library/libhemp.la tap.o
-elements_SOURCES = elements.c
-elements_OBJECTS = elements.$(OBJEXT)
-elements_LDADD = $(LDADD)
-elements_DEPENDENCIES = ../library/libhemp.la tap.o
-error_SOURCES = error.c
-error_OBJECTS = error.$(OBJEXT)
-error_LDADD = $(LDADD)
-error_DEPENDENCIES = ../library/libhemp.la tap.o
-factory_SOURCES = factory.c
-factory_OBJECTS = factory.$(OBJEXT)
-factory_LDADD = $(LDADD)
-factory_DEPENDENCIES = ../library/libhemp.la tap.o
-filesystem_SOURCES = filesystem.c
-filesystem_OBJECTS = filesystem.$(OBJEXT)
-filesystem_LDADD = $(LDADD)
-filesystem_DEPENDENCIES = ../library/libhemp.la tap.o
-grammar_SOURCES = grammar.c
-grammar_OBJECTS = grammar.$(OBJEXT)
-grammar_LDADD = $(LDADD)
-grammar_DEPENDENCIES = ../library/libhemp.la tap.o
-hash_SOURCES = hash.c
-hash_OBJECTS = hash.$(OBJEXT)
-hash_LDADD = $(LDADD)
-hash_DEPENDENCIES = ../library/libhemp.la tap.o
-list_SOURCES = list.c
-list_OBJECTS = list.$(OBJEXT)
-list_LDADD = $(LDADD)
-list_DEPENDENCIES = ../library/libhemp.la tap.o
-memory_SOURCES = memory.c
-memory_OBJECTS = memory.$(OBJEXT)
-memory_LDADD = $(LDADD)
-memory_DEPENDENCIES = ../library/libhemp.la tap.o
-pool_SOURCES = pool.c
-pool_OBJECTS = pool.$(OBJEXT)
-pool_LDADD = $(LDADD)
-pool_DEPENDENCIES = ../library/libhemp.la tap.o
-ptree_SOURCES = ptree.c
-ptree_OBJECTS = ptree.$(OBJEXT)
-ptree_LDADD = $(LDADD)
-ptree_DEPENDENCIES = ../library/libhemp.la tap.o
 scanner_SOURCES = scanner.c
 scanner_OBJECTS = scanner.$(OBJEXT)
 scanner_LDADD = $(LDADD)
 scanner_DEPENDENCIES = ../library/libhemp.la tap.o
-slab_SOURCES = slab.c
-slab_OBJECTS = slab.$(OBJEXT)
-slab_LDADD = $(LDADD)
-slab_DEPENDENCIES = ../library/libhemp.la tap.o
-source_SOURCES = source.c
-source_OBJECTS = source.$(OBJEXT)
-source_LDADD = $(LDADD)
-source_DEPENDENCIES = ../library/libhemp.la tap.o
-tag_SOURCES = tag.c
-tag_OBJECTS = tag.$(OBJEXT)
-tag_LDADD = $(LDADD)
-tag_DEPENDENCIES = ../library/libhemp.la tap.o
-tagset_SOURCES = tagset.c
-tagset_OBJECTS = tagset.$(OBJEXT)
-tagset_LDADD = $(LDADD)
-tagset_DEPENDENCIES = ../library/libhemp.la tap.o
-template_SOURCES = template.c
-template_OBJECTS = template.$(OBJEXT)
-template_LDADD = $(LDADD)
-template_DEPENDENCIES = ../library/libhemp.la tap.o
-text_SOURCES = text.c
-text_OBJECTS = text.$(OBJEXT)
-text_LDADD = $(LDADD)
-text_DEPENDENCIES = ../library/libhemp.la tap.o
-tt3_SOURCES = tt3.c
-tt3_OBJECTS = tt3.$(OBJEXT)
-tt3_LDADD = $(LDADD)
-tt3_DEPENDENCIES = ../library/libhemp.la tap.o
-utils_SOURCES = utils.c
-utils_OBJECTS = utils.$(OBJEXT)
-utils_LDADD = $(LDADD)
-utils_DEPENDENCIES = ../library/libhemp.la tap.o
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/hemp
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -160,14 +68,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = action.c dialect.c element.c elements.c error.c factory.c \
-	filesystem.c grammar.c hash.c list.c memory.c pool.c ptree.c \
-	scanner.c slab.c source.c tag.c tagset.c template.c text.c \
-	tt3.c utils.c
-DIST_SOURCES = action.c dialect.c element.c elements.c error.c \
-	factory.c filesystem.c grammar.c hash.c list.c memory.c pool.c \
-	ptree.c scanner.c slab.c source.c tag.c tagset.c template.c \
-	text.c tt3.c utils.c
+SOURCES = scanner.c
+DIST_SOURCES = scanner.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -315,6 +217,29 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 
+#check_PROGRAMS  =   action      \
+#                    dialect     \
+#                    element     \
+#                    elements    \
+#                    error       \
+#                    factory     \
+#                    filesystem  \
+#                    grammar     \
+#                    hash        \
+#                    list        \
+#                    memory      \
+#                    pool        \
+#                    ptree       \
+#                    scanner     \
+#                    source      \
+#                    slab        \
+#                    tag         \
+#                    tagset      \
+#                    template    \
+#                    text        \
+#                    tt3         \
+#                    utils
+
 #                  debug         \
 #                  benchmark  
 #                  hemp          \
@@ -368,72 +293,9 @@ clean-checkPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-action$(EXEEXT): $(action_OBJECTS) $(action_DEPENDENCIES) 
-	@rm -f action$(EXEEXT)
-	$(LINK) $(action_OBJECTS) $(action_LDADD) $(LIBS)
-dialect$(EXEEXT): $(dialect_OBJECTS) $(dialect_DEPENDENCIES) 
-	@rm -f dialect$(EXEEXT)
-	$(LINK) $(dialect_OBJECTS) $(dialect_LDADD) $(LIBS)
-element$(EXEEXT): $(element_OBJECTS) $(element_DEPENDENCIES) 
-	@rm -f element$(EXEEXT)
-	$(LINK) $(element_OBJECTS) $(element_LDADD) $(LIBS)
-elements$(EXEEXT): $(elements_OBJECTS) $(elements_DEPENDENCIES) 
-	@rm -f elements$(EXEEXT)
-	$(LINK) $(elements_OBJECTS) $(elements_LDADD) $(LIBS)
-error$(EXEEXT): $(error_OBJECTS) $(error_DEPENDENCIES) 
-	@rm -f error$(EXEEXT)
-	$(LINK) $(error_OBJECTS) $(error_LDADD) $(LIBS)
-factory$(EXEEXT): $(factory_OBJECTS) $(factory_DEPENDENCIES) 
-	@rm -f factory$(EXEEXT)
-	$(LINK) $(factory_OBJECTS) $(factory_LDADD) $(LIBS)
-filesystem$(EXEEXT): $(filesystem_OBJECTS) $(filesystem_DEPENDENCIES) 
-	@rm -f filesystem$(EXEEXT)
-	$(LINK) $(filesystem_OBJECTS) $(filesystem_LDADD) $(LIBS)
-grammar$(EXEEXT): $(grammar_OBJECTS) $(grammar_DEPENDENCIES) 
-	@rm -f grammar$(EXEEXT)
-	$(LINK) $(grammar_OBJECTS) $(grammar_LDADD) $(LIBS)
-hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES) 
-	@rm -f hash$(EXEEXT)
-	$(LINK) $(hash_OBJECTS) $(hash_LDADD) $(LIBS)
-list$(EXEEXT): $(list_OBJECTS) $(list_DEPENDENCIES) 
-	@rm -f list$(EXEEXT)
-	$(LINK) $(list_OBJECTS) $(list_LDADD) $(LIBS)
-memory$(EXEEXT): $(memory_OBJECTS) $(memory_DEPENDENCIES) 
-	@rm -f memory$(EXEEXT)
-	$(LINK) $(memory_OBJECTS) $(memory_LDADD) $(LIBS)
-pool$(EXEEXT): $(pool_OBJECTS) $(pool_DEPENDENCIES) 
-	@rm -f pool$(EXEEXT)
-	$(LINK) $(pool_OBJECTS) $(pool_LDADD) $(LIBS)
-ptree$(EXEEXT): $(ptree_OBJECTS) $(ptree_DEPENDENCIES) 
-	@rm -f ptree$(EXEEXT)
-	$(LINK) $(ptree_OBJECTS) $(ptree_LDADD) $(LIBS)
 scanner$(EXEEXT): $(scanner_OBJECTS) $(scanner_DEPENDENCIES) 
 	@rm -f scanner$(EXEEXT)
 	$(LINK) $(scanner_OBJECTS) $(scanner_LDADD) $(LIBS)
-slab$(EXEEXT): $(slab_OBJECTS) $(slab_DEPENDENCIES) 
-	@rm -f slab$(EXEEXT)
-	$(LINK) $(slab_OBJECTS) $(slab_LDADD) $(LIBS)
-source$(EXEEXT): $(source_OBJECTS) $(source_DEPENDENCIES) 
-	@rm -f source$(EXEEXT)
-	$(LINK) $(source_OBJECTS) $(source_LDADD) $(LIBS)
-tag$(EXEEXT): $(tag_OBJECTS) $(tag_DEPENDENCIES) 
-	@rm -f tag$(EXEEXT)
-	$(LINK) $(tag_OBJECTS) $(tag_LDADD) $(LIBS)
-tagset$(EXEEXT): $(tagset_OBJECTS) $(tagset_DEPENDENCIES) 
-	@rm -f tagset$(EXEEXT)
-	$(LINK) $(tagset_OBJECTS) $(tagset_LDADD) $(LIBS)
-template$(EXEEXT): $(template_OBJECTS) $(template_DEPENDENCIES) 
-	@rm -f template$(EXEEXT)
-	$(LINK) $(template_OBJECTS) $(template_LDADD) $(LIBS)
-text$(EXEEXT): $(text_OBJECTS) $(text_DEPENDENCIES) 
-	@rm -f text$(EXEEXT)
-	$(LINK) $(text_OBJECTS) $(text_LDADD) $(LIBS)
-tt3$(EXEEXT): $(tt3_OBJECTS) $(tt3_DEPENDENCIES) 
-	@rm -f tt3$(EXEEXT)
-	$(LINK) $(tt3_OBJECTS) $(tt3_LDADD) $(LIBS)
-utils$(EXEEXT): $(utils_OBJECTS) $(utils_DEPENDENCIES) 
-	@rm -f utils$(EXEEXT)
-	$(LINK) $(utils_OBJECTS) $(utils_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -441,28 +303,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/action.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialect.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/element.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/elements.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/factory.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filesystem.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/grammar.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pool.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ptree.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/scanner.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/slab.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/source.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tag.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tagset.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tt3.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

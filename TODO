@@ -56,3 +56,6 @@ An incomplete list of things TODO, in no particular order.
   to give it a chance to load it.  Just got to be careful we don't end up in
   a deathly spiral if we then re-attempt the lookup and it fails again.
 
+* inline tag scan: make quotes, comments, etc., all standard operators.
+  Define a scan method for them and invoke it on detection.
+  

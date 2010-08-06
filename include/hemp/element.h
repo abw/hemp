@@ -3,24 +3,25 @@
 
 #include <hemp/type.h>
 #include <hemp/text.h>
+#include <hemp/symbol.h>
 
 
 /*--------------------------------------------------------------------------
  * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_etype_s {
-    HEMP_TYPE_BASE
-    hemp_flags_t    flags;
-    hemp_clean_f    cleanup;
-    hemp_skip_f     skip_space;
-    hemp_skip_f     skip_delimiter;
-    hemp_skip_f     skip_separator;
-    hemp_parse_f    parse_expr;
-    hemp_text_f     text;
-
-    hemp_cstr_p     (*number)();
-};
+//struct hemp_etype_s {
+//    HEMP_TYPE_BASE
+//    hemp_flags_t    flags;
+//    hemp_clean_f    cleanup;
+//    hemp_skip_f     skip_space;
+//    hemp_skip_f     skip_delimiter;
+//    hemp_skip_f     skip_separator;
+//    hemp_parse_f    parse_expr;
+//    hemp_text_f     text;
+//
+//    hemp_cstr_p     (*number)();
+//};
 
 struct hemp_unary_s {
     hemp_element_p  expr;
@@ -46,7 +47,8 @@ union hemp_evalue_u {
 };
 
 struct hemp_element_s {
-    hemp_etype_p    type;
+//    hemp_etype_p    type;
+    hemp_symbol_p   type;
     hemp_element_p  next;
     hemp_cstr_p     token;
     hemp_pos_t      position;
@@ -60,19 +62,18 @@ struct hemp_element_s {
  * external static element types
  *--------------------------------------------------------------------------*/
 
-extern hemp_etype_p HempElementSpace;
-extern hemp_etype_p HempElementComment;
-extern hemp_etype_p HempElementTagStart;
-extern hemp_etype_p HempElementTagEnd;
-extern hemp_etype_p HempElementEof;
-
-extern hemp_etype_p HempElementText;
-extern hemp_etype_p HempElementWord;
-extern hemp_etype_p HempElementNumber;
-extern hemp_etype_p HempElementInteger;
-extern hemp_etype_p HempElementSQuote;
-extern hemp_etype_p HempElementDQuote;
-extern hemp_etype_p HempElementBlock;
+extern hemp_symbol_p HempSymbolSpace;
+extern hemp_symbol_p HempSymbolComment;
+extern hemp_symbol_p HempSymbolTagStart;
+extern hemp_symbol_p HempSymbolTagEnd;
+extern hemp_symbol_p HempSymbolEof;
+extern hemp_symbol_p HempSymbolText;
+extern hemp_symbol_p HempSymbolWord;
+extern hemp_symbol_p HempSymbolNumber;
+extern hemp_symbol_p HempSymbolInteger;
+extern hemp_symbol_p HempSymbolSQuote;
+extern hemp_symbol_p HempSymbolDQuote;
+extern hemp_symbol_p HempSymbolBlock;
 
 
 /*--------------------------------------------------------------------------
@@ -101,7 +102,7 @@ hemp_element_p
 hemp_element_p
     hemp_element_init(
         hemp_element_p,
-        hemp_etype_p, 
+        hemp_symbol_p, 
         hemp_cstr_p, 
         hemp_pos_t, 
         hemp_size_t
@@ -157,6 +158,12 @@ hemp_element_p
         HEMP_PARSE_PROTO
     );
 
+hemp_element_p
+    hemp_element_parse_binary(
+        HEMP_PARSE_PROTO,
+        hemp_element_p lhs
+    );
+
 hemp_bool_t
     hemp_element_dump(
         hemp_element_p element
@@ -169,6 +176,11 @@ hemp_bool_t
 
 hemp_element_p
     hemp_element_space_parse_expr(
+        HEMP_PARSE_PROTO
+    );
+
+hemp_element_p
+    hemp_element_number_parse_expr(
         HEMP_PARSE_PROTO
     );
 
@@ -198,16 +210,23 @@ hemp_text_p
     );
 
 hemp_text_p
+hemp_element_binary_text(
+    hemp_element_p  element,
+    hemp_text_p     text
+);
+
+hemp_text_p
 hemp_element_block_source(
     hemp_element_p  element,
     hemp_text_p     text
 );
 
-hemp_mem_p
-    hemp_element_number_constructor(
-        hemp_p      hemp,
-        hemp_cstr_p name
-    );
+//hemp_mem_p
+//    hemp_element_number_constructor(
+//        hemp_p      hemp,
+//        hemp_cstr_p name
+//    );
+//
 
 hemp_text_p
 hemp_element_no_text(
@@ -235,17 +254,22 @@ hemp_element_block_clean(
     hemp_element_free(e);    \
     e = NULL;
 
-#define hemp_parse_expr(ep, sc, pr, fr) \
-    (*ep)->type->parse_expr(ep, sc, pr, fr)
+#define hemp_parse_expr(ep, sc, pr, fr)     \
+    (hemp_element_p) (*ep)->type->parse_expr(ep, sc, pr, fr)
+
+#define hemp_parse_infix(ep, sc, pr, fr, lhs)            \
+    ((*ep)->type->parse && (*ep)->type->parse->infix)    \
+        ? (*ep)->type->parse->infix(ep, sc, pr, fr, lhs) \
+        : lhs
 
 #define hemp_skip_space(ep) \
-    (*ep)->type->skip_space(ep)
+    (*ep)->type->skip->space(ep)
 
 #define hemp_skip_delimiter(ep) \
-    (*ep)->type->skip_delimiter(ep)
+    (*ep)->type->skip->delimiter(ep)
 
 #define hemp_skip_separator(ep) \
-    (*ep)->type->skip_separator(ep)
+    (*ep)->type->skip->separator(ep)
 
 #define hemp_has_next(ep) \
     (*elemptr)->next
@@ -254,7 +278,7 @@ hemp_element_block_clean(
     *elemptr = (*elemptr)->next
 
 #define hemp_at_eof(ep) \
-    (*ep)->type == HempElementEof
+    (*ep)->type == HempSymbolEof
 
 #define hemp_set_flag(item, flag) \
     item->flags |= flag
@@ -271,7 +295,6 @@ hemp_element_block_clean(
 #define hemp_element_skip_space     hemp_element_self
 #define hemp_element_skip_delimiter hemp_element_self
 #define hemp_element_skip_separator hemp_element_self
-
 
 
 #endif /* HEMP_ELEMENT_H */

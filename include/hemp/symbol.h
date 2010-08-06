@@ -24,9 +24,9 @@ typedef struct hemp_skip_s  * hemp_skip_v;
 /* vtable for parsing elements as expressions */
 
 struct hemp_parse_s {
-    hemp_parse_f    expr;
-    hemp_parse_f    exprs;
-    hemp_parse_f    etc;
+    hemp_bool_t     mutable;
+    hemp_expr_f     expr;
+    hemp_infix_f    infix;
 };
 
 typedef struct hemp_parse_s  * hemp_parse_v;
@@ -35,7 +35,7 @@ typedef struct hemp_parse_s  * hemp_parse_v;
 /* symbol vtable */
 
 struct hemp_symbol_s {
-    HEMP_TYPE_BASE
+    hemp_cstr_p     name;
 
     /* symbol metadata */
     hemp_cstr_p     token;
@@ -57,7 +57,7 @@ struct hemp_symbol_s {
 //    hemp_num_f      number;
 
     // tmp - old
-    hemp_parse_f    parse_expr;
+    hemp_expr_f    parse_expr;
 
 
     // etc
@@ -87,8 +87,20 @@ hemp_symbol_skip_vtable(
     hemp_skip_f   separator
 );
 
+hemp_parse_v
+hemp_symbol_parse_vtable(
+    hemp_symbol_p symbol,
+    hemp_expr_f   expr,
+    hemp_infix_f  infix
+);
+
 void
 hemp_symbol_free(
+    hemp_symbol_p symbol
+);
+
+void 
+hemp_symbol_dump(
     hemp_symbol_p symbol
 );
 
@@ -97,10 +109,20 @@ hemp_symbol_free(
  * externals
  *--------------------------------------------------------------------------*/
 
-extern hemp_skip_v HempSkipNone;
-extern hemp_skip_v HempSkipAll;
-extern hemp_skip_v HempSkipDelimiter;
-extern hemp_skip_v HempSkipSeparator;
+extern struct hemp_skip_s hemp_skip_none_vtable;
+extern struct hemp_skip_s hemp_skip_all_vtable;
+extern struct hemp_skip_s hemp_skip_delimiter_vtable;
+extern struct hemp_skip_s hemp_skip_separator_vtable;
+extern struct hemp_skip_s hemp_skip_nonsep_vtable;
+
+
+/* can't make these work in constant struct definitions */
+//extern hemp_skip_v HempSkipNone;
+//extern hemp_skip_v HempSkipAll;
+//extern hemp_skip_v HempSkipDelimiter;
+//extern hemp_skip_v HempSkipSeparator;
+
+extern struct hemp_parse_s hemp_parse_binary_vtable;
 
 
 #endif /* HEMP_SYMBOL_H */

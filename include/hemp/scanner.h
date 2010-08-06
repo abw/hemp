@@ -30,11 +30,11 @@ hemp_bool_t
         hemp_template_p
     );
 
-hemp_tag_p
-    hemp_scan_tag_start(
-        hemp_pnode_p, 
-        hemp_cstr_p *
-    );
+//hemp_tag_p
+//    hemp_scan_tag_start(
+//        hemp_pnode_p, 
+//        hemp_cstr_p *
+//    );
 
 
 

@@ -58,6 +58,12 @@ hemp_mem_p
         hemp_cstr_p  key
     );
 
+hemp_mem_p
+    hemp_pnode_match_more(
+        hemp_pnode_p    pnode, 
+        hemp_cstr_p     *srcptr
+    );
+
 void 
     hemp_ptree_dump(
         hemp_ptree_p ptree

@@ -6,20 +6,21 @@ void
     );
 
 
-static struct hemp_etype_s
-    hemp_element_block = { 
+struct hemp_symbol_s
+    hemp_symbol_block = { 
         "block",
-        0,
+        "[block]",
+        0, 0, 0,
+        NULL, 
         &hemp_element_block_clean,
-        &hemp_element_dont_skip,
-        &hemp_element_dont_skip,
-        &hemp_element_dont_skip,
-        &hemp_element_parse_expr,
-        &hemp_element_block_text
+        &hemp_skip_none_vtable,
+        NULL, NULL,
+        &hemp_element_block_text,
+        &hemp_element_parse_expr,               // FIXME
     };
 
+hemp_symbol_p HempSymbolBlock = &hemp_symbol_block;
 
-hemp_etype_p HempElementBlock = &hemp_element_block;
 
 hemp_text_p
 hemp_element_block_source(
@@ -63,6 +64,7 @@ hemp_element_block_clean(
     hemp_element_p element
 ) {
     debug_call("hemp_element_block_clean(%p)\n", element);
+    
     hemp_list_p exprs = element->value.block.exprs;
     if (exprs)
         hemp_list_free(exprs);

@@ -31,10 +31,11 @@ hemp_scan_text(
             debug_yellow("OUTLINE:%c", *src);
             tagstr = src;
             
-            if ((tag = hemp_scan_tag_start(pnode, &src))) {
+//          if ((tag = hemp_scan_tag_start(pnode, &src))) {
+            if ((tag = (hemp_tag_p) hemp_pnode_match_more(pnode, &src))) {
                 if (tagstr > from) {
                     hemp_elements_append(
-                        elements, tagset->text_element,
+                        elements, tagset->text_symbol,
                         from, pos, tagstr - from
                     );
                     pos += tagstr - from;
@@ -62,10 +63,11 @@ hemp_scan_text(
 
                 tagstr = src;
 
-                if ((tag = hemp_scan_tag_start(pnode, &src))) {
+//              if ((tag = hemp_scan_tag_start(pnode, &src))) {
+                if ((tag = (hemp_tag_p) hemp_pnode_match_more(pnode, &src))) {
                     if (tagstr > from) {
                         hemp_elements_append(
-                            elements, tagset->text_element,
+                            elements, tagset->text_symbol,
                             from, pos, tagstr - from
                         );
                         pos += tagstr - from;
@@ -92,7 +94,7 @@ hemp_scan_text(
     if (src > from) {
 //      debug("got %d characters of trailing text\n", src - from);
         hemp_elements_append(
-            elements, tagset->text_element,
+            elements, tagset->text_symbol,
             from, pos, src - from
         );
         pos += src - from;
@@ -110,7 +112,7 @@ hemp_scan_text(
 
 
 hemp_tag_p
-hemp_scan_tag_start(
+OLD_hemp_scan_tag_start(
     hemp_pnode_p    pnode, 
     hemp_cstr_p     *srcptr
 ) {

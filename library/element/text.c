@@ -1,19 +1,18 @@
-#include <hemp/elements.h>
+#include <hemp/element.h>
 
-
-static struct hemp_etype_s
-    hemp_element_text = { 
+struct hemp_symbol_s
+    hemp_symbol_text = { 
         "text",
-        HEMP_IS_FIXED | HEMP_IS_STATIC,
-        NULL,
-        &hemp_element_dont_skip,                 /* not skippable */
-        &hemp_element_dont_skip,
-        &hemp_element_dont_skip,
-        &hemp_element_literal_parse_expr,
-        &hemp_element_literal_text
+        "text:",
+        HEMP_IS_FIXED | HEMP_IS_STATIC, 0, 0,
+        NULL, NULL,
+        &hemp_skip_none_vtable,
+        NULL, NULL,
+        &hemp_element_literal_text,
+        &hemp_element_literal_parse_expr
     };
 
-hemp_etype_p HempElementText = &hemp_element_text;
+hemp_symbol_p HempSymbolText = &hemp_symbol_text;
 
 
 /* TODO: perhaps move this as it only applies to FIXED literal text
@@ -24,7 +23,7 @@ void
 hemp_element_text_clean(
     hemp_element_p element
 ) {
-//  debug_call("hemp_element_text_clean(%p)\n", element);
+    debug_call("hemp_element_text_clean(%p)\n", element);
 
     /* squote and dquote elements may have allocated memory to accomodate
      * translated escape sequences, e.g. \n \\, etc

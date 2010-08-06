@@ -1,18 +1,17 @@
 #include <hemp/element.h>
 
-
-static struct hemp_etype_s
-    hemp_element_integer = { 
+struct hemp_symbol_s
+    hemp_symbol_integer = { 
         "integer",
-        HEMP_IS_STATIC,
+        "integer:",
+        HEMP_IS_STATIC, 0, 0,
+        NULL, NULL,
+        &hemp_skip_none_vtable,
         NULL,
-        &hemp_element_dont_skip,
-        &hemp_element_dont_skip,
-        &hemp_element_dont_skip,
-        &hemp_element_literal_parse_expr,
-        &hemp_element_literal_text
+        NULL,
+        &hemp_element_literal_text,
+        &hemp_element_number_parse_expr
     };
 
-
-hemp_etype_p HempElementInteger = &hemp_element_integer;
+hemp_symbol_p HempSymbolInteger = &hemp_symbol_integer;
 

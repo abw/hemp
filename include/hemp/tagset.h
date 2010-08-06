@@ -19,7 +19,7 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_tagset_s {
-   hemp_etype_p     text_element;
+   hemp_symbol_p    text_symbol;
    hemp_hash_p      tags;
    hemp_ptree_p     inline_tags;
    hemp_ptree_p     outline_tags;

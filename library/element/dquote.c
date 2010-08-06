@@ -1,18 +1,19 @@
-#include <hemp/elements.h>
+#include <hemp/element.h>
 
 
-static struct hemp_etype_s
-    hemp_element_dquote = { 
+struct hemp_symbol_s
+    hemp_symbol_dquote = { 
         "dquote",
-        0,
+        "dquote:",
+//      HEMP_IS_STATIC, 0, 0,
+        0, 0, 0,
+        NULL,
         &hemp_element_text_clean,
-        &hemp_element_dont_skip,
-        &hemp_element_dont_skip,
-        &hemp_element_dont_skip,
-        &hemp_element_literal_parse_expr,
-        &hemp_element_quoted_text
+        &hemp_skip_none_vtable,
+        NULL, NULL,
+        &hemp_element_quoted_text,
+        &hemp_element_literal_parse_expr
     };
 
-
-hemp_etype_p HempElementDQuote = &hemp_element_dquote;
+hemp_symbol_p HempSymbolDQuote = &hemp_symbol_dquote;
 

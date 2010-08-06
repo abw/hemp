@@ -21,10 +21,11 @@ main(
 }
 
 void test_scanner() {
-    test_script( "hello" );
-    test_script( "comments" );
-    test_script( "numbers" );
-    test_script( "quotes" );
+//    test_script( "hello" );
+//    test_script( "comments" );
+//    test_script( "numbers" );
+//    test_script( "quotes" );
+    test_script( "numops" );
 }
 
 

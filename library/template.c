@@ -16,7 +16,7 @@ hemp_template_init(
     tmpl->dialect  = dialect;
     tmpl->source   = source;
     tmpl->tagset   = hemp_tagset_init();
-    tmpl->elements = hemp_elements_init(0);
+    tmpl->elements = hemp_elements_init(dialect->hemp, 0);
     tmpl->tree     = NULL;
         
     return tmpl;
