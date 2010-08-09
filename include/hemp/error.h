@@ -61,7 +61,7 @@ hemp_error_p
     hemp_error_initfv(
         hemp_errno_e errno,
         hemp_cstr_p  format,
-        va_list     *args
+        va_list      args
     );
 
 void

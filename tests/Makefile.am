@@ -1,4 +1,4 @@
-check_PROGRAMS  =   scanner
+check_PROGRAMS  =   tagval
 
 #check_PROGRAMS  =   action      \
 #                    dialect     \

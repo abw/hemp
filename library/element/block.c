@@ -9,10 +9,10 @@ void
 struct hemp_symbol_s
     hemp_symbol_block = { 
         "block",
-        "[block]",
+        "[block]",NULL,
         0, 0, 0,
         NULL, 
-        &hemp_element_block_clean,
+        (hemp_clean_f) &hemp_element_block_clean,
         &hemp_skip_none_vtable,
         NULL, NULL,
         &hemp_element_block_text,

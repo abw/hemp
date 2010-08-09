@@ -64,7 +64,7 @@ hemp_error_p
 hemp_error_initfv(
     hemp_errno_e number,
     hemp_cstr_p  format,
-    va_list     *args
+    va_list     args
 ) {
     hemp_error_p error = hemp_error_new(number);
     vasprintf(&error->message, format, args);

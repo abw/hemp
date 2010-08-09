@@ -35,7 +35,7 @@ void test_tag() {
     hemp_tag_p tag, copy;
 
     tag = hemp_tag_init(
-        "test1", HEMP_INLINE, "[%", "%]", 
+        "test1", HEMP_INLINE_TAG, "[%", "%]", 
         NULL, NULL
     );
 

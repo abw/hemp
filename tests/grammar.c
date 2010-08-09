@@ -33,7 +33,7 @@ void test_grammar() {
     hemp_p hemp = hemp_init();
     ok( hemp, "created hemp object" );
     
-    hemp_grammar_p language = hemp_language(hemp, HEMP_TT3);
+    hemp_language_p language = hemp_language(hemp, HEMP_TT3);
     hemp_grammar_p grammar;
 
     /* calling this multiple times has no effect */
@@ -77,22 +77,22 @@ hemp_grammar_test(
 
     HEMP_TRY;
         hemp_grammar_add_symbol(
-            grammar, "hemp.text", "_TEXT", 0, 0
+            grammar, "hemp.text", "_TEXT", NULL, 0, 0
         );
         hemp_grammar_add_symbol(
-            grammar, "hemp.space", "_SPACE", 0, 0
+            grammar, "hemp.space", "_SPACE", NULL, 0, 0
         );
         hemp_grammar_add_symbol(
-            grammar, "hemp.numop.plus", "+", 42, 420
+            grammar, "hemp.numop.plus", "+", NULL, 42, 420
         );
         hemp_grammar_add_symbol(
-            grammar, "hemp.boolop.and", "and", 42, 420
+            grammar, "hemp.boolop.and", "and", NULL, 42, 420
         );
         hemp_grammar_add_symbol(
-            grammar, "hemp.textop.concat", "~", 42, 420
+            grammar, "hemp.textop.concat", "~", NULL, 42, 420
         );
         hemp_grammar_add_symbol(
-            grammar, "hemp.numop.dud", "--", 55, 99
+            grammar, "hemp.numop.dud", "--", NULL, 55, 99
         );
 //        hemp_grammar_add_symbol(
 //            grammar, "hemp.space", "++", 69, 690

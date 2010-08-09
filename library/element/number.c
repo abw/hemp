@@ -3,7 +3,7 @@
 struct hemp_symbol_s
     hemp_symbol_number = { 
         "number",
-        "number:",
+        "number:",NULL,
         HEMP_IS_STATIC, 0, 0,
         NULL, NULL,
         &hemp_skip_none_vtable,

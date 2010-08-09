@@ -38,11 +38,11 @@ void test_element_factory() {
     ok( hemp, "created hemp" );
 
     HEMP_TRY;
-        symbol = hemp_symbol(hemp, "hemp.numop.inc", "+");
+        symbol = hemp_symbol(hemp, "hemp.numop.inc", "+", NULL);
         ok( symbol, "got %s symbol", symbol->name );
         hemp_symbol_free(symbol);
 
-        symbol = hemp_symbol(hemp, "hemp.numop.inc", "+");
+        symbol = hemp_symbol(hemp, "hemp.numop.inc", "+", NULL);
         ok( symbol, "got it again" );
         hemp_symbol_free(symbol);
     HEMP_CATCH_ALL;
@@ -50,7 +50,7 @@ void test_element_factory() {
     HEMP_END;
 
     HEMP_TRY;
-        symbol = hemp_symbol(hemp, "blah.blah", "dud");
+        symbol = hemp_symbol(hemp, "blah.blah", "dud", NULL);
     HEMP_CATCH(HEMP_ERROR_INVALID);
         pass("error as expected: %s", hemp->error->message);
     HEMP_CATCH_ALL;

@@ -16,11 +16,15 @@
  * generic data types
  *--------------------------------------------------------------------------*/
 
+typedef u_int8_t                hemp_u8_t;      /* generic 8 bit integer    */
+typedef u_int16_t               hemp_u16_t;     /* generic 16 bit integer   */
+typedef u_int32_t               hemp_u32_t;     /* generic 32 bit integer   */
+typedef u_int64_t               hemp_u64_t;     /* generic 64 bit integer   */
 typedef unsigned char           hemp_bool_t;    /* boolean true/false       */
 typedef unsigned char           hemp_char_t;    /* single character         */
 typedef long                    hemp_flags_t;   /* bitmask                  */
 typedef long                    hemp_offset_t;  /* -ve/+ve offset           */
-typedef long                    hemp_int_t;     /* generic integer          */
+typedef u_int32_t               hemp_int_t;     /* generic integer          */
 typedef double                  hemp_num_t;     /* generic fp number        */
 typedef unsigned long           hemp_uint_t;    /* generic unsigned int     */
 typedef unsigned long           hemp_size_t;    /* +ve size of list         */
@@ -28,6 +32,7 @@ typedef unsigned long           hemp_pos_t;     /* +ve posn. in string/list */
 typedef unsigned short int      hemp_prec_t;    /* operator precedence      */
 typedef jmp_buf                 hemp_jump_b;    /* longjmp buffer           */
 typedef struct hemp_jump_s      hemp_jump_t;    /* longjmp call chain       */ 
+typedef union  hemp_value_u     hemp_value_t;
 
 
 /*--------------------------------------------------------------------------
@@ -45,6 +50,7 @@ typedef const char              * hemp_name_p;    /* immutable C string       */
 
 typedef struct hemp_s           * hemp_p;
 typedef struct hemp_action_s    * hemp_action_p;
+typedef struct hemp_context_s   * hemp_context_p;
 typedef struct hemp_dialect_s   * hemp_dialect_p;
 typedef struct hemp_element_s   * hemp_element_p;
 typedef struct hemp_elements_s  * hemp_elements_p;
@@ -72,7 +78,12 @@ typedef struct hemp_tagset_s    * hemp_tagset_p;
 typedef struct hemp_template_s  * hemp_template_p;
 typedef struct hemp_text_s      * hemp_text_p;
 typedef struct hemp_type_s      * hemp_type_p;
+typedef struct hemp_vtype_s     * hemp_vtype_p;
+typedef struct hemp_vtypes_s    * hemp_vtypes_p;
+typedef struct hemp_variable_s  * hemp_variable_p;
 
+
+typedef enum   hemp_tag_style_e   hemp_tag_style_t;
 
 typedef union  hemp_evalue_u      hemp_evalue_t;
 typedef struct hemp_unary_s       hemp_unary_t;
@@ -193,6 +204,12 @@ typedef hemp_mem_p
 typedef void 
     (* hemp_tag_scan_f)(
         HEMP_TAG_SCAN_ARGS
+    );
+
+typedef hemp_element_p
+    (* hemp_sym_scan_f)(
+        HEMP_TAG_SCAN_ARGS,
+        hemp_symbol_p symbol
     );
 
 typedef hemp_element_p

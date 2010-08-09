@@ -15,7 +15,7 @@
 static struct hemp_symbol_s
     hemp_symbol_space = { 
         "space",                                            /* name  */
-        "space:",                                           /* token */
+        "space:",NULL,                                           /* token */
         HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,    /* flags */
         0, 0,                                               /* precedence */
         NULL, NULL,                                         /* scanner, cleaner */
@@ -28,22 +28,9 @@ static struct hemp_symbol_s
 
 
 static struct hemp_symbol_s
-    hemp_symbol_comment = { 
-        "comment",
-        "comment:",
-        HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,
-        0, 0, NULL, NULL,
-        &hemp_skip_all_vtable,
-        NULL, NULL,
-        &hemp_element_literal_text,
-        &hemp_element_space_parse_expr
-    };
-
-
-static struct hemp_symbol_s
     hemp_symbol_tag_start = { 
         "tag_start",
-        "tag_start:",
+        "tag_start:",NULL,
         HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,
         0, 0, NULL, NULL,
         &hemp_skip_nonsep_vtable,
@@ -55,7 +42,7 @@ static struct hemp_symbol_s
 static struct hemp_symbol_s
     hemp_symbol_tag_end = { 
         "tag_end",
-        "tag_start:",
+        "tag_start:",NULL,
         HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,
         0, 0, NULL, NULL,
         &hemp_skip_delimiter_vtable,
@@ -68,7 +55,7 @@ static struct hemp_symbol_s
 static struct hemp_symbol_s
     hemp_symbol_eof = { 
         "EOF",
-        "--EOF--",
+        "--EOF--",NULL,
         HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN | HEMP_IS_EOF,
         0, 0, NULL, NULL,
         &hemp_skip_none_vtable,
@@ -85,7 +72,6 @@ static struct hemp_symbol_s
 hemp_symbol_p HempSymbolSpace     = &hemp_symbol_space;
 hemp_symbol_p HempSymbolTagStart  = &hemp_symbol_tag_start;
 hemp_symbol_p HempSymbolTagEnd    = &hemp_symbol_tag_end;
-hemp_symbol_p HempSymbolComment   = &hemp_symbol_comment;
 hemp_symbol_p HempSymbolEof       = &hemp_symbol_eof;
 
 

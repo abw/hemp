@@ -93,7 +93,8 @@ struct hemp_parse_s
 hemp_symbol_p
 hemp_symbol_init(
     hemp_cstr_p name,
-    hemp_cstr_p token
+    hemp_cstr_p start,
+    hemp_cstr_p end
 ) {
     hemp_symbol_p symbol = (hemp_symbol_p) hemp_mem_alloc(
         sizeof(struct hemp_symbol_s)
@@ -101,10 +102,7 @@ hemp_symbol_init(
     if (! symbol)
         hemp_mem_fail("symbol");
 
-//  symbol->name    = hemp_cstr_clone(name, "symbol name");
-//  symbol->token   = hemp_cstr_clone(name, "symbol token");
-    symbol->name    = name;    // should be const  
-    symbol->token   = token ? hemp_cstr_clone(name, "symbol token") : NULL;
+    symbol->name    = name;    // should be const?
     symbol->flags   = 0;
     symbol->lprec   = 0;
     symbol->rprec   = 0;
@@ -116,6 +114,20 @@ hemp_symbol_init(
     symbol->source  = NULL;
     symbol->text    = &hemp_element_literal_text;       // tmp
     symbol->parse_expr = &hemp_element_dont_parse;             /* TODO */
+
+    /* clone the start token if there is one, and the end token if there 
+     * is one and it's not the same as the start token
+     */
+    if (start) 
+        start = hemp_cstr_clone(start, "symbol start token");
+
+    if (end)
+        end = (start && (start == end || hemp_cstr_eq(start, end)))
+            ? start
+            : hemp_cstr_clone(end, "symbol end token");
+        
+    symbol->start   = start;
+    symbol->end     = end;
 
     return symbol;
 }
@@ -183,8 +195,12 @@ hemp_symbol_free(
     if (symbol->skip->mutable)
         hemp_mem_free(symbol->skip);
 
-    if (symbol->token)
-        hemp_mem_free(symbol->token);
+    /* only free the end token if it's not the same as the start token */
+    if (symbol->end && ! symbol->start || symbol->start == symbol->end)
+        hemp_mem_free(symbol->end);
+
+    if (symbol->start)
+        hemp_mem_free(symbol->start);
 
 //  hemp_mem_free(symbol->name);                // now static
     hemp_mem_free(symbol);
@@ -197,7 +213,8 @@ hemp_symbol_dump(
 ) {
     debug("symbol at %p\n", symbol->name, symbol);
     debug("       name: %s\n", symbol->name);
-    debug("      token: %s\n", symbol->token);
+    debug("      start: %s\n", symbol->start ? symbol->start : "<none>");
+    debug("        end: %s\n", symbol->end ? symbol->end : "<none>");
     debug("      flags: %04x\n", symbol->flags);
     debug("      lprec: %dx\n", symbol->lprec);
     debug("      rprec: %dx\n", symbol->rprec);

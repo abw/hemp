@@ -29,7 +29,8 @@ hemp_symbol_p
 hemp_grammar_new_symbol(
     hemp_grammar_p grammar,
     hemp_cstr_p    etype,
-    hemp_cstr_p    token
+    hemp_cstr_p    start,
+    hemp_cstr_p    end
 ) {
 //  debug_call(
 //      "new [%s => %s] symbol\n", 
@@ -43,7 +44,7 @@ hemp_grammar_new_symbol(
         hemp_throw(grammar->hemp, HEMP_ERROR_INVALID, "element", etype);
 
     hemp_symbol_p symbol = hemp_symbol_init(
-        etype, token
+        etype, start, end
     );
 
     symbol = (hemp_symbol_p) hemp_action_run(
@@ -61,7 +62,8 @@ hemp_symbol_p
 hemp_grammar_add_symbol(
     hemp_grammar_p grammar,
     hemp_cstr_p    etype,
-    hemp_cstr_p    token,
+    hemp_cstr_p    start,
+    hemp_cstr_p    end,
     hemp_prec_t    lprec,
     hemp_prec_t    rprec
 ) {
@@ -70,26 +72,26 @@ hemp_grammar_add_symbol(
 //      token, etype, grammar->name, lprec, rprec
 //  );
 
-    if (hemp_hash_fetch(grammar->symbols, token))
-        hemp_throw(grammar->hemp, HEMP_ERROR_DUPLICATE, "symbol", token);
+    if (hemp_hash_fetch(grammar->symbols, start))
+        hemp_throw(grammar->hemp, HEMP_ERROR_DUPLICATE, "symbol", start);
 
-    hemp_symbol_p symbol = hemp_grammar_new_symbol(grammar, etype, token);
+    hemp_symbol_p symbol = hemp_grammar_new_symbol(grammar, etype, start, end);
 
     symbol->lprec = lprec;
     symbol->rprec = rprec;
 
     /* all symbols get put in the hash table mapping token to symbol */
-    hemp_hash_store(grammar->symbols, token, symbol);
+    hemp_hash_store(grammar->symbols, start, symbol);
 
     /* non-alphanumeric (starting) symbols go in the operator ptree which
      * allows us to easily match longest tokens so that '++' is interpreted
      * as one single token, not two instances of '+'
      */
 
-    if (! isalpha(*token)) {
+    if (! isalpha(*start)) {
 //      debug("symbol token is not alphanumeric: %s\n", token);
         hemp_ptree_store(
-            grammar->operators, token, (hemp_mem_p) symbol
+            grammar->operators, start, (hemp_mem_p) symbol
         );
     }
 

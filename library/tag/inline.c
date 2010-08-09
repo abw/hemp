@@ -239,37 +239,21 @@ hemp_scan_inline_tag(
                 *--dquote = HEMP_NUL;
             }
         }
-        else if (*src == HEMP_COMMENT) {
-            /* walk to the end of line or end of tag */
-            while (* ++src) {
-                if (*src == HEMP_LF) {
-                    src++;
-                    break;
-                }
-                else if (*src == HEMP_CR) {
-                    src++;
-                    if (*src == HEMP_LF)
-                        src++;
-                    break;
-                }
-                else if (*src == *tagend && hemp_cstrn_eq(src, tagend, endlen)) {
-                    break;
-                }
-            }
-            hemp_elements_append(
-                tmpl->elements, HempSymbolComment,
-                from, pos, src - from
-            );
-        }
         else if (
             (pnode  = HEMP_IN_PTREE(ophead, src))
         &&  (symbol = (hemp_symbol_p) hemp_pnode_match_more(pnode, &src))
         ) {
             debug("[matched operator: %s]\n", symbol->name);
-            hemp_elements_append(
-                tmpl->elements, symbol,
-                from, pos, src - from
-            );
+            if (symbol->scanner) {
+                debug("symbol has dedicated scanner\n");
+                symbol->scanner(tmpl, tag, from, pos, &src, symbol);
+            }
+            else {
+                hemp_elements_append(
+                    tmpl->elements, symbol,
+                    from, pos, src - from
+                );
+            }
         }
         else {
             // TODO: operators

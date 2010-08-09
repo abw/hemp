@@ -5,7 +5,7 @@
 /* basic element prototypes */
 HEMP_ELEMENT_PROTO(hemp_element_text_symbol);
 HEMP_ELEMENT_PROTO(hemp_element_space_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_comment_symbol);
+//HEMP_ELEMENT_PROTO(hemp_element_comment_symbol);
 HEMP_ELEMENT_PROTO(hemp_element_tag_start_symbol);
 HEMP_ELEMENT_PROTO(hemp_element_tag_end_symbol);
 HEMP_ELEMENT_PROTO(hemp_element_number_symbol);
@@ -252,18 +252,19 @@ hemp_element_space_symbol(
 }
 
 
-hemp_symbol_p
-hemp_element_comment_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN;
-    symbol->skip       = &hemp_skip_all_vtable;
-    symbol->parse_expr = &hemp_element_space_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_no_text;
-    return symbol;
-}
+// moved to element/comment.c
+//hemp_symbol_p
+//hemp_element_comment_symbol(
+//    hemp_p        hemp,
+//    hemp_symbol_p symbol
+//) {
+//    symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN;
+//    symbol->skip       = &hemp_skip_all_vtable;
+//    symbol->parse_expr = &hemp_element_space_parse_expr,
+//    symbol->source     = &hemp_element_literal_text;
+//    symbol->text       = &hemp_element_no_text;
+//    return symbol;
+//}
 
 
 hemp_symbol_p
@@ -340,18 +341,6 @@ hemp_element_word_symbol(
 }
 
 
-hemp_symbol_p
-hemp_element_squote_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_STATIC;
-    symbol->parse_expr = &hemp_element_literal_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_quoted_text;
-//  symbol->cleanup    = &hemp_element_text_clean;          // FIXME
-    return symbol;
-}
 
 
 hemp_symbol_p
@@ -780,7 +769,9 @@ hemp_grammar_add_hemp_alpha(
     debug_call("hemp_grammar_add_hemp_alpha(%p)\n", grammar);
     HEMP_SYMBOL("hemp.text",    "_TEXT",    0, 0);
     HEMP_SYMBOL("hemp.space",   "_SPACE",   0, 0);
-    HEMP_SYMBOL("hemp.comment", "_COMMENT", 0, 0);
+    HEMP_SYMBOL("hemp.comment", "#",        0, 0);
+
+    HEMP_SYMBOL2("hemp.squote", "'", "'",   0, 0);
 }
 
 void

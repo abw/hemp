@@ -38,13 +38,14 @@ struct hemp_symbol_s {
     hemp_cstr_p     name;
 
     /* symbol metadata */
-    hemp_cstr_p     token;
+    hemp_cstr_p     start;
+    hemp_cstr_p     end;
     hemp_flags_t    flags;
     hemp_prec_t     lprec;
     hemp_prec_t     rprec;
 
     /* general methods */
-    hemp_scan_f     scanner;
+    hemp_sym_scan_f scanner;
     hemp_clean_f    cleanup;
 
     /* parsing vtables */
@@ -75,7 +76,8 @@ struct hemp_symbols_s {
 hemp_symbol_p
 hemp_symbol_init(
     hemp_cstr_p name,
-    hemp_cstr_p token
+    hemp_cstr_p start,
+    hemp_cstr_p end
 );
 
 

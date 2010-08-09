@@ -3,25 +3,14 @@
 
 #include <hemp/type.h>
 #include <hemp/text.h>
+#include <hemp/tag.h>
 #include <hemp/symbol.h>
+#include <hemp/template.h>
 
 
 /*--------------------------------------------------------------------------
  * data structures
  *--------------------------------------------------------------------------*/
-
-//struct hemp_etype_s {
-//    HEMP_TYPE_BASE
-//    hemp_flags_t    flags;
-//    hemp_clean_f    cleanup;
-//    hemp_skip_f     skip_space;
-//    hemp_skip_f     skip_delimiter;
-//    hemp_skip_f     skip_separator;
-//    hemp_parse_f    parse_expr;
-//    hemp_text_f     text;
-//
-//    hemp_cstr_p     (*number)();
-//};
 
 struct hemp_unary_s {
     hemp_element_p  expr;
@@ -47,7 +36,6 @@ union hemp_evalue_u {
 };
 
 struct hemp_element_s {
-//    hemp_etype_p    type;
     hemp_symbol_p   type;
     hemp_element_p  next;
     hemp_cstr_p     token;
@@ -243,6 +231,20 @@ void
 void
 hemp_element_block_clean(
     hemp_element_p element
+);
+
+
+/* comment */
+hemp_element_p
+hemp_element_comment_scanner(
+    HEMP_TAG_SCAN_ARGS,
+    hemp_symbol_p   symbol
+);
+
+hemp_symbol_p
+hemp_element_comment_symbol(
+    hemp_p        hemp,
+    hemp_symbol_p symbol
 );
 
 

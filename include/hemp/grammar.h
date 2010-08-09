@@ -40,14 +40,16 @@ hemp_symbol_p
     hemp_grammar_new_symbol(
         hemp_grammar_p grammar,
         hemp_cstr_p    element,
-        hemp_cstr_p    token
+        hemp_cstr_p    start,
+        hemp_cstr_p    end
     );
 
 hemp_symbol_p
     hemp_grammar_add_symbol(
         hemp_grammar_p grammar,
         hemp_cstr_p    element,
-        hemp_cstr_p    token,
+        hemp_cstr_p    start,
+        hemp_cstr_p    end,
         hemp_prec_t    lprec,
         hemp_prec_t    rprec
     );

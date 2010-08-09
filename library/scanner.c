@@ -6,19 +6,18 @@ hemp_bool_t
 hemp_scan_text(
     hemp_template_p tmpl
 ) {
+    hemp_elements_p elements = tmpl->elements;
     hemp_tagset_p   tagset   = tmpl->tagset;
-    hemp_cstr_p     text     = hemp_source_read(tmpl->source),
-                    src      = text,
-                    from     = text,
-                    cmptr, 
-                    tagstr;
-    hemp_pos_t      pos      = 0,
-                    line     = 0;
-    hemp_tag_p      tag;
     hemp_pnode_p    *inhead  = tagset->inline_tags->head,
                     *outhead = tagset->outline_tags->head,
                     pnode;
-    hemp_elements_p elements = tmpl->elements;
+    hemp_cstr_p     text     = hemp_source_read(tmpl->source),
+                    src      = text,
+                    from     = text,
+                    cmptr, tagstr;
+    hemp_pos_t      pos      = 0,
+                    line     = 0;
+    hemp_tag_p      tag;
 
     debug_magenta("-- source ---\n%s\n------------\n", text);
     
@@ -110,60 +109,4 @@ hemp_scan_text(
     return HEMP_TRUE;
 }
 
-
-hemp_tag_p
-OLD_hemp_scan_tag_start(
-    hemp_pnode_p    pnode, 
-    hemp_cstr_p     *srcptr
-) {
-//  debug_blue("hemp_scan_tag_start(%p[%s])]", pnode, pnode->key);
-
-    hemp_cstr_p cmptr  = pnode->key;
-    hemp_cstr_p src    = *srcptr;
-    hemp_tag_p  tag    = NULL;
-
-    // nuisance: we do the first comparison twice
-    while (1) {
-        if (*src == *cmptr) {
-            src++;
-
-            if (pnode->equal) {
-//              debug_yellow("[%c->equal]", *cmptr);
-                tag   = pnode->value;     // payload - but only if pnode is set - don't want to trash previous match
-                pnode = pnode->equal;
-                cmptr = pnode->key;
-            }
-            else if (* ++cmptr) {
-//              debug_yellow("[%c->more => %c]", *(cmptr - 1), cmptr);
-            }
-            else {
-                tag = pnode->value;
-                break;
-            }
-        }
-        else if (*src < *cmptr && pnode->before) {
-//          debug_blue("[%c is before %c]", *src, *cmptr);
-            pnode = pnode->before;
-            cmptr = pnode->key;
-        }
-        else if (*src > *cmptr && pnode->after) {
-//          debug_blue("[%c is after %c]", *src, *cmptr);
-            pnode = pnode->after;
-            cmptr = pnode->key;
-        }
-        else {
-            break;
-        }
-    }
-  
-    if (tag) {
-        *srcptr = src;
-        debug_green("<%s>", tag->name);
-    }
-    else {
-        debug_red("[MISS]");
-    }
-
-    return tag;
-}
 

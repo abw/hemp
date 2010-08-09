@@ -7,6 +7,7 @@ extern "C" {
 
 #include <hemp/core.h>
 #include <hemp/action.h>
+#include <hemp/context.h>
 #include <hemp/dialect.h>
 #include <hemp/element.h>
 #include <hemp/elements.h>
@@ -26,6 +27,7 @@ extern "C" {
 #include <hemp/tagset.h>
 #include <hemp/template.h>
 #include <hemp/text.h>
+#include <hemp/value.h>
 
     
 //#include <hemp/module.h>
@@ -34,7 +36,6 @@ extern "C" {
 //#include <hemp/type.h>
 //#include <hemp/hub.h>
 //#include <hemp/context.h>
-//#include <hemp/value.h>
 //#include <hemp/templates.h>
 
 
@@ -117,12 +118,15 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
 //        _cons;                                                              \
 //    })
 
-#define hemp_symbol(hemp,type,token) ({                                      \
-        hemp_action_p _cons = (hemp_action_p) hemp_factory_constructor(      \
-            hemp->elements, type                                             \
-        );                                                                   \
-        if (! _cons) hemp_throw(hemp, HEMP_ERROR_INVALID, "element", type);  \
-        (hemp_symbol_p) hemp_action_run(_cons, hemp_symbol_init(type, token)); \
+#define hemp_symbol(hemp,type,start,end) ({                                 \
+        hemp_action_p _cons = (hemp_action_p) hemp_factory_constructor(     \
+            hemp->elements, type                                            \
+        );                                                                  \
+        if (! _cons)                                                        \
+            hemp_throw(hemp, HEMP_ERROR_INVALID, "element", type);          \
+        (hemp_symbol_p) hemp_action_run(                                    \
+            _cons, hemp_symbol_init(type, start, end)                       \
+        );                                                                  \
     })
 
 
@@ -179,8 +183,11 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
 #define HEMP_ELEMENT(name, constructor) \
     hemp_register_element(hemp, name, (hemp_actor_f) constructor);
 
-#define HEMP_SYMBOL(name, token, lprec, rprec) \
-    hemp_grammar_add_symbol(grammar, name, token, lprec, rprec);
+#define HEMP_SYMBOL(name, start, lprec, rprec) \
+    hemp_grammar_add_symbol(grammar, name, start, NULL, lprec, rprec);
+
+#define HEMP_SYMBOL2(name, start, end, lprec, rprec) \
+    hemp_grammar_add_symbol(grammar, name, start, end, lprec, rprec);
 
 #define HEMP_DIALECT_PROTO(item) \
     hemp_dialect_p item (hemp_p, hemp_cstr_p);

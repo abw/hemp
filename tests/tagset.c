@@ -27,7 +27,7 @@ void test_tagset() {
 
     inline_tag = hemp_tag_init(
         "inline", 
-        HEMP_INLINE, 
+        HEMP_INLINE_TAG, 
         "[%", "%]", 
         &test1_scan, NULL
     );
@@ -35,7 +35,7 @@ void test_tagset() {
 
     outline_tag = hemp_tag_init(
         "outline", 
-        HEMP_OUTLINE, 
+        HEMP_OUTLINE_TAG, 
         "%%", NULL,
         &test1_scan, NULL
     );
@@ -50,7 +50,7 @@ void test_tagset() {
     ok( 
         hemp_tagset_new_tag(
             tagset, "wibble", 
-            HEMP_INLINE, 
+            HEMP_INLINE_TAG, 
             "<*", "*>",
             &test1_scan, NULL
         ), 

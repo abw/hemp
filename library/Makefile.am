@@ -6,6 +6,7 @@ libhemp_la_SOURCES  =   action.c              \
                         elements.c            \
                         element.c             \
                         element/block.c       \
+                        element/comment.c     \
                         element/dquote.c      \
                         element/integer.c     \
                         element/literal.c     \
@@ -41,7 +42,8 @@ libhemp_la_SOURCES  =   action.c              \
                         template.c            \
                         text.c                \
                         type.c                \
-                        utils.c
+                        utils.c               \
+                        value.c
 
 libhemp_la_CFLAGS = -I../include
 

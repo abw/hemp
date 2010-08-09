@@ -272,7 +272,7 @@ hemp_element_parse_binary(       // infix left
     );
 
     if (! rhs)
-        hemp_fatal("missing expression on rhs of %s\n", type->token);
+        hemp_fatal("missing expression on rhs of %s\n", type->start);
         
     self->value.binary.rhs = rhs;
 //    debug_cyan("set rhs to %p / %p\n", self->value.binary.rhs, rhs);

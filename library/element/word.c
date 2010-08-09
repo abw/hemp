@@ -4,7 +4,7 @@
 struct hemp_symbol_s
     hemp_symbol_word = { 
         "word",
-        "word:",
+        "word:",NULL,
         0, 0, 0,   /* HEMP_IS_FIXED?   Is this for source regeneration? */
         NULL, NULL,
         &hemp_skip_none_vtable,

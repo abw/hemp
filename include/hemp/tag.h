@@ -17,11 +17,10 @@
  *--------------------------------------------------------------------------*/
 
 enum hemp_tag_style_e {
-    HEMP_INLINE  = 1,
-    HEMP_OUTLINE = 2
+    HEMP_INLINE_TAG  = 1,
+    HEMP_OUTLINE_TAG = 2
 };
 
-typedef enum hemp_tag_style_e hemp_tag_style_t;
 
 
 struct hemp_tag_s {

@@ -1,48 +1,120 @@
 #ifndef HEMP_VALUE_H
 #define HEMP_VALUE_H
 
-#include <string.h>
-#include <stdlib.h>
-#include "hemp/types.h"
-#include "hemp/defaults.h"
-#include "hemp/memory.h"
-#include "hemp/hash.h"
+#include <hemp/core.h>
+#include <hemp/text.h>
+#include <hemp/hash.h>
+#include <hemp/context.h>
 
 
-typedef union hemp_data    hemp_data_t;
-typedef hemp_text_t     (* hemp_text_vfn)(hemp_value_t, hemp_context_t, hemp_text_t);
-typedef hemp_value_t    (* hemp_dot_vfn)(hemp_value_t, hemp_context_t, hemp_cstr_t);
+/*--------------------------------------------------------------------------
+ * Data structures
+ *--------------------------------------------------------------------------*/
+
+typedef union {
+    hemp_int_t      integer;
+    hemp_bool_t     boolean;
+    hemp_char_t     chars[4];
+} hemp_payload_t;
+
+typedef struct {
+    hemp_payload_t  value;
+    hemp_u32_t      type;           /* FIXME: assumes little-endian */
+} hemp_tagged_t;
+
+union hemp_value_u {
+    hemp_u64_t      bits;
+    hemp_num_t      number;
+    hemp_tagged_t   tagged;
+};
+
+
+
+/*--------------------------------------------------------------------------
+ * Definitions and macros for manipulating NaN-boxed values
+ *
+ * As per IEEE-754 double precision numbers, the first bit is the sign bit,
+ * the next 11 bits are the exponent and the remaining 52 are used to encode
+ * the mantissa.  If all of the first 12 (sign + exponent) bits are 1 then 
+ * the value represents +/- Infinity when all of the mantissa bits are 0, or
+ * NaN if any of the mantissa bits are 1.  So setting the first 13 bits to 1 
+ * will always represent NaN and we can use the remaining 51 bits to encode
+ * some other kind of payload.  This widely used technique is commonly known 
+ * as "NaN-boxing".
+ *
+ * In those 51 bits we can store a 32 bit integer.  We can also store a 
+ * memory pointer.  On 32 bit architectures that also requires 32 bits.  On
+ * all widely used (at the time of writing) 64-bit platforms, (up to) 47 bits 
+ * are used to store memory adddresses.  That leaves us 4 bits spare which we
+ * can use to encode up to 16 different data types.
+ *--------------------------------------------------------------------------*/
+
+#if HEMP_WORD_LENGTH == 32
+    #define HEMP_PAYLOAD_MASK   0x00000000FFFFFFFFLL
+    #define HEMP_PAYLOAD_BITS   32
+#elif HEMP_WORD_LENGTH == 64
+    #define HEMP_PAYLOAD_MASK   0x00007FFFFFFFFFFFLL
+    #define HEMP_PAYLOAD_BITS   47
+#else
+    #error "Invalid word length"
+#endif
+
+#define HEMP_NAN_MASK           0xFFF8000000000000LL
+#define HEMP_PAYLOAD(v)         (v.bits & HEMP_PAYLOAD_MASK)
+
+#define HEMP_TYPE_BITS          4
+#define HEMP_TYPE_SHIFT         47
+#define HEMP_TYPE_MASK          0x0F
+#define HEMP_TYPE_UP(t)         ((hemp_u64_t) (t & HEMP_TYPE_MASK) << HEMP_TYPE_SHIFT)
+#define HEMP_TYPE_DOWN(v)       ((hemp_u8_t)  (v >> HEMP_TYPE_SHIFT) & HEMP_TYPE_MASK)
+#define HEMP_TYPE_NAN_MASK(t)   (HEMP_NAN_MASK | HEMP_TYPE_UP(t))
+
+#define HEMP_TYPE_NUM_ID        ((hemp_u8_t)  0x00)     /* 64 bit double    */
+#define HEMP_TYPE_INT_ID        ((hemp_u8_t)  0x01)     /* 32 bit integer   */
+#define HEMP_TYPE_STR_ID        ((hemp_u8_t)  0x02)     /* string pointer   */
+
+#define HEMP_TYPE_NUM_MASK      ((hemp_u64_t) HEMP_TYPE_NUM_ID)
+#define HEMP_TYPE_INT_MASK      HEMP_TYPE_NAN_MASK(HEMP_TYPE_INT_ID)
+#define HEMP_TYPE_STR_MASK      HEMP_TYPE_NAN_MASK(HEMP_TYPE_STR_ID)
+
+#define HEMP_TYPE(v)            HEMP_TYPE_DOWN(v.bits)
+#define HEMP_IS_TYPE(v,t)       ((hemp_bool_t) HEMP_TYPE(v) == t)
+#define HEMP_IS_NUM(v)          ((hemp_bool_t) ((hemp_u64_t) v.bits < HEMP_NAN_MASK))
+#define HEMP_IS_INT(v)          HEMP_IS_TYPE(v, HEMP_TYPE_INT_ID)
+#define HEMP_IS_STR(v)          HEMP_IS_TYPE(v, HEMP_TYPE_STR_ID)
+#define HEMP_IS_TAGGED(v)       (! HEMP_IS_NUM(v))
+
+//#define HEMP_TAG_IS_TYPE(v,t)   (! HEMP_TAG_IS_NUM(t))
+
+
+/*--------------------------------------------------------------------------
+ * 
+ *--------------------------------------------------------------------------*/
+
+
+typedef hemp_text_p     (* hemp_text_vfn)(hemp_value_t, hemp_context_p, hemp_text_p);
+typedef hemp_value_t    (* hemp_dot_vfn)(hemp_value_t, hemp_context_p, hemp_cstr_p);
 typedef void            (* hemp_init_vfn)(hemp_value_t);
 typedef void            (* hemp_wipe_vfn)(hemp_value_t);
 
 
 
-/* The hemp_data union can hold any basic data type */
-
-union hemp_data {
-    hemp_cstr_t         cstr;
-    hemp_text_t         text;
-    hemp_int_t          integer;
-    hemp_num_t          number;
-    hemp_hash_t         hash;
-    hemp_list_t         list;
-};
-
-
-/* A hemp_value represents a typed data value being used in some expression.
+/* A hemp_variable represents a typed data value being used in some expression.
  * It contains a reference to its value type, the parent value (i.e. container)
  * from where it originated, the local (variable) name for the value, and a 
  * hemp_data union containing the raw data value.  For example, foo.bar would
  * create a 'foo' value originated from the root variables stash, and a 'bar'
  * value with the parent pointer set to the 'foo' value.  The type of 'foo'
  * would presumably be a hash or object, and bar could be any value type.
+ *
+ * NOTE: this is being changed and/or phased out
  */
  
-struct hemp_value {
-    hemp_vtype_t  vtype;
-    hemp_cstr_t   name;             // TODO: symbol?  dup?  element?  text?
-    hemp_data_t   data;
-    hemp_value_t  parent;
+struct hemp_variable_s {
+    hemp_vtype_p    vtype;
+    hemp_cstr_p     name;             // TODO: symbol?  dup?  element?  text?
+    hemp_value_t    value;
+    hemp_variable_p parent;
 //  TODO: flags?, next?
 };
 
@@ -58,9 +130,9 @@ struct hemp_value {
  * definitions for accessing Perl scalars, hash array and arrays.
  */
 
-struct hemp_vtype {
-    hemp_vtypes_t   vtypes;
-    hemp_cstr_t     name;
+struct hemp_vtype_s {
+    hemp_vtypes_p   vtypes;
+    hemp_cstr_p     name;
     hemp_init_vfn   init;
     hemp_wipe_vfn   wipe;
     hemp_text_vfn   text;
@@ -89,14 +161,15 @@ struct hemp_vtype {
  * of slower lookup time.
  */
 
-struct hemp_vtypes {
-    hemp_cstr_t     name;
+struct hemp_vtypes_s {
+    hemp_cstr_p     name;
     /* builtin value types */
-    hemp_vtype_t    text;
-    hemp_vtype_t    list;
-    hemp_vtype_t    hash;
+    /* TODO: make this an array of 16 vtables for core types */
+    hemp_vtype_p    text;
+    hemp_vtype_p    list;
+    hemp_vtype_p    hash;
     /* hash table for additional types */
-    hemp_hash_t     types;
+    hemp_hash_p     types;
 };
 
 
@@ -133,17 +206,34 @@ struct hemp_vtypes {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_vtypes_t   hemp_vtypes_init();
-void            hemp_vtypes_free(hemp_vtypes_t);
-hemp_vtype_t    hemp_vtypes_new_type(hemp_vtypes_t, hemp_cstr_t);
-void            hemp_vtypes_free_vtype(hemp_hash_entry_t entry);
-hemp_vtype_t    hemp_vtypes_type(hemp_vtypes_t, hemp_cstr_t);
+extern hemp_value_t HEMP_NUM_VAL(hemp_num_t n);
+extern hemp_value_t HEMP_INT_VAL(hemp_int_t n);
+extern hemp_value_t HEMP_STR_VAL(hemp_cstr_p n);
 
-hemp_vtype_t    hemp_vtype_init(hemp_vtypes_t, hemp_cstr_t);
+extern hemp_num_t   HEMP_VAL_NUM(hemp_value_t v);
+extern hemp_int_t   HEMP_VAL_INT(hemp_value_t v);
+extern hemp_cstr_p  HEMP_VAL_STR(hemp_value_t v);
+
+
+void hemp_dump_u64(hemp_u64_t value);
+void hemp_dump_64(hemp_u64_t value);
+void hemp_dump_32(hemp_u32_t value);
+void hemp_dump_value(hemp_value_t value);
+
+
+hemp_vtypes_p   hemp_vtypes_init();
+void            hemp_vtypes_free(hemp_vtypes_p);
+hemp_vtype_p    hemp_vtypes_new_type(hemp_vtypes_p, hemp_cstr_p);
+
+/*
+void            hemp_vtypes_free_vtype(hemp_hash_entry_p entry);
+hemp_vtype_p    hemp_vtypes_type(hemp_vtypes_p, hemp_cstr_p);
+
+hemp_vtype_p    hemp_vtype_init(hemp_vtypes_p, hemp_cstr_p);
 void            hemp_vtype_free();
-
-hemp_value_t    hemp_value_init(hemp_vtype_t, hemp_cstr_t, hemp_data_t, hemp_value_t);
-void            hemp_value_free(hemp_value_t);
+*/
+/*hemp_value_t    hemp_value_init(hemp_vtype_p, hemp_cstr_p, hemp_data_t, hemp_value_t);
+void            hemp_value_free(hemp_value_t); */
 
 
 #endif /* HEMP_VALUE_H */

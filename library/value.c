@@ -1,214 +1,125 @@
-#include "hemp/value.h"
-#include "hemp/debug.h"
-
-
-
-/*--------------------------------------------------------------------------
- * vtypes: factory for value types
- *--------------------------------------------------------------------------*/
-
-hemp_vtypes_t
-hemp_vtypes_init(
-    hemp_cstr_t name
-) {
-    hemp_vtypes_t vtypes;
-
-    if ((vtypes = (hemp_vtypes_t) hemp_mem_init(sizeof(struct hemp_vtypes)))) {
-        vtypes->name   = strdup(name);
-        vtypes->types  = hemp_hash_init();
-        vtypes->text   = 
-        vtypes->hash   = 
-        vtypes->list   = NULL;
-
-        if (vtypes->name && vtypes->types) {
-            debug_mem(
-                "Allocated vtypes '%s' at %p with hash at %p\n", 
-                vtypes->name, vtypes, vtypes->types
-            );
-        }
-        else {
-            hemp_vtypes_free(vtypes);
-            vtypes = NULL;
-        }
-    }
-
-    // TODO handle vtypes == NULL
-    return vtypes;
-}
-
-
-void
-hemp_vtypes_free(
-    hemp_vtypes_t vtypes
-) {
-    debug_mem("Releasing vtypes '%s' at %p\n", vtypes->name, vtypes);
-
-    if (vtypes->name) 
-        hemp_mem_free(vtypes->name);
-
-    if (vtypes->text)
-        hemp_vtype_free(vtypes->text);
-
-    if (vtypes->list)
-        hemp_vtype_free(vtypes->list);
-
-    if (vtypes->hash)
-        hemp_vtype_free(vtypes->hash);
-
-    if (vtypes->types) {
-        hemp_hash_each(vtypes->types, &hemp_vtypes_free_vtype);
-        hemp_hash_free(vtypes->types);
-    }
-
-    hemp_mem_free(vtypes);
-}
-
-
-void hemp_vtypes_free_vtype(
-    hemp_hash_entry_t   entry
-) {
-    hemp_vtype_free(entry->value);
-}
-
-
-
-hemp_vtype_t
-hemp_vtypes_new_type(
-    hemp_vtypes_t   vtypes,
-    hemp_cstr_t     name
-) {
-    hemp_vtype_t vtype;
-
-    if (vtype = (hemp_vtype_t) hemp_hash_fetch(vtypes->types, name)) {
-        hemp_fatal("A value type is already defined for %s", name);
-    }
-
-    vtype = hemp_vtype_init(vtypes, name);
-
-    if (vtype) {
-        hemp_hash_store(vtypes->types, vtype->name, vtype);
-    }
-    
-    return vtype;
-}
-
-
-hemp_vtype_t
-hemp_vtypes_type(
-    hemp_vtypes_t   vtypes,
-    hemp_cstr_t     name
-) {
-    hemp_vtype_t vtype = (hemp_vtype_t) hemp_hash_fetch(vtypes->types, name);
-    
-    if (! vtype) {
-        hemp_fatal("No value type defined for %s", name);
-    }
-
-    return vtype;
-}
-
+#include <hemp/value.h>
 
 
 /*--------------------------------------------------------------------------
- * vtype: value type
+ * inline functions to encode native values as tagged values
  *--------------------------------------------------------------------------*/
 
-
-hemp_vtype_t
-hemp_vtype_init(
-    hemp_vtypes_t   vtypes,
-    hemp_cstr_t     name
-) {
-    hemp_vtype_t vtype;
-
-    if ((vtype = (hemp_vtype_t) hemp_mem_init(sizeof(struct hemp_vtype)))) {
-        vtype->vtypes = vtypes;
-        vtype->name   = strdup(name);
-
-        if (vtype->name) {
-            debug_mem(
-                "Allocated vtype '%s' at %p\n", 
-                vtype->name, vtype
-            );
-        }
-        else {
-            hemp_vtype_free(vtype);
-            vtype = NULL;
-        }
-    }
-
-    // TODO handle vtype == NULL
-    return vtype;
+HEMP_DO_INLINE hemp_value_t
+HEMP_NUM_VAL(hemp_num_t n) {
+    hemp_value_t v;
+    v.number = n;
+    return v;
 }
 
-
-void
-hemp_vtype_free(
-    hemp_vtype_t vtype
-) {
-    debug_mem("Releasing vtype '%s' at %p\n", vtype->name, vtype);
-
-    if (vtype->name) {
-        hemp_mem_free(vtype->name);
-    }
-
-    hemp_mem_free(vtype);
+HEMP_DO_INLINE hemp_value_t
+HEMP_INT_VAL(hemp_int_t i) {
+    hemp_value_t v;
+    v.bits = HEMP_TYPE_INT_MASK | (hemp_u64_t) i;
+    return v;
 }
 
+HEMP_DO_INLINE hemp_value_t
+HEMP_STR_VAL(hemp_cstr_p s) {
+    hemp_value_t v;
+    v.bits = HEMP_TYPE_STR_MASK | (hemp_u64_t) s;
+    return v;
+}
 
 
 /*--------------------------------------------------------------------------
- * value
+ * inline functions to decode tagged values to native values
  *--------------------------------------------------------------------------*/
 
-hemp_value_t
-hemp_value_init(
-    hemp_vtype_t    vtype,
-    hemp_cstr_t     name, 
-    hemp_data_t     data,
-    hemp_value_t    parent
-) {
-    hemp_value_t    value;
+HEMP_DO_INLINE hemp_num_t
+HEMP_VAL_NUM(hemp_value_t v) {
+    return v.number;
+}
 
-    if ((value = (hemp_value_t) hemp_mem_init(sizeof(struct hemp_value)))) {
-        value->vtype  = vtype;
-        value->name   = strdup(name);           // TODO
-        value->data   = data;
-        value->parent = parent;
+HEMP_DO_INLINE hemp_int_t
+HEMP_VAL_INT(hemp_value_t v) {
+    return (hemp_int_t) v.bits;
+}
 
-        if (value->name) {
-            debug_mem(
-                "Allocated %s value '%s' at %p\n", 
-                vtype->name, name, value
-            );
-//          if (vtype->init) {
-//              vtype->init(value);
-//          }
-        }
-        else {
-            hemp_value_free(value);
-            value = NULL;
-        }
-    }
-
-    // TODO handle value == NULL
-    return value;
+HEMP_DO_INLINE hemp_cstr_p
+HEMP_VAL_STR(hemp_value_t v) {
+    return (hemp_cstr_p) HEMP_PAYLOAD(v);
 }
 
 
-void
-hemp_value_free(
+/*--------------------------------------------------------------------------
+ * debugging
+ *--------------------------------------------------------------------------*/
+
+void hemp_dump_value(
     hemp_value_t value
 ) {
-    debug_mem("Releasing %s value '%s' at %p\n", value->vtype->name, value->name, value);
-
-//    if (value->vtype->wipe) {
-//        value->vtype->wipe(value);
-//    }
-
-    if (value->name) {
-        hemp_mem_free(value->name);
-    }
-
-    hemp_mem_free(value);
+    hemp_dump_u64(value.bits);
 }
+
+
+void hemp_dump_u64(
+    hemp_u64_t  value
+) {
+    hemp_u64_t  mask  = (hemp_u64_t) 1 << 63;
+    hemp_u64_t  bit;
+    hemp_int_t  n = 1;
+    hemp_cstr_p col;
+    printf("0x%016llx\n", value);
+
+    while (mask) {
+        bit = value & mask;
+        mask = mask >> 1;
+        if (n == 1) {
+            col = ANSI_MAGENTA;
+        }
+        else if (n < 13) {
+            col = ANSI_YELLOW;
+        }
+        else if (n < 14) {
+            col = ANSI_MAGENTA;
+        }
+        else if (n < 18) {
+            col = ANSI_BLUE;
+        }
+        else {
+            col = ANSI_CYAN;
+        }
+        printf("%s%c", col, bit ? '1' : '0');
+        if (n % 4 == 0)
+            printf(" ");
+        n++;
+    }
+    printf(ANSI_RESET "\n");
+//    hemp_dump_32((hemp_u32_t)(value >> 32));
+//    hemp_dump_32((hemp_u32_t)(hemp_u64_t) value & 0xFFFFFFFFL);
+}
+
+void hemp_dump_64(
+    hemp_u64_t value
+) {
+    hemp_u64_t top = value & 0xffffffff00000000LL;
+    top = top >> 32;
+    hemp_u64_t bot = value & 0xffffffffL;
+    printf("0x%016llx\n", value);
+//    printf("TOP: 0x%016llx\n", top);
+    hemp_dump_32((hemp_u32_t) top);
+    hemp_dump_32((hemp_u32_t) bot);
+    printf("\n");
+}
+
+void hemp_dump_32(
+    hemp_u32_t value
+) {
+    hemp_u32_t  mask  = (hemp_u32_t) 1 << 31;
+    hemp_u32_t bit;
+    printf("0x%08x : ", value);
+
+    while (mask) {
+        bit = value & mask;
+        mask = mask >> 1;
+        printf("%c", bit ? '1' : '0');
+    }
+    printf("\n");
+}
+

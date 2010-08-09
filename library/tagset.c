@@ -42,11 +42,11 @@ hemp_tagset_add_tag(
         hemp_fatal("Duplicate tag in tagset: %s", tag->name);
     
     switch (tag->style) {
-        case HEMP_INLINE:
+        case HEMP_INLINE_TAG:
             ptree = tagset->inline_tags;
             break;
 
-        case HEMP_OUTLINE:
+        case HEMP_OUTLINE_TAG:
             ptree = tagset->outline_tags;
             break;
         

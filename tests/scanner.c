@@ -1,13 +1,14 @@
 #include <hemp.h>
 #include <tap.h>
 
-#define TEST_MARKER "-- test"
+#define TEST_START    "-- start"
+#define TEST_STOP     "-- stop"
+#define TEST_MARKER   "-- test"
 #define EXPECT_MARKER "-- expect"
 
 
 void test_scanner();
 void test_script(hemp_cstr_p);
-
 
 int
 main(
@@ -22,10 +23,10 @@ main(
 
 void test_scanner() {
 //    test_script( "hello" );
-//    test_script( "comments" );
+    test_script( "comments" );
 //    test_script( "numbers" );
 //    test_script( "quotes" );
-    test_script( "numops" );
+//    test_script( "numops" );
 }
 
 
@@ -37,7 +38,7 @@ void test_script(
     hemp_cstr_p     dir  = hemp_filesystem_join_path(TESTDIR, "scripts");
     hemp_cstr_p     path = hemp_filesystem_join_path(dir, script);
     hemp_cstr_p     text = hemp_filesystem_read_file(path);
-    hemp_cstr_p     test, name, expect;
+    hemp_cstr_p     test, name, expect, end;
     hemp_list_p     list;
     hemp_template_p tmpl;
     hemp_size_t     n;
@@ -49,7 +50,17 @@ void test_script(
         return;
     }
 
-    test = strstr(text, TEST_MARKER);
+    if ((test = strstr(text, TEST_START))) {
+        test += strlen(TEST_START);
+    }
+    else {
+        test = text;
+    }
+        
+    if ((end = strstr(text, TEST_STOP)))
+        *end = HEMP_NUL;
+
+    test = strstr(test, TEST_MARKER);
 
     if (! test)
         fail("no tests found in %s", script);

@@ -87,7 +87,7 @@ hemp_dialect_tt3_prepare(
         tagset, 
         hemp_tag_init(
             "comment",
-            HEMP_INLINE,
+            HEMP_INLINE_TAG,
             "[#", "#]",
             &hemp_scan_comment_tag,
             NULL
@@ -98,7 +98,7 @@ hemp_dialect_tt3_prepare(
         tagset, 
         hemp_tag_init(
             "control",
-            HEMP_INLINE,
+            HEMP_INLINE_TAG,
             "[?", "?]",
             &hemp_scan_control_tag,
             control
@@ -109,7 +109,7 @@ hemp_dialect_tt3_prepare(
         tagset, 
         hemp_tag_init(
             "outline", 
-            HEMP_OUTLINE,
+            HEMP_OUTLINE_TAG,
             "%%", NULL,
             &hemp_scan_outline_tag,
             command
@@ -120,7 +120,7 @@ hemp_dialect_tt3_prepare(
         tagset, 
         hemp_tag_init(
             "inline", 
-            HEMP_INLINE,
+            HEMP_INLINE_TAG,
             "[%", "%]",
             &hemp_scan_inline_tag,
             command
@@ -154,6 +154,7 @@ hemp_grammar_tt3_core(
 ) {
     debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = hemp_grammar_hemp_bravo(hemp, name);
+    HEMP_SYMBOL("hemp.comment", "#", 0, 0);
     return grammar;
 }
 
