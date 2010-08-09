@@ -1,4 +1,4 @@
-check_PROGRAMS  =   tagval
+check_PROGRAMS  =   value
 
 #check_PROGRAMS  =   action      \
 #                    dialect     \

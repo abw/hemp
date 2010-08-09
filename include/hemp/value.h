@@ -7,6 +7,7 @@
 #include <hemp/context.h>
 
 
+
 /*--------------------------------------------------------------------------
  * Data structures
  *--------------------------------------------------------------------------*/
@@ -26,6 +27,11 @@ union hemp_value_u {
     hemp_u64_t      bits;
     hemp_num_t      number;
     hemp_tagged_t   tagged;
+};
+
+struct hemp_vtype_s {
+    hemp_u8_t       id;
+    hemp_cstr_p     name;
 };
 
 
@@ -49,6 +55,13 @@ union hemp_value_u {
  * can use to encode up to 16 different data types.
  *--------------------------------------------------------------------------*/
 
+/* value types */
+#define HEMP_TYPE_NUM_ID        ((hemp_u8_t)  0x0)      /* 64 bit double    */
+#define HEMP_TYPE_INT_ID        ((hemp_u8_t)  0x1)      /* 32 bit integer   */
+#define HEMP_TYPE_STR_ID        ((hemp_u8_t)  0x2)      /* string pointer   */
+#define HEMP_TYPE_IDENT_ID      ((hemp_u8_t)  0xF)      /* identity value   */
+
+/* define used for payload (depends on word size) */
 #if HEMP_WORD_LENGTH == 32
     #define HEMP_PAYLOAD_MASK   0x00000000FFFFFFFFLL
     #define HEMP_PAYLOAD_BITS   32
@@ -59,33 +72,74 @@ union hemp_value_u {
     #error "Invalid word length"
 #endif
 
+/* first 13 bits are used to indicate NaN, payload can use the rest*/
 #define HEMP_NAN_MASK           0xFFF8000000000000LL
 #define HEMP_PAYLOAD(v)         (v.bits & HEMP_PAYLOAD_MASK)
 
+/* macros for detecting and manipulating type tag */
 #define HEMP_TYPE_BITS          4
 #define HEMP_TYPE_SHIFT         47
 #define HEMP_TYPE_MASK          0x0F
 #define HEMP_TYPE_UP(t)         ((hemp_u64_t) (t & HEMP_TYPE_MASK) << HEMP_TYPE_SHIFT)
 #define HEMP_TYPE_DOWN(v)       ((hemp_u8_t)  (v >> HEMP_TYPE_SHIFT) & HEMP_TYPE_MASK)
 #define HEMP_TYPE_NAN_MASK(t)   (HEMP_NAN_MASK | HEMP_TYPE_UP(t))
+#define HEMP_TYPE_TAG(v)        HEMP_TYPE_DOWN(v.bits)
+#define HEMP_TYPE_NUMBER(v)     ((hemp_bool_t) ((hemp_u64_t)  v.bits < HEMP_NAN_MASK))
+#define HEMP_TYPE_TAGGED(v)     ((hemp_bool_t) ((hemp_u64_t) (v.bits & HEMP_NAN_MASK) == HEMP_NAN_MASK))
+#define HEMP_TYPE_ID(v)         (HEMP_TYPE_NUMBER(v) ? HEMP_TYPE_NUM_ID : HEMP_TYPE_TAG(v))
+#define HEMP_TYPE_CHECK(v,t)    ((hemp_bool_t) HEMP_TYPE_ID(v) == t)
 
-#define HEMP_TYPE_NUM_ID        ((hemp_u8_t)  0x00)     /* 64 bit double    */
-#define HEMP_TYPE_INT_ID        ((hemp_u8_t)  0x01)     /* 32 bit integer   */
-#define HEMP_TYPE_STR_ID        ((hemp_u8_t)  0x02)     /* string pointer   */
-
+/* full width masks for different types */
 #define HEMP_TYPE_NUM_MASK      ((hemp_u64_t) HEMP_TYPE_NUM_ID)
 #define HEMP_TYPE_INT_MASK      HEMP_TYPE_NAN_MASK(HEMP_TYPE_INT_ID)
 #define HEMP_TYPE_STR_MASK      HEMP_TYPE_NAN_MASK(HEMP_TYPE_STR_ID)
+#define HEMP_TYPE_IDENT_MASK    HEMP_TYPE_NAN_MASK(HEMP_TYPE_IDENT_ID)
 
-#define HEMP_TYPE(v)            HEMP_TYPE_DOWN(v.bits)
-#define HEMP_IS_TYPE(v,t)       ((hemp_bool_t) HEMP_TYPE(v) == t)
-#define HEMP_IS_NUM(v)          ((hemp_bool_t) ((hemp_u64_t) v.bits < HEMP_NAN_MASK))
-#define HEMP_IS_INT(v)          HEMP_IS_TYPE(v, HEMP_TYPE_INT_ID)
-#define HEMP_IS_STR(v)          HEMP_IS_TYPE(v, HEMP_TYPE_STR_ID)
-#define HEMP_IS_TAGGED(v)       (! HEMP_IS_NUM(v))
+/* high-level macros for checking value types */
+#define HEMP_IS_TAGGED(v)       HEMP_TYPE_TAGGED(v)
+#define HEMP_IS_NUM(v)          HEMP_TYPE_NUMBER(v)
+#define HEMP_IS_INT(v)          HEMP_TYPE_CHECK(v, HEMP_TYPE_INT_ID)
+#define HEMP_IS_STR(v)          HEMP_TYPE_CHECK(v, HEMP_TYPE_STR_ID)
+#define HEMP_IS_IDENT(v)        HEMP_TYPE_CHECK(v, HEMP_TYPE_IDENT_ID)
+
+/* identity values are those that only ever have one instance */
+#define HEMP_IDENT_BIT_ALT      0x01
+#define HEMP_IDENT_BIT_UNDEF    0x02
+#define HEMP_IDENT_BIT_BOOLEAN  0x04
+
+#define HEMP_IDENT_NOT          0x0
+#define HEMP_IDENT_MISSING_ID   HEMP_IDENT_BIT_UNDEF
+#define HEMP_IDENT_EMPTY_ID     (HEMP_IDENT_BIT_UNDEF   | HEMP_IDENT_BIT_ALT)
+#define HEMP_IDENT_FALSE_ID     HEMP_IDENT_BIT_BOOLEAN
+#define HEMP_IDENT_TRUE_ID      (HEMP_IDENT_BIT_BOOLEAN | HEMP_IDENT_BIT_ALT)
+
+#define HEMP_IDENT_BITS         8
+#define HEMP_IDENT_MASK         0xFF
+
+#define HEMP_IDENT_TAG(v)       ((hemp_u8_t)(v.bits & HEMP_IDENT_MASK))
+#define HEMP_IDENT_ID(v)        (HEMP_IS_IDENT(v) ? HEMP_IDENT_TAG(v) : HEMP_IDENT_NOT)
+#define HEMP_IDENT_CHECK(v,t)   ((hemp_bool_t) (HEMP_IDENT_ID(v) == (hemp_u8_t) t))
+#define HEMP_IDENT_HAS(v,b)     ((hemp_bool_t) (HEMP_IDENT_ID(v) &  (hemp_u8_t) b) == b)
+
+#define HEMP_IS_UNDEF(v)        HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_UNDEF)
+#define HEMP_IS_BOOLEAN(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_BOOLEAN)
+#define HEMP_IS_MISSING(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_MISSING_ID)
+#define HEMP_IS_EMPTY(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_EMPTY_ID)
+#define HEMP_IS_FALSE(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_FALSE_ID)
+#define HEMP_IS_TRUE(v)         HEMP_IDENT_CHECK(v, HEMP_IDENT_TRUE_ID)
+
+/* a global array of vtables for each of the core types */
+extern const struct hemp_vtype_s hemp_global_vtypes[HEMP_TYPE_MASK];
+#define HEMP_VTABLE(v)          (hemp_global_vtypes[HEMP_TYPE_ID(v)])
+#define HEMP_TYPE_NAME(v)       (HEMP_VTABLE(v).name)
+
 
 //#define HEMP_TAG_IS_TYPE(v,t)   (! HEMP_TAG_IS_NUM(t))
 
+extern const hemp_value_t HempMissing;
+extern const hemp_value_t HempEmpty;
+extern const hemp_value_t HempFalse;
+extern const hemp_value_t HempTrue;
 
 /*--------------------------------------------------------------------------
  * 
@@ -130,14 +184,14 @@ struct hemp_variable_s {
  * definitions for accessing Perl scalars, hash array and arrays.
  */
 
+/*
 struct hemp_vtype_s {
-    hemp_vtypes_p   vtypes;
     hemp_cstr_p     name;
+    hemp_vtypes_p   vtypes;
     hemp_init_vfn   init;
     hemp_wipe_vfn   wipe;
     hemp_text_vfn   text;
-    hemp_dot_vfn    dot;
-/*
+    hemp_dot_vfn    dot; 
     set
     dot
     text
@@ -146,8 +200,8 @@ struct hemp_vtype_s {
     dot_set   ??
     apply     # function application
     name fullname
-*/
 };
+*/
 
 
 
@@ -171,6 +225,8 @@ struct hemp_vtypes_s {
     /* hash table for additional types */
     hemp_hash_p     types;
 };
+
+
 
 
 
@@ -209,10 +265,13 @@ struct hemp_vtypes_s {
 extern hemp_value_t HEMP_NUM_VAL(hemp_num_t n);
 extern hemp_value_t HEMP_INT_VAL(hemp_int_t n);
 extern hemp_value_t HEMP_STR_VAL(hemp_cstr_p n);
+extern hemp_value_t HEMP_IDENT_VAL(hemp_u8_t i);
 
 extern hemp_num_t   HEMP_VAL_NUM(hemp_value_t v);
 extern hemp_int_t   HEMP_VAL_INT(hemp_value_t v);
 extern hemp_cstr_p  HEMP_VAL_STR(hemp_value_t v);
+extern hemp_u8_t    HEMP_VAL_IDENT(hemp_value_t v);
+
 
 
 void hemp_dump_u64(hemp_u64_t value);

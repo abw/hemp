@@ -1,6 +1,29 @@
 #include <hemp/value.h>
 
 
+const struct hemp_vtype_s hemp_global_vtypes[] = {
+    { 0x0, "number"  },
+    { 0x1, "integer" },
+    { 0x2, "string"  }
+};
+
+const hemp_value_t 
+HempMissing = (hemp_value_t) 
+    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_MISSING_ID);
+
+const hemp_value_t 
+HempEmpty = (hemp_value_t) 
+    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_EMPTY_ID);
+
+const hemp_value_t 
+HempFalse = (hemp_value_t) 
+    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_FALSE_ID);
+
+const hemp_value_t 
+HempTrue = (hemp_value_t) 
+    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_TRUE_ID);
+
+
 /*--------------------------------------------------------------------------
  * inline functions to encode native values as tagged values
  *--------------------------------------------------------------------------*/
@@ -26,6 +49,13 @@ HEMP_STR_VAL(hemp_cstr_p s) {
     return v;
 }
 
+HEMP_DO_INLINE hemp_value_t
+HEMP_IDENT_VAL(hemp_u8_t i) {
+    hemp_value_t v;
+    v.bits = HEMP_TYPE_IDENT_MASK | (hemp_u64_t) i;
+    return v;
+}
+
 
 /*--------------------------------------------------------------------------
  * inline functions to decode tagged values to native values
@@ -46,6 +76,11 @@ HEMP_VAL_STR(hemp_value_t v) {
     return (hemp_cstr_p) HEMP_PAYLOAD(v);
 }
 
+//HEMP_DO_INLINE hemp_u8_t
+//HEMP_VAL_IDENT(hemp_value_t v) {
+//    return HEMP_IDENT_ID(v);
+//}
+
 
 /*--------------------------------------------------------------------------
  * debugging
@@ -65,7 +100,7 @@ void hemp_dump_u64(
     hemp_u64_t  bit;
     hemp_int_t  n = 1;
     hemp_cstr_p col;
-    printf("0x%016llx\n", value);
+    printf("0x%016llx : ", value);
 
     while (mask) {
         bit = value & mask;

@@ -18,9 +18,26 @@ main(
 }
 
 
+void type_check(
+    hemp_value_t value,
+    hemp_u8_t    id,
+    hemp_cstr_p  name
+) {
+    if (hemp_cstr_eq(HEMP_TYPE_NAME(value), name)) {
+        pass("value type is %s", name);
+    }
+    else {
+        fail("values type is %s, expected %s", HEMP_TYPE_NAME(value), name);
+    }
+    
+    ok( HEMP_TYPE_ID(value) == id, "%s type is %d", name, id);
+}
+
+
 void test_value() {
     pass("testing value");
     hemp_value_t value;
+    hemp_vtype_p vtable;
 
     printf("NAN64:\n");
     hemp_dump_u64(HEMP_NAN_MASK);
@@ -41,11 +58,13 @@ void test_value() {
     ok( ! HEMP_IS_TAGGED(value), "number is not a tagged value" );
     ok( HEMP_IS_NUM(value), "number is a number value" );
     ok( n == expect, "got num value back" );
+    type_check(value, HEMP_TYPE_NUM_ID, "number");
 
     /* tagged int */
     printf("INT: 12345\n");
     value = HEMP_INT_VAL(12345);
     hemp_dump_value(value);
+    type_check(value, HEMP_TYPE_INT_ID, "integer");
 
     hemp_u32_t i = HEMP_VAL_INT(value);
     ok( HEMP_IS_TAGGED(value), "integer is a tagged value" );
@@ -57,6 +76,7 @@ void test_value() {
     printf("STRING: %s\n", es);
     value = HEMP_STR_VAL(es);
     hemp_dump_value(value);
+    type_check(value, HEMP_TYPE_STR_ID, "string");
 
     hemp_cstr_p s = HEMP_VAL_STR(value);
     printf("[%p]   [%p]\n", es, s);

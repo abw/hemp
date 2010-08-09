@@ -15,11 +15,6 @@
 
 @SET_MAKE@
 
-#bin_PROGRAMS    = hemp
-#hemp_SOURCES    = hemp.c
-#hemp_LDADD      = ../library/libhemp.la
-#hemp_CFLAGS     = -I../include
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -39,7 +34,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = hello$(EXEEXT)
+bin_PROGRAMS = hemp$(EXEEXT)
 subdir = programs
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -59,11 +54,11 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_hello_OBJECTS = hello-hello.$(OBJEXT)
-hello_OBJECTS = $(am_hello_OBJECTS)
-hello_DEPENDENCIES = ../library/libhemp.la
-hello_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CCLD) $(hello_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+am_hemp_OBJECTS = hemp-hemp.$(OBJEXT)
+hemp_OBJECTS = $(am_hemp_OBJECTS)
+hemp_DEPENDENCIES = ../library/libhemp.la
+hemp_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(hemp_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/hemp
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
@@ -78,8 +73,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(hello_SOURCES)
-DIST_SOURCES = $(hello_SOURCES)
+SOURCES = $(hemp_SOURCES)
+DIST_SOURCES = $(hemp_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -211,9 +206,9 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-hello_SOURCES = hello.c
-hello_LDADD = ../library/libhemp.la
-hello_CFLAGS = -I../include
+hemp_SOURCES = hemp.c
+hemp_LDADD = ../library/libhemp.la
+hemp_CFLAGS = -I../include
 all: all-am
 
 .SUFFIXES:
@@ -291,9 +286,9 @@ clean-binPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-hello$(EXEEXT): $(hello_OBJECTS) $(hello_DEPENDENCIES) 
-	@rm -f hello$(EXEEXT)
-	$(hello_LINK) $(hello_OBJECTS) $(hello_LDADD) $(LIBS)
+hemp$(EXEEXT): $(hemp_OBJECTS) $(hemp_DEPENDENCIES) 
+	@rm -f hemp$(EXEEXT)
+	$(hemp_LINK) $(hemp_OBJECTS) $(hemp_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -301,7 +296,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hello-hello.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hemp-hemp.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -327,19 +322,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
-hello-hello.o: hello.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hello_CFLAGS) $(CFLAGS) -MT hello-hello.o -MD -MP -MF $(DEPDIR)/hello-hello.Tpo -c -o hello-hello.o `test -f 'hello.c' || echo '$(srcdir)/'`hello.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/hello-hello.Tpo $(DEPDIR)/hello-hello.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='hello.c' object='hello-hello.o' libtool=no @AMDEPBACKSLASH@
+hemp-hemp.o: hemp.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hemp_CFLAGS) $(CFLAGS) -MT hemp-hemp.o -MD -MP -MF $(DEPDIR)/hemp-hemp.Tpo -c -o hemp-hemp.o `test -f 'hemp.c' || echo '$(srcdir)/'`hemp.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/hemp-hemp.Tpo $(DEPDIR)/hemp-hemp.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='hemp.c' object='hemp-hemp.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hello_CFLAGS) $(CFLAGS) -c -o hello-hello.o `test -f 'hello.c' || echo '$(srcdir)/'`hello.c
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hemp_CFLAGS) $(CFLAGS) -c -o hemp-hemp.o `test -f 'hemp.c' || echo '$(srcdir)/'`hemp.c
 
-hello-hello.obj: hello.c
-@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hello_CFLAGS) $(CFLAGS) -MT hello-hello.obj -MD -MP -MF $(DEPDIR)/hello-hello.Tpo -c -o hello-hello.obj `if test -f 'hello.c'; then $(CYGPATH_W) 'hello.c'; else $(CYGPATH_W) '$(srcdir)/hello.c'; fi`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/hello-hello.Tpo $(DEPDIR)/hello-hello.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='hello.c' object='hello-hello.obj' libtool=no @AMDEPBACKSLASH@
+hemp-hemp.obj: hemp.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hemp_CFLAGS) $(CFLAGS) -MT hemp-hemp.obj -MD -MP -MF $(DEPDIR)/hemp-hemp.Tpo -c -o hemp-hemp.obj `if test -f 'hemp.c'; then $(CYGPATH_W) 'hemp.c'; else $(CYGPATH_W) '$(srcdir)/hemp.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/hemp-hemp.Tpo $(DEPDIR)/hemp-hemp.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='hemp.c' object='hemp-hemp.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hello_CFLAGS) $(CFLAGS) -c -o hello-hello.obj `if test -f 'hello.c'; then $(CYGPATH_W) 'hello.c'; else $(CYGPATH_W) '$(srcdir)/hello.c'; fi`
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(hemp_CFLAGS) $(CFLAGS) -c -o hemp-hemp.obj `if test -f 'hemp.c'; then $(CYGPATH_W) 'hemp.c'; else $(CYGPATH_W) '$(srcdir)/hemp.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

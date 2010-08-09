@@ -26,15 +26,15 @@ void hemp_banner();
 void hemp_prompt();
 void hemp_help();
 void hemp_say(char *format, ...);
-void hemp_getopt(hemp_t hemp, int argc, char **argv);
+void hemp_getopt(hemp_p hemp, int argc, char **argv);
 
 
 
 int main(int argc, char **argv, char **env) {
     hemp_p          hemp = hemp_init();
     hemp_cstr_p     filename;
-    hemp_template_t template;
-    hemp_text_t     input, output;
+    hemp_template_p template;
+    hemp_text_p     input, output;
     
     hemp_getopt(hemp, argc, argv);
 
@@ -54,7 +54,9 @@ int main(int argc, char **argv, char **env) {
                 hemp_text_append_cstr(input, " ");
             }
             // hemp_verbose(hemp, "loaded text: %s", input->string);
-            template = hemp_template_init(HEMP_TEXT, input->string, NULL);
+            template = hemp_template(
+                hemp, HEMP_TT3, HEMP_TEXT, input->string
+            );
             
             if (! template)
                 hemp_fatal("could not load template: %s", filename);
@@ -74,7 +76,7 @@ int main(int argc, char **argv, char **env) {
                 filename = argv[optind++];
                 hemp_verbose(hemp, "loading file: %s", filename);
 
-                template = hemp_template_init(HEMP_FILE, filename, NULL);
+                template = hemp_template(hemp, HEMP_TT3, HEMP_FILE, filename);
                 if (! template)
                     hemp_fatal("could not load template: %s", filename);
 
@@ -106,10 +108,11 @@ int main(int argc, char **argv, char **env) {
 
 void hemp_banner() {
     fprintf(
-        stderr, "%s%s v%s by %s %s%s\n",
+        stderr, "%s%s v%s %s by %s %s%s\n",
         ANSI_GREEN,
         HEMP_NAME,
         HEMP_VERSION,
+        HEMP_ARCHITECTURE,
         HEMP_AUTHOR,
         HEMP_EMAIL,
         ANSI_RESET
@@ -140,7 +143,7 @@ void hemp_say(char *format, ...)
 
 void
 hemp_getopt(
-    hemp_t  hemp,
+    hemp_p  hemp,
     int     argc,
     char    **argv
 ) {
