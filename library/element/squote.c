@@ -1,50 +1,71 @@
 #include <hemp/element.h>
 
 
-struct hemp_symbol_s
+static struct hemp_symbol_s
     hemp_symbol_squote = { 
-        "squote",
-        "squote:", NULL,
-        HEMP_IS_STATIC, 0, 0,
-        NULL,
-        (hemp_clean_f) &hemp_element_text_clean,
-        &hemp_skip_none_vtable,
-        NULL, NULL,
-        &hemp_element_quoted_text,
-        &hemp_element_literal_parse_expr
+        "squote",                                   /* name                 */
+        NULL,                                       /* start token          */
+        NULL,                                       /* end token            */
+        HEMP_IS_STATIC,
+        0, 0,                                       /* l/r precedence       */
+        &hemp_element_squote_scanner,               /* scanner callback     */
+        &hemp_element_text_clean,                   /* cleanup callback     */
+        &hemp_element_literal_expr,                 /* parse expression     */
+        &hemp_element_not_infix,                    /* parse infix expr     */
+        &hemp_element_literal_source,               /* source code          */
+        &hemp_element_literal_text,                 /* output text          */
+        &hemp_element_literal_number,               /* numeric conversion   */
+        &hemp_element_literal_integer,              /* integer conversion   */
+        &hemp_element_literal_boolean,              /* boolean conversion   */
     };
 
 hemp_symbol_p HempSymbolSQuote = &hemp_symbol_squote;
 
+HEMP_SYMBOL_FUNC(hemp_element_squote_symbol) {
+    symbol->flags      = HEMP_IS_STATIC;
+    symbol->scanner    = &hemp_element_squote_scanner;
+    symbol->cleanup    = &hemp_element_text_clean;
+    symbol->expr       = &hemp_element_literal_expr,
+    symbol->source     = &hemp_element_literal_source;
+    symbol->text       = &hemp_element_literal_text;
+    symbol->number     = &hemp_element_literal_number;
+    symbol->integer    = &hemp_element_literal_integer;
+    symbol->boolean    = &hemp_element_literal_boolean;
 
-hemp_element_p
-hemp_element_squote_scanner(
-    hemp_template_p tmpl,
-    hemp_tag_p      tag,
-    hemp_cstr_p     start,
-    hemp_pos_t      pos,
-    hemp_cstr_p     *srcptr,
-    hemp_symbol_p   symbol
-) {
+    return symbol;
+}
+
+
+HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
     hemp_cstr_p     src      = *srcptr;
     hemp_bool_t     is_fixed = HEMP_TRUE;
+    hemp_cstr_p     end      = symbol->end;
+    hemp_size_t     endlen   = strlen(end);
     hemp_element_p  element;
 
     debug_call("hemp_element_squote_scanner()\n");
 
+    if (! end)
+        end = start;
+
+//  debug("end token: %s  length: %d\n", end, endlen);
+
     /* walk to the end */
-    while ( * ++src && *src != HEMP_SQUOTE ) {
+    while (1) {
+        if (*src == *end
+        && (endlen == 1 || hemp_cstrn_eq(src, end, endlen)))
+            break;
         if (*src == HEMP_BACKSLASH) {
             src++;
             is_fixed = HEMP_FALSE;
         }
+        if (! *++src)
+            hemp_fatal("unterminated single quoted string: %s", start);     // FIXME
     }
 
-    /* check we hit a quote and not the end of string */
-    if (! *src)
-        hemp_fatal("unterminated single quoted string: %s", start);
-
-    src++;
+    /* skip over the terminating character(s) */
+    end  = src;
+    src += endlen;
 
     debug_token("SQUOTE", start, src-start);
 
@@ -59,38 +80,23 @@ hemp_element_squote_scanner(
     }
     else {
         /* we need to create a new string with escapes resolved */
-        hemp_cstr_p sqfrom  = start + 1;
-        hemp_cstr_p squote  = 
-        element->value.text = (hemp_cstr_p) hemp_mem_alloc(src - start - 1);
+        hemp_cstr_p sqfrom  = *srcptr;
+        hemp_cstr_p squote  = (hemp_cstr_p) hemp_mem_alloc(end - sqfrom + 1);        // CHECK ME
+        element->args.value = HEMP_STR_VAL(squote);
                     
-        while (sqfrom < src) {
+        while (sqfrom < end) {
             /* skip past the '\' if we've got "\\" or "\'" */
             if (*sqfrom == HEMP_BACKSLASH 
-            && ( *(sqfrom + 1) == HEMP_SQUOTE 
-            ||   *(sqfrom + 1) == HEMP_BACKSLASH ))
+            && ( *(sqfrom + 1) == HEMP_BACKSLASH 
+            ||   *(sqfrom + 1) == *end ))
                 sqfrom++;
 
             *squote++ = *sqfrom++;
         }
-        *--squote = HEMP_NUL;
+        *squote = HEMP_NUL;
     }
 
     *srcptr = src;
     return element;
-}
-
-
-hemp_symbol_p
-hemp_element_squote_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_STATIC;
-    symbol->scanner    = &hemp_element_squote_scanner;
-    symbol->cleanup    = (hemp_clean_f) &hemp_element_text_clean;
-    symbol->parse_expr = &hemp_element_literal_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_quoted_text;
-    return symbol;
 }
 

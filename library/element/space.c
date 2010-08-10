@@ -2,67 +2,159 @@
 
 
 /*--------------------------------------------------------------------------
- * static element structures
+ * space
  *--------------------------------------------------------------------------*/
-
-/* NOTE: I'm experimenting with replacing these with constructor functions
- * (see language/hemp) which generate the element types (now called symbols)
- * on demand when they are added to a grammar.  This allows us to also define
- * precedence values at the same time without having to hard-code them for 
- * all possible uses
- */
 
 static struct hemp_symbol_s
     hemp_symbol_space = { 
-        "space",                                            /* name  */
-        "space:",NULL,                                           /* token */
-        HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,    /* flags */
-        0, 0,                                               /* precedence */
-        NULL, NULL,                                         /* scanner, cleaner */
-        &hemp_skip_all_vtable,                              /* skip */
-        NULL, NULL,                                         /* parse, source */
-        &hemp_element_literal_text,                         /* text */
-        &hemp_element_space_parse_expr                      /* parse */
+        "space",                                    /* name                 */
+        NULL,                                       /* start token          */
+        NULL,                                       /* end token            */
+        HEMP_IS_SPACE       |                       /* flags                */
+        HEMP_IS_FIXED       |
+        HEMP_IS_STATIC      | 
+        HEMP_IS_HIDDEN,
+        0, 0,                                       /* l/r precedence       */
+        NULL,                                       /* scanner callback     */
+        NULL,                                       /* cleanup callback     */
+        &hemp_element_next_expr,                    /* parse expression     */
+        &hemp_element_next_infix,                   /* parse infix expr     */
+        &hemp_element_literal_source,               /* source code          */
+        &hemp_element_literal_text,                 /* output text          */
+        &hemp_element_literal_number,               /* numeric conversion   */
+        &hemp_element_literal_integer,              /* integer conversion   */
+        &hemp_element_literal_boolean,              /* boolean conversion   */
     };
 
 
+HEMP_SYMBOL_FUNC(hemp_element_space_symbol) {
+    symbol->expr    = &hemp_element_next_expr;
+    symbol->infix   = &hemp_element_next_infix;
+    symbol->source  = &hemp_element_literal_source;
+    symbol->text    = &hemp_element_not_text;
+    symbol->number  = &hemp_element_not_number;
+    symbol->integer = &hemp_element_not_integer;
+    symbol->boolean = &hemp_element_not_boolean;
+    symbol->flags   = HEMP_IS_SPACE | HEMP_IS_FIXED | HEMP_IS_STATIC 
+                    | HEMP_IS_HIDDEN;
+    return symbol;
+}
+
+
+/*--------------------------------------------------------------------------
+ * tag start
+ *--------------------------------------------------------------------------*/
 
 static struct hemp_symbol_s
     hemp_symbol_tag_start = { 
-        "tag_start",
-        "tag_start:",NULL,
-        HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,
-        0, 0, NULL, NULL,
-        &hemp_skip_nonsep_vtable,
-        NULL, NULL,
-        &hemp_element_literal_text,
-        &hemp_element_space_parse_expr
+        "tag_start",                                /* name                 */
+        NULL,                                       /* start token          */
+        NULL,                                       /* end token            */
+        HEMP_IS_SPACE       |                       /* flags                */
+        HEMP_IS_FIXED       |
+        HEMP_IS_STATIC      | 
+        HEMP_IS_HIDDEN      |
+        HEMP_IS_SEPARATOR,
+        0, 0,                                       /* l/r precedence       */
+        NULL,                                       /* scanner callback     */
+        NULL,                                       /* cleanup callback     */
+        &hemp_element_next_expr,                    /* parse expression     */
+        &hemp_element_next_infix,                   /* parse infix expr     */
+        &hemp_element_literal_source,               /* source code          */
+        &hemp_element_not_text,                     /* output text          */
+        &hemp_element_not_number,                   /* numeric conversion   */
+        &hemp_element_not_integer,                  /* integer conversion   */
+        &hemp_element_not_boolean,                  /* boolean conversion   */
     };
+
+
+HEMP_SYMBOL_FUNC(hemp_element_tag_start_symbol) {
+    symbol->expr    = &hemp_element_next_expr;
+    symbol->infix   = &hemp_element_next_infix;
+    symbol->source  = &hemp_element_literal_source;
+    symbol->flags   = HEMP_IS_SPACE | HEMP_IS_FIXED | HEMP_IS_STATIC 
+                    | HEMP_IS_HIDDEN | HEMP_IS_SEPARATOR;
+    return symbol;
+}
+
+
+/*--------------------------------------------------------------------------
+ * tag end
+ *--------------------------------------------------------------------------*/
 
 static struct hemp_symbol_s
     hemp_symbol_tag_end = { 
-        "tag_end",
-        "tag_start:",NULL,
-        HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,
-        0, 0, NULL, NULL,
-        &hemp_skip_delimiter_vtable,
-        NULL, NULL,
-        &hemp_element_literal_text,
-        &hemp_element_dont_parse
+        "tag_end",                                  /* name                 */
+        NULL,                                       /* start token          */
+        NULL,                                       /* end token            */
+        HEMP_IS_FIXED       |                       /* flags                */
+        HEMP_IS_STATIC      | 
+        HEMP_IS_HIDDEN      |
+        HEMP_IS_TERMINATOR,
+        0, 0,                                       /* l/r precedence       */
+        NULL,                                       /* scanner callback     */
+        NULL,                                       /* cleanup callback     */
+        &hemp_element_not_expr,                     /* parse expression     */
+        &hemp_element_not_infix,                    /* parse infix expr     */
+        &hemp_element_literal_source,               /* source code          */
+        &hemp_element_not_text,                     /* output text          */
+        &hemp_element_not_number,                   /* numeric conversion   */
+        &hemp_element_not_integer,                  /* integer conversion   */
+        &hemp_element_not_boolean,                  /* boolean conversion   */
     };
 
+
+HEMP_SYMBOL_FUNC(hemp_element_tag_end_symbol) {
+    symbol->source  = &hemp_element_literal_source;
+    symbol->flags   = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN
+                    | HEMP_IS_TERMINATOR;
+    return symbol;
+}
+
+
+
+/*--------------------------------------------------------------------------
+ * end of file element
+ *--------------------------------------------------------------------------*/
 
 static struct hemp_symbol_s
     hemp_symbol_eof = { 
-        "EOF",
-        "--EOF--",NULL,
-        HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN | HEMP_IS_EOF,
-        0, 0, NULL, NULL,
-        &hemp_skip_none_vtable,
-        NULL, NULL,
-        &hemp_element_eof_text,
-        &hemp_element_dont_parse
+        "eof",                                      /* name                 */
+        "--EOF--",                                  /* start token          */
+        NULL,                                       /* end token            */
+        HEMP_IS_FIXED       |                       /* flags                */
+        HEMP_IS_STATIC      | 
+        HEMP_IS_HIDDEN      |
+        HEMP_IS_EOF,
+        0, 0,                                       /* l/r precedence       */
+        NULL,                                       /* scanner callback     */
+        NULL,                                       /* cleanup callback     */
+        &hemp_element_not_expr,                     /* parse expression     */
+        &hemp_element_not_infix,                    /* parse infix expr     */
+        &hemp_element_eof_text,                     /* source code          */   // FIX ME
+        &hemp_element_eof_text,                     /* output text          */
+        &hemp_element_not_number,                   /* numeric conversion   */
+        &hemp_element_not_integer,                  /* integer conversion   */
+        &hemp_element_not_boolean,                  /* boolean conversion   */
     };
+
+
+HEMP_SYMBOL_FUNC(hemp_element_eof_symbol) {
+    symbol->source  = &hemp_element_eof_text;
+    symbol->text    = &hemp_element_eof_text;
+    symbol->flags   = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN
+                    | HEMP_IS_EOF;
+    return symbol;
+}
+
+HEMP_OUTPUT_FUNC(hemp_element_eof_text) {
+    debug_call("hemp_element_eof_text()\n");
+    hemp_text_p text;
+    hemp_prepare_output(output, text, 6);
+    hemp_text_append_cstr(text, "--EOF--");     // TMP
+    return output;
+}
+
 
 
 /*--------------------------------------------------------------------------
@@ -74,50 +166,3 @@ hemp_symbol_p HempSymbolTagStart  = &hemp_symbol_tag_start;
 hemp_symbol_p HempSymbolTagEnd    = &hemp_symbol_tag_end;
 hemp_symbol_p HempSymbolEof       = &hemp_symbol_eof;
 
-
-/*--------------------------------------------------------------------------
- * function definitions
- *--------------------------------------------------------------------------*/
-
-hemp_element_p
-hemp_element_space_parse_expr(
-    HEMP_PARSE_PROTO
-) {
-    debug("hemp_element_space_parse_expr()\n");
-    debug_call("hemp_element_space_parse_expr()\n");
-
-    /* Advance the pointer to the next element after this one and then skip
-     * any further whitespace tokens.  Then ask the next token to return 
-     * an expression.
-     */
-    hemp_element_next_skip_space(elemptr);
-    return hemp_parse_expr(elemptr, scope, precedence, force);
-}
-
-
-hemp_text_p
-hemp_element_eof_text(
-    hemp_element_p  element,
-    hemp_text_p     text
-) {
-    debug_call("hemp_element_eof_text()\n");
-    
-    if (! text)
-        text = hemp_text_init(8);           // TODO: have a dedicate empty string
-
-    hemp_text_append_cstr(text, "--EOF--");
-    return text;
-}
-
-hemp_text_p
-hemp_element_no_text(
-    hemp_element_p  element,
-    hemp_text_p     text
-) {
-    debug_call("hemp_element_no_text()\n");
-    
-    if (! text)
-        text = hemp_text_init(0);           // TODO: have a dedicate empty string
-
-    return text;
-}

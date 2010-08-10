@@ -13,6 +13,9 @@ void debug_on();
 void debug_off();
 void debug_token(hemp_cstr_p type, hemp_cstr_p str, hemp_pos_t len);
 
+hemp_bool_t dump(char *format, ...);
+
+
 
 #define DEBUG_MEM       0x0002
 #define DEBUG_CALL      0x0004

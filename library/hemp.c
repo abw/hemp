@@ -115,21 +115,29 @@ void
 hemp_free(
     hemp_p hemp
 ) {
+    debug_call("hemp_free()\n");
+
     /* templates */
+//  debug("freeing templates\n");
     hemp_hash_each(hemp->templates, &hemp_free_template);
     hemp_hash_free(hemp->templates);
 
     /* tags */
-//  hemp_hash_each(hemp->tags, &hemp_tagset_free_tag);
-//  hemp_hash_free(hemp->tags);
+    //  hemp_hash_each(hemp->tags, &hemp_tagset_free_tag);
+    //  hemp_hash_free(hemp->tags);
 
     /* free factories */
+//  debug("freeing elements factory\n");
     hemp_factory_free(hemp->elements);
+//  debug("freeing grammars factory\n");
     hemp_factory_free(hemp->grammars);
+//  debug("freeing dialects factory\n");
     hemp_factory_free(hemp->dialects);
+//  debug("freeing language factory\n");
     hemp_factory_free(hemp->languages);
 
     /* schemes */
+//  debug("freeing schemes\n");
     hemp_hash_each(hemp->schemes, &hemp_free_scheme);
     hemp_hash_free(hemp->schemes);
 
@@ -239,21 +247,21 @@ hemp_register_elements(
  * dialect management
  *--------------------------------------------------------------------------*/
 
-void 
-hemp_add_dialect(
-    hemp_p          hemp,
-    hemp_dialect_p  dialect
-) {
-    hemp_dialect_p old = hemp_dialect(hemp, dialect->name);
-    
-    if (old)
-        hemp_dialect_free(old);
-
-    hemp_todo("hemp_add_dialect()");
-    debug("adding dialect: %s\n", dialect->name);
-
-    hemp_hash_store(hemp->dialects, dialect->name, dialect);
-}
+//void 
+//hemp_add_dialect(
+//    hemp_p          hemp,
+//    hemp_dialect_p  dialect
+//) {
+//    hemp_dialect_p old = hemp_dialect(hemp, dialect->name);
+//    
+//    if (old)
+//        hemp_dialect_free(old);
+//
+//    hemp_todo("hemp_add_dialect()");
+//    debug("adding dialect: %s\n", dialect->name);
+//
+//    hemp_hash_store(hemp->dialects, dialect->name, dialect);
+//}
 
 
 void 
@@ -387,7 +395,7 @@ hemp_throw(
 
     va_list args;
     va_start(args, number);
-    hemp_error_p error = hemp_error_initfv(number, format, &args);
+    hemp_error_p error = hemp_error_initfv(number, format, args);
     va_end(args);
 
     error->parent = hemp->error;

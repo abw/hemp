@@ -64,18 +64,18 @@ void hemp_mem_fail(hemp_cstr_p);
     typedef struct hemp_mem_trace_s *hemp_mem_trace_p;
 
     hemp_mem_trace_p hemp_mem_new_trace();
-    hemp_mem_trace_p hemp_mem_get_trace(hemp_mem_p);
+    hemp_mem_trace_p hemp_mem_get_trace(hemp_mem_p, hemp_cstr_p, hemp_pos_t);
     hemp_size_t      hemp_mem_trace_report(hemp_bool_t);
     void             hemp_mem_trace_reset();
 
     hemp_mem_p       hemp_mem_trace_malloc(hemp_size_t, hemp_cstr_p, hemp_pos_t);
     hemp_mem_p       hemp_mem_trace_realloc(hemp_mem_p, hemp_size_t, hemp_cstr_p, hemp_pos_t);
     hemp_cstr_p      hemp_mem_trace_strdup(hemp_cstr_p, hemp_cstr_p, hemp_pos_t);
-    void             hemp_mem_trace_free(hemp_mem_p);
+    void             hemp_mem_trace_free(hemp_mem_p, hemp_cstr_p, hemp_pos_t);
 
     #define hemp_mem_alloc(size)            hemp_mem_trace_malloc(size, __FILE__, __LINE__)
     #define hemp_mem_resize(memory, size)   hemp_mem_trace_realloc(memory, size, __FILE__, __LINE__)
-    #define hemp_mem_free(memory)           hemp_mem_trace_free(memory)
+    #define hemp_mem_free(memory)           hemp_mem_trace_free(memory, __FILE__, __LINE__)
     #define hemp_cstr_copy(src)             hemp_mem_trace_strdup(src, __FILE__, __LINE__)
 #else
     #define hemp_mem_alloc(size)            malloc(size)

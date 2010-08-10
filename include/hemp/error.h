@@ -1,6 +1,7 @@
 #ifndef HEMP_ERROR_H
 #define HEMP_ERROR_H
 
+#include <stdarg.h>
 #include <hemp/types.h>
 
 
@@ -11,6 +12,8 @@ typedef enum {
     HEMP_ERROR_MISSING,
     HEMP_ERROR_INVALID,
     HEMP_ERROR_DUPLICATE,
+    HEMP_ERROR_OVERFLOW,
+    HEMP_ERROR_TOKEN,
     HEMP_ERROR_MAX
 } hemp_errno_e;
 
@@ -22,6 +25,8 @@ static hemp_cstr_p hemp_errmsg[] = {
     "No %s specified",
     "Invalid %s specified: %s",
     "Duplicate %s specified: %s",
+    "Number is too large: %s",
+    "Invalid token: %s",
     NULL
 };
 

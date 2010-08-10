@@ -67,6 +67,8 @@ hemp_elements_create(
     element->flags      = type->flags;
     element->next       = NULL;
 
+//  debug("created new %s element at %p\n", type->name, element);
+
     return element;
 }
 

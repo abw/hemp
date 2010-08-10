@@ -154,7 +154,9 @@ hemp_grammar_tt3_core(
 ) {
     debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = hemp_grammar_hemp_bravo(hemp, name);
-    HEMP_SYMBOL("hemp.comment", "#", 0, 0);
+//    HEMP_SYMBOL("hemp.comment", "#", 0, 0);
+    HEMP_SYMBOL2("hemp.squote", "q<<", ">>",   0, 0);
+
     return grammar;
 }
 

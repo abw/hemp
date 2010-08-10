@@ -116,14 +116,16 @@ hemp_mem_new_trace() {
 
 
 /*
- * hemp_mem_get_trace(ptr)
+ * hemp_mem_get_trace(ptr, file, line)
  *
  * Returns the memory trace record associated with a pointer.
  */
 
 hemp_mem_trace_p
 hemp_mem_get_trace(
-    hemp_mem_p ptr
+    hemp_mem_p ptr,
+    hemp_cstr_p file,
+    hemp_pos_t  line
 ) {
     int r = hemp_mem_used;
 
@@ -136,7 +138,11 @@ hemp_mem_get_trace(
         }
     }
 
-    hemp_fatal("no memory record for memory at %p\n", ptr);
+    hemp_fatal(
+        "no trace record for memory at %p\n"
+        "free() called from %s at line %d\n", 
+        ptr, file, line
+    );
 }
 
 
@@ -186,7 +192,7 @@ hemp_mem_trace_realloc(
     if (! ptr)
         return hemp_mem_trace_malloc(size, file, line);
 
-    hmt = hemp_mem_get_trace(ptr);
+    hmt = hemp_mem_get_trace(ptr, file, line);
     ptr = realloc(ptr, size);
 
     if (! ptr)
@@ -241,9 +247,12 @@ hemp_mem_trace_strdup(
 
 void 
 hemp_mem_trace_free(
-    hemp_mem_p ptr
+    hemp_mem_p  ptr,
+    hemp_cstr_p file,
+    hemp_pos_t  line
 ) {
-    hemp_mem_trace_p hmt = hemp_mem_get_trace(ptr);
+//    printf("free(%s)\n");
+    hemp_mem_trace_p hmt = hemp_mem_get_trace(ptr, file, line);
     free(hmt->ptr);
     hmt->status = HEMP_MEM_FREE;
 //  hmt->size   = 0;

@@ -62,4 +62,12 @@ debug_token(
     debug_scan("[%s:%s]\n", type, buffer);
 } 
 
-
+hemp_bool_t 
+dump(
+    char *format, ...
+) {
+    va_list args;
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    va_end(args);
+}

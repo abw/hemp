@@ -22,8 +22,8 @@ typedef u_int32_t               hemp_u32_t;     /* generic 32 bit integer   */
 typedef u_int64_t               hemp_u64_t;     /* generic 64 bit integer   */
 typedef unsigned char           hemp_bool_t;    /* boolean true/false       */
 typedef unsigned char           hemp_char_t;    /* single character         */
-typedef long                    hemp_flags_t;   /* bitmask                  */
-typedef long                    hemp_offset_t;  /* -ve/+ve offset           */
+typedef u_int32_t               hemp_flags_t;   /* bitmask                  */
+typedef int32_t                 hemp_offset_t;  /* -ve/+ve offset           */
 typedef u_int32_t               hemp_int_t;     /* generic integer          */
 typedef double                  hemp_num_t;     /* generic fp number        */
 typedef unsigned long           hemp_uint_t;    /* generic unsigned int     */
@@ -81,6 +81,7 @@ typedef struct hemp_type_s      * hemp_type_p;
 typedef struct hemp_vtype_s     * hemp_vtype_p;
 typedef struct hemp_vtypes_s    * hemp_vtypes_p;
 typedef struct hemp_variable_s  * hemp_variable_p;
+//typedef union  hemp_value_t     * hemp_value_p;
 
 
 typedef enum   hemp_tag_style_e   hemp_tag_style_t;
@@ -176,6 +177,11 @@ typedef void
         hemp_mem_p item             /* pointer to object to clean           */
     );
 
+typedef void
+    (* hemp_eclean_f)(
+        hemp_element_p element      /* pointer to element to clean          */
+    );
+
 typedef hemp_mem_p
     (* hemp_actor_f)(
         hemp_mem_p argument, 
@@ -223,7 +229,7 @@ typedef hemp_element_p
         hemp_scope_p    scope,      /* current lexical scope                */
         hemp_prec_t     precedence, /* operator precedence level            */
         hemp_bool_t     force       /* yes, really parse something          */
-);
+    );
 
 typedef hemp_element_p  
     (* hemp_infix_f )(
@@ -232,13 +238,36 @@ typedef hemp_element_p
         hemp_prec_t     precedence, /* operator precedence level            */
         hemp_bool_t     force,      /* yes, really parse something          */
         hemp_element_p  element     /* preceding element                    */
-);
+    );
 
-typedef hemp_text_p 
+typedef hemp_value_t 
     (* hemp_text_f )(
         hemp_element_p  element,    /* pointer to element                   */
-        hemp_text_p     buffer      /* optional pointer to output buffer    */
+        hemp_context_p  context,    /* runtime context                      */
+        hemp_value_t    output      /* optional output buffer               */
     );
+
+typedef hemp_value_t
+    (* hemp_eval_f)(
+        hemp_element_p  element,    /* element to evaluate                  */
+        hemp_context_p  context     /* runtime context                      */
+    );
+
+typedef hemp_value_t
+    (* hemp_unop_f)(
+        hemp_context_p  context,    /* runtime context                      */
+        hemp_value_t    expr        /* single value                         */
+    );
+
+typedef hemp_value_t
+    (* hemp_binop_f)(
+        hemp_context_p  context,    /* runtime context                      */
+        hemp_value_t    lhs,        /* expression on left hand side         */
+        hemp_value_t    rhs         /* expression on right hand side        */
+    );
+
+typedef hemp_value_t    (* hemp_binary_fn)(hemp_value_t, hemp_value_t);
+typedef hemp_value_t    (* hemp_ternary_fn)(hemp_value_t, hemp_value_t, hemp_value_t);
 
 
 typedef hemp_cstr_p     (* hemp_source_namer_f   )( hemp_source_p );
@@ -258,9 +287,6 @@ typedef hemp_bool_t     (* hemp_onload_fn)(hemp_t);
 /*
 typedef void            (* hemp_free_fn)(hemp_value_t);
 typedef hemp_bool_t     (* hemp_truth_fn)(hemp_value_t);
-typedef hemp_value_t    (* hemp_unary_fn)(hemp_value_t);
-typedef hemp_value_t    (* hemp_binary_fn)(hemp_value_t, hemp_value_t);
-typedef hemp_value_t    (* hemp_ternary_fn)(hemp_value_t, hemp_value_t, hemp_value_t);
 
 typedef hemp_text_t     (* hemp_text_fn)(hemp_element_t, hemp_text_t);
 */

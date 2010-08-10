@@ -58,4 +58,9 @@ An incomplete list of things TODO, in no particular order.
 
 * inline tag scan: make quotes, comments, etc., all standard operators.
   Define a scan method for them and invoke it on detection.
-  
+ 
+ 
+Parsing refactor 
+----------------
+
+

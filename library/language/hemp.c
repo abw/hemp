@@ -121,62 +121,6 @@ static struct hemp_symbols_s hemp_symbols_hemp_textop[] = {
 
 
 
-/* It seems rather pointless having all grammars lookup operators via hash
- * when they already know exectly what they're looking for.  So I'm thinking
- * about defining hard-coded structures containing the symbol constructors.
- * Something like this perhaps...
- */
-struct {
-    hemp_symbol_f text;
-    hemp_symbol_f space;
-    hemp_symbol_f comment;
-    hemp_symbol_f tag_start;
-    hemp_symbol_f tag_end;
-    hemp_symbol_f number;
-    hemp_symbol_f integer;
-    hemp_symbol_f word;
-    hemp_symbol_f squote;
-    hemp_symbol_f dquote;
-    hemp_symbol_f block;
-}   
-hemp_basic_symbol = {
-    &hemp_element_text_symbol,
-    &hemp_element_space_symbol,
-    &hemp_element_comment_symbol,
-    &hemp_element_tag_start_symbol,
-    &hemp_element_tag_end_symbol,
-    &hemp_element_number_symbol,
-    &hemp_element_integer_symbol,
-    &hemp_element_word_symbol,
-    &hemp_element_squote_symbol,
-    &hemp_element_dquote_symbol,
-    &hemp_element_block_symbol
-};
-
-struct {
-    hemp_symbol_f inc;
-    hemp_symbol_f dec;
-    hemp_symbol_f plus;
-    hemp_symbol_f minus;
-    hemp_symbol_f power;
-    hemp_symbol_f multiply;
-    hemp_symbol_f divide;
-    hemp_symbol_f divint;
-    hemp_symbol_f modulus;
-}
-hemp_numop_symbol = {
-    &hemp_element_numop_inc_symbol,
-    &hemp_element_numop_dec_symbol,
-    &hemp_element_numop_plus_symbol,
-    &hemp_element_numop_minus_symbol,
-    &hemp_element_numop_power_symbol,
-    &hemp_element_numop_multiply_symbol,
-    &hemp_element_numop_divide_symbol,
-    &hemp_element_numop_divint_symbol,
-    &hemp_element_numop_modulus_symbol
-};
-    
-
 hemp_grammar_p hemp_grammar_hemp_alpha(hemp_p, hemp_cstr_p);
 hemp_grammar_p hemp_grammar_hemp_bravo(hemp_p, hemp_cstr_p);
 void           hemp_grammar_add_hemp_alpha(hemp_grammar_p);
@@ -218,167 +162,6 @@ hemp_language_hemp_init(
     HEMP_GRAMMAR("hemp.bravo", &hemp_grammar_hemp_bravo);
 
     return language;
-}
-
-
-/*--------------------------------------------------------------------------
- * basic elements
- *--------------------------------------------------------------------------*/
-
-hemp_symbol_p
-hemp_element_text_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC;
-    symbol->parse_expr = &hemp_element_literal_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_literal_text;
-    return symbol;
-}
-
-
-hemp_symbol_p
-hemp_element_space_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN;
-    symbol->skip       = &hemp_skip_all_vtable;
-    symbol->parse_expr = &hemp_element_space_parse_expr;
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_no_text;
-    return symbol;
-}
-
-
-// moved to element/comment.c
-//hemp_symbol_p
-//hemp_element_comment_symbol(
-//    hemp_p        hemp,
-//    hemp_symbol_p symbol
-//) {
-//    symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN;
-//    symbol->skip       = &hemp_skip_all_vtable;
-//    symbol->parse_expr = &hemp_element_space_parse_expr,
-//    symbol->source     = &hemp_element_literal_text;
-//    symbol->text       = &hemp_element_no_text;
-//    return symbol;
-//}
-
-
-hemp_symbol_p
-hemp_element_tag_start_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN;
-    symbol->parse_expr = &hemp_element_space_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_no_text;
-
-    hemp_symbol_skip_vtable(
-        symbol,
-        &hemp_element_next_skip_space,
-        &hemp_element_next_skip_delimiter,
-        &hemp_element_dont_skip
-    );
-
-    return symbol;
-}
-
-
-hemp_symbol_p
-hemp_element_tag_end_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN;
-    symbol->skip       = &hemp_skip_delimiter_vtable;       // NOT SURE
-    symbol->parse_expr = &hemp_element_space_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_no_text;
-    return symbol;
-}
-
-
-hemp_symbol_p
-hemp_element_number_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_STATIC;
-    symbol->parse_expr = &hemp_element_number_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_literal_text;
-    return symbol;
-}
-
-
-hemp_symbol_p
-hemp_element_integer_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_STATIC;
-    symbol->parse_expr = &hemp_element_literal_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_literal_text;
-    return symbol;
-}
-
-
-hemp_symbol_p
-hemp_element_word_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    /* these aren't right, but they'll do for now, for testing purposes */
-    symbol->parse_expr = &hemp_element_literal_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_literal_text;
-    return symbol;
-}
-
-
-
-
-hemp_symbol_p
-hemp_element_dquote_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->parse_expr = &hemp_element_literal_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_quoted_text;
-//  symbol->cleanup    = &hemp_element_text_clean;          // FIXME
-    return symbol;
-}
-
-
-hemp_symbol_p
-hemp_element_block_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->parse_expr = &hemp_element_parse_expr,
-    symbol->source     = &hemp_element_block_source;
-    symbol->text       = &hemp_element_block_text;
-//    symbol->cleanup    = &hemp_element_block_clean;       // FIXME
-    return symbol;
-}
-
-
-hemp_symbol_p
-hemp_element_eof_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN | HEMP_IS_EOF;
-    symbol->parse_expr = &hemp_element_dont_parse,
-    symbol->source     = &hemp_element_eof_text;
-    symbol->text       = &hemp_element_no_text;
-    return symbol;
 }
 
 
@@ -503,19 +286,6 @@ hemp_element_numop_dec_symbol(
 }
 
 
-hemp_symbol_p
-hemp_element_numop_plus_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    // not quite right - needs to accept expr as well...
-    symbol->parse  = &hemp_parse_binary_vtable;
-    symbol->source = &hemp_element_literal_text;
-    symbol->text   = &hemp_element_binary_text;
-    return symbol;
-//    return hemp_element_numop_TODO_symbol(hemp, symbol);
-}
-
 
 hemp_symbol_p
 hemp_element_numop_minus_symbol(
@@ -523,7 +293,7 @@ hemp_element_numop_minus_symbol(
     hemp_symbol_p symbol
 ) {
     // not quite right - needs to accept expr as well...
-    symbol->parse = &hemp_parse_binary_vtable;
+    //symbol->parse = &hemp_parse_binary_vtable;
     return symbol;
 }
 
@@ -532,8 +302,9 @@ hemp_symbol_p hemp_element_numop_binary_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    symbol->parse  = &hemp_parse_binary_vtable;
-    symbol->source = &hemp_element_literal_text;
+    symbol->expr   = &hemp_element_not_expr;
+    symbol->infix  = &hemp_element_parse_infix_left;
+    symbol->source = &hemp_element_binary_text;
     symbol->text   = &hemp_element_binary_text;
     return symbol;
 }
@@ -770,8 +541,8 @@ hemp_grammar_add_hemp_alpha(
     HEMP_SYMBOL("hemp.text",    "_TEXT",    0, 0);
     HEMP_SYMBOL("hemp.space",   "_SPACE",   0, 0);
     HEMP_SYMBOL("hemp.comment", "#",        0, 0);
-
     HEMP_SYMBOL2("hemp.squote", "'", "'",   0, 0);
+    HEMP_SYMBOL2("hemp.dquote", "\"", "\"", 0, 0);
 }
 
 void

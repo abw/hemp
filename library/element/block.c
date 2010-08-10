@@ -1,61 +1,66 @@
 #include <hemp/element.h>
 
-void
-    hemp_element_block_clean(
-        hemp_element_p element
-    );
 
-
-struct hemp_symbol_s
+static struct hemp_symbol_s
     hemp_symbol_block = { 
-        "block",
-        "[block]",NULL,
-        0, 0, 0,
-        NULL, 
-        (hemp_clean_f) &hemp_element_block_clean,
-        &hemp_skip_none_vtable,
-        NULL, NULL,
-        &hemp_element_block_text,
-        &hemp_element_parse_expr,               // FIXME
+        "block",                                    /* name                 */
+        NULL,                                       /* start token          */
+        NULL,                                       /* end token            */
+        0,                                          /* flags                */
+        0, 0,                                       /* l/r precedence       */
+        NULL,                                       /* scanner callback     */
+        &hemp_element_block_clean,                  /* cleanup callback     */
+        &hemp_element_not_expr,                     /* parse expression     */      // CHECK ME
+        &hemp_element_not_infix,                    /* parse infix expr     */
+        &hemp_element_block_source,                 /* source code          */
+        &hemp_element_block_text,                   /* output text          */
+        &hemp_element_not_number,                   /* numeric conversion   */
+        &hemp_element_not_integer,                  /* integer conversion   */
+        &hemp_element_not_boolean,                  /* boolean conversion   */
     };
 
 hemp_symbol_p HempSymbolBlock = &hemp_symbol_block;
 
 
-hemp_text_p
-hemp_element_block_source(
-    hemp_element_p  element,
-    hemp_text_p     text
-) {
-    hemp_todo("hemp_element_block_source()\n");
+HEMP_SYMBOL_FUNC(hemp_element_block_symbol) {
+    symbol->source     = &hemp_element_block_source;
+    symbol->text       = &hemp_element_block_text;
+//   symbol->cleanup    = &hemp_element_block_clean;       // FIXME
+    return symbol;
 }
 
 
-hemp_text_p
-hemp_element_block_text(
-    hemp_element_p  element,
-    hemp_text_p     text
-) {
+HEMP_OUTPUT_FUNC(hemp_element_block_source) {
+    debug_call("hemp_element_block_source()\n");
+
+    hemp_text_p text;
+    hemp_prepare_output(output, text, element->length);
+
+    hemp_todo("hemp_element_block_source()");
+
+    return output;
+}
+
+
+HEMP_OUTPUT_FUNC(hemp_element_block_text) {
     debug_call("hemp_element_block_text()\n");
 //  debug("*** hemp_element_block_text()\n");
-    hemp_list_p     exprs = element->value.block.exprs;
+    hemp_list_p     exprs = element->args.block.exprs;
     hemp_element_p  expr;
     hemp_size_t     n;
-    
-    if (! text) {
-//      debug("new text item\n");
-        text = hemp_text_init(0);
-    }
 
+    hemp_text_p text;
+    hemp_prepare_output(output, text, 0);
+    
     for (n = 0; n < exprs->length; n++) {
         expr = hemp_list_item(exprs, n);
 //      debug("calling %s text method\n", expr->type->name);
-        expr->type->text(expr, text);
+        expr->type->text(expr, context, output);
     }
 
 //  debug("returning block text (%d bytes): %p\n", text->length, text);
 
-    return text;
+    return output;
 }
 
 
@@ -64,8 +69,9 @@ hemp_element_block_clean(
     hemp_element_p element
 ) {
     debug_call("hemp_element_block_clean(%p)\n", element);
-    
-    hemp_list_p exprs = element->value.block.exprs;
+
+    hemp_list_p exprs = element->args.block.exprs;
+
     if (exprs)
         hemp_list_free(exprs);
 

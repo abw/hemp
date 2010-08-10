@@ -15,7 +15,7 @@
 
 @SET_MAKE@
 
-#check_PROGRAMS  =   value
+#check_PROGRAMS  =   scanner
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@

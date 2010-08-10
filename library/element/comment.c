@@ -3,29 +3,38 @@
 
 static struct hemp_symbol_s
     hemp_symbol_comment = { 
-        "comment",
-        "comment:",NULL,
-        HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN,
-        0, 0, NULL, NULL,
-        &hemp_skip_all_vtable,
-        NULL, NULL,
-        &hemp_element_literal_text,
-        &hemp_element_space_parse_expr
+        "comment",                                  /* name                 */
+        NULL,                                       /* start token          */
+        NULL,                                       /* end token            */
+        HEMP_IS_SPACE       |                       /* flags                */
+        HEMP_IS_FIXED       |
+        HEMP_IS_STATIC      |
+        HEMP_IS_HIDDEN,
+        0, 0,                                       /* l/r precedence       */
+        NULL,                                       /* scanner callback     */
+        NULL,                                       /* cleanup callback     */
+        &hemp_element_not_expr,                     /* parse expression     */
+        &hemp_element_not_infix,                    /* parse infix expr     */
+        &hemp_element_literal_source,               /* source code          */
+        &hemp_element_not_text,                     /* output text          */
+        &hemp_element_not_number,                   /* numeric conversion   */
+        &hemp_element_not_integer,                  /* integer conversion   */
+        &hemp_element_not_boolean,                  /* boolean conversion   */
     };
 
 hemp_symbol_p HempSymbolComment = &hemp_symbol_comment;
 
 
+HEMP_SYMBOL_FUNC(hemp_element_comment_symbol) {
+    symbol->scanner    = &hemp_element_comment_scanner;
+    symbol->source     = &hemp_element_literal_source;
+    symbol->flags      = HEMP_IS_SPACE | HEMP_IS_FIXED | HEMP_IS_STATIC 
+                       | HEMP_IS_HIDDEN;
+    return symbol;
+}
 
-hemp_element_p
-hemp_element_comment_scanner(
-    hemp_template_p tmpl,
-    hemp_tag_p      tag,
-    hemp_cstr_p     start,
-    hemp_pos_t      pos,
-    hemp_cstr_p     *srcptr,
-    hemp_symbol_p   symbol
-) {
+
+HEMP_SCAN_FUNC(hemp_element_comment_scanner) {
     hemp_cstr_p     src     = *srcptr;
     hemp_cstr_p     tag_end = tag->end;
     hemp_size_t     tag_len = strlen(tag->end);
@@ -57,20 +66,5 @@ hemp_element_comment_scanner(
         tmpl->elements, symbol,
         start, pos, src - start
     );
-}
-
-
-hemp_symbol_p
-hemp_element_comment_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->flags      = HEMP_IS_FIXED | HEMP_IS_STATIC | HEMP_IS_HIDDEN;
-    symbol->scanner    = &hemp_element_comment_scanner;
-    symbol->skip       = &hemp_skip_all_vtable;
-    symbol->parse_expr = &hemp_element_space_parse_expr,
-    symbol->source     = &hemp_element_literal_text;
-    symbol->text       = &hemp_element_no_text;
-    return symbol;
 }
 

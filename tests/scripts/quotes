@@ -4,7 +4,6 @@
 -- expect
 foo foo bar
 
-
 -- test single quoted strings with escapes
 [% 'Tom O\'Tommy' ' and ' 'foo\\bar' ' and ' 'wiz\bang' %]
 
@@ -34,9 +33,24 @@ Some text [% 123 %] more text [% '456' %]
 Some text 123 more text 456
 
 
+-- stop 
+# NOTE: the next test only passes when a dedicated q<< >> quote operator
+# is forced into the grammar.  Need to figure out a nice way for test 
+# scripts to add these things, but that all depends on a general 
+# configuration mechanism that I haven't figured out yet.
+
+-- test single quoted strings with multi-character start/end tokens
+[% q<<foo>> q<< >> q<<foo'boo'bar>> %]
+
+-- expect
+foo foo'boo'bar
+
 -- test unterminated single quoted string
 TODO: [%# 'oops %]
 
 -- test unterminated double quoted string
 TODO: [%# "cripey! %]
+
+
+
 

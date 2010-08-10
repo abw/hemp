@@ -22,6 +22,7 @@
 #define HEMP_DQUOTE         '"'
 #define HEMP_COMMENT        '#'
 #define HEMP_BACKSLASH      '\\'
+#define HEMP_UNDERSCORE     '_'
 
 #define HEMP_BLANK          ""
 #define HEMP_SPACE          " "
@@ -47,12 +48,6 @@
 #define HEMP_PTREE_SIZE     8       /* # of bucket chains in a ptree        */
 #define HEMP_VTYPES_SIZE    8
 #define HEMP_TAGSET_SIZE    8
-
-/* element flags */
-#define HEMP_IS_FIXED       0x0001
-#define HEMP_IS_STATIC      0x0002
-#define HEMP_IS_HIDDEN      0x0004
-#define HEMP_IS_EOF         0x8000
 
 /* error codes (work in progress) */
 #define HEMP_ERRNO_HELP     1

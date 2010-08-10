@@ -4,7 +4,9 @@
 const struct hemp_vtype_s hemp_global_vtypes[] = {
     { 0x0, "number"  },
     { 0x1, "integer" },
-    { 0x2, "string"  }
+    { 0x2, "string"  },
+    { 0x3, "-- RESERVED 0x03" },
+    { 0x4, "text"  }
 };
 
 const hemp_value_t 
@@ -12,8 +14,8 @@ HempMissing = (hemp_value_t)
     ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_MISSING_ID);
 
 const hemp_value_t 
-HempEmpty = (hemp_value_t) 
-    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_EMPTY_ID);
+HempNothing = (hemp_value_t) 
+    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_NOTHING_ID);
 
 const hemp_value_t 
 HempFalse = (hemp_value_t) 
@@ -50,10 +52,24 @@ HEMP_STR_VAL(hemp_cstr_p s) {
 }
 
 HEMP_DO_INLINE hemp_value_t
+HEMP_TEXT_VAL(hemp_text_p t) {
+    hemp_value_t v;
+    v.bits = HEMP_TYPE_TEXT_MASK | (hemp_u64_t) t;
+    return v;
+}
+
+HEMP_DO_INLINE hemp_value_t
 HEMP_IDENT_VAL(hemp_u8_t i) {
     hemp_value_t v;
     v.bits = HEMP_TYPE_IDENT_MASK | (hemp_u64_t) i;
     return v;
+}
+
+HEMP_DO_INLINE hemp_value_t
+HEMP_BOOL_VAL(hemp_bool_t b) {
+    return b
+        ? HempTrue
+        : HempFalse;
 }
 
 
@@ -76,10 +92,30 @@ HEMP_VAL_STR(hemp_value_t v) {
     return (hemp_cstr_p) HEMP_PAYLOAD(v);
 }
 
+HEMP_DO_INLINE hemp_text_p
+HEMP_VAL_TEXT(hemp_value_t v) {
+    return (hemp_text_p) HEMP_PAYLOAD(v);
+}
+
 //HEMP_DO_INLINE hemp_u8_t
 //HEMP_VAL_IDENT(hemp_value_t v) {
 //    return HEMP_IDENT_ID(v);
 //}
+
+HEMP_DO_INLINE hemp_bool_t
+HEMP_VAL_BOOL(hemp_value_t v) {
+    if (HEMP_IS_BOOLEAN(v)) {
+        return HEMP_IS_TRUE(v);
+    }
+    else {
+        hemp_fatal("value is not boolean"); 
+        return HEMP_FALSE;
+    }
+    
+//    return HEMP_IS_BOOLEAN(v)
+//         ? HEMP_IS_TRUE(v)
+//         : ({ hemp_fatal("value is not boolean"); 0 }); // shitfucks. no hemp 
+}
 
 
 /*--------------------------------------------------------------------------

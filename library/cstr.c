@@ -122,4 +122,15 @@ hemp_cstr_chomp(
         *s = HEMP_NUL;
 }
 
+hemp_bool_t
+hemp_cstr_wordlike(
+    hemp_cstr_p str
+) {
+    while (isalnum(*str) || *str == HEMP_UNDERSCORE)
+        str++;
 
+    /* if we reached the end of the string then all characters are wordlike */
+    return *str
+        ? HEMP_FALSE
+        : HEMP_TRUE;
+}

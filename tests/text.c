@@ -67,32 +67,32 @@ void test_text() {
     ok( copycat->length == 24, "appended: %s", copycat->string );
 
     hemp_text_insert_cstr(copycat, 0, "START ");
-    ok( 
-        hemp_cstr_eq(copycat->string, "START Hello World Hello Badger"),
+    is( 
+        copycat->string, "START Hello World Hello Badger",
         "inserted at start"
     );
 
     hemp_text_insert_cstr(copycat, 12, "MID ");
-    ok( 
-        hemp_cstr_eq(copycat->string, "START Hello MID World Hello Badger"),
+    is( 
+        copycat->string, "START Hello MID World Hello Badger",
         "inserted at offset from start"
     );
 
     hemp_text_insert_cstr(copycat, -6, "END ");
-    ok( 
-        hemp_cstr_eq(copycat->string, "START Hello MID World Hello END Badger"),
+    is( 
+        copycat->string, "START Hello MID World Hello END Badger",
         "inserted at offset from end"
     );
 
     hemp_text_insert_cstr(copycat, 500, " AFTER");
-    ok( 
-        hemp_cstr_eq(copycat->string, "START Hello MID World Hello END Badger AFTER"),
+    is( 
+        copycat->string, "START Hello MID World Hello END Badger AFTER",
         "inserted at offset past the end"
     );
 
     hemp_text_insert_cstr(copycat, -500, "BEFORE ");
-    ok( 
-        hemp_cstr_eq(copycat->string, "BEFORE START Hello MID World Hello END Badger AFTER"),
+    is( 
+        copycat->string, "BEFORE START Hello MID World Hello END Badger AFTER",
         "inserted at offset from end past the beginning"
     );
 

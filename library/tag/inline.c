@@ -29,7 +29,7 @@ hemp_scan_inline_tag(
     hemp_element_p  element;
     hemp_num_t      num_val;
     hemp_int_t      int_val;
-    hemp_bool_t     is_int, is_fixed;
+    hemp_bool_t     is_int;
     hemp_pnode_p    pnode;
     hemp_pnode_p    *ophead  = tag->grammar->operators->head;
     hemp_symbol_p   symbol;
@@ -79,173 +79,46 @@ hemp_scan_inline_tag(
             if ( ( *src == '.' && isdigit(*(src + 1)) )
               || ( *src == 'e' || *src == 'E' )
             )  {
-                num_val = strtod(from, &src);
                 is_int  = HEMP_FALSE;
+                num_val = strtod(from, &src);
             }
 
             if (errno == ERANGE) {
-                debug_red("number out of range\n");     // TODO: proper handling
+                /* TODO: trim next token out of text */
+                hemp_throw(tmpl->dialect->hemp, HEMP_ERROR_OVERFLOW, from);
             }
             else if (errno) {
                 /* should never happen (famous last words) as we pre-check 
                  * that there is at least one valid digit available to be 
                  * parsed, but we check anyway
                  */
-                debug_red("number error\n");     // TODO: proper handling
-                perror("number");
+                hemp_fatal("Unknown number parsing error: %d", errno);
             }
             else if (is_int) {
                 debug_token("INTEGER", from, src-from);
-                hemp_elements_append(
+                element = hemp_elements_append(
                     tmpl->elements, HempSymbolInteger,
                     from, pos, src - from
                 );
-                // TODO: pre-set value of element to int_val
+                element->args.value = HEMP_INT_VAL(int_val);
             }
             else {
                 debug_token("NUMBER", from, src-from);
-                hemp_elements_append(
+                element = hemp_elements_append(
                     tmpl->elements, HempSymbolNumber,
                     from, pos, src - from
                 );
-                // TODO: pre-set value of element to num_val
-            }
-        }
-        else if (isalpha(*src)) {
-            /* word */
-            hemp_scan_while(src, isalnum);
-            // TODO: check for ':' following after, e.g. file:/blah/blah
-            // TODO: lookup keyword
-            debug_token("WORD", from, src-from);
-            hemp_elements_append(
-                tmpl->elements, HempSymbolWord,
-                from, pos, src - from
-            );
-        }
-        else if (*src == HEMP_SQUOTE) {
-            /* single quotes */
-            is_fixed = HEMP_TRUE;
-
-            /* walk to the end */
-            while ( * ++src && *src != HEMP_SQUOTE ) {
-                if (*src == HEMP_BACKSLASH) {
-                    src++;
-                    is_fixed = HEMP_FALSE;
-                }
-            }
-
-            /* check we hit a quote and not the end of string */
-            if (! *src)
-                hemp_fatal("unterminated single quoted string: %s", from);
-
-            src++;
-
-            debug_token("SQUOTE", from, src-from);
-
-            element = hemp_elements_append(
-                tmpl->elements, HempSymbolSQuote,
-                from, pos, src - from
-            );
-
-            if (is_fixed) {
-                /* we can generate the output text from the source token */
-                hemp_set_flag(element, HEMP_IS_FIXED);
-            }
-            else {
-                /* we need to create a new string with escapes resolved */
-                hemp_cstr_p squote  = 
-                element->value.text = (hemp_cstr_p) hemp_mem_alloc(src - from - 1);
-                hemp_cstr_p sqfrom  = from + 1;
-                    
-                while (sqfrom < src) {
-                    /* skip past the '\' if we've got "\\" or "\'" */
-                    if (*sqfrom == HEMP_BACKSLASH 
-                    && ( *(sqfrom + 1) == HEMP_SQUOTE 
-                    ||   *(sqfrom + 1) == HEMP_BACKSLASH ))
-                        sqfrom++;
-
-                    *squote++ = *sqfrom++;
-                }
-                *--squote = HEMP_NUL;
-            }
-        }
-        else if (*src == HEMP_DQUOTE) {
-            /* double quotes */
-            is_fixed = HEMP_TRUE;
-
-            /* walk to the end */
-            while ( * ++src && *src != HEMP_DQUOTE ) {
-                if (*src == HEMP_BACKSLASH) {
-                    src++;
-                    is_fixed = HEMP_FALSE;
-                }
-                /* TODO: also look for embedded vars, e.g. $foo */
-            } 
-
-            /* check we hit a quote and not the end of string */
-            if (! *src)
-                hemp_fatal("unterminated double quoted string: %s", from);
-
-            src++;
-
-            debug_token("DQUOTE", from, src-from);
-
-            element = hemp_elements_append(
-                tmpl->elements, HempSymbolDQuote,
-                from, pos, src - from
-            );
-
-            if (is_fixed) {
-                /* we can generate the output text from the source token */
-                hemp_set_flag(element, HEMP_IS_FIXED);
-            }
-            else {
-                /* we need to create a new string with escapes resolved */
-                hemp_cstr_p dquote  = 
-                element->value.text = hemp_mem_alloc(src - from - 1);
-                hemp_cstr_p dqfrom  = from + 1;
-
-                while (dqfrom < src) {
-                    /* skip past the '\' if we've got "\\" or "\'" */
-                    if (*dqfrom == HEMP_BACKSLASH) {
-                        switch (*(dqfrom + 1)) {
-                            case HEMP_DQUOTE:
-                            case HEMP_BACKSLASH:
-                                /* \" or \\  =>  " or \ */
-                                dqfrom++;
-                                break;
-
-                            case 'n':
-                                /* \n => newline (currently just LF) */
-                                *dquote++ = HEMP_NL;
-                                dqfrom += 2;
-                                break;
-
-                            case 't':
-                                /* \t => tab */
-                                *dquote++ = HEMP_TAB;
-                                dqfrom += 2;
-                                break;
-
-                            /* \X => X */
-                            default:
-                                *dquote++ = *dqfrom++;
-                        }
-                    }
-                    else {
-                        *dquote++ = *dqfrom++;
-                    }
-                }
-                *--dquote = HEMP_NUL;
+                element->args.value = HEMP_NUM_VAL(num_val);
             }
         }
         else if (
             (pnode  = HEMP_IN_PTREE(ophead, src))
         &&  (symbol = (hemp_symbol_p) hemp_pnode_match_more(pnode, &src))
         ) {
-            debug("[matched operator: %s]\n", symbol->name);
+            debug_token("OPERATOR", from, src-from);
+//          debug("[matched operator: %s]\n", symbol->name);
             if (symbol->scanner) {
-                debug("symbol has dedicated scanner\n");
+//              debug("symbol has dedicated scanner\n");
                 symbol->scanner(tmpl, tag, from, pos, &src, symbol);
             }
             else {
@@ -255,9 +128,21 @@ hemp_scan_inline_tag(
                 );
             }
         }
+        else if (isalpha(*src)) {
+            /* word */
+            hemp_scan_while(src, isalnum);
+            // TODO: check for ':' following after, e.g. file:/blah/blah
+            // TODO: lookup keyword
+            // TODO: on second thoughts, try pnode match first, for things
+            //       like C< >... DONE, by moving this down... I think ???
+            debug_token("WORD", from, src-from);
+            hemp_elements_append(
+                tmpl->elements, HempSymbolWord,
+                from, pos, src - from
+            );
+        }
         else {
-            // TODO: operators
-            hemp_fatal("unrecognised token\n");
+            hemp_throw(tmpl->dialect->hemp, HEMP_ERROR_TOKEN, src);
             break;
         }
 

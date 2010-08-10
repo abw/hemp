@@ -7,7 +7,6 @@
 #include <hemp/context.h>
 
 
-
 /*--------------------------------------------------------------------------
  * Data structures
  *--------------------------------------------------------------------------*/
@@ -32,8 +31,8 @@ union hemp_value_u {
 struct hemp_vtype_s {
     hemp_u8_t       id;
     hemp_cstr_p     name;
+    hemp_bool_t  (* boolean)(hemp_value_t);
 };
-
 
 
 /*--------------------------------------------------------------------------
@@ -59,6 +58,7 @@ struct hemp_vtype_s {
 #define HEMP_TYPE_NUM_ID        ((hemp_u8_t)  0x0)      /* 64 bit double    */
 #define HEMP_TYPE_INT_ID        ((hemp_u8_t)  0x1)      /* 32 bit integer   */
 #define HEMP_TYPE_STR_ID        ((hemp_u8_t)  0x2)      /* string pointer   */
+#define HEMP_TYPE_TEXT_ID       ((hemp_u8_t)  0x4)      /* text object      */
 #define HEMP_TYPE_IDENT_ID      ((hemp_u8_t)  0xF)      /* identity value   */
 
 /* define used for payload (depends on word size) */
@@ -93,6 +93,7 @@ struct hemp_vtype_s {
 #define HEMP_TYPE_NUM_MASK      ((hemp_u64_t) HEMP_TYPE_NUM_ID)
 #define HEMP_TYPE_INT_MASK      HEMP_TYPE_NAN_MASK(HEMP_TYPE_INT_ID)
 #define HEMP_TYPE_STR_MASK      HEMP_TYPE_NAN_MASK(HEMP_TYPE_STR_ID)
+#define HEMP_TYPE_TEXT_MASK     HEMP_TYPE_NAN_MASK(HEMP_TYPE_TEXT_ID)
 #define HEMP_TYPE_IDENT_MASK    HEMP_TYPE_NAN_MASK(HEMP_TYPE_IDENT_ID)
 
 /* high-level macros for checking value types */
@@ -100,6 +101,7 @@ struct hemp_vtype_s {
 #define HEMP_IS_NUM(v)          HEMP_TYPE_NUMBER(v)
 #define HEMP_IS_INT(v)          HEMP_TYPE_CHECK(v, HEMP_TYPE_INT_ID)
 #define HEMP_IS_STR(v)          HEMP_TYPE_CHECK(v, HEMP_TYPE_STR_ID)
+#define HEMP_IS_TEXT(v)         HEMP_TYPE_CHECK(v, HEMP_TYPE_TEXT_ID)
 #define HEMP_IS_IDENT(v)        HEMP_TYPE_CHECK(v, HEMP_TYPE_IDENT_ID)
 
 /* identity values are those that only ever have one instance */
@@ -109,7 +111,7 @@ struct hemp_vtype_s {
 
 #define HEMP_IDENT_NOT          0x0
 #define HEMP_IDENT_MISSING_ID   HEMP_IDENT_BIT_UNDEF
-#define HEMP_IDENT_EMPTY_ID     (HEMP_IDENT_BIT_UNDEF   | HEMP_IDENT_BIT_ALT)
+#define HEMP_IDENT_NOTHING_ID   (HEMP_IDENT_BIT_UNDEF   | HEMP_IDENT_BIT_ALT)
 #define HEMP_IDENT_FALSE_ID     HEMP_IDENT_BIT_BOOLEAN
 #define HEMP_IDENT_TRUE_ID      (HEMP_IDENT_BIT_BOOLEAN | HEMP_IDENT_BIT_ALT)
 
@@ -124,7 +126,7 @@ struct hemp_vtype_s {
 #define HEMP_IS_UNDEF(v)        HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_UNDEF)
 #define HEMP_IS_BOOLEAN(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_BOOLEAN)
 #define HEMP_IS_MISSING(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_MISSING_ID)
-#define HEMP_IS_EMPTY(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_EMPTY_ID)
+#define HEMP_IS_NOTHING(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_NOTHING_ID)
 #define HEMP_IS_FALSE(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_FALSE_ID)
 #define HEMP_IS_TRUE(v)         HEMP_IDENT_CHECK(v, HEMP_IDENT_TRUE_ID)
 
@@ -133,18 +135,14 @@ extern const struct hemp_vtype_s hemp_global_vtypes[HEMP_TYPE_MASK];
 #define HEMP_VTABLE(v)          (hemp_global_vtypes[HEMP_TYPE_ID(v)])
 #define HEMP_TYPE_NAME(v)       (HEMP_VTABLE(v).name)
 
-
-//#define HEMP_TAG_IS_TYPE(v,t)   (! HEMP_TAG_IS_NUM(t))
-
 extern const hemp_value_t HempMissing;
-extern const hemp_value_t HempEmpty;
+extern const hemp_value_t HempNothing;
 extern const hemp_value_t HempFalse;
 extern const hemp_value_t HempTrue;
 
 /*--------------------------------------------------------------------------
  * 
  *--------------------------------------------------------------------------*/
-
 
 typedef hemp_text_p     (* hemp_text_vfn)(hemp_value_t, hemp_context_p, hemp_text_p);
 typedef hemp_value_t    (* hemp_dot_vfn)(hemp_value_t, hemp_context_p, hemp_cstr_p);
@@ -227,58 +225,28 @@ struct hemp_vtypes_s {
 };
 
 
-
-
-
-
-/* each value has a pointer to its type and the value iteself */
-//#define HEMP_VALUE_BASE     \
-//    hemp_type_t  type;      \
-//    hemp_flags_t flags;     \
-//    hemp_value_t next;
-    
-/* From TT3:
-
-    # variable slots
-    META    => '=0',
-    CONTEXT => '=1',
-    NAME    => '=2',
-    VALUE   => '=3',
-    PARENT  => '=4',
-
-    # variable metadata slots
-    CONFIG  => '=0',
-    VARS    => '=1',
-    METHODS => '=2',
-
-    We want to unify CONTEXT/PARENT to be one and the same.
-    
-    foo       ===> [.] <-- [foo]             # parent/context is the root stash 
-    bar.baz   ===> [.] <-- [bar] <-- [baz]
-*/
-
-
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-extern hemp_value_t HEMP_NUM_VAL(hemp_num_t n);
-extern hemp_value_t HEMP_INT_VAL(hemp_int_t n);
-extern hemp_value_t HEMP_STR_VAL(hemp_cstr_p n);
-extern hemp_value_t HEMP_IDENT_VAL(hemp_u8_t i);
+extern hemp_value_t HEMP_NUM_VAL(hemp_num_t);
+extern hemp_value_t HEMP_INT_VAL(hemp_int_t);
+extern hemp_value_t HEMP_STR_VAL(hemp_cstr_p);
+extern hemp_value_t HEMP_TEXT_VAL(hemp_text_p);
+extern hemp_value_t HEMP_IDENT_VAL(hemp_u8_t);
+extern hemp_value_t HEMP_BOOL_VAL(hemp_bool_t);
 
-extern hemp_num_t   HEMP_VAL_NUM(hemp_value_t v);
-extern hemp_int_t   HEMP_VAL_INT(hemp_value_t v);
-extern hemp_cstr_p  HEMP_VAL_STR(hemp_value_t v);
-extern hemp_u8_t    HEMP_VAL_IDENT(hemp_value_t v);
-
-
+extern hemp_num_t   HEMP_VAL_NUM(hemp_value_t);
+extern hemp_int_t   HEMP_VAL_INT(hemp_value_t);
+extern hemp_cstr_p  HEMP_VAL_STR(hemp_value_t);
+extern hemp_text_p  HEMP_VAL_TEXT(hemp_value_t);
+extern hemp_u8_t    HEMP_VAL_IDENT(hemp_value_t);
+extern hemp_bool_t  HEMP_VAL_BOOL(hemp_value_t);
 
 void hemp_dump_u64(hemp_u64_t value);
 void hemp_dump_64(hemp_u64_t value);
 void hemp_dump_32(hemp_u32_t value);
 void hemp_dump_value(hemp_value_t value);
-
 
 hemp_vtypes_p   hemp_vtypes_init();
 void            hemp_vtypes_free(hemp_vtypes_p);

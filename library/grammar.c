@@ -88,8 +88,7 @@ hemp_grammar_add_symbol(
      * as one single token, not two instances of '+'
      */
 
-    if (! isalpha(*start)) {
-//      debug("symbol token is not alphanumeric: %s\n", token);
+    if (! hemp_cstr_wordlike(start)) {
         hemp_ptree_store(
             grammar->operators, start, (hemp_mem_p) symbol
         );
@@ -117,6 +116,7 @@ hemp_grammar_free_symbol(
     hemp_pos_t          position,
     hemp_hash_item_p    item
 ) {
+    hemp_symbol_p s = (hemp_symbol_p) item->value;
     hemp_symbol_free( (hemp_symbol_p) item->value );
     return HEMP_TRUE;
 }

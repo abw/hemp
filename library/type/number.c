@@ -1,6 +1,9 @@
 #include "hemp/type/number.h"
 
 
+// NO LONGER USED
+
+
 static struct hemp_type_number
     hemp_type_integer = {
         "hemp.type.integer",

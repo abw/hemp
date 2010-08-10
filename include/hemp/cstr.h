@@ -43,5 +43,10 @@ void
         hemp_cstr_p src
     );
 
+hemp_bool_t
+    hemp_cstr_wordlike(
+        hemp_cstr_p str
+    );
+
 
 #endif /* HEMP_CSTR_H */

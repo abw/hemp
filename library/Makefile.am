@@ -11,6 +11,7 @@ libhemp_la_SOURCES  =   action.c              \
                         element/integer.c     \
                         element/literal.c     \
                         element/number.c      \
+                        element/numops.c      \
                         element/space.c       \
                         element/squote.c      \
                         element/text.c        \
