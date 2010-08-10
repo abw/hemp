@@ -287,17 +287,6 @@ hemp_element_numop_dec_symbol(
 
 
 
-hemp_symbol_p
-hemp_element_numop_minus_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    // not quite right - needs to accept expr as well...
-    //symbol->parse = &hemp_parse_binary_vtable;
-    return symbol;
-}
-
-
 hemp_symbol_p hemp_element_numop_binary_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
@@ -315,23 +304,6 @@ hemp_symbol_p hemp_element_numop_power_symbol(
 ) {
     return hemp_element_numop_binary_symbol(hemp, symbol);
 }
-
-
-hemp_symbol_p hemp_element_numop_multiply_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-
-hemp_symbol_p hemp_element_numop_divide_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
 
 hemp_symbol_p hemp_element_numop_divint_symbol(
     hemp_p        hemp,

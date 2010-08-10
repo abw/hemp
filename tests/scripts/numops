@@ -1,12 +1,10 @@
--- test number operators
+-- test simple number expression
 [% 400 + 20 %]
 -- expect
 420
 
--- stop
-
--- test number operators
-[% 20 + 40 * 10 %]
+-- test complex number expression
+[% 20 + 40 * 10 + 20 / 5 - 2 * 2 %]
 
 -- expect
 420

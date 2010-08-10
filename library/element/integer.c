@@ -56,6 +56,7 @@ HEMP_OUTPUT_FUNC(hemp_element_integer_text) {
 HEMP_VALUE_FUNC(hemp_element_integer_number) {
     debug_call("hemp_element_integer_number()\n");
     hemp_value_t value = element->args.value;
+    return value;
     return HEMP_IS_NUM(value)
         ? value
         : HEMP_NUM_VAL((hemp_num_t) HEMP_VAL_INT(value));

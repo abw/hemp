@@ -322,7 +322,19 @@ HEMP_VALUE_FUNC(hemp_element_integer_boolean);
  *--------------------------------------------------------------------------*/
 
 HEMP_OUTPUT_FUNC(hemp_element_numop_text);
+HEMP_VALUE_FUNC(hemp_element_numop_integer);
+
+HEMP_SYMBOL_FUNC(hemp_element_numop_plus_symbol);
 HEMP_VALUE_FUNC(hemp_element_numop_plus_value);
+
+HEMP_SYMBOL_FUNC(hemp_element_numop_minus_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_minus_value);
+
+HEMP_SYMBOL_FUNC(hemp_element_numop_multiply_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_multiply_value);
+
+HEMP_SYMBOL_FUNC(hemp_element_numop_divide_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_divide_value);
 
 
 
