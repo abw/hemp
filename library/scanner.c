@@ -101,7 +101,7 @@ hemp_scan_text(
     
     hemp_elements_eof(elements, pos);
 
-#if DEBUG
+#if DEBUG > 100
     hemp_elements_dump(elements);
 #endif
 //  hemp_elements_free(elements);

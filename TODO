@@ -62,5 +62,14 @@ An incomplete list of things TODO, in no particular order.
  
 -- HOT STACK --
 
+* Number ops:
+   - Add ++ and -- auto-increment operator
+   - make + and - work as prefix ops as well as infix ops
+ 
+* figure out what to do with number/integer operators that return boolean
+  values (e.g. less than).  Is it an error to ask for those as int/num?
+  I think so...
+
 * change 'tmpl' to 'hemplate'
+
 

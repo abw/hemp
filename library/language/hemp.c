@@ -285,96 +285,6 @@ hemp_element_numop_dec_symbol(
 
 
 
-hemp_symbol_p hemp_element_numop_binary_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    symbol->expr   = &hemp_element_not_expr;
-    symbol->infix  = &hemp_element_parse_infix_left;
-    symbol->source = &hemp_element_binary_text;
-    symbol->text   = &hemp_element_binary_text;
-    return symbol;
-}
-
-hemp_symbol_p hemp_element_numop_power_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-hemp_symbol_p hemp_element_numop_divint_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-
-hemp_symbol_p hemp_element_numop_modulus_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-
-hemp_symbol_p hemp_element_numop_compare_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-
-hemp_symbol_p hemp_element_numop_equal_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-
-hemp_symbol_p hemp_element_numop_not_equal_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-
-hemp_symbol_p hemp_element_numop_less_than_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-
-hemp_symbol_p hemp_element_numop_more_than_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-
-hemp_symbol_p hemp_element_numop_less_equal_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-
-hemp_symbol_p hemp_element_numop_more_equal_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
-) {
-    return hemp_element_numop_binary_symbol(hemp, symbol);
-}
-
-
 
 /*--------------------------------------------------------------------------
  * text operator elements
@@ -533,8 +443,8 @@ hemp_grammar_add_hemp_bravo(
     HEMP_OPERATOR1("hemp.numop.minus",         "-",        275,  285);
     HEMP_OPERATOR1("hemp.numop.multiply",      "*",        280,    0);
     HEMP_OPERATOR1("hemp.numop.divide",        "/",        280,    0);
-    HEMP_OPERATOR1("hemp.numop.modulus",       "mod",      280,    0);
-//  HEMP_OPERATOR1("hemp.numop.divint",        "div",      280,    0);
+    HEMP_OPERATOR1("hemp.numop.modulus",       "%",        280,    0);
+    HEMP_OPERATOR1("hemp.numop.divint",        "/i",       280,    0);
 
     HEMP_OPERATOR1("hemp.textop.concat",       "~",        270,  270);
                 

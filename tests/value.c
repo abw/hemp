@@ -10,7 +10,7 @@ main(
     char **argv, 
     char **env
 ) {
-    plan_tests(61);
+    plan_tests(73);
     test_value();
     hemp_mem_trace_ok();
     return exit_status();
@@ -145,6 +145,28 @@ void test_value() {
     ok(   HEMP_IS_BOOLEAN(HempTrue),    "true is boolean" );
     ok(   HEMP_IS_TRUE(HempTrue),       "true is true" );
     ok( ! HEMP_IS_FALSE(HempTrue),      "true is not false" );
+
+    printf("HempBefore:\n");
+    hemp_dump_value(HempBefore);
+    ok( ! HEMP_IS_BOOLEAN(HempBefore),  "before is not boolean" );
+    ok(   HEMP_IS_BEFORE(HempBefore),   "before is before" );
+    ok( ! HEMP_IS_EQUAL(HempBefore),    "before is not equal" );
+    ok( ! HEMP_IS_AFTER(HempBefore),    "before is not after" );
+
+    printf("HempEqual:\n");
+    hemp_dump_value(HempEqual);
+    ok( ! HEMP_IS_BOOLEAN(HempEqual),   "equal is not boolean" );
+    ok( ! HEMP_IS_BEFORE(HempEqual),    "equal is not before" );
+    ok(   HEMP_IS_EQUAL(HempEqual),     "equal is equal" );
+    ok( ! HEMP_IS_AFTER(HempEqual),     "equal is not after" );
+
+    printf("HempAfter:\n");
+    hemp_dump_value(HempAfter);
+    ok( ! HEMP_IS_BOOLEAN(HempAfter),   "after is not boolean" );
+    ok( ! HEMP_IS_BEFORE(HempAfter),    "after is not before" );
+    ok( ! HEMP_IS_EQUAL(HempAfter),     "after is not equal" );
+    ok(   HEMP_IS_AFTER(HempAfter),     "after is after" );
+
 }
 
 

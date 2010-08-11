@@ -25,9 +25,15 @@
 #define HEMP_UNDERSCORE     '_'
 
 /* short strings */
+#define HEMP_STR_TRUE       "True"
+#define HEMP_STR_FALSE      "False"
 #define HEMP_STR_BLANK      ""
 #define HEMP_STR_SPACE      " "
 #define HEMP_STR_DOT        "."
+
+/* format strings */
+#define HEMP_FMT_INT        "%d"
+#define HEMP_FMT_NUM        "%g"
 
 /* names of standard schemes, languages, dialects, libraries, etc */
 #define HEMP_HEMP           "hemp"

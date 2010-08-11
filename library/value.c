@@ -25,6 +25,18 @@ const hemp_value_t
 HempTrue = (hemp_value_t) 
     ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_TRUE_ID);
 
+const hemp_value_t 
+HempBefore = (hemp_value_t) 
+    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_BEFORE_ID);
+
+const hemp_value_t 
+HempEqual = (hemp_value_t) 
+    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_EQUAL_ID);
+
+const hemp_value_t 
+HempAfter = (hemp_value_t) 
+    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_AFTER_ID);
+
 
 /*--------------------------------------------------------------------------
  * inline functions to encode native values as tagged values

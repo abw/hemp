@@ -9,6 +9,46 @@
 -- expect
 420
 
+-- test integer division
+[% 10 / 4 %]
+-- expect
+2
+
+-- test floating point division
+[% 10.0 / 4 %]
+-- expect
+2.5
+
+-- test explicit integer division on floater
+[% 10.0 /i 4 %]
+-- expect
+2
+
+-- test integer modulus
+[% 420 % 41 %]
+-- expect 
+10
+
+-- test floating point modulus
+[% 34.3 % 4 %]
+-- expect 
+2
+
+-- test integer power
+[% 2 ** 3 %]
+-- expect 
+8
+
+-- test integer power with float exponent
+[% 2 ** 3.5 %]
+-- expect 
+11
+
+-- test floating point power
+[% 2.5 ** 3 %]
+-- expect
+15.625
+
 -- stop
 -- test number operators
 [% 5 + 40 * 10 + 5 / 5 + 1 + 2 * 3 ** 2 * 5 ** 2 / 3 + 1 %]

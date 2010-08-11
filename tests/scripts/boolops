@@ -1,0 +1,127 @@
+-- test numerical less than when true
+[% 5 < 6 %]
+[% 5.1 < 5.12 %]
+-- expect
+True
+True
+
+-- test numerical less than when equal
+[% 5 < 5 %]
+[% 5.0 < 5.00 %]
+-- expect
+False
+False
+
+-- test numerical less than when false
+[% 6 < 5 %]
+[% 6.123 < 5.456 %]
+-- expect
+False
+False
+
+-- test numerical less equal when true
+[% 5 <= 6 %]
+[% 5.1 <= 5.10 %]
+-- expect
+True
+True
+
+-- test numerical less equal when equal
+[% 5 <= 5 %]
+[% 5.34 <= 5.34 %]
+-- expect
+True
+True
+
+-- test numerical less equal when false
+[% 6 <= 5 %]
+[% 6.01 <= 5.02 %]
+-- expect
+False
+False
+
+-- test numerical equal when less
+[% 5 == 6 %]
+[% 5.001 == 6.001 %]
+-- expect
+False
+False
+
+-- test numerical equal when more
+[% 6 == 5 %]
+[% 6.1 == 5.2 %]
+-- expect
+False
+False
+
+-- test numerical equal when equal
+[% 5 == 5 %]
+[% 5.123 == 5.123 %]
+-- expect
+True
+True
+
+-- test numerical not equal when less
+[% 5 != 6 %]
+[% 5.001 != 6.001 %]
+-- expect
+True
+True
+
+-- test numerical not equal when more
+[% 6 != 5 %]
+[% 6.1 != 5.2 %]
+-- expect
+True
+True
+
+-- test numerical not equal when equal
+[% 5 != 5 %]
+[% 5.123 != 5.123 %]
+-- expect
+False
+False
+
+
+
+-- test numerical more than when true
+[% 6 > 5 %]
+[% 5.12 > 5.11 %]
+-- expect
+True
+True
+
+-- test numerical more than when equal
+[% 5 > 5 %]
+[% 5.0 > 5.00 %]
+-- expect
+False
+False
+
+-- test numerical more than when false
+[% 5 > 6 %]
+[% 6.123 > 7.789 %]
+-- expect
+False
+False
+
+-- test numerical more equal when true
+[% 6 >= 5 %]
+[% 5.2 >= 5.10 %]
+-- expect
+True
+True
+
+-- test numerical more equal when equal
+[% 5 >= 5 %]
+[% 5.34 >= 5.34 %]
+-- expect
+True
+True
+
+-- test numerical more equal when false
+[% 5 >= 6 %]
+[% 5.01 >= 5.02 %]
+-- expect
+False
+False

@@ -6,6 +6,7 @@ libhemp_la_SOURCES  =   action.c              \
                         elements.c            \
                         element.c             \
                         element/block.c       \
+                        element/boolops.c     \
                         element/comment.c     \
                         element/integer.c     \
                         element/literal.c     \

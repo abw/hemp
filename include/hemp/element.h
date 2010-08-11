@@ -184,6 +184,7 @@ HEMP_INFIX_FUNC(hemp_element_next_infix);
  *--------------------------------------------------------------------------*/
 
 HEMP_INFIX_FUNC(hemp_element_parse_infix_left);
+HEMP_INFIX_FUNC(hemp_element_parse_infix_right);
 
 
 /*--------------------------------------------------------------------------
@@ -220,6 +221,13 @@ HEMP_OUTPUT_FUNC(hemp_element_quoted_text);
 
 
 /*--------------------------------------------------------------------------
+ * boolean elements
+ *--------------------------------------------------------------------------*/
+
+HEMP_OUTPUT_FUNC(hemp_element_boolop_text);
+
+
+/*--------------------------------------------------------------------------
  * number elements
  *--------------------------------------------------------------------------*/
 
@@ -249,11 +257,31 @@ HEMP_VALUE_FUNC(hemp_element_numop_plus_value);
 HEMP_SYMBOL_FUNC(hemp_element_numop_minus_symbol);
 HEMP_VALUE_FUNC(hemp_element_numop_minus_value);
 
+HEMP_SYMBOL_FUNC(hemp_element_numop_power_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_power_value);
 HEMP_SYMBOL_FUNC(hemp_element_numop_multiply_symbol);
 HEMP_VALUE_FUNC(hemp_element_numop_multiply_value);
-
 HEMP_SYMBOL_FUNC(hemp_element_numop_divide_symbol);
 HEMP_VALUE_FUNC(hemp_element_numop_divide_value);
+HEMP_SYMBOL_FUNC(hemp_element_numop_divint_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_divint_value);
+HEMP_SYMBOL_FUNC(hemp_element_numop_modulus_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_modulus_value);
+
+HEMP_SYMBOL_FUNC(hemp_element_numop_compare_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_compare_value);
+HEMP_SYMBOL_FUNC(hemp_element_numop_equal_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_equal_value);
+HEMP_SYMBOL_FUNC(hemp_element_numop_not_equal_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_not_equal_value);
+HEMP_SYMBOL_FUNC(hemp_element_numop_less_than_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_less_than_value);
+HEMP_SYMBOL_FUNC(hemp_element_numop_less_equal_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_less_equal_value);
+HEMP_SYMBOL_FUNC(hemp_element_numop_more_than_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_more_than_value);
+HEMP_SYMBOL_FUNC(hemp_element_numop_more_equal_symbol);
+HEMP_VALUE_FUNC(hemp_element_numop_more_equal_value);
 
 
 

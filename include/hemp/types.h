@@ -24,7 +24,7 @@ typedef unsigned char           hemp_bool_t;    /* boolean true/false       */
 typedef unsigned char           hemp_char_t;    /* single character         */
 typedef u_int32_t               hemp_flags_t;   /* bitmask                  */
 typedef int32_t                 hemp_offset_t;  /* -ve/+ve offset           */
-typedef u_int32_t               hemp_int_t;     /* generic integer          */
+typedef int32_t                 hemp_int_t;     /* generic integer          */
 typedef double                  hemp_num_t;     /* generic fp number        */
 typedef unsigned long           hemp_uint_t;    /* generic unsigned int     */
 typedef unsigned long           hemp_size_t;    /* +ve size of list         */

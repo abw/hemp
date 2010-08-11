@@ -43,7 +43,7 @@ HEMP_OUTPUT_FUNC(hemp_element_integer_text) {
     hemp_text_p text;
 
     snprintf(
-        buffer, HEMP_BUFFER_SIZE, "%d", 
+        buffer, HEMP_BUFFER_SIZE, HEMP_FMT_INT,
         HEMP_VAL_INT(element->args.value)
     );
     hemp_prepare_output(output, text, strlen(buffer));

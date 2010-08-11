@@ -1,28 +1,28 @@
-#check_PROGRAMS  =   scanner
+check_PROGRAMS  =   value scanner
 
-check_PROGRAMS  =   action      \
-                    dialect     \
-                    element     \
-                    elements    \
-                    error       \
-                    factory     \
-                    filesystem  \
-                    grammar     \
-                    hash        \
-                    list        \
-                    memory      \
-                    pool        \
-                    ptree       \
-                    scanner     \
-                    source      \
-                    slab        \
-                    tag         \
-                    tagset      \
-                    template    \
-                    text        \
-                    tt3         \
-                    utils       \
-                    value
+#check_PROGRAMS  =   action      \
+#                    dialect     \
+#                    element     \
+#                    elements    \
+#                    error       \
+#                    factory     \
+#                    filesystem  \
+#                    grammar     \
+#                    hash        \
+#                    list        \
+#                    memory      \
+#                    pool        \
+#                    ptree       \
+#                    scanner     \
+#                    source      \
+#                    slab        \
+#                    tag         \
+#                    tagset      \
+#                    template    \
+#                    text        \
+#                    tt3         \
+#                    utils       \
+#                    value
  
                     
 #                  debug         \

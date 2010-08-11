@@ -108,12 +108,17 @@ struct hemp_vtype_s {
 #define HEMP_IDENT_BIT_ALT      0x01
 #define HEMP_IDENT_BIT_UNDEF    0x02
 #define HEMP_IDENT_BIT_BOOLEAN  0x04
+#define HEMP_IDENT_BIT_COMPARE  0x10
+#define HEMP_IDENT_BIT_EQUAL    0x20
 
 #define HEMP_IDENT_NOT          0x0
-#define HEMP_IDENT_MISSING_ID   HEMP_IDENT_BIT_UNDEF
+#define HEMP_IDENT_MISSING_ID   (HEMP_IDENT_BIT_UNDEF)
 #define HEMP_IDENT_NOTHING_ID   (HEMP_IDENT_BIT_UNDEF   | HEMP_IDENT_BIT_ALT)
-#define HEMP_IDENT_FALSE_ID     HEMP_IDENT_BIT_BOOLEAN
+#define HEMP_IDENT_FALSE_ID     (HEMP_IDENT_BIT_BOOLEAN)
 #define HEMP_IDENT_TRUE_ID      (HEMP_IDENT_BIT_BOOLEAN | HEMP_IDENT_BIT_ALT)
+#define HEMP_IDENT_BEFORE_ID    (HEMP_IDENT_BIT_COMPARE)
+#define HEMP_IDENT_EQUAL_ID     (HEMP_IDENT_BIT_COMPARE | HEMP_IDENT_BIT_EQUAL)
+#define HEMP_IDENT_AFTER_ID     (HEMP_IDENT_BIT_COMPARE | HEMP_IDENT_BIT_ALT)
 
 #define HEMP_IDENT_BITS         8
 #define HEMP_IDENT_MASK         0xFF
@@ -125,10 +130,15 @@ struct hemp_vtype_s {
 
 #define HEMP_IS_UNDEF(v)        HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_UNDEF)
 #define HEMP_IS_BOOLEAN(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_BOOLEAN)
+#define HEMP_IS_COMPARE(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_COMPARE)
+
 #define HEMP_IS_MISSING(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_MISSING_ID)
 #define HEMP_IS_NOTHING(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_NOTHING_ID)
 #define HEMP_IS_FALSE(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_FALSE_ID)
 #define HEMP_IS_TRUE(v)         HEMP_IDENT_CHECK(v, HEMP_IDENT_TRUE_ID)
+#define HEMP_IS_BEFORE(v)       HEMP_IDENT_CHECK(v, HEMP_IDENT_BEFORE_ID)
+#define HEMP_IS_EQUAL(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_EQUAL_ID)
+#define HEMP_IS_AFTER(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_AFTER_ID)
 
 /* a global array of vtables for each of the core types */
 extern const struct hemp_vtype_s hemp_global_vtypes[HEMP_TYPE_MASK];
@@ -139,6 +149,9 @@ extern const hemp_value_t HempMissing;
 extern const hemp_value_t HempNothing;
 extern const hemp_value_t HempFalse;
 extern const hemp_value_t HempTrue;
+extern const hemp_value_t HempBefore;
+extern const hemp_value_t HempEqual;
+extern const hemp_value_t HempAfter;
 
 /*--------------------------------------------------------------------------
  * 

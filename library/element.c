@@ -117,7 +117,7 @@ hemp_element_parse_exprs(
     hemp_list_p    exprs = hemp_list_init();
 
 #if DEBUG
-    debug("\n-- EXPRS --\n");
+//    debug("\n-- EXPRS --\n");
 #endif
 
     while (1) {
@@ -144,7 +144,7 @@ hemp_element_parse_exprs(
 
 //      debug_parse("parsed %s expression:\n", expr->type->name);
 #if DEBUG
-        hemp_element_dump(expr);
+//      hemp_element_dump(expr);
 #endif
         hemp_list_push(exprs, expr);
     }
@@ -289,6 +289,33 @@ HEMP_INFIX_FUNC(hemp_element_parse_infix_left) {
     self->args.binary.rhs = rhs;
 //  debug_cyan("set rhs to %p / %p\n", self->value.binary.rhs, rhs);
     
+    hemp_skip_whitespace(elemptr);
+
+    return hemp_parse_infix(
+        elemptr, scope, precedence, 0,
+        self
+    );
+}
+
+
+HEMP_INFIX_FUNC(hemp_element_parse_infix_right) {
+    hemp_element_p self = *elemptr;
+    hemp_symbol_p  type = self->type;
+
+    debug_call("hemp_element_parse_infix_right()\n");
+
+    if (precedence && type->lprec < precedence)     /* '<' intead of '<='   */
+        return lhs;
+
+    self->args.binary.lhs = lhs;
+    hemp_go_next(elemptr);
+    self->args.binary.rhs = hemp_parse_expr(
+        elemptr, scope, type->lprec, 1
+    );
+
+    if (! self->args.binary.rhs)
+        hemp_fatal("missing expression on rhs of %s\n", type->start);
+        
     hemp_skip_whitespace(elemptr);
 
     return hemp_parse_infix(

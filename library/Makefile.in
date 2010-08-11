@@ -79,23 +79,23 @@ am__dirstamp = $(am__leading_dot)dirstamp
 am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-cstr.lo \
 	libhemp_la-debug.lo libhemp_la-dialect.lo \
 	libhemp_la-elements.lo libhemp_la-element.lo \
-	element/libhemp_la-block.lo element/libhemp_la-comment.lo \
-	element/libhemp_la-integer.lo element/libhemp_la-literal.lo \
-	element/libhemp_la-number.lo element/libhemp_la-numops.lo \
-	element/libhemp_la-quoted.lo element/libhemp_la-space.lo \
-	element/libhemp_la-text.lo element/libhemp_la-word.lo \
-	libhemp_la-error.lo libhemp_la-factory.lo \
-	libhemp_la-filesystem.lo libhemp_la-grammar.lo \
-	libhemp_la-hash.lo libhemp_la-hemp.lo libhemp_la-language.lo \
-	language/libhemp_la-hemp.lo language/libhemp_la-tt3.lo \
-	libhemp_la-list.lo libhemp_la-memory.lo libhemp_la-pool.lo \
-	libhemp_la-ptree.lo libhemp_la-scanner.lo libhemp_la-scheme.lo \
-	libhemp_la-slab.lo libhemp_la-source.lo libhemp_la-symbol.lo \
-	libhemp_la-tag.lo tag/libhemp_la-comment.lo \
-	tag/libhemp_la-control.lo tag/libhemp_la-inline.lo \
-	tag/libhemp_la-outline.lo libhemp_la-tagset.lo \
-	libhemp_la-template.lo libhemp_la-text.lo libhemp_la-type.lo \
-	libhemp_la-utils.lo libhemp_la-value.lo
+	element/libhemp_la-block.lo element/libhemp_la-boolops.lo \
+	element/libhemp_la-comment.lo element/libhemp_la-integer.lo \
+	element/libhemp_la-literal.lo element/libhemp_la-number.lo \
+	element/libhemp_la-numops.lo element/libhemp_la-quoted.lo \
+	element/libhemp_la-space.lo element/libhemp_la-text.lo \
+	element/libhemp_la-word.lo libhemp_la-error.lo \
+	libhemp_la-factory.lo libhemp_la-filesystem.lo \
+	libhemp_la-grammar.lo libhemp_la-hash.lo libhemp_la-hemp.lo \
+	libhemp_la-language.lo language/libhemp_la-hemp.lo \
+	language/libhemp_la-tt3.lo libhemp_la-list.lo \
+	libhemp_la-memory.lo libhemp_la-pool.lo libhemp_la-ptree.lo \
+	libhemp_la-scanner.lo libhemp_la-scheme.lo libhemp_la-slab.lo \
+	libhemp_la-source.lo libhemp_la-symbol.lo libhemp_la-tag.lo \
+	tag/libhemp_la-comment.lo tag/libhemp_la-control.lo \
+	tag/libhemp_la-inline.lo tag/libhemp_la-outline.lo \
+	libhemp_la-tagset.lo libhemp_la-template.lo libhemp_la-text.lo \
+	libhemp_la-type.lo libhemp_la-utils.lo libhemp_la-value.lo
 libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
 libhemp_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libhemp_la_CFLAGS) \
@@ -254,6 +254,7 @@ libhemp_la_SOURCES = action.c              \
                         elements.c            \
                         element.c             \
                         element/block.c       \
+                        element/boolops.c     \
                         element/comment.c     \
                         element/integer.c     \
                         element/literal.c     \
@@ -367,6 +368,8 @@ element/$(DEPDIR)/$(am__dirstamp):
 	@: > element/$(DEPDIR)/$(am__dirstamp)
 element/libhemp_la-block.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
+element/libhemp_la-boolops.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
 element/libhemp_la-comment.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
 element/libhemp_la-integer.lo: element/$(am__dirstamp) \
@@ -416,6 +419,8 @@ mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f element/libhemp_la-block.$(OBJEXT)
 	-rm -f element/libhemp_la-block.lo
+	-rm -f element/libhemp_la-boolops.$(OBJEXT)
+	-rm -f element/libhemp_la-boolops.lo
 	-rm -f element/libhemp_la-comment.$(OBJEXT)
 	-rm -f element/libhemp_la-comment.lo
 	-rm -f element/libhemp_la-integer.$(OBJEXT)
@@ -480,6 +485,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-utils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-value.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-block.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-boolops.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-comment.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-integer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-literal.Plo@am__quote@
@@ -568,6 +574,13 @@ element/libhemp_la-block.lo: element/block.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/block.c' object='element/libhemp_la-block.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o element/libhemp_la-block.lo `test -f 'element/block.c' || echo '$(srcdir)/'`element/block.c
+
+element/libhemp_la-boolops.lo: element/boolops.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT element/libhemp_la-boolops.lo -MD -MP -MF element/$(DEPDIR)/libhemp_la-boolops.Tpo -c -o element/libhemp_la-boolops.lo `test -f 'element/boolops.c' || echo '$(srcdir)/'`element/boolops.c
+@am__fastdepCC_TRUE@	$(am__mv) element/$(DEPDIR)/libhemp_la-boolops.Tpo element/$(DEPDIR)/libhemp_la-boolops.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/boolops.c' object='element/libhemp_la-boolops.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o element/libhemp_la-boolops.lo `test -f 'element/boolops.c' || echo '$(srcdir)/'`element/boolops.c
 
 element/libhemp_la-comment.lo: element/comment.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT element/libhemp_la-comment.lo -MD -MP -MF element/$(DEPDIR)/libhemp_la-comment.Tpo -c -o element/libhemp_la-comment.lo `test -f 'element/comment.c' || echo '$(srcdir)/'`element/comment.c

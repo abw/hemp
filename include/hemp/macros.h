@@ -260,19 +260,6 @@
     )
 
 
- 
-
-//#define HEMP_DIALECT_PROTO(item) \
-//    hemp_dialect_p item (hemp_p, hemp_cstr_p);
-
-//#define HEMP_GRAMMAR_PROTO(item) \
-//    hemp_grammar_p item (hemp_p, hemp_cstr_p);
-//
-//#define HEMP_ELEMENT_PROTO(item) \
-//    hemp_symbol_p item (hemp_p, hemp_symbol_p)  __attribute__((noinline));
-//
-
-
 /*--------------------------------------------------------------------------
  * Values
  *
