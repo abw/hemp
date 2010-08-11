@@ -22,7 +22,7 @@ HEMP_OUTPUT_FUNC(hemp_element_literal_source) {
     hemp_text_p text;
     hemp_prepare_output(output, text, element->length);
 
-    if (hemp_has_flag(element, HEMP_IS_FIXED)) {
+    if (hemp_has_flag(element, HEMP_BE_FIXED)) {
         hemp_symbol_p symbol = element->type;
         hemp_size_t slen     = symbol->start ? strlen(symbol->start) : 0;
         hemp_size_t elen     = symbol->end   ? strlen(symbol->end)   : 0;

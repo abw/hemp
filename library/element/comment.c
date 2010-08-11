@@ -6,10 +6,10 @@ static struct hemp_symbol_s
         "comment",                                  /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_IS_SPACE       |                       /* flags                */
-        HEMP_IS_FIXED       |
-        HEMP_IS_STATIC      |
-        HEMP_IS_HIDDEN,
+        HEMP_BE_WHITESPACE       |                       /* flags                */
+        HEMP_BE_FIXED       |
+        HEMP_BE_STATIC      |
+        HEMP_BE_HIDDEN,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
@@ -28,8 +28,8 @@ hemp_symbol_p HempSymbolComment = &hemp_symbol_comment;
 HEMP_SYMBOL_FUNC(hemp_element_comment_symbol) {
     symbol->scanner    = &hemp_element_comment_scanner;
     symbol->source     = &hemp_element_literal_source;
-    symbol->flags      = HEMP_IS_SPACE | HEMP_IS_FIXED | HEMP_IS_STATIC 
-                       | HEMP_IS_HIDDEN;
+    symbol->flags      = HEMP_BE_WHITESPACE | HEMP_BE_FIXED | HEMP_BE_STATIC 
+                       | HEMP_BE_HIDDEN;
     return symbol;
 }
 

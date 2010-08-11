@@ -12,7 +12,7 @@
 void hemp_mem_fail(
     hemp_cstr_p type
 ) {
-    hemp_fatal(HEMP_ERRMSG_MALLOC, type);
+    hemp_fatal(hemp_errmsg[HEMP_ERROR_MEMORY], type);
 }
 
 

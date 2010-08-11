@@ -86,7 +86,7 @@ hemp_factory_constructor(
      * to construct the constructor, e.g. ask foo.bar.* to construct baz, and 
      * if it declines, see if there's a foo.* to construct bar.baz
      */
-    if ((splits = hemp_cstr_splits(name, HEMP_DOT))) {
+    if ((splits = hemp_cstr_splits(name, HEMP_STR_DOT))) {
         int n;
         hemp_cstr_split_p split;
         hemp_action_p wildcard;

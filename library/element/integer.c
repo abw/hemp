@@ -6,8 +6,8 @@ static struct hemp_symbol_s
         "integer",                                  /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_IS_FIXED       |                       /* flags                */
-        HEMP_IS_STATIC,
+        HEMP_BE_FIXED       |                       /* flags                */
+        HEMP_BE_STATIC,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
@@ -31,7 +31,7 @@ HEMP_SYMBOL_FUNC(hemp_element_integer_symbol) {
     symbol->number  = &hemp_element_integer_number;
     symbol->integer = &hemp_element_integer_integer;
     symbol->boolean = &hemp_element_integer_boolean;
-    symbol->flags   = HEMP_IS_FIXED | HEMP_IS_STATIC;
+    symbol->flags   = HEMP_BE_FIXED | HEMP_BE_STATIC;
     return symbol;
 }
 

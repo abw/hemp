@@ -24,10 +24,10 @@
 #define HEMP_BACKSLASH      '\\'
 #define HEMP_UNDERSCORE     '_'
 
-#define HEMP_BLANK          ""
-#define HEMP_SPACE          " "
-#define HEMP_DOT            "."
-
+/* short strings */
+#define HEMP_STR_BLANK      ""
+#define HEMP_STR_SPACE      " "
+#define HEMP_STR_DOT        "."
 
 /* names of standard schemes, languages, dialects, libraries, etc */
 #define HEMP_HEMP           "hemp"
@@ -49,12 +49,14 @@
 #define HEMP_VTYPES_SIZE    8
 #define HEMP_TAGSET_SIZE    8
 
-/* error codes (work in progress) */
-#define HEMP_ERRNO_HELP     1
-#define HEMP_ERRNO_GETOPT   2
-
-/* error messages (ditto) */
-#define HEMP_ERRMSG_MALLOC  "Failed to allocate memory for a new %s"
+/* Arrrr!  These be the element flags, m'hearties */
+#define HEMP_BE_WHITESPACE  0x0001
+#define HEMP_BE_SEPARATOR   0x0002
+#define HEMP_BE_TERMINATOR  0x0004
+#define HEMP_BE_HIDDEN      0x0008
+#define HEMP_BE_FIXED       0x0010
+#define HEMP_BE_STATIC      0x0020
+#define HEMP_BE_EOF         0x8000
 
 
 

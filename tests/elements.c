@@ -21,7 +21,7 @@ void test_elements() {
     
     hemp_element_p eof = hemp_elements_eof(elements, 0);
     ok( eof, "got EOF element" );
-    ok( hemp_has_flag(eof, HEMP_IS_EOF), "HEMP_IS_EOF is set" );
+    ok( hemp_has_flag(eof, HEMP_BE_EOF), "HEMP_BE_EOF is set" );
     
     hemp_elements_free(elements);
     hemp_free(hemp);

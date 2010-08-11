@@ -6,8 +6,8 @@ static struct hemp_symbol_s
         "number",                                   /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_IS_FIXED       |                       /* flags                */
-        HEMP_IS_STATIC,
+        HEMP_BE_FIXED       |                       /* flags                */
+        HEMP_BE_STATIC,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
@@ -30,7 +30,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_symbol) {
     symbol->number  = &hemp_element_number_number;
     symbol->integer = &hemp_element_number_integer;
     symbol->boolean = &hemp_element_number_boolean;
-    symbol->flags   = HEMP_IS_FIXED | HEMP_IS_STATIC;
+    symbol->flags   = HEMP_BE_FIXED | HEMP_BE_STATIC;
     return symbol;
 }
 
@@ -42,7 +42,7 @@ HEMP_PARSE_FUNC(hemp_element_number_expr) {
   
     if (hemp_has_next(elemptr)) {
         hemp_go_next(elemptr);
-        hemp_skip_space(elemptr);
+        hemp_skip_whitespace(elemptr);
         hemp_symbol_p sym = (*elemptr)->type;
 
         if (sym->infix) {

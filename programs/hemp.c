@@ -187,13 +187,13 @@ hemp_getopt(
             case 'h':
                 hemp_banner();
                 hemp_help();
-                exit(HEMP_ERRNO_HELP);
+                exit(HEMP_ERROR_HELP);
 
             case '?':
                 fprintf(stderr, "Type '%s --help' for help\n", HEMP_NAME);
                 
             default:
-                exit(HEMP_ERRNO_GETOPT);
+                exit(HEMP_ERROR_OPTION);
                 break;
         }
     }

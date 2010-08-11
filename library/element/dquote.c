@@ -74,7 +74,7 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
 
     if (is_fixed) {
         /* we can generate the output text from the source token */
-        hemp_set_flag(element, HEMP_IS_FIXED);
+        hemp_set_flag(element, HEMP_BE_FIXED);
     }
     else {
         /* we need to create a new string with escapes resolved */

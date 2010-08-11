@@ -121,9 +121,10 @@ hemp_element_parse_exprs(
 #endif
 
     while (1) {
-        // todo: skip delimiter
-        //debug_parse("about to skip delimiter:\n");
+        // TODO: skip whitespace/delimiter all in one
+        hemp_skip_whitespace(elemptr);
         hemp_skip_terminator(elemptr);
+        hemp_skip_whitespace(elemptr);
 
 //      debug_parse("about to parse expr:\n");
 
@@ -287,7 +288,7 @@ HEMP_INFIX_FUNC(hemp_element_parse_infix_left) {
     self->args.binary.rhs = rhs;
 //    debug_cyan("set rhs to %p / %p\n", self->value.binary.rhs, rhs);
     
-    hemp_skip_space(elemptr);
+    hemp_skip_whitespace(elemptr);
 
     return hemp_parse_infix(
         elemptr, scope, precedence, 0,

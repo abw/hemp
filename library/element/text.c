@@ -5,8 +5,8 @@ static struct hemp_symbol_s
         "text",                                     /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_IS_FIXED   |                           /* flags                */
-        HEMP_IS_STATIC,
+        HEMP_BE_FIXED   |                           /* flags                */
+        HEMP_BE_STATIC,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
@@ -23,7 +23,7 @@ hemp_symbol_p HempSymbolText = &hemp_symbol_text;
 
 
 HEMP_SYMBOL_FUNC(hemp_element_text_symbol) {
-    symbol->flags   = HEMP_IS_FIXED | HEMP_IS_STATIC;
+    symbol->flags   = HEMP_BE_FIXED | HEMP_BE_STATIC;
     symbol->expr    = &hemp_element_literal_expr,
     symbol->source  = &hemp_element_literal_source;
     symbol->text    = &hemp_element_literal_text;
@@ -47,7 +47,7 @@ hemp_element_text_clean(
     /* squote and dquote elements may have allocated memory to accomodate
      * translated escape sequences, e.g. \n \\, etc
      */
-    if (hemp_not_flag(element, HEMP_IS_FIXED)) {
+    if (hemp_not_flag(element, HEMP_BE_FIXED)) {
         hemp_mem_free((hemp_mem_p) HEMP_VAL_STR(element->args.value));
     }
 }

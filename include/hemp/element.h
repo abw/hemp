@@ -7,18 +7,8 @@
 #include <hemp/symbol.h>
 #include <hemp/template.h>
 #include <hemp/context.h>
-//#include <hemp/element.h>
 #include <hemp/value.h>
 
-
-/* element flags */
-#define HEMP_IS_SPACE       0x0001
-#define HEMP_IS_SEPARATOR   0x0002
-#define HEMP_IS_TERMINATOR  0x0004
-#define HEMP_IS_HIDDEN      0x0008
-#define HEMP_IS_FIXED       0x0010
-#define HEMP_IS_STATIC      0x0020
-#define HEMP_IS_EOF         0x8000
 
 
 /*--------------------------------------------------------------------------
@@ -114,14 +104,14 @@ extern hemp_symbol_p HempSymbolBlock;
         && hemp_has_flag((*ep)->type, flag) )   \
             hemp_go_next(ep);
 
-#define hemp_skip_space(ep)                     \
-       hemp_skip_while(ep, HEMP_IS_SPACE)
+#define hemp_skip_whitespace(ep)                \
+       hemp_skip_while(ep, HEMP_BE_WHITESPACE)
        
 #define hemp_skip_separator(ep)                 \
-       hemp_skip_while(ep, HEMP_IS_SEPARATOR)
+       hemp_skip_while(ep, HEMP_BE_SEPARATOR)
 
 #define hemp_skip_terminator(ep)                \
-       hemp_skip_while(ep, HEMP_IS_TERMINATOR)
+       hemp_skip_while(ep, HEMP_BE_TERMINATOR)
 
 #define hemp_at_eof(ep) \
     (*ep)->type == HempSymbolEof

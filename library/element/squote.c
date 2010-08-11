@@ -6,7 +6,7 @@ static struct hemp_symbol_s
         "squote",                                   /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_IS_STATIC,
+        HEMP_BE_STATIC,
         0, 0,                                       /* l/r precedence       */
         &hemp_element_squote_scanner,               /* scanner callback     */
         &hemp_element_text_clean,                   /* cleanup callback     */
@@ -22,7 +22,7 @@ static struct hemp_symbol_s
 hemp_symbol_p HempSymbolSQuote = &hemp_symbol_squote;
 
 HEMP_SYMBOL_FUNC(hemp_element_squote_symbol) {
-    symbol->flags      = HEMP_IS_STATIC;
+    symbol->flags      = HEMP_BE_STATIC;
     symbol->scanner    = &hemp_element_squote_scanner;
     symbol->cleanup    = &hemp_element_text_clean;
     symbol->expr       = &hemp_element_literal_expr,
@@ -76,7 +76,7 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
 
     if (is_fixed) {
         /* we can generate the output text from the source token */
-        hemp_set_flag(element, HEMP_IS_FIXED);
+        hemp_set_flag(element, HEMP_BE_FIXED);
     }
     else {
         /* we need to create a new string with escapes resolved */

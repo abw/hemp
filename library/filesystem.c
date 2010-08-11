@@ -67,7 +67,7 @@ hemp_filesystem_cwd(
     // context of a virtual filesystem
     hemp_cstr_p cwd = getcwd(NULL, 0);
     if (! cwd)
-        hemp_fatal(HEMP_ERRMSG_MALLOC, HEMP_CWD_NAME);
+        hemp_fatal("Can't read current working directory");     // TODO: proper error
     return cwd;
 }
 
