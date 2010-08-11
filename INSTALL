@@ -27,7 +27,7 @@ Here's a simple example as a proof of concept:
     #include <hemp.h>
 
     int main(int argc, char **argv, char **env) {
-        hemp_t hemp = hemp_init();
+        hemp_p hemp = hemp_init();
         printf("created a hemp engine: %p\n", hemp);
         hemp_free(hemp);
         return 0;
@@ -42,5 +42,5 @@ If the program compiles and run then you've successfully linked in the hemp
 library.  Now you just have to twiddle your thumbs for a while until I've 
 had the chance to add the functionality to makes it useful and usuable.
 
--- Andy Wardley, July 2010
+-- Andy Wardley (abw), July 2010
 

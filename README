@@ -26,4 +26,16 @@ a look at the INSTALL file for instructions on building the hemp library and
 test programs.  But don't blame me if it doesn't work, or when you realise 
 that it doesn't do anything useful yet.
 
--- Andy Wardley, July 2010
+-- Andy Wardley (abw), July 2010
+
+
+UPDATE: Hemp can now process templates for some very loose definition of 
+processing templates.  It's still very incomplete, incorrect and buggy, so
+don't go expecting anything too good just yet.  See tests/scanner.c for an
+example.  This runs the template test/expect scripts in tests/scripts.
+Languages, dialects, grammars, tags and elements are all dynamically
+configurable.  Everything seems to be fitting together nicely.  Given that
+this started off as a proof-of-concept project, I think it's safe to say
+(tenatively) that the concept has been proved.
+
+-- abw 11th August 2010
