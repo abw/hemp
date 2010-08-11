@@ -38,4 +38,7 @@ configurable.  Everything seems to be fitting together nicely.  Given that
 this started off as a proof-of-concept project, I think it's safe to say
 (tenatively) that the concept has been proved.
 
+See the comments in include/macros.h for more information about how the
+basic parts fit together: Language > Dialect > Grammar > Symbol > Element
+
 -- abw 11th August 2010
