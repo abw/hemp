@@ -24,7 +24,7 @@ hemp_symbol_p HempSymbolWord = &hemp_symbol_word;
 
 HEMP_SYMBOL_FUNC(hemp_element_word_symbol) {
     /* these aren't right, but they'll do for now, for testing purposes */
-    symbol->flags   = HEMP_BE_FIXED | HEMP_BE_STATIC;
+    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_STATIC;
     symbol->expr    = &hemp_element_literal_expr;
     symbol->source  = &hemp_element_literal_source;
     symbol->text    = &hemp_element_literal_text;

@@ -60,7 +60,7 @@ An incomplete list of things TODO, in no particular order.
   Define a scan method for them and invoke it on detection.
  
  
-Parsing refactor 
-----------------
+-- HOT STACK --
 
+* change 'tmpl' to 'hemplate'
 

@@ -11,7 +11,7 @@ static struct hemp_symbol_s
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
         HEMP_BE_WHITESPACE       |                       /* flags                */
-        HEMP_BE_FIXED       |
+        HEMP_BE_SOURCE       |
         HEMP_BE_STATIC      | 
         HEMP_BE_HIDDEN,
         0, 0,                                       /* l/r precedence       */
@@ -35,7 +35,7 @@ HEMP_SYMBOL_FUNC(hemp_element_space_symbol) {
     symbol->number  = &hemp_element_not_number;
     symbol->integer = &hemp_element_not_integer;
     symbol->boolean = &hemp_element_not_boolean;
-    symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_FIXED | HEMP_BE_STATIC 
+    symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_STATIC 
                     | HEMP_BE_HIDDEN;
     return symbol;
 }
@@ -51,7 +51,7 @@ static struct hemp_symbol_s
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
         HEMP_BE_WHITESPACE       |                       /* flags                */
-        HEMP_BE_FIXED       |
+        HEMP_BE_SOURCE       |
         HEMP_BE_STATIC      | 
         HEMP_BE_HIDDEN      |
         HEMP_BE_SEPARATOR,
@@ -72,7 +72,7 @@ HEMP_SYMBOL_FUNC(hemp_element_tag_start_symbol) {
     symbol->expr    = &hemp_element_next_expr;
     symbol->infix   = &hemp_element_next_infix;
     symbol->source  = &hemp_element_literal_source;
-    symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_FIXED | HEMP_BE_STATIC 
+    symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_STATIC 
                     | HEMP_BE_HIDDEN | HEMP_BE_SEPARATOR;
     return symbol;
 }
@@ -87,7 +87,7 @@ static struct hemp_symbol_s
         "tag_end",                                  /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_BE_FIXED       |                       /* flags                */
+        HEMP_BE_SOURCE       |                       /* flags                */
         HEMP_BE_STATIC      | 
         HEMP_BE_HIDDEN      |
         HEMP_BE_TERMINATOR,
@@ -106,7 +106,7 @@ static struct hemp_symbol_s
 
 HEMP_SYMBOL_FUNC(hemp_element_tag_end_symbol) {
     symbol->source  = &hemp_element_literal_source;
-    symbol->flags   = HEMP_BE_FIXED | HEMP_BE_STATIC | HEMP_BE_HIDDEN
+    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_STATIC | HEMP_BE_HIDDEN
                     | HEMP_BE_TERMINATOR;
     return symbol;
 }
@@ -122,7 +122,7 @@ static struct hemp_symbol_s
         "eof",                                      /* name                 */
         "--EOF--",                                  /* start token          */
         NULL,                                       /* end token            */
-        HEMP_BE_FIXED       |                       /* flags                */
+        HEMP_BE_SOURCE       |                       /* flags                */
         HEMP_BE_STATIC      | 
         HEMP_BE_HIDDEN      |
         HEMP_BE_EOF,
@@ -142,7 +142,7 @@ static struct hemp_symbol_s
 HEMP_SYMBOL_FUNC(hemp_element_eof_symbol) {
     symbol->source  = &hemp_element_eof_text;
     symbol->text    = &hemp_element_eof_text;
-    symbol->flags   = HEMP_BE_FIXED | HEMP_BE_STATIC | HEMP_BE_HIDDEN
+    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_STATIC | HEMP_BE_HIDDEN
                     | HEMP_BE_EOF;
     return symbol;
 }

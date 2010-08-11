@@ -6,7 +6,6 @@
 -- expect
 hello world
 
--- start 
 -- test inline comment with tag at end
 [% # comment before 
    'hello again world'
@@ -14,9 +13,6 @@ hello world
 
 -- expect
 hello again world
-
--- stop 
-
 
 -- test comment tag
 hello [# this is a 

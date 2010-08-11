@@ -7,7 +7,7 @@ static struct hemp_symbol_s
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
         HEMP_BE_WHITESPACE       |                       /* flags                */
-        HEMP_BE_FIXED       |
+        HEMP_BE_SOURCE       |
         HEMP_BE_STATIC      |
         HEMP_BE_HIDDEN,
         0, 0,                                       /* l/r precedence       */
@@ -28,7 +28,7 @@ hemp_symbol_p HempSymbolComment = &hemp_symbol_comment;
 HEMP_SYMBOL_FUNC(hemp_element_comment_symbol) {
     symbol->scanner    = &hemp_element_comment_scanner;
     symbol->source     = &hemp_element_literal_source;
-    symbol->flags      = HEMP_BE_WHITESPACE | HEMP_BE_FIXED | HEMP_BE_STATIC 
+    symbol->flags      = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_STATIC 
                        | HEMP_BE_HIDDEN;
     return symbol;
 }
@@ -39,7 +39,7 @@ HEMP_SCAN_FUNC(hemp_element_comment_scanner) {
     hemp_cstr_p     tag_end = tag->end;
     hemp_size_t     tag_len = strlen(tag->end);
 
-    debug("hemp_element_comment_scanner()\n");
+    debug_call("hemp_element_comment_scanner()\n");
 
     /* walk to the end of line or end of tag */
     while (* ++src) {

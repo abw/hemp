@@ -2,59 +2,62 @@
 
 #define HEMP_LANGUAGE_VERSION 0.01
 
+HEMP_LANGUAGE_FUNC(hemp_language_hemp_init);
+
+
 /* basic element prototypes */
-HEMP_ELEMENT_PROTO(hemp_element_text_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_space_symbol);
-//HEMP_ELEMENT_PROTO(hemp_element_comment_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_tag_start_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_tag_end_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_number_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_integer_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_word_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_squote_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_dquote_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_block_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_eof_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_text_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_space_symbol);
+//HEMP_ELEMENT_FUNC(hemp_element_comment_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_tag_start_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_tag_end_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_number_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_integer_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_word_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_squote_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_dquote_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_block_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_eof_symbol);
 
 /* boolean operator prototypes */
-HEMP_SYMBOLS_PROTO(hemp_element_boolop_symbols);
-HEMP_ELEMENT_PROTO(hemp_element_boolop_not_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_boolop_and_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_boolop_or_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_boolop_nor_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_boolop_TODO_symbol);
+HEMP_SYMBOLS_FUNC(hemp_element_boolop_symbols);
+HEMP_ELEMENT_FUNC(hemp_element_boolop_not_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_boolop_and_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_boolop_or_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_boolop_nor_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_boolop_TODO_symbol);
 
 /* number operator prototypes */
-HEMP_SYMBOLS_PROTO(hemp_element_numop_symbols);
-HEMP_ELEMENT_PROTO(hemp_element_numop_inc_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_dec_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_plus_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_minus_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_power_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_multiply_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_divide_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_divint_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_modulus_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_compare_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_equal_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_not_equal_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_less_than_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_more_than_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_less_equal_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_more_equal_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_numop_TODO_symbol);
+HEMP_SYMBOLS_FUNC(hemp_element_numop_symbols);
+HEMP_ELEMENT_FUNC(hemp_element_numop_inc_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_dec_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_plus_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_minus_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_power_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_multiply_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_divide_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_divint_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_modulus_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_compare_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_equal_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_not_equal_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_less_than_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_more_than_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_less_equal_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_more_equal_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_numop_TODO_symbol);
 
 /* text operator prototypes */
-HEMP_SYMBOLS_PROTO(hemp_element_textop_symbols);
-HEMP_ELEMENT_PROTO(hemp_element_textop_concat_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_textop_compare_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_textop_equal_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_textop_not_equal_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_textop_less_than_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_textop_more_than_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_textop_less_equal_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_textop_more_equal_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_textop_TODO_symbol);
+HEMP_SYMBOLS_FUNC(hemp_element_textop_symbols);
+HEMP_ELEMENT_FUNC(hemp_element_textop_concat_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_textop_compare_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_textop_equal_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_textop_not_equal_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_textop_less_than_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_textop_more_than_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_textop_less_equal_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_textop_more_equal_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_textop_TODO_symbol);
 
 
 
@@ -137,12 +140,7 @@ void           hemp_grammar_add_hemp_bravo(hemp_grammar_p);
 #define DONT_OPTIMISE_ME_AWAY  asm("");
 
 
-
-hemp_language_p
-hemp_language_hemp_init(
-    hemp_p      hemp,
-    hemp_cstr_p name
-) {
+HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
     debug_call("hemp_language_hemp_init(%p, %s)\n", hemp, name);
 
     hemp_language_p language = hemp_language_init(
@@ -187,7 +185,7 @@ hemp_element_boolop_symbols(
 }
 
 
-hemp_symbol_p
+HEMP_NO_INLINE hemp_symbol_p
 hemp_element_boolop_TODO_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
@@ -257,7 +255,7 @@ hemp_element_numop_symbols(
 }
 
 
-hemp_symbol_p
+HEMP_NO_INLINE hemp_symbol_p
 hemp_element_numop_TODO_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
@@ -399,7 +397,7 @@ hemp_element_textop_symbols(
 }
 
 
-hemp_symbol_p
+HEMP_NO_INLINE hemp_symbol_p
 hemp_element_textop_TODO_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
@@ -510,11 +508,11 @@ hemp_grammar_add_hemp_alpha(
     hemp_grammar_p grammar
 ) {
     debug_call("hemp_grammar_add_hemp_alpha(%p)\n", grammar);
-    HEMP_SYMBOL("hemp.text",    "_TEXT",    0, 0);
-    HEMP_SYMBOL("hemp.space",   "_SPACE",   0, 0);
-    HEMP_SYMBOL("hemp.comment", "#",        0, 0);
-    HEMP_SYMBOL2("hemp.squote", "'", "'",   0, 0);
-    HEMP_SYMBOL2("hemp.dquote", "\"", "\"", 0, 0);
+    HEMP_SYMBOL1("hemp.text",    "_TEXT"    );
+    HEMP_SYMBOL1("hemp.space",   "_SPACE"   );
+    HEMP_SYMBOL1("hemp.comment", "#"        );
+    HEMP_SYMBOL2("hemp.squote",  "'",  "'"  );
+    HEMP_SYMBOL2("hemp.dquote",  "\"", "\"" );
 }
 
 void
@@ -528,38 +526,38 @@ hemp_grammar_add_hemp_bravo(
 //    [ '%'       => sig_hash         =>   0, 350 ],      # %foo
 //    [ '.'       => op_dot           => 340,   0 ],      # foo.bar
 
-    HEMP_SYMBOL("hemp.numop.inc",           "++",       295,  295);
-    HEMP_SYMBOL("hemp.numop.dec",           "--",       295,  295);
-    HEMP_SYMBOL("hemp.numop.power",         "**",       290,    0);
-    HEMP_SYMBOL("hemp.numop.plus",          "+",        275,  285);
-    HEMP_SYMBOL("hemp.numop.minus",         "-",        275,  285);
-    HEMP_SYMBOL("hemp.numop.multiply",      "*",        280,    0);
-    HEMP_SYMBOL("hemp.numop.divide",        "/",        280,    0);
-    HEMP_SYMBOL("hemp.numop.modulus",       "mod",      280,    0);
-//  HEMP_SYMBOL("hemp.numop.divint",        "div",      280,    0);
+    HEMP_OPERATOR1("hemp.numop.inc",           "++",       295,  295);
+    HEMP_OPERATOR1("hemp.numop.dec",           "--",       295,  295);
+    HEMP_OPERATOR1("hemp.numop.power",         "**",       290,    0);
+    HEMP_OPERATOR1("hemp.numop.plus",          "+",        275,  285);
+    HEMP_OPERATOR1("hemp.numop.minus",         "-",        275,  285);
+    HEMP_OPERATOR1("hemp.numop.multiply",      "*",        280,    0);
+    HEMP_OPERATOR1("hemp.numop.divide",        "/",        280,    0);
+    HEMP_OPERATOR1("hemp.numop.modulus",       "mod",      280,    0);
+//  HEMP_OPERATOR1("hemp.numop.divint",        "div",      280,    0);
 
-    HEMP_SYMBOL("hemp.textop.concat",       "~",        270,  270);
+    HEMP_OPERATOR1("hemp.textop.concat",       "~",        270,  270);
                 
-    HEMP_SYMBOL("hemp.numop.compare",       "<=>",      260,    0);
-    HEMP_SYMBOL("hemp.numop.equal",         "==",       260,    0);
-    HEMP_SYMBOL("hemp.numop.not_equal",     "!=",       260,    0);
-    HEMP_SYMBOL("hemp.numop.less_than",     "<",        260,    0);
-    HEMP_SYMBOL("hemp.numop.more_than",     ">",        260,    0);
-    HEMP_SYMBOL("hemp.numop.less_equal",    "<=",       260,    0);
-    HEMP_SYMBOL("hemp.numop.more_equal",    ">=",       260,    0);
-                
-    HEMP_SYMBOL("hemp.textop.compare",      "cmp",      260,    0);
-    HEMP_SYMBOL("hemp.textop.equal",        "eq",       260,    0);
-    HEMP_SYMBOL("hemp.textop.not_equal",    "ne",       260,    0);
-    HEMP_SYMBOL("hemp.textop.less_than",    "lt",       260,    0);
-    HEMP_SYMBOL("hemp.textop.more_than",    "gt",       260,    0);
-    HEMP_SYMBOL("hemp.textop.less_equal",   "le",       260,    0);
-    HEMP_SYMBOL("hemp.textop.more_equal",   "ge",       260,    0);
-                
-    HEMP_SYMBOL("hemp.boolop.not",          "!",          0,  285);
-    HEMP_SYMBOL("hemp.boolop.and",          "&&",       255,    0);
-    HEMP_SYMBOL("hemp.boolop.or",           "||",       250,    0);
-    HEMP_SYMBOL("hemp.boolop.nor",          "!!",       250,    0);
+    HEMP_OPERATOR1("hemp.numop.compare",       "<=>",      260,    0);
+    HEMP_OPERATOR1("hemp.numop.equal",         "==",       260,    0);
+    HEMP_OPERATOR1("hemp.numop.not_equal",     "!=",       260,    0);
+    HEMP_OPERATOR1("hemp.numop.less_than",     "<",        260,    0);
+    HEMP_OPERATOR1("hemp.numop.more_than",     ">",        260,    0);
+    HEMP_OPERATOR1("hemp.numop.less_equal",    "<=",       260,    0);
+    HEMP_OPERATOR1("hemp.numop.more_equal",    ">=",       260,    0);
+
+    HEMP_OPERATOR1("hemp.textop.compare",      "cmp",      260,    0);
+    HEMP_OPERATOR1("hemp.textop.equal",        "eq",       260,    0);
+    HEMP_OPERATOR1("hemp.textop.not_equal",    "ne",       260,    0);
+    HEMP_OPERATOR1("hemp.textop.less_than",    "lt",       260,    0);
+    HEMP_OPERATOR1("hemp.textop.more_than",    "gt",       260,    0);
+    HEMP_OPERATOR1("hemp.textop.less_equal",   "le",       260,    0);
+    HEMP_OPERATOR1("hemp.textop.more_equal",   "ge",       260,    0);
+
+    HEMP_OPERATOR1("hemp.boolop.not",          "!",          0,  285);
+    HEMP_OPERATOR1("hemp.boolop.and",          "&&",       255,    0);
+    HEMP_OPERATOR1("hemp.boolop.or",           "||",       250,    0);
+    HEMP_OPERATOR1("hemp.boolop.nor",          "!!",       250,    0);
 
 //    [ '..'      => op_range         => 240,   0 ],      # 1 .. 91
 //    [ 'to'      => op_range         => 240,   0 ],      # 1 to 91 by 10      # TODO: to
@@ -584,10 +582,10 @@ hemp_grammar_add_hemp_bravo(
 //    [ '||='     => bool_or_set      => 200,   0 ],      # foo ||= bar
 //    [ '!!='     => bool_nor_set     => 200,   0 ],      # foo !!= bar
 
-    HEMP_SYMBOL("hemp.boolop.not",          "not",        0,  190);
-    HEMP_SYMBOL("hemp.boolop.and",          "and",      180,    0);
-    HEMP_SYMBOL("hemp.boolop.or",           "or",       170,    0);
-    HEMP_SYMBOL("hemp.boolop.nor",          "nor",      170,    0);
+    HEMP_OPERATOR1("hemp.boolop.not",          "not",        0,  190);
+    HEMP_OPERATOR1("hemp.boolop.and",          "and",      180,    0);
+    HEMP_OPERATOR1("hemp.boolop.or",           "or",       170,    0);
+    HEMP_OPERATOR1("hemp.boolop.nor",          "nor",      170,    0);
 
 //    # grouping constructs...
 //    [ '('       => con_parens       =>   0,   0 ],

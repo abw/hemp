@@ -7,13 +7,12 @@ libhemp_la_SOURCES  =   action.c              \
                         element.c             \
                         element/block.c       \
                         element/comment.c     \
-                        element/dquote.c      \
                         element/integer.c     \
                         element/literal.c     \
                         element/number.c      \
                         element/numops.c      \
+                        element/quoted.c      \
                         element/space.c       \
-                        element/squote.c      \
                         element/text.c        \
                         element/word.c        \
                         error.c               \

@@ -15,6 +15,7 @@ typedef enum {
     HEMP_ERROR_DUPLICATE,
     HEMP_ERROR_OVERFLOW,
     HEMP_ERROR_TOKEN,
+    HEMP_ERROR_BADQUOTE,
     HEMP_ERROR_OPTION,
     HEMP_ERROR_HELP,
     HEMP_ERROR_MAX
@@ -31,6 +32,7 @@ static hemp_cstr_p hemp_errmsg[] = {
     "Duplicate %s specified: %s",
     "Number is too large: %s",
     "Invalid token: %s",
+    "Unterminated %s: %s",
     "Invalid option: %s",
     NULL
 };

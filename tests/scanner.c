@@ -16,13 +16,13 @@ main(
     char **argv, 
     char **env
 ) {
-    plan_tests(30);
+    plan_tests(33);
     test_scanner();
     return exit_status();
 }
 
 void test_scanner() {
-//  test_script( "hello" );
+    test_script( "hello" );
     test_script( "comments" );
     test_script( "numbers" );
     test_script( "quotes" );

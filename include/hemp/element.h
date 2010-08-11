@@ -8,6 +8,7 @@
 #include <hemp/template.h>
 #include <hemp/context.h>
 #include <hemp/value.h>
+#include <hemp/macros.h>
 
 
 
@@ -60,8 +61,6 @@ extern hemp_symbol_p HempSymbolText;
 extern hemp_symbol_p HempSymbolWord;
 extern hemp_symbol_p HempSymbolNumber;
 extern hemp_symbol_p HempSymbolInteger;
-extern hemp_symbol_p HempSymbolSQuote;
-extern hemp_symbol_p HempSymbolDQuote;
 extern hemp_symbol_p HempSymbolBlock;
 
 
@@ -125,78 +124,6 @@ extern hemp_symbol_p HempSymbolBlock;
     else {                                          \
         text   = HEMP_VAL_TEXT(output);             \
     }
-
-#define HEMP_SYMBOL_ARGS                    \
-        hemp_p        hemp,                 \
-        hemp_symbol_p symbol
-
-#define HEMP_SCAN_ARGS                      \
-        hemp_template_p tmpl,               \
-        hemp_tag_p      tag,                \
-        hemp_cstr_p     start,              \
-        hemp_pos_t      pos,                \
-        hemp_cstr_p    *srcptr,             \
-        hemp_symbol_p   symbol
-
-#define HEMP_PARSE_ARGS                     \
-        hemp_element_p *elemptr,            \
-        hemp_scope_p    scope,              \
-        hemp_prec_t     precedence,         \
-        hemp_bool_t     force
-
-#define HEMP_PARSE_ARG_NAMES                \
-        elemptr, scope, precedence, force
-
-#define HEMP_INFIX_ARGS                     \
-        hemp_element_p *elemptr,            \
-        hemp_scope_p    scope,              \
-        hemp_prec_t     precedence,         \
-        hemp_bool_t     force,              \
-        hemp_element_p  lhs 
-
-#define HEMP_INFIX_ARG_NAMES                \
-        elemptr, scope, precedence, force, lhs
-
-#define HEMP_VALUE_ARGS                     \
-        hemp_element_p  element,            \
-        hemp_context_p  context
-
-#define HEMP_OUTPUT_ARGS                    \
-        hemp_element_p  element,            \
-        hemp_context_p  context,            \
-        hemp_value_t    output
-
-#define HEMP_SYMBOL_FUNC(name)              \
-    hemp_symbol_p name(                     \
-        HEMP_SYMBOL_ARGS                    \
-    )
-
-#define HEMP_SCAN_FUNC(name)                \
-    hemp_element_p name(                    \
-        HEMP_SCAN_ARGS                      \
-    )
-
-#define HEMP_PARSE_FUNC(name)               \
-    HEMP_DO_INLINE hemp_element_p name(     \
-        HEMP_PARSE_ARGS                     \
-    )
-
-#define HEMP_INFIX_FUNC(name)               \
-    HEMP_DO_INLINE hemp_element_p name(     \
-        HEMP_INFIX_ARGS                     \
-    )
-
-#define HEMP_OUTPUT_FUNC(name)              \
-    HEMP_DO_INLINE hemp_value_t name(       \
-        HEMP_OUTPUT_ARGS                    \
-    )
-
-#define HEMP_VALUE_FUNC(name)               \
-    HEMP_DO_INLINE hemp_value_t name(       \
-        HEMP_VALUE_ARGS                     \
-    )
-
-
 
 /*--------------------------------------------------------------------------
  * function prototypes
@@ -288,6 +215,8 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner);
 
 HEMP_SYMBOL_FUNC(hemp_element_dquote_symbol);
 HEMP_SCAN_FUNC(hemp_element_dquote_scanner);
+
+HEMP_OUTPUT_FUNC(hemp_element_quoted_text);
 
 
 /*--------------------------------------------------------------------------

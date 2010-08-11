@@ -28,6 +28,7 @@ extern "C" {
 #include <hemp/template.h>
 #include <hemp/text.h>
 #include <hemp/value.h>
+#include <hemp/macros.h>
 
     
 //#include <hemp/module.h>
@@ -167,39 +168,6 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
         _dial;                                                              \
     })
 
-
-#define HEMP_LANGUAGE(name, constructor) \
-    hemp_register_language(hemp, name, (hemp_actor_f) constructor);
-
-#define HEMP_DIALECT(name, constructor) \
-    hemp_register_dialect(hemp, name, (hemp_actor_f) constructor);
-
-#define HEMP_GRAMMAR(name, constructor) \
-    hemp_register_grammar(hemp, name, (hemp_actor_f) constructor);
-
-#define HEMP_ELEMENTS(symbols) \
-    hemp_register_elements(hemp, symbols);
-
-#define HEMP_ELEMENT(name, constructor) \
-    hemp_register_element(hemp, name, (hemp_actor_f) constructor);
-
-#define HEMP_SYMBOL(name, start, lprec, rprec) \
-    hemp_grammar_add_symbol(grammar, name, start, NULL, lprec, rprec);
-
-#define HEMP_SYMBOL2(name, start, end, lprec, rprec) \
-    hemp_grammar_add_symbol(grammar, name, start, end, lprec, rprec);
-
-#define HEMP_DIALECT_PROTO(item) \
-    hemp_dialect_p item (hemp_p, hemp_cstr_p);
-
-#define HEMP_GRAMMAR_PROTO(item) \
-    hemp_grammar_p item (hemp_p, hemp_cstr_p);
-
-#define HEMP_SYMBOLS_PROTO(item) \
-    hemp_action_p item (hemp_p, hemp_cstr_p);
-
-#define HEMP_ELEMENT_PROTO(item) \
-    hemp_symbol_p item (hemp_p, hemp_symbol_p)  __attribute__((noinline));
 
 
 

@@ -49,15 +49,23 @@
 #define HEMP_VTYPES_SIZE    8
 #define HEMP_TAGSET_SIZE    8
 
-/* Arrrr!  These be the element flags, m'hearties */
-#define HEMP_BE_WHITESPACE  0x0001
-#define HEMP_BE_SEPARATOR   0x0002
-#define HEMP_BE_TERMINATOR  0x0004
-#define HEMP_BE_HIDDEN      0x0008
-#define HEMP_BE_FIXED       0x0010
-#define HEMP_BE_STATIC      0x0020
-#define HEMP_BE_EOF         0x8000
-
+/* 
+ * Arrrr!  These be the element flags, m'hearties.  They be the bits what'll
+ * tells ya what an element can be.  Be it a hunk o'whitespace?  Some static
+ * text?  Or perhaps a shiny gold dubloon?  Look in ye old element->flags and 
+ * ye shall find ye treasure!  Let it be known that we don't be callin'em the 
+ * HEMP_IS_GOLD_DUBLOON, or whatever the case might be, in case we be gettin' 
+ * ourselves confused with ye old value macros and definitions like them there 
+ * HEMP_IS_NUMBER and HEMP_IS_TEXT.  So now ye knows, and may that guidance 
+ * serve you well on yer merry sea-faring escapades... Arrrr!
+ */
+#define HEMP_BE_WHITESPACE  0x0001  /* skippabled whitespace, comment, etc  */
+#define HEMP_BE_SEPARATOR   0x0002  /* skippable separator in lists         */
+#define HEMP_BE_TERMINATOR  0x0004  /* non-skippable expression terminator  */
+#define HEMP_BE_HIDDEN      0x0008  /* generates no output                  */
+#define HEMP_BE_SOURCE      0x0010  /* source text can yield output text    */
+#define HEMP_BE_STATIC      0x0020  /* element output is pre-defined        */
+#define HEMP_BE_EOF         0x8000  /* special marker for end of file/text  */
 
 
 #endif /* HEMP_DEFINES_H */

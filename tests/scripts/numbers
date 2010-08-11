@@ -1,12 +1,11 @@
 -- test simple
 [% 0 %]
--- stop
 
 -- test integers
 [% 0 %] [% 01 %] [% 123 %] [% 12345 %]
 
 -- expect
-0 01 123 12345
+0 1 123 12345
 
 -- test hexadecimal
 [% 0x1234 %]

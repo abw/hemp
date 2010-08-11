@@ -2,13 +2,13 @@
 
 #define HEMP_TT3_LANGUAGE_VERSION 0.2
 
-HEMP_DIALECT_PROTO(hemp_dialect_tt3);
-HEMP_GRAMMAR_PROTO(hemp_grammar_tt3_core);
-HEMP_GRAMMAR_PROTO(hemp_grammar_tt3_command);
-HEMP_GRAMMAR_PROTO(hemp_grammar_tt3_control);
-HEMP_SYMBOLS_PROTO(hemp_element_tt3_command_symbols);
-HEMP_ELEMENT_PROTO(hemp_element_tt3_if_symbol);
-HEMP_ELEMENT_PROTO(hemp_element_tt3_TODO_symbol);
+HEMP_DIALECT_FUNC(hemp_dialect_tt3);
+HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core);
+HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_command);
+HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_control);
+HEMP_SYMBOLS_FUNC(hemp_element_tt3_command_symbols);
+HEMP_ELEMENT_FUNC(hemp_element_tt3_if_symbol);
+HEMP_ELEMENT_FUNC(hemp_element_tt3_TODO_symbol);
 
 /* see comment in language/hemp.c */
 #define DONT_OPTIMISE_ME_AWAY  asm("");
@@ -22,11 +22,7 @@ static struct hemp_symbols_s hemp_symbols_tt3_command[] = {
 };
 
 
-hemp_language_p
-hemp_language_tt3_init(
-    hemp_p      hemp,
-    hemp_cstr_p name
-) {
+HEMP_LANGUAGE_FUNC(hemp_language_tt3_init) {
     debug_call("hemp_language_tt3_init(%p, %s)\n", hemp, name);
 
     hemp_language_p language = hemp_language_init(
@@ -56,11 +52,7 @@ hemp_language_tt3_init(
  * dialects
  *--------------------------------------------------------------------------*/
 
-hemp_dialect_p
-hemp_dialect_tt3(
-    hemp_p      hemp,
-    hemp_cstr_p name
-) {
+HEMP_DIALECT_FUNC(hemp_dialect_tt3) {
     hemp_dialect_p dialect = hemp_dialect_init(hemp, name);
     
     dialect->prepare = &hemp_dialect_tt3_prepare;
@@ -147,36 +139,24 @@ hemp_dialect_tt3_cleanup(
  * grammars
  *--------------------------------------------------------------------------*/
 
-hemp_grammar_p
-hemp_grammar_tt3_core(
-    hemp_p      hemp,
-    hemp_cstr_p name
-) {
+HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core) {
     debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = hemp_grammar_hemp_bravo(hemp, name);
 //    HEMP_SYMBOL("hemp.comment", "#", 0, 0);
-    HEMP_SYMBOL2("hemp.squote", "q<<", ">>",   0, 0);
+    HEMP_SYMBOL2("hemp.squote", "q<<", ">>");
 
     return grammar;
 }
 
 
-hemp_grammar_p
-hemp_grammar_tt3_command(
-    hemp_p      hemp,
-    hemp_cstr_p name
-) {
+HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_command) {
     debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = hemp_grammar_tt3_core(hemp, name);
     return grammar;
 }
 
 
-hemp_grammar_p
-hemp_grammar_tt3_control(
-    hemp_p      hemp,
-    hemp_cstr_p name
-) {
+HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_control) {
     debug_call("hemp_grammar_tt3_control(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = hemp_grammar_tt3_core(hemp, name);
     return grammar;

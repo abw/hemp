@@ -256,26 +256,27 @@ HEMP_INFIX_FUNC(hemp_element_next_infix) {
  *--------------------------------------------------------------------------*/
 
 HEMP_INFIX_FUNC(hemp_element_parse_infix_left) {
-    debug_blue("hemp_element_parse_binary()\n");
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
 
+    debug_call("hemp_element_parse_infix_left()\n");
+
     if (precedence && type->lprec <= precedence) {
-        debug(
+        debug_call(
             "precedence of %s (%d) is lower than %s (%d), returning preceding element\n",
             type->name, type->lprec, lhs->type->name, precedence
         );
         return lhs;
     }
     else {
-        debug(
+        debug_call(
             "precedence of %s (%d) is higher than %s (%d), continuing...\n",
             type->name, type->lprec, lhs->type->name, precedence
         );
     }
 
     self->args.binary.lhs = lhs;
-//    debug_cyan("set lhs to %p / %p\n", self->value.binary.lhs, lhs);
+//  debug_cyan("set lhs to %p / %p\n", self->value.binary.lhs, lhs);
     hemp_go_next(elemptr);
 
     hemp_element_p rhs = hemp_parse_expr(
@@ -286,7 +287,7 @@ HEMP_INFIX_FUNC(hemp_element_parse_infix_left) {
         hemp_fatal("missing expression on rhs of %s\n", type->start);
         
     self->args.binary.rhs = rhs;
-//    debug_cyan("set rhs to %p / %p\n", self->value.binary.rhs, rhs);
+//  debug_cyan("set rhs to %p / %p\n", self->value.binary.rhs, rhs);
     
     hemp_skip_whitespace(elemptr);
 
