@@ -1,6 +1,10 @@
 #include <hemp/element.h>
 
 
+/*--------------------------------------------------------------------------
+ * initialisation and cleanup functions
+ *--------------------------------------------------------------------------*/
+
 hemp_element_p
 hemp_element_new() {
     hemp_element_p element = (hemp_element_p) hemp_mem_alloc(
@@ -45,7 +49,6 @@ hemp_element_free(
 }
 
 
-
 /*--------------------------------------------------------------------------
  * front-end parsing pseudo-method
  *--------------------------------------------------------------------------*/
@@ -80,11 +83,6 @@ hemp_element_parse(
 /*--------------------------------------------------------------------------
  * generic element parsing functions
  *--------------------------------------------------------------------------*/
-
-#define DEBUG_EMETHOD(name) \
-    debug_call("hemp_element_%s(%p) [%s]\n", name, *elemptr, *elemptr->type->name);
-
-
 
 HEMP_PARSE_FUNC(hemp_element_parse_block) {
     hemp_element_p element = *elemptr;
@@ -174,8 +172,6 @@ HEMP_PARSE_FUNC(hemp_element_parse_expr) {
     debug_todo("hemp_element_parse_expr()\n");
     return NULL;
 }
-
-
 
 
 /*--------------------------------------------------------------------------
@@ -284,6 +280,26 @@ HEMP_PARSE_FUNC(hemp_element_parse_prefix) {
 }
 
 
+HEMP_INFIX_FUNC(hemp_element_parse_postfix) {
+    hemp_element_p self = *elemptr;
+    hemp_symbol_p  type = self->type;
+
+    debug_call("hemp_element_parse_infix_left()\n");
+
+    HEMP_INFIX_LEFT_PRECEDENCE;
+    hemp_set_flag(self, HEMP_BE_POSTFIX);
+
+    self->args.unary.expr = lhs;
+    hemp_go_next(elemptr);
+    hemp_skip_whitespace(elemptr);
+
+    return hemp_parse_infix(
+        elemptr, scope, precedence, 0,
+        self
+    );
+}
+
+
 HEMP_INFIX_FUNC(hemp_element_parse_infix_left) {
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
@@ -334,26 +350,9 @@ HEMP_INFIX_FUNC(hemp_element_parse_infix_right) {
 }
 
 
-
 /*--------------------------------------------------------------------------
- * hackety hack - the rest needs cleaning up
+ * output functions
  *--------------------------------------------------------------------------*/
-
-//hemp_text_p
-//hemp_element_token(
-//    hemp_element_p  element,
-//    hemp_text_p     text
-//) {
-//    debug_call("hemp_element_token()\n");
-//
-//    if (! text)
-//        text = hemp_text_init(element->length);
-//    
-//    hemp_text_append_cstrn(text, element->token, element->length);
-//
-//    return text;
-//}
-
 
 HEMP_OUTPUT_FUNC(hemp_element_binary_source) {
     debug_call("hemp_element_binary_source()\n");

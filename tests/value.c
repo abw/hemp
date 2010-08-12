@@ -58,7 +58,7 @@ void test_value() {
     ok( ! HEMP_IS_TAGGED(value), "number is not a tagged value" );
     ok( HEMP_IS_NUM(value), "number is a number value" );
     ok( n == expect, "got num value back" );
-    type_check(value, HEMP_TYPE_NUM_ID, "number");
+    type_check(value, HEMP_TYPE_NUM_ID, "Number");
     ok( ! HEMP_IS_UNDEF(value),         "number is not undef" );
     ok( ! HEMP_IS_MISSING(value),       "number is not missing" );
     ok( ! HEMP_IS_NOTHING(value),       "number is not nothing" );
@@ -70,7 +70,7 @@ void test_value() {
     printf("integer value: 12345\n");
     value = HEMP_INT_VAL(12345);
     hemp_dump_value(value);
-    type_check(value, HEMP_TYPE_INT_ID, "integer");
+    type_check(value, HEMP_TYPE_INT_ID, "Integer");
 
     hemp_u32_t i = HEMP_VAL_INT(value);
     ok( HEMP_IS_TAGGED(value), "integer is a tagged value" );
@@ -88,7 +88,7 @@ void test_value() {
     printf("string value: %s\n", es);
     value = HEMP_STR_VAL(es);
     hemp_dump_value(value);
-    type_check(value, HEMP_TYPE_STR_ID, "string");
+    type_check(value, HEMP_TYPE_STR_ID, "String");
     ok( ! HEMP_IS_UNDEF(value),         "string is not undef" );
     ok( ! HEMP_IS_MISSING(value),       "string is not missing" );
     ok( ! HEMP_IS_NOTHING(value),       "string is not nothing" );

@@ -38,11 +38,11 @@ void test_element_factory() {
     ok( hemp, "created hemp" );
 
     HEMP_TRY;
-        symbol = hemp_symbol(hemp, "hemp.numop.inc", "+", NULL);
+        symbol = hemp_symbol(hemp, "hemp.number.plus", "+", NULL);
         ok( symbol, "got %s symbol", symbol->name );
         hemp_symbol_free(symbol);
 
-        symbol = hemp_symbol(hemp, "hemp.numop.inc", "+", NULL);
+        symbol = hemp_symbol(hemp, "hemp.number.plus", "+", NULL);
         ok( symbol, "got it again" );
         hemp_symbol_free(symbol);
     HEMP_CATCH_ALL;

@@ -163,8 +163,12 @@ hemp_list_p     hemp_element_parse_exprs(HEMP_PARSE_ARGS);
 
 HEMP_PARSE_FUNC(hemp_element_parse_block);
 HEMP_PARSE_FUNC(hemp_element_parse_expr);
-HEMP_OUTPUT_FUNC(hemp_element_binary_source);
+HEMP_PARSE_FUNC(hemp_element_parse_prefix);         // TODO: s/PARSE/PREFIX
+HEMP_INFIX_FUNC(hemp_element_parse_postfix);        // TODO: s/INFIX/POSTFIX
+HEMP_INFIX_FUNC(hemp_element_parse_infix_left);
+HEMP_INFIX_FUNC(hemp_element_parse_infix_right);
 
+HEMP_OUTPUT_FUNC(hemp_element_binary_source);
 
 
 /*--------------------------------------------------------------------------
@@ -187,15 +191,6 @@ HEMP_VALUE_FUNC(hemp_element_not_compare);
 
 HEMP_PARSE_FUNC(hemp_element_next_expr);
 HEMP_INFIX_FUNC(hemp_element_next_infix);
-
-
-/*--------------------------------------------------------------------------
- * expression parsing methods
- *--------------------------------------------------------------------------*/
-
-HEMP_PARSE_FUNC(hemp_element_parse_prefix);
-HEMP_INFIX_FUNC(hemp_element_parse_infix_left);
-HEMP_INFIX_FUNC(hemp_element_parse_infix_right);
 
 
 /*--------------------------------------------------------------------------
@@ -318,6 +313,8 @@ HEMP_OUTPUT_FUNC(hemp_element_numop_text);
 HEMP_VALUE_FUNC(hemp_element_numop_integer);
 HEMP_VALUE_FUNC(hemp_element_numop_boolean);
 
+HEMP_SYMBOL_FUNC(hemp_element_number_autoinc_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_autodec_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_number_plus_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_number_minus_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_number_power_symbol);
@@ -333,6 +330,8 @@ HEMP_SYMBOL_FUNC(hemp_element_number_not_before_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_number_not_after_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_number_after_symbol);
 
+HEMP_VALUE_FUNC(hemp_element_number_autoinc_value);
+HEMP_VALUE_FUNC(hemp_element_number_autodec_value);
 HEMP_VALUE_FUNC(hemp_element_number_plus_value);
 HEMP_VALUE_FUNC(hemp_element_number_minus_value);
 HEMP_VALUE_FUNC(hemp_element_number_power_value);

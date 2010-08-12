@@ -263,6 +263,42 @@ HEMP_VALUE_FUNC(hemp_element_numop_boolean) {
 
 
 /*--------------------------------------------------------------------------
+ * auto-increment
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_number_autoinc_symbol) {
+    hemp_element_numop_symbol(hemp, symbol);
+    symbol->expr   = &hemp_element_parse_prefix;
+    symbol->infix  = &hemp_element_parse_postfix;
+    symbol->number = &hemp_element_number_autoinc_value;
+    return symbol;
+}
+
+
+HEMP_VALUE_FUNC(hemp_element_number_autoinc_value) {
+    hemp_todo("hemp_element_number_autoinc_value()\n");
+}
+
+
+/*--------------------------------------------------------------------------
+ * auto-decrement
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_number_autodec_symbol) {
+    hemp_element_numop_symbol(hemp, symbol);
+    symbol->expr   = &hemp_element_parse_prefix;
+    symbol->infix  = &hemp_element_parse_postfix;
+    symbol->number = &hemp_element_number_autodec_value;
+    return symbol;
+}
+
+
+HEMP_VALUE_FUNC(hemp_element_number_autodec_value) {
+    hemp_todo("hemp_element_number_autodec_value()\n");
+}
+
+
+/*--------------------------------------------------------------------------
  * number plus, e.g. '+'
  *--------------------------------------------------------------------------*/
 
