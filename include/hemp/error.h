@@ -44,9 +44,10 @@ struct hemp_jump_s {
 };
 
 struct hemp_error_s {
-    hemp_errno_e  number;
-    hemp_cstr_p   message;
-    hemp_error_p  parent;
+    hemp_errno_e    number;
+    hemp_cstr_p     message;
+    hemp_scan_pos_p scan_pos;
+    hemp_error_p    parent;
 };
 
 
@@ -76,10 +77,16 @@ hemp_error_p
         va_list      args
     );
 
+hemp_text_p
+    hemp_error_text(
+        hemp_error_p error
+    );
+
 void
     hemp_error_free(
         hemp_error_p error
     );
+
 
 /* these macros are for testing */
 
@@ -136,5 +143,10 @@ void
         hemp->jump = hemp->jump->parent;            \
     } while (0);
 
+
+hemp_error_p    hemp_error_message(hemp_p, hemp_errno_e, ...);
+
+#define hemp_throw(h,...) \
+    hemp_error_throw(h, hemp_error_message(h,__VA_ARGS__))
 
 #endif /* HEMP_ERROR_H */

@@ -116,8 +116,8 @@ hemp_element_parse_exprs(
     hemp_element_p expr;
     hemp_list_p    exprs = hemp_list_init();
 
-#if DEBUG
-//    debug("\n-- EXPRS --\n");
+#if DEBUG & DEBUG_PARSE
+    debug("\n-- EXPRS --\n");
 #endif
 
     while (1) {
@@ -143,8 +143,8 @@ hemp_element_parse_exprs(
             break;
 
 //      debug_parse("parsed %s expression:\n", expr->type->name);
-#if DEBUG
-//      hemp_element_dump(expr);
+#if DEBUG & DEBUG_PARSE
+        hemp_element_dump(expr);
 #endif
         hemp_list_push(exprs, expr);
     }
@@ -223,6 +223,12 @@ HEMP_VALUE_FUNC(hemp_element_not_boolean) {
 }
 
 
+HEMP_VALUE_FUNC(hemp_element_not_compare) {
+    hemp_fatal("%s element does not yield comparison\n", element->type->name);
+    return HempNothing;
+}
+
+
 /*--------------------------------------------------------------------------
  * delegation functions, forwarding the request to the next element
  *--------------------------------------------------------------------------*/
@@ -255,39 +261,44 @@ HEMP_INFIX_FUNC(hemp_element_next_infix) {
  * expression parsing methods
  *--------------------------------------------------------------------------*/
 
+HEMP_PARSE_FUNC(hemp_element_parse_prefix) {
+    hemp_element_p self = *elemptr;
+    hemp_symbol_p  type = self->type;
+
+    debug_call("hemp_element_parse_prefix()\n");
+
+    hemp_set_flag(self, HEMP_BE_PREFIX);
+    hemp_go_next(elemptr);
+
+    self->args.unary.expr = hemp_parse_expr(elemptr, scope, type->rprec, 1);
+
+    if (! self->args.unary.expr)
+        hemp_fatal("missing expression on rhs of %s\n", type->start);
+    
+    hemp_skip_whitespace(elemptr);
+
+    return hemp_parse_infix(
+        elemptr, scope, precedence, 0,
+        self
+    );
+}
+
+
 HEMP_INFIX_FUNC(hemp_element_parse_infix_left) {
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
 
     debug_call("hemp_element_parse_infix_left()\n");
 
-    if (precedence && type->lprec <= precedence) {
-        debug_call(
-            "precedence of %s (%d) is lower than %s (%d), returning preceding element\n",
-            type->name, type->lprec, lhs->type->name, precedence
-        );
-        return lhs;
-    }
-    else {
-        debug_call(
-            "precedence of %s (%d) is higher than %s (%d), continuing...\n",
-            type->name, type->lprec, lhs->type->name, precedence
-        );
-    }
+    HEMP_INFIX_LEFT_PRECEDENCE;
+    hemp_set_flag(self, HEMP_BE_INFIX);
 
     self->args.binary.lhs = lhs;
-//  debug_cyan("set lhs to %p / %p\n", self->value.binary.lhs, lhs);
     hemp_go_next(elemptr);
+    self->args.binary.rhs = hemp_parse_expr(elemptr, scope, type->lprec, 1);
 
-    hemp_element_p rhs = hemp_parse_expr(
-        elemptr, scope, type->lprec, 1
-    );
-
-    if (! rhs)
+    if (! self->args.binary.rhs)
         hemp_fatal("missing expression on rhs of %s\n", type->start);
-        
-    self->args.binary.rhs = rhs;
-//  debug_cyan("set rhs to %p / %p\n", self->value.binary.rhs, rhs);
     
     hemp_skip_whitespace(elemptr);
 
@@ -304,14 +315,12 @@ HEMP_INFIX_FUNC(hemp_element_parse_infix_right) {
 
     debug_call("hemp_element_parse_infix_right()\n");
 
-    if (precedence && type->lprec < precedence)     /* '<' intead of '<='   */
-        return lhs;
+    HEMP_INFIX_RIGHT_PRECEDENCE;
+    hemp_set_flag(self, HEMP_BE_INFIX);
 
     self->args.binary.lhs = lhs;
     hemp_go_next(elemptr);
-    self->args.binary.rhs = hemp_parse_expr(
-        elemptr, scope, type->lprec, 1
-    );
+    self->args.binary.rhs = hemp_parse_expr(elemptr, scope, type->lprec, 1);
 
     if (! self->args.binary.rhs)
         hemp_fatal("missing expression on rhs of %s\n", type->start);
@@ -346,73 +355,33 @@ HEMP_INFIX_FUNC(hemp_element_parse_infix_right) {
 //}
 
 
-HEMP_OUTPUT_FUNC(hemp_element_binary_text) {
-    debug_call("hemp_element_binary_text()\n");
+HEMP_OUTPUT_FUNC(hemp_element_binary_source) {
+    debug_call("hemp_element_binary_source()\n");
+
+    /* ARSE!  I forgot, I'm using the source "method" to display token
+     * list as part of the parser debug... will have to disable this for
+     * now
+     */
+    return hemp_element_literal_source(HEMP_OUTPUT_ARG_NAMES);
 
     hemp_text_p text;
-    hemp_prepare_output(output, text, 0);
+
+
+    hemp_prepare_output(output, text, 32);
 
     struct hemp_binary_s exprs = element->args.binary;
     hemp_element_p lhs = exprs.lhs;
     hemp_element_p rhs = exprs.rhs;
 
-    // debugging
-    hemp_text_append_cstr(text, "(");
-
-    if (lhs && lhs->type->text) {
-        lhs->type->text(lhs, context, output);
-    }
-    else 
-        hemp_text_append_cstr(text, "[LHS]");
-        
-    hemp_text_append_cstr(text, " ");
+    lhs->type->source(lhs, context, output);
+    hemp_text_append_cstr(text, HEMP_STR_SPACE);
     hemp_text_append_cstrn(text, element->token, element->length);
-    hemp_text_append_cstr(text, " ");
+    hemp_text_append_cstr(text, HEMP_STR_SPACE);
 
-    if (rhs && rhs->type->text)
-        rhs->type->text(rhs, context, output);
-    else 
-        hemp_text_append_cstr(text, "[RHS]");
-
-    hemp_text_append_cstr(text, ")");
+    rhs->type->source(rhs, context, output);
 
     return output;
 }
-
-HEMP_OUTPUT_FUNC(OLD_hemp_element_binary_text) {
-    debug_call("hemp_element_binary_text()\n");
-
-    hemp_text_p text;
-
-    hemp_prepare_output(output, text, 0);
-
-    struct hemp_binary_s exprs = element->args.binary;
-    hemp_element_p lhs = exprs.lhs;
-    hemp_element_p rhs = exprs.rhs;
-
-    // debugging
-    hemp_text_append_cstr(text, "(");
-
-    if (lhs && lhs->type->text) {
-        lhs->type->text(lhs, context, output);
-    }
-    else 
-        hemp_text_append_cstr(text, "[LHS]");
-        
-    hemp_text_append_cstr(text, " ");
-    hemp_text_append_cstrn(text, element->token, element->length);
-    hemp_text_append_cstr(text, " ");
-
-    if (rhs && rhs->type->text)
-        rhs->type->text(rhs, context, output);
-    else 
-        hemp_text_append_cstr(text, "[RHS]");
-
-    hemp_text_append_cstr(text, ")");
-
-    return output;
-}
-
 
 
 /*--------------------------------------------------------------------------

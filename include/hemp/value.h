@@ -7,6 +7,9 @@
 #include <hemp/context.h>
 
 
+HEMP_DO_INLINE hemp_cstr_p hemp_identity_name(hemp_int_t id);
+
+
 /*--------------------------------------------------------------------------
  * Data structures
  *--------------------------------------------------------------------------*/
@@ -111,7 +114,7 @@ struct hemp_vtype_s {
 #define HEMP_IDENT_BIT_COMPARE  0x10
 #define HEMP_IDENT_BIT_EQUAL    0x20
 
-#define HEMP_IDENT_NOT          0x0
+#define HEMP_IDENT_NOT          0x00
 #define HEMP_IDENT_MISSING_ID   (HEMP_IDENT_BIT_UNDEF)
 #define HEMP_IDENT_NOTHING_ID   (HEMP_IDENT_BIT_UNDEF   | HEMP_IDENT_BIT_ALT)
 #define HEMP_IDENT_FALSE_ID     (HEMP_IDENT_BIT_BOOLEAN)
@@ -141,9 +144,10 @@ struct hemp_vtype_s {
 #define HEMP_IS_AFTER(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_AFTER_ID)
 
 /* a global array of vtables for each of the core types */
-extern const struct hemp_vtype_s hemp_global_vtypes[HEMP_TYPE_MASK];
+extern const struct hemp_vtype_s hemp_global_vtypes[16];
 #define HEMP_VTABLE(v)          (hemp_global_vtypes[HEMP_TYPE_ID(v)])
-#define HEMP_TYPE_NAME(v)       (HEMP_VTABLE(v).name)
+#define HEMP_IDENT_NAME(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
+#define HEMP_TYPE_NAME(v)       (HEMP_IS_IDENT(v) ? HEMP_IDENT_NAME(v) : HEMP_VTABLE(v).name)
 
 extern const hemp_value_t HempMissing;
 extern const hemp_value_t HempNothing;

@@ -1,5 +1,31 @@
 #include <hemp/scanner.h>
 
+hemp_scan_pos_p
+hemp_scan_pos_init(HEMP_SCAN_ARGS) {
+    hemp_scan_pos_p scan_pos = (hemp_scan_pos_p) hemp_mem_alloc(
+        sizeof(struct hemp_scan_pos_s)
+    );
+
+    if (! scan_pos)
+        hemp_mem_fail("scanner position");
+    
+    scan_pos->tmpl    = tmpl;
+    scan_pos->tag     = tag;
+    scan_pos->start   = start;
+    scan_pos->pos     = pos;
+    scan_pos->current = *srcptr;
+    scan_pos->symbol  = symbol;
+
+    return scan_pos;
+}
+
+
+void
+hemp_scan_pos_free(
+    hemp_scan_pos_p scan_pos
+) {
+    hemp_mem_free(scan_pos);
+}
 
 
 hemp_bool_t
@@ -27,7 +53,7 @@ hemp_scan_text(
         debug_scan("\n%d (%02d) : ", line, src - text);
 
         if ((pnode = outhead[(hemp_char_t) *src % HEMP_PTREE_SIZE])) {
-            debug_yellow("OUTLINE:%c", *src);
+            debug_parse("OUTLINE:%c", *src);
             tagstr = src;
             
 //          if ((tag = hemp_scan_tag_start(pnode, &src))) {
@@ -58,7 +84,7 @@ hemp_scan_text(
                 break;
             }
             else if ((pnode = inhead[(hemp_char_t) *src % HEMP_PTREE_SIZE])) {
-                debug_yellow("INLINE:%c", *src);
+                debug_parse("INLINE:%c", *src);
 
                 tagstr = src;
 
@@ -101,7 +127,7 @@ hemp_scan_text(
     
     hemp_elements_eof(elements, pos);
 
-#if DEBUG > 100
+#if DEBUG & DEBUG_PARSE
     hemp_elements_dump(elements);
 #endif
 //  hemp_elements_free(elements);

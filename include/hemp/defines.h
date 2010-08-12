@@ -27,9 +27,16 @@
 /* short strings */
 #define HEMP_STR_TRUE       "True"
 #define HEMP_STR_FALSE      "False"
+#define HEMP_STR_BEFORE     "Before"
+#define HEMP_STR_EQUAL      "Equal"
+#define HEMP_STR_AFTER      "After"
+#define HEMP_STR_MISSING    "Missing"
+#define HEMP_STR_NOTHING    "Nothing"
+#define HEMP_STR_UNKNOWN    "Unknown"
 #define HEMP_STR_BLANK      ""
 #define HEMP_STR_SPACE      " "
 #define HEMP_STR_DOT        "."
+#define HEMP_STR_QUOTED     "quoted string"
 
 /* format strings */
 #define HEMP_FMT_INT        "%d"
@@ -71,6 +78,9 @@
 #define HEMP_BE_HIDDEN      0x0008  /* generates no output                  */
 #define HEMP_BE_SOURCE      0x0010  /* source text can yield output text    */
 #define HEMP_BE_STATIC      0x0020  /* element output is pre-defined        */
+#define HEMP_BE_PREFIX      0x0100  /* element is a prefix operator         */
+#define HEMP_BE_INFIX       0x0200  /* element is an infix operator         */
+#define HEMP_BE_POSTFIX     0x0400  /* element is a postfix operator        */
 #define HEMP_BE_EOF         0x8000  /* special marker for end of file/text  */
 
 

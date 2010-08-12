@@ -68,18 +68,6 @@ extern hemp_symbol_p HempSymbolBlock;
  * macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_element_null(e) \
-    hemp_element_free(e);    \
-    e = NULL;
-
-#define hemp_parse_expr(ep, sc, pr, fr)     \
-    (hemp_element_p) (*ep)->type->expr(ep, sc, pr, fr)
-
-#define hemp_parse_infix(ep, sc, pr, fr, lhs)           \
-    ((*ep)->type->infix)                                \
-        ? (*ep)->type->infix(ep, sc, pr, fr, lhs)       \
-        : lhs
-
 #define hemp_set_flag(item, flag) \
     item->flags |= flag
 
@@ -98,31 +86,50 @@ extern hemp_symbol_p HempSymbolBlock;
 #define hemp_go_next(ep) \
     *ep = (*ep)->next
 
-#define hemp_skip_while(ep, flag)               \
-    while( hemp_has_next(ep)                    \
-        && hemp_has_flag((*ep)->type, flag) )   \
+#define hemp_skip_while(ep, flag)                       \
+    while( hemp_has_next(ep)                            \
+        && hemp_has_flag((*ep)->type, flag) )           \
             hemp_go_next(ep);
 
-#define hemp_skip_whitespace(ep)                \
+#define hemp_skip_whitespace(ep)                        \
        hemp_skip_while(ep, HEMP_BE_WHITESPACE)
        
-#define hemp_skip_separator(ep)                 \
+#define hemp_skip_separator(ep)                         \
        hemp_skip_while(ep, HEMP_BE_SEPARATOR)
 
-#define hemp_skip_terminator(ep)                \
+#define hemp_skip_terminator(ep)                        \
        hemp_skip_while(ep, HEMP_BE_TERMINATOR)
 
 #define hemp_at_eof(ep) \
     (*ep)->type == HempSymbolEof
 
+#define hemp_parse_expr(ep, sc, pr, fr)                 \
+    (hemp_element_p) (*ep)->type->expr(ep, sc, pr, fr)
 
-#define hemp_prepare_output(output, text, length)   \
-    if (HEMP_IS_UNDEF(output)) {                    \
-        text   = hemp_text_init(length);            \
-        output = HEMP_TEXT_VAL(text);               \
-    }                                               \
-    else {                                          \
-        text   = HEMP_VAL_TEXT(output);             \
+#define hemp_parse_infix(ep, sc, pr, fr, lhs)           \
+    ((*ep)->type->infix)                                \
+        ? (*ep)->type->infix(ep, sc, pr, fr, lhs)       \
+        : lhs
+
+//#define hemp_parse_infix_rhs(self, ep, sc, pr, fr)      \
+//    hemp_go_next(ep);                                   \
+//    self->args.binary.rhs = hemp_parse_expr(            \
+//        ep, sc, self->type->lprec, 1                    \
+//    );                                                  \
+//    if (! self->args.binary.rhs)                        \
+//        hemp_fatal(                                     \
+//            "missing expression on rhs of %s\n",        \
+//            self->type->start                           \
+//        );
+//
+
+#define hemp_prepare_output(output, text, length)       \
+    if (HEMP_IS_UNDEF(output)) {                        \
+        text   = hemp_text_init(length);                \
+        output = HEMP_TEXT_VAL(text);                   \
+    }                                                   \
+    else {                                              \
+        text   = HEMP_VAL_TEXT(output);                 \
     }
 
 /*--------------------------------------------------------------------------
@@ -156,6 +163,8 @@ hemp_list_p     hemp_element_parse_exprs(HEMP_PARSE_ARGS);
 
 HEMP_PARSE_FUNC(hemp_element_parse_block);
 HEMP_PARSE_FUNC(hemp_element_parse_expr);
+HEMP_OUTPUT_FUNC(hemp_element_binary_source);
+
 
 
 /*--------------------------------------------------------------------------
@@ -169,6 +178,7 @@ HEMP_OUTPUT_FUNC(hemp_element_not_text);
 HEMP_VALUE_FUNC(hemp_element_not_number);
 HEMP_VALUE_FUNC(hemp_element_not_integer);
 HEMP_VALUE_FUNC(hemp_element_not_boolean);
+HEMP_VALUE_FUNC(hemp_element_not_compare);
 
 
 /*--------------------------------------------------------------------------
@@ -183,6 +193,7 @@ HEMP_INFIX_FUNC(hemp_element_next_infix);
  * expression parsing methods
  *--------------------------------------------------------------------------*/
 
+HEMP_PARSE_FUNC(hemp_element_parse_prefix);
 HEMP_INFIX_FUNC(hemp_element_parse_infix_left);
 HEMP_INFIX_FUNC(hemp_element_parse_infix_right);
 
@@ -198,13 +209,50 @@ HEMP_VALUE_FUNC(hemp_element_literal_number);
 HEMP_VALUE_FUNC(hemp_element_literal_integer);
 HEMP_VALUE_FUNC(hemp_element_literal_boolean);
 
+HEMP_SYMBOL_FUNC(hemp_element_word_symbol);
+
 
 /*--------------------------------------------------------------------------
- * comments
+ * number/integer elements
  *--------------------------------------------------------------------------*/
 
+HEMP_SYMBOL_FUNC(hemp_element_number_symbol);
+HEMP_PARSE_FUNC(hemp_element_number_expr);
+HEMP_OUTPUT_FUNC(hemp_element_number_text);
+HEMP_VALUE_FUNC(hemp_element_number_number);
+HEMP_VALUE_FUNC(hemp_element_number_integer);
+HEMP_VALUE_FUNC(hemp_element_number_boolean);
+HEMP_VALUE_FUNC(hemp_element_number_compare);
+
+HEMP_SYMBOL_FUNC(hemp_element_integer_symbol);
+HEMP_OUTPUT_FUNC(hemp_element_integer_text);
+HEMP_VALUE_FUNC(hemp_element_integer_number);
+HEMP_VALUE_FUNC(hemp_element_integer_integer);
+HEMP_VALUE_FUNC(hemp_element_integer_boolean);
+HEMP_VALUE_FUNC(hemp_element_integer_compare);
+
+
+/*--------------------------------------------------------------------------
+ * whitespace, comments, etc
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_space_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_comment_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_tag_start_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_tag_end_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_eof_symbol);
+
 HEMP_SCAN_FUNC(hemp_element_comment_scanner);
+HEMP_PARSE_FUNC(hemp_element_space_parse_expr);
+HEMP_OUTPUT_FUNC(hemp_element_eof_text);
+
+
+/*--------------------------------------------------------------------------
+ * text elements
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_text_symbol);
+HEMP_PARSE_FUNC(hemp_element_text_expr);
 
 
 /*--------------------------------------------------------------------------
@@ -221,79 +269,109 @@ HEMP_OUTPUT_FUNC(hemp_element_quoted_text);
 
 
 /*--------------------------------------------------------------------------
- * boolean elements
+ * boolean operators
  *--------------------------------------------------------------------------*/
 
-HEMP_OUTPUT_FUNC(hemp_element_boolop_text);
+HEMP_OUTPUT_FUNC(hemp_element_boolean_text);
+HEMP_SYMBOL_FUNC(hemp_element_boolean_symbol);
+
+HEMP_SYMBOL_FUNC(hemp_element_boolean_not_symbol);
+HEMP_VALUE_FUNC(hemp_element_boolean_not_value);
+
+HEMP_SYMBOL_FUNC(hemp_element_boolean_and_symbol);
+HEMP_VALUE_FUNC(hemp_element_boolean_and_value);
+
+HEMP_SYMBOL_FUNC(hemp_element_boolean_or_symbol);
+HEMP_VALUE_FUNC(hemp_element_boolean_or_value);
+
 
 
 /*--------------------------------------------------------------------------
- * number elements
+ * generic element comparison functions
  *--------------------------------------------------------------------------*/
 
-HEMP_PARSE_FUNC(hemp_element_number_expr);
+HEMP_SYMBOL_FUNC(hemp_element_compare_symbol);
+HEMP_OUTPUT_FUNC(hemp_element_compare_text);
+HEMP_VALUE_FUNC(hemp_element_compare_integer);
 
-HEMP_OUTPUT_FUNC(hemp_element_number_text);
-HEMP_VALUE_FUNC(hemp_element_number_number);
-HEMP_VALUE_FUNC(hemp_element_number_integer);
-HEMP_VALUE_FUNC(hemp_element_number_boolean);
+HEMP_SYMBOL_FUNC(hemp_element_compare_equal_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_compare_not_equal_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_compare_before_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_compare_not_before_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_compare_after_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_compare_not_after_symbol);
 
-HEMP_OUTPUT_FUNC(hemp_element_integer_text);
-HEMP_VALUE_FUNC(hemp_element_integer_number);
-HEMP_VALUE_FUNC(hemp_element_integer_integer);
-HEMP_VALUE_FUNC(hemp_element_integer_boolean);
+HEMP_VALUE_FUNC(hemp_element_compare_equal_value);
+HEMP_VALUE_FUNC(hemp_element_compare_not_equal_value);
+HEMP_VALUE_FUNC(hemp_element_compare_before_value);
+HEMP_VALUE_FUNC(hemp_element_compare_not_before_value);
+HEMP_VALUE_FUNC(hemp_element_compare_after_value);
+HEMP_VALUE_FUNC(hemp_element_compare_not_after_value);
 
 
 /*--------------------------------------------------------------------------
  * number operator elements
  *--------------------------------------------------------------------------*/
 
+HEMP_SYMBOL_FUNC(hemp_element_numop_symbol);
 HEMP_OUTPUT_FUNC(hemp_element_numop_text);
 HEMP_VALUE_FUNC(hemp_element_numop_integer);
+HEMP_VALUE_FUNC(hemp_element_numop_boolean);
 
-HEMP_SYMBOL_FUNC(hemp_element_numop_plus_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_plus_value);
+HEMP_SYMBOL_FUNC(hemp_element_number_plus_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_minus_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_power_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_multiply_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_divide_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_divint_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_modulus_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_compare_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_equal_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_not_equal_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_before_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_not_before_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_not_after_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_number_after_symbol);
 
-HEMP_SYMBOL_FUNC(hemp_element_numop_minus_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_minus_value);
-
-HEMP_SYMBOL_FUNC(hemp_element_numop_power_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_power_value);
-HEMP_SYMBOL_FUNC(hemp_element_numop_multiply_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_multiply_value);
-HEMP_SYMBOL_FUNC(hemp_element_numop_divide_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_divide_value);
-HEMP_SYMBOL_FUNC(hemp_element_numop_divint_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_divint_value);
-HEMP_SYMBOL_FUNC(hemp_element_numop_modulus_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_modulus_value);
-
-HEMP_SYMBOL_FUNC(hemp_element_numop_compare_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_compare_value);
-HEMP_SYMBOL_FUNC(hemp_element_numop_equal_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_equal_value);
-HEMP_SYMBOL_FUNC(hemp_element_numop_not_equal_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_not_equal_value);
-HEMP_SYMBOL_FUNC(hemp_element_numop_less_than_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_less_than_value);
-HEMP_SYMBOL_FUNC(hemp_element_numop_less_equal_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_less_equal_value);
-HEMP_SYMBOL_FUNC(hemp_element_numop_more_than_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_more_than_value);
-HEMP_SYMBOL_FUNC(hemp_element_numop_more_equal_symbol);
-HEMP_VALUE_FUNC(hemp_element_numop_more_equal_value);
-
+HEMP_VALUE_FUNC(hemp_element_number_plus_value);
+HEMP_VALUE_FUNC(hemp_element_number_minus_value);
+HEMP_VALUE_FUNC(hemp_element_number_power_value);
+HEMP_VALUE_FUNC(hemp_element_number_multiply_value);
+HEMP_VALUE_FUNC(hemp_element_number_divide_value);
+HEMP_VALUE_FUNC(hemp_element_number_divint_value);
+HEMP_VALUE_FUNC(hemp_element_number_modulus_value);
+HEMP_VALUE_FUNC(hemp_element_number_compare_value);
 
 
 /*--------------------------------------------------------------------------
- * function prototypes for specific element types
+ * text operator elements
  *--------------------------------------------------------------------------*/
 
-HEMP_PARSE_FUNC(hemp_element_space_parse_expr);
+HEMP_SYMBOL_FUNC(hemp_element_textop_symbol);
+HEMP_VALUE_FUNC(hemp_element_textop_number);
+HEMP_VALUE_FUNC(hemp_element_textop_integer);
+HEMP_VALUE_FUNC(hemp_element_textop_boolean);
+
+HEMP_SYMBOL_FUNC(hemp_element_text_concat_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_text_compare_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_text_equal_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_text_not_equal_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_text_before_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_text_not_before_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_text_after_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_text_not_after_symbol);
+
+HEMP_OUTPUT_FUNC(hemp_element_text_concat_value);
+HEMP_VALUE_FUNC(hemp_element_text_compare_value);
+
+
+/*--------------------------------------------------------------------------
+ * block element
+ *--------------------------------------------------------------------------*/
+
+HEMP_ELEMENT_FUNC(hemp_element_block_symbol);
 HEMP_OUTPUT_FUNC(hemp_element_block_source);
 HEMP_OUTPUT_FUNC(hemp_element_block_text);
-HEMP_OUTPUT_FUNC(hemp_element_binary_text);
-HEMP_OUTPUT_FUNC(hemp_element_eof_text);
 
 
 void

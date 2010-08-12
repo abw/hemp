@@ -1,12 +1,23 @@
 #include <hemp/value.h>
 
 
-const struct hemp_vtype_s hemp_global_vtypes[] = {
-    { 0x0, "number"  },
-    { 0x1, "integer" },
-    { 0x2, "string"  },
-    { 0x3, "-- RESERVED 0x03" },
-    { 0x4, "text"  }
+const struct hemp_vtype_s hemp_global_vtypes[16] = {
+    { 0x0, "Number"          },
+    { 0x1, "Integer"         },
+    { 0x2, "String"          },
+    { 0x3, "-- RESERVED 0x3" },
+    { 0x4, "Text"            },
+    { 0x5, "-- RESERVED 0x5" },
+    { 0x6, "-- RESERVED 0x6" },
+    { 0x7, "-- RESERVED 0x7" },
+    { 0x8, "-- RESERVED 0x8" },
+    { 0x9, "-- RESERVED 0x9" },
+    { 0xA, "-- RESERVED 0xA" },
+    { 0xB, "-- RESERVED 0xB" },
+    { 0xC, "-- RESERVED 0xC" },
+    { 0xD, "-- RESERVED 0xD" },
+    { 0xE, "-- RESERVED 0xD" },
+    { 0xF, "Identity"        }
 };
 
 const hemp_value_t 
@@ -36,6 +47,27 @@ HempEqual = (hemp_value_t)
 const hemp_value_t 
 HempAfter = (hemp_value_t) 
     ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_AFTER_ID);
+
+
+/*--------------------------------------------------------------------------
+ * return the name of special identity values
+ *--------------------------------------------------------------------------*/
+
+HEMP_DO_INLINE hemp_cstr_p
+hemp_identity_name(
+    hemp_int_t id
+) {
+    switch (id) {
+        case HEMP_IDENT_MISSING_ID: return HEMP_STR_MISSING;
+        case HEMP_IDENT_NOTHING_ID: return HEMP_STR_NOTHING;
+        case HEMP_IDENT_FALSE_ID:   return HEMP_STR_FALSE;
+        case HEMP_IDENT_TRUE_ID:    return HEMP_STR_TRUE;
+        case HEMP_IDENT_EQUAL_ID:   return HEMP_STR_EQUAL;
+        case HEMP_IDENT_BEFORE_ID:  return HEMP_STR_BEFORE;
+        case HEMP_IDENT_AFTER_ID:   return HEMP_STR_AFTER;
+        default:                    return HEMP_STR_UNKNOWN;
+    }
+}
 
 
 /*--------------------------------------------------------------------------

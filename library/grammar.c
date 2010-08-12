@@ -88,11 +88,11 @@ hemp_grammar_add_symbol(
      * as one single token, not two instances of '+'
      */
 
-    if (! hemp_cstr_wordlike(start)) {
+//  if (! hemp_cstr_wordlike(start)) {
         hemp_ptree_store(
             grammar->operators, start, (hemp_mem_p) symbol
         );
-    }
+//  }
 
     return symbol;
 }

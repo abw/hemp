@@ -39,5 +39,8 @@ void            hemp_source_free( hemp_source_p );
         : source->scheme->reader(source)    \
 )                                           
 
+#define hemp_source_name(source)            \
+    ((hemp_cstr_p) source->scheme->namer(source))
+
 
 #endif /* HEMP_SOURCE_H */

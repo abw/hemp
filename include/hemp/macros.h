@@ -172,6 +172,8 @@
 #define HEMP_ELEMENT(name, constructor)     \
     hemp_register_element(hemp, name, (hemp_actor_f) constructor);
 
+/* err... I think this does the same thing as HEMP_SYMBOL_FUNC() */
+
 #define HEMP_ELEMENT_FUNC(f)                \
     HEMP_NO_INLINE hemp_symbol_p f(         \
         hemp_p          hemp,               \
@@ -209,13 +211,24 @@
         HEMP_SCAN_ARGS                      \
     )
 
+hemp_scan_pos_p hemp_scan_pos_init(HEMP_SCAN_ARGS);
+hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
+
 #define HEMP_SCAN_ERROR(type,...)           \
-    hemp_scan_error(                        \
+    hemp_error_throw(                       \
         tmpl->dialect->hemp,                \
-        HEMP_SCAN_ARG_NAMES,                \
-        HEMP_ERROR_##type,                  \
-        __VA_ARGS__                         \
+        hemp_error_scan_pos(                \
+            hemp_error_message(             \
+                tmpl->dialect->hemp,        \
+                HEMP_ERROR_##type,          \
+                __VA_ARGS__                 \
+            ),                              \
+            hemp_scan_pos_init(             \
+                HEMP_SCAN_ARG_NAMES         \
+            )                               \
+        )                                   \
     )
+
 
 
 /*--------------------------------------------------------------------------
@@ -252,12 +265,56 @@
     hemp_element_p  lhs 
 
 #define HEMP_INFIX_ARG_NAMES                \
-        elemptr, scope, precedence, force, lhs
+    elemptr, scope, precedence, force, lhs
 
 #define HEMP_INFIX_FUNC(f)                  \
     HEMP_DO_INLINE hemp_element_p f(        \
         HEMP_INFIX_ARGS                     \
     )
+
+
+/* operator precedence */
+
+#define HEMP_PREC_DBG(type, tprec, lhs, prec, compare, action)              \
+    debug_parse(                                                            \
+        "precedence of %s (%d) is %s than %s (%d), %s\n",                   \
+        type->name, tprec, compare,                                         \
+        lhs->type->name, prec, action                                       \
+    )
+
+#define HEMP_LPREC_DBG(type, lhs, prec, compare, action)                    \
+    HEMP_PREC_DBG(type, type->lprec, lhs, prec, compare, action)
+
+#define HEMP_RPREC_DBG(type, lhs, prec, compare, action)                    \
+    HEMP_PREC_DBG(type, type->rprec, lhs, prec, compare, action)
+
+
+#define HEMP_PREFIX_PRECEDENCE                                              \
+    if (precedence && type->rprec < precedence) {                           \
+        HEMP_RPREC_DBG(type, lhs, precedence, "not more", "returning lhs"); \
+        return lhs;                                                         \
+    }                                                                       \
+    else {                                                                  \
+        HEMP_RPREC_DBG(type, lhs, precedence, "less", "continuing");        \
+    }
+
+#define HEMP_INFIX_LEFT_PRECEDENCE                                          \
+    if (precedence && type->lprec <= precedence) {                          \
+        HEMP_LPREC_DBG(type, lhs, precedence, "not more", "returning lhs"); \
+        return lhs;                                                         \
+    }                                                                       \
+    else {                                                                  \
+        HEMP_LPREC_DBG(type, lhs, precedence, "less", "continuing");        \
+    }
+
+#define HEMP_INFIX_RIGHT_PRECEDENCE                                         \
+    if (precedence && type->lprec < precedence) {                           \
+        HEMP_LPREC_DBG(type, lhs, precedence, "less", "returning lhs");     \
+        return lhs;                                                         \
+    }                                                                       \
+    else {                                                                  \
+        HEMP_LPREC_DBG(type, lhs, precedence, "not less", "continuing");    \
+    }
 
 
 /*--------------------------------------------------------------------------

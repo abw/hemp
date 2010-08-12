@@ -5,6 +5,7 @@
 #define TEST_STOP     "-- stop"
 #define TEST_MARKER   "-- test"
 #define EXPECT_MARKER "-- expect"
+#define ERROR_MARKER  "-- error"
 
 
 void test_scanner();
@@ -16,7 +17,7 @@ main(
     char **argv, 
     char **env
 ) {
-    plan_tests(86);
+    plan_tests(172);
     test_scanner();
     return exit_status();
 }
@@ -26,8 +27,62 @@ void test_scanner() {
     test_script( "comments" );
     test_script( "numbers" );
     test_script( "quotes" );
-    test_script( "numops" );
     test_script( "boolops" );
+    test_script( "textops" );
+    test_script( "numops" );
+}
+
+hemp_cstr_p find_marker(
+    hemp_cstr_p src,
+    hemp_cstr_p marker
+) {
+    hemp_cstr_p mark;
+
+    if ((mark = strstr(src, marker))) {
+        /* skip to the end of the line */
+        hemp_cstr_to_next_line(&mark);
+    }
+    return mark;
+}
+
+
+void check_output(
+    hemp_cstr_p name,
+    hemp_text_p output,
+    hemp_cstr_p expect
+) {
+    hemp_cstr_chomp(output->string);
+    hemp_cstr_chomp(expect);
+
+    if (hemp_cstr_eq(output->string, expect)) {
+//      printf("EXPECT: [%s%s%s]\n", ANSI_YELLOW, expect, ANSI_RESET);
+//      printf("OUTPUT: [%s%s%s]\n", ANSI_GREEN, output->string, ANSI_RESET);
+        ok(1, "%s output matches expected", name);
+    }
+    else {
+        printf("EXPECT: [%s%s%s]\n", ANSI_YELLOW, expect, ANSI_RESET);
+        printf("OUTPUT: [%s%s%s]\n", ANSI_RED, output->string, ANSI_RESET);
+        ok(0, "%s output does not match expected", name);
+    }
+}
+
+
+void check_error(
+    hemp_cstr_p name,
+    hemp_cstr_p error,
+    hemp_cstr_p expect
+) {
+    hemp_cstr_chomp(error);
+    hemp_cstr_chomp(expect);
+
+    if (hemp_cstr_eq(error, expect)) {
+        ok(1, "%s error matches expected", name);
+    }
+    else {
+        printf("EXPECT ERROR: [%s%s%s]\n", ANSI_YELLOW, expect, ANSI_RESET);
+        printf("ACTUAL ERROR: [%s%s%s]\n", ANSI_RED, error, ANSI_RESET);
+        ok(0, "%s error does not match expected", name);
+    }
 }
 
 
@@ -39,9 +94,10 @@ void test_script(
     hemp_cstr_p     dir  = hemp_filesystem_join_path(TESTDIR, "scripts");
     hemp_cstr_p     path = hemp_filesystem_join_path(dir, script);
     hemp_cstr_p     text = hemp_filesystem_read_file(path);
-    hemp_cstr_p     test, name, expect, end;
+    hemp_cstr_p     test, name, expect, error, end;
     hemp_list_p     list;
     hemp_template_p tmpl;
+    hemp_text_p     output;
     hemp_size_t     n;
 
     HEMP_TRY;
@@ -53,7 +109,7 @@ void test_script(
     }
 
     if ((test = strstr(text, TEST_START))) {
-        test += strlen(TEST_START);
+        hemp_cstr_to_next_line(&test);
     }
     else {
         test = text;
@@ -93,51 +149,50 @@ void test_script(
         if ((expect = strstr(test, EXPECT_MARKER))) {
             *expect = '\0';
             expect += strlen(EXPECT_MARKER);
-            while   (*expect != HEMP_LF && *expect != HEMP_CR)
-                    { expect++; }
-            do      { expect++; }
-            while   (*expect == HEMP_LF || *expect == HEMP_CR);
-//            expect++;
+            hemp_cstr_to_next_line(&expect);
+        }
+
+        if ( (error = strstr(test, ERROR_MARKER))
+          || (expect && (error = strstr(expect, ERROR_MARKER )))) {
+            *error = '\0';
+            error += strlen(ERROR_MARKER);
+            hemp_cstr_to_next_line(&error);
         }
 
         hemp_cstr_chomp(test);
 
-//      printf(">> test %d: %s\n", n, name);
-
+//        printf(">> test %u: %s\n", n, name);
 //        if (expect)
 //            printf(">> expect [%s]\n", expect);
+//        if (error)
+//            printf(">> error [%s]\n", error);
 
         HEMP_TRY;
+
             tmpl = hemp_template(
                 hemp,
                 HEMP_TT3,
                 HEMP_TEXT, 
                 test
             );
+            output = hemp_template_render(tmpl);
+            ok( output, "%s rendered", name);
+
+            if (expect)
+                check_output(name, output, expect);
+            else if (error)
+                fail("expected error but got output");
+
         HEMP_CATCH_ALL;
-            hemp_fatal("error: %s", hemp->error->message);
+            output = hemp_error_text(hemp->error);
+
+            if (error)
+                check_error(name, output->string, error);
+            else
+                fail("error: %s", output->string);
+
         HEMP_END;
 
-//      printf("rendering...\n");
-        hemp_text_p output = hemp_template_render(tmpl);
-        ok( output, "%s rendered", name);
-
-        if (expect) {
-            hemp_cstr_chomp(output->string);
-            hemp_cstr_chomp(expect);
-
-            if (hemp_cstr_eq(output->string, expect)) {
-//              printf("EXPECT: [%s%s%s]\n", ANSI_YELLOW, expect, ANSI_RESET);
-//              printf("OUTPUT: [%s%s%s]\n", ANSI_GREEN, output->string, ANSI_RESET);
-                ok(1, "%s output matches expected", name);
-            }
-            else {
-                printf("EXPECT: [%s%s%s]\n", ANSI_YELLOW, expect, ANSI_RESET);
-                printf("OUTPUT: [%s%s%s]\n", ANSI_RED, output->string, ANSI_RESET);
-                ok(0, "%s output does not match expected", name);
-            }
-        }
-        
         hemp_text_free(output);
     }
 

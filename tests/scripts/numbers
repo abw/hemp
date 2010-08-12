@@ -18,3 +18,5 @@
 
 -- test integer overflow
 [% 123123871263876187236123876 %]
+-- error
+Number is too large: 123123871263876187236123876 %]

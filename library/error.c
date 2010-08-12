@@ -1,4 +1,6 @@
 #include <hemp/core.h>
+#include <hemp/scanner.h>
+//#include <hemp/source.h>
 
 
 hemp_error_p
@@ -14,9 +16,10 @@ hemp_error_new(
     if (number < 0 || number >= HEMP_ERROR_MAX) 
         hemp_fatal("Invalid error number: %d", number);
 
-    error->number  = number;
-    error->message = NULL;
-    error->parent  = NULL;
+    error->number   = number;
+    error->message  = NULL;
+    error->parent   = NULL;
+    error->scan_pos = NULL;
 
     return error;
 }
@@ -72,6 +75,16 @@ hemp_error_initfv(
 }
 
 
+hemp_error_p
+hemp_error_scan_pos(
+    hemp_error_p    error,
+    hemp_scan_pos_p scan_pos
+) {
+    error->scan_pos = scan_pos;
+    return error;
+}
+
+
 void
 hemp_error_free(
     hemp_error_p error
@@ -82,5 +95,9 @@ hemp_error_free(
     if (error->message)
         free(error->message);
 
+    if (error->scan_pos)
+        hemp_scan_pos_free(error->scan_pos);
+
     hemp_mem_free(error);
 }
+

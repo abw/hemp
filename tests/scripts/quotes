@@ -32,8 +32,19 @@ Some text [% 123 %] more text [% '456' %]
 -- expect --
 Some text 123 more text 456
 
-
 -- stop 
+
+# This test kinda passes, in that an error is output and we have some position
+# information.  But the error message needs cleaning up.
+
+-- test unterminated single quoted string
+[% 'oops %] oh dear!
+-- error
+Hemp syntax error at line 1 of "unterminated single quoted string" test:
+    Error: Unterminated quoted string: 'oops 
+   Source: [% 'oops %] oh dear!
+              ^ here
+
 # NOTE: the next test only passes when a dedicated q<< >> quote operator
 # is forced into the grammar.  Need to figure out a nice way for test 
 # scripts to add these things, but that all depends on a general 
@@ -45,8 +56,6 @@ Some text 123 more text 456
 -- expect
 foo foo'boo'bar
 
--- test unterminated single quoted string
-TODO: [%# 'oops %]
 
 -- test unterminated double quoted string
 TODO: [%# "cripey! %]

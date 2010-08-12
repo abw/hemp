@@ -3,6 +3,7 @@
 
 
 void test_md5();
+void test_cstr();
 void test_splits();
 void split_ok(
     hemp_list_p list,
@@ -18,9 +19,13 @@ main(
     char **argv, 
     char **env
 ) {
-    plan_tests(24);
+    plan_tests(27);
 
     test_md5();
+    hemp_mem_trace_ok();
+    hemp_mem_trace_reset();
+
+    test_cstr();
     hemp_mem_trace_ok();
     hemp_mem_trace_reset();
 
@@ -54,6 +59,15 @@ void test_md5() {
         ),
         "MD5 [%s] matches", md5.output
     );
+}
+
+
+void test_cstr() {
+    hemp_cstr_p source = "Hello world\nnext line";
+    hemp_cstr_p search = source + 6;
+    is( search, "world\nnext line", "ready to look for next line" );
+    hemp_cstr_to_next_line(&search);
+    is( search, "next line", "advanced to next line" );
 }
 
 void test_splits() {

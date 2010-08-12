@@ -66,7 +66,13 @@ hemp_source_p   hemp_source(hemp_p, hemp_cstr_p, hemp_cstr_p);
 void            hemp_init_templates(hemp_p);
 hemp_template_p hemp_template(hemp_p, hemp_cstr_p, hemp_cstr_p, hemp_cstr_p);
 
-void            hemp_throw(hemp_p, hemp_errno_e, ...);
+//void            hemp_throw(hemp_p, hemp_errno_e, ...);
+hemp_cstr_p     hemp_error_format(hemp_p, hemp_errno_e);
+hemp_error_p    hemp_error_message(hemp_p, hemp_errno_e, ...);
+hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
+void            hemp_error_throw(hemp_p, hemp_error_p);
+void            hemp_scan_error(hemp_p, HEMP_SCAN_ARGS, hemp_errno_e, ...);
+
 
 /* tag functions */
 //void            hemp_init_tags(hemp_p);

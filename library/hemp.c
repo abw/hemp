@@ -375,11 +375,10 @@ hemp_template(
  * error handling
  *--------------------------------------------------------------------------*/
 
-void 
-hemp_throw(
+hemp_cstr_p
+hemp_error_format(
     hemp_p       hemp,
-    hemp_errno_e number,
-    ...
+    hemp_errno_e number
 ) {
     if (number < 0 || number >= HEMP_ERROR_MAX) 
         hemp_fatal("Invalid error number: %d", number);
@@ -392,14 +391,63 @@ hemp_throw(
 
     if (! format)
         hemp_fatal("No error message format for error number %d", number);
+        
+    return format;
+}
+
+
+hemp_error_p
+hemp_error_message(
+    hemp_p       hemp,
+    hemp_errno_e number,
+    ...
+) {
+    debug_call("hemp_error_message()\n");
+    hemp_cstr_p format = hemp_error_format(hemp, number);
 
     va_list args;
     va_start(args, number);
     hemp_error_p error = hemp_error_initfv(number, format, args);
     va_end(args);
 
+    return error;
+}
+
+
+hemp_text_p
+hemp_error_text(
+    hemp_error_p error
+) {
+    hemp_scan_pos_p sp = error->scan_pos;
+    hemp_text_p text;
+    hemp_cstr_p buffer;
+    
+    if (sp) {
+        asprintf(
+            &buffer, 
+            "error at pos %d of %s:\n   Error: %s\n  Source: %s",
+            sp->pos, hemp_source_name(sp->tmpl->source), error->message,
+            sp->start
+        );
+        text = hemp_text_from_cstr(buffer);
+    }
+    else {
+        text = hemp_text_from_cstr(error->message);
+    }
+    
+    return text;
+}
+
+
+void 
+hemp_error_throw(
+    hemp_p       hemp,
+    hemp_error_p error
+) {
+    debug_call("hemp_error_throw()\n");
     error->parent = hemp->error;
     hemp->error = error;
-
-    HEMP_THROW(number);
+    HEMP_THROW(error->number);
 }
+
+

@@ -12,7 +12,12 @@ HEMP_PARSE_FUNC(hemp_element_literal_expr) {
     if (hemp_has_next(elemptr))
         hemp_go_next(elemptr);
 
-    return element;
+    hemp_skip_whitespace(elemptr);
+
+    return hemp_parse_infix(
+        elemptr, scope, precedence, 0,
+        element
+    );
 }
 
 

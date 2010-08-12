@@ -1,7 +1,7 @@
 An incomplete list of things TODO, in no particular order.
 
 * hemp_element_parse_block() and various other methods need access to the 
-  elements factory.  I think this should probably be encasulated in the 
+  elements factory.  I think this should probably be encapsulated in the 
   scope object.
 
 * double and single quoted strings need to check for backslashes and 
@@ -22,20 +22,22 @@ An incomplete list of things TODO, in no particular order.
 
 * Decide how to represent values and implement.  I want to try and unify as 
   much of the API between elements and values as possible.  Consider
-  nanboxing.
+  nanboxing.  UPDATE: now done using NaN boxing, but needs some completing,
+  and a few issues addressing.
 
 * This is my first time using autotools, and I'm sure I've made plenty of
   nooby mistakes.  The whole autoconf/automake/libtool setup needs cleaning
-  up, ideally by someone more familiar with the tools than me.
+  up, ideally by someone more familiar with the tools than me
 
 * Add cleanup methods for squote and dquote to release the text memory when
-  HEMP_FLAG_FIXED is not set.
+  HEMP_FLAG_FIXED is not set.  UPDATE: think that's done now.
 
 * filesystem is a quick hack... needs doing properly
 
 * Factory used named passed as argument to cache instance in hash.  We
   can't guarantee that it's statically allocated.  Previous we used the 
-  allocated name in, e.g. dialect->name
+  allocated name in, e.g. dialect->name. UPDATE: now we can use tagged 
+  values.
 
 * Figure out a nice way to implement exceptions.  Ideally we want the 
   flexibility of the Perl/Badger approach that allows a main error type to
@@ -49,27 +51,34 @@ An incomplete list of things TODO, in no particular order.
   Ideally they should be encapsulated in a grammar definition, but we also
   want the commonly used elements to be readily available.  We don't want to
   be doing a hash lookup for known elements, only for dynamically assigned
-  keywords, operators, etc.
+  keywords, operators, etc.  UPDATE: we now have a few core elements defined
+  statically and the rest are defined dynamically as grammar symbols.
  
 * Add a fallback mechanism to the various factories.  e.g. if a tt3 dialect
   is requested and not found then the fallback should call hemp_language("tt3")
   to give it a chance to load it.  Just got to be careful we don't end up in
   a deathly spiral if we then re-attempt the lookup and it fails again.
 
-* inline tag scan: make quotes, comments, etc., all standard operators.
-  Define a scan method for them and invoke it on detection.
- 
  
 -- HOT STACK --
 
+* Add compare_symbol with special text/number/integer methods to render
+  number_compare = map -1/0/+1 to HempBefore, etc
+
 * Number ops:
    - Add ++ and -- auto-increment operator
-   - make + and - work as prefix ops as well as infix ops
- 
+   - make + and - work as prefix ops as well as infix ops  (half-implemented)
+
+* Prefix boolops (not)
+
+* Text ops:
+   - text append / textify prefix 
+   - text comparison
+
 * figure out what to do with number/integer operators that return boolean
   values (e.g. less than).  Is it an error to ask for those as int/num?
   I think so...
 
-* change 'tmpl' to 'hemplate'
+* change 'tmpl' to 'hemplate'?
 
 

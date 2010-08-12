@@ -41,7 +41,7 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
             is_source = HEMP_FALSE;
         }
         if (! *++src)
-            HEMP_SCAN_ERROR(BADQUOTE,0);
+            HEMP_SCAN_ERROR(BADQUOTE, HEMP_STR_QUOTED, start);
     }
 
     /* skip over the terminating character(s) */
@@ -123,7 +123,7 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
             is_source = HEMP_FALSE;
         }
         if (! *++src)
-            HEMP_SCAN_ERROR(BADQUOTE,0);
+            HEMP_SCAN_ERROR(BADQUOTE, HEMP_STR_QUOTED, start);
     }
 
     /* skip over the terminating character(s) */

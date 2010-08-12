@@ -82,7 +82,7 @@ hemp_bool_t dump(char *format, ...);
 #  endif
 #
 #  if DEBUG & DEBUG_PARSE
-#    define debug_parse(format, ...)    debug_col(ANSI_GREEN, format, ##__VA_ARGS__)
+#    define debug_parse(format, ...)    debug_col(ANSI_YELLOW, format, ##__VA_ARGS__)
 #  else 
 #    define debug_parse(format, ...)
 #  endif

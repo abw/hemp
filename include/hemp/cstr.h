@@ -48,5 +48,9 @@ hemp_bool_t
         hemp_cstr_p str
     );
 
+void
+    hemp_cstr_to_next_line(
+        hemp_cstr_p *cstr
+    );
 
 #endif /* HEMP_CSTR_H */

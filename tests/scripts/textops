@@ -1,0 +1,106 @@
+-- test single quotes
+[% 'foo' 'bar' %]
+-- expect
+foobar
+
+-- test single quoted string concatenation
+[% 'foo' ~ 'bar' %]
+-- expect
+foobar
+
+
+-- test text equal when false 
+[% 'foo' eq 'bar' %]
+-- expect 
+False
+
+-- test text equal when true
+[% 'foo' eq 'foo' %]
+-- expect 
+True
+
+-- test text not equal when false 
+[% 'foo' ne 'foo' %]
+-- expect 
+False
+
+-- test text not equal when true
+[% 'foo' ne 'bar' %]
+-- expect 
+True
+
+-- test text less than when false 
+[% 'foo' lt 'bar' %]
+-- expect 
+False
+
+-- test text less than when true
+[% 'bar' lt 'foo' %]
+-- expect 
+True
+
+-- test text less than when equal
+[% 'bar' lt 'bar' %]
+-- expect 
+False
+
+-- test text less than or equal when false 
+[% 'foo' le 'bar' %]
+-- expect 
+False
+
+-- test text less than or equal when less
+[% 'bar' le 'foo' %]
+-- expect 
+True
+
+-- test text less than or equal when equal
+[% 'bar' le 'bar' %]
+-- expect 
+True
+
+-- test text more than when false 
+[% 'bar' gt 'foo' %]
+-- expect 
+False
+
+-- test text more than when true
+[% 'foo' gt 'bar' %]
+-- expect 
+True
+
+-- test text more than when equal
+[% 'bar' gt 'bar' %]
+-- expect 
+False
+
+-- test text more than or equal when false 
+[% 'bar' ge 'foo' %]
+-- expect 
+False
+
+-- test text more than or equal when more
+[% 'foo' ge 'bar' %]
+-- expect 
+True
+
+-- test text less than or equal when equal
+[% 'bar' ge 'bar' %]
+-- expect 
+True
+
+-- test text compare when before
+[% 'bar' cmp 'foo' %]
+-- expect 
+Before
+
+-- test text compare when equal
+[% 'foo' cmp 'foo' %]
+-- expect 
+Equal
+
+-- test text compare when after
+[% 'foo' cmp 'bar' %]
+-- expect 
+After
+

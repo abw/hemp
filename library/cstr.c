@@ -124,13 +124,35 @@ hemp_cstr_chomp(
 
 hemp_bool_t
 hemp_cstr_wordlike(
-    hemp_cstr_p str
+    hemp_cstr_p cstr
 ) {
-    while (isalnum(*str) || *str == HEMP_UNDERSCORE)
-        str++;
+    while (isalnum(*cstr) || *cstr == HEMP_UNDERSCORE)
+        cstr++;
 
     /* if we reached the end of the string then all characters are wordlike */
-    return *str
+    return *cstr
         ? HEMP_FALSE
         : HEMP_TRUE;
+}
+
+void
+hemp_cstr_to_next_line(
+    hemp_cstr_p *cstr
+) {
+    hemp_cstr_p s = *cstr;
+
+    while (*s) {
+        if (*s == HEMP_LF) {
+            s++;
+            break;
+        }
+        else if (*s == HEMP_CR) {
+            s++;
+            if (*s == HEMP_LF)
+                s++;
+            break;
+        }
+        s++;
+    }
+    *cstr = s;
 }
