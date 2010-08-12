@@ -7,8 +7,8 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core);
 HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_command);
 HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_control);
 HEMP_SYMBOLS_FUNC(hemp_element_tt3_command_symbols);
-HEMP_ELEMENT_FUNC(hemp_element_tt3_if_symbol);
-HEMP_ELEMENT_FUNC(hemp_element_tt3_TODO_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_tt3_if_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_tt3_TODO_symbol);
 
 /* see comment in language/hemp.c */
 #define DONT_OPTIMISE_ME_AWAY  asm("");

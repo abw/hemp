@@ -368,7 +368,7 @@ HEMP_VALUE_FUNC(hemp_element_text_compare_value);
  * block element
  *--------------------------------------------------------------------------*/
 
-HEMP_ELEMENT_FUNC(hemp_element_block_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_block_symbol);
 HEMP_OUTPUT_FUNC(hemp_element_block_source);
 HEMP_OUTPUT_FUNC(hemp_element_block_text);
 

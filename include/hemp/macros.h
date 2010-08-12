@@ -162,8 +162,7 @@
  * symbol (e.g. a grammar using hemp.numop.multiply will trigger a call to 
  * the provider registered for hemp.numop.*).  HEMP_ELEMENT(...) is used to
  * register a callback to construct an individual element type (e.g. 
- * hemp.numop.multiply).  The HEMP_ELEMENT_FUNC() macro can be used to 
- * declare/define the element constructor callback function.
+ * hemp.numop.multiply).
  *--------------------------------------------------------------------------*/
 
 #define HEMP_ELEMENTS(symbols)              \
@@ -171,14 +170,6 @@
 
 #define HEMP_ELEMENT(name, constructor)     \
     hemp_register_element(hemp, name, (hemp_actor_f) constructor);
-
-/* err... I think this does the same thing as HEMP_SYMBOL_FUNC() */
-
-#define HEMP_ELEMENT_FUNC(f)                \
-    HEMP_NO_INLINE hemp_symbol_p f(         \
-        hemp_p          hemp,               \
-        hemp_symbol_p   symbol              \
-    )
 
 
 /*--------------------------------------------------------------------------
