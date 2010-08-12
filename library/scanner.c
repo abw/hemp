@@ -45,7 +45,7 @@ hemp_scan_text(
                     line     = 0;
     hemp_tag_p      tag;
 
-    debug_magenta("-- source ---\n%s\n------------\n", text);
+    debug_magenta("-- source ---\n%s\n-------------\n", text);
     
     while (*src) {
         /* at start of line */
