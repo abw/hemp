@@ -36,7 +36,6 @@ check_PROGRAMS  =   action      \
 
 TESTS           = $(check_PROGRAMS)
 LDADD           = ../library/libhemp.la tap.o
-CFLAGS          = -I../include
-CPPFLAGS        = -DDEBUG=2 -DTESTDIR='"$(abs_top_srcdir)/tests"'
-#CPPFLAGS        = -DTESTDIR='"$(abs_top_srcdir)/tests"'
+CFLAGS          = @CFLAGS@ -I../include
+CPPFLAGS        = -DTESTDIR='"$(abs_top_srcdir)/tests"'
 

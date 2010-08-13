@@ -36,7 +36,6 @@
 
 #include "tap.h"
 #include "hemp/debug.h"
-#define DEBUG DEBUG_MEM
 #include "hemp/memory.h"
 
 #ifdef TAP_COLOR
@@ -477,7 +476,7 @@ hemp_mem_trace_ok(void)
         pass("all memory freed");
     }
     else if (size == -1) {
-        pass("memory checks disabled (%d)", size);
+        pass("memory checks disabled", size);
     }
     else {
         fail("memory unfreed: %u bytes", size);
