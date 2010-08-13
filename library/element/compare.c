@@ -31,7 +31,7 @@ HEMP_OUTPUT_FUNC(hemp_element_compare_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_compare_integer) {
+HEMP_EVAL_FUNC(hemp_element_compare_integer) {
     hemp_debug_call("hemp_element_compare_integer()\n");
 
     hemp_value_t value = element->type->compare(element, context);
@@ -77,7 +77,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_equal_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_compare_equal_value) {
+HEMP_EVAL_FUNC(hemp_element_compare_equal_value) {
     hemp_debug_call("hemp_element_compare_equal_value()\n");
 
     return hemp_is_equal( element->type->compare(element, context) )
@@ -97,7 +97,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_not_equal_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_compare_not_equal_value) {
+HEMP_EVAL_FUNC(hemp_element_compare_not_equal_value) {
     hemp_debug_call("hemp_element_compare_not_equal_value()\n");
 
     return hemp_is_equal( element->type->compare(element, context) )
@@ -117,7 +117,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_before_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_compare_before_value) {
+HEMP_EVAL_FUNC(hemp_element_compare_before_value) {
     hemp_debug_call("hemp_element_compare_before()\n");
 
     return hemp_is_before( element->type->compare(element, context) )
@@ -137,7 +137,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_not_before_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_compare_not_before_value) {
+HEMP_EVAL_FUNC(hemp_element_compare_not_before_value) {
     hemp_debug_call("hemp_element_compare_not_before_value()\n");
 
     return hemp_is_before( element->type->compare(element, context) )
@@ -157,7 +157,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_after_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_compare_after_value) {
+HEMP_EVAL_FUNC(hemp_element_compare_after_value) {
     hemp_debug_call("hemp_element_compare_after_value()\n");
 
     return hemp_is_after( element->type->compare(element, context) )
@@ -177,7 +177,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_not_after_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_compare_not_after_value) {
+HEMP_EVAL_FUNC(hemp_element_compare_not_after_value) {
     hemp_debug_call("hemp_element_compare_not_after_value()\n");
 
     return hemp_is_after( element->type->compare(element, context) )

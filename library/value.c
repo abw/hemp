@@ -2,8 +2,20 @@
 
 
 const struct hemp_vtype_s hemp_global_vtypes[16] = {
-    { 0x0, "Number"          },
-    { 0x1, "Integer"         },
+    {   0x0, "Number",
+        &hemp_value_number_text,
+        &hemp_value_no_op,
+        &hemp_value_number_integer,
+        &hemp_value_number_boolean,
+        &hemp_value_number_compare
+    },
+    {   0x0, "Integer",
+        &hemp_value_integer_text,
+        &hemp_value_integer_number,
+        &hemp_value_no_op,
+        &hemp_value_integer_boolean,
+        &hemp_value_integer_compare
+    },
     { 0x2, "String"          },
     { 0x3, "-- RESERVED 0x3" },
     { 0x4, "Text"            },
@@ -161,6 +173,98 @@ hemp_val_bool(hemp_value_t v) {
 //         ? hemp_is_true(v)
 //         : ({ hemp_fatal("value is not boolean"); 0 }); // shitfucks. no hemp 
 }
+
+
+
+/*--------------------------------------------------------------------------
+ * generic conversion functions
+ *--------------------------------------------------------------------------*/
+
+HEMP_VALUE_FUNC(hemp_value_no_op) {
+    return value;
+}
+
+HEMP_VALUE_FUNC(hemp_value_defined) {
+    return HempTrue;
+}
+
+HEMP_VALUE_FUNC(hemp_value_undefined) {
+    return HempFalse;
+}
+
+
+/*--------------------------------------------------------------------------
+ * number -> xxx conversion
+ *--------------------------------------------------------------------------*/
+
+HEMP_TEXT_FUNC(hemp_value_number_text) {
+    static hemp_char_t buffer[HEMP_BUFFER_SIZE];
+    hemp_text_p text;
+
+    snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, hemp_val_num(value));
+    hemp_prepare_output(output, text, strlen(buffer));
+    hemp_text_append_cstr(text, buffer);
+
+    return output;
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_number_integer) {
+    return hemp_int_val((hemp_int_t) hemp_val_num(value));
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_number_boolean) {
+    /* TODO: decide if this is the right thing to do */
+    return hemp_val_num(value) == 0.0
+        ? HempFalse
+        : HempTrue;
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_number_compare) {
+    hemp_num_t cmp = hemp_val_num(value);
+    return  cmp < 0 ? HempBefore
+        :   cmp > 0 ? HempAfter
+        :             HempEqual; 
+}
+
+
+/*--------------------------------------------------------------------------
+ * integer -> xxx conversion
+ *--------------------------------------------------------------------------*/
+
+HEMP_TEXT_FUNC(hemp_value_integer_text) {
+    static hemp_char_t buffer[HEMP_BUFFER_SIZE];
+    hemp_text_p text;
+
+    snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_INT, hemp_val_int(value));
+    hemp_prepare_output(output, text, strlen(buffer));
+    hemp_text_append_cstr(text, buffer);
+
+    return output;
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_integer_number) {
+    return hemp_num_val((hemp_num_t) hemp_val_int(value));
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_integer_boolean) {
+    return hemp_val_int(value) == 0
+        ? HempFalse
+        : HempTrue;
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_integer_compare) {
+    hemp_num_t cmp = hemp_val_int(value);
+    return  cmp < 0 ? HempBefore
+        :   cmp > 0 ? HempAfter
+        :             HempEqual; 
+}
+
 
 
 /*--------------------------------------------------------------------------

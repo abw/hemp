@@ -122,13 +122,13 @@ HEMP_OUTPUT_FUNC(hemp_element_number_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_number) {
+HEMP_EVAL_FUNC(hemp_element_number_number) {
     hemp_debug_call("hemp_element_number_number()\n");
     return element->args.value;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_integer) {
+HEMP_EVAL_FUNC(hemp_element_number_integer) {
     hemp_debug_call("hemp_element_number_integer()\n");
     hemp_value_t value = element->args.value;
     return hemp_is_int(value)
@@ -137,12 +137,12 @@ HEMP_VALUE_FUNC(hemp_element_number_integer) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_boolean) {
+HEMP_EVAL_FUNC(hemp_element_number_boolean) {
     hemp_todo("hemp_element_number_boolean() : number element => boolean value\n");
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_compare) {
+HEMP_EVAL_FUNC(hemp_element_number_compare) {
     hemp_todo("hemp_element_number_compare()\n");
     // TODO: coerce number to HempBefore/HempEqual/HempAfter, etc
 }
@@ -181,7 +181,7 @@ HEMP_OUTPUT_FUNC(hemp_element_integer_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_integer_number) {
+HEMP_EVAL_FUNC(hemp_element_integer_number) {
     hemp_debug_call("hemp_element_integer_number()\n");
     hemp_value_t value = element->args.value;
     
@@ -194,18 +194,18 @@ HEMP_VALUE_FUNC(hemp_element_integer_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_integer_integer) {
+HEMP_EVAL_FUNC(hemp_element_integer_integer) {
     hemp_debug_call("hemp_element_number_integer()\n");
     return element->args.value;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_integer_boolean) {
+HEMP_EVAL_FUNC(hemp_element_integer_boolean) {
     hemp_todo("hemp_element_integer_boolean() : number element => boolean value\n");
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_integer_compare) {
+HEMP_EVAL_FUNC(hemp_element_integer_compare) {
     hemp_todo("hemp_element_integer_compare()\n");
     // TODO: coerce number to HempBefore/HempEqual/HempAfter, etc
 }
@@ -247,7 +247,7 @@ HEMP_OUTPUT_FUNC(hemp_element_numop_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_numop_integer) {
+HEMP_EVAL_FUNC(hemp_element_numop_integer) {
     hemp_debug_call("hemp_element_numop_integer()\n");
 
     hemp_text_p text;
@@ -259,7 +259,7 @@ HEMP_VALUE_FUNC(hemp_element_numop_integer) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_numop_boolean) {
+HEMP_EVAL_FUNC(hemp_element_numop_boolean) {
     hemp_debug_call("hemp_element_numop_boolean()\n");
     hemp_todo("hemp_element_numop_boolean()");
 }
@@ -278,7 +278,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_autoinc_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_autoinc_value) {
+HEMP_EVAL_FUNC(hemp_element_number_autoinc_value) {
     hemp_todo("hemp_element_number_autoinc_value()\n");
 }
 
@@ -296,7 +296,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_autodec_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_autodec_value) {
+HEMP_EVAL_FUNC(hemp_element_number_autodec_value) {
     hemp_todo("hemp_element_number_autodec_value()\n");
 }
 
@@ -313,7 +313,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_plus_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_plus_value) {
+HEMP_EVAL_FUNC(hemp_element_number_plus_value) {
     hemp_debug_call("hemp_element_number_plus_value()\n");
 
     /* prefix unary '+' coerces value to a number */
@@ -358,7 +358,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_minus_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_minus_value) {
+HEMP_EVAL_FUNC(hemp_element_number_minus_value) {
     hemp_debug_call("hemp_element_number_minus_value()\n");
 
     /* prefix unary '-' coerces value to a number and negates it */
@@ -407,7 +407,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_power_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_power_value) {
+HEMP_EVAL_FUNC(hemp_element_number_power_value) {
     hemp_debug_call("hemp_element_number_power_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
@@ -449,7 +449,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_multiply_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_multiply_value) {
+HEMP_EVAL_FUNC(hemp_element_number_multiply_value) {
     hemp_debug_call("hemp_element_number_multiply_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
@@ -486,7 +486,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_divide_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_divide_value) {
+HEMP_EVAL_FUNC(hemp_element_number_divide_value) {
     hemp_debug_call("hemp_element_number_divide_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
@@ -524,7 +524,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_divint_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_divint_value) {
+HEMP_EVAL_FUNC(hemp_element_number_divint_value) {
     hemp_debug_call("hemp_element_number_divint_value()\n");
 
     hemp_element_p lhs  = element->args.binary.lhs;
@@ -550,7 +550,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_modulus_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_modulus_value) {
+HEMP_EVAL_FUNC(hemp_element_number_modulus_value) {
     hemp_debug_call("hemp_element_number_modulus_value()\n");
 
     hemp_element_p lhs  = element->args.binary.lhs;
@@ -575,7 +575,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_compare_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_number_compare_value) {
+HEMP_EVAL_FUNC(hemp_element_number_compare_value) {
     hemp_debug_call("hemp_element_number_compare_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;

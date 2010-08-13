@@ -46,19 +46,19 @@ HEMP_OUTPUT_FUNC(hemp_element_literal_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_literal_number) {
+HEMP_EVAL_FUNC(hemp_element_literal_number) {
     hemp_todo("hemp_element_literal_number()");
     return HempNothing;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_literal_integer) {
+HEMP_EVAL_FUNC(hemp_element_literal_integer) {
     hemp_todo("hemp_element_literal_integer()");
     return HempNothing;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_literal_boolean) {
+HEMP_EVAL_FUNC(hemp_element_literal_boolean) {
     hemp_todo("hemp_element_literal_boolean()");
     return HempNothing;
 }

@@ -75,7 +75,7 @@ HEMP_PARSE_FUNC(hemp_element_text_expr) {
  * functions for coercing text to other value types
  *--------------------------------------------------------------------------*/
 
-HEMP_VALUE_FUNC(hemp_element_textop_number) {
+HEMP_EVAL_FUNC(hemp_element_textop_number) {
     hemp_debug_call("hemp_element_textop_number()\n");
 
     hemp_text_p text;
@@ -85,7 +85,7 @@ HEMP_VALUE_FUNC(hemp_element_textop_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_textop_integer) {
+HEMP_EVAL_FUNC(hemp_element_textop_integer) {
     hemp_debug_call("hemp_element_textop_integer()\n");
 
     hemp_text_p text;
@@ -95,7 +95,7 @@ HEMP_VALUE_FUNC(hemp_element_textop_integer) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_textop_boolean) {
+HEMP_EVAL_FUNC(hemp_element_textop_boolean) {
     hemp_debug_call("hemp_element_textop_boolean()\n");
 
     hemp_text_p text;
@@ -160,7 +160,7 @@ HEMP_SYMBOL_FUNC(hemp_element_text_compare_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_text_compare_value) {
+HEMP_EVAL_FUNC(hemp_element_text_compare_value) {
     hemp_debug_call("hemp_element_text_compare_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;

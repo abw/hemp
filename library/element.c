@@ -201,25 +201,25 @@ HEMP_OUTPUT_FUNC(hemp_element_not_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_not_number) {
+HEMP_EVAL_FUNC(hemp_element_not_number) {
     hemp_fatal("%s element does not yield number\n", element->type->name);
     return HempNothing;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_not_integer) {
+HEMP_EVAL_FUNC(hemp_element_not_integer) {
     hemp_fatal("%s element does not yield integer\n", element->type->name);
     return HempNothing;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_not_boolean) {
+HEMP_EVAL_FUNC(hemp_element_not_boolean) {
     hemp_fatal("%s element does not yield boolean\n", element->type->name);
     return HempNothing;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_not_compare) {
+HEMP_EVAL_FUNC(hemp_element_not_compare) {
     hemp_fatal("%s element does not yield comparison\n", element->type->name);
     return HempNothing;
 }

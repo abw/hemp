@@ -3,6 +3,7 @@
 
 
 void test_value();
+void test_value_conversion();
 
 int
 main(
@@ -11,7 +12,8 @@ main(
     char **env
 ) {
     plan_tests(117);
-    test_value();
+//    test_value();
+    test_value_conversion();
     hemp_mem_trace_ok();
     return exit_status();
 }
@@ -185,3 +187,26 @@ void test_value() {
 }
 
 
+void test_value_conversion() {
+    hemp_value_t value  = hemp_int_val(42);
+    hemp_value_f method = hemp_vmethod(value,number);
+    ok( method, "got int->number method: %p", method);
+    is( hemp_type_name(value), "Integer", "value is integer" );
+
+    value = method(value);
+    is( hemp_type_name(value), "Number", "value is now a number" );
+    hemp_debug("number: %g\n", hemp_val_num(value));
+
+    value = hemp_vcall(value, integer);
+    is( hemp_type_name(value), "Integer", "back to an integer" );
+    hemp_debug("integer: %d\n", hemp_val_int(value));
+
+    value = hemp_to_text(value);
+    is( hemp_type_name(value), "Text", "now text" );
+    hemp_debug("text: %s\n", hemp_val_text(value)->string);
+
+    hemp_value_t v2 = hemp_to_text(value);
+    ok( hemp_val_text(v2) == hemp_val_text(value), "text to text no-op" );
+
+    hemp_text_free(hemp_val_text(value));
+}

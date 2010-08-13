@@ -259,6 +259,17 @@ typedef hemp_value_t
     );
 
 typedef hemp_value_t
+    (* hemp_value_f)(
+        hemp_value_t  value         /* value to operate on                  */
+    );
+
+typedef hemp_value_t
+    (* hemp_tvalue_f)(
+        hemp_value_t  value,        /* value to operate on                  */
+        hemp_value_t  output        /* output to append onto                */
+    );
+
+typedef hemp_value_t
     (* hemp_unop_f)(
         hemp_context_p  context,    /* runtime context                      */
         hemp_value_t    expr        /* single value                         */

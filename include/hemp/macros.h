@@ -309,7 +309,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 
 
 /*--------------------------------------------------------------------------
- * Values
+ * Element evaluation
  *
  * Each element type defines a function (via the vtable in the grammar 
  * symbol entry for the relevant element type) which evaluates the element
@@ -319,19 +319,19 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * like operators, expressions, keywords, etc., do other stuff and then return
  * some value.
  *
- * HEMP_VALUE_FUNC() can be used to declare and define value functions.
+ * HEMP_EVAL_FUNC() can be used to declare and define value functions.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_VALUE_ARGS                     \
+#define HEMP_EVAL_ARGS                      \
         hemp_element_p  element,            \
         hemp_context_p  context
 
-#define HEMP_VALUE_ARG_NAMES                \
+#define HEMP_EVAL_ARG_NAMES                 \
         element, context
 
-#define HEMP_VALUE_FUNC(f)                  \
+#define HEMP_EVAL_FUNC(f)                   \
     HEMP_DO_INLINE hemp_value_t f(          \
-        HEMP_VALUE_ARGS                     \
+        HEMP_EVAL_ARGS                      \
     )
 
 
@@ -364,6 +364,44 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
     HEMP_DO_INLINE hemp_value_t f(          \
         HEMP_OUTPUT_ARGS                    \
     )
+
+
+/*--------------------------------------------------------------------------
+ * Values
+ *
+ * Data values define vtables for coercing one type to another (e.g. number
+ * to text) and other methods that can be called on values, e.g. text.length
+ *
+ * HEMP_VALUE_FUNC() can be used to declare and define value functions.
+ * HEMP_TEXT_FUNC() is a special case for text yielding functions where we 
+ * allow an existing text object to be passed as an extra argument for the 
+ * function to append the next onto.
+ *--------------------------------------------------------------------------*/
+
+#define HEMP_VALUE_FUNC(f)                  \
+    HEMP_DO_INLINE hemp_value_t f(          \
+        hemp_value_t value                  \
+    )
+
+#define HEMP_TEXT_FUNC(f)                   \
+    HEMP_DO_INLINE hemp_value_t f(          \
+        hemp_value_t value,                 \
+        hemp_value_t output                 \
+    )
+
+
+/*--------------------------------------------------------------------------
+ * other stuff
+ *--------------------------------------------------------------------------*/
+
+#define hemp_prepare_output(output, text, length)       \
+    if (hemp_is_undef(output)) {                        \
+        text   = hemp_text_init(length);                \
+        output = hemp_text_val(text);                   \
+    }                                                   \
+    else {                                              \
+        text   = hemp_val_text(output);                 \
+    }
 
 
 #endif /* HEMP_MACROS_H */

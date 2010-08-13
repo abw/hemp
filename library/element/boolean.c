@@ -51,7 +51,7 @@ HEMP_SYMBOL_FUNC(hemp_element_boolean_not_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_boolean_not_value) {
+HEMP_EVAL_FUNC(hemp_element_boolean_not_value) {
     hemp_debug_call("hemp_element_boolean_not_value()\n");
 
     hemp_element_p expr = element->args.unary.expr;
@@ -74,7 +74,7 @@ HEMP_SYMBOL_FUNC(hemp_element_boolean_and_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_boolean_and_value) {
+HEMP_EVAL_FUNC(hemp_element_boolean_and_value) {
     hemp_debug_call("hemp_element_boolean_and_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
@@ -99,7 +99,7 @@ HEMP_SYMBOL_FUNC(hemp_element_boolean_or_symbol) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_boolean_or_value) {
+HEMP_EVAL_FUNC(hemp_element_boolean_or_value) {
     hemp_debug_call("hemp_element_boolean_or_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
