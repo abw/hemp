@@ -17,8 +17,14 @@ main(
     char **argv, 
     char **env
 ) {
-    plan_tests(172);
-    test_scanner();
+    if (argc > 1) {
+        test_script(argv[1]);
+    }
+    else {
+        plan_tests(172);
+        test_scanner();
+    }
+    
     return exit_status();
 }
 
