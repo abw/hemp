@@ -55,13 +55,13 @@ AC_ARG_ENABLE(
     debug, [  --enable-debug=[no/yes/N] turn on debugging],, enable_debug=no)
 
 if test "x$enable_debug" = "xyes"; then
-    CFLAGS="$CFLAGS -g -DDEBUG"
+    CFLAGS="$CFLAGS -g -DHEMP_DEBUG"
     AC_MSG_RESULT(yes)
 elif test "x$enable_debug" = "xno"; then
     CFLAGS="$CFLAGS -O3"
     AC_MSG_RESULT(no)
 else
-    CFLAGS="$CFLAGS -g -DDEBUG=$enable_debug"
+    CFLAGS="$CFLAGS -g -DHEMP_DEBUG=$enable_debug"
     AC_MSG_RESULT(yes)
 fi
 
