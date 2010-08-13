@@ -346,7 +346,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * of its own that we then have to worry about freeing up afterwards.  If 
  * you don't pass an output buffer (e.g. by passing the special HempNothing
  * value instead) then it *will* return a text object which needs to be 
- * freed via hemp_text_free(HEMP_VAL_STR(output)).
+ * freed via hemp_text_free(hemp_val_str(output)).
  *
  * HEMP_OUTPUT_FUNC() can be used, yes, you guessed it, to declare and define
  * output functions that work this way.

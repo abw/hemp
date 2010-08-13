@@ -117,6 +117,6 @@ hemp_template_render(
         hemp_fatal("template does not have a root element");
     
     hemp_value_t v = root->type->text(root, NULL, HempNothing);
-    return HEMP_VAL_TEXT(v);
+    return hemp_val_text(v);
 }
 

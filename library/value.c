@@ -75,42 +75,42 @@ hemp_identity_name(
  *--------------------------------------------------------------------------*/
 
 HEMP_DO_INLINE hemp_value_t
-HEMP_NUM_VAL(hemp_num_t n) {
+hemp_num_val(hemp_num_t n) {
     hemp_value_t v;
     v.number = n;
     return v;
 }
 
 HEMP_DO_INLINE hemp_value_t
-HEMP_INT_VAL(hemp_int_t i) {
+hemp_int_val(hemp_int_t i) {
     hemp_value_t v;
     v.bits = HEMP_TYPE_INT_MASK | (hemp_u64_t) i;
     return v;
 }
 
 HEMP_DO_INLINE hemp_value_t
-HEMP_STR_VAL(hemp_cstr_p s) {
+hemp_str_val(hemp_cstr_p s) {
     hemp_value_t v;
     v.bits = HEMP_TYPE_STR_MASK | (hemp_u64_t) s;
     return v;
 }
 
 HEMP_DO_INLINE hemp_value_t
-HEMP_TEXT_VAL(hemp_text_p t) {
+hemp_text_val(hemp_text_p t) {
     hemp_value_t v;
     v.bits = HEMP_TYPE_TEXT_MASK | (hemp_u64_t) t;
     return v;
 }
 
 HEMP_DO_INLINE hemp_value_t
-HEMP_IDENT_VAL(hemp_u8_t i) {
+hemp_ident_val(hemp_u8_t i) {
     hemp_value_t v;
     v.bits = HEMP_TYPE_IDENT_MASK | (hemp_u64_t) i;
     return v;
 }
 
 HEMP_DO_INLINE hemp_value_t
-HEMP_BOOL_VAL(hemp_bool_t b) {
+hemp_bool_val(hemp_bool_t b) {
     return b
         ? HempTrue
         : HempFalse;
@@ -122,32 +122,32 @@ HEMP_BOOL_VAL(hemp_bool_t b) {
  *--------------------------------------------------------------------------*/
 
 HEMP_DO_INLINE hemp_num_t
-HEMP_VAL_NUM(hemp_value_t v) {
+hemp_val_num(hemp_value_t v) {
     return v.number;
 }
 
 HEMP_DO_INLINE hemp_int_t
-HEMP_VAL_INT(hemp_value_t v) {
+hemp_val_int(hemp_value_t v) {
     return (hemp_int_t) v.bits;
 }
 
 HEMP_DO_INLINE hemp_cstr_p
-HEMP_VAL_STR(hemp_value_t v) {
+hemp_val_str(hemp_value_t v) {
     return (hemp_cstr_p) HEMP_PAYLOAD(v);
 }
 
 HEMP_DO_INLINE hemp_text_p
-HEMP_VAL_TEXT(hemp_value_t v) {
+hemp_val_text(hemp_value_t v) {
     return (hemp_text_p) HEMP_PAYLOAD(v);
 }
 
 //HEMP_DO_INLINE hemp_u8_t
-//HEMP_VAL_IDENT(hemp_value_t v) {
+//hemp_val_ident(hemp_value_t v) {
 //    return HEMP_IDENT_ID(v);
 //}
 
 HEMP_DO_INLINE hemp_bool_t
-HEMP_VAL_BOOL(hemp_value_t v) {
+hemp_val_bool(hemp_value_t v) {
     if (HEMP_IS_BOOLEAN(v)) {
         return HEMP_IS_TRUE(v);
     }

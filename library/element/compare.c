@@ -62,7 +62,7 @@ HEMP_VALUE_FUNC(hemp_element_compare_integer) {
     
     debug("comparison yielded number: %d\n", compare);
                 
-    return HEMP_INT_VAL(compare);
+    return hemp_int_val(compare);
 }
 
 

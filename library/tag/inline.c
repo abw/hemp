@@ -100,7 +100,7 @@ hemp_scan_inline_tag(
                     tmpl->elements, HempSymbolInteger,
                     from, pos, src - from
                 );
-                element->args.value = HEMP_INT_VAL(int_val);
+                element->args.value = hemp_int_val(int_val);
             }
             else {
                 debug_token("NUMBER", from, src-from);
@@ -108,7 +108,7 @@ hemp_scan_inline_tag(
                     tmpl->elements, HempSymbolNumber,
                     from, pos, src - from
                 );
-                element->args.value = HEMP_NUM_VAL(num_val);
+                element->args.value = hemp_num_val(num_val);
             }
         }
         else if (

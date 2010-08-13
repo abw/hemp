@@ -246,19 +246,19 @@ struct hemp_vtypes_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-extern hemp_value_t HEMP_NUM_VAL(hemp_num_t);
-extern hemp_value_t HEMP_INT_VAL(hemp_int_t);
-extern hemp_value_t HEMP_STR_VAL(hemp_cstr_p);
-extern hemp_value_t HEMP_TEXT_VAL(hemp_text_p);
-extern hemp_value_t HEMP_IDENT_VAL(hemp_u8_t);
-extern hemp_value_t HEMP_BOOL_VAL(hemp_bool_t);
+extern hemp_value_t hemp_num_val(hemp_num_t);
+extern hemp_value_t hemp_int_val(hemp_int_t);
+extern hemp_value_t hemp_str_val(hemp_cstr_p);
+extern hemp_value_t hemp_text_val(hemp_text_p);
+extern hemp_value_t hemp_ident_val(hemp_u8_t);
+extern hemp_value_t hemp_bool_val(hemp_bool_t);
 
-extern hemp_num_t   HEMP_VAL_NUM(hemp_value_t);
-extern hemp_int_t   HEMP_VAL_INT(hemp_value_t);
-extern hemp_cstr_p  HEMP_VAL_STR(hemp_value_t);
-extern hemp_text_p  HEMP_VAL_TEXT(hemp_value_t);
-extern hemp_u8_t    HEMP_VAL_IDENT(hemp_value_t);
-extern hemp_bool_t  HEMP_VAL_BOOL(hemp_value_t);
+extern hemp_num_t   hemp_val_num(hemp_value_t);
+extern hemp_int_t   hemp_val_int(hemp_value_t);
+extern hemp_cstr_p  hemp_val_str(hemp_value_t);
+extern hemp_text_p  hemp_val_text(hemp_value_t);
+extern hemp_u8_t    hemp_val_ident(hemp_value_t);
+extern hemp_bool_t  hemp_val_bool(hemp_value_t);
 
 void hemp_dump_u64(hemp_u64_t value);
 void hemp_dump_64(hemp_u64_t value);

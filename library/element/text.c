@@ -81,7 +81,7 @@ HEMP_VALUE_FUNC(hemp_element_textop_number) {
     hemp_text_p text;
     hemp_value_t value = element->type->text(element, context, HempNothing);
 
-    hemp_todo("see if text [%s] will convert to number\n", HEMP_VAL_STR(value));
+    hemp_todo("see if text [%s] will convert to number\n", hemp_val_str(value));
 }
 
 
@@ -91,7 +91,7 @@ HEMP_VALUE_FUNC(hemp_element_textop_integer) {
     hemp_text_p text;
     hemp_value_t value = element->type->text(element, context, HempNothing);
 
-    hemp_todo("see if text [%s] will convert to integer\n", HEMP_VAL_STR(value));
+    hemp_todo("see if text [%s] will convert to integer\n", hemp_val_str(value));
 }
 
 
@@ -101,7 +101,7 @@ HEMP_VALUE_FUNC(hemp_element_textop_boolean) {
     hemp_text_p text;
     hemp_value_t value = element->type->text(element, context, HempNothing);
 
-    hemp_todo("see if text [%s] will convert to boolean\n", HEMP_VAL_STR(value));
+    hemp_todo("see if text [%s] will convert to boolean\n", hemp_val_str(value));
 }
 
 
@@ -119,7 +119,7 @@ hemp_element_text_clean(
      * translated escape sequences, e.g. \n \\, etc
      */
     if (hemp_not_flag(element, HEMP_BE_SOURCE)) {
-        hemp_mem_free((hemp_mem_p) HEMP_VAL_STR(element->args.value));
+        hemp_mem_free((hemp_mem_p) hemp_val_str(element->args.value));
     }
 }
 
@@ -168,11 +168,11 @@ HEMP_VALUE_FUNC(hemp_element_text_compare_value) {
     hemp_value_t lval  = lhs->type->text(lhs, context, HempNothing);
     hemp_value_t rval  = rhs->type->text(rhs, context, HempNothing);
     hemp_int_t compare = strcmp( 
-        HEMP_VAL_TEXT(lval)->string,
-        HEMP_VAL_TEXT(rval)->string
+        hemp_val_text(lval)->string,
+        hemp_val_text(rval)->string
     );
-    hemp_text_free( HEMP_VAL_TEXT(lval) );
-    hemp_text_free( HEMP_VAL_TEXT(rval) );
+    hemp_text_free( hemp_val_text(lval) );
+    hemp_text_free( hemp_val_text(rval) );
     
     return  compare < 0 ? HempBefore
         :   compare > 0 ? HempAfter

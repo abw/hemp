@@ -4,14 +4,14 @@
 /* TODO: check for overflow/underflow/divide-by-zero/NaN/Infinity */
 
 #define HEMP_NUMOP_GET_INT(e,c)             \
-    HEMP_VAL_INT(                           \
+    hemp_val_int(                           \
         e->type->integer(e, c)              \
     )
 
 #define HEMP_NUMOP_CAST_NUM(v)              \
     (HEMP_IS_NUM(v)                         \
-        ? HEMP_VAL_NUM(v)                   \
-        : ((hemp_num_t) HEMP_VAL_INT(v))    \
+        ? hemp_val_num(v)                   \
+        : ((hemp_num_t) hemp_val_int(v))    \
     )
 
 
@@ -110,7 +110,7 @@ HEMP_OUTPUT_FUNC(hemp_element_number_text) {
 
     snprintf(
         buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, 
-        HEMP_VAL_NUM(element->args.value)
+        hemp_val_num(element->args.value)
     );
     hemp_prepare_output(output, text, strlen(buffer));
     hemp_text_append_cstr(text, buffer);
@@ -130,7 +130,7 @@ HEMP_VALUE_FUNC(hemp_element_number_integer) {
     hemp_value_t value = element->args.value;
     return HEMP_IS_INT(value)
         ? value
-        : HEMP_INT_VAL((hemp_int_t) HEMP_VAL_NUM(value));
+        : hemp_int_val((hemp_int_t) hemp_val_num(value));
 }
 
 
@@ -169,7 +169,7 @@ HEMP_OUTPUT_FUNC(hemp_element_integer_text) {
 
     snprintf(
         buffer, HEMP_BUFFER_SIZE, HEMP_FMT_INT,
-        HEMP_VAL_INT(element->args.value)
+        hemp_val_int(element->args.value)
     );
     hemp_prepare_output(output, text, strlen(buffer));
     hemp_text_append_cstr(text, buffer);
@@ -187,7 +187,7 @@ HEMP_VALUE_FUNC(hemp_element_integer_number) {
     return value;
     return HEMP_IS_NUM(value)
         ? value
-        : HEMP_NUM_VAL((hemp_num_t) HEMP_VAL_INT(value));
+        : hemp_num_val((hemp_num_t) hemp_val_int(value));
 }
 
 
@@ -233,9 +233,9 @@ HEMP_OUTPUT_FUNC(hemp_element_numop_text) {
     hemp_value_t value = element->type->number(element, context);
 
     if (HEMP_IS_INT(value))
-        snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_INT, HEMP_VAL_INT(value));
+        snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_INT, hemp_val_int(value));
     else
-        snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, HEMP_VAL_NUM(value));
+        snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, hemp_val_num(value));
 
     hemp_prepare_output(output, text, strlen(buffer));
     hemp_text_append_cstr(text, buffer);
@@ -252,7 +252,7 @@ HEMP_VALUE_FUNC(hemp_element_numop_integer) {
 
     return HEMP_IS_INT(value)
         ? value
-        : HEMP_INT_VAL((int) HEMP_VAL_NUM(value));
+        : hemp_int_val((int) hemp_val_num(value));
 }
 
 
@@ -313,25 +313,28 @@ HEMP_SYMBOL_FUNC(hemp_element_number_plus_symbol) {
 HEMP_VALUE_FUNC(hemp_element_number_plus_value) {
     debug_call("hemp_element_number_plus_value()\n");
 
+    /* prefix unary '+' coerces value to a number */
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
-        hemp_todo("+ as a prefix operator");
+        hemp_element_p expr = element->args.unary.expr;
+        return expr->type->number(expr, context);
     }
 
+    /* otherwise it's an infix addition operator */
     hemp_element_p lhs = element->args.binary.lhs;
     hemp_element_p rhs = element->args.binary.rhs;
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval, result;
     
     if (HEMP_IS_INT(lval)) {
-        result = HEMP_INT_VAL(
-            HEMP_VAL_INT(lval) 
+        result = hemp_int_val(
+            hemp_val_int(lval) 
           + HEMP_NUMOP_GET_INT(rhs, context)
         );
     }
     else {
         rval   = rhs->type->number(rhs, context);
-        result = HEMP_NUM_VAL(
-            HEMP_VAL_NUM(lval) 
+        result = hemp_num_val(
+            hemp_val_num(lval) 
           + HEMP_NUMOP_CAST_NUM(rval)
         );
     }
@@ -355,25 +358,28 @@ HEMP_SYMBOL_FUNC(hemp_element_number_minus_symbol) {
 HEMP_VALUE_FUNC(hemp_element_number_minus_value) {
     debug_call("hemp_element_number_minus_value()\n");
 
+    /* prefix unary '-' coerces value to a number and negates it */
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
-        hemp_todo("+ as a prefix operator");
+        hemp_element_p expr = element->args.unary.expr;
+        hemp_value_t   val  = expr->type->number(expr, context);
     }
 
+    /* otherwise it's an infix subtraction operator */
     hemp_element_p lhs = element->args.binary.lhs;
     hemp_element_p rhs = element->args.binary.rhs;
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval, result;
 
     if (HEMP_IS_INT(lval)) {
-        result = HEMP_INT_VAL(
-            HEMP_VAL_INT(lval) 
+        result = hemp_int_val(
+            hemp_val_int(lval) 
           - HEMP_NUMOP_GET_INT(rhs, context)
         );
     }
     else {
         rval   = rhs->type->number(rhs, context);
-        result = HEMP_NUM_VAL(
-            HEMP_VAL_NUM(lval) 
+        result = hemp_num_val(
+            hemp_val_num(lval) 
           - HEMP_NUMOP_CAST_NUM(rval)
         );
     }
@@ -404,18 +410,18 @@ HEMP_VALUE_FUNC(hemp_element_number_power_value) {
     hemp_value_t result;
 
     if (HEMP_IS_INT(lval)) {
-        result = HEMP_INT_VAL(
+        result = hemp_int_val(
             (hemp_int_t)
             pow( 
-                (hemp_num_t) HEMP_VAL_INT(lval),
+                (hemp_num_t) hemp_val_int(lval),
                 HEMP_NUMOP_CAST_NUM(rval)
             )
         );
     }
     else {
-        result = HEMP_NUM_VAL(
+        result = hemp_num_val(
             pow( 
-                HEMP_VAL_NUM(lval),
+                hemp_val_num(lval),
                 HEMP_NUMOP_CAST_NUM(rval)
             )
         );
@@ -445,15 +451,15 @@ HEMP_VALUE_FUNC(hemp_element_number_multiply_value) {
     hemp_value_t rval, result;
 
     if (HEMP_IS_INT(lval)) {
-        result = HEMP_INT_VAL(
-            HEMP_VAL_INT(lval) 
+        result = hemp_int_val(
+            hemp_val_int(lval) 
           * HEMP_NUMOP_GET_INT(rhs, context)
         );
     }
     else {
         rval   = rhs->type->number(rhs, context);
-        result = HEMP_NUM_VAL(
-            HEMP_VAL_NUM(lval) 
+        result = hemp_num_val(
+            hemp_val_num(lval) 
           * HEMP_NUMOP_CAST_NUM(rval)
         );
     }
@@ -482,15 +488,15 @@ HEMP_VALUE_FUNC(hemp_element_number_divide_value) {
     hemp_value_t rval, result;
 
     if (HEMP_IS_INT(lval)) {
-        result = HEMP_INT_VAL(
-            HEMP_VAL_INT(lval) 
+        result = hemp_int_val(
+            hemp_val_int(lval) 
           / HEMP_NUMOP_GET_INT(rhs, context)
         );
     }
     else {
         rval   = rhs->type->number(rhs, context);
-        result = HEMP_NUM_VAL(
-            HEMP_VAL_NUM(lval) 
+        result = hemp_num_val(
+            hemp_val_num(lval) 
           / HEMP_NUMOP_CAST_NUM(rval)
         );
     }
@@ -517,10 +523,10 @@ HEMP_VALUE_FUNC(hemp_element_number_divint_value) {
     hemp_element_p lhs  = element->args.binary.lhs;
     hemp_element_p rhs  = element->args.binary.rhs;
     
-    return HEMP_INT_VAL(
+    return hemp_int_val(
         (hemp_int_t)
-        HEMP_VAL_INT( lhs->type->integer(lhs, context) )
-      / HEMP_VAL_INT( rhs->type->integer(rhs, context) )
+        hemp_val_int( lhs->type->integer(lhs, context) )
+      / hemp_val_int( rhs->type->integer(rhs, context) )
     );
 }
 
@@ -543,10 +549,10 @@ HEMP_VALUE_FUNC(hemp_element_number_modulus_value) {
     hemp_element_p lhs  = element->args.binary.lhs;
     hemp_element_p rhs  = element->args.binary.rhs;
     
-    return HEMP_INT_VAL(
+    return hemp_int_val(
         (hemp_int_t)
-        HEMP_VAL_INT( lhs->type->integer(lhs, context) )
-      % HEMP_VAL_INT( rhs->type->integer(rhs, context) )
+        hemp_val_int( lhs->type->integer(lhs, context) )
+      % hemp_val_int( rhs->type->integer(rhs, context) )
     );
 }
 

@@ -126,10 +126,10 @@ extern hemp_symbol_p HempSymbolBlock;
 #define hemp_prepare_output(output, text, length)       \
     if (HEMP_IS_UNDEF(output)) {                        \
         text   = hemp_text_init(length);                \
-        output = HEMP_TEXT_VAL(text);                   \
+        output = hemp_text_val(text);                   \
     }                                                   \
     else {                                              \
-        text   = HEMP_VAL_TEXT(output);                 \
+        text   = hemp_val_text(output);                 \
     }
 
 /*--------------------------------------------------------------------------

@@ -51,10 +51,10 @@ void test_value() {
     /* native double */
     printf("number value: 3.14159\n");
     hemp_num_t expect = -314.59;
-    value = HEMP_NUM_VAL(expect);
+    value = hemp_num_val(expect);
     hemp_dump_value(value);
 
-    hemp_num_t n = HEMP_VAL_NUM(value);
+    hemp_num_t n = hemp_val_num(value);
     ok( ! HEMP_IS_TAGGED(value), "number is not a tagged value" );
     ok( HEMP_IS_NUM(value), "number is a number value" );
     ok( n == expect, "got num value back" );
@@ -68,11 +68,11 @@ void test_value() {
 
     /* tagged int */
     printf("integer value: 12345\n");
-    value = HEMP_INT_VAL(12345);
+    value = hemp_int_val(12345);
     hemp_dump_value(value);
     type_check(value, HEMP_TYPE_INT_ID, "Integer");
 
-    hemp_u32_t i = HEMP_VAL_INT(value);
+    hemp_u32_t i = hemp_val_int(value);
     ok( HEMP_IS_TAGGED(value), "integer is a tagged value" );
     ok( HEMP_IS_INT(value), "integer is an integer value" );
     ok( i == 12345, "got int value back" );
@@ -86,7 +86,7 @@ void test_value() {
     /* tagged string pointer */
     hemp_cstr_p es = "Hello world!";
     printf("string value: %s\n", es);
-    value = HEMP_STR_VAL(es);
+    value = hemp_str_val(es);
     hemp_dump_value(value);
     type_check(value, HEMP_TYPE_STR_ID, "String");
     ok( ! HEMP_IS_UNDEF(value),         "string is not undef" );
@@ -96,17 +96,17 @@ void test_value() {
     ok( ! HEMP_IS_TRUE(value),          "string is not true" );
     ok( ! HEMP_IS_FALSE(value),         "string is not false" );
 
-    hemp_cstr_p s = HEMP_VAL_STR(value);
+    hemp_cstr_p s = hemp_val_str(value);
     ok( HEMP_IS_TAGGED(value), "string is a tagged value" );
     ok( HEMP_IS_STR(value), "string is a string value" );
     is( s, es, "got str value back" );
 
     /* boolean */
     printf("boolean value: %d\n", HEMP_TRUE);
-    value = HEMP_BOOL_VAL(HEMP_TRUE);
+    value = hemp_bool_val(HEMP_TRUE);
     hemp_dump_value(value);
     ok( value.bits == HempTrue.bits, "true identity" );
-    hemp_bool_t b = HEMP_VAL_BOOL(value);
+    hemp_bool_t b = hemp_val_bool(value);
     ok( b == HEMP_TRUE, "unboxed back to true" );
 
 

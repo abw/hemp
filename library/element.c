@@ -400,7 +400,7 @@ hemp_element_dump(
         ? e->type->source(e, NULL, HempNothing)
         : e->type->text(e, NULL, HempNothing);
 
-    hemp_text_p text = HEMP_VAL_TEXT(output);
+    hemp_text_p text = hemp_val_text(output);
     hemp_cstr_p cstr = text ? text->string : "-- NO OUTPUT --";
     
     debug(
