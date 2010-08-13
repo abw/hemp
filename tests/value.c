@@ -22,11 +22,11 @@ void type_check(
     hemp_u8_t    id,
     hemp_cstr_p  name
 ) {
-    if (hemp_cstr_eq(HEMP_TYPE_NAME(value), name)) {
+    if (hemp_cstr_eq(hemp_type_name(value), name)) {
         pass("value type is %s", name);
     }
     else {
-        fail("values type is %s, expected %s", HEMP_TYPE_NAME(value), name);
+        fail("values type is %s, expected %s", hemp_type_name(value), name);
     }
     
     ok( HEMP_TYPE_ID(value) == id, "%s type is %d", name, id);
@@ -55,16 +55,16 @@ void test_value() {
     hemp_dump_value(value);
 
     hemp_num_t n = hemp_val_num(value);
-    ok( ! HEMP_IS_TAGGED(value), "number is not a tagged value" );
-    ok( HEMP_IS_NUM(value), "number is a number value" );
+    ok( ! hemp_is_tagged(value), "number is not a tagged value" );
+    ok( hemp_is_num(value), "number is a number value" );
     ok( n == expect, "got num value back" );
     type_check(value, HEMP_TYPE_NUM_ID, "Number");
-    ok( ! HEMP_IS_UNDEF(value),         "number is not undef" );
-    ok( ! HEMP_IS_MISSING(value),       "number is not missing" );
-    ok( ! HEMP_IS_NOTHING(value),       "number is not nothing" );
-    ok( ! HEMP_IS_BOOLEAN(value),       "number is not boolean" );
-    ok( ! HEMP_IS_TRUE(value),          "number is not true" );
-    ok( ! HEMP_IS_FALSE(value),         "number is not false" );
+    ok( ! hemp_is_undef(value),         "number is not undef" );
+    ok( ! hemp_is_missing(value),       "number is not missing" );
+    ok( ! hemp_is_nothing(value),       "number is not nothing" );
+    ok( ! hemp_is_boolean(value),       "number is not boolean" );
+    ok( ! hemp_is_true(value),          "number is not true" );
+    ok( ! hemp_is_false(value),         "number is not false" );
 
     /* tagged int */
     printf("integer value: 12345\n");
@@ -73,15 +73,15 @@ void test_value() {
     type_check(value, HEMP_TYPE_INT_ID, "Integer");
 
     hemp_u32_t i = hemp_val_int(value);
-    ok( HEMP_IS_TAGGED(value), "integer is a tagged value" );
-    ok( HEMP_IS_INT(value), "integer is an integer value" );
+    ok( hemp_is_tagged(value), "integer is a tagged value" );
+    ok( hemp_is_int(value), "integer is an integer value" );
     ok( i == 12345, "got int value back" );
-    ok( ! HEMP_IS_UNDEF(value),         "integer is not undef" );
-    ok( ! HEMP_IS_MISSING(value),       "integer is not missing" );
-    ok( ! HEMP_IS_NOTHING(value),       "integer is not nothing" );
-    ok( ! HEMP_IS_BOOLEAN(value),       "integer is not boolean" );
-    ok( ! HEMP_IS_TRUE(value),          "integer is not true" );
-    ok( ! HEMP_IS_FALSE(value),         "integer is not false" );
+    ok( ! hemp_is_undef(value),         "integer is not undef" );
+    ok( ! hemp_is_missing(value),       "integer is not missing" );
+    ok( ! hemp_is_nothing(value),       "integer is not nothing" );
+    ok( ! hemp_is_boolean(value),       "integer is not boolean" );
+    ok( ! hemp_is_true(value),          "integer is not true" );
+    ok( ! hemp_is_false(value),         "integer is not false" );
 
     /* tagged string pointer */
     hemp_cstr_p es = "Hello world!";
@@ -89,16 +89,16 @@ void test_value() {
     value = hemp_str_val(es);
     hemp_dump_value(value);
     type_check(value, HEMP_TYPE_STR_ID, "String");
-    ok( ! HEMP_IS_UNDEF(value),         "string is not undef" );
-    ok( ! HEMP_IS_MISSING(value),       "string is not missing" );
-    ok( ! HEMP_IS_NOTHING(value),       "string is not nothing" );
-    ok( ! HEMP_IS_BOOLEAN(value),       "string is not boolean" );
-    ok( ! HEMP_IS_TRUE(value),          "string is not true" );
-    ok( ! HEMP_IS_FALSE(value),         "string is not false" );
+    ok( ! hemp_is_undef(value),         "string is not undef" );
+    ok( ! hemp_is_missing(value),       "string is not missing" );
+    ok( ! hemp_is_nothing(value),       "string is not nothing" );
+    ok( ! hemp_is_boolean(value),       "string is not boolean" );
+    ok( ! hemp_is_true(value),          "string is not true" );
+    ok( ! hemp_is_false(value),         "string is not false" );
 
     hemp_cstr_p s = hemp_val_str(value);
-    ok( HEMP_IS_TAGGED(value), "string is a tagged value" );
-    ok( HEMP_IS_STR(value), "string is a string value" );
+    ok( hemp_is_tagged(value), "string is a tagged value" );
+    ok( hemp_is_str(value), "string is a string value" );
     is( s, es, "got str value back" );
 
     /* boolean */
@@ -112,60 +112,60 @@ void test_value() {
 
     printf("HempMissing:\n");
     hemp_dump_value(HempMissing);
-    ok(   HEMP_IS_UNDEF(HempMissing),   "missing is undef" );
-    ok(   HEMP_IS_MISSING(HempMissing), "missing is missing" );
-    ok( ! HEMP_IS_NOTHING(HempMissing), "missing is not nothing" );
-    ok( ! HEMP_IS_BOOLEAN(HempMissing), "missing is not boolean" );
-    ok( ! HEMP_IS_TRUE(HempMissing),    "missing is not true" );
-    ok( ! HEMP_IS_FALSE(HempMissing),   "missing is not false" );
+    ok(   hemp_is_undef(HempMissing),   "missing is undef" );
+    ok(   hemp_is_missing(HempMissing), "missing is missing" );
+    ok( ! hemp_is_nothing(HempMissing), "missing is not nothing" );
+    ok( ! hemp_is_boolean(HempMissing), "missing is not boolean" );
+    ok( ! hemp_is_true(HempMissing),    "missing is not true" );
+    ok( ! hemp_is_false(HempMissing),   "missing is not false" );
 
     printf("HempNothing:\n");
     hemp_dump_value(HempNothing);
-    ok(   HEMP_IS_UNDEF(HempNothing),   "nothing is undef" );
-    ok( ! HEMP_IS_MISSING(HempNothing), "nothing is not missing" );
-    ok(   HEMP_IS_NOTHING(HempNothing), "nothing is nothing" );
-    ok( ! HEMP_IS_BOOLEAN(HempNothing), "nothing is not boolean" );
-    ok( ! HEMP_IS_TRUE(HempNothing),    "nothing is not true" );
-    ok( ! HEMP_IS_FALSE(HempNothing),   "nothing is not false" );
+    ok(   hemp_is_undef(HempNothing),   "nothing is undef" );
+    ok( ! hemp_is_missing(HempNothing), "nothing is not missing" );
+    ok(   hemp_is_nothing(HempNothing), "nothing is nothing" );
+    ok( ! hemp_is_boolean(HempNothing), "nothing is not boolean" );
+    ok( ! hemp_is_true(HempNothing),    "nothing is not true" );
+    ok( ! hemp_is_false(HempNothing),   "nothing is not false" );
 
     printf("HempFalse:\n");
     hemp_dump_value(HempFalse);
-    ok( ! HEMP_IS_UNDEF(HempFalse),     "false is not undef" );
-    ok( ! HEMP_IS_MISSING(HempFalse),   "false is not missing" );
-    ok( ! HEMP_IS_NOTHING(HempFalse),   "false is not nothing" );
-    ok(   HEMP_IS_BOOLEAN(HempFalse),   "false is boolean" );
-    ok( ! HEMP_IS_TRUE(HempFalse),      "false is not true" );
-    ok(   HEMP_IS_FALSE(HempFalse),     "false is false" );
+    ok( ! hemp_is_undef(HempFalse),     "false is not undef" );
+    ok( ! hemp_is_missing(HempFalse),   "false is not missing" );
+    ok( ! hemp_is_nothing(HempFalse),   "false is not nothing" );
+    ok(   hemp_is_boolean(HempFalse),   "false is boolean" );
+    ok( ! hemp_is_true(HempFalse),      "false is not true" );
+    ok(   hemp_is_false(HempFalse),     "false is false" );
 
     printf("HempTrue:\n");
     hemp_dump_value(HempTrue);
-    ok( ! HEMP_IS_UNDEF(HempTrue),      "true is not undef" );
-    ok( ! HEMP_IS_MISSING(HempTrue),    "true is not missing" );
-    ok( ! HEMP_IS_NOTHING(HempTrue),    "true is not nothing" );
-    ok(   HEMP_IS_BOOLEAN(HempTrue),    "true is boolean" );
-    ok(   HEMP_IS_TRUE(HempTrue),       "true is true" );
-    ok( ! HEMP_IS_FALSE(HempTrue),      "true is not false" );
+    ok( ! hemp_is_undef(HempTrue),      "true is not undef" );
+    ok( ! hemp_is_missing(HempTrue),    "true is not missing" );
+    ok( ! hemp_is_nothing(HempTrue),    "true is not nothing" );
+    ok(   hemp_is_boolean(HempTrue),    "true is boolean" );
+    ok(   hemp_is_true(HempTrue),       "true is true" );
+    ok( ! hemp_is_false(HempTrue),      "true is not false" );
 
     printf("HempBefore:\n");
     hemp_dump_value(HempBefore);
-    ok( ! HEMP_IS_BOOLEAN(HempBefore),  "before is not boolean" );
-    ok(   HEMP_IS_BEFORE(HempBefore),   "before is before" );
-    ok( ! HEMP_IS_EQUAL(HempBefore),    "before is not equal" );
-    ok( ! HEMP_IS_AFTER(HempBefore),    "before is not after" );
+    ok( ! hemp_is_boolean(HempBefore),  "before is not boolean" );
+    ok(   hemp_is_before(HempBefore),   "before is before" );
+    ok( ! hemp_is_equal(HempBefore),    "before is not equal" );
+    ok( ! hemp_is_after(HempBefore),    "before is not after" );
 
     printf("HempEqual:\n");
     hemp_dump_value(HempEqual);
-    ok( ! HEMP_IS_BOOLEAN(HempEqual),   "equal is not boolean" );
-    ok( ! HEMP_IS_BEFORE(HempEqual),    "equal is not before" );
-    ok(   HEMP_IS_EQUAL(HempEqual),     "equal is equal" );
-    ok( ! HEMP_IS_AFTER(HempEqual),     "equal is not after" );
+    ok( ! hemp_is_boolean(HempEqual),   "equal is not boolean" );
+    ok( ! hemp_is_before(HempEqual),    "equal is not before" );
+    ok(   hemp_is_equal(HempEqual),     "equal is equal" );
+    ok( ! hemp_is_after(HempEqual),     "equal is not after" );
 
     printf("HempAfter:\n");
     hemp_dump_value(HempAfter);
-    ok( ! HEMP_IS_BOOLEAN(HempAfter),   "after is not boolean" );
-    ok( ! HEMP_IS_BEFORE(HempAfter),    "after is not before" );
-    ok( ! HEMP_IS_EQUAL(HempAfter),     "after is not equal" );
-    ok(   HEMP_IS_AFTER(HempAfter),     "after is after" );
+    ok( ! hemp_is_boolean(HempAfter),   "after is not boolean" );
+    ok( ! hemp_is_before(HempAfter),    "after is not before" );
+    ok( ! hemp_is_equal(HempAfter),     "after is not equal" );
+    ok(   hemp_is_after(HempAfter),     "after is after" );
 
 }
 

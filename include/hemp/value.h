@@ -58,13 +58,35 @@ struct hemp_vtype_s {
  *--------------------------------------------------------------------------*/
 
 /* value types */
+#define HEMP_TYPE_BITS          4
+#define HEMP_TYPE_SHIFT         47
+#define HEMP_TYPE_MASK          0x0F
 #define HEMP_TYPE_NUM_ID        ((hemp_u8_t)  0x0)      /* 64 bit double    */
 #define HEMP_TYPE_INT_ID        ((hemp_u8_t)  0x1)      /* 32 bit integer   */
 #define HEMP_TYPE_STR_ID        ((hemp_u8_t)  0x2)      /* string pointer   */
 #define HEMP_TYPE_TEXT_ID       ((hemp_u8_t)  0x4)      /* text object      */
 #define HEMP_TYPE_IDENT_ID      ((hemp_u8_t)  0xF)      /* identity value   */
 
-/* define used for payload (depends on word size) */
+/* identity values are those that only ever have one instance */
+#define HEMP_IDENT_BITS         8
+#define HEMP_IDENT_MASK         0xFF
+#define HEMP_IDENT_NOT          0x00
+#define HEMP_IDENT_BIT_ALT      0x01
+#define HEMP_IDENT_BIT_UNDEF    0x02
+#define HEMP_IDENT_BIT_BOOLEAN  0x04
+#define HEMP_IDENT_BIT_COMPARE  0x10
+#define HEMP_IDENT_BIT_EQUAL    0x20
+
+#define HEMP_IDENT_MISSING_ID   (HEMP_IDENT_BIT_UNDEF)
+#define HEMP_IDENT_NOTHING_ID   (HEMP_IDENT_BIT_UNDEF   | HEMP_IDENT_BIT_ALT)
+#define HEMP_IDENT_FALSE_ID     (HEMP_IDENT_BIT_BOOLEAN)
+#define HEMP_IDENT_TRUE_ID      (HEMP_IDENT_BIT_BOOLEAN | HEMP_IDENT_BIT_ALT)
+#define HEMP_IDENT_BEFORE_ID    (HEMP_IDENT_BIT_COMPARE)
+#define HEMP_IDENT_EQUAL_ID     (HEMP_IDENT_BIT_COMPARE | HEMP_IDENT_BIT_EQUAL)
+#define HEMP_IDENT_AFTER_ID     (HEMP_IDENT_BIT_COMPARE | HEMP_IDENT_BIT_ALT)
+
+
+/* define bits used for payload (depends on word size) */
 #if HEMP_WORD_LENGTH == 32
     #define HEMP_PAYLOAD_MASK   0x00000000FFFFFFFFLL
     #define HEMP_PAYLOAD_BITS   32
@@ -79,10 +101,7 @@ struct hemp_vtype_s {
 #define HEMP_NAN_MASK           0xFFF8000000000000LL
 #define HEMP_PAYLOAD(v)         (v.bits & HEMP_PAYLOAD_MASK)
 
-/* macros for detecting and manipulating type tag */
-#define HEMP_TYPE_BITS          4
-#define HEMP_TYPE_SHIFT         47
-#define HEMP_TYPE_MASK          0x0F
+/* internal macros for detecting and manipulating type tag */
 #define HEMP_TYPE_UP(t)         ((hemp_u64_t) (t & HEMP_TYPE_MASK) << HEMP_TYPE_SHIFT)
 #define HEMP_TYPE_DOWN(v)       ((hemp_u8_t)  (v >> HEMP_TYPE_SHIFT) & HEMP_TYPE_MASK)
 #define HEMP_TYPE_NAN_MASK(t)   (HEMP_NAN_MASK | HEMP_TYPE_UP(t))
@@ -99,55 +118,38 @@ struct hemp_vtype_s {
 #define HEMP_TYPE_TEXT_MASK     HEMP_TYPE_NAN_MASK(HEMP_TYPE_TEXT_ID)
 #define HEMP_TYPE_IDENT_MASK    HEMP_TYPE_NAN_MASK(HEMP_TYPE_IDENT_ID)
 
-/* high-level macros for checking value types */
-#define HEMP_IS_TAGGED(v)       HEMP_TYPE_TAGGED(v)
-#define HEMP_IS_NUM(v)          HEMP_TYPE_NUMBER(v)
-#define HEMP_IS_INT(v)          HEMP_TYPE_CHECK(v, HEMP_TYPE_INT_ID)
-#define HEMP_IS_STR(v)          HEMP_TYPE_CHECK(v, HEMP_TYPE_STR_ID)
-#define HEMP_IS_TEXT(v)         HEMP_TYPE_CHECK(v, HEMP_TYPE_TEXT_ID)
-#define HEMP_IS_IDENT(v)        HEMP_TYPE_CHECK(v, HEMP_TYPE_IDENT_ID)
-
-/* identity values are those that only ever have one instance */
-#define HEMP_IDENT_BIT_ALT      0x01
-#define HEMP_IDENT_BIT_UNDEF    0x02
-#define HEMP_IDENT_BIT_BOOLEAN  0x04
-#define HEMP_IDENT_BIT_COMPARE  0x10
-#define HEMP_IDENT_BIT_EQUAL    0x20
-
-#define HEMP_IDENT_NOT          0x00
-#define HEMP_IDENT_MISSING_ID   (HEMP_IDENT_BIT_UNDEF)
-#define HEMP_IDENT_NOTHING_ID   (HEMP_IDENT_BIT_UNDEF   | HEMP_IDENT_BIT_ALT)
-#define HEMP_IDENT_FALSE_ID     (HEMP_IDENT_BIT_BOOLEAN)
-#define HEMP_IDENT_TRUE_ID      (HEMP_IDENT_BIT_BOOLEAN | HEMP_IDENT_BIT_ALT)
-#define HEMP_IDENT_BEFORE_ID    (HEMP_IDENT_BIT_COMPARE)
-#define HEMP_IDENT_EQUAL_ID     (HEMP_IDENT_BIT_COMPARE | HEMP_IDENT_BIT_EQUAL)
-#define HEMP_IDENT_AFTER_ID     (HEMP_IDENT_BIT_COMPARE | HEMP_IDENT_BIT_ALT)
-
-#define HEMP_IDENT_BITS         8
-#define HEMP_IDENT_MASK         0xFF
-
+/* macros for manipulating identity values */
 #define HEMP_IDENT_TAG(v)       ((hemp_u8_t)(v.bits & HEMP_IDENT_MASK))
-#define HEMP_IDENT_ID(v)        (HEMP_IS_IDENT(v) ? HEMP_IDENT_TAG(v) : HEMP_IDENT_NOT)
+#define HEMP_IDENT_ID(v)        (hemp_is_ident(v) ? HEMP_IDENT_TAG(v) : HEMP_IDENT_NOT)
 #define HEMP_IDENT_CHECK(v,t)   ((hemp_bool_t) (HEMP_IDENT_ID(v) == (hemp_u8_t) t))
 #define HEMP_IDENT_HAS(v,b)     ((hemp_bool_t) (HEMP_IDENT_ID(v) &  (hemp_u8_t) b) == b)
 
-#define HEMP_IS_UNDEF(v)        HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_UNDEF)
-#define HEMP_IS_BOOLEAN(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_BOOLEAN)
-#define HEMP_IS_COMPARE(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_COMPARE)
 
-#define HEMP_IS_MISSING(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_MISSING_ID)
-#define HEMP_IS_NOTHING(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_NOTHING_ID)
-#define HEMP_IS_FALSE(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_FALSE_ID)
-#define HEMP_IS_TRUE(v)         HEMP_IDENT_CHECK(v, HEMP_IDENT_TRUE_ID)
-#define HEMP_IS_BEFORE(v)       HEMP_IDENT_CHECK(v, HEMP_IDENT_BEFORE_ID)
-#define HEMP_IS_EQUAL(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_EQUAL_ID)
-#define HEMP_IS_AFTER(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_AFTER_ID)
+/* high-level macros for checking value types */
+#define hemp_is_tagged(v)       HEMP_TYPE_TAGGED(v)
+#define hemp_is_num(v)          HEMP_TYPE_NUMBER(v)
+#define hemp_is_int(v)          HEMP_TYPE_CHECK(v, HEMP_TYPE_INT_ID)
+#define hemp_is_str(v)          HEMP_TYPE_CHECK(v, HEMP_TYPE_STR_ID)
+#define hemp_is_text(v)         HEMP_TYPE_CHECK(v, HEMP_TYPE_TEXT_ID)
+#define hemp_is_ident(v)        HEMP_TYPE_CHECK(v, HEMP_TYPE_IDENT_ID)
+
+#define hemp_is_undef(v)        HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_UNDEF)
+#define hemp_is_boolean(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_BOOLEAN)
+#define hemp_is_compare(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_COMPARE)
+
+#define hemp_is_missing(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_MISSING_ID)
+#define hemp_is_nothing(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_NOTHING_ID)
+#define hemp_is_false(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_FALSE_ID)
+#define hemp_is_true(v)         HEMP_IDENT_CHECK(v, HEMP_IDENT_TRUE_ID)
+#define hemp_is_before(v)       HEMP_IDENT_CHECK(v, HEMP_IDENT_BEFORE_ID)
+#define hemp_is_equal(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_EQUAL_ID)
+#define hemp_is_after(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_AFTER_ID)
 
 /* a global array of vtables for each of the core types */
 extern const struct hemp_vtype_s hemp_global_vtypes[16];
-#define HEMP_VTABLE(v)          (hemp_global_vtypes[HEMP_TYPE_ID(v)])
-#define HEMP_IDENT_NAME(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
-#define HEMP_TYPE_NAME(v)       (HEMP_IS_IDENT(v) ? HEMP_IDENT_NAME(v) : HEMP_VTABLE(v).name)
+#define hemp_vtable(v)          (hemp_global_vtypes[HEMP_TYPE_ID(v)])
+#define hemp_ident_name(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
+#define hemp_type_name(v)       (hemp_is_ident(v) ? hemp_ident_name(v) : hemp_vtable(v).name)
 
 extern const hemp_value_t HempMissing;
 extern const hemp_value_t HempNothing;
@@ -219,8 +221,6 @@ struct hemp_vtype_s {
 */
 
 
-
-
 /* The hemp_vtypes data structure defines a collection of hemp_vtype value
  * types.  It is essentially a factory for creating value instances of 
  * different types.  The builtin data types (text, list, hash, etc) have
@@ -272,12 +272,11 @@ hemp_vtype_p    hemp_vtypes_new_type(hemp_vtypes_p, hemp_cstr_p);
 /*
 void            hemp_vtypes_free_vtype(hemp_hash_entry_p entry);
 hemp_vtype_p    hemp_vtypes_type(hemp_vtypes_p, hemp_cstr_p);
-
 hemp_vtype_p    hemp_vtype_init(hemp_vtypes_p, hemp_cstr_p);
 void            hemp_vtype_free();
+hemp_value_t    hemp_value_init(hemp_vtype_p, hemp_cstr_p, hemp_data_t, hemp_value_t);
+void            hemp_value_free(hemp_value_t); 
 */
-/*hemp_value_t    hemp_value_init(hemp_vtype_p, hemp_cstr_p, hemp_data_t, hemp_value_t);
-void            hemp_value_free(hemp_value_t); */
 
 
 #endif /* HEMP_VALUE_H */

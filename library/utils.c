@@ -101,13 +101,15 @@ hemp_md5_p
 hemp_md5_init(
     hemp_md5_p md5
 ) {
-    if (! md5)
+    if (! md5) {
         md5 = hemp_mem_alloc(
             sizeof(struct hemp_md5_s)
         );
+        if (! md5)
+            hemp_mem_fatal("md5");
+        debug("allocated md5 at %p\n", md5);
+    }
     
-    if (! md5)
-        hemp_mem_fatal("md5");
         
     md5->i[0] = md5->i[1] = (hemp_uint_t) 0;
 
@@ -116,6 +118,8 @@ hemp_md5_init(
     md5->buffer[1] = (hemp_uint_t) 0xefcdab89;
     md5->buffer[2] = (hemp_uint_t) 0x98badcfe;
     md5->buffer[3] = (hemp_uint_t) 0x10325476;
+    
+    return md5;
 }
 
 
@@ -203,7 +207,7 @@ hemp_md5_final(
         sprintf(str, "%02x", md5->digest[i]);
         str += 2;
     }
-    str[33] = HEMP_NUL;
+    *str = HEMP_NUL;
 }
 
 
@@ -321,6 +325,7 @@ void
 hemp_md5_free(
     hemp_md5_p md5
 ) {
+    debug("freeing MD5 data at %p\n", md5);
     hemp_mem_free(md5);
 }
 

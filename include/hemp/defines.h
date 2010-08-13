@@ -69,7 +69,7 @@
  * ye shall find ye treasure!  Let it be known that we don't be callin'em the 
  * HEMP_IS_GOLD_DUBLOON, or whatever the case might be, in case we be gettin' 
  * ourselves confused with ye old value macros and definitions like them there 
- * HEMP_IS_NUMBER and HEMP_IS_TEXT.  So now ye knows, and may that guidance 
+ * HEMP_IS_NUMBER and hemp_is_text.  So now ye knows, and may that guidance 
  * serve you well on yer merry sea-faring escapades... Arrrr!
  */
 #define HEMP_BE_WHITESPACE  0x0001  /* skippabled whitespace, comment, etc  */

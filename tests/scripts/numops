@@ -1,3 +1,18 @@
+-- test unary plus --
+[% +5 %]
+-- expect --
+5
+
+-- test unary minus --
+[% -5 %]
+-- expect --
+-5
+
+
+-- stop
+
+
+
 -- test simple number expression
 [% 400 + 20 %]
 -- expect

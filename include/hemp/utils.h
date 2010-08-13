@@ -35,7 +35,7 @@ static void
     hemp_md5_transform(
         hemp_uint_t *buffer,
         hemp_uint_t *input
-        );
+    );
 
 void 
     hemp_md5_free();

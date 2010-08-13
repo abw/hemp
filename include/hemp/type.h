@@ -29,9 +29,9 @@ void        hemp_type_free(hemp_type_p);
  * macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_type_name(obj)     \
-    obj->type->name
-
+//#define hemp_type_name(obj)     \
+//    obj->type->name
+//
 
 #endif /* HEMP_TYPE_H */
 

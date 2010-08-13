@@ -148,16 +148,16 @@ hemp_val_text(hemp_value_t v) {
 
 HEMP_DO_INLINE hemp_bool_t
 hemp_val_bool(hemp_value_t v) {
-    if (HEMP_IS_BOOLEAN(v)) {
-        return HEMP_IS_TRUE(v);
+    if (hemp_is_boolean(v)) {
+        return hemp_is_true(v);
     }
     else {
         hemp_fatal("value is not boolean"); 
         return HEMP_FALSE;
     }
     
-//    return HEMP_IS_BOOLEAN(v)
-//         ? HEMP_IS_TRUE(v)
+//    return hemp_is_boolean(v)
+//         ? hemp_is_true(v)
 //         : ({ hemp_fatal("value is not boolean"); 0 }); // shitfucks. no hemp 
 }
 

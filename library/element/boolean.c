@@ -29,7 +29,7 @@ HEMP_OUTPUT_FUNC(hemp_element_boolean_text) {
 
     hemp_text_append_cstr(
         text, 
-        HEMP_IS_TRUE( element->type->boolean(element, context) )
+        hemp_is_true( element->type->boolean(element, context) )
             ? HEMP_STR_TRUE
             : HEMP_STR_FALSE
     );
@@ -57,7 +57,7 @@ HEMP_VALUE_FUNC(hemp_element_boolean_not_value) {
     hemp_element_p expr = element->args.unary.expr;
     hemp_value_t   val  = expr->type->boolean(expr, context);
 
-    return HEMP_IS_TRUE(val)
+    return hemp_is_true(val)
         ? HempFalse
         : HempTrue;
 }
@@ -82,7 +82,7 @@ HEMP_VALUE_FUNC(hemp_element_boolean_and_value) {
     hemp_value_t lval  = lhs->type->boolean(lhs, context);
     hemp_value_t rval  = rhs->type->boolean(rhs, context);
 
-    return (HEMP_IS_TRUE(lval) && HEMP_IS_TRUE(rval))
+    return (hemp_is_true(lval) && hemp_is_true(rval))
         ? HempTrue
         : HempFalse;
 }
@@ -107,7 +107,7 @@ HEMP_VALUE_FUNC(hemp_element_boolean_or_value) {
     hemp_value_t lval  = lhs->type->boolean(lhs, context);
     hemp_value_t rval  = rhs->type->boolean(rhs, context);
 
-    return (HEMP_IS_TRUE(lval) || HEMP_IS_TRUE(rval))
+    return (hemp_is_true(lval) || hemp_is_true(rval))
         ? HempTrue
         : HempFalse;
 }
