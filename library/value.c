@@ -1,7 +1,7 @@
 #include <hemp/value.h>
 
 
-const struct hemp_vtype_s hemp_global_vtypes[16] = {
+const struct hemp_vtype_s hemp_global_vtypes[19] = {
     {   0x0, "Number",
         &hemp_value_number_text,
         &hemp_value_no_op,

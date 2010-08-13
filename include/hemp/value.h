@@ -55,6 +55,16 @@ extern const hemp_value_t HempBefore;
 extern const hemp_value_t HempEqual;
 extern const hemp_value_t HempAfter;
 
+/* 
+ * We have a global list of 32 vtables, each of which contains a core set
+ * of pseudo-methods that can be called against different data types.
+ * The first 16 entries correspond to the core value types: number, integer, 
+ * C string, text, etc.  The next 16 provide vtables for the singleton 
+ * identity values: HempMissing, HempNothing, HempFalse, HempTrue, 
+ * HempBefore, HempEqual and HempAfter.
+ */
+ 
+extern const struct hemp_vtype_s hemp_global_vtypes[19];
 
 
 
@@ -87,24 +97,61 @@ extern const hemp_value_t HempAfter;
 #define HEMP_TYPE_TEXT_ID       ((hemp_u8_t)  0x4)      /* text object      */
 #define HEMP_TYPE_IDENT_ID      ((hemp_u8_t)  0xF)      /* identity value   */
 
-/* identity values are those that only ever have one instance */
+/*
+ * Identity values are those that only ever have one instance.
+ *
+ * We use 4 bits to define the identity type and sub-type.  
+ *
+ *   0000 == 0x0 == 00  -- NOT USED: indicates value is *NOT* an identity --
+ *   0010 == 0x2 == 02  undefined: HempMissing
+ *   0011 == 0x3 == 03  undefined: HempNothing
+ *   0100 == 0x4 == 04  boolean: HempFalse
+ *   0110 == 0x6 == 06  boolean: HempTrue
+ *   1100 == 0xC == 12  compare: HempEqual  (bits 2 and 3 also indicate false)
+ *   1110 == 0xE == 14  compare: HempBefore (ditto indicating true)
+ *   1111 == 0xF == 15  compare: HempAfter  (ditto)
+ *
+ * The top two bits gives us a vtable entry as an offset from entry 
+ * HEMP_TYPE_MASK (16) in the global vtable list.
+ *
+ *   00     Undefined values: HempMissing, HempNothing
+ *   01     Boolean values: HempTrue, HempFalse
+ *   10     Comparison values: HempBefore, HempEqual, HempAfter
+ *
+ * Undefined values are identified by having bit 2 set and all higher bits 
+ * unset.  Bit 1 then indicates a missing (0) or found, but nil (1) value.
+ * When bit 3 is set it indicates that the value yields a boolean result.  In 
+ * that case, bit 2 contains the boolean flag and bit 1 is ignored.  Bit 4 
+ * indicates a comparison value: before, equal, after.  Before and after also
+ * have the boolean true bits encoded and equal has the false bits.
+ * 
+ */
+
 #define HEMP_IDENT_BITS         8
 #define HEMP_IDENT_MASK         0xFF
 #define HEMP_IDENT_NOT          0x00
-#define HEMP_IDENT_BIT_ALT      0x01
-#define HEMP_IDENT_BIT_UNDEF    0x02
-#define HEMP_IDENT_BIT_BOOLEAN  0x04
-#define HEMP_IDENT_BIT_COMPARE  0x10
-#define HEMP_IDENT_BIT_EQUAL    0x20
 
-#define HEMP_IDENT_MISSING_ID   (HEMP_IDENT_BIT_UNDEF)
-#define HEMP_IDENT_NOTHING_ID   (HEMP_IDENT_BIT_UNDEF   | HEMP_IDENT_BIT_ALT)
-#define HEMP_IDENT_FALSE_ID     (HEMP_IDENT_BIT_BOOLEAN)
-#define HEMP_IDENT_TRUE_ID      (HEMP_IDENT_BIT_BOOLEAN | HEMP_IDENT_BIT_ALT)
-#define HEMP_IDENT_BEFORE_ID    (HEMP_IDENT_BIT_COMPARE)
-#define HEMP_IDENT_EQUAL_ID     (HEMP_IDENT_BIT_COMPARE | HEMP_IDENT_BIT_EQUAL)
-#define HEMP_IDENT_AFTER_ID     (HEMP_IDENT_BIT_COMPARE | HEMP_IDENT_BIT_ALT)
+/* 
+ * These are a bit ad-hoc, so don't take them too seriously.  They're only 
+ * used below and the intent is to make the subsequent definitions make 
+ * sense in a self-documenting kinda way
+ */
+#define HEMP_IDENT_ZERO_BIT     0x0
+#define HEMP_IDENT_FALSE_BIT    0x0
+#define HEMP_IDENT_ONE_BIT      0x1
+#define HEMP_IDENT_UNDEF_BIT    0x2
+#define HEMP_IDENT_TRUE_BIT     0x2
+#define HEMP_IDENT_TRUTH_BIT    0x4
+#define HEMP_IDENT_COMPARE_BIT  0x8
 
+#define HEMP_IDENT_MISSING_ID   (HEMP_IDENT_UNDEF_BIT   | HEMP_IDENT_ZERO_BIT)
+#define HEMP_IDENT_NOTHING_ID   (HEMP_IDENT_UNDEF_BIT   | HEMP_IDENT_ONE_BIT)
+#define HEMP_IDENT_FALSE_ID     (HEMP_IDENT_TRUTH_BIT   | HEMP_IDENT_FALSE_BIT)
+#define HEMP_IDENT_TRUE_ID      (HEMP_IDENT_TRUTH_BIT   | HEMP_IDENT_TRUE_BIT)
+#define HEMP_IDENT_EQUAL_ID     (HEMP_IDENT_COMPARE_BIT | HEMP_IDENT_FALSE_ID)
+#define HEMP_IDENT_COMPARE_ID   (HEMP_IDENT_COMPARE_BIT | HEMP_IDENT_TRUE_ID)
+#define HEMP_IDENT_BEFORE_ID    (HEMP_IDENT_COMPARE_ID  | HEMP_IDENT_ZERO_BIT)
+#define HEMP_IDENT_AFTER_ID     (HEMP_IDENT_COMPARE_ID  | HEMP_IDENT_ONE_BIT)
 
 /* define bits used for payload (depends on word size) */
 #if HEMP_WORD_LENGTH == 32
@@ -130,7 +177,7 @@ extern const hemp_value_t HempAfter;
 #define HEMP_TYPE_NUMBER(v)     ((hemp_bool_t) ((hemp_u64_t)  v.bits < HEMP_NAN_MASK))
 #define HEMP_TYPE_TAGGED(v)     ((hemp_bool_t) ((hemp_u64_t) (v.bits & HEMP_NAN_MASK) == HEMP_NAN_MASK))
 #define HEMP_TYPE_ID(v)         (HEMP_TYPE_NUMBER(v) ? HEMP_TYPE_NUM_ID : HEMP_TYPE_TAG(v))
-#define HEMP_TYPE_CHECK(v,t)    ((hemp_bool_t) HEMP_TYPE_ID(v) == t)
+#define HEMP_TYPE_IS(v,t)       ((hemp_bool_t) HEMP_TYPE_ID(v) == t)
 
 /* full width masks for different types */
 #define HEMP_TYPE_NUM_MASK      ((hemp_u64_t) HEMP_TYPE_NUM_ID)
@@ -142,32 +189,45 @@ extern const hemp_value_t HempAfter;
 /* macros for manipulating identity values */
 #define HEMP_IDENT_TAG(v)       ((hemp_u8_t)(v.bits & HEMP_IDENT_MASK))
 #define HEMP_IDENT_ID(v)        (hemp_is_ident(v) ? HEMP_IDENT_TAG(v) : HEMP_IDENT_NOT)
-#define HEMP_IDENT_CHECK(v,t)   ((hemp_bool_t) (HEMP_IDENT_ID(v) == (hemp_u8_t) t))
-#define HEMP_IDENT_HAS(v,b)     ((hemp_bool_t) (HEMP_IDENT_ID(v) &  (hemp_u8_t) b) == b)
+#define HEMP_IDENT_IS(v,t)      ((hemp_bool_t) (HEMP_IDENT_ID(v) == (hemp_u8_t) t))
+#define HEMP_IDENT_HAS(v,b)     ( HEMP_IDENT_ID(v) & b)
+#define HEMP_IDENT_BELOW(v,b)   ((HEMP_IDENT_ID(v) ^ b) < b)
+
+//#define HEMP_IDENT_HAS(v,b)     ((hemp_bool_t) (HEMP_IDENT_ID(v) &  (hemp_u8_t) b) == b)
+//#define HEMP_IDENT_UNDEF(v)   
 
 
 /* high-level macros for checking value types */
 #define hemp_is_tagged(v)       HEMP_TYPE_TAGGED(v)
 #define hemp_is_num(v)          HEMP_TYPE_NUMBER(v)
-#define hemp_is_int(v)          HEMP_TYPE_CHECK(v, HEMP_TYPE_INT_ID)
-#define hemp_is_str(v)          HEMP_TYPE_CHECK(v, HEMP_TYPE_STR_ID)
-#define hemp_is_text(v)         HEMP_TYPE_CHECK(v, HEMP_TYPE_TEXT_ID)
-#define hemp_is_ident(v)        HEMP_TYPE_CHECK(v, HEMP_TYPE_IDENT_ID)
+#define hemp_is_int(v)          HEMP_TYPE_IS(v, HEMP_TYPE_INT_ID)
+#define hemp_is_str(v)          HEMP_TYPE_IS(v, HEMP_TYPE_STR_ID)
+#define hemp_is_text(v)         HEMP_TYPE_IS(v, HEMP_TYPE_TEXT_ID)
+#define hemp_is_ident(v)        HEMP_TYPE_IS(v, HEMP_TYPE_IDENT_ID)
+#define hemp_is_undef(v)        HEMP_IDENT_BELOW(v, HEMP_IDENT_UNDEF_BIT)
+#define hemp_is_truth(v)        HEMP_IDENT_HAS(v, HEMP_IDENT_TRUTH_BIT)
+#define hemp_is_compare(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_COMPARE_BIT)
+#define hemp_is_missing(v)      HEMP_IDENT_IS(v, HEMP_IDENT_MISSING_ID)
+#define hemp_is_nothing(v)      HEMP_IDENT_IS(v, HEMP_IDENT_NOTHING_ID)
+#define hemp_is_true(v)         (hemp_is_truth(v) &&   HEMP_IDENT_HAS(v, HEMP_IDENT_TRUE_BIT))
+#define hemp_is_false(v)        (hemp_is_truth(v) && ! HEMP_IDENT_HAS(v, HEMP_IDENT_TRUE_BIT))
+//#define hemp_is_false(v)        HEMP_IDENT_IS(v, HEMP_IDENT_FALSE_ID)
+//#define hemp_is_true(v)         HEMP_IDENT_IS(v, HEMP_IDENT_TRUE_ID)
 
-#define hemp_is_undef(v)        HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_UNDEF)
-#define hemp_is_boolean(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_BOOLEAN)
-#define hemp_is_compare(v)      HEMP_IDENT_HAS(v, HEMP_IDENT_BIT_COMPARE)
+#define hemp_is_before(v)       HEMP_IDENT_IS(v, HEMP_IDENT_BEFORE_ID)
+#define hemp_is_equal(v)        HEMP_IDENT_IS(v, HEMP_IDENT_EQUAL_ID)
+#define hemp_is_after(v)        HEMP_IDENT_IS(v, HEMP_IDENT_AFTER_ID)
 
-#define hemp_is_missing(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_MISSING_ID)
-#define hemp_is_nothing(v)      HEMP_IDENT_CHECK(v, HEMP_IDENT_NOTHING_ID)
-#define hemp_is_false(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_FALSE_ID)
-#define hemp_is_true(v)         HEMP_IDENT_CHECK(v, HEMP_IDENT_TRUE_ID)
-#define hemp_is_before(v)       HEMP_IDENT_CHECK(v, HEMP_IDENT_BEFORE_ID)
-#define hemp_is_equal(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_EQUAL_ID)
-#define hemp_is_after(v)        HEMP_IDENT_CHECK(v, HEMP_IDENT_AFTER_ID)
+
+/* old name, not sure which is better: boolean is what computer scientists
+ * call it, but truth is the more fundamental underlying concept
+ */
+#define hemp_is_boolean(v)      hemp_is_truth(v)
+
+
+
 
 /* a global array of vtables for each of the core types */
-extern const struct hemp_vtype_s hemp_global_vtypes[16];
 #define hemp_vtable(v)          (hemp_global_vtypes[HEMP_TYPE_ID(v)])
 #define hemp_vmethod(v,n)       (hemp_vtable(v).n)
 #define hemp_vcall(v,n)         (hemp_vmethod(v,n)(v))
