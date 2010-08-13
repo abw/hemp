@@ -1,6 +1,18 @@
 #include <hemp/ptree.h>
 
-#define hemp_debug_cmp(fmt,...) hemp_debug_yellow(fmt,##__VA_ARGS__)
+#if HEMP_DEBUG & HEMP_DEBUG_PTREE
+#define hemp_debug_find(fmt,...) hemp_debug_cyan(fmt,##__VA_ARGS__)
+#define hemp_debug_cmp(fmt,...)  hemp_debug_yellow(fmt,##__VA_ARGS__)
+#define hemp_debug_hit(fmt,...)  hemp_debug_green(fmt,##__VA_ARGS__)
+#define hemp_debug_miss(fmt,...) hemp_debug_red(fmt,##__VA_ARGS__)
+#define hemp_debug_walk(fmt,...) hemp_debug_blue(fmt,##__VA_ARGS__)
+#else
+#define hemp_debug_find(fmt,...)
+#define hemp_debug_cmp(fmt,...)
+#define hemp_debug_hit(fmt,...)
+#define hemp_debug_miss(fmt,...)
+#define hemp_debug_walk(fmt,...)
+#endif
  
 
 /*--------------------------------------------------------------------------
@@ -186,42 +198,44 @@ hemp_ptree_fetch(
     hemp_cstr_p  src      = key;
     hemp_cstr_p  cmptr    = pnode ? pnode->key : NULL;
 
+    hemp_debug_find("hemp_ptree_fetch(%p, %s)\n", ptree, key);
+
     while (src && cmptr) {
-//      hemp_debug_yellow("[%p] ?= [%p]\n", src, cmptr);
+        hemp_debug_cmp("[%s] ?= [%s]\n", src, cmptr);
         
         if (*src == *cmptr) {
-//          hemp_debug_yellow("[%c] == [%c]\n", *src, *cmptr);
+            hemp_debug_cmp("[%c] == [%c]\n", *src, *cmptr);
 
             if (* ++src) {
-//              hemp_debug_yellow("more of source to come: %s\n", src);
+                hemp_debug_cmp("more of source to come: %s\n", src);
 
                 if (pnode->equal) {
-//                  hemp_debug_yellow("[%c->equal]", *cmptr);
+                    hemp_debug_cmp("[%c->equal]\n", *cmptr);
                     pnode = pnode->equal;
                     cmptr = pnode->key;
                     continue;
                 }
                 else if (* ++cmptr) {
-//                  hemp_debug_yellow("[%c->more => %c]\n", *(cmptr - 1), *cmptr);
+                    hemp_debug_cmp("[%c->more => %c]\n", *(cmptr - 1), *cmptr);
                     continue;
                 }
             }
             else if  (* ++cmptr && ! pnode->equal) {
-//              hemp_debug("incomplete key lookup: %s\n", cmptr);
+                hemp_debug_miss("incomplete key lookup: %s\n", cmptr);
                 break;
             }
             else {
-//              hemp_debug("returning final payload: %s\n", pnode->value);
+                hemp_debug_hit("returning final payload: %p\n", pnode->value);
                 return pnode->value;
             }
         }
         else if (*src < *cmptr && pnode->before) {
-//          hemp_debug_blue("[%c is before %c]", *src, *cmptr);
+            hemp_debug_walk("[%c is before %c]\n", *src, *cmptr);
             pnode = pnode->before;
             cmptr = pnode->key;
         }
         else if (*src > *cmptr && pnode->after) {
-//          hemp_debug_blue("[%c is after %c]", *src, *cmptr);
+            hemp_debug_walk("[%c is after %c]\n", *src, *cmptr);
             pnode = pnode->after;
             cmptr = pnode->key;
         }
@@ -244,18 +258,20 @@ hemp_pnode_match_more(
     hemp_cstr_p src    = *srcptr;
     hemp_mem_p  value  = NULL;
 
+    hemp_debug_find("hemp_ptree_match_more()\n");
+
     while (1) {
         if (*src == *cmptr) {
             src++;
 
             if (pnode->equal) {
-//              hemp_debug_yellow("[%c->equal]", *cmptr);
+                hemp_debug_cmp("[%c->equal]", *cmptr);
                 value = pnode->value;     // payload - but only if pnode is set - don't want to trash previous match
                 pnode = pnode->equal;
                 cmptr = pnode->key;
             }
             else if (* ++cmptr) {
-//              hemp_debug_yellow("[%c->more => %c]", *(cmptr - 1), cmptr);
+                hemp_debug_cmp("[%c->more => %c]", *(cmptr - 1), cmptr);
             }
             else {
                 value = pnode->value;
@@ -263,12 +279,12 @@ hemp_pnode_match_more(
             }
         }
         else if (*src < *cmptr && pnode->before) {
-//          hemp_debug_blue("[%c is before %c]", *src, *cmptr);
+            hemp_debug_walk("[%c is before %c]", *src, *cmptr);
             pnode = pnode->before;
             cmptr = pnode->key;
         }
         else if (*src > *cmptr && pnode->after) {
-//          hemp_debug_blue("[%c is after %c]", *src, *cmptr);
+            hemp_debug_walk("[%c is after %c]", *src, *cmptr);
             pnode = pnode->after;
             cmptr = pnode->key;
         }

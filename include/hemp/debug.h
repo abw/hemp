@@ -19,6 +19,7 @@ void hemp_debug_token(hemp_cstr_p type, hemp_cstr_p str, hemp_pos_t len);
 #define HEMP_DEBUG_FILE      0x0010
 #define HEMP_DEBUG_SCAN      0x0020
 #define HEMP_DEBUG_PARSE     0x0040
+#define HEMP_DEBUG_PTREE     0x0100
 #define HEMP_DEBUG_ALL       0xFFFF
 
 #define HEMP_ANSI_RED        "\e[31m"
