@@ -267,7 +267,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 /* operator precedence */
 
 #define HEMP_PREC_DBG(type, tprec, lhs, prec, compare, action)              \
-    debug_parse(                                                            \
+    hemp_debug_parse(                                                       \
         "precedence of %s (%d) is %s than %s (%d), %s\n",                   \
         type->name, tprec, compare,                                         \
         lhs->type->name, prec, action                                       \

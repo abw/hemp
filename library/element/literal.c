@@ -2,7 +2,7 @@
 
 
 HEMP_PARSE_FUNC(hemp_element_literal_expr) {
-    debug_call("hemp_element_literal_parse_expr()\n");
+    hemp_debug_call("hemp_element_literal_parse_expr()\n");
     
     /* Advance the pointer to the next element after this one and return the 
      * current element as the yielded expression.
@@ -22,7 +22,7 @@ HEMP_PARSE_FUNC(hemp_element_literal_expr) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_literal_source) {
-    debug_call("hemp_element_literal_source()\n");
+    hemp_debug_call("hemp_element_literal_source()\n");
     hemp_text_p text;
     hemp_prepare_output(output, text, element->length);
     hemp_text_append_cstrn(text, element->token, element->length);
@@ -31,7 +31,10 @@ HEMP_OUTPUT_FUNC(hemp_element_literal_source) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_literal_text) {
-    debug_call("hemp_element_literal_text(%p) [%s]\n", element, element->type->name);
+    hemp_debug_call(
+        "hemp_element_literal_text(%p) [%s]\n", 
+        element, element->type->name
+    );
 
     /* TODO: merge this with hemp_element_literal_source().  They were 
      * different but are now the same

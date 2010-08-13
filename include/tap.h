@@ -93,7 +93,7 @@
         ? _gen_result(1, __func__, __FILE__, __LINE__, msg)                  \
         : _gen_result(0, __func__, __FILE__, __LINE__,                       \
             "%s\n%sEXPECT: [%s%s%s]\nOUTPUT: [%s%s%s]",                      \
-            msg, ANSI_CYAN, ANSI_YELLOW, b, ANSI_CYAN, ANSI_RED, a, ANSI_CYAN) \
+            msg, HEMP_ANSI_CYAN, HEMP_ANSI_YELLOW, b, HEMP_ANSI_CYAN, HEMP_ANSI_RED, a, HEMP_ANSI_CYAN) \
     )
 
 

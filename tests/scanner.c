@@ -61,13 +61,13 @@ void check_output(
     hemp_cstr_chomp(expect);
 
     if (hemp_cstr_eq(output->string, expect)) {
-//      printf("EXPECT: [%s%s%s]\n", ANSI_YELLOW, expect, ANSI_RESET);
-//      printf("OUTPUT: [%s%s%s]\n", ANSI_GREEN, output->string, ANSI_RESET);
+//      printf("EXPECT: [%s%s%s]\n", HEMP_ANSI_YELLOW, expect, HEMP_ANSI_RESET);
+//      printf("OUTPUT: [%s%s%s]\n", HEMP_ANSI_GREEN, output->string, HEMP_ANSI_RESET);
         ok(1, "%s output matches expected", name);
     }
     else {
-        printf("EXPECT: [%s%s%s]\n", ANSI_YELLOW, expect, ANSI_RESET);
-        printf("OUTPUT: [%s%s%s]\n", ANSI_RED, output->string, ANSI_RESET);
+        printf("EXPECT: [%s%s%s]\n", HEMP_ANSI_YELLOW, expect, HEMP_ANSI_RESET);
+        printf("OUTPUT: [%s%s%s]\n", HEMP_ANSI_RED, output->string, HEMP_ANSI_RESET);
         ok(0, "%s output does not match expected", name);
     }
 }
@@ -85,8 +85,8 @@ void check_error(
         ok(1, "%s error matches expected", name);
     }
     else {
-        printf("EXPECT ERROR: [%s%s%s]\n", ANSI_YELLOW, expect, ANSI_RESET);
-        printf("ACTUAL ERROR: [%s%s%s]\n", ANSI_RED, error, ANSI_RESET);
+        printf("EXPECT ERROR: [%s%s%s]\n", HEMP_ANSI_YELLOW, expect, HEMP_ANSI_RESET);
+        printf("ACTUAL ERROR: [%s%s%s]\n", HEMP_ANSI_RED, error, HEMP_ANSI_RESET);
         ok(0, "%s error does not match expected", name);
     }
 }
@@ -132,7 +132,7 @@ void test_script(
     /* skip over first -- test */
     test += strlen(TEST_MARKER);
     list = hemp_cstr_split(test, TEST_MARKER);
-    debug("found %d tests in %s\n", list->length, script);
+    hemp_debug("found %d tests in %s\n", list->length, script);
 
     for (n = 0; n < list->length; n++) {
         test = hemp_list_item(list, n);
@@ -203,7 +203,7 @@ void test_script(
     }
 
     HEMP_CATCH_ALL;
-        debug("CATCH-ALL: %s\n", hemp->error->message);
+        hemp_debug("CATCH-ALL: %s\n", hemp->error->message);
     HEMP_END;
 
     hemp_mem_free(dir);

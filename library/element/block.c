@@ -31,7 +31,7 @@ HEMP_SYMBOL_FUNC(hemp_element_block_symbol) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_block_source) {
-    debug_call("hemp_element_block_source()\n");
+    hemp_debug_call("hemp_element_block_source()\n");
 
     hemp_text_p text;
     hemp_prepare_output(output, text, element->length);
@@ -43,8 +43,8 @@ HEMP_OUTPUT_FUNC(hemp_element_block_source) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_block_text) {
-    debug_call("hemp_element_block_text()\n");
-//  debug("*** hemp_element_block_text()\n");
+    hemp_debug_call("hemp_element_block_text()\n");
+//  hemp_debug("*** hemp_element_block_text()\n");
     hemp_list_p     exprs = element->args.block.exprs;
     hemp_element_p  expr;
     hemp_size_t     n;
@@ -54,11 +54,11 @@ HEMP_OUTPUT_FUNC(hemp_element_block_text) {
     
     for (n = 0; n < exprs->length; n++) {
         expr = hemp_list_item(exprs, n);
-//      debug("calling %s text method\n", expr->type->name);
+//      hemp_debug("calling %s text method\n", expr->type->name);
         expr->type->text(expr, context, output);
     }
 
-//  debug("returning block text (%d bytes): %p\n", text->length, text);
+//  hemp_debug("returning block text (%d bytes): %p\n", text->length, text);
 
     return output;
 }
@@ -68,7 +68,7 @@ void
 hemp_element_block_clean(
     hemp_element_p element
 ) {
-    debug_call("hemp_element_block_clean(%p)\n", element);
+    hemp_debug_call("hemp_element_block_clean(%p)\n", element);
 
     hemp_list_p exprs = element->args.block.exprs;
 

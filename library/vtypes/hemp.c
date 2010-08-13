@@ -58,14 +58,14 @@ hemp_value_text_init(
     hemp_data_t data = value->data;
     hemp_text_t text = data.text;
     
-    debug("text:init [%s]\n", text->string);
+    hemp_debug("text:init [%s]\n", text->string);
 }
 
 void
 hemp_value_text_wipe(
     hemp_value_t    value
 ) {
-    debug("text:wipe [%s]\n", value->data.text->string);
+    hemp_debug("text:wipe [%s]\n", value->data.text->string);
 }
 
 hemp_text_t
@@ -74,7 +74,7 @@ hemp_value_text_text(
     hemp_context_t  context,
     hemp_text_t     output
 ) {
-    debug("text:text\n");
+    hemp_debug("text:text\n");
 }
 
 
@@ -84,7 +84,7 @@ hemp_value_text_dot(
     hemp_context_t  context,
     hemp_cstr_t     name
 ) {
-    debug("text:dot(%s)\n", name);
+    hemp_debug("text:dot(%s)\n", name);
 }
 
 
@@ -98,7 +98,7 @@ hemp_value_list_text(
     hemp_context_t  context,
     hemp_text_t     output
 ) {
-    debug("list:text\n");
+    hemp_debug("list:text\n");
 }
 
 hemp_value_t
@@ -107,7 +107,7 @@ hemp_value_list_dot(
     hemp_context_t  context,
     hemp_cstr_t     name
 ) {
-    debug("list:dot(%s)\n", name);
+    hemp_debug("list:dot(%s)\n", name);
 }
 
 
@@ -121,7 +121,7 @@ hemp_value_hash_text(
     hemp_context_t  context,
     hemp_text_t     output
 ) {
-    debug("hash:text\n");
+    hemp_debug("hash:text\n");
 }
 
 hemp_value_t
@@ -133,13 +133,13 @@ hemp_value_hash_dot(
     hemp_value_t result = (hemp_value_t) hemp_hash_fetch(
         value->data.hash, name
     );
-    debug("looked up\n");
+    hemp_debug("looked up\n");
     
     if (result) {
-        debug("found '%s' in hash\n", name);
+        hemp_debug("found '%s' in hash\n", name);
     }
     else {
-        debug("missing '%s' in hash\n", name);
+        hemp_debug("missing '%s' in hash\n", name);
     }
     return result;
 }

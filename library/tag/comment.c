@@ -13,7 +13,7 @@ hemp_scan_comment_tag(
 
     to += strlen(tag->end);
 
-    debug_token("comment", tagtok, to - tagtok);
+    hemp_debug_token("comment", tagtok, to - tagtok);
 
     hemp_elements_append(
         tmpl->elements, HempSymbolComment,

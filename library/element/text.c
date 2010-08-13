@@ -55,7 +55,7 @@ HEMP_SYMBOL_FUNC(hemp_element_textop_symbol) {
 }
 
 HEMP_PARSE_FUNC(hemp_element_text_expr) {
-    debug_call("hemp_element_text_expr()\n");
+    hemp_debug_call("hemp_element_text_expr()\n");
     
     /* Advance the pointer to the next element after this one and return the 
      * current element as the yielded expression.
@@ -76,7 +76,7 @@ HEMP_PARSE_FUNC(hemp_element_text_expr) {
  *--------------------------------------------------------------------------*/
 
 HEMP_VALUE_FUNC(hemp_element_textop_number) {
-    debug_blue("hemp_element_textop_number()\n");
+    hemp_debug_call("hemp_element_textop_number()\n");
 
     hemp_text_p text;
     hemp_value_t value = element->type->text(element, context, HempNothing);
@@ -86,7 +86,7 @@ HEMP_VALUE_FUNC(hemp_element_textop_number) {
 
 
 HEMP_VALUE_FUNC(hemp_element_textop_integer) {
-    debug_blue("hemp_element_textop_integer()\n");
+    hemp_debug_call("hemp_element_textop_integer()\n");
 
     hemp_text_p text;
     hemp_value_t value = element->type->text(element, context, HempNothing);
@@ -96,7 +96,7 @@ HEMP_VALUE_FUNC(hemp_element_textop_integer) {
 
 
 HEMP_VALUE_FUNC(hemp_element_textop_boolean) {
-    debug_blue("hemp_element_textop_boolean()\n");
+    hemp_debug_call("hemp_element_textop_boolean()\n");
 
     hemp_text_p text;
     hemp_value_t value = element->type->text(element, context, HempNothing);
@@ -113,7 +113,7 @@ void
 hemp_element_text_clean(
     hemp_element_p element
 ) {
-    debug_call("hemp_element_text_clean(%p)\n", element);
+    hemp_debug_call("hemp_element_text_clean(%p)\n", element);
 
     /* squote and dquote elements may have allocated memory to accomodate
      * translated escape sequences, e.g. \n \\, etc
@@ -136,7 +136,7 @@ HEMP_SYMBOL_FUNC(hemp_element_text_concat_symbol) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_text_concat_value) {
-    debug_call("hemp_element_text_concat_value()\n");
+    hemp_debug_call("hemp_element_text_concat_value()\n");
 
     hemp_text_p text;
     hemp_prepare_output(output, text, 0);
@@ -161,7 +161,7 @@ HEMP_SYMBOL_FUNC(hemp_element_text_compare_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_text_compare_value) {
-    debug_call("hemp_element_text_compare_value()\n");
+    hemp_debug_call("hemp_element_text_compare_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
     hemp_element_p rhs = element->args.binary.rhs;

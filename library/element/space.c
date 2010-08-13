@@ -148,7 +148,7 @@ HEMP_SYMBOL_FUNC(hemp_element_eof_symbol) {
 }
 
 HEMP_OUTPUT_FUNC(hemp_element_eof_text) {
-    debug_call("hemp_element_eof_text()\n");
+    hemp_debug_call("hemp_element_eof_text()\n");
     hemp_text_p text;
     hemp_prepare_output(output, text, 6);
     hemp_text_append_cstr(text, "--EOF--");     // TMP

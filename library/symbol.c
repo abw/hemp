@@ -80,21 +80,21 @@ void
 hemp_symbol_dump(
     hemp_symbol_p symbol
 ) {
-    debug("symbol at %p\n", symbol->name, symbol);
-    debug("       name: %s\n", symbol->name);
-    debug("      start: %s\n", symbol->start ? symbol->start : "<none>");
-    debug("        end: %s\n", symbol->end ? symbol->end : "<none>");
-    debug("      flags: %04x\n", symbol->flags);
-    debug("      lprec: %dx\n", symbol->lprec);
-    debug("      rprec: %dx\n", symbol->rprec);
-    debug("    scanner: %px\n", symbol->scanner);
-    debug("    cleanup: %px\n", symbol->cleanup);
-    debug("       expr: %px\n", symbol->expr);
-    debug("      infix: %px\n", symbol->infix);
-    debug("     source: %px\n", symbol->source);
-    debug("       text: %px\n", symbol->text);
-    debug("     number: %px\n", symbol->number);
-    debug("    integer: %px\n", symbol->integer);
-    debug("    boolean: %px\n", symbol->boolean);
+    hemp_debug("symbol at %p\n", symbol->name, symbol);
+    hemp_debug("       name: %s\n", symbol->name);
+    hemp_debug("      start: %s\n", symbol->start ? symbol->start : "<none>");
+    hemp_debug("        end: %s\n", symbol->end ? symbol->end : "<none>");
+    hemp_debug("      flags: %04x\n", symbol->flags);
+    hemp_debug("      lprec: %dx\n", symbol->lprec);
+    hemp_debug("      rprec: %dx\n", symbol->rprec);
+    hemp_debug("    scanner: %px\n", symbol->scanner);
+    hemp_debug("    cleanup: %px\n", symbol->cleanup);
+    hemp_debug("       expr: %px\n", symbol->expr);
+    hemp_debug("      infix: %px\n", symbol->infix);
+    hemp_debug("     source: %px\n", symbol->source);
+    hemp_debug("       text: %px\n", symbol->text);
+    hemp_debug("     number: %px\n", symbol->number);
+    hemp_debug("    integer: %px\n", symbol->integer);
+    hemp_debug("    boolean: %px\n", symbol->boolean);
 }
 

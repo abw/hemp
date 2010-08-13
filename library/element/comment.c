@@ -39,7 +39,7 @@ HEMP_SCAN_FUNC(hemp_element_comment_scanner) {
     hemp_cstr_p     tag_end = tag->end;
     hemp_size_t     tag_len = strlen(tag->end);
 
-    debug_call("hemp_element_comment_scanner()\n");
+    hemp_debug_call("hemp_element_comment_scanner()\n");
 
     /* walk to the end of line or end of tag */
     while (* ++src) {

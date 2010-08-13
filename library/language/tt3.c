@@ -23,7 +23,7 @@ static struct hemp_symbols_s hemp_symbols_tt3_command[] = {
 
 
 HEMP_LANGUAGE_FUNC(hemp_language_tt3_init) {
-    debug_call("hemp_language_tt3_init(%p, %s)\n", hemp, name);
+    hemp_debug_call("hemp_language_tt3_init(%p, %s)\n", hemp, name);
 
     hemp_language_p language = hemp_language_init(
         hemp, name, HEMP_TT3_LANGUAGE_VERSION
@@ -68,7 +68,7 @@ hemp_dialect_tt3_prepare(
     hemp_template_p tmpl
     // TODO: options
 ) {
-    debug_call("hemp_dialect_tt3_prepare(%p)\n", tmpl);
+    hemp_debug_call("hemp_dialect_tt3_prepare(%p)\n", tmpl);
 
     hemp_p         hemp    = tmpl->dialect->hemp;
     hemp_tagset_p  tagset  = tmpl->tagset;
@@ -130,7 +130,7 @@ void
 hemp_dialect_tt3_cleanup(
     hemp_template_p tmpl
 ) {
-    debug_call("hemp_dialect_tt3_cleanup(%p)\n", tmpl);
+    hemp_debug_call("hemp_dialect_tt3_cleanup(%p)\n", tmpl);
 }
 
 
@@ -140,7 +140,7 @@ hemp_dialect_tt3_cleanup(
  *--------------------------------------------------------------------------*/
 
 HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core) {
-    debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
+    hemp_debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = hemp_grammar_hemp_bravo(hemp, name);
 //    HEMP_SYMBOL("hemp.comment", "#", 0, 0);
     HEMP_SYMBOL2("hemp.squote", "q<<", ">>");
@@ -150,14 +150,14 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core) {
 
 
 HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_command) {
-    debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
+    hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = hemp_grammar_tt3_core(hemp, name);
     return grammar;
 }
 
 
 HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_control) {
-    debug_call("hemp_grammar_tt3_control(%p, %s)\n", hemp, name);
+    hemp_debug_call("hemp_grammar_tt3_control(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = hemp_grammar_tt3_core(hemp, name);
     return grammar;
 }
@@ -173,7 +173,7 @@ hemp_element_tt3_command_symbols(
     hemp_p      hemp,
     hemp_cstr_p name
 ) {
-    debug_yellow("** Initialising tt3 command symbols (%s requested)\n", name);
+    hemp_debug_yellow("** Initialising tt3 command symbols (%s requested)\n", name);
 
     /* we should detect if we've done this already and skip it */
     HEMP_ELEMENTS(hemp_symbols_tt3_command);
@@ -190,7 +190,7 @@ hemp_element_tt3_TODO_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    debug_todo("tt3 constructor for %s symbol", symbol->name);
+    hemp_todo("tt3 constructor for %s symbol", symbol->name);
     DONT_OPTIMISE_ME_AWAY;
     return symbol;
 }

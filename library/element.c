@@ -57,7 +57,7 @@ hemp_element_p
 hemp_element_parse(
     hemp_element_p element
 ) {
-    debug_call("hemp_element_parse()\n");
+    hemp_debug_call("hemp_element_parse()\n");
 
     hemp_element_p block = hemp_element_parse_block(
         &element,
@@ -68,11 +68,11 @@ hemp_element_parse(
 /*    
     if (block) {
         hemp_text_t text = block->type->text(block, NULL);
-        debug("OUTPUT: %s\n", text->string);
+        hemp_debug("OUTPUT: %s\n", text->string);
         hemp_text_free(text);
     }
     else {
-        debug_red("did not parse a block\n");
+        hemp_debug_red("did not parse a block\n");
     }
 */
     
@@ -90,7 +90,7 @@ HEMP_PARSE_FUNC(hemp_element_parse_block) {
     hemp_element_p block   = NULL;
 
     if (list) {
-        // debug("got list of %d exprs\n", list->length);
+        // hemp_debug("got list of %d exprs\n", list->length);
         block = hemp_element_init(
             NULL,
             HempSymbolBlock, 
@@ -109,13 +109,13 @@ hemp_list_p
 hemp_element_parse_exprs(
     HEMP_PARSE_ARGS
 ) {
-    debug_call("hemp_element_parse_exprs()\n");
+    hemp_debug_call("hemp_element_parse_exprs()\n");
 
     hemp_element_p expr;
     hemp_list_p    exprs = hemp_list_init();
 
-#if DEBUG & DEBUG_PARSE
-    debug("\n-- EXPRS --\n");
+#if HEMP_DEBUG & HEMP_DEBUG_PARSE
+    hemp_debug("\n-- EXPRS --\n");
 #endif
 
     while (1) {
@@ -124,7 +124,7 @@ hemp_element_parse_exprs(
         hemp_skip_terminator(elemptr);
         hemp_skip_whitespace(elemptr);
 
-//      debug_parse("about to parse expr:\n");
+//      hemp_debug_parse("about to parse expr:\n");
 
         /* tmp hack to catch TODO stuff while developing */
         if (! (*elemptr)->type->expr) {
@@ -140,8 +140,8 @@ hemp_element_parse_exprs(
         if (! expr)
             break;
 
-//      debug_parse("parsed %s expression:\n", expr->type->name);
-#if DEBUG & DEBUG_PARSE
+//      hemp_debug_parse("parsed %s expression:\n", expr->type->name);
+#if HEMP_DEBUG & HEMP_DEBUG_PARSE
         hemp_element_dump(expr);
 #endif
         hemp_list_push(exprs, expr);
@@ -149,17 +149,17 @@ hemp_element_parse_exprs(
 
     /* element should be EOF or we hit a duff token */
     if (hemp_at_eof(elemptr)) {
-        debug_parse("%sReached EOF\n%s\n", ANSI_GREEN, ANSI_RESET);
+        hemp_debug_parse("%sReached EOF\n%s\n", HEMP_ANSI_GREEN, HEMP_ANSI_RESET);
     }
     else {
-        debug_parse("%sNot an expression: %s:%s\n", ANSI_RED, (*elemptr)->type->name, ANSI_RESET);
+        hemp_debug_parse("%sNot an expression: %s:%s\n", HEMP_ANSI_RED, (*elemptr)->type->name, HEMP_ANSI_RESET);
         hemp_element_dump(*elemptr);
     }
     
-    // debug("n expressions: %d\n", exprs->length);
+    // hemp_debug("n expressions: %d\n", exprs->length);
     
     if (! exprs->length && ! force) {
-        // debug("clearing empty list\n");
+        // hemp_debug("clearing empty list\n");
         hemp_list_free(exprs);
         exprs = NULL;
     }
@@ -169,7 +169,7 @@ hemp_element_parse_exprs(
 
 
 HEMP_PARSE_FUNC(hemp_element_parse_expr) {
-    debug_todo("hemp_element_parse_expr()\n");
+    hemp_todo("hemp_element_parse_expr()\n");
     return NULL;
 }
 
@@ -184,7 +184,7 @@ HEMP_PARSE_FUNC(hemp_element_not_expr) {
 
 
 HEMP_INFIX_FUNC(hemp_element_not_infix) {
-    debug_call("hemp_element_not_infix()\n");
+    hemp_debug_call("hemp_element_not_infix()\n");
     return lhs;
 }
 
@@ -230,7 +230,7 @@ HEMP_VALUE_FUNC(hemp_element_not_compare) {
  *--------------------------------------------------------------------------*/
 
 HEMP_PARSE_FUNC(hemp_element_next_expr) {
-    debug_call("hemp_element_next_expr()\n");
+    hemp_debug_call("hemp_element_next_expr()\n");
 
     if (hemp_has_next(elemptr)) {
         hemp_go_next(elemptr);
@@ -242,7 +242,7 @@ HEMP_PARSE_FUNC(hemp_element_next_expr) {
 
 
 HEMP_INFIX_FUNC(hemp_element_next_infix) {
-    debug_call("hemp_element_next_infix()\n");
+    hemp_debug_call("hemp_element_next_infix()\n");
 
     if (hemp_has_next(elemptr)) {
         hemp_go_next(elemptr);
@@ -261,7 +261,7 @@ HEMP_PARSE_FUNC(hemp_element_parse_prefix) {
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
 
-    debug_call("hemp_element_parse_prefix()\n");
+    hemp_debug_call("hemp_element_parse_prefix()\n");
 
     hemp_set_flag(self, HEMP_BE_PREFIX);
     hemp_go_next(elemptr);
@@ -284,7 +284,7 @@ HEMP_INFIX_FUNC(hemp_element_parse_postfix) {
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
 
-    debug_call("hemp_element_parse_infix_left()\n");
+    hemp_debug_call("hemp_element_parse_infix_left()\n");
 
     HEMP_INFIX_LEFT_PRECEDENCE;
     hemp_set_flag(self, HEMP_BE_POSTFIX);
@@ -304,7 +304,7 @@ HEMP_INFIX_FUNC(hemp_element_parse_infix_left) {
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
 
-    debug_call("hemp_element_parse_infix_left()\n");
+    hemp_debug_call("hemp_element_parse_infix_left()\n");
 
     HEMP_INFIX_LEFT_PRECEDENCE;
     hemp_set_flag(self, HEMP_BE_INFIX);
@@ -329,7 +329,7 @@ HEMP_INFIX_FUNC(hemp_element_parse_infix_right) {
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
 
-    debug_call("hemp_element_parse_infix_right()\n");
+    hemp_debug_call("hemp_element_parse_infix_right()\n");
 
     HEMP_INFIX_RIGHT_PRECEDENCE;
     hemp_set_flag(self, HEMP_BE_INFIX);
@@ -355,7 +355,7 @@ HEMP_INFIX_FUNC(hemp_element_parse_infix_right) {
  *--------------------------------------------------------------------------*/
 
 HEMP_OUTPUT_FUNC(hemp_element_binary_source) {
-    debug_call("hemp_element_binary_source()\n");
+    hemp_debug_call("hemp_element_binary_source()\n");
 
     /* ARSE!  I forgot, I'm using the source "method" to display token
      * list as part of the parser debug... will have to disable this for
@@ -394,7 +394,7 @@ hemp_element_dump(
     if (! e->type->text)
         hemp_fatal("%s type does not define a text() method", e->type->name);
 
-//    debug("calling text() method for %s\n", e->type->name);
+//    hemp_debug("calling text() method for %s\n", e->type->name);
 
     hemp_value_t output = e->type->source
         ? e->type->source(e, NULL, HempNothing)
@@ -403,10 +403,10 @@ hemp_element_dump(
     hemp_text_p text = hemp_val_text(output);
     hemp_cstr_p cstr = text ? text->string : "-- NO OUTPUT --";
     
-    debug(
+    hemp_debug(
         "%p %03d:%02d %-20s %s[%s%s%s]%s\n", e,
         (int) e->position, (int) e->length, e->type->name, 
-        ANSI_BLUE, ANSI_YELLOW, cstr, ANSI_BLUE, ANSI_RESET
+        HEMP_ANSI_BLUE, HEMP_ANSI_YELLOW, cstr, HEMP_ANSI_BLUE, HEMP_ANSI_RESET
     );
 
     if (text) {

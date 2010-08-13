@@ -4,9 +4,9 @@
 void hemp_todo(char *format, ...) {
     va_list args;
     va_start(args, format);
-    fprintf(stderr, "%sTODO: %s", ANSI_RED, ANSI_YELLOW);
+    fprintf(stderr, "%sTODO: %s", HEMP_ANSI_RED, HEMP_ANSI_YELLOW);
     vfprintf(stderr, format, args);
-    fprintf(stderr, "%s\n", ANSI_RESET);
+    fprintf(stderr, "%s\n", HEMP_ANSI_RESET);
     va_end(args);
 }
 
@@ -14,9 +14,9 @@ void hemp_todo(char *format, ...) {
 void hemp_fatal(char *format, ...) {
     va_list args;
     va_start(args, format);
-    fprintf(stderr, "%shemp fatal error: %s", ANSI_RED, ANSI_YELLOW);
+    fprintf(stderr, "%shemp fatal error: %s", HEMP_ANSI_RED, HEMP_ANSI_YELLOW);
     vfprintf(stderr, format, args);
-    fprintf(stderr, "%s\n", ANSI_RESET);
+    fprintf(stderr, "%s\n", HEMP_ANSI_RESET);
     va_end(args);
     exit(1);
 }
@@ -106,11 +106,9 @@ hemp_md5_init(
             sizeof(struct hemp_md5_s)
         );
         if (! md5)
-            hemp_mem_fatal("md5");
-        debug("allocated md5 at %p\n", md5);
+            hemp_mem_fail("MD5");
     }
     
-        
     md5->i[0] = md5->i[1] = (hemp_uint_t) 0;
 
     /* Load magic initialization constants */
@@ -325,7 +323,6 @@ void
 hemp_md5_free(
     hemp_md5_p md5
 ) {
-    debug("freeing MD5 data at %p\n", md5);
     hemp_mem_free(md5);
 }
 

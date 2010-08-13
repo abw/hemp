@@ -49,7 +49,7 @@ hemp_element_p
 hemp_template_tokens(
     hemp_template_p tmpl
 ) {
-    debug_call("hemp_template_tokens(%p)\n", tmpl);
+    hemp_debug_call("hemp_template_tokens(%p)\n", tmpl);
 
     if (! tmpl->elements->head)
         hemp_template_scan(tmpl);
@@ -62,18 +62,10 @@ hemp_bool_t
 hemp_template_scan(
     hemp_template_p tmpl
 ) {
-    debug_call("hemp_template_scan(%p)\n", tmpl);
+    hemp_debug_call("hemp_template_scan(%p)\n", tmpl);
     
     hemp_bool_t result = tmpl->dialect->scanner(tmpl);
     
-    if (result) {
-        // TODO: proper exception handling
-        debug_green("scanned OK\n");
-    }
-    else {
-        debug_red("scan failed\n");
-    }
-
     return result;
 }
 
@@ -82,7 +74,7 @@ hemp_bool_t
 hemp_template_compile(
     hemp_template_p tmpl
 ) {
-    debug_call("hemp_template_compile(%p)\n", tmpl);
+    hemp_debug_call("hemp_template_compile(%p)\n", tmpl);
     
     hemp_element_p element = hemp_template_tokens(tmpl);
     tmpl->tree = hemp_element_parse(element);
@@ -96,7 +88,7 @@ hemp_element_p
 hemp_template_tree(
     hemp_template_p tmpl
 ) {
-    debug_call("hemp_template_tree(%p)\n", tmpl);
+    hemp_debug_call("hemp_template_tree(%p)\n", tmpl);
 
     if (! tmpl->tree)
         hemp_template_compile(tmpl);
@@ -109,7 +101,7 @@ hemp_text_p
 hemp_template_render(
     hemp_template_p tmpl
 ) {
-    debug_call("hemp_template_render(%p)\n", tmpl);
+    hemp_debug_call("hemp_template_render(%p)\n", tmpl);
 
     hemp_element_p root = hemp_template_tree(tmpl);
 

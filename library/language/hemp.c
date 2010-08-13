@@ -81,7 +81,7 @@ static struct hemp_symbols_s hemp_symbols_hemp_text[] = {
  *--------------------------------------------------------------------------*/
 
 HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
-    debug_call("hemp_language_hemp_init(%p, %s)\n", hemp, name);
+    hemp_debug_call("hemp_language_hemp_init(%p, %s)\n", hemp, name);
 
     hemp_language_p language = hemp_language_init(
         hemp, name, HEMP_LANGUAGE_VERSION
@@ -153,7 +153,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_text_symbols) {
  *--------------------------------------------------------------------------*/
 
 HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_alpha) {
-    debug_call("hemp_grammar_hemp_alpha(%p, %s)\n", hemp, name);
+    hemp_debug_call("hemp_grammar_hemp_alpha(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = (hemp_grammar_p) hemp_grammar_init(hemp, name);
     hemp_grammar_add_hemp_alpha(grammar);
     return grammar;
@@ -161,7 +161,7 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_alpha) {
 
 
 HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_bravo) {
-    debug_call("hemp_grammar_hemp_bravo(%p, %s)\n", hemp, name);
+    hemp_debug_call("hemp_grammar_hemp_bravo(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = (hemp_grammar_p) hemp_grammar_init(hemp, name);
     hemp_grammar_add_hemp_alpha(grammar);
     hemp_grammar_add_hemp_bravo(grammar);
@@ -173,7 +173,7 @@ void
 hemp_grammar_add_hemp_alpha(
     hemp_grammar_p grammar
 ) {
-    debug_call("hemp_grammar_add_hemp_alpha(%p)\n", grammar);
+    hemp_debug_call("hemp_grammar_add_hemp_alpha(%p)\n", grammar);
     HEMP_SYMBOL1("hemp.text",    "_TEXT"    );
     HEMP_SYMBOL1("hemp.space",   "_SPACE"   );
     HEMP_SYMBOL1("hemp.comment", "#"        );
@@ -186,7 +186,7 @@ void
 hemp_grammar_add_hemp_bravo(
     hemp_grammar_p grammar
 ) {
-    debug_call("hemp_grammar_add_hemp_bravo(%p)\n", grammar);
+    hemp_debug_call("hemp_grammar_add_hemp_bravo(%p)\n", grammar);
 
 //    [ '$'       => sig_item         =>   0, 350 ],      # $foo
 //    [ '@'       => sig_list         =>   0, 350 ],      # @foo

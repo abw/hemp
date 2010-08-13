@@ -83,7 +83,10 @@ HEMP_SYMBOL_FUNC(hemp_element_number_symbol) {
 
 
 HEMP_PARSE_FUNC(hemp_element_number_expr) {
-    debug_call("hemp_element_number_parse_expr() precedence is %d, parg: %d\n", (*elemptr)->type->lprec, precedence);
+    hemp_debug_call(
+        "hemp_element_number_parse_expr() precedence is %d, parg: %d\n", 
+        (*elemptr)->type->lprec, precedence
+    );
     
     hemp_element_p element = *elemptr;
   
@@ -103,7 +106,7 @@ HEMP_PARSE_FUNC(hemp_element_number_expr) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_number_text) {
-    debug_call("hemp_element_number_text()\n");
+    hemp_debug_call("hemp_element_number_text()\n");
 
     static hemp_char_t buffer[HEMP_BUFFER_SIZE];
     hemp_text_p text;
@@ -120,13 +123,13 @@ HEMP_OUTPUT_FUNC(hemp_element_number_text) {
 
 
 HEMP_VALUE_FUNC(hemp_element_number_number) {
-    debug_call("hemp_element_number_number()\n");
+    hemp_debug_call("hemp_element_number_number()\n");
     return element->args.value;
 }
 
 
 HEMP_VALUE_FUNC(hemp_element_number_integer) {
-    debug_call("hemp_element_number_integer()\n");
+    hemp_debug_call("hemp_element_number_integer()\n");
     hemp_value_t value = element->args.value;
     return hemp_is_int(value)
         ? value
@@ -140,7 +143,7 @@ HEMP_VALUE_FUNC(hemp_element_number_boolean) {
 
 
 HEMP_VALUE_FUNC(hemp_element_number_compare) {
-    debug_todo("hemp_element_number_compare()\n");
+    hemp_todo("hemp_element_number_compare()\n");
     // TODO: coerce number to HempBefore/HempEqual/HempAfter, etc
 }
 
@@ -162,7 +165,7 @@ HEMP_SYMBOL_FUNC(hemp_element_integer_symbol) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_integer_text) {
-    debug_call("hemp_element_integer_text()\n");
+    hemp_debug_call("hemp_element_integer_text()\n");
 
     static hemp_char_t buffer[HEMP_BUFFER_SIZE];
     hemp_text_p text;
@@ -179,7 +182,7 @@ HEMP_OUTPUT_FUNC(hemp_element_integer_text) {
 
 
 HEMP_VALUE_FUNC(hemp_element_integer_number) {
-    debug_call("hemp_element_integer_number()\n");
+    hemp_debug_call("hemp_element_integer_number()\n");
     hemp_value_t value = element->args.value;
     
     // FIXME: not sure what's best to do here... do we allow number() 
@@ -192,7 +195,7 @@ HEMP_VALUE_FUNC(hemp_element_integer_number) {
 
 
 HEMP_VALUE_FUNC(hemp_element_integer_integer) {
-    debug_call("hemp_element_number_integer()\n");
+    hemp_debug_call("hemp_element_number_integer()\n");
     return element->args.value;
 }
 
@@ -203,7 +206,7 @@ HEMP_VALUE_FUNC(hemp_element_integer_boolean) {
 
 
 HEMP_VALUE_FUNC(hemp_element_integer_compare) {
-    debug_todo("hemp_element_integer_compare()\n");
+    hemp_todo("hemp_element_integer_compare()\n");
     // TODO: coerce number to HempBefore/HempEqual/HempAfter, etc
 }
 
@@ -225,7 +228,7 @@ HEMP_SYMBOL_FUNC(hemp_element_numop_symbol) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_numop_text) {
-    debug_call("hemp_element_numop_text()\n");
+    hemp_debug_call("hemp_element_numop_text()\n");
 
     static hemp_char_t buffer[HEMP_BUFFER_SIZE];
 
@@ -245,7 +248,7 @@ HEMP_OUTPUT_FUNC(hemp_element_numop_text) {
 
 
 HEMP_VALUE_FUNC(hemp_element_numop_integer) {
-    debug_call("hemp_element_numop_integer()\n");
+    hemp_debug_call("hemp_element_numop_integer()\n");
 
     hemp_text_p text;
     hemp_value_t value = element->type->number(element, context);
@@ -257,7 +260,7 @@ HEMP_VALUE_FUNC(hemp_element_numop_integer) {
 
 
 HEMP_VALUE_FUNC(hemp_element_numop_boolean) {
-    debug_call("hemp_element_numop_boolean()\n");
+    hemp_debug_call("hemp_element_numop_boolean()\n");
     hemp_todo("hemp_element_numop_boolean()");
 }
 
@@ -311,7 +314,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_plus_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_number_plus_value) {
-    debug_call("hemp_element_number_plus_value()\n");
+    hemp_debug_call("hemp_element_number_plus_value()\n");
 
     /* prefix unary '+' coerces value to a number */
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
@@ -356,7 +359,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_minus_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_number_minus_value) {
-    debug_blue("hemp_element_number_minus_value()\n");
+    hemp_debug_call("hemp_element_number_minus_value()\n");
 
     /* prefix unary '-' coerces value to a number and negates it */
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
@@ -402,7 +405,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_power_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_number_power_value) {
-    debug_call("hemp_element_number_power_value()\n");
+    hemp_debug_call("hemp_element_number_power_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
     hemp_element_p rhs = element->args.binary.rhs;
@@ -444,7 +447,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_multiply_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_number_multiply_value) {
-    debug_call("hemp_element_number_multiply_value()\n");
+    hemp_debug_call("hemp_element_number_multiply_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
     hemp_element_p rhs = element->args.binary.rhs;
@@ -481,7 +484,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_divide_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_number_divide_value) {
-    debug_call("hemp_element_number_divide_value()\n");
+    hemp_debug_call("hemp_element_number_divide_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
     hemp_element_p rhs = element->args.binary.rhs;
@@ -519,7 +522,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_divint_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_number_divint_value) {
-    debug_call("hemp_element_number_divint_value()\n");
+    hemp_debug_call("hemp_element_number_divint_value()\n");
 
     hemp_element_p lhs  = element->args.binary.lhs;
     hemp_element_p rhs  = element->args.binary.rhs;
@@ -545,7 +548,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_modulus_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_number_modulus_value) {
-    debug_call("hemp_element_number_modulus_value()\n");
+    hemp_debug_call("hemp_element_number_modulus_value()\n");
 
     hemp_element_p lhs  = element->args.binary.lhs;
     hemp_element_p rhs  = element->args.binary.rhs;
@@ -570,7 +573,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_compare_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_number_compare_value) {
-    debug_call("hemp_element_number_compare_value()\n");
+    hemp_debug_call("hemp_element_number_compare_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
     hemp_element_p rhs = element->args.binary.rhs;

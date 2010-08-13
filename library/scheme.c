@@ -84,7 +84,7 @@ hemp_scheme_file_reader(
     hemp_source_p source 
 ) {
     hemp_cstr_p output = "TODO: read file";
-    debug_red("TODO: hemp_scheme_file_reader()\n");
+    hemp_debug_red("TODO: hemp_scheme_file_reader()\n");
     return (source->text = hemp_cstr_copy(output));
 }
 
@@ -101,7 +101,7 @@ hemp_bool_t
 hemp_scheme_file_checker(
     hemp_source_p source
 ) {
-    debug_red("TODO: hemp_scheme_file_checker()\n");
+    hemp_debug_red("TODO: hemp_scheme_file_checker()\n");
     return HEMP_FALSE;
 }
 

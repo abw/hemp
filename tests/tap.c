@@ -39,11 +39,11 @@
 #include "hemp/memory.h"
 
 #ifdef TAP_COLOR
-# define PASS_COL ANSI_GREEN
-# define FAIL_COL ANSI_RED
-# define SKIP_COL ANSI_YELLOW
-# define DIAG_COL ANSI_CYAN
-# define TERM_COL ANSI_RESET
+# define PASS_COL HEMP_ANSI_GREEN
+# define FAIL_COL HEMP_ANSI_RED
+# define SKIP_COL HEMP_ANSI_YELLOW
+# define DIAG_COL HEMP_ANSI_CYAN
+# define TERM_COL HEMP_ANSI_RESET
 #else
 # define PASS_COL ""
 # define FAIL_COL ""

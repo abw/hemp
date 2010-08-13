@@ -1,30 +1,30 @@
 #include "hemp/core.h"
 
-#ifdef DEBUG
-int debugging = 1;
+#ifdef HEMP_DEBUG
+int hemp_debugging = 1;
 #else
-int debugging = 0;
+int hemp_debugging = 0;
 #endif
 
 
-void debug_on() {
-#ifdef DEBUG
-    debugging = 1;
-#endif
-}
-
-
-void debug_off() {
-#ifdef DEBUG
-    debugging = 0;
+void hemp_debug_on() {
+#ifdef HEMP_DEBUG
+    hemp_debugging = 1;
 #endif
 }
 
 
-void debug(char *format, ...)
+void hemp_debug_off() {
+#ifdef HEMP_DEBUG
+    hemp_debugging = 0;
+#endif
+}
+
+
+void hemp_debug(char *format, ...)
 {
-#ifdef DEBUG
-    if (debugging) {
+#ifdef HEMP_DEBUG
+    if (hemp_debugging) {
         va_list args;
         va_start(args, format);
         vfprintf(stderr, format, args);
@@ -34,22 +34,22 @@ void debug(char *format, ...)
 }
 
 
-void debug_col(char *col, char *format, ...) 
+void hemp_debug_col(char *col, char *format, ...) 
 {
-#ifdef DEBUG
-    if (debugging) {
+#ifdef HEMP_DEBUG
+    if (hemp_debugging) {
         va_list args;
         va_start(args, format);
         fprintf(stderr, "%s", col);
         vfprintf(stderr, format, args);
-        fprintf(stderr, ANSI_RESET);
+        fprintf(stderr, HEMP_ANSI_RESET);
         va_end(args);
     }
 #endif
 }
 
 void 
-debug_token(
+hemp_debug_token(
     hemp_cstr_p type,
     hemp_cstr_p str,
     hemp_pos_t  len
@@ -59,15 +59,6 @@ debug_token(
         len = 79;
     strncpy(buffer, str, len);
     buffer[len] = '\0';
-    debug_scan("[%s:%s]\n", type, buffer);
+    hemp_debug_scan("[%s:%s]\n", type, buffer);
 } 
 
-hemp_bool_t 
-dump(
-    char *format, ...
-) {
-    va_list args;
-    va_start(args, format);
-    vfprintf(stderr, format, args);
-    va_end(args);
-}

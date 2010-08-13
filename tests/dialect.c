@@ -46,6 +46,6 @@ hemp_bool_t
 dummy_dialect_builder(
     hemp_p hemp
 ) {
-    debug_cyan("dummy dialect builder\n");
+    hemp_debug_cyan("dummy dialect builder\n");
 }
 

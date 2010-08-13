@@ -12,7 +12,7 @@ void hemp_mem_fail(hemp_cstr_p);
         sizeof(type)                                    \
     );                                                  \
     if (! name) hemp_mem_fail(label);                   \
-    debug_mem(                                          \
+    hemp_debug_mem(                                          \
         "Allocated %d bytes at %p for new %s type\n",   \
         sizeof(type), name, label                       \
     );
@@ -43,7 +43,7 @@ void hemp_mem_fail(hemp_cstr_p);
  *--------------------------------------------------------------------------*/
 
 
-#if DEBUG & DEBUG_MEM
+#if HEMP_DEBUG & HEMP_DEBUG_MEM
     #define HEMP_MEM_WILD     0    /* uninitialised (wild)                     */
     #define HEMP_MEM_FAIL     1    /* malloc failed                            */
     #define HEMP_MEM_MALLOC   2    /* malloc succeeded                         */

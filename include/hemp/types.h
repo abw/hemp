@@ -85,8 +85,9 @@ typedef struct hemp_variable_s  * hemp_variable_p;
 //typedef union  hemp_value_t     * hemp_value_p;
 
 
-typedef enum   hemp_tag_style_e   hemp_tag_style_t;
+/* may be some cruft in these below */
 
+typedef enum   hemp_tag_style_e   hemp_tag_style_t;
 typedef union  hemp_evalue_u      hemp_evalue_t;
 typedef struct hemp_unary_s       hemp_unary_t;
 typedef struct hemp_binary_s      hemp_binary_t;
@@ -94,18 +95,11 @@ typedef struct hemp_block_s       hemp_block_t;
 
 
 /*
-typedef struct hemp_context     * hemp_context_t;
-typedef struct hemp_elements    * hemp_elements_t;
 typedef struct hemp_hub         * hemp_hub_t;
-typedef struct hemp_scheme      * hemp_scheme_t;
-typedef struct hemp_scope       * hemp_scope_t;
-typedef struct hemp_source      * hemp_source_t;
-typedef struct hemp_text        * hemp_text_t;
 typedef struct hemp_type        * hemp_type_t;
 typedef struct hemp_vtype       * hemp_vtype_t;
 typedef struct hemp_vtypes      * hemp_vtypes_t;
 typedef struct hemp_value       * hemp_value_t;
-
 typedef struct hemp_templates_s * hemp_templates_p;
 */
 
@@ -132,6 +126,16 @@ struct hemp_s {
     hemp_error_p     error;
     hemp_cstr_p     *errmsg;
 };
+
+
+/*--------------------------------------------------------------------------
+ * singleton global data structure
+ *--------------------------------------------------------------------------*/
+
+struct hemp_global_s {
+    hemp_size_t     n_hemps;
+};
+
 
 /*--------------------------------------------------------------------------
  * function pointers

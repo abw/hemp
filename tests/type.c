@@ -55,7 +55,7 @@ foo_prepare(
     foo_ptr foo = (foo_ptr) item;
     int n     = HEMP_ARG(int);
     char *ptr = HEMP_ARG(char *);
-    debug("foo_init(%p, %d, %s)\n", foo, n, ptr);
+    hemp_debug("foo_init(%p, %d, %s)\n", foo, n, ptr);
     foo->n = n;
     foo->ptr = strdup(ptr);
     return foo;
@@ -67,6 +67,6 @@ foo_cleanup(
     hemp_item_t item
 ) {
     foo_ptr foo = (foo_ptr) item;
-    debug("foo_cleanup(%p) %d: %s\n", foo, foo->n, foo->ptr);
+    hemp_debug("foo_cleanup(%p) %d: %s\n", foo, foo->n, foo->ptr);
     hemp_mem_free(foo->ptr);
 }

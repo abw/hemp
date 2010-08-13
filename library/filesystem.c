@@ -52,9 +52,9 @@ hemp_filesystem_set_path(
     hemp_cstr_p path
 ) {
     hemp_filesystem_clear_path(filesystem);             // TODO: free strings
-    debug_file("setting filesystem path to %s\n", path);
+    hemp_debug_file("setting filesystem path to %s\n", path);
     filesystem->path = hemp_cstr_split(path, HEMP_PATH_SEPARATOR);      // TODO: handle errors?
-    debug_file("filesystem path is now %s\n", hemp_list_dump(filesystem->path));
+    hemp_debug_file("filesystem path is now %s\n", hemp_list_dump(filesystem->path));
 }
 
 
@@ -109,7 +109,7 @@ hemp_filesystem_join_path(
 
     strcat(joined, path);
     
-//  debug("joined [%s] + [%s] => [%s]\n", base, path, joined);
+//  hemp_debug("joined [%s] + [%s] => [%s]\n", base, path, joined);
     return joined;
 }
 
@@ -139,7 +139,7 @@ hemp_filesystem_readable_path(
     for (n = 0; n < filesystem->path->length; n++) {
         root = hemp_list_item(filesystem->path, n);
         full = hemp_filesystem_join_path(root, path);
-//      debug("full path: %s\n", full);
+//      hemp_debug("full path: %s\n", full);
         hemp_mem_free(full);
     }
     

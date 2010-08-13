@@ -109,13 +109,13 @@ int main(int argc, char **argv, char **env) {
 void hemp_banner() {
     fprintf(
         stderr, "%s%s v%s %s by %s %s%s\n",
-        ANSI_GREEN,
+        HEMP_ANSI_GREEN,
         HEMP_NAME,
         HEMP_VERSION,
         HEMP_ARCHITECTURE,
         HEMP_AUTHOR,
         HEMP_EMAIL,
-        ANSI_RESET
+        HEMP_ANSI_RESET
     );
 }
 
@@ -123,8 +123,8 @@ void hemp_banner() {
 void hemp_prompt() {
     fprintf(
         stderr, "%s%s%s >%s ",
-        ANSI_GREEN, HEMP_PROMPT,
-        ANSI_YELLOW, ANSI_RESET
+        HEMP_ANSI_GREEN, HEMP_PROMPT,
+        HEMP_ANSI_YELLOW, HEMP_ANSI_RESET
     );
 }
 

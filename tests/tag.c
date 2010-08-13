@@ -27,7 +27,7 @@ void test1_scan(
     hemp_pos_t  pos, 
     hemp_cstr_p *src
 ) {
-    debug("custom scanner");
+    hemp_debug("custom scanner");
 }
 
 

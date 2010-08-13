@@ -186,26 +186,26 @@ void hemp_dump_u64(
         bit = value & mask;
         mask = mask >> 1;
         if (n == 1) {
-            col = ANSI_MAGENTA;
+            col = HEMP_ANSI_MAGENTA;
         }
         else if (n < 13) {
-            col = ANSI_YELLOW;
+            col = HEMP_ANSI_YELLOW;
         }
         else if (n < 14) {
-            col = ANSI_MAGENTA;
+            col = HEMP_ANSI_MAGENTA;
         }
         else if (n < 18) {
-            col = ANSI_BLUE;
+            col = HEMP_ANSI_BLUE;
         }
         else {
-            col = ANSI_CYAN;
+            col = HEMP_ANSI_CYAN;
         }
         printf("%s%c", col, bit ? '1' : '0');
         if (n % 4 == 0)
             printf(" ");
         n++;
     }
-    printf(ANSI_RESET "\n");
+    printf(HEMP_ANSI_RESET "\n");
 //    hemp_dump_32((hemp_u32_t)(value >> 32));
 //    hemp_dump_32((hemp_u32_t)(hemp_u64_t) value & 0xFFFFFFFFL);
 }

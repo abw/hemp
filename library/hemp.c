@@ -1,7 +1,42 @@
 #include <hemp.h>
 
+struct hemp_global_s hemp_global = {
+    0                           /* nhemps - number of live hemp objects   */
+};
+    
 
-void hemp_init_extra(hemp_p);
+/*--------------------------------------------------------------------------
+ * hemp global initialisation and cleanup functions
+ *--------------------------------------------------------------------------*/
+
+hemp_size_t
+hemp_global_init() {
+    if (! hemp_global.n_hemps++) {
+        hemp_debug_init("Initialising global hemp data\n");
+        /* TODO: do init */
+    }
+    
+    hemp_debug_init(
+        "Initialising local hemp interpreter #%d\n", 
+        hemp_global.n_hemps
+    );
+
+    return hemp_global.n_hemps;
+}
+
+hemp_size_t
+hemp_global_free() {
+    hemp_debug_init(
+        "Releasing local hemp interpreter #%d\n", 
+        hemp_global.n_hemps
+    );
+
+    if (! --hemp_global.n_hemps) {
+        hemp_debug_init("Releasing global hemp data\n");
+    }
+
+    return hemp_global.n_hemps;
+}
 
 
 /*--------------------------------------------------------------------------
@@ -10,6 +45,8 @@ void hemp_init_extra(hemp_p);
 
 hemp_p
 hemp_init() {
+    hemp_global_init();
+
     hemp_p hemp = (hemp_p) hemp_mem_alloc( 
         sizeof(struct hemp_s) 
     );
@@ -88,12 +125,12 @@ hemp_init_errors(
     hemp->jump->parent = NULL;
     hemp->jump->depth  = 0;
 
-//  debug("setting error handling jump point in hemp at %p\n", hemp);
+//  hemp_debug("setting error handling jump point in hemp at %p\n", hemp);
 
     hemp_errno_e e = setjmp(hemp->jump->buffer);
 
     if (e) {
-//        debug("uncaught error in hemp at %p\n", hemp);
+//        hemp_debug("uncaught error in hemp at %p\n", hemp);
 //        if (hemp->error && hemp->error->message) {
 //            hemp_fatal(hemp->error->message);
 //        }
@@ -115,10 +152,10 @@ void
 hemp_free(
     hemp_p hemp
 ) {
-    debug_call("hemp_free()\n");
+    hemp_debug_call("hemp_free()\n");
 
     /* templates */
-//  debug("freeing templates\n");
+//  hemp_debug("freeing templates\n");
     hemp_hash_each(hemp->templates, &hemp_free_template);
     hemp_hash_free(hemp->templates);
 
@@ -127,17 +164,17 @@ hemp_free(
     //  hemp_hash_free(hemp->tags);
 
     /* free factories */
-//  debug("freeing elements factory\n");
+//  hemp_debug("freeing elements factory\n");
     hemp_factory_free(hemp->elements);
-//  debug("freeing grammars factory\n");
+//  hemp_debug("freeing grammars factory\n");
     hemp_factory_free(hemp->grammars);
-//  debug("freeing dialects factory\n");
+//  hemp_debug("freeing dialects factory\n");
     hemp_factory_free(hemp->dialects);
-//  debug("freeing language factory\n");
+//  hemp_debug("freeing language factory\n");
     hemp_factory_free(hemp->languages);
 
     /* schemes */
-//  debug("freeing schemes\n");
+//  hemp_debug("freeing schemes\n");
     hemp_hash_each(hemp->schemes, &hemp_free_scheme);
     hemp_hash_free(hemp->schemes);
 
@@ -160,6 +197,9 @@ hemp_free(
 
     /* hemp */
     hemp_mem_free(hemp);
+
+    /* release global data if we're the last hemp object */
+    hemp_global_free();
 }
 
 
@@ -170,7 +210,7 @@ hemp_free_scheme(
     hemp_pos_t          position,
     hemp_hash_item_p    item
 ) {
-//  debug("cleaning %s scheme\n", ((hemp_scheme_p) item->value)->name);
+//  hemp_debug("cleaning %s scheme\n", ((hemp_scheme_p) item->value)->name);
     hemp_scheme_free( (hemp_scheme_p) item->value );
     return HEMP_TRUE;
 }
@@ -193,7 +233,7 @@ hemp_free_dialect(
     hemp_pos_t          position,
     hemp_hash_item_p    item
 ) {
-//  debug("cleaning %s dialect\n", ((hemp_dialect_p) item->value)->name);
+//  hemp_debug("cleaning %s dialect\n", ((hemp_dialect_p) item->value)->name);
     hemp_dialect_free( (hemp_dialect_p) item->value );
     return HEMP_TRUE;
 }
@@ -205,7 +245,7 @@ hemp_free_grammar(
     hemp_pos_t          position,
     hemp_hash_item_p    item
 ) {
-//  debug("cleaning %s grammar\n", ((hemp_grammar_p) item->value)->name);
+//  hemp_debug("cleaning %s grammar\n", ((hemp_grammar_p) item->value)->name);
     hemp_grammar_free( (hemp_grammar_p) item->value );
     return HEMP_TRUE;
 }
@@ -217,7 +257,7 @@ hemp_free_element(
     hemp_pos_t          position,
     hemp_hash_item_p    item
 ) {
-//    debug("cleaning %s element\n", ((hemp_etype_p) item->value)->name);
+//    hemp_debug("cleaning %s element\n", ((hemp_etype_p) item->value)->name);
 //    hemp_element_free( (hemp_element_p) item->value );
     return HEMP_TRUE;
 }
@@ -258,7 +298,7 @@ hemp_register_elements(
 //        hemp_dialect_free(old);
 //
 //    hemp_todo("hemp_add_dialect()");
-//    debug("adding dialect: %s\n", dialect->name);
+//    hemp_debug("adding dialect: %s\n", dialect->name);
 //
 //    hemp_hash_store(hemp->dialects, dialect->name, dialect);
 //}
@@ -339,7 +379,7 @@ hemp_template(
     hemp_md5_update_cstr(&md5, source);
     hemp_md5_final(&md5);
     
-//  debug("MD5 for %s template [%s] is %s\n", scheme, source, md5.output);
+//  hemp_debug("MD5 for %s template [%s] is %s\n", scheme, source, md5.output);
 
     tmpl = hemp_hash_fetch(hemp->templates, md5.output);
     
@@ -347,7 +387,7 @@ hemp_template(
         if (hemp_cstr_eq(tmpl->source->scheme->name, scheme)
         &&  hemp_cstr_eq(tmpl->source->name, source)) {
             // TODO: bump up LRU cache
-//          debug("returning cached template\n");
+//          hemp_debug("returning cached template\n");
             return tmpl;
         }
         else {
@@ -361,7 +401,7 @@ hemp_template(
         hemp_source(hemp, scheme, source)
     );
 
-//  debug("caching new template\n");
+//  hemp_debug("caching new template\n");
 
     /* let the source allocate memory for storing md5 permanently */
     hemp_source_set_md5(tmpl->source, md5.output);
@@ -402,7 +442,7 @@ hemp_error_message(
     hemp_errno_e number,
     ...
 ) {
-    debug_call("hemp_error_message()\n");
+    hemp_debug_call("hemp_error_message()\n");
     hemp_cstr_p format = hemp_error_format(hemp, number);
 
     va_list args;
@@ -444,7 +484,7 @@ hemp_error_throw(
     hemp_p       hemp,
     hemp_error_p error
 ) {
-    debug_call("hemp_error_throw()\n");
+    hemp_debug_call("hemp_error_throw()\n");
     error->parent = hemp->error;
     hemp->error = error;
     HEMP_THROW(error->number);

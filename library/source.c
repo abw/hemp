@@ -27,7 +27,7 @@ hemp_source_init(
     source->text   = NULL;
 
     /*
-    debug_mem(
+    hemp_debug_mem(
         "Allocated %s source at %p\n", 
         scheme->name, source
     );]
@@ -56,7 +56,7 @@ void
 hemp_source_free(
     hemp_source_p source
 ) {
-    /* debug_mem("Releasing %s source at %p\n", source->scheme->name, source); */
+    /* hemp_debug_mem("Releasing %s source at %p\n", source->scheme->name, source); */
 
     if (source->md5)
         hemp_mem_free(source->md5);
@@ -66,7 +66,7 @@ hemp_source_free(
      */
 
     if (source->text && source->text != source->name) {
-        /* debug_mem("Releasing %s source text at %p\n", source->scheme->name, source->text); */
+        /* hemp_debug_mem("Releasing %s source text at %p\n", source->scheme->name, source->text); */
         hemp_mem_free(source->text);
     }
 

@@ -14,17 +14,17 @@ hemp_module_load(
     hemp_cstr_t     error;
     
     if (plugin == NULL) {
-        debug_load("failed to load plugin %s: \n", name, dlerror());
+        hemp_debug_load("failed to load plugin %s: \n", name, dlerror());
         return HEMP_FALSE;
     }
 
     onload = dlsym(plugin, HEMP_ONLOAD);
     if (onload) {
-        debug_load("found onload function at %p\n", onload);
+        hemp_debug_load("found onload function at %p\n", onload);
         return onload(hemp);
     }
     else {
-        debug_load("Cannot find %s() function in %s: %s", HEMP_ONLOAD, name, dlerror());
+        hemp_debug_load("Cannot find %s() function in %s: %s", HEMP_ONLOAD, name, dlerror());
         return HEMP_FALSE;
     }
 }

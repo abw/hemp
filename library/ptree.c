@@ -1,5 +1,7 @@
 #include <hemp/ptree.h>
 
+#define hemp_debug_cmp(fmt,...) hemp_debug_yellow(fmt,##__VA_ARGS__)
+ 
 
 /*--------------------------------------------------------------------------
  *  hemp_ptree_init(capacity)
@@ -185,41 +187,41 @@ hemp_ptree_fetch(
     hemp_cstr_p  cmptr    = pnode ? pnode->key : NULL;
 
     while (src && cmptr) {
-//      debug_yellow("[%p] ?= [%p]\n", src, cmptr);
+//      hemp_debug_yellow("[%p] ?= [%p]\n", src, cmptr);
         
         if (*src == *cmptr) {
-//          debug_yellow("[%c] == [%c]\n", *src, *cmptr);
+//          hemp_debug_yellow("[%c] == [%c]\n", *src, *cmptr);
 
             if (* ++src) {
-//              debug_yellow("more of source to come: %s\n", src);
+//              hemp_debug_yellow("more of source to come: %s\n", src);
 
                 if (pnode->equal) {
-//                  debug_yellow("[%c->equal]", *cmptr);
+//                  hemp_debug_yellow("[%c->equal]", *cmptr);
                     pnode = pnode->equal;
                     cmptr = pnode->key;
                     continue;
                 }
                 else if (* ++cmptr) {
-//                  debug_yellow("[%c->more => %c]\n", *(cmptr - 1), *cmptr);
+//                  hemp_debug_yellow("[%c->more => %c]\n", *(cmptr - 1), *cmptr);
                     continue;
                 }
             }
             else if  (* ++cmptr && ! pnode->equal) {
-//              debug("incomplete key lookup: %s\n", cmptr);
+//              hemp_debug("incomplete key lookup: %s\n", cmptr);
                 break;
             }
             else {
-//              debug("returning final payload: %s\n", pnode->value);
+//              hemp_debug("returning final payload: %s\n", pnode->value);
                 return pnode->value;
             }
         }
         else if (*src < *cmptr && pnode->before) {
-//          debug_blue("[%c is before %c]", *src, *cmptr);
+//          hemp_debug_blue("[%c is before %c]", *src, *cmptr);
             pnode = pnode->before;
             cmptr = pnode->key;
         }
         else if (*src > *cmptr && pnode->after) {
-//          debug_blue("[%c is after %c]", *src, *cmptr);
+//          hemp_debug_blue("[%c is after %c]", *src, *cmptr);
             pnode = pnode->after;
             cmptr = pnode->key;
         }
@@ -247,13 +249,13 @@ hemp_pnode_match_more(
             src++;
 
             if (pnode->equal) {
-//              debug_yellow("[%c->equal]", *cmptr);
+//              hemp_debug_yellow("[%c->equal]", *cmptr);
                 value = pnode->value;     // payload - but only if pnode is set - don't want to trash previous match
                 pnode = pnode->equal;
                 cmptr = pnode->key;
             }
             else if (* ++cmptr) {
-//              debug_yellow("[%c->more => %c]", *(cmptr - 1), cmptr);
+//              hemp_debug_yellow("[%c->more => %c]", *(cmptr - 1), cmptr);
             }
             else {
                 value = pnode->value;
@@ -261,12 +263,12 @@ hemp_pnode_match_more(
             }
         }
         else if (*src < *cmptr && pnode->before) {
-//          debug_blue("[%c is before %c]", *src, *cmptr);
+//          hemp_debug_blue("[%c is before %c]", *src, *cmptr);
             pnode = pnode->before;
             cmptr = pnode->key;
         }
         else if (*src > *cmptr && pnode->after) {
-//          debug_blue("[%c is after %c]", *src, *cmptr);
+//          hemp_debug_blue("[%c is after %c]", *src, *cmptr);
             pnode = pnode->after;
             cmptr = pnode->key;
         }
@@ -293,19 +295,19 @@ hemp_pnode_dump(
     memset(pad, ' ', len);
     pad[len] = '\0';
     
-//    debug("%s => %p [%p]\n", pnode->key, pnode->value, pnode);
-    debug("%s%s%s => %s [%p]\n", ANSI_CYAN, pnode->key, ANSI_RESET, pnode->value, pnode);
+//    hemp_debug("%s => %p [%p]\n", pnode->key, pnode->value, pnode);
+    hemp_debug("%s%s%s => %s [%p]\n", HEMP_ANSI_CYAN, pnode->key, HEMP_ANSI_RESET, pnode->value, pnode);
 
     if (pnode->before) {
-        debug("%s %s<%s ", pad, ANSI_RED, ANSI_RESET);
+        hemp_debug("%s %s<%s ", pad, HEMP_ANSI_RED, HEMP_ANSI_RESET);
         hemp_pnode_dump(pnode->before, indent + 1);
     }
     if (pnode->equal) {
-        debug("%s %s=%s ", pad, ANSI_RED, ANSI_RESET);
+        hemp_debug("%s %s=%s ", pad, HEMP_ANSI_RED, HEMP_ANSI_RESET);
         hemp_pnode_dump(pnode->equal, indent + 1);
     }
     if (pnode->after) {
-        debug("%s %s>%s ", pad, ANSI_RED, ANSI_RESET);
+        hemp_debug("%s %s>%s ", pad, HEMP_ANSI_RED, HEMP_ANSI_RESET);
         hemp_pnode_dump(pnode->after, indent + 1);
     }
 }

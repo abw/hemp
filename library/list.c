@@ -81,7 +81,7 @@ hemp_list_each_free(
     hemp_pos_t  pos, 
     hemp_mem_p  item
 ) {
-/*  debug_mem("freeing list item at %p\n", item); */
+/*  hemp_debug_mem("freeing list item at %p\n", item); */
     hemp_mem_free(item);
     return HEMP_TRUE;
 }

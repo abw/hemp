@@ -26,7 +26,7 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
     hemp_size_t     endlen    = strlen(end);
     hemp_element_p  element;
 
-    debug_call("hemp_element_squote_scanner()\n");
+    hemp_debug_call("hemp_element_squote_scanner()\n");
 
     if (! end)
         end = start;
@@ -48,7 +48,7 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
     end  = src;
     src += endlen;
 
-    debug_token("SQUOTE", start, src-start);
+    hemp_debug_token("SQUOTE", start, src-start);
 
     element = hemp_elements_append(
         tmpl->elements, symbol,
@@ -106,12 +106,12 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
     hemp_size_t     endlen    = strlen(end);
     hemp_element_p  element;
 
-    debug_call("hemp_element_dquote_scanner()\n");
+    hemp_debug_call("hemp_element_dquote_scanner()\n");
 
     if (! end)
         end = start;
 
-//  debug("end token: %s  length: %d\n", end, endlen);
+//  hemp_debug("end token: %s  length: %d\n", end, endlen);
 
     /* walk to the end */
     while (1) {
@@ -130,7 +130,7 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
     end  = src;
     src += endlen;
 
-    debug_token("SQUOTE", start, src-start);
+    hemp_debug_token("SQUOTE", start, src-start);
 
     element = hemp_elements_append(
         tmpl->elements, symbol,
@@ -194,7 +194,7 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
  *--------------------------------------------------------------------------*/
 
 HEMP_OUTPUT_FUNC(hemp_element_quoted_text) {
-    debug_call("hemp_element_quoted_text(%p) [%s]\n", element, element->type->name);
+    hemp_debug_call("hemp_element_quoted_text(%p) [%s]\n", element, element->type->name);
 
     hemp_text_p text;
     hemp_prepare_output(output, text, element->length);

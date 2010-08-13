@@ -59,7 +59,7 @@ hemp_mem_copy(
  * Memory debugging functions
  *--------------------------------------------------------------------------*/
 
-#if DEBUG & DEBUG_MEM
+#if HEMP_DEBUG & HEMP_DEBUG_MEM
 
 hemp_mem_trace_p hemp_mem_traces   = NULL;
 hemp_size_t      hemp_mem_used     = 0;
@@ -77,7 +77,7 @@ hemp_mem_new_trace() {
     hemp_mem_trace_p hmt;
     int r;
 
-//  debug_yellow("%d/%d memory traces used\n", hemp_mem_used, hemp_mem_capacity);
+//  hemp_debug_yellow("%d/%d memory traces used\n", hemp_mem_used, hemp_mem_capacity);
 
     /* create more memory trace records if required */
     if (hemp_mem_used == hemp_mem_capacity) {
@@ -105,11 +105,11 @@ hemp_mem_new_trace() {
             hmt->line   = 0;
             hmt->file   = NULL;
         }
-//      debug_yellow("increased number of memory traces to %d\n", hemp_mem_capacity);
+//      hemp_debug_yellow("increased number of memory traces to %d\n", hemp_mem_capacity);
     }
 
     /* return address of next available memory record */
-//  debug_yellow("using memory trace %d/%d\n", hemp_mem_used, hemp_mem_capacity);
+//  hemp_debug_yellow("using memory trace %d/%d\n", hemp_mem_used, hemp_mem_capacity);
     return &(hemp_mem_traces[hemp_mem_used++]);
 }
 
@@ -277,8 +277,8 @@ hemp_mem_trace_report(
     hemp_size_t count = 0, total = 0;
 
     if (verbose) {
-        debug_magenta("\nSTATUS    ID         LOCATION       SIZE            MREC\n");
-        debug_magenta("--------------------------------------------------------\n");
+        hemp_debug_magenta("\nSTATUS    ID         LOCATION       SIZE            MREC\n");
+        hemp_debug_magenta("--------------------------------------------------------\n");
     }
 
     for(r = 0; r < hemp_mem_used; r++) {
@@ -315,10 +315,10 @@ hemp_mem_trace_report(
             "????"
         );
         if (verbose) {
-            debug_blue(
+            hemp_debug_blue(
                 "line %3d of %s:\n", hmt->line, hmt->file ? hmt->file : "???"
             );
-            debug_cyan(
+            hemp_debug_cyan(
                 "%6s  %4lu   %14p   %8lu  %14p  [%s]\n", 
                 status, hmt->id, hmt->ptr, hmt->size, hmt, buffer
             );
@@ -326,9 +326,9 @@ hemp_mem_trace_report(
     }
 
     if (verbose) {
-        debug_magenta("--------------------------------------------------------\n");
-        debug_green("Memory used: %8lu\n", total);
-        debug_yellow("Memory wild: %8lu\n", count);
+        hemp_debug_magenta("--------------------------------------------------------\n");
+        hemp_debug_green("Memory used: %8lu\n", total);
+        hemp_debug_yellow("Memory wild: %8lu\n", count);
     }
     
     return count;
@@ -345,7 +345,7 @@ hemp_mem_trace_reset() {
     hemp_mem_traces   = NULL;
 }
 
-#else  /* DEBUG & DEBUG_MEM */
+#else  /* HEMP_DEBUG & HEMP_DEBUG_MEM */
 
 hemp_size_t
 hemp_mem_trace_report(
@@ -354,7 +354,7 @@ hemp_mem_trace_report(
     return -1;
 }
 
-#endif  /* DEBUG & DEBUG_MEM */
+#endif  /* HEMP_DEBUG & HEMP_DEBUG_MEM */
 
 /*--------------------------------------------------------------------------
  * End of memory debugging functions

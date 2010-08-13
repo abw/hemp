@@ -17,7 +17,7 @@ main(int argc, char **argv, char **env)
 void test1_scan(
     HEMP_TAG_SCAN_ARGS
 ) {
-    debug("custom scanner");
+    hemp_debug("custom scanner");
 }
 
 

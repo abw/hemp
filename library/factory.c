@@ -54,7 +54,7 @@ hemp_factory_register(
         actor, script
     );
 
-//    debug("registering %s action at %p in %p\n", name, action, factory->constructors);
+//  hemp_hash_store("registering %s action at %p in %p\n", name, action, factory->constructors);
 
     hemp_hash_store(
         factory->constructors, name, action
@@ -69,7 +69,7 @@ hemp_factory_constructor(
     hemp_factory_p  factory,
     hemp_cstr_p     name
 ) {
-    debug_call("hemp_factory_constructor(F, %s)\n", name);
+    hemp_debug_call("hemp_factory_constructor(F, %s)\n", name);
     
     static hemp_char_t  wildname[HEMP_BUFFER_SIZE];
     hemp_list_p splits;
@@ -102,8 +102,6 @@ hemp_factory_constructor(
             if (! wildcard)
                 continue;               /* no dice, try again               */
 
-//          debug_yellow("got wildcard action for %s\n", name);
-
             /* see if it can generate a constructor */
             constructor = hemp_action_run(
 //              wildcard, split->right
@@ -119,11 +117,6 @@ hemp_factory_constructor(
         hemp_list_free(splits);
     }
 
-//    if (constructor)
-//        debug_green("returning constructor for %s at %p\n", name, constructor);
-//    else
-//        debug_red("no constructor for %s\n", name);
-
     return constructor;
 }
 
@@ -133,7 +126,7 @@ hemp_factory_instance(
     hemp_factory_p  factory,
     hemp_cstr_p     name
 ) {
-    debug_call("hemp_factory_instance(F, %s)\n", name);
+    hemp_debug_call("hemp_factory_instance(F, %s)\n", name);
     
     static hemp_char_t  wildname[HEMP_BUFFER_SIZE];
     hemp_list_p splits;

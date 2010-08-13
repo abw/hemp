@@ -32,7 +32,7 @@ hemp_grammar_new_symbol(
     hemp_cstr_p    start,
     hemp_cstr_p    end
 ) {
-//  debug_call(
+//  hemp_debug_call(
 //      "new [%s => %s] symbol\n", 
 //      token, etype
 //  );
@@ -67,7 +67,7 @@ hemp_grammar_add_symbol(
     hemp_prec_t    lprec,
     hemp_prec_t    rprec
 ) {
-//  debug_call(
+//  hemp_debug_call(
 //      "adding [%s => %s] symbol to %s grammar [%d|%d]\n", 
 //      token, etype, grammar->name, lprec, rprec
 //  );

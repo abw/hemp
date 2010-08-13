@@ -34,7 +34,12 @@ union hemp_value_u {
 struct hemp_vtype_s {
     hemp_u8_t       id;
     hemp_cstr_p     name;
-    hemp_bool_t  (* boolean)(hemp_value_t);
+    hemp_eval_f     defined;
+    hemp_eval_f     boolean;
+    hemp_eval_f     compare;
+    hemp_eval_f     number;
+    hemp_eval_f     integer;
+    hemp_eval_f     text;
 };
 
 

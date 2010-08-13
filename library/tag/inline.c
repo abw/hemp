@@ -34,7 +34,7 @@ hemp_scan_inline_tag(
     hemp_pnode_p    *ophead  = tag->grammar->operators->head;
     hemp_symbol_p   symbol;
 
-    debug_call("hemp_scan_inline_tag()\n");
+    hemp_debug_call("hemp_scan_inline_tag()\n");
 
     // add the tag start token
     hemp_elements_append(
@@ -47,7 +47,7 @@ hemp_scan_inline_tag(
         if (isspace(*src)) {
             /* whitespace */
             hemp_scan_while(src, isspace);
-            debug_token("SPACE", from, src-from);
+            hemp_debug_token("SPACE", from, src-from);
             hemp_elements_append(
                 tmpl->elements, HempSymbolSpace,
                 from, pos, src - from
@@ -55,7 +55,7 @@ hemp_scan_inline_tag(
         }
         else if (hemp_cstrn_eq(src, tagend, endlen)) {      // TODO: end flags
             /* tag end */
-            debug_token("TAG END", from, endlen);
+            hemp_debug_token("TAG END", from, endlen);
             hemp_elements_append(
                 tmpl->elements, HempSymbolTagEnd,
                 from, pos, endlen
@@ -95,7 +95,7 @@ hemp_scan_inline_tag(
                 hemp_fatal("Unknown number parsing error: %d", errno);
             }
             else if (is_int) {
-                debug_token("INTEGER", from, src-from);
+                hemp_debug_token("INTEGER", from, src-from);
                 element = hemp_elements_append(
                     tmpl->elements, HempSymbolInteger,
                     from, pos, src - from
@@ -103,7 +103,7 @@ hemp_scan_inline_tag(
                 element->args.value = hemp_int_val(int_val);
             }
             else {
-                debug_token("NUMBER", from, src-from);
+                hemp_debug_token("NUMBER", from, src-from);
                 element = hemp_elements_append(
                     tmpl->elements, HempSymbolNumber,
                     from, pos, src - from
@@ -115,10 +115,10 @@ hemp_scan_inline_tag(
             (pnode  = HEMP_IN_PTREE(ophead, src))
         &&  (symbol = (hemp_symbol_p) hemp_pnode_match_more(pnode, &src))
         ) {
-            debug_token("OPERATOR", from, src-from);
-//          debug("[matched operator: %s]\n", symbol->name);
+            hemp_debug_token("OPERATOR", from, src-from);
+//          hemp_debug("[matched operator: %s]\n", symbol->name);
             if (symbol->scanner) {
-//              debug("symbol has dedicated scanner\n");
+//              hemp_debug("symbol has dedicated scanner\n");
                 symbol->scanner(tmpl, tag, from, pos, &src, symbol);
             }
             else {
@@ -135,7 +135,7 @@ hemp_scan_inline_tag(
             // TODO: lookup keyword
             // TODO: on second thoughts, try pnode match first, for things
             //       like C< >... DONE, by moving this down... I think ???
-            debug_token("WORD", from, src-from);
+            hemp_debug_token("WORD", from, src-from);
             hemp_elements_append(
                 tmpl->elements, HempSymbolWord,
                 from, pos, src - from

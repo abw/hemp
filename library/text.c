@@ -137,7 +137,7 @@ hemp_text_insert_cstr(
     extra = strlen(insert);
     length += extra;
 
-    // debug("offset %d  length %d  extra %d  length %d\n", offset, text->length, extra, length);
+    // hemp_debug("offset %d  length %d  extra %d  length %d\n", offset, text->length, extra, length);
     
     text = hemp_text_capacity(text, length);
     /* shift down contents of existing string from offset onwards */

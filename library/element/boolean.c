@@ -20,12 +20,12 @@ HEMP_SYMBOL_FUNC(hemp_element_boolean_symbol) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_boolean_text) {
-    debug_call("hemp_element_boolean_text()\n");
+    hemp_debug_call("hemp_element_boolean_text()\n");
 
     hemp_text_p text;
     hemp_prepare_output(output, text, 10);      // FIXME
     
-//  debug("boolean output for %s\n", element->type->name);
+//  hemp_debug("boolean output for %s\n", element->type->name);
 
     hemp_text_append_cstr(
         text, 
@@ -52,7 +52,7 @@ HEMP_SYMBOL_FUNC(hemp_element_boolean_not_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_boolean_not_value) {
-    debug_call("hemp_element_boolean_not_value()\n");
+    hemp_debug_call("hemp_element_boolean_not_value()\n");
 
     hemp_element_p expr = element->args.unary.expr;
     hemp_value_t   val  = expr->type->boolean(expr, context);
@@ -75,7 +75,7 @@ HEMP_SYMBOL_FUNC(hemp_element_boolean_and_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_boolean_and_value) {
-    debug_call("hemp_element_boolean_and_value()\n");
+    hemp_debug_call("hemp_element_boolean_and_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
     hemp_element_p rhs = element->args.binary.rhs;
@@ -100,7 +100,7 @@ HEMP_SYMBOL_FUNC(hemp_element_boolean_or_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_boolean_or_value) {
-    debug_call("hemp_element_boolean_or_value()\n");
+    hemp_debug_call("hemp_element_boolean_or_value()\n");
 
     hemp_element_p lhs = element->args.binary.lhs;
     hemp_element_p rhs = element->args.binary.rhs;

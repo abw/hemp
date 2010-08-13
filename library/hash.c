@@ -56,7 +56,7 @@ hemp_hash_init() {
     if (! table)
         hemp_mem_fail("hash");
 
-    /* debug_mem("Allocated hash table at %p\n", table); */
+    /* hemp_debug_mem("Allocated hash table at %p\n", table); */
 
     table->width   = hemp_hash_wider(0);
     table->size    = 0;
@@ -67,7 +67,7 @@ hemp_hash_init() {
     if (! table->columns)
         hemp_mem_fail("hash item");
 
-    /* debug_mem("Allocated hash columns at %p\n", table->columns); */
+    /* hemp_debug_mem("Allocated hash columns at %p\n", table->columns); */
 
     for(w = 0; w < table->width; w++) {
         table->columns[w] = NULL;
@@ -84,7 +84,7 @@ hemp_hash_free(
     hemp_hash_item_p entry, next;
     int i;
 
-    /* debug_mem("Releasing hash at %p\n", table); */
+    /* hemp_debug_mem("Releasing hash at %p\n", table); */
 
     for(i = 0; i < table->width; i++) {
         entry = table->columns[i];
@@ -112,7 +112,7 @@ hemp_hash_resize(
     if (width == wider)
         return width;  /* can't go any bigger */
 
-    /* debug_mem("Resizing hash at %p from %d to %d\n", hash, width, wider); */
+    /* hemp_debug_mem("Resizing hash at %p from %d to %d\n", hash, width, wider); */
 
     columns = (hemp_hash_item_p *) hemp_mem_alloc(
         wider * sizeof(hemp_hash_item_p)

@@ -18,7 +18,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_symbol) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_compare_text) {
-    debug_call("hemp_element_compare_text()\n");
+    hemp_debug_call("hemp_element_compare_text()\n");
 
     hemp_value_t value = element->type->compare(element, context);
     hemp_cstr_p  cstr  = hemp_type_name(value);
@@ -32,12 +32,12 @@ HEMP_OUTPUT_FUNC(hemp_element_compare_text) {
 
 
 HEMP_VALUE_FUNC(hemp_element_compare_integer) {
-    debug_call("hemp_element_compare_integer()\n");
+    hemp_debug_call("hemp_element_compare_integer()\n");
 
     hemp_value_t value = element->type->compare(element, context);
     hemp_int_t   compare;
     
-    debug("compare value type [%s]: %s\n", HEMP_TYPE_ID(value), hemp_type_name(value));
+    hemp_debug("compare value type [%s]: %s\n", HEMP_TYPE_ID(value), hemp_type_name(value));
 
     switch (HEMP_IDENT_ID(value)) {
         case HEMP_IDENT_BEFORE_ID:
@@ -60,7 +60,7 @@ HEMP_VALUE_FUNC(hemp_element_compare_integer) {
             );
     }
     
-    debug("comparison yielded number: %d\n", compare);
+    hemp_debug("comparison yielded number: %d\n", compare);
                 
     return hemp_int_val(compare);
 }
@@ -78,7 +78,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_equal_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_compare_equal_value) {
-    debug_call("hemp_element_compare_equal_value()\n");
+    hemp_debug_call("hemp_element_compare_equal_value()\n");
 
     return hemp_is_equal( element->type->compare(element, context) )
          ? HempTrue
@@ -98,7 +98,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_not_equal_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_compare_not_equal_value) {
-    debug_call("hemp_element_compare_not_equal_value()\n");
+    hemp_debug_call("hemp_element_compare_not_equal_value()\n");
 
     return hemp_is_equal( element->type->compare(element, context) )
          ? HempFalse
@@ -118,7 +118,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_before_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_compare_before_value) {
-    debug_call("hemp_element_compare_before()\n");
+    hemp_debug_call("hemp_element_compare_before()\n");
 
     return hemp_is_before( element->type->compare(element, context) )
          ? HempTrue
@@ -138,7 +138,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_not_before_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_compare_not_before_value) {
-    debug_call("hemp_element_compare_not_before_value()\n");
+    hemp_debug_call("hemp_element_compare_not_before_value()\n");
 
     return hemp_is_before( element->type->compare(element, context) )
          ? HempFalse
@@ -158,7 +158,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_after_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_compare_after_value) {
-    debug_call("hemp_element_compare_after_value()\n");
+    hemp_debug_call("hemp_element_compare_after_value()\n");
 
     return hemp_is_after( element->type->compare(element, context) )
          ? HempTrue
@@ -178,7 +178,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_not_after_symbol) {
 
 
 HEMP_VALUE_FUNC(hemp_element_compare_not_after_value) {
-    debug_call("hemp_element_compare_not_after_value()\n");
+    hemp_debug_call("hemp_element_compare_not_after_value()\n");
 
     return hemp_is_after( element->type->compare(element, context) )
          ? HempFalse

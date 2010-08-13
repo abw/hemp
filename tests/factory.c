@@ -42,7 +42,7 @@ wildcard(
     hemp_mem_p      msg,
     hemp_cstr_p     name
 ) {
-    debug_cyan("wildcard action for %s\n", name);
+    hemp_debug_cyan("wildcard action for %s\n", name);
     return hemp_action_init(
         (hemp_actor_f) constructor, msg
     );

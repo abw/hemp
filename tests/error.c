@@ -54,7 +54,7 @@ void test_error1() {
     
     if((exception = setjmp(state)) == 0) {              // try
         thrower(HEMP_ERROR_MEMORY, "hello world");
-        debug_red("returned from thrower (this should not happen)\n");
+        fail("returned from thrower (this should not happen)\n");
     }
     else {
         switch (exception) {             
@@ -195,7 +195,7 @@ void test_hemp_throw() {
 
 
 void thrower(hemp_errno_e type, char *msg) {
-    // debug("throwing %d: %s\n", type, msg);
+    // hemp_debug("throwing %d: %s\n", type, msg);
     longjmp(state, type);
-    debug("not reachhed\n");
+    hemp_debug("not reachhed\n");
 }
