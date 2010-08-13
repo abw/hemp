@@ -21,7 +21,7 @@ main(
         test_script(argv[1]);
     }
     else {
-        plan_tests(172);
+        plan_tests(180);
         test_scanner();
     }
     

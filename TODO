@@ -62,18 +62,15 @@ An incomplete list of things TODO, in no particular order.
  
 -- HOT STACK --
 
-* Add compare_symbol with special text/number/integer methods to render
-  number_compare = map -1/0/+1 to HempBefore, etc
+* Clean up all the macros and inline functions so that they're consistently
+  name, e.g. HEMP_IS_NUM() and so on.
 
 * Number ops:
    - Add ++ and -- auto-increment operator
    - make + and - work as prefix ops as well as infix ops  (half-implemented)
 
-* Prefix boolops (not)
-
 * Text ops:
-   - text append / textify prefix 
-   - text comparison
+   - textify prefix 
 
 * figure out what to do with number/integer operators that return boolean
   values (e.g. less than).  Is it an error to ask for those as int/num?

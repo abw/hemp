@@ -104,6 +104,7 @@ struct hemp_vtype_s {
 
 /* first 13 bits are used to indicate NaN, payload can use the rest*/
 #define HEMP_NAN_MASK           0xFFF8000000000000LL
+#define HEMP_INT_MASK           0xFFFFFFFFL
 #define HEMP_PAYLOAD(v)         (v.bits & HEMP_PAYLOAD_MASK)
 
 /* internal macros for detecting and manipulating type tag */

@@ -10,7 +10,7 @@ main(
     char **argv, 
     char **env
 ) {
-    plan_tests(73);
+    plan_tests(117);
     test_value();
     hemp_mem_trace_ok();
     return exit_status();
@@ -33,6 +33,47 @@ void type_check(
 }
 
 
+void test_number(hemp_num_t expect) {
+    printf("number value: %g\n", expect);
+    hemp_value_t value = hemp_num_val(expect);
+    hemp_dump_value(value);
+
+    hemp_num_t n = hemp_val_num(value);
+    ok( ! hemp_is_tagged(value), "number is not a tagged value" );
+    ok( hemp_is_num(value), "number is a number value" );
+    ok( n == expect, "got num value back" );
+
+    type_check(value, HEMP_TYPE_NUM_ID, "Number");
+    ok( ! hemp_is_undef(value),         "number is not undef" );
+    ok( ! hemp_is_missing(value),       "number is not missing" );
+    ok( ! hemp_is_nothing(value),       "number is not nothing" );
+    ok( ! hemp_is_boolean(value),       "number is not boolean" );
+    ok( ! hemp_is_true(value),          "number is not true" );
+    ok( ! hemp_is_false(value),         "number is not false" );
+}
+
+
+void test_integer(hemp_int_t expect) {
+    /* tagged int */
+    printf("integer value: %d\n", expect);
+    hemp_value_t value = hemp_int_val(expect);
+    hemp_dump_value(value);
+    type_check(value, HEMP_TYPE_INT_ID, "Integer");
+
+    hemp_u32_t i = hemp_val_int(value);
+    ok( hemp_is_tagged(value), "integer is a tagged value" );
+    ok( hemp_is_int(value), "integer is an integer value" );
+    ok( i == expect, "got int value back" );
+
+    ok( ! hemp_is_undef(value),         "integer is not undef" );
+    ok( ! hemp_is_missing(value),       "integer is not missing" );
+    ok( ! hemp_is_nothing(value),       "integer is not nothing" );
+    ok( ! hemp_is_boolean(value),       "integer is not boolean" );
+    ok( ! hemp_is_true(value),          "integer is not true" );
+    ok( ! hemp_is_false(value),         "integer is not false" );
+}
+
+
 void test_value() {
     pass("testing value");
     hemp_value_t value;
@@ -49,39 +90,13 @@ void test_value() {
     printf("------------------\n");
 
     /* native double */
-    printf("number value: 3.14159\n");
-    hemp_num_t expect = -314.59;
-    value = hemp_num_val(expect);
-    hemp_dump_value(value);
+    test_number(3000);
+    test_number(3.14159);
+    test_number(-42.43);
 
-    hemp_num_t n = hemp_val_num(value);
-    ok( ! hemp_is_tagged(value), "number is not a tagged value" );
-    ok( hemp_is_num(value), "number is a number value" );
-    ok( n == expect, "got num value back" );
-    type_check(value, HEMP_TYPE_NUM_ID, "Number");
-    ok( ! hemp_is_undef(value),         "number is not undef" );
-    ok( ! hemp_is_missing(value),       "number is not missing" );
-    ok( ! hemp_is_nothing(value),       "number is not nothing" );
-    ok( ! hemp_is_boolean(value),       "number is not boolean" );
-    ok( ! hemp_is_true(value),          "number is not true" );
-    ok( ! hemp_is_false(value),         "number is not false" );
-
-    /* tagged int */
-    printf("integer value: 12345\n");
-    value = hemp_int_val(12345);
-    hemp_dump_value(value);
-    type_check(value, HEMP_TYPE_INT_ID, "Integer");
-
-    hemp_u32_t i = hemp_val_int(value);
-    ok( hemp_is_tagged(value), "integer is a tagged value" );
-    ok( hemp_is_int(value), "integer is an integer value" );
-    ok( i == 12345, "got int value back" );
-    ok( ! hemp_is_undef(value),         "integer is not undef" );
-    ok( ! hemp_is_missing(value),       "integer is not missing" );
-    ok( ! hemp_is_nothing(value),       "integer is not nothing" );
-    ok( ! hemp_is_boolean(value),       "integer is not boolean" );
-    ok( ! hemp_is_true(value),          "integer is not true" );
-    ok( ! hemp_is_false(value),         "integer is not false" );
+    test_integer(123);
+    test_integer(456789);
+    test_integer(-69);
 
     /* tagged string pointer */
     hemp_cstr_p es = "Hello world!";

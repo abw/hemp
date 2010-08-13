@@ -365,7 +365,10 @@ HEMP_VALUE_FUNC(hemp_element_number_minus_value) {
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
         hemp_element_p expr = element->args.unary.expr;
         hemp_value_t   val  = expr->type->number(expr, context);
-        hemp_fatal("TODO: unary minus\n");
+
+        return hemp_is_int(val)
+            ? hemp_int_val(- hemp_val_int(val) )
+            : hemp_num_val(- hemp_val_num(val) );
     }
 
     /* otherwise it's an infix subtraction operator */

@@ -1,17 +1,22 @@
--- test unary plus --
+-- test unary plus integer --
 [% +5 %]
 -- expect --
 5
 
--- test unary minus --
+-- test unary plus floating point --
+[% +5.23 %]
+-- expect --
+5.23
+
+-- test unary minus integer --
 [% -5 %]
 -- expect --
 -5
 
-
--- stop
-
-
+-- test unary minus floating point--
+[% -3.14159 %]
+-- expect --
+-3.14159
 
 -- test simple number expression
 [% 400 + 20 %]

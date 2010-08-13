@@ -84,7 +84,8 @@ hemp_num_val(hemp_num_t n) {
 HEMP_DO_INLINE hemp_value_t
 hemp_int_val(hemp_int_t i) {
     hemp_value_t v;
-    v.bits = HEMP_TYPE_INT_MASK | (hemp_u64_t) i;
+//  v.bits = HEMP_TYPE_INT_MASK | (hemp_u64_t) i;   /* FAIL on -ve ints */
+    v.bits = HEMP_TYPE_INT_MASK | (hemp_u64_t)(i & HEMP_INT_MASK);
     return v;
 }
 
