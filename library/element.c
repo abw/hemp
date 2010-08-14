@@ -365,15 +365,6 @@ HEMP_OUTPUT_FUNC(hemp_element_binary_source) {
 
     hemp_text_p text;
 
-    if (hemp_is_undef(output)) {
-//        text   = hemp_text_init(length);              
-//        output = hemp_text_val(text);             
-    }
-    else {
-//        text   = hemp_val_text(output);
-    }
-
-
     hemp_prepare_output(output, text, 32);
 
     struct hemp_binary_s exprs = element->args.binary;

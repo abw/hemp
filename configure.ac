@@ -31,6 +31,8 @@ AC_PROG_RANLIB
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([argz.h limits.h stddef.h stdlib.h string.h unistd.h])
+AC_CHECK_LIB([readline], [readline], [LIBS="-lreadline $LIBS"])
+
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -46,6 +48,7 @@ AC_CHECK_FUNCS([atexit bcopy getcwd memmove memset strchr strdup strrchr strstr 
 
 
 CFLAGS="${CFLAGS=}"
+
 dnl this macro is used to get the arguments supplied
 dnl to the configure script (./configure --enable-debug)
 dnl Check if we have enable debug support.

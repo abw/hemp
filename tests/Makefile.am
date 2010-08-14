@@ -1,36 +1,36 @@
-#check_PROGRAMS  =   value
+check_PROGRAMS  =   utils
 
-check_PROGRAMS  =   action      \
-                    dialect     \
-                    element     \
-                    elements    \
-                    error       \
-                    factory     \
-                    filesystem  \
-                    grammar     \
-                    hash        \
-                    list        \
-                    memory      \
-                    pool        \
-                    ptree       \
-                    scanner     \
-                    source      \
-                    slab        \
-                    tag         \
-                    tagset      \
-                    template    \
-                    text        \
-                    tt3         \
-                    utils       \
-                    value
- 
+#check_PROGRAMS  =   action      \
+#                    cstr        \
+#                    dialect     \
+#                    element     \
+#                    elements    \
+#                    error       \
+#                    factory     \
+#                    filesystem  \
+#                    grammar     \
+#                    hash        \
+#                    list        \
+#                    memory      \
+#                    pool        \
+#                    ptree       \
+#                    scanner     \
+#                    source      \
+#                    slab        \
+#                    tag         \
+#                    tagset      \
+#                    template    \
+#                    text        \
+#                    tt3         \
+#                    utils       \
+#                    value
+# 
                     
 #                  debug         \
 #                  benchmark  
 #                  hemp          \
 #                  hub          \
 #                  module        \
-#                  ptree         \
 #                  type          
 
 
