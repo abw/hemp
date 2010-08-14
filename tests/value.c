@@ -12,15 +12,15 @@ main(
     char **argv, 
     char **env
 ) {
-    plan_tests(162);
+    plan_tests(185);
 
-//    test_value();
-//    hemp_mem_trace_ok();
-//    hemp_mem_trace_reset();
-//    
-//    test_value_conversion();
-//    hemp_mem_trace_ok();
-//    hemp_mem_trace_reset();
+    test_value();
+    hemp_mem_trace_ok();
+    hemp_mem_trace_reset();
+    
+    test_value_conversion();
+    hemp_mem_trace_ok();
+    hemp_mem_trace_reset();
 
     test_identity_values();
     hemp_mem_trace_ok();
@@ -262,31 +262,38 @@ void test_identity_values() {
 
     hemp_dump_value(HempMissing);
     ok( HEMP_IDENT_VTABLE_NO(HempMissing) == 0, "missing uses ident vtable 0" );
-    is( hemp_type_name(HempMissing), "Undefined", "Missing is Undefined" );
+    is( hemp_type_class(HempMissing), "Undefined", "Missing type class is Undefined" );
+    is( hemp_type_name(HempMissing), "Missing", "Missing class name is Missing" );
     
     hemp_dump_value(HempNothing);
     ok( HEMP_IDENT_VTABLE_NO(HempNothing) == 0, "nothing uses ident vtable 0" );
-    is( hemp_type_name(HempNothing), "Undefined", "Nothing is Undefined" );
+    is( hemp_type_class(HempNothing), "Undefined", "Nothing type class is Undefined" );
+    is( hemp_type_name(HempNothing), "Nothing", "Nothing type name is Nothing" );
 
     hemp_dump_value(HempFalse);
     ok( HEMP_IDENT_VTABLE_NO(HempFalse) == 1, "false uses ident vtable 1" );
-    is( hemp_type_name(HempFalse), "Truth", "False is Truth" );
+    is( hemp_type_class(HempFalse), "Truth", "False type class is Truth" );
+    is( hemp_type_name(HempFalse), "False", "False type name is False" );
 
     hemp_dump_value(HempTrue);
     ok( HEMP_IDENT_VTABLE_NO(HempTrue) == 1, "true uses ident vtable 1" );
-    is( hemp_type_name(HempTrue), "Truth", "True is Truth" );
+    is( hemp_type_class(HempTrue), "Truth", "True type class is Truth" );
+    is( hemp_type_name(HempTrue), "True", "True type name is Truth" );
 
     hemp_dump_value(HempBefore);
     ok( HEMP_IDENT_VTABLE_NO(HempBefore) == 3, "before uses ident vtable 3" );
-    is( hemp_type_name(HempBefore), "Compare", "Before is Compare" );
+    is( hemp_type_class(HempBefore), "Compare", "Before type class is Compare" );
+    is( hemp_type_name(HempBefore), "Before", "Before type name is Before" );
 
     hemp_dump_value(HempEqual);
     ok( HEMP_IDENT_VTABLE_NO(HempEqual) == 3, "equal uses ident vtable 3" );
-    is( hemp_type_name(HempEqual), "Compare", "Equal is Compare" );
+    is( hemp_type_class(HempEqual), "Compare", "Equal type class is Compare" );
+    is( hemp_type_name(HempEqual), "Equal", "Equal type name is Equal" );
 
     hemp_dump_value(HempAfter);
     ok( HEMP_IDENT_VTABLE_NO(HempAfter) == 3, "after uses ident vtable 3" );
-    is( hemp_type_name(HempAfter), "Compare", "After is Compare" );
+    is( hemp_type_class(HempAfter), "Compare", "After type class is Compare" );
+    is( hemp_type_name(HempAfter), "After", "After type name is After" );
 }
 
 

@@ -236,8 +236,8 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 #define hemp_vcall(v,n)         (hemp_vmethod(v,n)(v))
 #define hemp_vtext(v,o)         (hemp_vmethod(v,text)(v,o))
 #define hemp_ident_name(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
-//#define hemp_type_name(v)       (hemp_is_ident(v) ? hemp_ident_name(v) : hemp_vtable(v).name)
-#define hemp_type_name(v)       (hemp_vtable(v).name)
+#define hemp_type_name(v)       (hemp_is_ident(v) ? hemp_ident_name(v) : hemp_vtable(v).name)
+#define hemp_type_class(v)      (hemp_vtable(v).name)
 
 #define hemp_to_num(v)          (hemp_is_number(v)  ? v : hemp_vcall(v,number))
 #define hemp_to_int(v)          (hemp_is_integer(v) ? v : hemp_vcall(v,integer))
