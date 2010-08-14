@@ -1,35 +1,40 @@
 #include <hemp/value.h>
 
 
-const struct hemp_vtype_s hemp_global_vtypes[19] = {
-    {   0x0, "Number",
+const struct hemp_vtype_s hemp_global_vtypes[32] = {
+    {   0x00, "Number",
         &hemp_value_number_text,
         &hemp_value_no_op,
         &hemp_value_number_integer,
         &hemp_value_number_boolean,
         &hemp_value_number_compare
     },
-    {   0x0, "Integer",
+    {   0x01, "Integer",
         &hemp_value_integer_text,
         &hemp_value_integer_number,
         &hemp_value_no_op,
         &hemp_value_integer_boolean,
         &hemp_value_integer_compare
     },
-    { 0x2, "String"          },
-    { 0x3, "-- RESERVED 0x3" },
-    { 0x4, "Text"            },
-    { 0x5, "-- RESERVED 0x5" },
-    { 0x6, "-- RESERVED 0x6" },
-    { 0x7, "-- RESERVED 0x7" },
-    { 0x8, "-- RESERVED 0x8" },
-    { 0x9, "-- RESERVED 0x9" },
-    { 0xA, "-- RESERVED 0xA" },
-    { 0xB, "-- RESERVED 0xB" },
-    { 0xC, "-- RESERVED 0xC" },
-    { 0xD, "-- RESERVED 0xD" },
-    { 0xE, "-- RESERVED 0xD" },
-    { 0xF, "Identity"        }
+    { 0x02, "String"            },
+    { 0x03, "-- RESERVED 0x03"  },
+    { 0x04, "Text"              },
+    { 0x05, "-- RESERVED 0x05"  },
+    { 0x06, "-- RESERVED 0x06"  },
+    { 0x07, "-- RESERVED 0x07"  },
+    { 0x08, "-- RESERVED 0x08"  },
+    { 0x09, "-- RESERVED 0x09"  },
+    { 0x0A, "-- RESERVED 0x0A"  },
+    { 0x0B, "-- RESERVED 0x0B"  },
+    { 0x0C, "-- RESERVED 0x0C"  },
+    { 0x0D, "-- RESERVED 0x0D"  },
+    { 0x0E, "-- RESERVED 0x0D"  },
+    { 0x0F, "Identity"          },
+    { 0x10, "Undefined"         },
+    { 0x11, "Truth"             },
+    { 0x12, "-- RESERVED 0x12"  },
+    { 0x13, "Compare"           },
+    { 0x14, "Overload"          }
 };
 
 const hemp_value_t 

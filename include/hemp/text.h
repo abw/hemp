@@ -20,7 +20,9 @@ struct hemp_text_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
+hemp_text_p hemp_text_new();
 hemp_text_p hemp_text_init(hemp_size_t);
+hemp_text_p hemp_text_init_format(hemp_cstr_p, ...);
 void        hemp_text_free(hemp_text_p);
 hemp_text_p hemp_text_from_text(hemp_text_p);
 hemp_text_p hemp_text_from_cstr(hemp_cstr_p);

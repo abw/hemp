@@ -174,6 +174,23 @@ hemp_mem_trace_malloc(
 }
 
 
+hemp_mem_p
+hemp_mem_trace_external(
+    hemp_mem_p  ptr,
+    hemp_size_t size,
+    hemp_cstr_p file,
+    hemp_pos_t  line
+) {
+    hemp_mem_trace_p hmt = hemp_mem_new_trace();
+    hmt->ptr    = ptr;
+    hmt->status = HEMP_MEM_EXTERNAL;
+    hmt->size   = size;
+    hmt->file   = file;
+    hmt->line   = line;
+    return hmt->ptr;
+}
+
+
 /*
  * hemp_mem_trace_realloc(ptr, size)
  *
@@ -284,7 +301,7 @@ hemp_mem_trace_report(
     for(r = 0; r < hemp_mem_used; r++) {
         hmt = &(hemp_mem_traces[r]);
 
-        if (hmt->status == HEMP_MEM_MALLOC)
+        if (hmt->status == HEMP_MEM_MALLOC || hmt->status == HEMP_MEM_EXTERNAL)
             count += hmt->size;
 
         total += hmt->size;
@@ -307,11 +324,12 @@ hemp_mem_trace_report(
         buffer[i] = '\0';
 
         status = (
-            hmt->status == HEMP_MEM_WILD   ? "UNUSED"   :
-            hmt->status == HEMP_MEM_FAIL   ? "FAIL"     :
-            hmt->status == HEMP_MEM_MALLOC ? "MALLOC"   :
-            hmt->status == HEMP_MEM_MOVED  ? "MOVED"    :
-            hmt->status == HEMP_MEM_FREE   ? "FREE"     : 
+            hmt->status == HEMP_MEM_WILD     ? "UNUSED"   :
+            hmt->status == HEMP_MEM_FAIL     ? "FAIL"     :
+            hmt->status == HEMP_MEM_MALLOC   ? "MALLOC"   :
+            hmt->status == HEMP_MEM_MOVED    ? "MOVED"    :
+            hmt->status == HEMP_MEM_EXTERNAL ? "EXTERNAL" :
+            hmt->status == HEMP_MEM_FREE     ? "FREE"     : 
             "????"
         );
         if (verbose) {

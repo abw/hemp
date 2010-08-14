@@ -55,8 +55,10 @@ hemp_scan_text(
                     line     = 0;
     hemp_tag_p      tag;
 
+#if HEMP_DEBUG & HEMP_DEBUG_SCAN
     hemp_debug_magenta("-- source ---\n%s\n-------------\n", text);
-    
+#endif
+
     while (*src) {
         /* at start of line */
         line++;

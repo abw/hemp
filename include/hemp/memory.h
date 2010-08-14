@@ -44,14 +44,15 @@ void hemp_mem_fail(hemp_cstr_p);
 
 
 #if HEMP_DEBUG & HEMP_DEBUG_MEM
-    #define HEMP_MEM_WILD     0    /* uninitialised (wild)                     */
-    #define HEMP_MEM_FAIL     1    /* malloc failed                            */
-    #define HEMP_MEM_MALLOC   2    /* malloc succeeded                         */
-    #define HEMP_MEM_MOVED    3    /* realloc relocated                        */
-    #define HEMP_MEM_FREE     4    /* memory free'd                            */
+    #define HEMP_MEM_WILD     0    /* uninitialised (wild)                  */
+    #define HEMP_MEM_FAIL     1    /* malloc failed                         */
+    #define HEMP_MEM_MALLOC   2    /* malloc succeeded                      */
+    #define HEMP_MEM_MOVED    3    /* realloc relocated                     */
+    #define HEMP_MEM_EXTERNAL 4    /* memory allocated by external function */
+    #define HEMP_MEM_FREE     5    /* memory free'd                         */
 
-    #define HEMP_MEM_BLKSIZ   8    /* # of mrec's to malloc at once            */
-    #define HEMP_MEM_PEEKLEN  32   /* # of bytes to peek into memory           */
+    #define HEMP_MEM_BLKSIZ   8    /* # of mrec's to malloc at once         */
+    #define HEMP_MEM_PEEKLEN  32   /* # of bytes to peek into memory        */
 
     struct hemp_mem_trace_s {
         int          id;
@@ -71,6 +72,8 @@ void hemp_mem_fail(hemp_cstr_p);
     hemp_mem_p       hemp_mem_trace_malloc(hemp_size_t, hemp_cstr_p, hemp_pos_t);
     hemp_mem_p       hemp_mem_trace_realloc(hemp_mem_p, hemp_size_t, hemp_cstr_p, hemp_pos_t);
     hemp_cstr_p      hemp_mem_trace_strdup(hemp_cstr_p, hemp_cstr_p, hemp_pos_t);
+    hemp_mem_p       hemp_mem_trace_external(hemp_mem_p, hemp_size_t, hemp_cstr_p, hemp_pos_t);
+
     void             hemp_mem_trace_free(hemp_mem_p, hemp_cstr_p, hemp_pos_t);
 
     #define hemp_mem_alloc(size)            hemp_mem_trace_malloc(size, __FILE__, __LINE__)
@@ -82,6 +85,7 @@ void hemp_mem_fail(hemp_cstr_p);
     #define hemp_mem_resize(memory, size)   realloc(memory, size)
     #define hemp_mem_free(memory)           free(memory)
     #define hemp_cstr_copy(src)             strdup(src)
+    #define hemp_mem_trace_external(m,s,f,l)
 //    #define hemp_mem_trace_report(verbose) -1
     #define hemp_mem_trace_reset()
 #endif

@@ -5,9 +5,12 @@ void test_text();
 
 
 int
-main(int argc, char **argv, char **env)
-{
-    plan_tests(32);
+main(
+    int argc, 
+    char **argv, 
+    char **env
+) {
+    plan_tests(36);
     test_text();
     hemp_mem_trace_ok();
     return exit_status();
@@ -119,4 +122,14 @@ void test_text() {
 
     hemp_text_free(message);
 
+
+    message = hemp_text_init_format(
+        "The %s sat on the %s and %s.", 
+        "cat", "mat", "shat"
+    );
+    ok( message, "created text from format" );
+    is( message->string, "The cat sat on the mat and shat.", "message is ok" );
+    ok( message->length == 32, "length is %d, expected 32", message->length );
+    ok( message->capacity == 32, "capacity is %d, expected 32", message->capacity );
+    hemp_text_free(message);
 }

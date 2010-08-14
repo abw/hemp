@@ -1,10 +1,8 @@
 #include <hemp/text.h>
 
 
-hemp_text_p
-hemp_text_init(
-    hemp_size_t size
-) {
+HEMP_INLINE hemp_text_p
+hemp_text_new( ) {
     hemp_text_p text = (hemp_text_p) hemp_mem_alloc(
         sizeof(struct hemp_text_s)
     );
@@ -12,6 +10,20 @@ hemp_text_init(
     /* TODO: allocate both header and body in one block */
     if (! text)
         hemp_mem_fail("text");
+
+    text->capacity = 
+    text->length   = 0;
+    text->string   = NULL;
+
+    return text;
+}
+
+
+hemp_text_p
+hemp_text_init(
+    hemp_size_t size
+) {
+    hemp_text_p text = hemp_text_new();
 
     if (size) {
         text->string = hemp_mem_alloc(size + 1);
@@ -22,10 +34,35 @@ hemp_text_init(
         text->capacity = size;
         text->length   = 0;
     }
-    else {
-        text->string   = NULL;
-        text->capacity = text->length = 0;
-    }
+
+    return text;
+}
+
+
+hemp_text_p
+hemp_text_init_format(
+    const hemp_cstr_p format,
+    ...
+) {
+    hemp_text_p text = hemp_text_new();
+    hemp_cstr_p cstr;
+
+    va_list args;
+    va_start(args, format);
+    vasprintf(&cstr, format, args);
+    va_end(args);
+
+    if (! cstr)
+        hemp_mem_fail("text");
+
+#if HEMP_DEBUG & HEMP_DEBUG_MEM
+    /* tell the memory trace debugging code that we know about this memory */
+    hemp_mem_trace_external(cstr, strlen(cstr) + 1, __FILE__, __LINE__);
+#endif
+
+    text->length   = 
+    text->capacity = strlen(cstr);
+    text->string   = cstr;
 
     return text;
 }
@@ -81,6 +118,7 @@ hemp_text_from_cstr(
     hemp_text_append_cstr(text, source);
     return text;
 }
+
 
 
 hemp_text_p

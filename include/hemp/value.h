@@ -64,7 +64,7 @@ extern const hemp_value_t HempAfter;
  * HempBefore, HempEqual and HempAfter.
  */
  
-extern const struct hemp_vtype_s hemp_global_vtypes[19];
+extern const struct hemp_vtype_s hemp_global_vtypes[32];
 
 
 
@@ -97,7 +97,8 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
 #define HEMP_TYPE_TEXT_ID       ((hemp_u8_t)  0x4)      /* text object      */
 #define HEMP_TYPE_IDENT_ID      ((hemp_u8_t)  0xF)      /* identity value   */
 
-/*
+
+/*--------------------------------------------------------------------------
  * Identity values are those that only ever have one instance.
  *
  * We use 4 bits to define the identity type and sub-type.  
@@ -125,11 +126,13 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
  * indicates a comparison value: before, equal, after.  Before and after also
  * have the boolean true bits encoded and equal has the false bits.
  * 
- */
+ *--------------------------------------------------------------------------*/
 
+#define HEMP_IDENT_NOT          0x00
 #define HEMP_IDENT_BITS         8
 #define HEMP_IDENT_MASK         0xFF
-#define HEMP_IDENT_NOT          0x00
+#define HEMP_IDENT_VTMASK       0x0C
+#define HEMP_IDENT_VTSHIFT      2
 
 /* 
  * These are a bit ad-hoc, so don't take them too seriously.  They're only 
@@ -166,7 +169,7 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
 
 /* first 13 bits are used to indicate NaN, payload can use the rest*/
 #define HEMP_NAN_MASK           0xFFF8000000000000LL
-#define HEMP_INTEGER_MASK           0xFFFFFFFFL
+#define HEMP_INTEGER_MASK       0xFFFFFFFFL
 #define HEMP_PAYLOAD(v)         (v.bits & HEMP_PAYLOAD_MASK)
 
 /* internal macros for detecting and manipulating type tag */
@@ -192,6 +195,7 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
 #define HEMP_IDENT_IS(v,t)      ((hemp_bool_t) (HEMP_IDENT_ID(v) == (hemp_u8_t) t))
 #define HEMP_IDENT_HAS(v,b)     ( HEMP_IDENT_ID(v) & b)
 #define HEMP_IDENT_BELOW(v,b)   ((HEMP_IDENT_ID(v) ^ b) < b)
+#define HEMP_IDENT_VTABLE_NO(v) ((HEMP_IDENT_ID(v) & HEMP_IDENT_VTMASK) >> HEMP_IDENT_VTSHIFT)
 
 //#define HEMP_IDENT_HAS(v,b)     ((hemp_bool_t) (HEMP_IDENT_ID(v) &  (hemp_u8_t) b) == b)
 //#define HEMP_IDENT_UNDEF(v)   
@@ -226,12 +230,14 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
 
 
 /* a global array of vtables for each of the core types */
-#define hemp_vtable(v)          (hemp_global_vtypes[HEMP_TYPE_ID(v)])
+#define hemp_vtable_no(v)       (hemp_is_ident(v) ? (0x10 + HEMP_IDENT_VTABLE_NO(v)) : HEMP_TYPE_ID(v))
+#define hemp_vtable(v)          (hemp_global_vtypes[hemp_vtable_no(v)])
 #define hemp_vmethod(v,n)       (hemp_vtable(v).n)
 #define hemp_vcall(v,n)         (hemp_vmethod(v,n)(v))
 #define hemp_vtext(v,o)         (hemp_vmethod(v,text)(v,o))
 #define hemp_ident_name(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
-#define hemp_type_name(v)       (hemp_is_ident(v) ? hemp_ident_name(v) : hemp_vtable(v).name)
+//#define hemp_type_name(v)       (hemp_is_ident(v) ? hemp_ident_name(v) : hemp_vtable(v).name)
+#define hemp_type_name(v)       (hemp_vtable(v).name)
 
 #define hemp_to_num(v)          (hemp_is_number(v)  ? v : hemp_vcall(v,number))
 #define hemp_to_int(v)          (hemp_is_integer(v) ? v : hemp_vcall(v,integer))

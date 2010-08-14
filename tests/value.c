@@ -4,6 +4,7 @@
 
 void test_value();
 void test_value_conversion();
+void test_identity_values();
 
 int
 main(
@@ -13,11 +14,15 @@ main(
 ) {
     plan_tests(162);
 
-    test_value();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-    
-    test_value_conversion();
+//    test_value();
+//    hemp_mem_trace_ok();
+//    hemp_mem_trace_reset();
+//    
+//    test_value_conversion();
+//    hemp_mem_trace_ok();
+//    hemp_mem_trace_reset();
+
+    test_identity_values();
     hemp_mem_trace_ok();
     hemp_mem_trace_reset();
 
@@ -250,3 +255,38 @@ void test_value_conversion() {
 
     hemp_text_free(hemp_val_text(value));
 }
+
+
+void test_identity_values() {
+    pass("testing identity value");
+
+    hemp_dump_value(HempMissing);
+    ok( HEMP_IDENT_VTABLE_NO(HempMissing) == 0, "missing uses ident vtable 0" );
+    is( hemp_type_name(HempMissing), "Undefined", "Missing is Undefined" );
+    
+    hemp_dump_value(HempNothing);
+    ok( HEMP_IDENT_VTABLE_NO(HempNothing) == 0, "nothing uses ident vtable 0" );
+    is( hemp_type_name(HempNothing), "Undefined", "Nothing is Undefined" );
+
+    hemp_dump_value(HempFalse);
+    ok( HEMP_IDENT_VTABLE_NO(HempFalse) == 1, "false uses ident vtable 1" );
+    is( hemp_type_name(HempFalse), "Truth", "False is Truth" );
+
+    hemp_dump_value(HempTrue);
+    ok( HEMP_IDENT_VTABLE_NO(HempTrue) == 1, "true uses ident vtable 1" );
+    is( hemp_type_name(HempTrue), "Truth", "True is Truth" );
+
+    hemp_dump_value(HempBefore);
+    ok( HEMP_IDENT_VTABLE_NO(HempBefore) == 3, "before uses ident vtable 3" );
+    is( hemp_type_name(HempBefore), "Compare", "Before is Compare" );
+
+    hemp_dump_value(HempEqual);
+    ok( HEMP_IDENT_VTABLE_NO(HempEqual) == 3, "equal uses ident vtable 3" );
+    is( hemp_type_name(HempEqual), "Compare", "Equal is Compare" );
+
+    hemp_dump_value(HempAfter);
+    ok( HEMP_IDENT_VTABLE_NO(HempAfter) == 3, "after uses ident vtable 3" );
+    is( hemp_type_name(HempAfter), "Compare", "After is Compare" );
+}
+
+

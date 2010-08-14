@@ -4,9 +4,10 @@
 #include <readline/history.h>
 
 
-#define HEMP_OPTION_SIG "vdhtqf:"
-#define HEMP_QUIT       "quit"
-#define HEMP_EXIT       "exit"
+#define HEMP_OPTION_SIG     "vdhtqf:"
+#define HEMP_QUIT           "quit"
+#define HEMP_EXIT           "exit"
+#define HEMP_EXPR_PROMPT    HEMP_ANSI_CYAN "expr> " HEMP_ANSI_RESET
 
 void         hemp_banner();
 void         hemp_help();
@@ -18,17 +19,20 @@ hemp_cstr_p  hemp_prompt_init();
 void         hemp_prompt_free();
 hemp_cstr_p  hemp_input_read(hemp_cstr_p prompt);
 void         hemp_input_free();
-hemp_bool_t  hemp_cmd_help(hemp_p, hemp_cstr_p);
-hemp_bool_t  hemp_cmd_quit(hemp_p, hemp_cstr_p);
-hemp_bool_t  hemp_cmd_todo(hemp_p, hemp_cstr_p);
 char **      hemp_completion(const char *, int, int);
 char *       hemp_command_generator(const char *, int);
 
+hemp_bool_t  hemp_cmd_todo(hemp_p, hemp_cstr_p);
+hemp_bool_t  hemp_cmd_exprs(hemp_p, hemp_cstr_p);
+hemp_bool_t  hemp_cmd_expr(hemp_p, hemp_cstr_p);
+hemp_bool_t  hemp_cmd_help(hemp_p, hemp_cstr_p);
+hemp_bool_t  hemp_cmd_quit(hemp_p, hemp_cstr_p);
 
 static int be_quiet  = 0;
 static int read_text = 0;
 static hemp_cstr_p hemp_input  = NULL;
-static hemp_cstr_p hemp_prompt = NULL;
+static hemp_cstr_p hemp_prompt = NULL;      /* old way */
+
 
 static struct option hemp_options[] = {
     {"quiet",   no_argument,        NULL, 'q' },
@@ -47,11 +51,13 @@ typedef struct {
 } hemp_command;
 
 hemp_command hemp_commands[] = {
-    { &hemp_cmd_todo, "data",   "Load data definitions" },
-    { &hemp_cmd_todo, "text",   "Process some template text" },
-    { &hemp_cmd_todo, "file",   "Process a template file" },
-    { &hemp_cmd_help, "help",   "Help on using hemp" },
-    { &hemp_cmd_quit, "quit",   "Quit using hemp"    },
+    { &hemp_cmd_expr,   "expr",   "Evaluate a single hemp expression"       },
+    { &hemp_cmd_exprs,  "exprs",  "Evaluate hemp expressions, line by line" },
+    { &hemp_cmd_todo,   "data",   "Load data definitions from a file"       },
+    { &hemp_cmd_todo,   "text",   "Process some template text"              },
+    { &hemp_cmd_todo,   "file",   "Process a template file"                 },
+    { &hemp_cmd_help,   "help",   "Help on using hemp"                      },
+    { &hemp_cmd_quit,   "quit",   "Quit using hemp"                         },
     { NULL, NULL, NULL }
 };
 
@@ -66,6 +72,10 @@ hemp_command hemp_commands[] = {
 
 
 
+/*--------------------------------------------------------------------------
+ * main entry point
+ *--------------------------------------------------------------------------*/
+
 int main(
     int  argc, 
     char **argv, 
@@ -76,6 +86,7 @@ int main(
     hemp_template_p template;
     hemp_text_p     input, output;
     
+    hemp_language(hemp, "tt3");
     hemp_prompt_init();
     hemp_getopt(hemp, argc, argv);
 
@@ -142,6 +153,11 @@ int main(
     return 0;
 }
 
+
+
+/*--------------------------------------------------------------------------
+ * interactive mode
+ *--------------------------------------------------------------------------*/
 
 hemp_command *
 hemp_command_lookup(
@@ -266,12 +282,6 @@ hemp_input_read(
 }
 
 
-/* Attempt to complete on the contents of TEXT.  START and END bound the
-   region of rl_line_buffer that contains the word to complete.  TEXT is
-   the word to complete.  We can use the entire contents of rl_line_buffer
-   in case we want to do some simple parsing.  Return the array of matches,
-   or NULL if there aren't any. */
-
 char **
 hemp_completion(
     const char *text, 
@@ -279,23 +289,11 @@ hemp_completion(
     int end
 ) {
     return rl_completion_matches(text, &hemp_command_generator);
-
-//    return rl_completion_matches(text, &hemp_command_generator);
-//    rl_message("found some matches\n");
-//    rl_set_prompt("BLAH>");
-//
-//
 //    hemp_cstr_p *matches = NULL;
 ////    if (start == 0)
 //    matches = rl_completion_matches(text, &hemp_command_generator);
-////    rl_message("found some matches\n");
-//    return matches;
 }
 
-
-/* Generator function for command completion.  STATE lets us know whether
-   to start from scratch; without any state (i.e. STATE == 0), then we
-   start at the top of the list. */
 
 char *
 hemp_command_generator(
@@ -362,6 +360,96 @@ void hemp_warn(
  *--------------------------------------------------------------------------*/
 
 hemp_bool_t 
+hemp_cmd_todo(
+    hemp_p      hemp, 
+    hemp_cstr_p input
+) {
+    hemp_warn("Sorry, that functionality is still TODO");
+    return HEMP_FALSE;
+}
+
+
+hemp_bool_t 
+hemp_cmd_exprs(
+    hemp_p      hemp, 
+    hemp_cstr_p text
+) {
+    /* pass text along as first expression */
+    if (text) {
+        if (hemp_cmd_expr(hemp,text))
+            return HEMP_FALSE;
+    }
+
+    /* rinse and repeat... */
+    while (! hemp_cmd_expr(hemp,text)) {
+        /* keep going */
+    }
+
+    return HEMP_FALSE;
+}
+
+
+hemp_bool_t 
+hemp_cmd_expr(
+    hemp_p      hemp, 
+    hemp_cstr_p text
+) {
+    hemp_text_p     input, output;
+    hemp_template_p hemplate;
+
+    if (! text)
+        text = hemp_input_read(HEMP_EXPR_PROMPT);
+    
+    if (! text)
+        return HEMP_FALSE;
+    
+    hemp_cstr_trim(text);
+
+    if (! *text)
+        return HEMP_FALSE;
+
+    input = hemp_text_init_format("[%% %s %%]", text);
+
+    hemplate = NULL;
+    output   = NULL;
+
+    HEMP_TRY;
+        // hemp_verbose(hemp, "loaded text: %s", input->string);
+        hemplate = hemp_template(
+            hemp, HEMP_TT3, HEMP_TEXT, input->string
+        );
+        
+        if (! hemplate)
+            hemp_fatal("failed to create template... I think this should never happen, but need to check\n");
+
+        output = hemp_template_render(hemplate);
+
+        if (output)
+            puts(output->string);
+        else 
+            hemp_fatal("could not render template output");
+
+
+    HEMP_CATCH_ALL;
+        hemp_warn(hemp->error->message);
+
+    HEMP_END;
+
+    hemp_text_free(input);
+
+    if (output)
+        hemp_text_free(output);
+  
+// cleaned up automatically  
+//    if (hemplate)
+//        hemp_template_free(hemplate);
+
+
+    return HEMP_FALSE;
+}
+
+
+hemp_bool_t 
 hemp_cmd_help(
     hemp_p      hemp, 
     hemp_cstr_p input
@@ -381,16 +469,6 @@ hemp_cmd_help(
             HEMP_ANSI_RESET
         );
     }
-    return HEMP_FALSE;
-}
-
-
-hemp_bool_t 
-hemp_cmd_todo(
-    hemp_p      hemp, 
-    hemp_cstr_p input
-) {
-    hemp_warn("Sorry, that functionality is still TODO");
     return HEMP_FALSE;
 }
 
