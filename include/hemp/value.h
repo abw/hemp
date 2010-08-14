@@ -91,9 +91,9 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
 #define HEMP_TYPE_BITS          4
 #define HEMP_TYPE_SHIFT         47
 #define HEMP_TYPE_MASK          0x0F
-#define HEMP_TYPE_NUM_ID        ((hemp_u8_t)  0x0)      /* 64 bit double    */
-#define HEMP_TYPE_INT_ID        ((hemp_u8_t)  0x1)      /* 32 bit integer   */
-#define HEMP_TYPE_STR_ID        ((hemp_u8_t)  0x2)      /* string pointer   */
+#define HEMP_TYPE_NUMBER_ID     ((hemp_u8_t)  0x0)      /* 64 bit double    */
+#define HEMP_TYPE_INTEGER_ID    ((hemp_u8_t)  0x1)      /* 32 bit integer   */
+#define HEMP_TYPE_STRING_ID     ((hemp_u8_t)  0x2)      /* string pointer   */
 #define HEMP_TYPE_TEXT_ID       ((hemp_u8_t)  0x4)      /* text object      */
 #define HEMP_TYPE_IDENT_ID      ((hemp_u8_t)  0xF)      /* identity value   */
 
@@ -166,7 +166,7 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
 
 /* first 13 bits are used to indicate NaN, payload can use the rest*/
 #define HEMP_NAN_MASK           0xFFF8000000000000LL
-#define HEMP_INT_MASK           0xFFFFFFFFL
+#define HEMP_INTEGER_MASK           0xFFFFFFFFL
 #define HEMP_PAYLOAD(v)         (v.bits & HEMP_PAYLOAD_MASK)
 
 /* internal macros for detecting and manipulating type tag */
@@ -176,13 +176,13 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
 #define HEMP_TYPE_TAG(v)        HEMP_TYPE_DOWN(v.bits)
 #define HEMP_TYPE_NUMBER(v)     ((hemp_bool_t) ((hemp_u64_t)  v.bits < HEMP_NAN_MASK))
 #define HEMP_TYPE_TAGGED(v)     ((hemp_bool_t) ((hemp_u64_t) (v.bits & HEMP_NAN_MASK) == HEMP_NAN_MASK))
-#define HEMP_TYPE_ID(v)         (HEMP_TYPE_NUMBER(v) ? HEMP_TYPE_NUM_ID : HEMP_TYPE_TAG(v))
+#define HEMP_TYPE_ID(v)         (HEMP_TYPE_NUMBER(v) ? HEMP_TYPE_NUMBER_ID : HEMP_TYPE_TAG(v))
 #define HEMP_TYPE_IS(v,t)       ((hemp_bool_t) HEMP_TYPE_ID(v) == t)
 
 /* full width masks for different types */
-#define HEMP_TYPE_NUM_MASK      ((hemp_u64_t) HEMP_TYPE_NUM_ID)
-#define HEMP_TYPE_INT_MASK      HEMP_TYPE_NAN_MASK(HEMP_TYPE_INT_ID)
-#define HEMP_TYPE_STR_MASK      HEMP_TYPE_NAN_MASK(HEMP_TYPE_STR_ID)
+#define HEMP_TYPE_NUMBER_MASK   ((hemp_u64_t) HEMP_TYPE_NUMBER_ID)
+#define HEMP_TYPE_INTEGER_MASK  HEMP_TYPE_NAN_MASK(HEMP_TYPE_INTEGER_ID)
+#define HEMP_TYPE_STRING_MASK   HEMP_TYPE_NAN_MASK(HEMP_TYPE_STRING_ID)
 #define HEMP_TYPE_TEXT_MASK     HEMP_TYPE_NAN_MASK(HEMP_TYPE_TEXT_ID)
 #define HEMP_TYPE_IDENT_MASK    HEMP_TYPE_NAN_MASK(HEMP_TYPE_IDENT_ID)
 
@@ -199,9 +199,9 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
 
 /* high-level macros for checking value types */
 #define hemp_is_tagged(v)       HEMP_TYPE_TAGGED(v)
-#define hemp_is_num(v)          HEMP_TYPE_NUMBER(v)
-#define hemp_is_int(v)          HEMP_TYPE_IS(v, HEMP_TYPE_INT_ID)
-#define hemp_is_str(v)          HEMP_TYPE_IS(v, HEMP_TYPE_STR_ID)
+#define hemp_is_number(v)       HEMP_TYPE_NUMBER(v)
+#define hemp_is_integer(v)      HEMP_TYPE_IS(v, HEMP_TYPE_INTEGER_ID)
+#define hemp_is_str(v)          HEMP_TYPE_IS(v, HEMP_TYPE_STRING_ID)
 #define hemp_is_text(v)         HEMP_TYPE_IS(v, HEMP_TYPE_TEXT_ID)
 #define hemp_is_ident(v)        HEMP_TYPE_IS(v, HEMP_TYPE_IDENT_ID)
 #define hemp_is_undef(v)        HEMP_IDENT_BELOW(v, HEMP_IDENT_UNDEF_BIT)
@@ -211,8 +211,6 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
 #define hemp_is_nothing(v)      HEMP_IDENT_IS(v, HEMP_IDENT_NOTHING_ID)
 #define hemp_is_true(v)         (hemp_is_truth(v) &&   HEMP_IDENT_HAS(v, HEMP_IDENT_TRUE_BIT))
 #define hemp_is_false(v)        (hemp_is_truth(v) && ! HEMP_IDENT_HAS(v, HEMP_IDENT_TRUE_BIT))
-//#define hemp_is_false(v)        HEMP_IDENT_IS(v, HEMP_IDENT_FALSE_ID)
-//#define hemp_is_true(v)         HEMP_IDENT_IS(v, HEMP_IDENT_TRUE_ID)
 
 #define hemp_is_before(v)       HEMP_IDENT_IS(v, HEMP_IDENT_BEFORE_ID)
 #define hemp_is_equal(v)        HEMP_IDENT_IS(v, HEMP_IDENT_EQUAL_ID)
@@ -235,8 +233,8 @@ extern const struct hemp_vtype_s hemp_global_vtypes[19];
 #define hemp_ident_name(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
 #define hemp_type_name(v)       (hemp_is_ident(v) ? hemp_ident_name(v) : hemp_vtable(v).name)
 
-#define hemp_to_num(v)          (hemp_is_num(v)     ? v : hemp_vcall(v,number))
-#define hemp_to_int(v)          (hemp_is_int(v)     ? v : hemp_vcall(v,integer))
+#define hemp_to_num(v)          (hemp_is_number(v)  ? v : hemp_vcall(v,number))
+#define hemp_to_int(v)          (hemp_is_integer(v) ? v : hemp_vcall(v,integer))
 #define hemp_to_boolean(v)      (hemp_is_boolean(v) ? v : hemp_vcall(v,boolean))
 #define hemp_to_text(v)         (hemp_is_text(v)    ? v : hemp_vtext(v,HempNothing))
 #define hemp_onto_text(v,o)      hemp_vtext(v,o)

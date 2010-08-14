@@ -53,37 +53,37 @@ hemp_bool_t
         hemp_cstr_p str
     );
 
-HEMP_DO_INLINE hemp_cstr_p
+HEMP_INLINE hemp_cstr_p
     hemp_cstr_next_space(
         hemp_cstr_p cstr
     );
 
-HEMP_DO_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool_t
     hemp_cstr_to_next_space(
         hemp_cstr_p *cstr
     );
 
-HEMP_DO_INLINE hemp_cstr_p
+HEMP_INLINE hemp_cstr_p
     hemp_cstr_next_nonspace(
         hemp_cstr_p cstr
     );
 
-HEMP_DO_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool_t
     hemp_cstr_to_next_nonspace(
         hemp_cstr_p *cstr
     );
 
-HEMP_DO_INLINE hemp_cstr_p
+HEMP_INLINE hemp_cstr_p
     hemp_cstr_next_line(
         hemp_cstr_p cstr
     );
 
-HEMP_DO_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool_t
     hemp_cstr_to_next_line(
         hemp_cstr_p *cstr
     );
 
-HEMP_DO_INLINE hemp_list_p
+HEMP_INLINE hemp_list_p
     hemp_cstr_words(
         hemp_cstr_p cstr
     );

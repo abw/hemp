@@ -20,7 +20,7 @@ main(
     char **argv, 
     char **env
 ) {
-    plan_tests(48);
+    plan_tests(49);
 
     test_line();
     hemp_mem_trace_ok();
@@ -57,7 +57,7 @@ void test_line() {
 
 
 void test_space() {
-    hemp_cstr_p paddy = hemp_cstr_copy("  foo bar baz  ");
+    hemp_cstr_p paddy = hemp_cstr_copy("               foo bar baz  ");
     ok( paddy, "created padded string" );
 
     hemp_cstr_trim(paddy);
@@ -159,4 +159,6 @@ void test_words() {
     is( hemp_list_item(list,1), "bar  baz\n\t  bam  ", "second word is bar..." );
     hemp_list_free(list);
 
+    list = hemp_cstr_words("");
+    ok( ! list, "got no words" );
 }

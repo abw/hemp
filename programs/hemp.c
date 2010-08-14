@@ -11,6 +11,7 @@
 void         hemp_banner();
 void         hemp_help();
 void         hemp_say(char *format, ...);
+void         hemp_warn(char *format, ...);
 void         hemp_getopt(hemp_p hemp, int argc, char **argv);
 void         hemp_interactive(hemp_p hemp);
 hemp_cstr_p  hemp_prompt_init();
@@ -142,16 +143,34 @@ int main(
 }
 
 
+hemp_command *
+hemp_command_lookup(
+    hemp_cstr_p name
+) {
+    int i;
+    
+    for (i = 0; hemp_commands[i].name; i++) {
+        if (hemp_cstr_eq(name, hemp_commands[i].name)) {
+            return &hemp_commands[i];
+        }
+    }
+
+    return NULL;
+}
+
+
 void hemp_interactive(
     hemp_p hemp
 ) {
     hemp_cstr_p prompt = hemp_prompt;
     hemp_bool_t done   = HEMP_FALSE;
-    hemp_cstr_p input;
+    hemp_list_p words;
+    hemp_cstr_p input, word, args;
+    hemp_command *cmd;
 
     rl_readline_name = HEMP_HEMP;
 //    rl_attempted_completion_function = hemp_completion;
-    rl_completion_entry_function = &hemp_command_generator;
+    rl_completion_entry_function = hemp_command_generator;
 
     while(! done) {
         input = hemp_input_read(prompt);
@@ -161,11 +180,24 @@ void hemp_interactive(
             break;
         }
 
-        if (hemp_cstr_eq(input, HEMP_QUIT) || hemp_cstr_eq(input, HEMP_EXIT))
-            break;
+        words = hemp_cstr_nwords(input, 2);
         
-        if (*input) {
-            hemp_say("You said: %s", input);
+        if (words) {
+            word = (hemp_cstr_p) hemp_list_item(words, 0);
+            args = (words->length > 1)
+                ? (hemp_cstr_p) hemp_list_item(words, 1)
+                : NULL;
+            
+            cmd = hemp_command_lookup(word);
+            
+            if (cmd) {
+                done = cmd->func(hemp, args);
+            }
+            else {
+                hemp_warn("Unknown command: %s     (type 'help' for help)", word);
+            }
+
+            hemp_list_free(words);
         }
     }
 
@@ -313,6 +345,17 @@ void hemp_say(
     va_end(args);
 }
 
+void hemp_warn(
+    char *format, ...
+) {
+    va_list args;
+    va_start(args, format);
+    fprintf(stderr, "%shemp> ", HEMP_ANSI_RED);
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "%s\n", HEMP_ANSI_RESET);
+    va_end(args);
+}
+
 
 /*--------------------------------------------------------------------------
  * commands
@@ -323,8 +366,22 @@ hemp_cmd_help(
     hemp_p      hemp, 
     hemp_cstr_p input
 ) {
-    hemp_say("TODO: help");
-    return HEMP_TRUE;
+    int i;
+    hemp_command cmd;
+    printf("Hemp commands:\n");
+    
+    for (i = 0; hemp_commands[i].name; i++) {
+        cmd = hemp_commands[i];
+        printf(
+            "      %s%-12s %s%s%s\n", 
+            HEMP_ANSI_CYAN, 
+            cmd.name, 
+            HEMP_ANSI_YELLOW, 
+            cmd.about, 
+            HEMP_ANSI_RESET
+        );
+    }
+    return HEMP_FALSE;
 }
 
 
@@ -333,7 +390,7 @@ hemp_cmd_todo(
     hemp_p      hemp, 
     hemp_cstr_p input
 ) {
-    hemp_say("TODO");
+    hemp_warn("Sorry, that functionality is still TODO");
     return HEMP_FALSE;
 }
 
@@ -343,8 +400,7 @@ hemp_cmd_quit(
     hemp_p      hemp, 
     hemp_cstr_p input
 ) {
-    hemp_say("QUIT!");
-    return HEMP_FALSE;
+    return HEMP_TRUE;
 }
 
 

@@ -9,7 +9,7 @@
     )
 
 #define HEMP_NUMOP_CAST_NUM(v)              \
-    (hemp_is_num(v)                         \
+    (hemp_is_number(v)                      \
         ? hemp_val_num(v)                   \
         : ((hemp_num_t) hemp_val_int(v))    \
     )
@@ -131,7 +131,7 @@ HEMP_EVAL_FUNC(hemp_element_number_number) {
 HEMP_EVAL_FUNC(hemp_element_number_integer) {
     hemp_debug_call("hemp_element_number_integer()\n");
     hemp_value_t value = element->args.value;
-    return hemp_is_int(value)
+    return hemp_is_integer(value)
         ? value
         : hemp_int_val((hemp_int_t) hemp_val_num(value));
 }
@@ -188,7 +188,7 @@ HEMP_EVAL_FUNC(hemp_element_integer_number) {
     // FIXME: not sure what's best to do here... do we allow number() 
     // functions to return integers?
     return value;
-    return hemp_is_num(value)
+    return hemp_is_number(value)
         ? value
         : hemp_num_val((hemp_num_t) hemp_val_int(value));
 }
@@ -235,7 +235,7 @@ HEMP_OUTPUT_FUNC(hemp_element_numop_text) {
     hemp_text_p text;
     hemp_value_t value = element->type->number(element, context);
 
-    if (hemp_is_int(value))
+    if (hemp_is_integer(value))
         snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_INT, hemp_val_int(value));
     else
         snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, hemp_val_num(value));
@@ -253,7 +253,7 @@ HEMP_EVAL_FUNC(hemp_element_numop_integer) {
     hemp_text_p text;
     hemp_value_t value = element->type->number(element, context);
 
-    return hemp_is_int(value)
+    return hemp_is_integer(value)
         ? value
         : hemp_int_val((int) hemp_val_num(value));
 }
@@ -328,7 +328,7 @@ HEMP_EVAL_FUNC(hemp_element_number_plus_value) {
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval, result;
     
-    if (hemp_is_int(lval)) {
+    if (hemp_is_integer(lval)) {
         result = hemp_int_val(
             hemp_val_int(lval) 
           + HEMP_NUMOP_GET_INT(rhs, context)
@@ -366,7 +366,7 @@ HEMP_EVAL_FUNC(hemp_element_number_minus_value) {
         hemp_element_p expr = element->args.unary.expr;
         hemp_value_t   val  = expr->type->number(expr, context);
 
-        return hemp_is_int(val)
+        return hemp_is_integer(val)
             ? hemp_int_val(- hemp_val_int(val) )
             : hemp_num_val(- hemp_val_num(val) );
     }
@@ -377,7 +377,7 @@ HEMP_EVAL_FUNC(hemp_element_number_minus_value) {
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval, result;
 
-    if (hemp_is_int(lval)) {
+    if (hemp_is_integer(lval)) {
         result = hemp_int_val(
             hemp_val_int(lval) 
           - HEMP_NUMOP_GET_INT(rhs, context)
@@ -416,7 +416,7 @@ HEMP_EVAL_FUNC(hemp_element_number_power_value) {
     hemp_value_t rval  = rhs->type->number(rhs, context);
     hemp_value_t result;
 
-    if (hemp_is_int(lval)) {
+    if (hemp_is_integer(lval)) {
         result = hemp_int_val(
             (hemp_int_t)
             pow( 
@@ -457,7 +457,7 @@ HEMP_EVAL_FUNC(hemp_element_number_multiply_value) {
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval, result;
 
-    if (hemp_is_int(lval)) {
+    if (hemp_is_integer(lval)) {
         result = hemp_int_val(
             hemp_val_int(lval) 
           * HEMP_NUMOP_GET_INT(rhs, context)
@@ -494,7 +494,7 @@ HEMP_EVAL_FUNC(hemp_element_number_divide_value) {
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval, result;
 
-    if (hemp_is_int(lval)) {
+    if (hemp_is_integer(lval)) {
         result = hemp_int_val(
             hemp_val_int(lval) 
           / HEMP_NUMOP_GET_INT(rhs, context)

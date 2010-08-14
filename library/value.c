@@ -96,15 +96,15 @@ hemp_num_val(hemp_num_t n) {
 HEMP_DO_INLINE hemp_value_t
 hemp_int_val(hemp_int_t i) {
     hemp_value_t v;
-//  v.bits = HEMP_TYPE_INT_MASK | (hemp_u64_t) i;   /* FAIL on -ve ints */
-    v.bits = HEMP_TYPE_INT_MASK | (hemp_u64_t)(i & HEMP_INT_MASK);
+//  v.bits = HEMP_TYPE_INTEGER_MASK | (hemp_u64_t) i;   /* FAIL on -ve ints */
+    v.bits = HEMP_TYPE_INTEGER_MASK | (hemp_u64_t)(i & HEMP_INTEGER_MASK);
     return v;
 }
 
 HEMP_DO_INLINE hemp_value_t
 hemp_str_val(hemp_cstr_p s) {
     hemp_value_t v;
-    v.bits = HEMP_TYPE_STR_MASK | (hemp_u64_t) s;
+    v.bits = HEMP_TYPE_STRING_MASK | (hemp_u64_t) s;
     return v;
 }
 

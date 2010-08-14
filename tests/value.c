@@ -48,10 +48,10 @@ void test_number(hemp_num_t expect) {
 
     hemp_num_t n = hemp_val_num(value);
     ok( ! hemp_is_tagged(value), "number is not a tagged value" );
-    ok( hemp_is_num(value), "number is a number value" );
+    ok( hemp_is_number(value), "number is a number value" );
     ok( n == expect, "got num value back" );
 
-    type_check(value, HEMP_TYPE_NUM_ID, "Number");
+    type_check(value, HEMP_TYPE_NUMBER_ID, "Number");
     ok( ! hemp_is_undef(value),         "number is not undef" );
     ok( ! hemp_is_missing(value),       "number is not missing" );
     ok( ! hemp_is_nothing(value),       "number is not nothing" );
@@ -67,11 +67,11 @@ void test_integer(hemp_int_t expect) {
     printf("integer value: %d\n", expect);
     hemp_value_t value = hemp_int_val(expect);
     hemp_dump_value(value);
-    type_check(value, HEMP_TYPE_INT_ID, "Integer");
+    type_check(value, HEMP_TYPE_INTEGER_ID, "Integer");
 
     hemp_u32_t i = hemp_val_int(value);
     ok( hemp_is_tagged(value), "integer is a tagged value" );
-    ok( hemp_is_int(value), "integer is an integer value" );
+    ok( hemp_is_integer(value), "integer is an integer value" );
     ok( i == expect, "got int value back" );
 
     ok( ! hemp_is_undef(value),         "integer is not undef" );
@@ -89,14 +89,14 @@ void test_value() {
     hemp_value_t value;
     hemp_vtype_p vtable;
 
-    printf("HEMP_NUM_MASK:\n");
-    hemp_dump_u64(HEMP_TYPE_NUM_MASK);
+    printf("HEMP_NUMBER_MASK:\n");
+    hemp_dump_u64(HEMP_TYPE_NUMBER_MASK);
     printf("HEMP_NAN_MASK:\n");
     hemp_dump_u64(HEMP_NAN_MASK);
-    printf("HEMP_INT_MASK:\n");
-    hemp_dump_u64(HEMP_TYPE_INT_MASK);
-    printf("HEMP_STR_MASK:\n");
-    hemp_dump_u64(HEMP_TYPE_STR_MASK);
+    printf("HEMP_INTEGER_MASK:\n");
+    hemp_dump_u64(HEMP_TYPE_INTEGER_MASK);
+    printf("HEMP_STRING_MASK:\n");
+    hemp_dump_u64(HEMP_TYPE_STRING_MASK);
     printf("------------------\n");
 
     /* native double */
@@ -113,7 +113,7 @@ void test_value() {
     printf("string value: %s\n", es);
     value = hemp_str_val(es);
     hemp_dump_value(value);
-    type_check(value, HEMP_TYPE_STR_ID, "String");
+    type_check(value, HEMP_TYPE_STRING_ID, "String");
     ok( ! hemp_is_undef(value),         "string is not undef" );
     ok( ! hemp_is_missing(value),       "string is not missing" );
     ok( ! hemp_is_nothing(value),       "string is not nothing" );

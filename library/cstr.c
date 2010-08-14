@@ -120,12 +120,11 @@ hemp_cstr_trim(
         s++;
 
     len = strlen(s);
-    t = s + len - 1;
-
     if (s > cstr)
         hemp_mem_copy(s, cstr, len);
 
-    while (t > s && isspace(*t))
+    t = cstr + len - 1;
+    while (t > cstr && isspace(*t))
         t--;
 
     *++t = HEMP_NUL;
@@ -160,7 +159,7 @@ hemp_cstr_wordlike(
         : HEMP_TRUE;
 }
 
-HEMP_DO_INLINE hemp_cstr_p
+HEMP_INLINE hemp_cstr_p
 hemp_cstr_next_space(
     hemp_cstr_p cstr
 ) {
@@ -171,7 +170,7 @@ hemp_cstr_next_space(
 }
 
 
-HEMP_DO_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool_t
 hemp_cstr_to_next_space(
     hemp_cstr_p *cstr
 ) {
@@ -187,7 +186,7 @@ hemp_cstr_to_next_space(
 }
 
 
-HEMP_DO_INLINE hemp_cstr_p
+HEMP_INLINE hemp_cstr_p
 hemp_cstr_next_nonspace(
     hemp_cstr_p cstr
 ) {
@@ -198,7 +197,7 @@ hemp_cstr_next_nonspace(
 }
 
 
-HEMP_DO_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool_t
 hemp_cstr_to_next_nonspace(
     hemp_cstr_p *cstr
 ) {
@@ -214,7 +213,7 @@ hemp_cstr_to_next_nonspace(
 }
 
 
-HEMP_DO_INLINE hemp_cstr_p
+HEMP_INLINE hemp_cstr_p
 hemp_cstr_next_line(
     hemp_cstr_p cstr
 ) {
@@ -235,7 +234,7 @@ hemp_cstr_next_line(
 }
 
 
-HEMP_DO_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool_t
 hemp_cstr_to_next_line(
     hemp_cstr_p *cstr
 ) {
@@ -251,7 +250,7 @@ hemp_cstr_to_next_line(
 }
 
 
-HEMP_DO_INLINE hemp_list_p
+HEMP_INLINE hemp_list_p
 hemp_cstr_words(
     hemp_cstr_p cstr
 ) {
@@ -278,7 +277,9 @@ hemp_cstr_nwords(
          * in the remaining text then 'to' is also NULL and we consume all
          * the remaining text
          */ 
-        if (max && ++size >= max)
+        size++;
+         
+        if (max && size >= max)
             to = NULL;
         else
             to = hemp_cstr_next_space(from);
@@ -294,6 +295,11 @@ hemp_cstr_nwords(
         
         hemp_list_push(list, item);
         
+    }
+    
+    if (! size) {
+        hemp_list_free(list);
+        list = NULL;
     }
 
     return list;
