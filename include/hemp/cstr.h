@@ -39,6 +39,11 @@ hemp_list_p
     );
 
 void
+    hemp_cstr_trim(
+        hemp_cstr_p cstr
+    );
+
+void
     hemp_cstr_chomp(
         hemp_cstr_p src
     );
@@ -48,9 +53,46 @@ hemp_bool_t
         hemp_cstr_p str
     );
 
-void
+HEMP_DO_INLINE hemp_cstr_p
+    hemp_cstr_next_space(
+        hemp_cstr_p cstr
+    );
+
+HEMP_DO_INLINE hemp_bool_t
+    hemp_cstr_to_next_space(
+        hemp_cstr_p *cstr
+    );
+
+HEMP_DO_INLINE hemp_cstr_p
+    hemp_cstr_next_nonspace(
+        hemp_cstr_p cstr
+    );
+
+HEMP_DO_INLINE hemp_bool_t
+    hemp_cstr_to_next_nonspace(
+        hemp_cstr_p *cstr
+    );
+
+HEMP_DO_INLINE hemp_cstr_p
+    hemp_cstr_next_line(
+        hemp_cstr_p cstr
+    );
+
+HEMP_DO_INLINE hemp_bool_t
     hemp_cstr_to_next_line(
         hemp_cstr_p *cstr
     );
+
+HEMP_DO_INLINE hemp_list_p
+    hemp_cstr_words(
+        hemp_cstr_p cstr
+    );
+
+hemp_list_p
+    hemp_cstr_nwords(
+        hemp_cstr_p cstr,
+        hemp_size_t max
+    );
+
 
 #endif /* HEMP_CSTR_H */

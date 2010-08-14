@@ -10,6 +10,7 @@ config.status
 .dirstamp
 programs/hemp
 tests/action
+tests/cstr
 tests/debug
 tests/dialect
 tests/element
