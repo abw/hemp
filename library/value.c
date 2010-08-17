@@ -39,7 +39,7 @@ const struct hemp_vtype_s hemp_global_vtypes[32] = {
         &hemp_value_boolean_compare
     },
     {   0x12, "-- RESERVED 0x12"  },
-    {   0x13, "Truth",
+    {   0x13, "Compare",
         &hemp_value_compare_text,
         &hemp_value_compare_number,
         &hemp_value_compare_integer,
