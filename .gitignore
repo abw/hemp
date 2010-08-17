@@ -8,6 +8,7 @@ config.status
 .deps
 .libs
 .dirstamp
+build/libltdl/argz.h
 programs/hemp
 tests/core/action
 tests/core/cstr
@@ -33,6 +34,14 @@ tests/core/ptree
 tests/memtrace
 tests/core/utils
 tests/core/value
+
+tests/language/hemp/boolops
+tests/language/hemp/comments
+tests/language/hemp/numbers
+tests/language/hemp/numops
+tests/language/hemp/quotes
+tests/language/hemp/textops
+
 
 tests/debug
 tests/hemp
