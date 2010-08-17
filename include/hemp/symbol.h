@@ -26,12 +26,14 @@ struct hemp_symbol_s {
     hemp_eclean_f   cleanup;
 
     /* parsing methods */
-    hemp_expr_f     expr;
-    hemp_infix_f    infix;
+    hemp_prefix_f   prefix;
+    hemp_postfix_f  postfix;
 
     /* value methods */
+    hemp_text_f     token;
     hemp_text_f     source;
     hemp_text_f     text;
+    hemp_eval_f     value;
     hemp_eval_f     number;
     hemp_eval_f     integer;
     hemp_eval_f     boolean;

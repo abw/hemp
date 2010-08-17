@@ -11,6 +11,7 @@ libhemp_la_SOURCES  =   action.c              \
                         element/compare.c     \
                         element/literal.c     \
                         element/number.c      \
+                        element/operator.c    \
                         element/quoted.c      \
                         element/space.c       \
                         element/text.c        \
@@ -40,6 +41,7 @@ libhemp_la_SOURCES  =   action.c              \
                         tag/outline.c         \
                         tagset.c              \
                         template.c            \
+                        test.c                \
                         text.c                \
                         type.c                \
                         utils.c               \

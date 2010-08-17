@@ -9,12 +9,11 @@ HEMP_SYMBOL_FUNC(hemp_element_squote_symbol) {
     symbol->flags      = HEMP_BE_STATIC;
     symbol->scanner    = &hemp_element_squote_scanner;
     symbol->cleanup    = &hemp_element_text_clean;
-    symbol->expr       = &hemp_element_literal_expr,
+    symbol->prefix     = &hemp_element_literal_prefix;
+    symbol->token      = &hemp_element_literal_token;
     symbol->source     = &hemp_element_literal_source;
     symbol->text       = &hemp_element_quoted_text;
-    symbol->number     = &hemp_element_literal_number;
-    symbol->integer    = &hemp_element_literal_integer;
-    symbol->boolean    = &hemp_element_literal_boolean;
+    symbol->value      = &hemp_element_quoted_value;
     return symbol;
 }
 
@@ -89,12 +88,11 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
 HEMP_SYMBOL_FUNC(hemp_element_dquote_symbol) {
     symbol->scanner    = &hemp_element_dquote_scanner;
     symbol->cleanup    = &hemp_element_text_clean;
-    symbol->expr       = &hemp_element_literal_expr,
+    symbol->prefix     = &hemp_element_literal_prefix;
+    symbol->token      = &hemp_element_literal_token;
     symbol->source     = &hemp_element_literal_source;
     symbol->text       = &hemp_element_quoted_text;
-    symbol->number     = &hemp_element_literal_number;
-    symbol->integer    = &hemp_element_literal_integer;
-    symbol->boolean    = &hemp_element_literal_boolean;
+    symbol->value      = &hemp_element_quoted_value;
     return symbol;
 }
 
@@ -193,7 +191,7 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
  * generic text output function for quoted strings
  *--------------------------------------------------------------------------*/
 
-HEMP_OUTPUT_FUNC(hemp_element_quoted_text) {
+HEMP_ETEXT_FUNC(hemp_element_quoted_text) {
     hemp_debug_call("hemp_element_quoted_text(%p) [%s]\n", element, element->type->name);
 
     hemp_text_p text;
@@ -218,6 +216,11 @@ HEMP_OUTPUT_FUNC(hemp_element_quoted_text) {
     }
 
     return output;
+}
+
+
+HEMP_EVAL_FUNC(hemp_element_quoted_value) {
+    return hemp_element_quoted_text(HEMP_EVAL_ARG_NAMES, HempNothing);
 }
 
 

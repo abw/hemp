@@ -229,7 +229,7 @@ typedef hemp_element_p
     );
 
 typedef hemp_element_p  
-    (* hemp_expr_f )(
+    (* hemp_prefix_f )(
         hemp_element_p *current,    /* pointer to current element pointer   */
         hemp_scope_p    scope,      /* current lexical scope                */
         hemp_prec_t     precedence, /* operator precedence level            */
@@ -237,7 +237,7 @@ typedef hemp_element_p
     );
 
 typedef hemp_element_p  
-    (* hemp_infix_f )(
+    (* hemp_postfix_f )(
         hemp_element_p *current,    /* pointer to current element pointer   */
         hemp_scope_p    scope,      /* current lexical scope                */
         hemp_prec_t     precedence, /* operator precedence level            */
@@ -264,7 +264,7 @@ typedef hemp_value_t
     );
 
 typedef hemp_value_t
-    (* hemp_tvalue_f)(
+    (* hemp_vtext_f)(
         hemp_value_t  value,        /* value to operate on                  */
         hemp_value_t  output        /* output to append onto                */
     );

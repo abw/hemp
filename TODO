@@ -62,12 +62,15 @@ An incomplete list of things TODO, in no particular order.
  
 -- HOT STACK --
 
+* implement vtables for value types, possibly via global 
+
+* boolean vs truth
+
 * Clean up all the macros and inline functions so that they're consistently
-  name, e.g. HEMP_IS_NUM() and so on.
+  name, e.g. HEMP_IS_NUM() and so on.  Change 'num' to 'number' and so on.
 
 * Number ops:
    - Add ++ and -- auto-increment operator
-   - make + and - work as prefix ops as well as infix ops  (half-implemented)
 
 * Text ops:
    - textify prefix 

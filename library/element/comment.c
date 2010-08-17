@@ -6,17 +6,19 @@ static struct hemp_symbol_s
         "comment",                                  /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_BE_WHITESPACE       |                       /* flags                */
-        HEMP_BE_SOURCE       |
+        HEMP_BE_WHITESPACE  |                       /* flags                */
+        HEMP_BE_SOURCE      |
         HEMP_BE_STATIC      |
         HEMP_BE_HIDDEN,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
-        &hemp_element_not_expr,                     /* parse expression     */
-        &hemp_element_not_infix,                    /* parse infix expr     */
+        &hemp_element_not_prefix,                   /* prefix expression    */
+        &hemp_element_not_postfix,                  /* postfix expression   */
+        &hemp_element_literal_token,                /* source token         */
         &hemp_element_literal_source,               /* source code          */
         &hemp_element_not_text,                     /* output text          */
+        &hemp_element_not_value,                    /* output text          */
         &hemp_element_not_number,                   /* numeric conversion   */
         &hemp_element_not_integer,                  /* integer conversion   */
         &hemp_element_not_boolean,                  /* boolean conversion   */
@@ -27,6 +29,7 @@ hemp_symbol_p HempSymbolComment = &hemp_symbol_comment;
 
 HEMP_SYMBOL_FUNC(hemp_element_comment_symbol) {
     symbol->scanner    = &hemp_element_comment_scanner;
+    symbol->token      = &hemp_element_literal_token;
     symbol->source     = &hemp_element_literal_source;
     symbol->flags      = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_STATIC 
                        | HEMP_BE_HIDDEN;

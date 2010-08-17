@@ -277,7 +277,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 ltdl_LIBOBJS = @ltdl_LIBOBJS@
 ltdl_LTLIBOBJS = @ltdl_LTLIBOBJS@
 mandir = @mandir@
@@ -301,8 +300,9 @@ AUTOMAKE_OPTIONS = foreign
 
 # -I$(srcdir) is needed for user that built libltdl with a sub-Automake
 # (not as a sub-package!) using 'nostdinc':
-AM_CPPFLAGS = -DLT_CONFIG_H='<$(LT_CONFIG_H)>' -DLTDL -I. -I../.. \
-	-I$(srcdir) -Ilibltdl -I$(srcdir)/libltdl -I$(srcdir)/libltdl
+AM_CPPFLAGS = -DLT_CONFIG_H='<$(LT_CONFIG_H)>' -DLTDL -I. -I$(srcdir) \
+	-I$(top_srcdir) -Ilibltdl -I$(srcdir)/libltdl \
+	-I$(srcdir)/libltdl
 AM_LDFLAGS = -no-undefined
 BUILT_SOURCES = $(ARGZ_H)
 include_HEADERS = $(am__append_1)
@@ -314,7 +314,7 @@ EXTRA_DIST = lt__dirent.c lt__strl.c COPYING.LIB README argz_.h argz.c
 CLEANFILES = libltdl.la libltdlc.la libdlloader.la $(ltdl_LIBOBJS) \
 	$(ltdl_LTLIBOBJS)
 MOSTLYCLEANFILES = argz.h argz.h-t
-LTDL_VERSION_INFO = -version-info 9:1:2
+LTDL_VERSION_INFO = -version-info 9:2:2
 @INSTALL_LTDL_TRUE@ltdlincludedir = $(includedir)/libltdl
 @INSTALL_LTDL_TRUE@ltdlinclude_HEADERS = libltdl/lt_system.h \
 @INSTALL_LTDL_TRUE@			  libltdl/lt_error.h \

@@ -10,18 +10,20 @@ static struct hemp_symbol_s
         "text",                                     /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_BE_SOURCE   |                           /* flags                */
+        HEMP_BE_SOURCE  |                           /* flags                */
         HEMP_BE_STATIC,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
-        &hemp_element_text_expr,                    /* parse expression     */
-        &hemp_element_not_infix,                    /* parse infix expr     */
+        &hemp_element_text_prefix,                  /* prefix expression    */
+        &hemp_element_not_postfix,                  /* postfix expression   */
+        &hemp_element_literal_token,                /* source token         */
         &hemp_element_literal_source,               /* source code          */
         &hemp_element_literal_text,                 /* output text          */
-        &hemp_element_literal_number,               /* numeric conversion   */
-        &hemp_element_literal_integer,              /* integer conversion   */
-        &hemp_element_literal_boolean,              /* boolean conversion   */
+        &hemp_element_literal_value,                /* output value         */
+        &hemp_element_value_number,                 /* numeric conversion   */
+        &hemp_element_value_integer,                /* integer conversion   */
+        &hemp_element_value_boolean,                /* boolean conversion   */
     };
 
 hemp_symbol_p HempSymbolText = &hemp_symbol_text;
@@ -32,30 +34,24 @@ hemp_symbol_p HempSymbolText = &hemp_symbol_text;
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_text_symbol) {
+    hemp_element_literal_symbol(hemp, symbol);
     symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_STATIC;
-    symbol->expr    = &hemp_element_literal_expr,
-    symbol->source  = &hemp_element_literal_source;
-    symbol->text    = &hemp_element_literal_text;
-    symbol->number  = &hemp_element_literal_number;
-    symbol->integer = &hemp_element_literal_integer;
-    symbol->boolean = &hemp_element_literal_boolean;
+    symbol->prefix  = &hemp_element_literal_prefix;
     return symbol;
 }
 
 
-HEMP_SYMBOL_FUNC(hemp_element_textop_symbol) {
-    symbol->expr    = &hemp_element_not_expr;
-    symbol->infix   = &hemp_element_parse_infix_left;
-    symbol->source  = &hemp_element_binary_source;
-    symbol->text    = &hemp_element_not_text;      /* redefined for each op */
-    symbol->number  = &hemp_element_textop_number;
-    symbol->integer = &hemp_element_textop_integer;
-    symbol->boolean = &hemp_element_textop_boolean;
-    return symbol;
-}
+//HEMP_SYMBOL_FUNC(hemp_element_textop_symbol) {
+//    hemp_element_binary_symbol(hemp, symbol);
+//    symbol->text    = &hemp_element_not_text;      /* redefined for each op */
+//    symbol->number  = &hemp_element_textop_number;
+//    symbol->integer = &hemp_element_textop_integer;
+//    symbol->boolean = &hemp_element_textop_boolean;
+//    return symbol;
+//}
 
-HEMP_PARSE_FUNC(hemp_element_text_expr) {
-    hemp_debug_call("hemp_element_text_expr()\n");
+HEMP_PREFIX_FUNC(hemp_element_text_prefix) {
+    hemp_debug_call("hemp_element_text_prefix()\n");
     
     /* Advance the pointer to the next element after this one and return the 
      * current element as the yielded expression.
@@ -68,41 +64,6 @@ HEMP_PARSE_FUNC(hemp_element_text_expr) {
     return element;
 }
 
-
-
-
-/*--------------------------------------------------------------------------
- * functions for coercing text to other value types
- *--------------------------------------------------------------------------*/
-
-HEMP_EVAL_FUNC(hemp_element_textop_number) {
-    hemp_debug_call("hemp_element_textop_number()\n");
-
-    hemp_text_p text;
-    hemp_value_t value = element->type->text(element, context, HempNothing);
-
-    hemp_todo("see if text [%s] will convert to number\n", hemp_val_str(value));
-}
-
-
-HEMP_EVAL_FUNC(hemp_element_textop_integer) {
-    hemp_debug_call("hemp_element_textop_integer()\n");
-
-    hemp_text_p text;
-    hemp_value_t value = element->type->text(element, context, HempNothing);
-
-    hemp_todo("see if text [%s] will convert to integer\n", hemp_val_str(value));
-}
-
-
-HEMP_EVAL_FUNC(hemp_element_textop_boolean) {
-    hemp_debug_call("hemp_element_textop_boolean()\n");
-
-    hemp_text_p text;
-    hemp_value_t value = element->type->text(element, context, HempNothing);
-
-    hemp_todo("see if text [%s] will convert to boolean\n", hemp_val_str(value));
-}
 
 
 /* TODO: perhaps move this as it only applies to FIXED literal text
@@ -129,13 +90,19 @@ hemp_element_text_clean(
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_text_concat_symbol) {
-    hemp_element_textop_symbol(hemp, symbol);
-    symbol->text = &hemp_element_text_concat_value;
+    hemp_element_infix_left_symbol(hemp, symbol);
+    symbol->value = &hemp_element_text_value;
+    symbol->text  = &hemp_element_text_concat_value;
+    &hemp_element_text_concat_value;
     return symbol;
 }
 
+HEMP_EVAL_FUNC(hemp_element_text_value) {
+    return element->type->text(HEMP_EVAL_ARG_NAMES, HempNothing);
+}
 
-HEMP_OUTPUT_FUNC(hemp_element_text_concat_value) {
+
+HEMP_ETEXT_FUNC(hemp_element_text_concat_value) {
     hemp_debug_call("hemp_element_text_concat_value()\n");
 
     hemp_text_p text;

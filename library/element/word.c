@@ -10,27 +10,25 @@ static struct hemp_symbol_s
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
-        &hemp_element_literal_expr,                 /* parse expression     */
-        &hemp_element_not_infix,                    /* parse infix expr     */
+        &hemp_element_literal_prefix,               /* prefix expression    */
+        &hemp_element_not_postfix,                  /* postfix expr         */
+        &hemp_element_literal_token,                /* source token         */
         &hemp_element_literal_source,               /* source code          */
         &hemp_element_literal_text,                 /* output text          */
-        &hemp_element_literal_number,               /* numeric conversion   */
-        &hemp_element_literal_integer,              /* integer conversion   */
-        &hemp_element_literal_boolean,              /* boolean conversion   */
+        &hemp_element_literal_value,                /* output value         */
+        &hemp_element_value_number,                 /* numeric conversion   */
+        &hemp_element_value_integer,                /* integer conversion   */
+        &hemp_element_value_boolean,                /* boolean conversion   */
     };
 
 hemp_symbol_p HempSymbolWord = &hemp_symbol_word;
 
 
 HEMP_SYMBOL_FUNC(hemp_element_word_symbol) {
+    hemp_element_literal_symbol(hemp, symbol);
     /* these aren't right, but they'll do for now, for testing purposes */
     symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_STATIC;
-    symbol->expr    = &hemp_element_literal_expr;
-    symbol->source  = &hemp_element_literal_source;
-    symbol->text    = &hemp_element_literal_text;
-    symbol->number  = &hemp_element_literal_number;
-    symbol->integer = &hemp_element_literal_integer;
-    symbol->boolean = &hemp_element_literal_boolean;
+    symbol->prefix   = &hemp_element_literal_prefix;
     return symbol;
 }
 

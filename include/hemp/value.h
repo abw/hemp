@@ -34,7 +34,7 @@ union hemp_value_u {
 struct hemp_vtype_s {
     hemp_u8_t       id;
     hemp_cstr_p     name;
-    hemp_tvalue_f   text;
+    hemp_vtext_f    text;
     hemp_value_f    number;
     hemp_value_f    integer;
     hemp_value_f    defined;
@@ -233,6 +233,7 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 #define hemp_vtable_no(v)       (hemp_is_ident(v) ? (0x10 + HEMP_IDENT_VTABLE_NO(v)) : HEMP_TYPE_ID(v))
 #define hemp_vtable(v)          (hemp_global_vtypes[hemp_vtable_no(v)])
 #define hemp_vmethod(v,n)       (hemp_vtable(v).n)
+//#define hemp_vmethod(v,n)       (hemp_debug("VT:%p -> %s => %p\n", hemp_vtable(v), n, hemp_vtable(v).n), hemp_vtable(v).n)
 #define hemp_vcall(v,n)         (hemp_vmethod(v,n)(v))
 #define hemp_vtext(v,o)         (hemp_vmethod(v,text)(v,o))
 #define hemp_ident_name(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
@@ -242,6 +243,7 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 #define hemp_to_num(v)          (hemp_is_number(v)  ? v : hemp_vcall(v,number))
 #define hemp_to_int(v)          (hemp_is_integer(v) ? v : hemp_vcall(v,integer))
 #define hemp_to_boolean(v)      (hemp_is_boolean(v) ? v : hemp_vcall(v,boolean))
+#define hemp_to_compare(v)      (hemp_is_compare(v) ? v : hemp_vcall(v,compare))
 #define hemp_to_text(v)         (hemp_is_text(v)    ? v : hemp_vtext(v,HempNothing))
 #define hemp_onto_text(v,o)      hemp_vtext(v,o)
 
@@ -341,6 +343,7 @@ struct hemp_vtypes_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
+/* natives to values */
 hemp_value_t hemp_num_val(hemp_num_t);
 hemp_value_t hemp_int_val(hemp_int_t);
 hemp_value_t hemp_str_val(hemp_cstr_p);
@@ -348,6 +351,7 @@ hemp_value_t hemp_text_val(hemp_text_p);
 hemp_value_t hemp_ident_val(hemp_u8_t);
 hemp_value_t hemp_bool_val(hemp_bool_t);
 
+/* values to natives */
 hemp_num_t   hemp_val_num(hemp_value_t);
 hemp_int_t   hemp_val_int(hemp_value_t);
 hemp_cstr_p  hemp_val_str(hemp_value_t);
@@ -355,19 +359,46 @@ hemp_text_p  hemp_val_text(hemp_value_t);
 hemp_u8_t    hemp_val_ident(hemp_value_t);
 hemp_bool_t  hemp_val_bool(hemp_value_t);
 
+/* generic value evalaution */
 HEMP_VALUE_FUNC(hemp_value_no_op);
 HEMP_VALUE_FUNC(hemp_value_defined);
 HEMP_VALUE_FUNC(hemp_value_undefined);
 
-HEMP_TEXT_FUNC(hemp_value_number_text);
+/* number -> xxx conversion */
+HEMP_VTEXT_FUNC(hemp_value_number_text);
 HEMP_VALUE_FUNC(hemp_value_number_integer);
 HEMP_VALUE_FUNC(hemp_value_number_boolean);
 HEMP_VALUE_FUNC(hemp_value_number_compare);
 
-HEMP_TEXT_FUNC(hemp_value_integer_text);
+/* integer -> xxx conversion */
+HEMP_VTEXT_FUNC(hemp_value_integer_text);
 HEMP_VALUE_FUNC(hemp_value_integer_number);
 HEMP_VALUE_FUNC(hemp_value_integer_boolean);
 HEMP_VALUE_FUNC(hemp_value_integer_compare);
+
+/* boolean -> xxx conversion */
+HEMP_VTEXT_FUNC(hemp_value_boolean_text);
+HEMP_VALUE_FUNC(hemp_value_boolean_number);
+HEMP_VALUE_FUNC(hemp_value_boolean_integer);
+HEMP_VALUE_FUNC(hemp_value_boolean_compare);
+
+/* text -> xxx conversion */
+HEMP_VALUE_FUNC(hemp_value_text_number);
+HEMP_VALUE_FUNC(hemp_value_text_integer);
+HEMP_VALUE_FUNC(hemp_value_text_boolean);
+HEMP_VALUE_FUNC(hemp_value_text_compare);
+
+/* identity -> xxx conversions */
+HEMP_VALUE_FUNC(hemp_value_identity_number);
+HEMP_VALUE_FUNC(hemp_value_identity_integer);
+HEMP_VALUE_FUNC(hemp_value_identity_boolean);
+HEMP_VTEXT_FUNC(hemp_value_identity_text);
+
+/* compare -> xxx conversions */
+HEMP_VALUE_FUNC(hemp_value_compare_number);
+HEMP_VALUE_FUNC(hemp_value_compare_integer);
+HEMP_VALUE_FUNC(hemp_value_compare_boolean);
+HEMP_VTEXT_FUNC(hemp_value_compare_text);
 
 
 void hemp_dump_u64(hemp_u64_t value);

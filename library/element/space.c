@@ -10,31 +10,29 @@ static struct hemp_symbol_s
         "space",                                    /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_BE_WHITESPACE       |                       /* flags                */
-        HEMP_BE_SOURCE       |
+        HEMP_BE_WHITESPACE  |                       /* flags                */
+        HEMP_BE_SOURCE      |
         HEMP_BE_STATIC      | 
         HEMP_BE_HIDDEN,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
-        &hemp_element_next_expr,                    /* parse expression     */
-        &hemp_element_next_infix,                   /* parse infix expr     */
+        &hemp_element_next_prefix,                  /* prefix expression    */
+        &hemp_element_next_postfix,                 /* postfix expression   */
+        &hemp_element_literal_token,                /* source token         */
         &hemp_element_literal_source,               /* source code          */
         &hemp_element_literal_text,                 /* output text          */
-        &hemp_element_literal_number,               /* numeric conversion   */
-        &hemp_element_literal_integer,              /* integer conversion   */
-        &hemp_element_literal_boolean,              /* boolean conversion   */
+        &hemp_element_literal_value,                /* output value         */
+        &hemp_element_value_number,                 /* numeric conversion   */
+        &hemp_element_value_integer,                /* integer conversion   */
+        &hemp_element_value_boolean,                /* boolean conversion   */
     };
 
 
 HEMP_SYMBOL_FUNC(hemp_element_space_symbol) {
-    symbol->expr    = &hemp_element_next_expr;
-    symbol->infix   = &hemp_element_next_infix;
-    symbol->source  = &hemp_element_literal_source;
-    symbol->text    = &hemp_element_not_text;
-    symbol->number  = &hemp_element_not_number;
-    symbol->integer = &hemp_element_not_integer;
-    symbol->boolean = &hemp_element_not_boolean;
+    hemp_element_literal_symbol(hemp, symbol);
+    symbol->prefix  = &hemp_element_next_prefix;
+    symbol->postfix = &hemp_element_next_postfix;
     symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_STATIC 
                     | HEMP_BE_HIDDEN;
     return symbol;
@@ -50,18 +48,20 @@ static struct hemp_symbol_s
         "tag_start",                                /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_BE_WHITESPACE       |                       /* flags                */
-        HEMP_BE_SOURCE       |
+        HEMP_BE_WHITESPACE  |                       /* flags                */
+        HEMP_BE_SOURCE      |
         HEMP_BE_STATIC      | 
         HEMP_BE_HIDDEN      |
         HEMP_BE_SEPARATOR,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
-        &hemp_element_next_expr,                    /* parse expression     */
-        &hemp_element_next_infix,                   /* parse infix expr     */
+        &hemp_element_next_prefix,                  /* prefix expression    */
+        &hemp_element_next_postfix,                 /* postfix expression   */
+        &hemp_element_literal_token,                /* source token         */
         &hemp_element_literal_source,               /* source code          */
         &hemp_element_not_text,                     /* output text          */
+        &hemp_element_not_value,                    /* output value         */
         &hemp_element_not_number,                   /* numeric conversion   */
         &hemp_element_not_integer,                  /* integer conversion   */
         &hemp_element_not_boolean,                  /* boolean conversion   */
@@ -69,9 +69,9 @@ static struct hemp_symbol_s
 
 
 HEMP_SYMBOL_FUNC(hemp_element_tag_start_symbol) {
-    symbol->expr    = &hemp_element_next_expr;
-    symbol->infix   = &hemp_element_next_infix;
-    symbol->source  = &hemp_element_literal_source;
+    hemp_element_literal_symbol(hemp, symbol);
+    symbol->prefix  = &hemp_element_next_prefix;
+    symbol->postfix = &hemp_element_next_postfix;
     symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_STATIC 
                     | HEMP_BE_HIDDEN | HEMP_BE_SEPARATOR;
     return symbol;
@@ -87,17 +87,19 @@ static struct hemp_symbol_s
         "tag_end",                                  /* name                 */
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
-        HEMP_BE_SOURCE       |                       /* flags                */
+        HEMP_BE_SOURCE      |                       /* flags                */
         HEMP_BE_STATIC      | 
         HEMP_BE_HIDDEN      |
         HEMP_BE_TERMINATOR,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
-        &hemp_element_not_expr,                     /* parse expression     */
-        &hemp_element_not_infix,                    /* parse infix expr     */
+        &hemp_element_not_prefix,                   /* prefix expression    */
+        &hemp_element_not_postfix,                  /* postfix expr         */
+        &hemp_element_literal_token,                /* source token         */
         &hemp_element_literal_source,               /* source code          */
         &hemp_element_not_text,                     /* output text          */
+        &hemp_element_not_value,                    /* output value         */
         &hemp_element_not_number,                   /* numeric conversion   */
         &hemp_element_not_integer,                  /* integer conversion   */
         &hemp_element_not_boolean,                  /* boolean conversion   */
@@ -105,7 +107,7 @@ static struct hemp_symbol_s
 
 
 HEMP_SYMBOL_FUNC(hemp_element_tag_end_symbol) {
-    symbol->source  = &hemp_element_literal_source;
+    hemp_element_literal_symbol(hemp, symbol);
     symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_STATIC | HEMP_BE_HIDDEN
                     | HEMP_BE_TERMINATOR;
     return symbol;
@@ -122,17 +124,19 @@ static struct hemp_symbol_s
         "eof",                                      /* name                 */
         "--EOF--",                                  /* start token          */
         NULL,                                       /* end token            */
-        HEMP_BE_SOURCE       |                       /* flags                */
+        HEMP_BE_SOURCE      |                       /* flags                */
         HEMP_BE_STATIC      | 
         HEMP_BE_HIDDEN      |
         HEMP_BE_EOF,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
-        &hemp_element_not_expr,                     /* parse expression     */
-        &hemp_element_not_infix,                    /* parse infix expr     */
-        &hemp_element_eof_text,                     /* source code          */   // FIX ME
-        &hemp_element_eof_text,                     /* output text          */
+        &hemp_element_not_prefix,                   /* prefix expression    */
+        &hemp_element_not_postfix,                  /* postfix expression   */
+        &hemp_element_eof_token,                    /* source token         */
+        &hemp_element_not_source,                   /* source code          */
+        &hemp_element_not_text,                     /* output text          */
+        &hemp_element_not_value,                    /* output value         */
         &hemp_element_not_number,                   /* numeric conversion   */
         &hemp_element_not_integer,                  /* integer conversion   */
         &hemp_element_not_boolean,                  /* boolean conversion   */
@@ -140,15 +144,14 @@ static struct hemp_symbol_s
 
 
 HEMP_SYMBOL_FUNC(hemp_element_eof_symbol) {
-    symbol->source  = &hemp_element_eof_text;
-    symbol->text    = &hemp_element_eof_text;
+    symbol->token   = &hemp_element_eof_token;
     symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_STATIC | HEMP_BE_HIDDEN
                     | HEMP_BE_EOF;
     return symbol;
 }
 
-HEMP_OUTPUT_FUNC(hemp_element_eof_text) {
-    hemp_debug_call("hemp_element_eof_text()\n");
+HEMP_ETEXT_FUNC(hemp_element_eof_token) {
+    hemp_debug_call("hemp_element_eof_token()\n");
     hemp_text_p text;
     hemp_prepare_output(output, text, 6);
     hemp_text_append_cstr(text, "--EOF--");     // TMP

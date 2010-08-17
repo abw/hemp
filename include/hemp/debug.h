@@ -38,6 +38,7 @@ void hemp_debug_token(hemp_cstr_p type, hemp_cstr_p str, hemp_pos_t len);
 #endif
 
 #if HEMP_DEBUG
+#  define hemp_assert                       assert
 #  define hemp_debug_red(format, ...)       hemp_debug_col(HEMP_ANSI_RED,     format, ##__VA_ARGS__)
 #  define hemp_debug_green(format, ...)     hemp_debug_col(HEMP_ANSI_GREEN,   format, ##__VA_ARGS__)
 #  define hemp_debug_yellow(format, ...)    hemp_debug_col(HEMP_ANSI_YELLOW,  format, ##__VA_ARGS__)
@@ -83,6 +84,7 @@ void hemp_debug_token(hemp_cstr_p type, hemp_cstr_p str, hemp_pos_t len);
 #
 #
 #else
+#  define hemp_assert
 #  define hemp_debug_red(format, ...)
 #  define hemp_debug_green(format, ...)
 #  define hemp_debug_yellow(format, ...)

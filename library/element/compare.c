@@ -3,71 +3,28 @@
 
 
 /*--------------------------------------------------------------------------
- * comparison operators
+ * comparison operators return a tri-state before/equal/after value, e.g. 
+ * cmp, <=>, etc.
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_compare_symbol) {
-    symbol->expr    = &hemp_element_not_expr;
-    symbol->infix   = &hemp_element_parse_infix_left;
-    symbol->source  = &hemp_element_binary_source;
-    symbol->text    = &hemp_element_compare_text;
-    symbol->number  = &hemp_element_compare_integer;    // TODO: decide if this is OK
-    symbol->integer = &hemp_element_compare_integer;
+    hemp_element_infix_symbol(hemp, symbol);
+    symbol->value   = &hemp_element_compare_value;
+    symbol->compare = &hemp_element_not_compare;    /* subtypes redefine    */
     return symbol;
 }
 
 
-HEMP_OUTPUT_FUNC(hemp_element_compare_text) {
-    hemp_debug_call("hemp_element_compare_text()\n");
-
-    hemp_value_t value = element->type->compare(element, context);
-    hemp_cstr_p  cstr  = hemp_type_name(value);
-                
-    hemp_text_p text;
-    hemp_prepare_output(output, text, strlen(cstr));
-    hemp_text_append_cstr(text, cstr);
-
-    return output;
-}
-
-
-HEMP_EVAL_FUNC(hemp_element_compare_integer) {
-    hemp_debug_call("hemp_element_compare_integer()\n");
-
-    hemp_value_t value = element->type->compare(element, context);
-    hemp_int_t   compare;
-    
-    hemp_debug("compare value type [%s]: %s\n", HEMP_TYPE_ID(value), hemp_type_name(value));
-
-    switch (HEMP_IDENT_ID(value)) {
-        case HEMP_IDENT_BEFORE_ID:
-            compare = -1;
-            break;
-
-        case HEMP_IDENT_EQUAL_ID:
-            compare = 0;
-            break;
-
-        case HEMP_IDENT_AFTER_ID:
-            compare = 1;
-            break;
-        
-        default:
-            // FIXME
-            hemp_fatal(
-                "%s compare function did not return a comparison value\n",
-                element->type->name
-            );
-    }
-    
-    hemp_debug("comparison yielded number: %d\n", compare);
-                
-    return hemp_int_val(compare);
+HEMP_EVAL_FUNC(hemp_element_compare_value) {
+    hemp_debug_call("hemp_element_compare_value()\n");
+    return element->type->compare(element, context);
 }
 
 
 /*--------------------------------------------------------------------------
- * equal
+ * equal is a boolean operator (returns true/false) that calls the element's
+ * compare() method to return a comparison value, then return true/false if
+ * the value is HempEqual
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_compare_equal_symbol) {
@@ -87,7 +44,7 @@ HEMP_EVAL_FUNC(hemp_element_compare_equal_value) {
 
 
 /*--------------------------------------------------------------------------
- * not equal
+ * not equal is like equal... NOT!
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_compare_not_equal_symbol) {
@@ -107,7 +64,7 @@ HEMP_EVAL_FUNC(hemp_element_compare_not_equal_value) {
 
 
 /*--------------------------------------------------------------------------
- * before
+ * before - did the compare() method return HempBefore?
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_compare_before_symbol) {

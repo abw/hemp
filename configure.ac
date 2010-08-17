@@ -13,6 +13,9 @@ AC_CONFIG_FILES([
     library/Makefile 
     programs/Makefile 
     tests/Makefile
+    tests/core/Makefile
+    tests/language/Makefile
+    tests/language/hemp/Makefile
     build/libltdl/Makefile
 ])
 

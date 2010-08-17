@@ -79,7 +79,7 @@ hemp_text_free(
 }
 
 
-hemp_text_p
+HEMP_INLINE hemp_text_p
 hemp_text_capacity(
     hemp_text_p text, 
     hemp_size_t length
@@ -130,8 +130,8 @@ hemp_text_append_text(
     
     text = hemp_text_capacity(text, length);
     strncpy(text->string + text->length, append->string, append->length);
-    text->string[length + 1] = '\0';
     text->length = length;
+    *(text->string + length) = HEMP_NUL;
 
     return text;
 }
@@ -189,3 +189,15 @@ hemp_text_insert_cstr(
 }
 
 
+hemp_text_p
+hemp_text_replace_cstr(
+    hemp_text_p     text, 
+    hemp_cstr_p     replace
+) {
+    hemp_size_t length = strlen(replace);
+    hemp_text_capacity(text, length);
+    strcpy(text->string, replace);
+    text->string[length + 1] = HEMP_NUL;
+    text->length = length;
+    return text;
+}

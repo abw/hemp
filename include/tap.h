@@ -88,13 +88,25 @@
 
 # define skip_end } while(0);
 
-# define is(a, b, msg) (                                                     \
-    (strcmp(a, b) == 0)                                                      \
-        ? _gen_result(1, __func__, __FILE__, __LINE__, msg)                  \
-        : _gen_result(0, __func__, __FILE__, __LINE__,                       \
-            "%s\n%sEXPECT: [%s%s%s]\nOUTPUT: [%s%s%s]",                      \
-            msg, HEMP_ANSI_CYAN, HEMP_ANSI_YELLOW, b, HEMP_ANSI_CYAN, HEMP_ANSI_RED, a, HEMP_ANSI_CYAN) \
-    )
+# define is(a, b, msg) (                                                    \
+    (strcmp(a, b) == 0)                                                     \
+        ? _gen_result(1, __func__, __FILE__, __LINE__, msg)                 \
+        : _gen_result(0, __func__, __FILE__, __LINE__,                      \
+            "%s\n%sEXPECT: [%s%s%s]\nOUTPUT: [%s%s%s]%s", msg,              \
+            HEMP_ANSI_CYAN, HEMP_ANSI_YELLOW, b,                            \
+            HEMP_ANSI_CYAN, HEMP_ANSI_RED, a, HEMP_ANSI_CYAN,               \
+            HEMP_ANSI_RESET)                                                \
+)
+
+# define eq(a, b, msg) (                                                    \
+    (a == b)                                                                \
+        ? _gen_result(1, __func__, __FILE__, __LINE__, msg)                 \
+        : _gen_result(0, __func__, __FILE__, __LINE__,                      \
+            "%s\n%sEXPECT: [%s%g%s]\nOUTPUT: [%s%g%s]%s", msg,              \
+            HEMP_ANSI_CYAN, HEMP_ANSI_YELLOW, (hemp_num_t) b,               \
+            HEMP_ANSI_CYAN, HEMP_ANSI_RED, (hemp_num_t) a, HEMP_ANSI_CYAN,  \
+            HEMP_ANSI_RESET)                                                \
+)
 
 
 

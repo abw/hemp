@@ -5,7 +5,9 @@
  * by most, if not all of the library source files.
  */
  
+#include <assert.h>
 #include <ctype.h>
+#include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>

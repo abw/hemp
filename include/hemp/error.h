@@ -59,20 +59,20 @@ hemp_error_p
 
 hemp_error_p
     hemp_error_init(
-        hemp_errno_e errno,
+        hemp_errno_e number,
         hemp_cstr_p  message
     );
 
 hemp_error_p
     hemp_error_initf(
-        hemp_errno_e errno,
+        hemp_errno_e number,
         hemp_cstr_p  format,
         ...
     );
 
 hemp_error_p
     hemp_error_initfv(
-        hemp_errno_e errno,
+        hemp_errno_e number,
         hemp_cstr_p  format,
         va_list      args
     );

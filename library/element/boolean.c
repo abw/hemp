@@ -4,48 +4,44 @@
 
 /*--------------------------------------------------------------------------
  * boolean operators
+ *
+ * The "base class" boolean symbol role is a "sub-class" of a binary operator
+ * symbol.  It patches in a value() "method" which delegates to an element's
+ * boolean() method.  Each boolean operator should then define a boolean()
+ * method to Do The Right Thing[tm].  Note that we initially patch the 
+ * boolean() method to throw an error just in case someone (i.e. me) forgets
+ * to define a boolean() method for an operator.  This makes the mistake easy
+ * to spot and fix rather than having the value() and boolean() methods call 
+ * each other in a deadly embrace until the universe grows cold.
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_boolean_symbol) {
-    symbol->expr    = &hemp_element_not_expr;
-    symbol->infix   = &hemp_element_parse_infix_left;
-    symbol->source  = &hemp_element_binary_source;
-    symbol->text    = &hemp_element_boolean_text;
-    symbol->number  = &hemp_element_not_number;
-    symbol->integer = &hemp_element_not_integer;
-    symbol->boolean = &hemp_element_not_boolean;   /* symbols redefine this */
-    symbol->compare = &hemp_element_not_compare;
+    hemp_element_infix_symbol(hemp, symbol);
+    symbol->value   = &hemp_element_boolean_value;
+    symbol->boolean = &hemp_element_not_boolean;
     return symbol;
 }
 
-
-HEMP_OUTPUT_FUNC(hemp_element_boolean_text) {
-    hemp_debug_call("hemp_element_boolean_text()\n");
-
-    hemp_text_p text;
-    hemp_prepare_output(output, text, 10);      // FIXME
-    
-//  hemp_debug("boolean output for %s\n", element->type->name);
-
-    hemp_text_append_cstr(
-        text, 
-        hemp_is_true( element->type->boolean(element, context) )
-            ? HEMP_STR_TRUE
-            : HEMP_STR_FALSE
-    );
-
-    return output;
+HEMP_EVAL_FUNC(hemp_element_boolean_value) {
+    hemp_debug_call("hemp_element_boolean_value()\n");
+    return element->type->boolean(element, context);
 }
+
 
 
 /*--------------------------------------------------------------------------
  * not
+ *
+ * The exception that proves the rule: 'not' is a prefix operator rather 
+ * than an infix/postfix operator, so we have to unpick some of the work we
+ * did in the call to hemp_element_(boolean|infix)_symbol().  Other than
+ * that, it's just a case of patching in the boolean() evaluation function.
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_boolean_not_symbol) {
     hemp_element_boolean_symbol(HEMP_SYMBOL_ARG_NAMES);
-    symbol->expr    = &hemp_element_parse_prefix;
-    symbol->infix   = &hemp_element_not_infix;
+    symbol->prefix  = &hemp_element_parse_prefix;
+    symbol->postfix = &hemp_element_not_postfix;
     symbol->boolean = &hemp_element_boolean_not_value;
     return symbol;
 }
@@ -65,6 +61,9 @@ HEMP_EVAL_FUNC(hemp_element_boolean_not_value) {
 
 /*--------------------------------------------------------------------------
  * and
+ *
+ * Standard binary boolean operator - just need to patch in the boolean() 
+ * evaluation method.
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_boolean_and_symbol) {
@@ -79,7 +78,11 @@ HEMP_EVAL_FUNC(hemp_element_boolean_and_value) {
 
     hemp_element_p lhs = element->args.binary.lhs;
     hemp_element_p rhs = element->args.binary.rhs;
+    hemp_debug("[and] evaluating LHS (%s) as boolean\n", lhs->type->name);
     hemp_value_t lval  = lhs->type->boolean(lhs, context);
+    
+    /* TODO: short-circuit if false */
+    hemp_debug("[and] evaluating RHS (%s) as boolean\n", rhs->type->name);
     hemp_value_t rval  = rhs->type->boolean(rhs, context);
 
     return (hemp_is_true(lval) && hemp_is_true(rval))
@@ -90,6 +93,8 @@ HEMP_EVAL_FUNC(hemp_element_boolean_and_value) {
 
 /*--------------------------------------------------------------------------
  * or
+ *
+ * Another standard binary boolean operator.
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_boolean_or_symbol) {

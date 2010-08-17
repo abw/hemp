@@ -16,25 +16,37 @@ const struct hemp_vtype_s hemp_global_vtypes[32] = {
         &hemp_value_integer_boolean,
         &hemp_value_integer_compare
     },
-    { 0x02, "String"            },
-    { 0x03, "-- RESERVED 0x03"  },
-    { 0x04, "Text"              },
-    { 0x05, "-- RESERVED 0x05"  },
-    { 0x06, "-- RESERVED 0x06"  },
-    { 0x07, "-- RESERVED 0x07"  },
-    { 0x08, "-- RESERVED 0x08"  },
-    { 0x09, "-- RESERVED 0x09"  },
-    { 0x0A, "-- RESERVED 0x0A"  },
-    { 0x0B, "-- RESERVED 0x0B"  },
-    { 0x0C, "-- RESERVED 0x0C"  },
-    { 0x0D, "-- RESERVED 0x0D"  },
-    { 0x0E, "-- RESERVED 0x0D"  },
-    { 0x0F, "Identity"          },
-    { 0x10, "Undefined"         },
-    { 0x11, "Truth"             },
-    { 0x12, "-- RESERVED 0x12"  },
-    { 0x13, "Compare"           },
-    { 0x14, "Overload"          }
+    {   0x02, "String"            },
+    {   0x03, "-- RESERVED 0x03"  },
+    {   0x04, "Text"              },
+    {   0x05, "-- RESERVED 0x05"  },
+    {   0x06, "-- RESERVED 0x06"  },
+    {   0x07, "-- RESERVED 0x07"  },
+    {   0x08, "-- RESERVED 0x08"  },
+    {   0x09, "-- RESERVED 0x09"  },
+    {   0x0A, "-- RESERVED 0x0A"  },
+    {   0x0B, "-- RESERVED 0x0B"  },
+    {   0x0C, "-- RESERVED 0x0C"  },
+    {   0x0D, "-- RESERVED 0x0D"  },
+    {   0x0E, "-- RESERVED 0x0D"  },
+    {   0x0F, "Identity"          },
+    {   0x10, "Undefined"         },
+    {   0x11, "Truth",
+        &hemp_value_boolean_text,
+        &hemp_value_boolean_number,
+        &hemp_value_boolean_integer,
+        &hemp_value_no_op,
+        &hemp_value_boolean_compare
+    },
+    {   0x12, "-- RESERVED 0x12"  },
+    {   0x13, "Truth",
+        &hemp_value_compare_text,
+        &hemp_value_compare_number,
+        &hemp_value_compare_integer,
+        &hemp_value_compare_boolean,
+        &hemp_value_no_op
+    },
+    {   0x14, "Overload"          }
 };
 
 const hemp_value_t 
@@ -202,7 +214,7 @@ HEMP_VALUE_FUNC(hemp_value_undefined) {
  * number -> xxx conversion
  *--------------------------------------------------------------------------*/
 
-HEMP_TEXT_FUNC(hemp_value_number_text) {
+HEMP_VTEXT_FUNC(hemp_value_number_text) {
     static hemp_char_t buffer[HEMP_BUFFER_SIZE];
     hemp_text_p text;
 
@@ -239,7 +251,7 @@ HEMP_VALUE_FUNC(hemp_value_number_compare) {
  * integer -> xxx conversion
  *--------------------------------------------------------------------------*/
 
-HEMP_TEXT_FUNC(hemp_value_integer_text) {
+HEMP_VTEXT_FUNC(hemp_value_integer_text) {
     static hemp_char_t buffer[HEMP_BUFFER_SIZE];
     hemp_text_p text;
 
@@ -268,6 +280,177 @@ HEMP_VALUE_FUNC(hemp_value_integer_compare) {
     return  cmp < 0 ? HempBefore
         :   cmp > 0 ? HempAfter
         :             HempEqual; 
+}
+
+
+/*--------------------------------------------------------------------------
+ * boolean -> xxx conversion
+ *--------------------------------------------------------------------------*/
+
+HEMP_VTEXT_FUNC(hemp_value_boolean_text) {
+    hemp_text_p text;
+    hemp_prepare_output(output, text, 5);
+
+    hemp_text_append_cstr(
+        text, 
+        hemp_is_true(value)
+            ? HEMP_STR_TRUE
+            : HEMP_STR_FALSE
+    );
+
+    return output;
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_boolean_number) {
+    /* shitfucks!  We can't throw an error because we don't have a hemp */
+    hemp_todo("THROW ERROR: boolean cannot convert to number");
+    return HempNothing;
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_boolean_integer) {
+    /* shitfucks!  We can't throw an error because we don't have a hemp */
+    hemp_todo("THROW ERROR: boolean cannot convert to integer");
+    return HempNothing;
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_boolean_compare) {
+    /* shitfucks!  We can't throw an error because we don't have a hemp */
+    hemp_todo("THROW ERROR: boolean cannot convert to comparison");
+    return HempNothing;
+}
+
+
+/*--------------------------------------------------------------------------
+ * text -> xxx conversion
+ *--------------------------------------------------------------------------*/
+
+HEMP_VALUE_FUNC(hemp_value_text_number) {
+    hemp_text_p text = hemp_val_text(value);
+    hemp_cstr_p end;
+    hemp_num_t  nval;
+    
+    if (! text->length) {
+        hemp_todo("THROW ERROR: empty string is not a number");
+        return hemp_num_val(0);
+    }
+
+    errno = 0;
+    nval  = strtod(text->string, &end);
+    
+    if (*end || (errno == EINVAL)) {
+        hemp_todo("THROW ERROR: text is not a number: %s", text->string);
+    }
+    else if (errno == ERANGE) {
+        hemp_todo("THROW ERROR: text number is too large: %s", text->string);
+    }
+    else {
+        return hemp_num_val(nval);
+    }
+
+    return hemp_num_val(0);
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_text_integer) {
+    hemp_value_t nval = hemp_value_text_number(value);
+    return hemp_int_val((hemp_int_t) hemp_val_num(nval));
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_text_boolean) {
+    /* hmmm... must be careful here... I think the best approach is to say 
+     * that any non-zero length string is true, but unlike Perl, we won't 
+     * perform any implicit text->number conversion.  The end result is that 
+     * things like "0" and "false" (both strings) are true values, while 0 
+     * (integer zero), 0.0 (float zero), "" (empty string) and HempFalse 
+     * (explicit false) are all false.
+     */
+    return hemp_val_text(value)->length
+        ? HempTrue
+        : HempFalse;
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_text_compare) {
+    hemp_todo("THROW ERROR: text cannot convert to comparison");
+    return HempNothing;
+}
+
+
+/*--------------------------------------------------------------------------
+ * identity -> xxx conversion
+ *--------------------------------------------------------------------------*/
+
+HEMP_VALUE_FUNC(hemp_value_identity_number) {
+    hemp_todo("THROW ERROR: %s is not a number", hemp_type_name(value));
+    return hemp_num_val(0);
+}
+
+HEMP_VALUE_FUNC(hemp_value_identity_integer) {
+    hemp_todo("THROW ERROR: %s is not an integer", hemp_type_name(value));
+    return hemp_num_val(0);
+}
+
+/* Not sure about this: is undef boolean false? */
+
+HEMP_VALUE_FUNC(hemp_value_identity_boolean) {
+    return hemp_is_truth(value)
+        ? (hemp_is_true(value) ? HempTrue : HempFalse)
+        : (hemp_todo("THROW ERROR: %s is not boolean (or is it?)", hemp_type_name(value)), HempFalse);
+}
+
+
+HEMP_VTEXT_FUNC(hemp_value_identity_text) {
+    hemp_cstr_p name = hemp_type_name(value);
+    hemp_text_p text;
+    hemp_prepare_output(output, text, strlen(name));
+    hemp_text_append_cstr(text, name);
+    return output;
+}
+
+
+HEMP_VTEXT_FUNC(hemp_value_compare_text) {
+    hemp_text_p text;
+    hemp_prepare_output(output, text, 5);
+
+    hemp_text_append_cstr(
+        text, 
+        hemp_is_before(value) ? HEMP_STR_BEFORE :
+        hemp_is_after(value)  ? HEMP_STR_AFTER  : 
+                                HEMP_STR_EQUAL
+    );
+
+    return output;
+}
+
+
+/* I'm not sure that comparisons should automatically convert to numbers... */
+
+HEMP_VALUE_FUNC(hemp_value_compare_number) {
+    return hemp_num_val(
+        hemp_is_before(value) ? -1 :
+        hemp_is_after(value)  ?  1 :
+                                 0
+    );
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_compare_integer) {
+    return hemp_int_val(
+        hemp_is_before(value) ? -1 :
+        hemp_is_after(value)  ?  1 :
+                                 0
+    );
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_compare_boolean) {
+    return hemp_is_true(value)
+        ? HempTrue
+        : HempFalse;
 }
 
 

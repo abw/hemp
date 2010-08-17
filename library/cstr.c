@@ -136,6 +136,7 @@ hemp_cstr_chomp(
     hemp_cstr_p cstr
 ) {
     hemp_cstr_p s = cstr;
+    hemp_assert(s);
 
     /* go to the end of the string */
     while (*s)

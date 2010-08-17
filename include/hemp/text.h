@@ -30,6 +30,7 @@ hemp_text_p hemp_text_append_text(hemp_text_p, hemp_text_p);
 hemp_text_p hemp_text_append_cstr(hemp_text_p, hemp_cstr_p);
 hemp_text_p hemp_text_append_cstrn(hemp_text_p, hemp_cstr_p, hemp_size_t);
 hemp_text_p hemp_text_insert_cstr(hemp_text_p, hemp_offset_t, hemp_cstr_p);
+hemp_text_p hemp_text_replace_cstr(hemp_text_p, hemp_cstr_p);
 
 /*
 int hemp_string_equals(HEMP_STRING a, HEMP_STRING b);

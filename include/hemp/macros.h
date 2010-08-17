@@ -2,6 +2,23 @@
 #define HEMP_MACROS_H
 
 
+
+/*--------------------------------------------------------------------------
+ * Thread locking.  Encapsulates a block of code with a locked mutex.
+ *--------------------------------------------------------------------------*/
+
+#ifdef HAVE_LIBPTHREAD
+    #include <pthread.h>
+    static  pthread_mutex_t M = PTHREAD_MUTEX_INITIALIZER;
+    #define HEMP_MUTEX_LOCK     pthread_mutex_lock(&M);
+    #define HEMP_MUTEX_UNLOCK   pthread_mutex_unlock(&M);
+#else
+    #define HEMP_MUTEX_LOCK
+    #define HEMP_MUTEX_UNLOCK
+#endif
+
+
+
 /*--------------------------------------------------------------------------
  * Languages
  *
@@ -233,34 +250,37 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * operator precedence parsing.  See Ch.9 of "Beautiful Code" (O'Reilly, 
  * ISBN-13: 978-0-596-51004-6) for a good introduction to the subject.
  *
- * HEMP_PARSE_FUNC() and HEMP_INFIX_FUNC() can be used to declare and define
- * expression parsing functions for this purpose.
+ * HEMP_PREFIX_FUNC() and HEMP_POSTFIX_FUNC() can be used to declare and 
+ * define expression parsing functions for this purpose.  A prefix function
+ * is called when an element appears at the start of an expression.  A 
+ * postfix function is called when it appears following a preceding 
+ * expression element.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_PARSE_ARGS                     \
+#define HEMP_PREFIX_ARGS                    \
     hemp_element_p *elemptr,                \
     hemp_scope_p    scope,                  \
     hemp_prec_t     precedence,             \
     hemp_bool_t     force
 
-#define HEMP_PARSE_ARG_NAMES                \
+#define HEMP_PREFIX_ARG_NAMES               \
     elemptr, scope, precedence, force
 
-#define HEMP_PARSE_FUNC(f)                  \
+#define HEMP_PREFIX_FUNC(f)                 \
     HEMP_DO_INLINE hemp_element_p f(        \
-        HEMP_PARSE_ARGS                     \
+        HEMP_PREFIX_ARGS                    \
     )
 
-#define HEMP_INFIX_ARGS                     \
-    HEMP_PARSE_ARGS,                        \
+#define HEMP_POSTFIX_ARGS                   \
+    HEMP_PREFIX_ARGS,                       \
     hemp_element_p  lhs 
 
-#define HEMP_INFIX_ARG_NAMES                \
+#define HEMP_POSTFIX_ARG_NAMES              \
     elemptr, scope, precedence, force, lhs
 
-#define HEMP_INFIX_FUNC(f)                  \
+#define HEMP_POSTFIX_FUNC(f)                \
     HEMP_DO_INLINE hemp_element_p f(        \
-        HEMP_INFIX_ARGS                     \
+        HEMP_POSTFIX_ARGS                   \
     )
 
 
@@ -336,7 +356,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 
 
 /*--------------------------------------------------------------------------
- * Output
+ * Element Text Output
  *
  * To render a parsed template we simply render each expression in the 
  * template and concatenate the output text generated.  As an optimisation
@@ -348,21 +368,21 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * value instead) then it *will* return a text object which needs to be 
  * freed via hemp_text_free(hemp_val_str(output)).
  *
- * HEMP_OUTPUT_FUNC() can be used, yes, you guessed it, to declare and define
+ * HEMP_ETEXT_FUNC() can be used, yes, you guessed it, to declare and define
  * output functions that work this way.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_OUTPUT_ARGS                    \
+#define HEMP_ETEXT_ARGS                     \
     hemp_element_p  element,                \
     hemp_context_p  context,                \
     hemp_value_t    output
 
-#define HEMP_OUTPUT_ARG_NAMES               \
+#define HEMP_ETEXT_ARG_NAMES                \
     element, context, output
 
-#define HEMP_OUTPUT_FUNC(f)                 \
+#define HEMP_ETEXT_FUNC(f)                  \
     HEMP_DO_INLINE hemp_value_t f(          \
-        HEMP_OUTPUT_ARGS                    \
+        HEMP_ETEXT_ARGS                     \
     )
 
 
@@ -373,7 +393,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * to text) and other methods that can be called on values, e.g. text.length
  *
  * HEMP_VALUE_FUNC() can be used to declare and define value functions.
- * HEMP_TEXT_FUNC() is a special case for text yielding functions where we 
+ * HEMP_VTEXT_FUNC() is a special case for text yielding functions where we 
  * allow an existing text object to be passed as an extra argument for the 
  * function to append the next onto.
  *--------------------------------------------------------------------------*/
@@ -383,7 +403,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         hemp_value_t value                  \
     )
 
-#define HEMP_TEXT_FUNC(f)                   \
+#define HEMP_VTEXT_FUNC(f)                  \
     HEMP_DO_INLINE hemp_value_t f(          \
         hemp_value_t value,                 \
         hemp_value_t output                 \
