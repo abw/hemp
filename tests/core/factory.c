@@ -1,28 +1,20 @@
-#include <hemp.h>
-#include <tap.h>
+#include <hemp/test.h>
+
 
 void test_factory();
 void test_factory_wildcard();
 char result[255];
 int  n = 0;
 
-int
-main(
-    int  argc, 
-    char **argv, 
-    char **env
+int main(
+    int argc, char **argv, char **env
 ) {
-    plan_tests(22);
+    plan(20);
 
     test_factory();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
     test_factory_wildcard();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
 
-    return exit_status();
+    return done();
 }
 
 

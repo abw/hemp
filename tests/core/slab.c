@@ -1,15 +1,13 @@
-#include <hemp.h>
-#include <tap.h>
+#include <hemp/test.h>
 
 void test_slab();
 
-int
-main(int argc, char **argv, char **env)
-{
-    plan_tests(3);
+int main(
+    int argc, char **argv, char **env
+) {
+    plan(2);
     test_slab();
-    hemp_mem_trace_ok();
-    return exit_status();
+    return done();
 }
 
 

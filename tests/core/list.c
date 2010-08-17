@@ -1,5 +1,4 @@
-#include <hemp.h>
-#include "tap.h"
+#include <hemp/test.h>
 
 void test_list();
 hemp_cstr_p list_as_text(hemp_list_p);
@@ -7,10 +6,9 @@ hemp_cstr_p list_as_text(hemp_list_p);
 
 int
 main(int argc, char **argv, char **env) {
-    plan_tests(7);
+    plan(6);
     test_list();
-    hemp_mem_trace_ok();
-    return exit_status();
+    return done();
 }
 
 

@@ -1,26 +1,17 @@
-#include <hemp.h>
-#include <tap.h>
+#include <hemp/test.h>
 
 void test_element();
 void test_element_factory();
 
-int
-main(
-    int argc, 
-    char **argv, 
-    char **env
+int main(
+    int argc, char **argv, char **env
 ) {
-    plan_tests(7);
+    plan(5);
 
     test_element();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
     test_element_factory();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
 
-    return exit_status();
+    return done();
 }
 
 

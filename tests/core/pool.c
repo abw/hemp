@@ -1,16 +1,14 @@
-#include <hemp.h>
-#include "tap.h"
+#include <hemp/test.h>
 
 void test_pool();
 void test_pool_type();
 
-int
-main(int argc, char **argv, char **env)
-{
-    plan_tests(11);
+int main(
+    int argc, char **argv, char **env
+) {
+    plan(10);
     test_pool();
-    hemp_mem_trace_ok();
-    return exit_status();
+    return done();
 }
 
 

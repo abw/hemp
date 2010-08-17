@@ -1,5 +1,4 @@
-#include <hemp.h>
-#include "tap.h"
+#include <hemp/test.h>
 
 void test_hash();
 void hash_get(hemp_hash_p, char *);
@@ -8,13 +7,12 @@ void hash_has(hemp_hash_p table, hemp_cstr_p, hemp_cstr_p);
 void hash_hasnt(hemp_hash_p table, hemp_cstr_p);
 
 
-int
-main(int argc, char **argv, char **env)
-{
-    plan_tests(11);
+int main(
+    int argc, char **argv, char **env
+) {
+    plan(10);
     test_hash();
-    hemp_mem_trace_ok();
-    return exit_status();
+    return done();
 }
 
 

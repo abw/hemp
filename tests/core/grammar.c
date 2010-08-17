@@ -1,31 +1,20 @@
-#include <hemp.h>
-#include <tap.h>
+#include <hemp/test.h>
 
 void test_grammar();
 void test_hemp_grammar();
 void test_hemp_grammar_hemp();
 
 
-int
-main(
-    int  argc, 
-    char **argv, 
-    char **env
+int main(
+    int argc, char **argv, char **env
 ) {
-    plan_tests(14);
+    plan(11);
+
     test_grammar();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
     test_hemp_grammar();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
     test_hemp_grammar_hemp();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
 
-    return exit_status();
+    return done();
 }
 
 

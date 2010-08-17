@@ -1,5 +1,4 @@
-#include <hemp.h>
-#include <tap.h>
+#include <hemp/test.h>
 
 
 void test_template();
@@ -11,10 +10,9 @@ main(
     char **argv, 
     char **env
 ) {
-    plan_tests(6);
+    plan(5);
     test_template();
-    hemp_mem_trace_ok();
-    return exit_status();
+    return done();
 }
 
 

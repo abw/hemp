@@ -1,19 +1,14 @@
-#include <hemp.h>
-#include "tap.h"
+#include <hemp/test.h>
 
 void test_text();
 
 
-int
-main(
-    int argc, 
-    char **argv, 
-    char **env
+int main(
+    int argc, char **argv, char **env
 ) {
-    plan_tests(36);
+    plan(46);
     test_text();
-    hemp_mem_trace_ok();
-    return exit_status();
+    return done();
 }
 
 
@@ -52,22 +47,27 @@ void test_text() {
 
 
     message = hemp_text_from_cstr("Hello ");
-    ok( message->length == 6, message->string );
+    eq( message->length, 6, "length is 6" );
+    is( message->string, "Hello ", message->string );
 
     hemp_text_append_cstr(message, "World");
-    ok( message->length == 11, message->string );
+    eq( message->length, 11, "length is 11" );
+    is( message->string, "Hello World", message->string );
 
     copycat = hemp_text_from_text(message);
-    ok( copycat->length == 11, "copied: %s", copycat->string );
+    eq( copycat->length, 11, "copycat length is 11" );
+    is( copycat->string, "Hello World", copycat->string );
 
     hemp_text_append_cstr(copycat, " Hello");
     ok( copycat->length == 17, "appended: %s", copycat->string );
+    is( copycat->string, "Hello World Hello", copycat->string );
 
     badger  = hemp_text_from_cstr(" Badger");
-    ok( badger->length == 7, badger->string );
+    eq( badger->length, 7, "new badger string is 7 long" );
 
     hemp_text_append_text(copycat, badger);
-    ok( copycat->length == 24, "appended: %s", copycat->string );
+    eq( copycat->length,  24, "appended text is 24 long" );
+    is( copycat->string, "Hello World Hello Badger", "combined text correct" );
 
     hemp_text_insert_cstr(copycat, 0, "START ");
     is( 
@@ -103,6 +103,8 @@ void test_text() {
     hemp_text_free(badger);
     hemp_text_free(copycat);
 
+
+    /* append */
     message = hemp_text_init(3);
     ok( message->capacity == 3, "capacity is %d", message->capacity );
     hemp_text_append_cstrn(message, "foobar", 3);
@@ -120,6 +122,18 @@ void test_text() {
     ok( message->length   == 4, "added nothing again, length is %d", message->length );
     ok( message->capacity == 4, "added nothing again, capacity is %d", message->capacity );
 
+
+    /* replace */
+    hemp_text_replace_cstr(message, "replacement");
+    is( message->string, "replacement", "replaced text with 'replacement'" );
+    eq( message->length, 11, "increased length to 11" );
+    eq( message->capacity, 11, "increased capacity to 11" );
+
+    hemp_text_replace_cstr(message, "foo");
+    is( message->string, "foo", "replaced text with 'foo'" );
+    eq( message->length, 3, "reduced length to 3" );
+    eq( message->capacity, 11, "capacity remains at 11" );
+
     hemp_text_free(message);
 
 
@@ -129,7 +143,7 @@ void test_text() {
     );
     ok( message, "created text from format" );
     is( message->string, "The cat sat on the mat and shat.", "message is ok" );
-    ok( message->length == 32, "length is %d, expected 32", message->length );
-    ok( message->capacity == 32, "capacity is %d, expected 32", message->capacity );
+    eq( message->length, 32, "length is 32" );
+    eq( message->capacity, 32, "capacity is 32" );
     hemp_text_free(message);
 }

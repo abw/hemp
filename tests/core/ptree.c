@@ -1,5 +1,4 @@
-#include <hemp.h>
-#include "tap.h"
+#include <hemp/test.h>
 
 void test_tree();
 void tree_get(hemp_ptree_p, char *);
@@ -8,13 +7,12 @@ void tree_has(hemp_ptree_p tree, char *key, char *expect);
 void tree_hasnt(hemp_ptree_p tree, char *key);
 
 
-int
-main(int argc, char **argv, char **env)
-{
-    plan_tests(187);
+int main(
+    int argc, char **argv, char **env
+) {
+    plan(186);
     test_tree();
-    hemp_mem_trace_ok();
-    return exit_status();
+    return done();
 }
 
 void test_tree() {

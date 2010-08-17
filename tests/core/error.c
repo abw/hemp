@@ -1,5 +1,4 @@
-#include <hemp.h>
-#include <tap.h>
+#include <hemp/test.h>
 
 jmp_buf state;
 
@@ -13,39 +12,18 @@ void test_hemp_throw();
 void thrower(hemp_errno_e, char *msg);
 
 
-int
-main(
-    int  argc, 
-    char **argv, 
-    char **env
+int main(
+    int argc, char **argv, char **env
 ) {
-    plan_tests(15);
+    plan(10);
 
     test_error1();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-    
     test_error2();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
     test_error3();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
-//    test_error4();
-//    hemp_mem_trace_ok();
-//    hemp_mem_trace_reset();
-
     test_error_object();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
     test_hemp_throw();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
 
-    return exit_status();
+    return done();
 }
 
 

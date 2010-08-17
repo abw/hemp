@@ -1,28 +1,17 @@
-#include <hemp.h>
-#include <tap.h>
+#include <hemp/test.h>
 
 
 void test_md5_static();
 void test_md5_dynamic();
 
 
-int
-main(
-    int  argc, 
-    char **argv, 
-    char **env
+int main(
+    int argc, char **argv, char **env
 ) {
-    plan_tests(12);
-
+    plan(10);
     test_md5_dynamic();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
     test_md5_static();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
-    return exit_status();
+    return done();
 }
 
 

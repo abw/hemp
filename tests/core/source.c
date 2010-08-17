@@ -1,16 +1,14 @@
-#include <hemp.h>
-#include "tap.h"
+#include <hemp/test.h>
 
 void test_source();
 
 
-int
-main(int argc, char **argv, char **env)
-{
-    plan_tests(8);
+int main(
+    int argc, char **argv, char **env
+) {
+    plan(7);
     test_source();
-    hemp_mem_trace_ok();
-    return exit_status();
+    return done();
 }
 
 
@@ -21,8 +19,6 @@ void test_source() {
     hemp_cstr_p   text;
 
     ok( hemp, "created hemp object" );
-
-    
 
     ok(
         (source = hemp_source(hemp, HEMP_TEXT, "source/text.html")),

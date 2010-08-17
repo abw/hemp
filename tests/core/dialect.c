@@ -1,5 +1,4 @@
-#include <hemp.h>
-#include <tap.h>
+#include <hemp/test.h>
 
 
 void        test_dialect();
@@ -7,13 +6,12 @@ void        test_dialect_registration();
 hemp_bool_t dummy_dialect_builder(hemp_p);
 
 
-int
-main(int argc, char **argv, char **env)
-{
-    plan_tests(4);
+int main(
+    int argc, char **argv, char **env
+) {
+    plan(3);
     test_dialect();
-    hemp_mem_trace_ok();
-    return exit_status();
+    return done();
 }
 
 

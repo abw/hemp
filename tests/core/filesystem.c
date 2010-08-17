@@ -1,26 +1,19 @@
-#include <hemp.h>
-#include <tap.h>
+#include <hemp/test.h>
 
 
 void test_filesystem();
 void test_file1();
 
 
-int
-main(
-    int  argc, 
-    char **argv, 
-    char **env
+int main(
+    int argc, char **argv, char **env
 ) {
-    plan_tests(7);
+    plan(7);
 
     test_filesystem();
-//  hemp_mem_trace_ok();
-//  hemp_mem_trace_reset();
-
     test_file1();
-//  hemp_mem_trace_ok();
-    return exit_status();
+
+    return done();
 }
 
 
@@ -37,7 +30,7 @@ void test_filesystem() {
     ok( 1, "finding readable paths for /wibble.html" );
     hemp_filesystem_readable_path(filesystem, "/wibble.html");
 
-    hemp_filesystem_set_path(filesystem, TESTDIR);
+    hemp_filesystem_set_path(filesystem, HEMP_TESTDIR);
     ok( filesystem, "created filesystem with a single path" );
     ok( filesystem->path->length == 1, "path has one directory" );
 
@@ -47,10 +40,14 @@ void test_filesystem() {
 
 
 void test_file1() {
-    hemp_p hemp = hemp_init();
-    hemp_filesystem_p filesystem = hemp_filesystem_init(hemp, TESTDIR);
-    hemp_cstr_p text = hemp_filesystem_read_file(
-        hemp_filesystem_join_path(TESTDIR, "data/file1")
-    );
+    hemp_p hemp      = hemp_init();
+    hemp_filesystem_p filesystem 
+                     = hemp_filesystem_init(hemp, HEMP_TESTDIR);
+    hemp_cstr_p path = hemp_filesystem_join_path(HEMP_TESTDIR, "data/file1");
+    hemp_cstr_p text = hemp_filesystem_read_file(path);
     ok( text, "read text from foobar: %s", text );
+    hemp_mem_free(text);
+    hemp_mem_free(path);
+    hemp_filesystem_free(filesystem);
+    hemp_free(hemp);
 }

@@ -1,5 +1,4 @@
-#include <hemp.h>
-#include <tap.h>
+#include <hemp/test.h>
 
 
 void test_line();
@@ -13,32 +12,17 @@ void split_ok(
     hemp_cstr_p right
 );
 
-
-int
-main(
-    int  argc, 
-    char **argv, 
-    char **env
+int main(
+    int argc, char **argv, char **env
 ) {
-    plan_tests(49);
+    plan(45);
 
     test_line();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
     test_space();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
     test_splits();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
     test_words();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
 
-    return exit_status();
+    return done();
 }
 
 

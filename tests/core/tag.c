@@ -1,23 +1,15 @@
-#include <hemp.h>
-#include "tap.h"
+#include <hemp/test.h>
 
 void test_tag();
 void test_hemp_tags();
 
 
-int
-main(int argc, char **argv, char **env)
-{
-    plan_tests(13);
-
+int main(
+    int argc, char **argv, char **env
+) {
+    plan(12);
     test_tag();
-    hemp_mem_trace_ok();
-    hemp_mem_trace_reset();
-
-//    test_hemp_tags();
-//    hemp_mem_trace_ok();
-
-    return exit_status();
+    return done();
 }
 
 
