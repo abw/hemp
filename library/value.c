@@ -303,23 +303,32 @@ HEMP_VTEXT_FUNC(hemp_value_boolean_text) {
 
 
 HEMP_VALUE_FUNC(hemp_value_boolean_number) {
-    /* shitfucks!  We can't throw an error because we don't have a hemp */
-    hemp_todo("THROW ERROR: boolean cannot convert to number");
-    return HempNothing;
+    HEMP_CONVERT_ERROR(
+        context, 
+        HEMP_STR_BOOLEAN, 
+        HEMP_STR_NUMBER, 
+        hemp_type_name(value)
+    );
 }
 
 
 HEMP_VALUE_FUNC(hemp_value_boolean_integer) {
-    /* shitfucks!  We can't throw an error because we don't have a hemp */
-    hemp_todo("THROW ERROR: boolean cannot convert to integer");
-    return HempNothing;
+    HEMP_CONVERT_ERROR(
+        context, 
+        HEMP_STR_BOOLEAN,
+        HEMP_STR_INTEGER,
+        hemp_type_name(value)
+    );
 }
 
 
 HEMP_VALUE_FUNC(hemp_value_boolean_compare) {
-    /* shitfucks!  We can't throw an error because we don't have a hemp */
-    hemp_todo("THROW ERROR: boolean cannot convert to comparison");
-    return HempNothing;
+    HEMP_CONVERT_ERROR(
+        context, 
+        HEMP_STR_BOOLEAN,
+        HEMP_STR_COMPARE,
+        hemp_type_name(value)
+    );
 }
 
 
@@ -333,18 +342,30 @@ HEMP_VALUE_FUNC(hemp_value_text_number) {
     hemp_num_t  nval;
     
     if (! text->length) {
-        hemp_todo("THROW ERROR: empty string is not a number");
-        return hemp_num_val(0);
+        HEMP_CONVERT_ERROR(
+            context, 
+            HEMP_STR_NO_TEXT,
+            HEMP_STR_NUMBER,
+            HEMP_STR_BLANK
+        );
     }
 
     errno = 0;
     nval  = strtod(text->string, &end);
     
     if (*end || (errno == EINVAL)) {
-        hemp_todo("THROW ERROR: text is not a number: %s", text->string);
+        HEMP_CONVERT_ERROR(
+            context, 
+            HEMP_STR_TEXT, 
+            HEMP_STR_NUMBER,
+            text->string
+        );
     }
     else if (errno == ERANGE) {
-        hemp_todo("THROW ERROR: text number is too large: %s", text->string);
+        HEMP_OVERFLOW_ERROR(
+            context, 
+            text->string
+        );
     }
     else {
         return hemp_num_val(nval);
@@ -355,7 +376,7 @@ HEMP_VALUE_FUNC(hemp_value_text_number) {
 
 
 HEMP_VALUE_FUNC(hemp_value_text_integer) {
-    hemp_value_t nval = hemp_value_text_number(value);
+    hemp_value_t nval = hemp_value_text_number(value, context);
     return hemp_int_val((hemp_int_t) hemp_val_num(nval));
 }
 
@@ -385,13 +406,21 @@ HEMP_VALUE_FUNC(hemp_value_text_compare) {
  *--------------------------------------------------------------------------*/
 
 HEMP_VALUE_FUNC(hemp_value_identity_number) {
-    hemp_todo("THROW ERROR: %s is not a number", hemp_type_name(value));
-    return hemp_num_val(0);
+    HEMP_CONVERT_ERROR(
+        context, 
+        HEMP_STR_IDENTITY, 
+        HEMP_STR_NUMBER,
+        hemp_type_name(value)
+    );
 }
 
 HEMP_VALUE_FUNC(hemp_value_identity_integer) {
-    hemp_todo("THROW ERROR: %s is not an integer", hemp_type_name(value));
-    return hemp_num_val(0);
+    HEMP_CONVERT_ERROR(
+        context, 
+        HEMP_STR_IDENTITY, 
+        HEMP_STR_INTEGER,
+        hemp_type_name(value)
+    );
 }
 
 /* Not sure about this: is undef boolean false? */

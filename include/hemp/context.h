@@ -9,8 +9,8 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_context_s {
-/*    hemp_value_t    variables; */
-    // more TODO
+    hemp_p  hemp;
+/*  hemp_value_t    variables; */
 };
 
 
@@ -18,7 +18,7 @@ struct hemp_context_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_context_p  hemp_context_init();
+hemp_context_p  hemp_context_init(hemp_p);
 void            hemp_context_free(hemp_context_p);
 
 

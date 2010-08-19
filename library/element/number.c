@@ -348,12 +348,14 @@ HEMP_EVAL_FUNC(hemp_element_number_divide_value) {
     hemp_value_t rval, result;
 
     if (hemp_is_integer(lval)) {
+        hemp_debug("number is integer\n");
         result = hemp_int_val(
             hemp_val_int(lval) 
           / HEMP_NUMOP_GET_INT(rhs, context)
         );
     }
     else {
+        hemp_debug("number is real\n");
         rval   = rhs->type->number(rhs, context);
         result = hemp_num_val(
             hemp_val_num(lval) 

@@ -1,5 +1,6 @@
 lib_LTLIBRARIES     =   libhemp.la
 libhemp_la_SOURCES  =   action.c              \
+                        context.c             \
                         cstr.c                \
                         debug.c               \
                         dialect.c             \
@@ -50,7 +51,6 @@ libhemp_la_SOURCES  =   action.c              \
 libhemp_la_CFLAGS = -I../include
 
 #libhemp_la_SOURCES  = 
-#                      context.c             \
 #                      hub.c                 \
 #                      module.c              \
 #                      tag/embed.c           \

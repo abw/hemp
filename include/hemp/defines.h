@@ -33,10 +33,18 @@
 #define HEMP_STR_MISSING    "Missing"
 #define HEMP_STR_NOTHING    "Nothing"
 #define HEMP_STR_UNKNOWN    "Unknown"
+
+#define HEMP_STR_QUOTED     "quoted string"
+#define HEMP_STR_TEXT       "text"
+#define HEMP_STR_NO_TEXT    "empty text"
+#define HEMP_STR_NUMBER     "number"
+#define HEMP_STR_INTEGER    "integer"
+#define HEMP_STR_BOOLEAN    "truth"
+#define HEMP_STR_IDENTITY   "identity value"
+#define HEMP_STR_COMPARE    "comparison"
 #define HEMP_STR_BLANK      ""
 #define HEMP_STR_SPACE      " "
 #define HEMP_STR_DOT        "."
-#define HEMP_STR_QUOTED     "quoted string"
 
 /* format strings */
 #define HEMP_FMT_INT        "%d"

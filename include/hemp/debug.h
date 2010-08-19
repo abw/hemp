@@ -31,72 +31,83 @@ void hemp_debug_token(hemp_cstr_p type, hemp_cstr_p str, hemp_pos_t len);
 #define HEMP_ANSI_RESET      "\e[0m"
 
 #ifndef HEMP_DEBUG
-#  define HEMP_DEBUG 0
+    #define HEMP_DEBUG 0
 #elif (HEMP_DEBUG == 1)
-#  undef  HEMP_DEBUG
-#  define HEMP_DEBUG HEMP_DEBUG_ALL
+    #undef  HEMP_DEBUG
+    #define HEMP_DEBUG HEMP_DEBUG_ALL
 #endif
 
 #if HEMP_DEBUG
-#  define hemp_assert                       assert
-#  define hemp_debug_red(format, ...)       hemp_debug_col(HEMP_ANSI_RED,     format, ##__VA_ARGS__)
-#  define hemp_debug_green(format, ...)     hemp_debug_col(HEMP_ANSI_GREEN,   format, ##__VA_ARGS__)
-#  define hemp_debug_yellow(format, ...)    hemp_debug_col(HEMP_ANSI_YELLOW,  format, ##__VA_ARGS__)
-#  define hemp_debug_blue(format, ...)      hemp_debug_col(HEMP_ANSI_BLUE,    format, ##__VA_ARGS__)
-#  define hemp_debug_magenta(format, ...)   hemp_debug_col(HEMP_ANSI_MAGENTA, format, ##__VA_ARGS__)
-#  define hemp_debug_cyan(format, ...)      hemp_debug_col(HEMP_ANSI_CYAN,    format, ##__VA_ARGS__)
-#
-#  if HEMP_DEBUG & HEMP_DEBUG_INIT
-#    define hemp_debug_init(format, ...)    hemp_debug_col(HEMP_ANSI_YELLOW, format, ##__VA_ARGS__)
-#  else 
-#    define hemp_debug_init(format, ...)
-#  endif
-#
-#  if HEMP_DEBUG & HEMP_DEBUG_MEM
-#    define hemp_debug_mem(format, ...)     hemp_debug_col(HEMP_ANSI_CYAN, format, ##__VA_ARGS__)
-#  else 
-#    define hemp_debug_mem(format, ...)
-#  endif
-#
-#  if HEMP_DEBUG & HEMP_DEBUG_CALL
-#    define hemp_debug_call(format, ...)    hemp_debug_col(HEMP_ANSI_BLUE, format, ##__VA_ARGS__)
-#  else 
-#    define hemp_debug_call(format, ...)
-#  endif
-#
-#  if HEMP_DEBUG & HEMP_DEBUG_FILE
-#    define hemp_debug_file(format, ...)    hemp_debug_col(HEMP_ANSI_MAGENTA, format, ##__VA_ARGS__)
-#  else 
-#    define hemp_debug_file(format, ...)
-#  endif
-#
-#  if HEMP_DEBUG & HEMP_DEBUG_SCAN
-#    define hemp_debug_scan(format, ...)    hemp_debug_col(HEMP_ANSI_GREEN, format, ##__VA_ARGS__)
-#  else 
-#    define hemp_debug_scan(format, ...)
-#  endif
-#
-#  if HEMP_DEBUG & HEMP_DEBUG_PARSE
-#    define hemp_debug_parse(format, ...)   hemp_debug_col(HEMP_ANSI_YELLOW, format, ##__VA_ARGS__)
-#  else 
-#    define hemp_debug_parse(format, ...)
-#  endif
-#
-#
+    #define hemp_assert                       \
+            assert
+    #define hemp_debug_red(format, ...)       \
+            hemp_debug_col(HEMP_ANSI_RED,     format, ##__VA_ARGS__)
+    #define hemp_debug_green(format, ...)     \
+            hemp_debug_col(HEMP_ANSI_GREEN,   format, ##__VA_ARGS__)
+    #define hemp_debug_yellow(format, ...)    \
+            hemp_debug_col(HEMP_ANSI_YELLOW,  format, ##__VA_ARGS__)
+    #define hemp_debug_blue(format, ...)      \
+            hemp_debug_col(HEMP_ANSI_BLUE,    format, ##__VA_ARGS__)
+    #define hemp_debug_magenta(format, ...)   \
+            hemp_debug_col(HEMP_ANSI_MAGENTA, format, ##__VA_ARGS__)
+    #define hemp_debug_cyan(format, ...)      \
+            hemp_debug_col(HEMP_ANSI_CYAN,    format, ##__VA_ARGS__)
+
+    #if HEMP_DEBUG & HEMP_DEBUG_INIT
+        #define hemp_debug_init(format, ...)    \
+                hemp_debug_col(HEMP_ANSI_YELLOW, format, ##__VA_ARGS__)
+    #else 
+        #define hemp_debug_init(format, ...)
+    #endif
+
+    #if HEMP_DEBUG & HEMP_DEBUG_MEM
+        #define hemp_debug_mem(format, ...)     \
+                hemp_debug_col(HEMP_ANSI_CYAN, format, ##__VA_ARGS__)
+    #else 
+        #define hemp_debug_mem(format, ...)
+    #endif
+
+    #if HEMP_DEBUG & HEMP_DEBUG_CALL
+        #define hemp_debug_call(format, ...)    \
+                hemp_debug_col(HEMP_ANSI_BLUE, format, ##__VA_ARGS__)
+    #else 
+        #define hemp_debug_call(format, ...)
+    #endif
+
+    #if HEMP_DEBUG & HEMP_DEBUG_FILE
+        #define hemp_debug_file(format, ...)    \
+                hemp_debug_col(HEMP_ANSI_MAGENTA, format, ##__VA_ARGS__)
+    #else 
+        #define hemp_debug_file(format, ...)
+    #endif
+
+    #if HEMP_DEBUG & HEMP_DEBUG_SCAN
+        #define hemp_debug_scan(format, ...)    \
+                hemp_debug_col(HEMP_ANSI_GREEN, format, ##__VA_ARGS__)
+    #else 
+        #define hemp_debug_scan(format, ...)
+    #endif
+
+    #if HEMP_DEBUG & HEMP_DEBUG_PARSE
+        #define hemp_debug_parse(format, ...)   \
+                hemp_debug_col(HEMP_ANSI_YELLOW, format, ##__VA_ARGS__)
+    #else 
+        #define hemp_debug_parse(format, ...)
+    #endif
 #else
-#  define hemp_assert
-#  define hemp_debug_red(format, ...)
-#  define hemp_debug_green(format, ...)
-#  define hemp_debug_yellow(format, ...)
-#  define hemp_debug_blue(format, ...)
-#  define hemp_debug_magenta(format, ...)
-#  define hemp_debug_cyan(format, ...)
-#  define hemp_debug_init(format, ...)
-#  define hemp_debug_mem(format, ...)
-#  define hemp_debug_call(format, ...)
-#  define hemp_debug_file(format, ...)
-#  define hemp_debug_scan(format, ...)
-#  define hemp_debug_parse(format, ...)
+    #define hemp_assert
+    #define hemp_debug_red(format, ...)
+    #define hemp_debug_green(format, ...)
+    #define hemp_debug_yellow(format, ...)
+    #define hemp_debug_blue(format, ...)
+    #define hemp_debug_magenta(format, ...)
+    #define hemp_debug_cyan(format, ...)
+    #define hemp_debug_init(format, ...)
+    #define hemp_debug_mem(format, ...)
+    #define hemp_debug_call(format, ...)
+    #define hemp_debug_file(format, ...)
+    #define hemp_debug_scan(format, ...)
+    #define hemp_debug_parse(format, ...)
 #endif
 
 #endif /* HEMP_DEBUG_H */

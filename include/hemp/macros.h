@@ -400,13 +400,36 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 
 #define HEMP_VALUE_FUNC(f)                  \
     HEMP_DO_INLINE hemp_value_t f(          \
-        hemp_value_t value                  \
+        hemp_value_t    value,              \
+        hemp_context_p  context             \
     )
 
 #define HEMP_VTEXT_FUNC(f)                  \
     HEMP_DO_INLINE hemp_value_t f(          \
-        hemp_value_t value,                 \
-        hemp_value_t output                 \
+        hemp_value_t    value,              \
+        hemp_context_p  context,            \
+        hemp_value_t    output              \
+    )
+
+
+#define HEMP_CONVERT_ERROR(context,from,to,val) \
+    hemp_error_throw(                       \
+        context->hemp,                      \
+        hemp_error_message(                 \
+            context->hemp,                  \
+            HEMP_ERROR_CONVERT,             \
+            from, to, val                   \
+        )                                   \
+    )
+
+#define HEMP_OVERFLOW_ERROR(context,text)   \
+    hemp_error_throw(                       \
+        context->hemp,                      \
+        hemp_error_message(                 \
+            context->hemp,                  \
+            HEMP_ERROR_OVERFLOW,            \
+            text                            \
+        )                                   \
     )
 
 

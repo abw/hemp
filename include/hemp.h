@@ -66,6 +66,9 @@ hemp_source_p   hemp_source(hemp_p, hemp_cstr_p, hemp_cstr_p);
 void            hemp_init_templates(hemp_p);
 hemp_template_p hemp_template(hemp_p, hemp_cstr_p, hemp_cstr_p, hemp_cstr_p);
 
+/* runtime functions */
+hemp_context_p  hemp_context(hemp_p);
+
 //void            hemp_throw(hemp_p, hemp_errno_e, ...);
 hemp_cstr_p     hemp_error_format(hemp_p, hemp_errno_e);
 hemp_error_p    hemp_error_message(hemp_p, hemp_errno_e, ...);

@@ -1,15 +1,18 @@
 #include <hemp/context.h>
 
 
-
-hemp_context_t
-hemp_context_init() {
-    hemp_context_t context = (hemp_context_t) hemp_mem_alloc(
+hemp_context_p
+hemp_context_init(
+    hemp_p hemp
+) {
+    hemp_context_p context = (hemp_context_p) hemp_mem_alloc(
         sizeof(struct hemp_context_s)
     );
     
     if (! context)
         hemp_mem_fail("context");
+
+    context->hemp = hemp;
 
     return context;
 }
@@ -17,8 +20,8 @@ hemp_context_init() {
 
 void
 hemp_context_free(
-    hemp_context_t context
+    hemp_context_p context
 ) {
-    hemp_debug_mem("Releasing context at %p\n", context);
     hemp_mem_free(context);
 }
+

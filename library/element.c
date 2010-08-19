@@ -378,36 +378,41 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right) {
 
 HEMP_ETEXT_FUNC(hemp_element_value_text) {
     hemp_debug_call("hemp_element_value_text()\n");
-    hemp_value_t v = element->type->value(element, context);
-    return hemp_onto_text(v, output);
+    hemp_value_t value = element->type->value(element, context);
+    return hemp_onto_text(value, context, output);
 }
 
 
 HEMP_EVAL_FUNC(hemp_element_value_number) {
     hemp_debug_call("hemp_element_value_number()\n");
-    hemp_value_t v = element->type->value(element, context);
-    return hemp_to_num(v);
+    hemp_value_t value = element->type->value(element, context);
+    return hemp_is_numeric(value)
+        ? value
+        : hemp_vcall(value, context, number);
+
+// forced coersion is not the way forward
+//    return hemp_to_num(v);
 }
 
 
 HEMP_EVAL_FUNC(hemp_element_value_integer) {
     hemp_debug_call("hemp_element_value_integer()\n");
-    hemp_value_t v = element->type->value(element, context);
-    return hemp_to_int(v);
+    hemp_value_t value = element->type->value(element, context);
+    return hemp_to_int(value, context);
 }
 
 
 HEMP_EVAL_FUNC(hemp_element_value_boolean) {
     hemp_debug_call("hemp_element_value_boolean()\n");
-    hemp_value_t v = element->type->value(element, context);
-    return hemp_to_boolean(v);
+    hemp_value_t value = element->type->value(element, context);
+    return hemp_to_boolean(value, context);
 }
 
 
 HEMP_EVAL_FUNC(hemp_element_value_compare) {
-    hemp_todo("hemp_element_value_compare()\n");
-    hemp_value_t v = element->type->value(element, context);
-    return hemp_to_compare(v);
+    hemp_debug_call("hemp_element_value_compare()\n");
+    hemp_value_t value = element->type->value(element, context);
+    return hemp_to_compare(value, context);
 
 }
 
@@ -425,8 +430,8 @@ hemp_element_dump(
 
 //    hemp_debug("calling text() method for %s\n", e->type->name);
 
-    hemp_value_t output = e->type->source
-        ? e->type->source(e, NULL, HempNothing)
+    hemp_value_t output = e->type->token
+        ? e->type->token(e, NULL, HempNothing)
         : e->type->text(e, NULL, HempNothing);
 
     hemp_text_p text = hemp_val_text(output);

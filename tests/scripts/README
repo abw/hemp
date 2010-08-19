@@ -1,0 +1,86 @@
+This directory contains test/expect scripts used by various test programs.
+A typical test program (e.g. tests/languages/hemp/numops.c) looks like this:
+
+    #include <hemp/test.h>
+
+    int main(
+        int argc, char **argv, char **env
+    ) {
+        return hemp_test_expect_script(
+            HEMP_TT3, HEMP_TT3, 
+            HEMP_TESTDIR, "numops"
+        );
+    }
+
+The first two arguments indicate the language and dialect respectively.  In 
+this case they are both set to HEMP_TT3 which is the string constant "tt3".
+HEMP_TESTDIR is a constant which contains the absolute path of the 'tests'
+directory (i.e. the parent of this directory).  This is defined as a command 
+line option when the test is compiled (see tests/languages/hemp/Makefile.am). 
+The final argument is the name of the test script in this directory, i.e.
+"$HEMP_TESTDIR/scripts".
+
+A test script looks like this:
+
+    -- test unary plus integer
+    [% +5 %]
+    -- expect
+    5
+
+    -- test unary plus floating point
+    [% +5.23 %]
+    -- expect
+    5.23
+
+Each test begins with the following marker at the start of a line:
+
+    -- test
+
+The text following on that line denotes the name of the test
+
+    -- test This is the name of the test
+
+The source template for the test follows, starting on the next line. Any
+leading whitespace is removed from the template source (as well as from
+expect/error blocks), as is any trailing whitespace at the end. The test
+source continues to the next line starting with '--'. This can either be the
+output expected from the test, denoted by '-- expect':
+
+    -- test pass-through text
+    Hello World!
+    -- expect
+    Hello World!
+
+Or an error that the test is expected to generate:
+
+    -- test unterminated tag
+    Hello [% World!
+    -- error
+    Unterminated tag at line 1 of "unterminated tag" test:
+      Source: Hello [% World!
+      Error:                 ^here
+
+(Note that hemp doesn't yet produce error messages as informative as that
+shown above, but soon will).
+
+If no "-- expect" or "-- error" markers are found following a "-- test" block
+then the test manager will only assert that the template rendered correctly
+and did not generate any errors. Note however that at present this messes up
+the number of tests that the hemp_test_expect_script() thinks it has to run.
+It currently takes the naive approach of counting the "-- test" markers and
+multiplying by 2, based on the assumption that each has either an "-- expect"
+or "-- error" marker.  This will be fixed at some point in the future to 
+count all "-- test", "-- expect" and "-- error" markers to determine the 
+correct test plan.
+
+The "-- start" and "-- stop" markers can be used to indicate an explicit
+starting or stopping point for the test. If "-- start" is present then any
+tests before it will be ignored. If "-- stop" is present then any tests after
+it will be ignored.  This can be used to temporarily limit the tests run by
+the script, e.g. when debugging a particular failing test.
+
+    -- test one
+    This test isn't run
+    -- expect
+    Blah
+

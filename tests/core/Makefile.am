@@ -1,4 +1,7 @@
+#check_PROGRAMS  =   value
+
 check_PROGRAMS  =   action      \
+                    context     \
                     cstr        \
                     dialect     \
                     element     \

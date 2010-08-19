@@ -1,19 +1,19 @@
--- test unary plus integer --
+-- test unary plus integer
 [% +5 %]
 -- expect --
 5
 
--- test unary plus floating point --
+-- test unary plus floating point
 [% +5.23 %]
 -- expect --
 5.23
 
--- test unary minus integer --
+-- test unary minus integer
 [% -5 %]
 -- expect --
 -5
 
--- test unary minus floating point--
+-- test unary minus floating point
 [% -3.14159 %]
 -- expect --
 -3.14159
@@ -29,10 +29,12 @@
 -- expect
 420
 
+-- start
 -- test integer division
 [% 10 / 4 %]
 -- expect
 2
+-- stop
 
 -- test floating point division
 [% 10.0 / 4 %]

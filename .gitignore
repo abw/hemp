@@ -10,7 +10,9 @@ config.status
 .dirstamp
 build/libltdl/argz.h
 programs/hemp
+
 tests/core/action
+tests/core/context
 tests/core/cstr
 tests/core/dialect
 tests/core/element

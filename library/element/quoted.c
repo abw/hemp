@@ -223,5 +223,3 @@ HEMP_EVAL_FUNC(hemp_element_quoted_value) {
     return hemp_element_quoted_text(HEMP_EVAL_ARG_NAMES, HempNothing);
 }
 
-
-
