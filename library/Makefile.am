@@ -33,6 +33,7 @@ libhemp_la_SOURCES  =   action.c              \
                         scanner.c             \
                         scheme.c              \
                         slab.c                \
+                        slot.c                \
                         source.c              \
                         symbol.c              \
                         tag.c                 \

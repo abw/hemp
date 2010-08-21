@@ -71,6 +71,7 @@ typedef struct hemp_scan_pos_s  * hemp_scan_pos_p;
 typedef struct hemp_scheme_s    * hemp_scheme_p;
 typedef struct hemp_scope_s     * hemp_scope_p;
 typedef struct hemp_slab_s      * hemp_slab_p;
+typedef struct hemp_slot_s      * hemp_slot_p;
 typedef struct hemp_source_s    * hemp_source_p;
 typedef struct hemp_symbol_s    * hemp_symbol_p;
 typedef struct hemp_symbols_s   * hemp_symbols_p;

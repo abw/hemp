@@ -24,9 +24,9 @@ void hemp_mem_fail(hemp_cstr_p);
  * patch in memmove(), bcopy() or a hand-rolled memory copy function
  *--------------------------------------------------------------------------*/
 
-#if  HAVE_memmove
+#if  HAVE_MEMMOVE
 #   define hemp_mem_copy(src, dest, len) memmove(dest, src, len)
-#elif HAVE_bcopy
+#elif HAVE_BCOPY
 #   define hemp_mem_copy(src, dest, len) bcopy(src, dest, len)
 #else
 #   define HEMP_ADD_MEM_COPY 1

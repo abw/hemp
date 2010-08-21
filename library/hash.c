@@ -33,7 +33,9 @@ hemp_primes[] = {
     1073741824 + 85,
 };
 
-static hemp_size_t
+
+
+HEMP_DO_INLINE static hemp_size_t
 hemp_hash_wider(
     hemp_size_t n
 ) {
@@ -49,160 +51,159 @@ hemp_hash_wider(
 hemp_hash_p
 hemp_hash_init() {
     hemp_size_t w;
-    hemp_hash_p table = (hemp_hash_p) hemp_mem_alloc(
+    hemp_hash_p hash = (hemp_hash_p) hemp_mem_alloc(
         sizeof(struct hemp_hash_s)
     );
     
-    if (! table)
+    if (! hash)
         hemp_mem_fail("hash");
 
     /* hemp_debug_mem("Allocated hash table at %p\n", table); */
 
-    table->width   = hemp_hash_wider(0);
-    table->size    = 0;
-    table->parent  = NULL;
-    table->columns = (hemp_hash_item_p *) hemp_mem_alloc(
-        table->width * sizeof(hemp_hash_item_p)
+    hash->width  = hemp_hash_wider(0);
+    hash->size   = 0;
+    hash->parent = NULL;
+    hash->slots  = (hemp_slot_p *) hemp_mem_alloc(
+        hash->width * sizeof(hemp_slot_p)
     );
-    if (! table->columns)
-        hemp_mem_fail("hash item");
+    if (! hash->slots)
+        hemp_mem_fail("hash slots");
+
+    // TODO: hemp_mem_wipe(ptr,size) or perhaps hemp_mem_init(size) to 
+    // allocate memory, alloc+ wie
 
     /* hemp_debug_mem("Allocated hash columns at %p\n", table->columns); */
-
-    for(w = 0; w < table->width; w++) {
-        table->columns[w] = NULL;
+    for(w = 0; w < hash->width; w++) {
+        hash->slots[w] = NULL;
     }
 
-    return table;
+    return hash;
 }
 
 
 void
 hemp_hash_free(
-    hemp_hash_p table
+    hemp_hash_p hash
 ) {
-    hemp_hash_item_p entry, next;
+    hemp_slot_p slot, next;
     int i;
 
     /* hemp_debug_mem("Releasing hash at %p\n", table); */
 
-    for(i = 0; i < table->width; i++) {
-        entry = table->columns[i];
-        while (entry) {
-            next = entry->next;
-            hemp_mem_free(entry);   /* what about what's in the entry? */
-            entry = next;
+    for(i = 0; i < hash->width; i++) {
+        slot = hash->slots[i];
+
+        while (slot) {
+            next = slot->next;
+            hemp_slot_free(slot);
+            slot = next;
         }
     }
-    hemp_mem_free(table->columns);
-    hemp_mem_free(table);
+    hemp_mem_free(hash->slots);
+    hemp_mem_free(hash);
 }
 
 
 hemp_size_t
 hemp_hash_resize(
-    hemp_hash_p table
+    hemp_hash_p hash
 ) {
-    hemp_size_t width, wider, hash, i;
-    hemp_hash_item_p *columns, entry, next;
+    hemp_size_t width, wider, index, i;
+    hemp_slots_p *slots, slots, next;
     
-    width = table->width;
+    width = hash->width;
     wider = hemp_hash_wider(width);
 
     if (width == wider)
-        return width;  /* can't go any bigger */
+        return width;   /* can't go any bigger */
 
     /* hemp_debug_mem("Resizing hash at %p from %d to %d\n", hash, width, wider); */
 
-    columns = (hemp_hash_item_p *) hemp_mem_alloc(
-        wider * sizeof(hemp_hash_item_p)
+    slots = (hemp_slot_p *) hemp_mem_alloc(
+        wider * sizeof(hemp_slot_p)
     );
-    
-    for (i = 0; i < table->width; i++) {
-        entry = table->columns[i];
-        while (entry) {
-            next = entry->next;
-            hash = entry->hash % wider;
-            entry->next = columns[i];
-            columns[i] = entry;
-            entry = next;
+
+    for (i = 0; i < hash->width; i++) {
+        slot = hash->slots[i];
+        while (slot) {
+            next         = slot->next;
+            index        = slot->index % wider;
+            slot->next   = slots[index];
+            slots[index] = slot;
+            slot         = next;
         }
     }
-    hemp_mem_free(table->columns);
-    table->columns = columns;
-    table->width   = wider;
+
+    hemp_mem_free(hash->slots);
+    hash->slots = slots;
+    hash->width = wider;
+
     return wider;
 }
 
 
-hemp_hash_item_p
+hemp_slot_p
 hemp_hash_store(
-    hemp_hash_p table, 
-    hemp_cstr_p key, 
-    hemp_mem_p value
+    hemp_hash_p     hash,
+    hemp_cstr_p     name,
+    hemp_value_p    value
 ) {
-    hemp_hash_item_p entry;
-    hemp_size_t hash, column;
+    hemp_slot_p slot;
+    hemp_size_t index, column;
 
-    if (table->size / table->width > HEMP_HASH_DENSITY)
-        hemp_hash_resize(table);
+    if (hash->size / hash->width > HEMP_HASH_DENSITY)
+        hemp_hash_resize(hash);
 
-    hash   = hemp_hash_function(key);
-    column = hash % table->width;
-    entry  = table->columns[column];
+    index  = hemp_hash_function(key);
+    column = index % hash->width;
+    slot   = hash->slots[column];
 
     /* look at each entry in the column comparing the numerical hash value 
      * first, and then the more time consuming key string comparison only if 
      * the hash values are identical
      */
-    while (entry && (hash != entry->hash) && strcmp(key, entry->key))
-        entry = entry->next;
+    while (slot && (index != slot->index) && strcmp(key, slot->key))
+        slot = slot->next;
 
-    if (entry) {
-        entry->value = value;
+    if (slot) {
+        /* TODO: free the value in the slot */
+        slot->value = value;
     }
     else {
-        entry  = hemp_mem_alloc( sizeof(struct hemp_hash_item_s) );
-
-        if (! entry)
-            hemp_mem_fail("hash item");
-
-        entry->key   = key;
-        entry->value = value;
-        entry->hash  = hash;
-        entry->next  = table->columns[column];
-        table->columns[column] = entry;
+        slot = table->columns[column] = hemp_slot_init(
+            hash, index, name, value, table->columns[column]
+        );
         table->size++;
     }
 
-    return entry;
+    return slot;
 }
 
 
-hemp_mem_p
+hemp_value_t
 hemp_hash_fetch(
-    hemp_hash_p table, 
-    hemp_cstr_p key
+    hemp_hash_p hash, 
+    hemp_cstr_p name
 ) {
-    hemp_hash_item_p entry = NULL;
-    hemp_size_t hash, column;
-    hash   = hemp_hash_function(key);
+    hemp_slot_p slot = NULL;
+    hemp_size_t index, column;
+    index = hemp_hash_function(key);
     
-    while (table && ! entry) {
-        column = hash % table->width;
-        entry  = table->columns[column];
+    while (hash && ! slot) {
+        column = index % hash->width;
+        slot   = hash->slots[column];
 
         /* look for an entry in this hash table */
-        while (entry && (hash != entry->hash) && strcmp(key, entry->key))
-            entry = entry->next;
+        while (slot && (index != slot->index) && strcmp(key, slot->key))
+            slot = slot->next;
 
         /* or try the parent table, if there is one */
-        table = table->parent;
+        hash = hash->parent;
     }
     
-    return entry 
-        ? entry->value 
-        : NULL;
+    return slot
+        ? slot->value 
+        : HempMissing;
 }
 
 
@@ -225,20 +226,21 @@ hemp_hash_detach(
 
 void
 hemp_hash_each(
-    hemp_hash_p table,
+    hemp_hash_p      hash,
     hemp_hash_each_f func
 ) {
     hemp_size_t i;
-    hemp_hash_item_p entry;
+    hemp_slot_p slot;
     hemp_pos_t n = 0;
 
 
-    for (i = 0; i < table->width; i++) {
-        entry = table->columns[i];
+    for (i = 0; i < hash->width; i++) {
+        slot = hash->slots[i];
+
         while (entry) {
-            if (! func(table, n++, entry))
+            if (! func(hash, n++, slot))
                 break;
-            entry = entry->next;
+            slot = slot->next;
         }
     }
 }

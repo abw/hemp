@@ -30,9 +30,9 @@ void
 
 hemp_bool_t
     hemp_factory_free_constructor(
-        hemp_hash_p         dialects,
-        hemp_pos_t          position,
-        hemp_hash_item_p    item
+        hemp_hash_p     dialects,
+        hemp_pos_t      position,
+        hemp_slot_p     slot
     );
 
 hemp_action_p
