@@ -15,7 +15,7 @@
 
 @SET_MAKE@
 
-#check_PROGRAMS  =   value
+#check_PROGRAMS  =   slab
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@

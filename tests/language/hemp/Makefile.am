@@ -3,7 +3,8 @@ check_PROGRAMS  =   boolops     \
                     numbers     \
                     numops      \
                     quotes      \
-                    textops
+                    textops     
+#                    words
 
 TESTS           = $(check_PROGRAMS)
 LDADD           = ../../../library/libhemp.la

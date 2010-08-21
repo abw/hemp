@@ -1,4 +1,4 @@
-#check_PROGRAMS  =   value
+#check_PROGRAMS  =   slab
 
 check_PROGRAMS  =   action      \
                     context     \

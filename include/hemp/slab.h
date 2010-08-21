@@ -9,8 +9,8 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_slab_s {
-    hemp_mem_p  data;       /* pointer to memory            */
     hemp_size_t size;       /* size of allocated memory     */
+    hemp_mem_p  data;       /* pointer to memory            */
     hemp_slab_p next;       /* next slab in linked list     */
 };
 

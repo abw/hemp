@@ -251,12 +251,12 @@ void test_identity_values() {
     ok(   hemp_is_after(HempAfter),     "after is after" );
 
 
-    /* reassure myself that 0.0 doesn't trigger any weird behaviour */
+    /* reassure myself that 0.0 (all zero bits) doesn't trigger any weird behaviour */
     printf("Zero:\n");
     hemp_value_t zero = hemp_num_val(0.0);
     hemp_dump_value(zero);
-    ok( ! hemp_is_undef(zero),          "zero is undef" );
-    ok( ! hemp_is_missing(zero),        "zero is missing" );
+    ok( ! hemp_is_undef(zero),          "zero is not undef" );
+    ok( ! hemp_is_missing(zero),        "zero is not missing" );
     ok( ! hemp_is_nothing(zero),        "zero is not nothing" );
     ok( ! hemp_is_boolean(zero),        "zero is not boolean" );
     ok( ! hemp_is_compare(zero),        "zero is not compare" );

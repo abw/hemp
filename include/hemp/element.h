@@ -202,6 +202,8 @@ HEMP_ETEXT_FUNC(hemp_element_literal_text);
 HEMP_EVAL_FUNC(hemp_element_literal_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_word_symbol);
+HEMP_PREFIX_FUNC(hemp_element_word_prefix);
+HEMP_EVAL_FUNC(hemp_element_word_value);
 
 
 /*--------------------------------------------------------------------------

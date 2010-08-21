@@ -1,0 +1,9 @@
+-- test one word
+[% name %]
+-- expect
+World
+
+-- test text and word
+Hello [% name %]!
+-- expect
+Hello World!
