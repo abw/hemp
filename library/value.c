@@ -480,9 +480,9 @@ void hemp_dump_u64(
         else if (n < 13) {
             col = HEMP_ANSI_YELLOW;
         }
-        else if (n < 14) {
-            col = HEMP_ANSI_MAGENTA;
-        }
+//        else if (n < 14) {
+//            col = HEMP_ANSI_MAGENTA;
+//        }
         else if (n < 18) {
             col = HEMP_ANSI_BLUE;
         }
