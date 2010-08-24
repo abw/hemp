@@ -52,8 +52,8 @@ const struct hemp_vtype_s hemp_global_vtypes[32] = {
     {   0x1C, "-- RESERVED 0x1C"  },
     {   0x1D, "-- RESERVED 0x1D"  },
     {   0x1E, "-- RESERVED 0x1E"  },
-    {   0x1F, "-- RESERVED 0x1F"  },
-    {   0x20, "Overload"          }
+    {   0x1F, "-- RESERVED 0x1F"  }
+//    {   0x20, "Overload"          }
 };
 
 const hemp_value_t  HempMissing = HEMP_IDENT_MAKE(HEMP_IDENT_MISSING);
@@ -161,7 +161,9 @@ hemp_val_text(hemp_value_t v) {
 
 HEMP_INLINE hemp_bool_t
 hemp_val_bool(hemp_value_t v) {
-    return hemp_is_true(v);
+    return hemp_is_true(v)
+        ? HEMP_TRUE
+        : HEMP_FALSE;
 }
 
 
@@ -500,9 +502,8 @@ void hemp_dump_u64(
 void hemp_dump_64(
     hemp_u64_t value
 ) {
-    hemp_u64_t top = value & 0xffffffff00000000LL;
-    top = top >> 32;
-    hemp_u64_t bot = value & 0xffffffffL;
+    hemp_u32_t top = value >> 32;
+    hemp_u32_t bot = value & 0xffffffffL;
     printf("0x%016llx\n", value);
 //    printf("TOP: 0x%016llx\n", top);
     hemp_dump_32((hemp_u32_t) top);

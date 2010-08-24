@@ -16,11 +16,11 @@ void test_identity_conversion();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(242);
+    plan(249);
 
-//    test_values();
+    test_values();
     test_identity_values();
-//    test_value_conversion();
+    test_value_conversion();
 
     return done();
 }

@@ -191,9 +191,9 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 #define HEMP_IDENT_EQUAL        (HEMP_IDENT_FALSE | HEMP_COMPARE_BITS)     /* 110111 */
 
 /* special identity values */
-#define HEMP_INFINITY           0xFFF0000000000000LL
-#define HEMP_NAN                0xFFF8000000000000LL
-#define HEMP_IDENT              0xFFF8000000000001LL
+#define HEMP_INFINITY           0xFFF0000000000000ULL
+#define HEMP_NAN                0xFFF8000000000000ULL
+#define HEMP_IDENTITY           0xFFF8000000000001ULL
 
 /* The type tag is 5 bits wide, offset 47 bits from the LSB */
 #define HEMP_TAG_SHIFT          47
@@ -202,7 +202,7 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 #define HEMP_TAG_DOWN(v)        ((hemp_u8_t)  (v >> HEMP_TAG_SHIFT) & HEMP_TAG_MASK)
 #define HEMP_TAG_MAKE(t)        (HEMP_INFINITY | HEMP_TAG_UP(t))
 #define HEMP_TAG_TYPE(v)        HEMP_TAG_DOWN(v.bits)
-#define HEMP_TAG_VALID(v)       ((v.bits & HEMP_INFINITY) == HEMP_INFINITY)
+#define HEMP_TAG_VALID(v)       ((hemp_bool_t) ((v.bits & HEMP_INFINITY) == HEMP_INFINITY))
 
 /* internal macros to fetch/test the type identifier in a tagged value */
 #define HEMP_TYPE_ID(v)         (HEMP_TAG_VALID(v) ? HEMP_TAG_TYPE(v) : HEMP_NUMBER_ID)
@@ -211,16 +211,15 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 
 /* macros for manipulating identity values */
 #define HEMP_IDENT_MASK         0xFF
-#define HEMP_IDENT_MAKE(t)      ((hemp_value_t)(HEMP_TAG_MAKE(HEMP_IDENTITY_ID) | t))
-#define HEMP_IDENT_VALID(v)     HEMP_TYPE_IS(v, HEMP_IDENTITY_ID)
-#define HEMP_IDENT_VALUE(v)     ((hemp_u8_t)(v.bits & HEMP_IDENT_MASK))
-#define HEMP_IDENT_ID(v)        (HEMP_IDENT_VALID(v) ? HEMP_IDENT_VALUE(v) : 0)
-#define HEMP_IDENT_IS(v,i)      (HEMP_IDENT_ID(v) == i)
-#define HEMP_IDENT_MAX(v,b)     (HEMP_IDENT_ID(v) ^ b)
-#define HEMP_IDENT_ANY(v,b)     (HEMP_IDENT_ID(v) & b)
-#define HEMP_IDENT_ALL(v,b)     (HEMP_IDENT_ANY(v,b) == b)
-#define HEMP_IDENT_NOT(v,b)     (((v.bits & HEMP_IDENT) == HEMP_IDENT) && (HEMP_IDENT_ANY(v,b) == 0))
-//#define HEMP_IDENT_VTABLE_NO(v) ((HEMP_IDENT_ID(v) & HEMP_IDENT_VTMASK) >> HEMP_IDENT_VTSHIFT)
+#define HEMP_IDENT_MAKE(t)      ((hemp_value_t) (HEMP_IDENTITY | t))
+#define HEMP_IDENT_VALID(v)     ((hemp_bool_t) ((v.bits & HEMP_IDENTITY) == HEMP_IDENTITY))
+#define HEMP_IDENT_VALUE(v)     ((hemp_u8_t) (v.bits & HEMP_IDENT_MASK))
+#define HEMP_IDENT_ID(v)        ((hemp_u8_t) HEMP_IDENT_VALID(v) ? HEMP_IDENT_VALUE(v) : 0)
+#define HEMP_IDENT_IS(v,i)      ((hemp_bool_t) (v.bits == (HEMP_IDENTITY | i)))
+#define HEMP_IDENT_MAX(v,b)     ((hemp_bool_t) (HEMP_IDENT_ID(v) ^ b))
+#define HEMP_IDENT_ANY(v,b)     ((hemp_bool_t) (HEMP_IDENT_ID(v) & b))
+#define HEMP_IDENT_ALL(v,b)     ((hemp_bool_t) (HEMP_IDENT_ANY(v,b) == b))
+#define HEMP_IDENT_NOT(v,b)     ((hemp_bool_t) (HEMP_IDENT_VALID(v) && (HEMP_IDENT_ANY(v,b) == 0)))
 
 /* Integers are represented in the lower 32 bits */
 #define HEMP_INTEGER_BITS       32
