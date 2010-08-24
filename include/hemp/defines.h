@@ -25,14 +25,15 @@
 #define HEMP_UNDERSCORE     '_'
 
 /* short strings */
-#define HEMP_STR_TRUE       "True"
-#define HEMP_STR_FALSE      "False"
-#define HEMP_STR_BEFORE     "Before"
-#define HEMP_STR_EQUAL      "Equal"
-#define HEMP_STR_AFTER      "After"
+#define HEMP_STR_UNKNOWN    "Unknown"
+#define HEMP_STR_INFINITY   "Infinity"
 #define HEMP_STR_MISSING    "Missing"
 #define HEMP_STR_NOTHING    "Nothing"
-#define HEMP_STR_UNKNOWN    "Unknown"
+#define HEMP_STR_FALSE      "False"
+#define HEMP_STR_TRUE       "True"
+#define HEMP_STR_BEFORE     "Before"
+#define HEMP_STR_AFTER      "After"
+#define HEMP_STR_EQUAL      "Equal"
 
 #define HEMP_STR_QUOTED     "quoted string"
 #define HEMP_STR_TEXT       "text"
@@ -40,7 +41,8 @@
 #define HEMP_STR_NUMBER     "number"
 #define HEMP_STR_INTEGER    "integer"
 #define HEMP_STR_BOOLEAN    "truth"
-#define HEMP_STR_IDENTITY   "identity value"
+#define HEMP_STR_VALUE      "value"
+#define HEMP_STR_IDENTITY   "identity"
 #define HEMP_STR_COMPARE    "comparison"
 #define HEMP_STR_BLANK      ""
 #define HEMP_STR_SPACE      " "
