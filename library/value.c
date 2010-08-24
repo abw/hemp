@@ -29,117 +29,95 @@ const struct hemp_vtype_s hemp_global_vtypes[32] = {
     {   0x0C, "-- RESERVED 0x0C"  },
     {   0x0D, "-- RESERVED 0x0D"  },
     {   0x0E, "-- RESERVED 0x0D"  },
-    {   0x0F, "Identity"          },
-    {   0x10, "Undefined"         },
-    {   0x11, "Truth",
-        &hemp_value_boolean_text,
-        &hemp_value_boolean_number,
-        &hemp_value_boolean_integer,
-        &hemp_value_no_op,
-        &hemp_value_boolean_compare
+    {   0x0F, "-- RESERVED 0x0F"  },
+    {   0x10, "Identity",
+        &hemp_value_identity_text,
+        &hemp_value_identity_number,
+        &hemp_value_identity_integer,
+        &hemp_value_identity_defined,
+        &hemp_value_identity_boolean,
+        &hemp_value_identity_compare
     },
+    {   0x11, "-- RESERVED 0x11"  },
     {   0x12, "-- RESERVED 0x12"  },
-    {   0x13, "Compare",
-        &hemp_value_compare_text,
-        &hemp_value_compare_number,
-        &hemp_value_compare_integer,
-        &hemp_value_compare_boolean,
-        &hemp_value_no_op
-    },
-    {   0x14, "Overload"          }
+    {   0x13, "-- RESERVED 0x13"  },
+    {   0x14, "-- RESERVED 0x14"  },
+    {   0x15, "-- RESERVED 0x15"  },
+    {   0x16, "-- RESERVED 0x16"  },
+    {   0x17, "-- RESERVED 0x17"  },
+    {   0x18, "-- RESERVED 0x18"  },
+    {   0x19, "-- RESERVED 0x19"  },
+    {   0x1A, "-- RESERVED 0x1A"  },
+    {   0x1B, "-- RESERVED 0x1B"  },
+    {   0x1C, "-- RESERVED 0x1C"  },
+    {   0x1D, "-- RESERVED 0x1D"  },
+    {   0x1E, "-- RESERVED 0x1E"  },
+    {   0x1F, "-- RESERVED 0x1F"  },
+    {   0x20, "Overload"          }
 };
 
-const hemp_value_t 
-HempMissing = (hemp_value_t) 
-    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_MISSING_ID);
-
-const hemp_value_t 
-HempNothing = (hemp_value_t) 
-    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_NOTHING_ID);
-
-const hemp_value_t 
-HempFalse = (hemp_value_t) 
-    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_FALSE_ID);
-
-const hemp_value_t 
-HempTrue = (hemp_value_t) 
-    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_TRUE_ID);
-
-const hemp_value_t 
-HempBefore = (hemp_value_t) 
-    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_BEFORE_ID);
-
-const hemp_value_t 
-HempEqual = (hemp_value_t) 
-    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_EQUAL_ID);
-
-const hemp_value_t 
-HempAfter = (hemp_value_t) 
-    ((hemp_u64_t) HEMP_TYPE_IDENT_MASK | HEMP_IDENT_AFTER_ID);
-
-
-/*--------------------------------------------------------------------------
- * return the name of special identity values
- *--------------------------------------------------------------------------*/
-
-HEMP_DO_INLINE hemp_cstr_p
-hemp_identity_name(
-    hemp_int_t id
-) {
-    switch (id) {
-        case HEMP_IDENT_MISSING_ID: return HEMP_STR_MISSING;
-        case HEMP_IDENT_NOTHING_ID: return HEMP_STR_NOTHING;
-        case HEMP_IDENT_FALSE_ID:   return HEMP_STR_FALSE;
-        case HEMP_IDENT_TRUE_ID:    return HEMP_STR_TRUE;
-        case HEMP_IDENT_EQUAL_ID:   return HEMP_STR_EQUAL;
-        case HEMP_IDENT_BEFORE_ID:  return HEMP_STR_BEFORE;
-        case HEMP_IDENT_AFTER_ID:   return HEMP_STR_AFTER;
-        default:                    return HEMP_STR_UNKNOWN;
-    }
-}
+const hemp_value_t  HempMissing = HEMP_IDENT_MAKE(HEMP_IDENT_MISSING);
+const hemp_value_t  HempNothing = HEMP_IDENT_MAKE(HEMP_IDENT_NOTHING);
+const hemp_value_t  HempFalse   = HEMP_IDENT_MAKE(HEMP_IDENT_FALSE);
+const hemp_value_t  HempTrue    = HEMP_IDENT_MAKE(HEMP_IDENT_TRUE);
+const hemp_value_t  HempBefore  = HEMP_IDENT_MAKE(HEMP_IDENT_BEFORE);
+const hemp_value_t  HempAfter   = HEMP_IDENT_MAKE(HEMP_IDENT_AFTER);
+const hemp_value_t  HempEqual   = HEMP_IDENT_MAKE(HEMP_IDENT_EQUAL);
 
 
 /*--------------------------------------------------------------------------
  * inline functions to encode native values as tagged values
  *--------------------------------------------------------------------------*/
 
-HEMP_DO_INLINE hemp_value_t
+HEMP_INLINE hemp_value_t
 hemp_num_val(hemp_num_t n) {
     hemp_value_t v;
     v.number = n;
     return v;
 }
 
-HEMP_DO_INLINE hemp_value_t
+
+HEMP_INLINE hemp_value_t
 hemp_int_val(hemp_int_t i) {
     hemp_value_t v;
-//  v.bits = HEMP_TYPE_INTEGER_MASK | (hemp_u64_t) i;   /* FAIL on -ve ints */
-    v.bits = HEMP_TYPE_INTEGER_MASK | (hemp_u64_t)(i & HEMP_INTEGER_MASK);
+    v.bits = HEMP_INTEGER_TAG | ((hemp_u64_t) i & HEMP_INTEGER_MASK);
     return v;
 }
 
-HEMP_DO_INLINE hemp_value_t
+
+HEMP_INLINE hemp_value_t
+hemp_ptr_val(hemp_mem_p p) {
+    hemp_value_t v;
+    v.bits = HEMP_POINTER_TAG | ((hemp_u64_t) p & HEMP_POINTER_MASK);
+    return v;
+}
+
+
+HEMP_INLINE hemp_value_t
 hemp_str_val(hemp_cstr_p s) {
     hemp_value_t v;
-    v.bits = HEMP_TYPE_STRING_MASK | (hemp_u64_t) s;
+    v.bits = HEMP_POINTER_TAG | ((hemp_u64_t) s & HEMP_POINTER_MASK);
     return v;
 }
 
-HEMP_DO_INLINE hemp_value_t
+
+HEMP_INLINE hemp_value_t
 hemp_text_val(hemp_text_p t) {
     hemp_value_t v;
-    v.bits = HEMP_TYPE_TEXT_MASK | (hemp_u64_t) t;
+    v.bits = HEMP_TEXT_TAG | ((hemp_u64_t) t & HEMP_POINTER_MASK);
     return v;
 }
 
-HEMP_DO_INLINE hemp_value_t
+
+HEMP_INLINE hemp_value_t
 hemp_ident_val(hemp_u8_t i) {
     hemp_value_t v;
-    v.bits = HEMP_TYPE_IDENT_MASK | (hemp_u64_t) i;
+    v.bits = HEMP_IDENTITY_TAG | ((hemp_u64_t) i & HEMP_IDENT_MASK);
     return v;
 }
 
-HEMP_DO_INLINE hemp_value_t
+
+HEMP_INLINE hemp_value_t
 hemp_bool_val(hemp_bool_t b) {
     return b
         ? HempTrue
@@ -151,45 +129,42 @@ hemp_bool_val(hemp_bool_t b) {
  * inline functions to decode tagged values to native values
  *--------------------------------------------------------------------------*/
 
-HEMP_DO_INLINE hemp_num_t
+HEMP_INLINE hemp_num_t
 hemp_val_num(hemp_value_t v) {
     return v.number;
 }
 
-HEMP_DO_INLINE hemp_int_t
+
+HEMP_INLINE hemp_int_t
 hemp_val_int(hemp_value_t v) {
-    return (hemp_int_t) v.bits;
+    return (hemp_int_t)(v.bits & HEMP_INTEGER_MASK);
 }
 
-HEMP_DO_INLINE hemp_cstr_p
+
+HEMP_INLINE hemp_mem_p
+hemp_val_ptr(hemp_value_t v) {
+    return (hemp_mem_p) HEMP_POINTER(v);
+}
+
+
+HEMP_INLINE hemp_cstr_p
 hemp_val_str(hemp_value_t v) {
-    return (hemp_cstr_p) HEMP_PAYLOAD(v);
+    return (hemp_cstr_p) HEMP_POINTER(v);
 }
 
-HEMP_DO_INLINE hemp_text_p
+
+HEMP_INLINE hemp_text_p
 hemp_val_text(hemp_value_t v) {
-    return (hemp_text_p) HEMP_PAYLOAD(v);
+    return (hemp_text_p) HEMP_POINTER(v);
 }
 
-//HEMP_DO_INLINE hemp_u8_t
-//hemp_val_ident(hemp_value_t v) {
-//    return HEMP_IDENT_ID(v);
-//}
 
-HEMP_DO_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool_t
 hemp_val_bool(hemp_value_t v) {
-    if (hemp_is_boolean(v)) {
-        return hemp_is_true(v);
-    }
-    else {
-        hemp_fatal("value is not boolean"); 
-        return HEMP_FALSE;
-    }
-    
-//    return hemp_is_boolean(v)
-//         ? hemp_is_true(v)
-//         : ({ hemp_fatal("value is not boolean"); 0 }); // shitfucks. no hemp 
+    return hemp_is_true(v);
 }
+
+
 
 
 
@@ -201,9 +176,11 @@ HEMP_VALUE_FUNC(hemp_value_no_op) {
     return value;
 }
 
+
 HEMP_VALUE_FUNC(hemp_value_defined) {
     return HempTrue;
 }
+
 
 HEMP_VALUE_FUNC(hemp_value_undefined) {
     return HempFalse;
@@ -284,55 +261,6 @@ HEMP_VALUE_FUNC(hemp_value_integer_compare) {
 
 
 /*--------------------------------------------------------------------------
- * boolean -> xxx conversion
- *--------------------------------------------------------------------------*/
-
-HEMP_VTEXT_FUNC(hemp_value_boolean_text) {
-    hemp_text_p text;
-    hemp_prepare_output(output, text, 5);
-
-    hemp_text_append_cstr(
-        text, 
-        hemp_is_true(value)
-            ? HEMP_STR_TRUE
-            : HEMP_STR_FALSE
-    );
-
-    return output;
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_boolean_number) {
-    HEMP_CONVERT_ERROR(
-        context, 
-        HEMP_STR_BOOLEAN, 
-        HEMP_STR_NUMBER, 
-        hemp_type_name(value)
-    );
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_boolean_integer) {
-    HEMP_CONVERT_ERROR(
-        context, 
-        HEMP_STR_BOOLEAN,
-        HEMP_STR_INTEGER,
-        hemp_type_name(value)
-    );
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_boolean_compare) {
-    HEMP_CONVERT_ERROR(
-        context, 
-        HEMP_STR_BOOLEAN,
-        HEMP_STR_COMPARE,
-        hemp_type_name(value)
-    );
-}
-
-
-/*--------------------------------------------------------------------------
  * text -> xxx conversion
  *--------------------------------------------------------------------------*/
 
@@ -401,39 +329,32 @@ HEMP_VALUE_FUNC(hemp_value_text_compare) {
 }
 
 
+
 /*--------------------------------------------------------------------------
- * identity -> xxx conversion
+ * identity -> xxx conversions
  *--------------------------------------------------------------------------*/
 
-HEMP_VALUE_FUNC(hemp_value_identity_number) {
-    HEMP_CONVERT_ERROR(
-        context, 
-        HEMP_STR_IDENTITY, 
-        HEMP_STR_NUMBER,
-        hemp_type_name(value)
-    );
+HEMP_DO_INLINE hemp_cstr_p
+hemp_identity_name(
+    hemp_value_t value
+) {
+    switch (HEMP_IDENT_ID(value)) {
+        case 0:                     return HEMP_STR_INFINITY;
+        case HEMP_IDENT_MISSING:    return HEMP_STR_MISSING;
+        case HEMP_IDENT_NOTHING:    return HEMP_STR_NOTHING;
+        case HEMP_IDENT_FALSE:      return HEMP_STR_FALSE;
+        case HEMP_IDENT_TRUE:       return HEMP_STR_TRUE;
+        case HEMP_IDENT_BEFORE:     return HEMP_STR_BEFORE;
+        case HEMP_IDENT_AFTER:      return HEMP_STR_AFTER;
+        case HEMP_IDENT_EQUAL:      return HEMP_STR_EQUAL;
+        default:                    return HEMP_STR_UNKNOWN;
+    }
 }
 
-HEMP_VALUE_FUNC(hemp_value_identity_integer) {
-    HEMP_CONVERT_ERROR(
-        context, 
-        HEMP_STR_IDENTITY, 
-        HEMP_STR_INTEGER,
-        hemp_type_name(value)
-    );
-}
-
-/* Not sure about this: is undef boolean false? */
-
-HEMP_VALUE_FUNC(hemp_value_identity_boolean) {
-    return hemp_is_truth(value)
-        ? (hemp_is_true(value) ? HempTrue : HempFalse)
-        : (hemp_todo("THROW ERROR: %s is not boolean (or is it?)", hemp_type_name(value)), HempFalse);
-}
 
 
 HEMP_VTEXT_FUNC(hemp_value_identity_text) {
-    hemp_cstr_p name = hemp_type_name(value);
+    hemp_cstr_p name = hemp_identity_name(value);
     hemp_text_p text;
     hemp_prepare_output(output, text, strlen(name));
     hemp_text_append_cstr(text, name);
@@ -441,46 +362,90 @@ HEMP_VTEXT_FUNC(hemp_value_identity_text) {
 }
 
 
-HEMP_VTEXT_FUNC(hemp_value_compare_text) {
-    hemp_text_p text;
-    hemp_prepare_output(output, text, 5);
-
-    hemp_text_append_cstr(
-        text, 
-        hemp_is_before(value) ? HEMP_STR_BEFORE :
-        hemp_is_after(value)  ? HEMP_STR_AFTER  : 
-                                HEMP_STR_EQUAL
-    );
-
-    return output;
-}
-
-
-/* I'm not sure that comparisons should automatically convert to numbers... */
-
-HEMP_VALUE_FUNC(hemp_value_compare_number) {
-    return hemp_num_val(
-        hemp_is_before(value) ? -1 :
-        hemp_is_after(value)  ?  1 :
-                                 0
+HEMP_VALUE_FUNC(hemp_value_identity_number) {
+    /* might want to auto-convert true(1), false(0), before(-1), equal(0)
+     * and after(1)
+     */
+    HEMP_CONVERT_ERROR(
+        context, 
+        HEMP_STR_IDENTITY,
+        HEMP_STR_NUMBER, 
+        hemp_identity_name(value)
     );
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_compare_integer) {
-    return hemp_int_val(
-        hemp_is_before(value) ? -1 :
-        hemp_is_after(value)  ?  1 :
-                                 0
+HEMP_VALUE_FUNC(hemp_value_identity_integer) {
+    /* might want to auto-convert true(1), false(0), before(-1), equal(0)
+     * and after(1)
+     */
+    HEMP_CONVERT_ERROR(
+        context, 
+        HEMP_STR_IDENTITY,
+        HEMP_STR_INTEGER,
+        hemp_identity_name(value)
     );
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_compare_boolean) {
-    return hemp_is_true(value)
-        ? HempTrue
+HEMP_VALUE_FUNC(hemp_value_identity_defined) {
+    return hemp_is_defined(value) 
+        ? HempTrue 
         : HempFalse;
 }
+
+
+HEMP_VALUE_FUNC(hemp_value_identity_boolean) {
+    if (hemp_is_boolean(value)) 
+        return hemp_is_true(value) 
+            ? HempTrue 
+            : HempFalse;
+    else
+        HEMP_CONVERT_ERROR(
+            context, 
+            HEMP_STR_IDENTITY,
+            HEMP_STR_BOOLEAN, 
+            hemp_identity_name(value)
+        );
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_identity_compare) {
+    if (hemp_is_compare(value)) 
+        return value;
+    else 
+        HEMP_CONVERT_ERROR(
+            context, 
+            HEMP_STR_IDENTITY,
+            HEMP_STR_COMPARE, 
+            hemp_identity_name(value)
+        );
+}
+
+
+/*--------------------------------------------------------------------------
+ * boolean -> xxx conversion
+ *--------------------------------------------------------------------------*/
+
+/* Not sure about this: is undef boolean false? */
+/* I'm not sure that comparisons should automatically convert to numbers... */
+
+//HEMP_VALUE_FUNC(hemp_value_compare_number) {
+//    return hemp_num_val(
+//        hemp_is_before(value) ? -1 :
+//        hemp_is_after(value)  ?  1 :
+//                                 0
+//    );
+//}
+//
+//
+//HEMP_VALUE_FUNC(hemp_value_compare_integer) {
+//    return hemp_int_val(
+//        hemp_is_before(value) ? -1 :
+//        hemp_is_after(value)  ?  1 :
+//                                 0
+//    );
+//}
 
 
 

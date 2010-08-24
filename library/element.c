@@ -398,7 +398,7 @@ HEMP_EVAL_FUNC(hemp_element_value_number) {
 HEMP_EVAL_FUNC(hemp_element_value_integer) {
     hemp_debug_call("hemp_element_value_integer()\n");
     hemp_value_t value = element->type->value(element, context);
-    return hemp_to_int(value, context);
+    return hemp_to_integer(value, context);
 }
 
 
