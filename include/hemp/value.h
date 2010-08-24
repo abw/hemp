@@ -2,9 +2,9 @@
 #define HEMP_VALUE_H
 
 #include <hemp/core.h>
-#include <hemp/text.h>
+//#include <hemp/text.h>
 //#include <hemp/hash.h>
-#include <hemp/context.h>
+//#include <hemp/context.h>
 #include <hemp/macros.h>
 
 

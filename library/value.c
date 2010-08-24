@@ -1,4 +1,7 @@
 #include <hemp/value.h>
+#include <hemp/text.h>
+#include <hemp/hash.h>
+#include <hemp/context.h>
 
 
 const struct hemp_vtype_s hemp_global_vtypes[32] = {

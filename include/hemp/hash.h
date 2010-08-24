@@ -75,6 +75,18 @@ hemp_value_t
         hemp_cstr_p     key
     );
 
+hemp_num_t
+    hemp_hash_fetch_number(
+        hemp_hash_p hash, 
+        hemp_cstr_p name
+    );
+
+hemp_int_t
+    hemp_hash_fetch_integer(
+        hemp_hash_p hash, 
+        hemp_cstr_p name
+    );
+
 hemp_mem_p
     hemp_hash_fetch_pointer(
         hemp_hash_p     hash, 

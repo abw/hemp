@@ -26,4 +26,6 @@
 #include <hemp/cstr.h>              /* functions for handling C strings     */
 #include <hemp/utils.h>             /* misc utils                           */
 
+//#include <hemp/value.h>             /* data values                          */
+
 #endif /* HEMP_CORE_H */

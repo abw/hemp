@@ -207,6 +207,38 @@ hemp_hash_fetch(
 }
 
 
+hemp_num_t
+hemp_hash_fetch_number(
+    hemp_hash_p hash, 
+    hemp_cstr_p name
+) {
+    hemp_value_t value = hemp_hash_fetch(hash, name);
+
+    /* this is of limited value because we have no way to indicate "not 
+     * found" when using raw numeric values (NaN perhaps?)
+     */
+    return hemp_is_number(value)
+        ? hemp_val_num(value)
+        : 0.0;
+}
+
+
+hemp_int_t
+hemp_hash_fetch_integer(
+    hemp_hash_p hash, 
+    hemp_cstr_p name
+) {
+    hemp_value_t value = hemp_hash_fetch(hash, name);
+
+    /* as above, only for testing, or when you know all your values are 
+     * non-zero 
+     */
+    return hemp_is_integer(value)
+        ? hemp_val_int(value)
+        : 0;
+}
+
+
 hemp_mem_p
 hemp_hash_fetch_pointer(
     hemp_hash_p hash, 
