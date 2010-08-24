@@ -109,7 +109,7 @@ hemp_hash_resize(
     hemp_hash_p hash
 ) {
     hemp_size_t width, wider, index, i;
-    hemp_slots_p *slots, slots, next;
+    hemp_slot_p *slots, slot, next;
     
     width = hash->width;
     wider = hemp_hash_wider(width);
@@ -146,7 +146,7 @@ hemp_slot_p
 hemp_hash_store(
     hemp_hash_p     hash,
     hemp_cstr_p     name,
-    hemp_value_p    value
+    hemp_value_t    value
 ) {
     hemp_slot_p slot;
     hemp_size_t index, column;
@@ -154,7 +154,7 @@ hemp_hash_store(
     if (hash->size / hash->width > HEMP_HASH_DENSITY)
         hemp_hash_resize(hash);
 
-    index  = hemp_hash_function(key);
+    index  = hemp_hash_function(name);
     column = index % hash->width;
     slot   = hash->slots[column];
 
@@ -162,7 +162,7 @@ hemp_hash_store(
      * first, and then the more time consuming key string comparison only if 
      * the hash values are identical
      */
-    while (slot && (index != slot->index) && strcmp(key, slot->key))
+    while (slot && (index != slot->index) && strcmp(name, slot->name))
         slot = slot->next;
 
     if (slot) {
@@ -170,10 +170,10 @@ hemp_hash_store(
         slot->value = value;
     }
     else {
-        slot = table->columns[column] = hemp_slot_init(
-            hash, index, name, value, table->columns[column]
+        slot = hash->slots[column] = hemp_slot_init(
+            hemp_ptr_val(hash), index, name, value, hash->slots[column]
         );
-        table->size++;
+        hash->size++;
     }
 
     return slot;
@@ -187,14 +187,14 @@ hemp_hash_fetch(
 ) {
     hemp_slot_p slot = NULL;
     hemp_size_t index, column;
-    index = hemp_hash_function(key);
+    index = hemp_hash_function(name);
     
     while (hash && ! slot) {
         column = index % hash->width;
         slot   = hash->slots[column];
 
         /* look for an entry in this hash table */
-        while (slot && (index != slot->index) && strcmp(key, slot->key))
+        while (slot && (index != slot->index) && strcmp(name, slot->name))
             slot = slot->next;
 
         /* or try the parent table, if there is one */
@@ -205,6 +205,39 @@ hemp_hash_fetch(
         ? slot->value 
         : HempMissing;
 }
+
+
+hemp_mem_p
+hemp_hash_fetch_pointer(
+    hemp_hash_p hash, 
+    hemp_cstr_p name
+) {
+    hemp_value_t value = hemp_hash_fetch(hash, name);
+
+    return hemp_is_pointer(value)
+        ? hemp_val_ptr(value)
+        : NULL;
+}
+
+
+hemp_cstr_p
+hemp_hash_fetch_string(
+    hemp_hash_p hash, 
+    hemp_cstr_p name
+) {
+    hemp_value_t value = hemp_hash_fetch(hash, name);
+
+    /* We can't actually tell the difference between a void memory pointer
+     * and a char * string.  Perhaps we should set aside a tag type for it?
+     * For now, we assume that if the user is asking for a string then they
+     * know that string pointer == memory pointer in C, and only varies on
+     * the return type cast
+     */
+    return hemp_is_pointer(value)
+        ? hemp_val_str(value)
+        : NULL;
+}
+
 
 
 void 
@@ -237,7 +270,7 @@ hemp_hash_each(
     for (i = 0; i < hash->width; i++) {
         slot = hash->slots[i];
 
-        while (entry) {
+        while (slot) {
             if (! func(hash, n++, slot))
                 break;
             slot = slot->next;

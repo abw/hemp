@@ -60,7 +60,6 @@ typedef struct hemp_factory_s   * hemp_factory_p;
 typedef struct hemp_filesystem_s *hemp_filesystem_p;
 typedef struct hemp_grammar_s   * hemp_grammar_p;
 typedef struct hemp_hash_s      * hemp_hash_p;
-typedef struct hemp_hash_item_s * hemp_hash_item_p;
 typedef struct hemp_jump_s      * hemp_jump_p;
 typedef struct hemp_language_s  * hemp_language_p;
 typedef struct hemp_list_s      * hemp_list_p;
@@ -151,20 +150,20 @@ typedef hemp_bool_t
 
 typedef hemp_bool_t     
     (* hemp_hash_each_f)(           /* function called against hash items   */
-        hemp_hash_p      hash,      /* pointer to hash                      */ 
-        hemp_pos_t       index,     /* 0-based index of item in hash        */
-        hemp_hash_item_p item       /* pointer to hash item entry           */
+        hemp_hash_p     hash,       /* pointer to hash                      */ 
+        hemp_pos_t      index,      /* 0-based index of item in hash        */
+        hemp_slot_p     item        /* pointer to hash item entry           */
     );
 
 typedef hemp_symbol_p
     (* hemp_symbol_f)(
-        hemp_p        hemp,         /* pointer to current hemp context      */
-        hemp_symbol_p symbol        /* pointer to new symbol to initialise  */
+        hemp_p          hemp,       /* pointer to current hemp context      */
+        hemp_symbol_p   symbol      /* pointer to new symbol to initialise  */
     );
 
 typedef hemp_dialect_p 
     (* hemp_dialect_f)(
-        hemp_dialect_p dialect      /* pointer to dialect to prepare       */
+        hemp_dialect_p  dialect      /* pointer to dialect to prepare       */
     );
 
 // TODO: rename this to hemp_template_f
@@ -180,17 +179,17 @@ typedef hemp_bool_t
 
 typedef void
     (* hemp_clean_f)(
-        hemp_mem_p item             /* pointer to object to clean           */
+        hemp_mem_p      item        /* pointer to object to clean           */
     );
 
 typedef void
     (* hemp_eclean_f)(
-        hemp_element_p element      /* pointer to element to clean          */
+        hemp_element_p  element     /* pointer to element to clean          */
     );
 
 typedef hemp_mem_p
     (* hemp_actor_f)(
-        hemp_mem_p argument, 
+        hemp_mem_p      argument, 
         ...
     );
 

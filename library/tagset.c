@@ -38,7 +38,7 @@ hemp_tagset_add_tag(
 ) {
     hemp_ptree_p ptree;
 
-    if (hemp_hash_fetch(tagset->tags, tag->name))
+    if (hemp_hash_fetch_pointer(tagset->tags, tag->name))
         hemp_fatal("Duplicate tag in tagset: %s", tag->name);
     
     switch (tag->style) {
@@ -54,7 +54,7 @@ hemp_tagset_add_tag(
             hemp_fatal("Invalid tag style for %s tag: %d", tag->name, tag->style);
     }
 
-    hemp_hash_store(tagset->tags, tag->name, tag);
+    hemp_hash_store_pointer(tagset->tags, tag->name, tag);
 
     return hemp_ptree_store(ptree, tag->start, (hemp_mem_p) tag);
 }
@@ -79,11 +79,11 @@ hemp_tagset_new_tag(
 
 hemp_bool_t
 hemp_tagset_free_tag(
-    hemp_hash_p      tags,
-    hemp_pos_t       index,
-    hemp_hash_item_p item
+    hemp_hash_p tags,
+    hemp_pos_t  index,
+    hemp_slot_p item
 ) {
-    hemp_tag_free((hemp_tag_p) item->value);
+    hemp_tag_free((hemp_tag_p) hemp_val_ptr(item->value));
     return HEMP_TRUE;
 }
 

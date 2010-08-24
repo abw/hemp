@@ -75,6 +75,18 @@ hemp_value_t
         hemp_cstr_p     key
     );
 
+hemp_mem_p
+    hemp_hash_fetch_pointer(
+        hemp_hash_p     hash, 
+        hemp_cstr_p     key
+    );
+
+hemp_cstr_p
+    hemp_hash_fetch_string(
+        hemp_hash_p     hash, 
+        hemp_cstr_p     key
+    );
+
 hemp_cstr_p
     hemp_hash_as_cstr(
         hemp_hash_p hash
@@ -104,11 +116,22 @@ void
 
 
 /*--------------------------------------------------------------------------
- * patch in the hash function we want to use
+ * patch in the hash function we want to use and define some other macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_hash_function(cstr)    \
+#define hemp_hash_function(cstr)        \
     hemp_hash_function_jenkins32(cstr)
 
+#define hemp_hash_store_number(h,k,n)   \
+    hemp_hash_store(h, k, hemp_num_val(n))
+
+#define hemp_hash_store_integer(h,k,i)  \
+    hemp_hash_store(h, k, hemp_int_val(i))
+
+#define hemp_hash_store_pointer(h,k,p)  \
+    hemp_hash_store(h, k, hemp_ptr_val(p))
+
+#define hemp_hash_store_string(h,k,s)   \
+    hemp_hash_store(h, k, hemp_str_val(s))
 
 #endif /* HEMP_HASH_H */

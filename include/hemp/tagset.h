@@ -55,9 +55,9 @@ hemp_pnode_p
 
 hemp_bool_t
     hemp_tagset_free_tag(
-        hemp_hash_p      tags,
-        hemp_pos_t       index,
-        hemp_hash_item_p item
+        hemp_hash_p     tags,
+        hemp_pos_t      index,
+        hemp_slot_p     item
     );
 
 

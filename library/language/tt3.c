@@ -179,7 +179,7 @@ hemp_element_tt3_command_symbols(
     HEMP_ELEMENTS(hemp_symbols_tt3_command);
 
     /* now try again */
-    return (hemp_action_p) hemp_hash_fetch(
+    return (hemp_action_p) hemp_hash_fetch_pointer(
         hemp->elements->constructors, name
     );
 }

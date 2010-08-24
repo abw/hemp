@@ -72,7 +72,7 @@ hemp_grammar_add_symbol(
 //      token, etype, grammar->name, lprec, rprec
 //  );
 
-    if (hemp_hash_fetch(grammar->symbols, start))
+    if (hemp_hash_fetch_pointer(grammar->symbols, start))
         hemp_throw(grammar->hemp, HEMP_ERROR_DUPLICATE, "symbol", start);
 
     hemp_symbol_p symbol = hemp_grammar_new_symbol(grammar, etype, start, end);
@@ -81,7 +81,7 @@ hemp_grammar_add_symbol(
     symbol->rprec = rprec;
 
     /* all symbols get put in the hash table mapping token to symbol */
-    hemp_hash_store(grammar->symbols, start, symbol);
+    hemp_hash_store_pointer(grammar->symbols, start, symbol);
 
     /* non-alphanumeric (starting) symbols go in the operator ptree which
      * allows us to easily match longest tokens so that '++' is interpreted
@@ -112,11 +112,10 @@ hemp_grammar_free(
 
 hemp_bool_t
 hemp_grammar_free_symbol(
-    hemp_hash_p         grammars,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
+    hemp_hash_p     grammars,
+    hemp_pos_t      position,
+    hemp_slot_p     item
 ) {
-    hemp_symbol_p s = (hemp_symbol_p) item->value;
-    hemp_symbol_free( (hemp_symbol_p) item->value );
+    hemp_symbol_free( (hemp_symbol_p) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }

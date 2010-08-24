@@ -47,17 +47,17 @@ void            hemp_init_schemes(hemp_p);
 void            hemp_init_errors(hemp_p);
 
 void            hemp_free(hemp_p);
-hemp_bool_t     hemp_free_scheme(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
-hemp_bool_t     hemp_free_language(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
-hemp_bool_t     hemp_free_dialect(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
-hemp_bool_t     hemp_free_grammar(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
-hemp_bool_t     hemp_free_element(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
-hemp_bool_t     hemp_free_template(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
+hemp_bool_t     hemp_free_scheme(   hemp_hash_p, hemp_pos_t, hemp_slot_p);
+hemp_bool_t     hemp_free_language( hemp_hash_p, hemp_pos_t, hemp_slot_p);
+hemp_bool_t     hemp_free_dialect(  hemp_hash_p, hemp_pos_t, hemp_slot_p);
+hemp_bool_t     hemp_free_grammar(  hemp_hash_p, hemp_pos_t, hemp_slot_p);
+hemp_bool_t     hemp_free_element(  hemp_hash_p, hemp_pos_t, hemp_slot_p);
+hemp_bool_t     hemp_free_template( hemp_hash_p, hemp_pos_t, hemp_slot_p);
 
 /* scheme functions */
 void            hemp_add_scheme(hemp_p, hemp_scheme_p);
 #define         hemp_scheme(hemp, name) \
-                    (hemp_scheme_p) hemp_hash_fetch(hemp->schemes, name)
+                    (hemp_scheme_p) hemp_hash_fetch_pointer(hemp->schemes, name)
 
 /* source functions */
 hemp_source_p   hemp_source(hemp_p, hemp_cstr_p, hemp_cstr_p);
@@ -80,7 +80,6 @@ void            hemp_scan_error(hemp_p, HEMP_SCAN_ARGS, hemp_errno_e, ...);
 /* tag functions */
 //void            hemp_init_tags(hemp_p);
 //void            hemp_add_tag(hemp_p, hemp_tag_p);
-//hemp_bool_t     hemp_free_tag(hemp_hash_p, hemp_pos_t, hemp_hash_item_p);
 //
 //#define         hemp_tag(hemp, name) \
 //                    (hemp_tag_p) hemp_hash_fetch(hemp->tags, name)

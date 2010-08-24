@@ -206,56 +206,56 @@ hemp_free(
 
 hemp_bool_t
 hemp_free_scheme(
-    hemp_hash_p         schemes,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
+    hemp_hash_p schemes,
+    hemp_pos_t  position,
+    hemp_slot_p item
 ) {
 //  hemp_debug("cleaning %s scheme\n", ((hemp_scheme_p) item->value)->name);
-    hemp_scheme_free( (hemp_scheme_p) item->value );
+    hemp_scheme_free( (hemp_scheme_p) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
 
 hemp_bool_t
 hemp_free_language(
-    hemp_hash_p         languages,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
+    hemp_hash_p languages,
+    hemp_pos_t  position,
+    hemp_slot_p item
 ) {
-    hemp_language_free( (hemp_language_p) item->value );
+    hemp_language_free( (hemp_language_p) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
 
 hemp_bool_t
 hemp_free_dialect(
-    hemp_hash_p         dialects,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
+    hemp_hash_p dialects,
+    hemp_pos_t  position,
+    hemp_slot_p item
 ) {
 //  hemp_debug("cleaning %s dialect\n", ((hemp_dialect_p) item->value)->name);
-    hemp_dialect_free( (hemp_dialect_p) item->value );
+    hemp_dialect_free( (hemp_dialect_p) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
 
 hemp_bool_t
 hemp_free_grammar(
-    hemp_hash_p         grammars,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
+    hemp_hash_p grammars,
+    hemp_pos_t  position,
+    hemp_slot_p item
 ) {
 //  hemp_debug("cleaning %s grammar\n", ((hemp_grammar_p) item->value)->name);
-    hemp_grammar_free( (hemp_grammar_p) item->value );
+    hemp_grammar_free( (hemp_grammar_p) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
 
 hemp_bool_t
 hemp_free_element(
-    hemp_hash_p         elements,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
+    hemp_hash_p elements,
+    hemp_pos_t  position,
+    hemp_slot_p item
 ) {
 //    hemp_debug("cleaning %s element\n", ((hemp_etype_p) item->value)->name);
 //    hemp_element_free( (hemp_element_p) item->value );
@@ -314,7 +314,7 @@ hemp_add_scheme(
     if (old)
         hemp_scheme_free(old);
 
-    hemp_hash_store(hemp->schemes, scheme->name, scheme);
+    hemp_hash_store_pointer(hemp->schemes, scheme->name, scheme);
 }
 
 
@@ -355,11 +355,11 @@ hemp_init_templates(
 
 hemp_bool_t
 hemp_free_template(
-    hemp_hash_p         templates,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
+    hemp_hash_p templates,
+    hemp_pos_t  position,
+    hemp_slot_p item
 ) {
-    hemp_template_free( (hemp_template_p) item->value );
+    hemp_template_free( (hemp_template_p) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
@@ -381,7 +381,7 @@ hemp_template(
     
 //  hemp_debug("MD5 for %s template [%s] is %s\n", scheme, source, md5.output);
 
-    tmpl = hemp_hash_fetch(hemp->templates, md5.output);
+    tmpl = hemp_hash_fetch_pointer(hemp->templates, md5.output);
     
     if (tmpl) {
         if (hemp_cstr_eq(tmpl->source->scheme->name, scheme)
@@ -405,7 +405,7 @@ hemp_template(
 
     /* let the source allocate memory for storing md5 permanently */
     hemp_source_set_md5(tmpl->source, md5.output);
-    hemp_hash_store(hemp->templates, tmpl->source->md5, tmpl);
+    hemp_hash_store_pointer(hemp->templates, tmpl->source->md5, tmpl);
     
     return tmpl;
 }

@@ -43,7 +43,7 @@ hemp_factory_register(
     hemp_actor_f    actor,
     hemp_mem_p      script
 ) {
-    hemp_action_p action = hemp_hash_fetch(
+    hemp_action_p action = (hemp_action_p) hemp_hash_fetch_pointer(
         factory->constructors, name
     );
 
@@ -56,7 +56,7 @@ hemp_factory_register(
 
 //  hemp_hash_store("registering %s action at %p in %p\n", name, action, factory->constructors);
 
-    hemp_hash_store(
+    hemp_hash_store_pointer(
         factory->constructors, name, action
     );
     
@@ -74,7 +74,7 @@ hemp_factory_constructor(
     static hemp_char_t  wildname[HEMP_BUFFER_SIZE];
     hemp_list_p splits;
     
-    hemp_action_p constructor = hemp_hash_fetch(
+    hemp_action_p constructor = (hemp_action_p) hemp_hash_fetch_pointer(
         factory->constructors, name
     );
 
@@ -96,7 +96,7 @@ hemp_factory_constructor(
             snprintf(wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
 
             /* look for a wildcard meta-constructor */
-            wildcard = hemp_hash_fetch(
+            wildcard = (hemp_action_p) hemp_hash_fetch_pointer(
                 factory->constructors, wildname
             );
             if (! wildcard)
@@ -108,7 +108,7 @@ hemp_factory_constructor(
                 wildcard, name
             );
             if (constructor) {
-                hemp_hash_store(
+                hemp_hash_store_pointer(
                     factory->constructors, name, constructor
                 );
                 break;
@@ -131,7 +131,7 @@ hemp_factory_instance(
     static hemp_char_t  wildname[HEMP_BUFFER_SIZE];
     hemp_list_p splits;
     
-    hemp_mem_p instance = hemp_hash_fetch(
+    hemp_mem_p instance = hemp_hash_fetch_pointer(
         factory->instances, name
     );
 
@@ -150,7 +150,7 @@ hemp_factory_instance(
         /* TODO: not sure about name.  We used to use dialect->name which is 
         * guaranteed to be locally duplicated in a dialect */
         if (instance)
-            hemp_hash_store(factory->instances, name, instance);
+            hemp_hash_store_pointer(factory->instances, name, instance);
     }
 
     return instance;
@@ -159,11 +159,11 @@ hemp_factory_instance(
 
 hemp_bool_t
 hemp_factory_free_constructor(
-    hemp_hash_p         dialects,
-    hemp_pos_t          position,
-    hemp_hash_item_p    item
+    hemp_hash_p     dialects,
+    hemp_pos_t      position,
+    hemp_slot_p     item
 ) {
-    hemp_action_free( (hemp_action_p) item->value );
+    hemp_action_free( (hemp_action_p) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 

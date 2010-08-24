@@ -3,7 +3,7 @@
 
 #include <hemp/core.h>
 #include <hemp/text.h>
-#include <hemp/hash.h>
+//#include <hemp/hash.h>
 #include <hemp/context.h>
 #include <hemp/macros.h>
 
@@ -212,6 +212,11 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 /* macros for manipulating identity values */
 #define HEMP_IDENT_MASK         0xFF
 #define HEMP_IDENT_MAKE(t)      ((hemp_value_t) (HEMP_IDENTITY | t))
+
+/* TODO: this isn't right - it doesn't check that the lower 4 bits of the 
+ * identity tag are 0.  It works for now because we don't have any type 
+ * tags >= 0xFFF8000000000000
+ */
 #define HEMP_IDENT_VALID(v)     ((hemp_bool_t) ((v.bits & HEMP_IDENTITY) == HEMP_IDENTITY))
 #define HEMP_IDENT_VALUE(v)     ((hemp_u8_t) (v.bits & HEMP_IDENT_MASK))
 #define HEMP_IDENT_ID(v)        ((hemp_u8_t) HEMP_IDENT_VALID(v) ? HEMP_IDENT_VALUE(v) : 0)
@@ -254,8 +259,9 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 #define hemp_is_pointer(v)      HEMP_TYPE_IS(v, HEMP_POINTER_ID)
 #define hemp_is_text(v)         HEMP_TYPE_IS(v, HEMP_TEXT_ID)
 #define hemp_is_identity(v)     HEMP_TYPE_IS(v, HEMP_IDENTITY_ID)
-#define hemp_is_found(v)        HEMP_IDENT_ANY(v, HEMP_FOUND_BIT)
 #define hemp_is_missing(v)      HEMP_IDENT_NOT(v, HEMP_FOUND_BIT)
+//#define hemp_is_found(v)      HEMP_IDENT_ANY(v, HEMP_FOUND_BIT)
+#define hemp_is_found(v)        (! hemp_is_missing(v))
 #define hemp_is_nothing(v)      HEMP_IDENT_IS(v, HEMP_IDENT_NOTHING)
 #define hemp_is_defined(v)      HEMP_IDENT_ANY(v, HEMP_DEFINED_BIT)
 #define hemp_is_undefined(v)    HEMP_IDENT_NOT(v, HEMP_DEFINED_BIT)

@@ -51,7 +51,7 @@ hash_has(
     hemp_cstr_p key, 
     hemp_cstr_p expect
 ) {
-    hemp_mem_p value = hemp_hash_fetch(table, key);
+    hemp_cstr_p value = hemp_hash_fetch_string(table, key);
     ok( 
         value && hemp_cstr_eq(value, expect),
         "found %s => %s", key, value
@@ -64,7 +64,7 @@ hash_hasnt(
     hemp_hash_p table, 
     hemp_cstr_p key
 ) {
-    hemp_mem_p value = hemp_hash_fetch(table, key);
+    hemp_cstr_p value = hemp_hash_fetch_string(table, key);
     ok( ! value, "no entry for %s", key);
 }
 
@@ -76,7 +76,7 @@ hash_set(
     hemp_cstr_p value
 ) {
     ok(
-        hemp_hash_store(table, key, value),
+        hemp_hash_store_string(table, key, value),
         "set %s to %s", key, value
     );
 }
