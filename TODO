@@ -20,10 +20,7 @@ An incomplete list of things TODO, in no particular order.
 * Figure out what needs to go into the element data structure value union
   to represent all the various different element types.
 
-* Decide how to represent values and implement.  I want to try and unify as 
-  much of the API between elements and values as possible.  Consider
-  nanboxing.  UPDATE: now done using NaN boxing, but needs some completing,
-  and a few issues addressing.
+* Change elements to be object values.
 
 * This is my first time using autotools, and I'm sure I've made plenty of
   nooby mistakes.  The whole autoconf/automake/libtool setup needs cleaning
@@ -62,15 +59,9 @@ An incomplete list of things TODO, in no particular order.
  
 -- HOT STACK --
 
-* Modify NaN boxing to use 5 type bits... ultimately with the goal of 
-  providing a reserved bit pattern to indicate memory allocation status
-  (e.g. shared, read-only, mortal, must-be-freed, etc).  Work in progress.
-
 * Change elements to be values so that we can have a single value() and 
   text() interface instead of the similar (but not quite identical) 
   hemp_eval_f and hemp_value_f typedefs.
-
-* implement vtables for value types, possibly via global 
 
 * boolean vs truth
 
@@ -81,7 +72,7 @@ An incomplete list of things TODO, in no particular order.
    - Add ++ and -- auto-increment operator
 
 * Text ops:
-   - textify prefix 
+   - textify prefix operator: ~
 
 * figure out what to do with number/integer operators that return boolean
   values (e.g. less than).  Is it an error to ask for those as int/num?

@@ -137,7 +137,7 @@ hemp_filesystem_readable_path(
     hemp_cstr_p root, full;
     
     for (n = 0; n < filesystem->path->length; n++) {
-        root = hemp_list_item(filesystem->path, n);
+        root = hemp_val_str( hemp_list_item(filesystem->path, n) );
         full = hemp_filesystem_join_path(root, path);
 //      hemp_debug("full path: %s\n", full);
         hemp_mem_free(full);

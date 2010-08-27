@@ -22,6 +22,7 @@ void         hemp_input_free();
 char **      hemp_completion(const char *, int, int);
 char *       hemp_command_generator(const char *, int);
 
+
 hemp_bool_t  hemp_cmd_todo(hemp_p, hemp_cstr_p);
 hemp_bool_t  hemp_cmd_exprs(hemp_p, hemp_cstr_p);
 hemp_bool_t  hemp_cmd_expr(hemp_p, hemp_cstr_p);
@@ -199,9 +200,9 @@ void hemp_interactive(
         words = hemp_cstr_nwords(input, 2);
         
         if (words) {
-            word = (hemp_cstr_p) hemp_list_item(words, 0);
+            word = hemp_val_str( hemp_list_item(words, 0) );
             args = (words->length > 1)
-                ? (hemp_cstr_p) hemp_list_item(words, 1)
+                ? hemp_val_str( hemp_list_item(words, 1) )
                 : NULL;
             
             cmd = hemp_command_lookup(word);

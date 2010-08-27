@@ -1,5 +1,6 @@
 #include <hemp/text.h>
 
+/* TODO: move this into type/text.c */
 
 HEMP_INLINE hemp_text_p
 hemp_text_new( ) {

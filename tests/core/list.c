@@ -16,14 +16,14 @@ void test_list() {
     hemp_list_p list = hemp_list_init();
     pass("created list");
 
-    hemp_list_push(list, "foo");
+    hemp_list_push(list, hemp_str_val("foo") );
     pass("appended foo");
     ok( 
         list->length == 1,
         "one item in list"
     );
 
-    hemp_list_push(list, "bar");
+    hemp_list_push_string(list, "bar");
     pass("appended bar");
     ok( 
         list->length == 2,
@@ -46,11 +46,11 @@ hemp_bool_t
 hemp_text_append(
     hemp_list_p  list, 
     hemp_pos_t   pos, 
-    hemp_mem_p   item
+    hemp_value_t value
 ) {
     if (buffer[0])
         strcat(buffer, ", ");
-    strcat(buffer, item);
+    strcat(buffer, hemp_val_str(value) );
     return HEMP_TRUE;
 }
 

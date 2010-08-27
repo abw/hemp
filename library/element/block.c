@@ -64,7 +64,7 @@ HEMP_ETEXT_FUNC(hemp_element_block_text) {
     hemp_prepare_output(output, text, 0);
     
     for (n = 0; n < exprs->length; n++) {
-        expr = hemp_list_item(exprs, n);
+        expr = (hemp_element_p) hemp_val_ptr( hemp_list_item(exprs, n) );
         expr->type->text(expr, context, output);
     }
 

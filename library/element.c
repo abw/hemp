@@ -144,7 +144,7 @@ hemp_element_parse_exprs(
 #if HEMP_DEBUG & HEMP_DEBUG_PARSE
         hemp_element_dump(expr);
 #endif
-        hemp_list_push(exprs, expr);
+        hemp_list_push(exprs, hemp_ptr_val(expr));
     }
 
     /* element should be EOF or we hit a duff token */

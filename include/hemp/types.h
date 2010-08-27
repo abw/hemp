@@ -133,7 +133,7 @@ typedef hemp_bool_t
     (* hemp_list_each_f)(           /* function called against list items   */
         hemp_list_p     list,       /* pointer to list                      */ 
         hemp_pos_t      index,      /* 0-based index of item in list        */
-        hemp_mem_p      item        /* pointer to item itself               */
+        hemp_value_t    item        /* item value                           */
     );
 
 typedef hemp_bool_t     

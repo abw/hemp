@@ -92,7 +92,7 @@ hemp_factory_constructor(
         hemp_action_p wildcard;
             
         for (n = splits->length - 1; n >= 0; n--) {
-            split = (hemp_cstr_split_p) hemp_list_item(splits, n);
+            split = (hemp_cstr_split_p) hemp_val_ptr( hemp_list_item(splits, n) );
             snprintf(wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
 
             /* look for a wildcard meta-constructor */

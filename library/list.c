@@ -36,22 +36,22 @@ hemp_list_free(
 
 hemp_list_p
 hemp_list_push(
-    hemp_list_p list, 
-    hemp_mem_p  item
+    hemp_list_p     list, 
+    hemp_value_t    value
 ) {
     if (list->length == list->capacity) {
         // TODO: slab allocate with overflow to avoid repeated realloc
         // (or just plug in an off-the-shelf list library...)
         list->items = hemp_mem_resize(
             list->items, 
-            (list->capacity + 1) * sizeof(hemp_mem_p)
+            (list->capacity + 1) * sizeof(hemp_value_t)
         );
         if (! list->items)
             hemp_mem_fail("list item");
 
         list->capacity++;
     }
-    list->items[list->length++] = item;
+    list->items[list->length++] = value;
 
     return list;
 }
@@ -77,12 +77,13 @@ hemp_list_each(
 
 hemp_bool_t 
 hemp_list_each_free(
-    hemp_list_p list, 
-    hemp_pos_t  pos, 
-    hemp_mem_p  item
+    hemp_list_p     list, 
+    hemp_pos_t      pos, 
+    hemp_value_t    item
 ) {
 /*  hemp_debug_mem("freeing list item at %p\n", item); */
-    hemp_mem_free(item);
+    /* this assume that each element is a pointer */
+    hemp_mem_free( hemp_val_ptr(item) );
     return HEMP_TRUE;
 }
 
@@ -96,13 +97,14 @@ char buffer[1024];                  // FIXME!
 
 hemp_bool_t 
 hemp_list_dump_item(
-    hemp_list_p list, 
-    hemp_pos_t  pos, 
-    hemp_mem_p  item
+    hemp_list_p     list, 
+    hemp_pos_t      pos, 
+    hemp_value_t    item
 ) {
+    hemp_cstr_p str = hemp_val_str(item);
     if (buffer[0])
         strcat(buffer, ", ");
-    strcat(buffer, item);
+    strcat(buffer, str);
     return HEMP_TRUE;
 }
 

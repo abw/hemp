@@ -44,7 +44,7 @@ hemp_cstr_split(
 
     while ((to = strstr(from, split))) {
         item = hemp_cstr_extract(from, to);
-        hemp_list_push(list, item);
+        hemp_list_push(list, hemp_str_val(item));
         from = (to += slen);
     }
 
@@ -52,7 +52,7 @@ hemp_cstr_split(
     if (! item)
         hemp_mem_fail("string extract");
 
-    hemp_list_push(list, item);
+    hemp_list_push(list, hemp_str_val(item));
 
     return list;
 };
@@ -90,7 +90,7 @@ hemp_cstr_splits(
         );
         split->left = (hemp_cstr_p) split + sizeof(struct hemp_cstr_split_s);
         strcpy(split->left, source);
-        hemp_list_push(list, split);
+        hemp_list_push(list, hemp_ptr_val(split));
 
         to   = split->left + pos;
         *to  = HEMP_NUL;
@@ -294,7 +294,7 @@ hemp_cstr_nwords(
             from = NULL;
         }
         
-        hemp_list_push(list, item);
+        hemp_list_push_string(list, item);
         
     }
     

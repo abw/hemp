@@ -425,7 +425,7 @@ hemp_test_expect_text(
     hemp_test_plan(list->length * 2);
 
     for (n = 0; n < list->length; n++) {
-        test = hemp_list_item(list, n);
+        test = hemp_val_str( hemp_list_item(list, n) );
         
         /* skip over leading whitespace */
         while (isspace(*test)) {

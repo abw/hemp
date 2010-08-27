@@ -110,7 +110,7 @@ void split_ok(
     hemp_cstr_p left,
     hemp_cstr_p right
 ) {
-    hemp_cstr_split_p split = (hemp_cstr_split_p) hemp_list_item(list, index);
+    hemp_cstr_split_p split = (hemp_cstr_split_p) hemp_val_ptr( hemp_list_item(list, index) );
     if (split) {
         ok( hemp_cstr_eq(split->left,  left),  "left is [%s] expected [%s]",  split->left, left);
         ok( hemp_cstr_eq(split->right, right), "right is [%s] expected [%s]", split->right, right);
@@ -130,17 +130,17 @@ void test_words() {
     list = hemp_cstr_words(text);
     ok( list, "got words" );
     ok( list->length == 4, "four items in list" );
-    is( hemp_list_item(list,0), "foo", "first word is foo" );
-    is( hemp_list_item(list,1), "bar", "second word is bar" );
-    is( hemp_list_item(list,2), "baz", "third word is baz" );
-    is( hemp_list_item(list,3), "bam", "fourth word is bam" );
+    is( hemp_list_item_string(list,0), "foo", "first word is foo" );
+    is( hemp_list_item_string(list,1), "bar", "second word is bar" );
+    is( hemp_list_item_string(list,2), "baz", "third word is baz" );
+    is( hemp_list_item_string(list,3), "bam", "fourth word is bam" );
     hemp_list_free(list);
 
     list = hemp_cstr_nwords(text, 2);
     ok( list, "got more words" );
     ok( list->length == 2, "two items in list" );
-    is( hemp_list_item(list,0), "foo", "first word is foo" );
-    is( hemp_list_item(list,1), "bar  baz\n\t  bam  ", "second word is bar..." );
+    is( hemp_list_item_string(list,0), "foo", "first word is foo" );
+    is( hemp_list_item_string(list,1), "bar  baz\n\t  bam  ", "second word is bar..." );
     hemp_list_free(list);
 
     list = hemp_cstr_words("");

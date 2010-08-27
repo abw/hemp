@@ -63,12 +63,12 @@ void test_tree() {
     char *word;
     
     for (i = 0; i < list->length; i++) {
-        word = hemp_list_item(list, i);
+        word = hemp_list_item_string(list, i);
         tree_set(tree, word, word);
     }
 
     for (i = 0; i < list->length; i++) {
-        word = hemp_list_item(list, i);
+        word = hemp_list_item_string(list, i);
         tree_has(tree, word, word);
     }
 
