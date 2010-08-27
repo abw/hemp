@@ -4,59 +4,57 @@
 #include <hemp/context.h>
 
 
-const struct hemp_vtype_s hemp_global_vtypes[32] = {
-    {   0x00, "Number",
-        &hemp_value_number_text,
-        &hemp_value_no_op,
-        &hemp_value_number_integer,
-        &hemp_value_number_boolean,
-        &hemp_value_number_compare
-    },
-    {   0x01, "Integer",
-        &hemp_value_integer_text,
-        &hemp_value_integer_number,
-        &hemp_value_no_op,
-        &hemp_value_integer_boolean,
-        &hemp_value_integer_compare
-    },
-    {   0x02, "String"            },
-    {   0x03, "-- RESERVED 0x03"  },
-    {   0x04, "Text"              },
-    {   0x05, "-- RESERVED 0x05"  },
-    {   0x06, "-- RESERVED 0x06"  },
-    {   0x07, "-- RESERVED 0x07"  },
-    {   0x08, "-- RESERVED 0x08"  },
-    {   0x09, "-- RESERVED 0x09"  },
-    {   0x0A, "-- RESERVED 0x0A"  },
-    {   0x0B, "-- RESERVED 0x0B"  },
-    {   0x0C, "-- RESERVED 0x0C"  },
-    {   0x0D, "-- RESERVED 0x0D"  },
-    {   0x0E, "-- RESERVED 0x0D"  },
-    {   0x0F, "-- RESERVED 0x0F"  },
-    {   0x10, "Identity",
-        &hemp_value_identity_text,
-        &hemp_value_identity_number,
-        &hemp_value_identity_integer,
-        &hemp_value_identity_defined,
-        &hemp_value_identity_boolean,
-        &hemp_value_identity_compare
-    },
-    {   0x11, "-- RESERVED 0x11"  },
-    {   0x12, "-- RESERVED 0x12"  },
-    {   0x13, "-- RESERVED 0x13"  },
-    {   0x14, "-- RESERVED 0x14"  },
-    {   0x15, "-- RESERVED 0x15"  },
-    {   0x16, "-- RESERVED 0x16"  },
-    {   0x17, "-- RESERVED 0x17"  },
-    {   0x18, "-- RESERVED 0x18"  },
-    {   0x19, "-- RESERVED 0x19"  },
-    {   0x1A, "-- RESERVED 0x1A"  },
-    {   0x1B, "-- RESERVED 0x1B"  },
-    {   0x1C, "-- RESERVED 0x1C"  },
-    {   0x1D, "-- RESERVED 0x1D"  },
-    {   0x1E, "-- RESERVED 0x1E"  },
-    {   0x1F, "-- RESERVED 0x1F"  }
-//    {   0x20, "Overload"          }
+const struct hemp_type_s hemp_type_reserved = {
+    HEMP_RESERVED_ID, "Reserved",
+};
+
+const struct hemp_type_s hemp_type_unused = {
+    HEMP_UNUSED_ID, "Unused",
+};
+
+
+/*--------------------------------------------------------------------------
+ * WARNING: the order of entries in this vtable is critical and must 
+ * correspond to the HEMP_XXXX_ID values defined in value.h.
+ *
+ * Types 0x04 to 0x0F are reserved for future hemp use.
+ * Types 0x11 to 0x1F are available for user-defined types (e.g. alien values)
+ *--------------------------------------------------------------------------*/
+
+const struct hemp_type_s *hemp_global_types[32] = {
+    &hemp_type_number,      /* 0x00 == 00 */
+    &hemp_type_integer,     /* 0x01 == 01 */
+    &hemp_type_reserved,    /* 0x02 == 02 */        /* pointer: TODO */
+    &hemp_type_string,      /* 0x03 == 03 */
+    &hemp_type_text,        /* 0x04 == 04 */
+    &hemp_type_reserved,    /* 0x05 == 05 */
+    &hemp_type_reserved,    /* 0x06 == 06 */
+    &hemp_type_reserved,    /* 0x07 == 07 */
+    &hemp_type_reserved,    /* 0x08 == 08 */
+    &hemp_type_reserved,    /* 0x09 == 09 */
+    &hemp_type_reserved,    /* 0x0A == 10 */
+    &hemp_type_reserved,    /* 0x0B == 11 */
+    &hemp_type_reserved,    /* 0x0C == 12 */
+    &hemp_type_reserved,    /* 0x0D == 13 */
+    &hemp_type_reserved,    /* 0x0E == 14 */
+    &hemp_type_reserved,    /* 0x0F == 15 */
+    
+    &hemp_type_identity,    /* 0x10 == 16 */
+    &hemp_type_unused,      /* 0x11 == 17 */    /* available for user defined types */
+    &hemp_type_unused,      /* 0x12 == 18 */
+    &hemp_type_unused,      /* 0x13 == 19 */
+    &hemp_type_unused,      /* 0x14 == 20 */
+    &hemp_type_unused,      /* 0x15 == 21 */
+    &hemp_type_unused,      /* 0x16 == 22 */
+    &hemp_type_unused,      /* 0x17 == 23 */
+    &hemp_type_unused,      /* 0x18 == 24 */
+    &hemp_type_unused,      /* 0x19 == 25 */
+    &hemp_type_unused,      /* 0x1A == 26 */
+    &hemp_type_unused,      /* 0x1B == 27 */
+    &hemp_type_unused,      /* 0x1C == 28 */
+    &hemp_type_unused,      /* 0x1D == 29 */
+    &hemp_type_unused,      /* 0x1E == 30 */
+    &hemp_type_unused,      /* 0x1F == 31 */
 };
 
 const hemp_value_t  HempMissing = HEMP_IDENT_MAKE(HEMP_IDENT_MISSING);
@@ -99,7 +97,7 @@ hemp_ptr_val(hemp_mem_p p) {
 HEMP_INLINE hemp_value_t
 hemp_str_val(hemp_cstr_p s) {
     hemp_value_t v;
-    v.bits = HEMP_POINTER_TAG | ((hemp_u64_t) s & HEMP_POINTER_MASK);
+    v.bits = HEMP_STRING_TAG | ((hemp_u64_t) s & HEMP_POINTER_MASK);
     return v;
 }
 
@@ -174,7 +172,8 @@ hemp_val_bool(hemp_value_t v) {
 
 
 /*--------------------------------------------------------------------------
- * generic conversion functions
+ * Generic purpose conversion, literal and no-op functions, most of which are 
+ * syntactic sugar so that our type vtables are more self-documenting.
  *--------------------------------------------------------------------------*/
 
 HEMP_VALUE_FUNC(hemp_value_no_op) {
@@ -182,275 +181,30 @@ HEMP_VALUE_FUNC(hemp_value_no_op) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_defined) {
+HEMP_VALUE_FUNC(hemp_value_self) {
+    return value;
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_true) {
     return HempTrue;
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_undefined) {
+HEMP_VALUE_FUNC(hemp_value_false) {
     return HempFalse;
 }
 
 
-/*--------------------------------------------------------------------------
- * number -> xxx conversion
- *--------------------------------------------------------------------------*/
-
-HEMP_VTEXT_FUNC(hemp_value_number_text) {
-    static hemp_char_t buffer[HEMP_BUFFER_SIZE];
-    hemp_text_p text;
-
-    snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, hemp_val_num(value));
-    hemp_prepare_output(output, text, strlen(buffer));
-    hemp_text_append_cstr(text, buffer);
-
-    return output;
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_number_integer) {
-    return hemp_int_val((hemp_int_t) hemp_val_num(value));
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_number_boolean) {
-    /* TODO: decide if this is the right thing to do */
-    return hemp_val_num(value) == 0.0
-        ? HempFalse
-        : HempTrue;
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_number_compare) {
-    hemp_num_t cmp = hemp_val_num(value);
-    return  cmp < 0 ? HempBefore
-        :   cmp > 0 ? HempAfter
-        :             HempEqual; 
-}
-
-
-/*--------------------------------------------------------------------------
- * integer -> xxx conversion
- *--------------------------------------------------------------------------*/
-
-HEMP_VTEXT_FUNC(hemp_value_integer_text) {
-    static hemp_char_t buffer[HEMP_BUFFER_SIZE];
-    hemp_text_p text;
-
-    snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_INT, hemp_val_int(value));
-    hemp_prepare_output(output, text, strlen(buffer));
-    hemp_text_append_cstr(text, buffer);
-
-    return output;
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_integer_number) {
-    return hemp_num_val((hemp_num_t) hemp_val_int(value));
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_integer_boolean) {
-    return hemp_val_int(value) == 0
-        ? HempFalse
-        : HempTrue;
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_integer_compare) {
-    hemp_num_t cmp = hemp_val_int(value);
-    return  cmp < 0 ? HempBefore
-        :   cmp > 0 ? HempAfter
-        :             HempEqual; 
-}
-
-
-/*--------------------------------------------------------------------------
- * text -> xxx conversion
- *--------------------------------------------------------------------------*/
-
-HEMP_VALUE_FUNC(hemp_value_text_number) {
-    hemp_text_p text = hemp_val_text(value);
-    hemp_cstr_p end;
-    hemp_num_t  nval;
-    
-    if (! text->length) {
-        HEMP_CONVERT_ERROR(
-            context, 
-            HEMP_STR_NO_TEXT,
-            HEMP_STR_NUMBER,
-            HEMP_STR_BLANK
-        );
-    }
-
-    errno = 0;
-    nval  = strtod(text->string, &end);
-    
-    if (*end || (errno == EINVAL)) {
-        HEMP_CONVERT_ERROR(
-            context, 
-            HEMP_STR_TEXT, 
-            HEMP_STR_NUMBER,
-            text->string
-        );
-    }
-    else if (errno == ERANGE) {
-        HEMP_OVERFLOW_ERROR(
-            context, 
-            text->string
-        );
-    }
-    else {
-        return hemp_num_val(nval);
-    }
-
-    return hemp_num_val(0);
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_text_integer) {
-    hemp_value_t nval = hemp_value_text_number(value, context);
-    return hemp_int_val((hemp_int_t) hemp_val_num(nval));
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_text_boolean) {
-    /* hmmm... must be careful here... I think the best approach is to say 
-     * that any non-zero length string is true, but unlike Perl, we won't 
-     * perform any implicit text->number conversion.  The end result is that 
-     * things like "0" and "false" (both strings) are true values, while 0 
-     * (integer zero), 0.0 (float zero), "" (empty string) and HempFalse 
-     * (explicit false) are all false.
-     */
-    return hemp_val_text(value)->length
-        ? HempTrue
-        : HempFalse;
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_text_compare) {
-    hemp_todo("THROW ERROR: text cannot convert to comparison");
-    return HempNothing;
-}
-
-
-
-/*--------------------------------------------------------------------------
- * identity -> xxx conversions
- *--------------------------------------------------------------------------*/
-
-HEMP_DO_INLINE hemp_cstr_p
-hemp_identity_name(
-    hemp_value_t value
-) {
-    switch (HEMP_IDENT_ID(value)) {
-        case 0:                     return HEMP_STR_INFINITY;
-        case HEMP_IDENT_MISSING:    return HEMP_STR_MISSING;
-        case HEMP_IDENT_NOTHING:    return HEMP_STR_NOTHING;
-        case HEMP_IDENT_FALSE:      return HEMP_STR_FALSE;
-        case HEMP_IDENT_TRUE:       return HEMP_STR_TRUE;
-        case HEMP_IDENT_BEFORE:     return HEMP_STR_BEFORE;
-        case HEMP_IDENT_AFTER:      return HEMP_STR_AFTER;
-        case HEMP_IDENT_EQUAL:      return HEMP_STR_EQUAL;
-        default:                    return HEMP_STR_UNKNOWN;
-    }
-}
-
-
-
-HEMP_VTEXT_FUNC(hemp_value_identity_text) {
-    hemp_cstr_p name = hemp_identity_name(value);
-    hemp_text_p text;
-    hemp_prepare_output(output, text, strlen(name));
-    hemp_text_append_cstr(text, name);
-    return output;
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_identity_number) {
-    /* might want to auto-convert true(1), false(0), before(-1), equal(0)
-     * and after(1)
-     */
+HEMP_VALUE_FUNC(hemp_value_cannot_compare) {
     HEMP_CONVERT_ERROR(
         context, 
-        HEMP_STR_IDENTITY,
-        HEMP_STR_NUMBER, 
-        hemp_identity_name(value)
+        hemp_type_name(value),
+        HEMP_STR_COMPARE,
+        HEMP_STR_BLANK
     );
 }
 
-
-HEMP_VALUE_FUNC(hemp_value_identity_integer) {
-    /* might want to auto-convert true(1), false(0), before(-1), equal(0)
-     * and after(1)
-     */
-    HEMP_CONVERT_ERROR(
-        context, 
-        HEMP_STR_IDENTITY,
-        HEMP_STR_INTEGER,
-        hemp_identity_name(value)
-    );
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_identity_defined) {
-    return hemp_is_defined(value) 
-        ? HempTrue 
-        : HempFalse;
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_identity_boolean) {
-    if (hemp_is_boolean(value)) 
-        return hemp_is_true(value) 
-            ? HempTrue 
-            : HempFalse;
-    else
-        HEMP_CONVERT_ERROR(
-            context, 
-            HEMP_STR_IDENTITY,
-            HEMP_STR_BOOLEAN, 
-            hemp_identity_name(value)
-        );
-}
-
-
-HEMP_VALUE_FUNC(hemp_value_identity_compare) {
-    if (hemp_is_compare(value)) 
-        return value;
-    else 
-        HEMP_CONVERT_ERROR(
-            context, 
-            HEMP_STR_IDENTITY,
-            HEMP_STR_COMPARE, 
-            hemp_identity_name(value)
-        );
-}
-
-
-/*--------------------------------------------------------------------------
- * boolean -> xxx conversion
- *--------------------------------------------------------------------------*/
-
-/* Not sure about this: is undef boolean false? */
-/* I'm not sure that comparisons should automatically convert to numbers... */
-
-//HEMP_VALUE_FUNC(hemp_value_compare_number) {
-//    return hemp_num_val(
-//        hemp_is_before(value) ? -1 :
-//        hemp_is_after(value)  ?  1 :
-//                                 0
-//    );
-//}
-//
-//
-//HEMP_VALUE_FUNC(hemp_value_compare_integer) {
-//    return hemp_int_val(
-//        hemp_is_before(value) ? -1 :
-//        hemp_is_after(value)  ?  1 :
-//                                 0
-//    );
-//}
 
 
 

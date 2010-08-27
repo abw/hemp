@@ -19,7 +19,7 @@ hemp_cstr_extract(
         hemp_mem_fail("string extract");
 
     strncpy(str, from, size);
-    str[size] = '\0';
+    *(str + size) = HEMP_NUL;
 
     return str;
 }

@@ -142,19 +142,50 @@ hemp_hash_resize(
 }
 
 
+HEMP_INLINE hemp_bool_t 
+hemp_hash_key_match(
+    hemp_cstr_p key1,
+    hemp_cstr_p key2,
+    hemp_size_t length
+) {
+    /* We allow hash keys to be looked up using an unterminated C string
+     * (with length specified explicitly) so that we can use an element's
+     * source as the lookup key (e.g. in the template "Hello [% name %]"
+     * we can pass a pointer to the 9th character and length 4 to lookup
+     * the value for "name" without having to allocate and prepare a short
+     * C string to hold the hash key for lookup.  One side effect of this 
+     * is that we can't use the normal strcmp() or strncmp() functions, so
+     * we roll a simple one of our own which matches all of the hash key 
+     * against the first 'length' characters of the search key.  In other 
+     * words, the search key may be longer, but the slot key can't be
+     */
+    while (*key1 && *key1 == *key2 && length--) {
+        key1++; 
+        key2++;
+    }
+
+//  hemp_debug("\nlength: %d  k1: [%c]  k2: [%c]\n", length, *key1, *key2);
+
+    return (length || *key1)
+        ? HEMP_FALSE
+        : HEMP_TRUE;
+}
+
+
 hemp_slot_p
 hemp_hash_store(
     hemp_hash_p     hash,
     hemp_cstr_p     name,
     hemp_value_t    value
 ) {
+    hemp_size_t length = strlen(name);
+    hemp_size_t index  = hemp_hash_function(name, length);
+    hemp_size_t column;
     hemp_slot_p slot;
-    hemp_size_t index, column;
 
     if (hash->size / hash->width > HEMP_HASH_DENSITY)
         hemp_hash_resize(hash);
 
-    index  = hemp_hash_function(name);
     column = index % hash->width;
     slot   = hash->slots[column];
 
@@ -162,7 +193,9 @@ hemp_hash_store(
      * first, and then the more time consuming key string comparison only if 
      * the hash values are identical
      */
-    while (slot && (index != slot->index) && strcmp(name, slot->name))
+    while (slot 
+      &&  (index != slot->index) 
+      &&  ! hemp_hash_key_match(slot->name, name, length) )
         slot = slot->next;
 
     if (slot) {
@@ -180,30 +213,54 @@ hemp_hash_store(
 }
 
 
-hemp_value_t
-hemp_hash_fetch(
+HEMP_INLINE hemp_value_t
+hemp_hash_fetch_keylen(
     hemp_hash_p hash, 
-    hemp_cstr_p name
+    hemp_cstr_p name,
+    hemp_size_t length
 ) {
-    hemp_slot_p slot = NULL;
-    hemp_size_t index, column;
-    index = hemp_hash_function(name);
+    hemp_debug_call("hemp_hash_fetch_keylen(%p, %s, %d)\n", hash, name, length);
+    hemp_slot_p slot  = NULL;
+    hemp_size_t index = hemp_hash_function(name, length);
+    hemp_size_t column;
+    
+//  hemp_debug("looking up slot [%s][%d] => %ud\n", name, length, index);
     
     while (hash && ! slot) {
         column = index % hash->width;
         slot   = hash->slots[column];
 
         /* look for an entry in this hash table */
-        while (slot && (index != slot->index) && strcmp(name, slot->name))
+        while (slot 
+          &&  (index != slot->index) 
+          &&  ! hemp_hash_key_match(slot->name, name, length) )
             slot = slot->next;
 
         /* or try the parent table, if there is one */
         hash = hash->parent;
     }
-    
+
+//    if (slot) {
+//        hemp_debug("found slot at %p with key: %s\n", slot, slot->name);
+//    }
+//    else {
+//        hemp_debug("no slot\n");
+//    }
+
     return slot
         ? slot->value 
         : HempMissing;
+}
+
+
+HEMP_INLINE hemp_value_t
+hemp_hash_fetch(
+    hemp_hash_p hash, 
+    hemp_cstr_p name
+) {
+    return hemp_hash_fetch_keylen(
+        hash, name, strlen(name)
+    );
 }
 
 
@@ -259,14 +316,21 @@ hemp_hash_fetch_string(
 ) {
     hemp_value_t value = hemp_hash_fetch(hash, name);
 
-    /* We can't actually tell the difference between a void memory pointer
-     * and a char * string.  Perhaps we should set aside a tag type for it?
-     * For now, we assume that if the user is asking for a string then they
-     * know that string pointer == memory pointer in C, and only varies on
-     * the return type cast
-     */
-    return hemp_is_pointer(value)
+    return hemp_is_string(value)
         ? hemp_val_str(value)
+        : NULL;
+}
+
+
+hemp_text_p
+hemp_hash_fetch_text(
+    hemp_hash_p hash, 
+    hemp_cstr_p name
+) {
+    hemp_value_t value = hemp_hash_fetch(hash, name);
+
+    return hemp_is_text(value)
+        ? hemp_val_text(value)
         : NULL;
 }
 
@@ -399,17 +463,17 @@ typedef  unsigned     char  u1;
     c=c-a;  c=c-b;  c=c^(b>>15);            \
 }
 
-hemp_size_t
+HEMP_INLINE hemp_size_t
 hemp_hash_function_jenkins32(
-    register hemp_cstr_p key
+    register hemp_cstr_p key,
+    register hemp_size_t length
 ) {
-    register u4 a,b,c;              /* the internal state */
-    hemp_size_t length, remain;     /* total length, remaining left to process */
+    register u4 a, b, c;
+    register hemp_size_t remain = length;
 
    /* Set up the internal state */
-    length = remain = strlen(key);
-    a = b = 0x9e3779b9;             /* the golden ratio; an arbitrary value */
-    c = hemp_hash_jenkins32_seed;   /* variable initialization of internal state */
+    a = b = 0x9e3779b9;
+    c = hemp_hash_jenkins32_seed;
 
     /* handle all but the last 11 bytes */
     while (remain >= 12) {
@@ -417,7 +481,7 @@ hemp_hash_function_jenkins32(
         b = b+(key[4]+((u4)key[5]<<8)+((u4)key[ 6]<<16)+((u4)key[ 7]<<24));
         c = c+(key[8]+((u4)key[9]<<8)+((u4)key[10]<<16)+((u4)key[11]<<24));
         hemp_hash_jenkins32_mix(a,b,c);
-        key    = key + 12; 
+        key    = key    + 12; 
         remain = remain - 12;
     }
 

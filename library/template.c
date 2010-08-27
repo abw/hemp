@@ -99,16 +99,35 @@ hemp_template_tree(
 
 hemp_text_p
 hemp_template_render(
-    hemp_template_p tmpl
+    hemp_template_p tmpl,
+    hemp_context_p  context
 ) {
     hemp_debug_call("hemp_template_render(%p)\n", tmpl);
+    hemp_p hemp = tmpl->dialect->hemp;
+    hemp_bool_t my_context = HEMP_FALSE;
+    hemp_value_t v;
 
     hemp_element_p root = hemp_template_tree(tmpl);
+
+    if (! context) {
+        my_context = HEMP_TRUE;
+        context = hemp_context_init(tmpl->dialect->hemp);
+    }
 
     if (! root)
         hemp_fatal("template does not have a root element");
     
-    hemp_value_t v = root->type->text(root, NULL, HempNothing);
+//    hemp_debug("root type: %s\n", root->type->name);
+
+//    HEMP_TRY;
+        v = root->type->text(root, context, HempNothing);
+//    HEMP_CATCH_ALL;
+//       hemp_fatal("Error processing template: %s", hemp->error->message);
+//    HEMP_END;
+
+    if (my_context)
+        hemp_context_free(context);
+
     return hemp_val_text(v);
 }
 

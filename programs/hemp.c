@@ -113,7 +113,7 @@ int main(
             if (! template)
                 hemp_fatal("could not load template: %s", filename);
 
-            output = hemp_template_render(template);
+            output = hemp_template_render(template, NULL);
             if (! output)
                 hemp_fatal("could not render template output: %s", filename);
 
@@ -132,7 +132,7 @@ int main(
                 if (! template)
                     hemp_fatal("could not load template: %s", filename);
 
-                output = hemp_template_render(template);
+                output = hemp_template_render(template, NULL);
                 if (! output)
                     hemp_fatal("could not render template output: %s", filename);
 
@@ -422,7 +422,7 @@ hemp_cmd_expr(
         if (! hemplate)
             hemp_fatal("failed to create template... I think this should never happen, but need to check\n");
 
-        output = hemp_template_render(hemplate);
+        output = hemp_template_render(hemplate, NULL);
 
         if (output)
             puts(output->string);

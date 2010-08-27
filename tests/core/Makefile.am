@@ -1,4 +1,4 @@
-#check_PROGRAMS  =   context
+#check_PROGRAMS  =   hash grammar
 
 check_PROGRAMS  =   action      \
                     context     \

@@ -17,6 +17,7 @@ typedef enum {
     HEMP_ERROR_TOKEN,
     HEMP_ERROR_BADQUOTE,
     HEMP_ERROR_CONVERT,
+    HEMP_ERROR_UNDEF,
     HEMP_ERROR_OPTION,
     HEMP_ERROR_HELP,
     HEMP_ERROR_MAX
@@ -35,6 +36,7 @@ static hemp_cstr_p hemp_errmsg[] = {
     "Invalid token: %s",
     "Unterminated %s: %s",
     "Cannot convert %s to %s: %s",
+    "%s value",
     "Invalid option: %s",
     NULL
 };

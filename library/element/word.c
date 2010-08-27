@@ -1,4 +1,5 @@
 #include <hemp/element.h>
+#include <hemp/cstr.h>
 
 
 static struct hemp_symbol_s
@@ -27,14 +28,14 @@ hemp_symbol_p HempSymbolWord = &hemp_symbol_word;
 HEMP_SYMBOL_FUNC(hemp_element_word_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     /* these aren't right, but they'll do for now, for testing purposes */
-    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_STATIC;
-    symbol->prefix   = &hemp_element_literal_prefix;
+    symbol->flags  = HEMP_BE_SOURCE | HEMP_BE_STATIC;
+    symbol->prefix = &hemp_element_literal_prefix;
     return symbol;
 }
 
 
 HEMP_PREFIX_FUNC(hemp_element_word_prefix) {
-    hemp_todo(
+    hemp_debug_call(
         "hemp_element_word_prefix() precedence is %d, parg: %d\n", 
         (*elemptr)->type->lprec, precedence
     );
@@ -47,14 +48,15 @@ HEMP_PREFIX_FUNC(hemp_element_word_prefix) {
         return hemp_parse_postfix(elemptr, scope, precedence, force, element);
     }
 
-    hemp_todo("hemp_element_word_prefix()");
     return element;
 }
 
 
 HEMP_EVAL_FUNC(hemp_element_word_value) {
-    hemp_todo("hemp_element_word_value()");
-    return HempNothing;
+    hemp_debug_call("hemp_element_word_value()\n");
+    return hemp_hash_fetch_keylen(
+        context->vars, element->token, element->length
+    );
 }
 
 

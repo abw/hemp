@@ -25,6 +25,7 @@
 #include <hemp/memory.h>            /* memory managment                     */
 #include <hemp/cstr.h>              /* functions for handling C strings     */
 #include <hemp/utils.h>             /* misc utils                           */
+#include <hemp/macros.h>            /* macros sprinkling syntactic sugar    */
 
 //#include <hemp/value.h>             /* data values                          */
 

@@ -16,7 +16,7 @@ void test_identity_conversion();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(249);
+    plan(250);
 
     test_values();
     test_identity_values();
@@ -88,7 +88,7 @@ void test_integer(hemp_int_t expect) {
 void test_values() {
     pass("testing values");
     hemp_value_t value;
-    hemp_vtype_p vtable;
+    hemp_type_p vtable;
 
     printf("HEMP_NAN:\n");
     hemp_dump_u64(HEMP_NAN);
@@ -112,7 +112,7 @@ void test_values() {
     printf("string value: %s\n", es);
     value = hemp_str_val(es);
     hemp_dump_value(value);
-    type_check(value, HEMP_POINTER_ID, "String");
+    type_check(value, HEMP_STRING_ID, "String");
     ok( ! hemp_is_undef(value),         "string is not undef" );
     ok( ! hemp_is_missing(value),       "string is not missing" );
     ok( ! hemp_is_nothing(value),       "string is not nothing" );
@@ -123,7 +123,8 @@ void test_values() {
 
     hemp_cstr_p s = hemp_val_str(value);
     ok( hemp_is_tagged(value), "string is a tagged value" );
-    ok( hemp_is_pointer(value), "string is a string value" );
+    ok( hemp_is_string(value), "string is a string value" );
+    ok( ! hemp_is_pointer(value), "string is not a pointer (well, not a raw pointer)" );
     is( s, es, "got str value back" );
 
     /* boolean */
@@ -598,14 +599,9 @@ void test_identity_conversion() {
     /* identity -> text is always allowed */
     hemp_value_t text;
 
-    text = hemp_value_identity_text(HempMissing, context, HempNothing);
-    ok( hemp_is_text(text), "missing converts to text" );
-    is( hemp_val_text(text)->string, "Missing", "Missing text" );
-    hemp_text_free( hemp_val_text(text) );
-
-    text = hemp_value_identity_text(HempNothing, context, HempNothing);
-    ok( hemp_is_text(text), "nothing converts to text" );
-    is( hemp_val_text(text)->string, "Nothing", "Nothing text" );
+    text = hemp_value_identity_text(HempFalse, context, HempNothing);
+    ok( hemp_is_text(text), "false converts to text" );
+    is( hemp_val_text(text)->string, "False", "False text" );
     hemp_text_free( hemp_val_text(text) );
 
     text = hemp_value_identity_text(HempTrue, context, HempNothing);
@@ -615,8 +611,14 @@ void test_identity_conversion() {
 
     text = hemp_value_identity_text(HempBefore, context, HempNothing);
     ok( hemp_is_text(text), "before converts to text" );
-    is( hemp_val_text(text)->string, "Before", "True text" );
+    is( hemp_val_text(text)->string, "Before", "Before text" );
     hemp_text_free( hemp_val_text(text) );
+
+    text = hemp_value_identity_text(HempAfter, context, HempNothing);
+    ok( hemp_is_text(text), "after converts to text" );
+    is( hemp_val_text(text)->string, "After", "After text" );
+    hemp_text_free( hemp_val_text(text) );
+
 
     // TODO
 

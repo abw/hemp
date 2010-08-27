@@ -20,10 +20,10 @@ hemp_slab_init(
     slab->next  = NULL;
     slab->data  = ((char *) slab) + sizeof(struct hemp_slab_s);
     
-    hemp_debug_mem(
-        "allocated slab (%d bytes) at %p and %d bytes of data at %p\n",
-        sizeof(struct hemp_slab_s), slab, size, slab->data
-    );
+//    hemp_debug_mem(
+//        "allocated slab (%d bytes) at %p and %d bytes of data at %p\n",
+//        sizeof(struct hemp_slab_s), slab, size, slab->data
+//    );
 
     return slab;
 }

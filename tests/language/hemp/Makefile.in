@@ -34,7 +34,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = boolops$(EXEEXT) comments$(EXEEXT) numbers$(EXEEXT) \
-	numops$(EXEEXT) quotes$(EXEEXT) textops$(EXEEXT)
+	numops$(EXEEXT) quotes$(EXEEXT) textops$(EXEEXT) \
+	words$(EXEEXT)
 subdir = tests/language/hemp
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -76,6 +77,10 @@ textops_SOURCES = textops.c
 textops_OBJECTS = textops.$(OBJEXT)
 textops_LDADD = $(LDADD)
 textops_DEPENDENCIES = ../../../library/libhemp.la
+words_SOURCES = words.c
+words_OBJECTS = words.$(OBJEXT)
+words_LDADD = $(LDADD)
+words_DEPENDENCIES = ../../../library/libhemp.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/hemp
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -89,9 +94,10 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = boolops.c comments.c numbers.c numops.c quotes.c textops.c
+SOURCES = boolops.c comments.c numbers.c numops.c quotes.c textops.c \
+	words.c
 DIST_SOURCES = boolops.c comments.c numbers.c numops.c quotes.c \
-	textops.c
+	textops.c words.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -240,7 +246,6 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-#                    words
 TESTS = $(check_PROGRAMS)
 LDADD = ../../../library/libhemp.la
 all: all-am
@@ -304,6 +309,9 @@ quotes$(EXEEXT): $(quotes_OBJECTS) $(quotes_DEPENDENCIES)
 textops$(EXEEXT): $(textops_OBJECTS) $(textops_DEPENDENCIES) 
 	@rm -f textops$(EXEEXT)
 	$(LINK) $(textops_OBJECTS) $(textops_LDADD) $(LIBS)
+words$(EXEEXT): $(words_OBJECTS) $(words_DEPENDENCIES) 
+	@rm -f words$(EXEEXT)
+	$(LINK) $(words_OBJECTS) $(words_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -317,6 +325,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numops.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/quotes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textops.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/words.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

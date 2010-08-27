@@ -51,7 +51,8 @@ hemp_bool_t
 
 hemp_text_p
     hemp_template_render(
-        hemp_template_p tmpl
+        hemp_template_p tmpl,
+        hemp_context_p  context
     );
 
 

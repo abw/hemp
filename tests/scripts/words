@@ -1,9 +1,27 @@
 -- test one word
 [% name %]
 -- expect
-World
+Badger
 
 -- test text and word
 Hello [% name %]!
 -- expect
-Hello World!
+Hello Badger!
+
+-- test integer
+The answer is [% answer %]
+-- expect
+The answer is 42
+
+-- test number
+e is [% e %]
+pi is [% pi %]
+-- expect
+e is 2.718
+pi is 3.14159
+
+-- test message
+The message is: [% message %]
+-- expect
+The message is: Hello World!
+

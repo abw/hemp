@@ -62,6 +62,14 @@ An incomplete list of things TODO, in no particular order.
  
 -- HOT STACK --
 
+* Modify NaN boxing to use 5 type bits... ultimately with the goal of 
+  providing a reserved bit pattern to indicate memory allocation status
+  (e.g. shared, read-only, mortal, must-be-freed, etc).  Work in progress.
+
+* Change elements to be values so that we can have a single value() and 
+  text() interface instead of the similar (but not quite identical) 
+  hemp_eval_f and hemp_value_f typedefs.
+
 * implement vtables for value types, possibly via global 
 
 * boolean vs truth

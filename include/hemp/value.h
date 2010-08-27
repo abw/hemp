@@ -2,10 +2,9 @@
 #define HEMP_VALUE_H
 
 #include <hemp/core.h>
-//#include <hemp/text.h>
-//#include <hemp/hash.h>
-//#include <hemp/context.h>
 #include <hemp/macros.h>
+#include <hemp/type.h>
+#include <hemp/text.h>
 
 
 HEMP_DO_INLINE hemp_cstr_p hemp_identity_name(hemp_value_t value);
@@ -31,17 +30,6 @@ union hemp_value_u {
     hemp_tagged_t   tagged;
 };
 
-struct hemp_vtype_s {
-    hemp_u8_t       id;
-    hemp_cstr_p     name;
-    hemp_vtext_f    text;
-    hemp_value_f    number;
-    hemp_value_f    integer;
-    hemp_value_f    defined;
-    hemp_value_f    boolean;
-    hemp_value_f    compare;
-};
-
 
 /*--------------------------------------------------------------------------
  * global identity (singleton) values
@@ -64,7 +52,12 @@ extern const hemp_value_t HempAfter;
  * HempBefore, HempEqual and HempAfter.
  */
  
-extern const struct hemp_vtype_s hemp_global_vtypes[32];
+extern const struct hemp_type_s  hemp_type_number;
+extern const struct hemp_type_s  hemp_type_integer;
+extern const struct hemp_type_s  hemp_type_string;
+extern const struct hemp_type_s  hemp_type_text;
+extern const struct hemp_type_s  hemp_type_identity;
+extern const struct hemp_type_s *hemp_global_types[32];
 
 
 
@@ -165,10 +158,15 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 /* tag types */
 #define HEMP_NUMBER_ID          0x00        /* 64 bit double                */
 #define HEMP_INTEGER_ID         0x01        /* 32 bit integer               */
-#define HEMP_POINTER_ID         0x02        /* generic memory pointer       */
-#define HEMP_STRING_ID          0x03        /* generic C string             */
+#define HEMP_POINTER_ID         0x02        /* memory pointer/string        */
+#define HEMP_STRING_ID          0x03        /* memory pointer/string        */
 #define HEMP_TEXT_ID            0x04        /* hemp_text_p pointer          */
 #define HEMP_IDENTITY_ID        0x10        /* identity values (NaN + n)    */
+
+/* out-of-band values used to mark unused/reserved type slots */
+#define HEMP_RESERVED_ID        0x80        /* reserved for future hemp use */
+#define HEMP_UNUSED_ID          0xF0        /* available for custom types   */
+
 
 /* bits to twiddle to encode meaning into identity values */
 #define HEMP_FINITE_BIT         0x01        /* not infinity                 */
@@ -246,6 +244,7 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 /* type tags */
 #define HEMP_INTEGER_TAG        HEMP_TAG_MAKE(HEMP_INTEGER_ID)
 #define HEMP_POINTER_TAG        HEMP_TAG_MAKE(HEMP_POINTER_ID)
+#define HEMP_STRING_TAG         HEMP_TAG_MAKE(HEMP_STRING_ID)
 #define HEMP_TEXT_TAG           HEMP_TAG_MAKE(HEMP_TEXT_ID)
 #define HEMP_IDENTITY_TAG       HEMP_TAG_MAKE(HEMP_IDENTITY_ID)
 
@@ -257,6 +256,7 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 #define hemp_is_numeric(v)      HEMP_IDENT_MAX(v, HEMP_INTEGER_ID)
 #define hemp_is_integer(v)      HEMP_TYPE_IS(v, HEMP_INTEGER_ID)
 #define hemp_is_pointer(v)      HEMP_TYPE_IS(v, HEMP_POINTER_ID)
+#define hemp_is_string(v)       HEMP_TYPE_IS(v, HEMP_STRING_ID)
 #define hemp_is_text(v)         HEMP_TYPE_IS(v, HEMP_TEXT_ID)
 #define hemp_is_identity(v)     HEMP_TYPE_IS(v, HEMP_IDENTITY_ID)
 #define hemp_is_missing(v)      HEMP_IDENT_NOT(v, HEMP_FOUND_BIT)
@@ -276,12 +276,12 @@ extern const struct hemp_vtype_s hemp_global_vtypes[32];
 
 
 /* a global array of vtables for each of the core types */
-#define hemp_vtable(v)          (hemp_global_vtypes[HEMP_TYPE_ID(v)])
-#define hemp_vmethod(v,n)       (hemp_vtable(v).n)
+#define hemp_vtable(v)          (hemp_global_types[HEMP_TYPE_ID(v)])
+#define hemp_vmethod(v,n)       (hemp_vtable(v)->n)
 #define hemp_vcall(v,c,n)       (hemp_vmethod(v,n)(v,c))
 #define hemp_vtext(v,c,o)       (hemp_vmethod(v,text)(v,c,o))
 //#define hemp_ident_name(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
-#define hemp_type_name(v)       (hemp_vtable(v).name)
+#define hemp_type_name(v)       (hemp_vtable(v)->name)
 //#define hemp_type_class(v)      (hemp_vtable(v).name)
 
 #define hemp_to_number(v,c)     (hemp_is_number(v)  ? v : hemp_vcall(v,c,number))
@@ -309,100 +309,26 @@ typedef void            (* hemp_wipe_vfn)(hemp_value_t);
  * inline functions to encode native values as tagged values
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_value_t hemp_num_val(hemp_num_t n);
-HEMP_INLINE hemp_value_t hemp_int_val(hemp_int_t i);
-HEMP_INLINE hemp_value_t hemp_ptr_val(hemp_mem_p p);
-HEMP_INLINE hemp_value_t hemp_str_val(hemp_cstr_p s);
-HEMP_INLINE hemp_value_t hemp_text_val(hemp_text_p t);
-HEMP_INLINE hemp_value_t hemp_ident_val(hemp_u8_t i);
-HEMP_INLINE hemp_value_t hemp_bool_val(hemp_bool_t b);
+extern HEMP_INLINE hemp_value_t hemp_num_val(hemp_num_t n);
+extern HEMP_INLINE hemp_value_t hemp_int_val(hemp_int_t i);
+extern HEMP_INLINE hemp_value_t hemp_ptr_val(hemp_mem_p p);
+extern HEMP_INLINE hemp_value_t hemp_str_val(hemp_cstr_p s);
+extern HEMP_INLINE hemp_value_t hemp_text_val(hemp_text_p t);
+extern HEMP_INLINE hemp_value_t hemp_ident_val(hemp_u8_t i);
+extern HEMP_INLINE hemp_value_t hemp_bool_val(hemp_bool_t b);
 
 
 /*--------------------------------------------------------------------------
  * inline functions to decode tagged values to native values
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_num_t  hemp_val_num(hemp_value_t v);
-HEMP_INLINE hemp_int_t  hemp_val_int(hemp_value_t v);
-HEMP_INLINE hemp_mem_p  hemp_val_ptr(hemp_value_t v);
-HEMP_INLINE hemp_cstr_p hemp_val_str(hemp_value_t v);
-HEMP_INLINE hemp_text_p hemp_val_text(hemp_value_t v);
-HEMP_INLINE hemp_bool_t hemp_val_bool(hemp_value_t v);
+extern HEMP_INLINE hemp_num_t  hemp_val_num(hemp_value_t v);
+extern HEMP_INLINE hemp_int_t  hemp_val_int(hemp_value_t v);
+extern HEMP_INLINE hemp_mem_p  hemp_val_ptr(hemp_value_t v);
+extern HEMP_INLINE hemp_cstr_p hemp_val_str(hemp_value_t v);
+extern HEMP_INLINE hemp_text_p hemp_val_text(hemp_value_t v);
+extern HEMP_INLINE hemp_bool_t hemp_val_bool(hemp_value_t v);
 
-
-/*--------------------------------------------------------------------------
- * A hemp_variable represents a typed data value being used in some expression.
- * It contains a reference to its value type, the parent value (i.e. container)
- * from where it originated, the local (variable) name for the value, and a 
- * hemp_data union containing the raw data value.  For example, foo.bar would
- * create a 'foo' value originated from the root variables stash, and a 'bar'
- * value with the parent pointer set to the 'foo' value.  The type of 'foo'
- * would presumably be a hash or object, and bar could be any value type.
- *
- * NOTE: this is being changed and/or phased out
- * 
- *--------------------------------------------------------------------------*/
-
-
-struct hemp_variable_s {
-    hemp_vtype_p    vtype;
-    hemp_cstr_p     name;             // TODO: symbol?  dup?  element?  text?
-    hemp_value_t    value;
-    hemp_variable_p parent;
-//  TODO: flags?, next?
-};
-
-
-/* A hemp_vtype defines a lookup table (aka vtable) of functions (aka methods)
- * which perform the basic data operations on values of different types.
- * e.g. the 'dot' method for accessing a dotted part of a value, e.g. foo.bar.
- * It also contains a value type name and a reference to the hemp_types 
- * collection of which it is a part.  e.g. the "hemp" hemp_vtypes collection
- * contains hemp_vtype definitions for values using the builtin hemp_text,
- * hemp_list, hemp_hash, etc., data structures (aka objects).  A some point 
- * in the future a "perl" hemp_vtypes collection can provide hemp_vtype 
- * definitions for accessing Perl scalars, hash array and arrays.
- */
-
-/*
-struct hemp_vtype_s {
-    hemp_cstr_p     name;
-    hemp_vtypes_p   vtypes;
-    hemp_init_vfn   init;
-    hemp_wipe_vfn   wipe;
-    hemp_text_vfn   text;
-    hemp_dot_vfn    dot; 
-    set
-    dot
-    text
-    value
-    pairs
-    dot_set   ??
-    apply     # function application
-    name fullname
-};
-*/
-
-
-/* The hemp_vtypes data structure defines a collection of hemp_vtype value
- * types.  It is essentially a factory for creating value instances of 
- * different types.  The builtin data types (text, list, hash, etc) have
- * hard-coded entries in the data structure that can be accessed directly 
- * for the sake of efficiency.  Any other custom value types can be defined
- * in the types hash table which offers unlimited extensibility at the cost
- * of slower lookup time.
- */
-
-struct hemp_vtypes_s {
-    hemp_cstr_p     name;
-    /* builtin value types */
-    /* TODO: make this an array of 16 vtables for core types */
-    hemp_vtype_p    text;
-    hemp_vtype_p    list;
-    hemp_vtype_p    hash;
-    /* hash table for additional types */
-    hemp_hash_p     types;
-};
 
 
 /*--------------------------------------------------------------------------
@@ -411,8 +337,10 @@ struct hemp_vtypes_s {
 
 /* generic value evalaution */
 HEMP_VALUE_FUNC(hemp_value_no_op);
-HEMP_VALUE_FUNC(hemp_value_defined);
-HEMP_VALUE_FUNC(hemp_value_undefined);
+HEMP_VALUE_FUNC(hemp_value_self);
+HEMP_VALUE_FUNC(hemp_value_true);
+HEMP_VALUE_FUNC(hemp_value_false);
+HEMP_VALUE_FUNC(hemp_value_cannot_compare);
 
 /* number -> xxx conversion */
 HEMP_VTEXT_FUNC(hemp_value_number_text);
@@ -426,11 +354,17 @@ HEMP_VALUE_FUNC(hemp_value_integer_number);
 HEMP_VALUE_FUNC(hemp_value_integer_boolean);
 HEMP_VALUE_FUNC(hemp_value_integer_compare);
 
+/* string -> xxx conversion */
+HEMP_VTEXT_FUNC(hemp_value_string_text);
+HEMP_VALUE_FUNC(hemp_value_string_number);
+HEMP_VALUE_FUNC(hemp_value_string_integer);
+HEMP_VALUE_FUNC(hemp_value_string_boolean);
+
 /* text -> xxx conversion */
+HEMP_VTEXT_FUNC(hemp_value_text_text);
 HEMP_VALUE_FUNC(hemp_value_text_number);
 HEMP_VALUE_FUNC(hemp_value_text_integer);
 HEMP_VALUE_FUNC(hemp_value_text_boolean);
-HEMP_VALUE_FUNC(hemp_value_text_compare);
 
 /* identity -> xxx conversions */
 HEMP_VTEXT_FUNC(hemp_value_identity_text);
@@ -446,18 +380,16 @@ void hemp_dump_64(hemp_u64_t value);
 void hemp_dump_32(hemp_u32_t value);
 void hemp_dump_value(hemp_value_t value);
 
-hemp_vtypes_p   hemp_vtypes_init();
-void            hemp_vtypes_free(hemp_vtypes_p);
-hemp_vtype_p    hemp_vtypes_new_type(hemp_vtypes_p, hemp_cstr_p);
 
-/*
-void            hemp_vtypes_free_vtype(hemp_hash_entry_p entry);
-hemp_vtype_p    hemp_vtypes_type(hemp_vtypes_p, hemp_cstr_p);
-hemp_vtype_p    hemp_vtype_init(hemp_vtypes_p, hemp_cstr_p);
-void            hemp_vtype_free();
-hemp_value_t    hemp_value_init(hemp_vtype_p, hemp_cstr_p, hemp_data_t, hemp_value_t);
-void            hemp_value_free(hemp_value_t); 
-*/
+//hemp_vtypes_p   hemp_vtypes_init();
+//void            hemp_vtypes_free(hemp_vtypes_p);
+//hemp_vtype_p    hemp_vtypes_new_type(hemp_vtypes_p, hemp_cstr_p);
+//void            hemp_vtypes_free_vtype(hemp_hash_entry_p entry);
+//hemp_vtype_p    hemp_vtypes_type(hemp_vtypes_p, hemp_cstr_p);
+//hemp_vtype_p    hemp_vtype_init(hemp_vtypes_p, hemp_cstr_p);
+//void            hemp_vtype_free();
+//hemp_value_t    hemp_value_init(hemp_vtype_p, hemp_cstr_p, hemp_data_t, hemp_value_t);
+//void            hemp_value_free(hemp_value_t); 
 
 
 #endif /* HEMP_VALUE_H */

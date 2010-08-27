@@ -129,25 +129,28 @@ void hemp_mem_trace_ok(void);
 
 hemp_uint_t
     hemp_test_expect_text(
-        hemp_cstr_p language,
-        hemp_cstr_p dialect,
-        hemp_cstr_p text,
-        hemp_cstr_p alias
+        hemp_cstr_p     language,
+        hemp_cstr_p     dialect,
+        hemp_cstr_p     text,
+        hemp_cstr_p     alias,
+        hemp_context_p  context
     );
 
 hemp_uint_t
     hemp_test_expect_file(
-        hemp_cstr_p language,
-        hemp_cstr_p dialect,
-        hemp_cstr_p file
+        hemp_cstr_p     language,
+        hemp_cstr_p     dialect,
+        hemp_cstr_p     file,
+        hemp_context_p  context
     );
 
 hemp_uint_t
     hemp_test_expect_script(
-        hemp_cstr_p language,
-        hemp_cstr_p dialect,
-        hemp_cstr_p testdir,
-        hemp_cstr_p name
+        hemp_cstr_p     language,
+        hemp_cstr_p     dialect,
+        hemp_cstr_p     testdir,
+        hemp_cstr_p     name,
+        hemp_context_p  context
     );
 
 

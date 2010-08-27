@@ -26,6 +26,12 @@ typedef struct hemp_cstr_split_s * hemp_cstr_split_p;
     _clone;                                 \
 })
 
+hemp_cstr_p
+    hemp_cstr_extract(
+        hemp_cstr_p from,
+        hemp_cstr_p to
+    );
+
 hemp_list_p
     hemp_cstr_split(
         hemp_cstr_p source,

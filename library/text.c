@@ -144,12 +144,10 @@ hemp_text_append_cstrn(
     hemp_size_t length
 ) {
     hemp_size_t capacity = text->length + length;
-
     text = hemp_text_capacity(text, capacity);
     strncpy(text->string + text->length, append, length);
     text->string[capacity] = '\0';
     text->length = capacity;
-
     return text;
 }
 

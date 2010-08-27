@@ -79,8 +79,6 @@ typedef struct hemp_tagset_s    * hemp_tagset_p;
 typedef struct hemp_template_s  * hemp_template_p;
 typedef struct hemp_text_s      * hemp_text_p;
 typedef struct hemp_type_s      * hemp_type_p;
-typedef struct hemp_vtype_s     * hemp_vtype_p;
-typedef struct hemp_vtypes_s    * hemp_vtypes_p;
 typedef struct hemp_variable_s  * hemp_variable_p;
 //typedef union  hemp_value_t     * hemp_value_p;
 
@@ -92,16 +90,6 @@ typedef union  hemp_evalue_u      hemp_evalue_t;
 typedef struct hemp_unary_s       hemp_unary_t;
 typedef struct hemp_binary_s      hemp_binary_t;
 typedef struct hemp_block_s       hemp_block_t;
-
-
-/*
-typedef struct hemp_hub         * hemp_hub_t;
-typedef struct hemp_type        * hemp_type_t;
-typedef struct hemp_vtype       * hemp_vtype_t;
-typedef struct hemp_vtypes      * hemp_vtypes_t;
-typedef struct hemp_value       * hemp_value_t;
-typedef struct hemp_templates_s * hemp_templates_p;
-*/
 
 
 /*--------------------------------------------------------------------------

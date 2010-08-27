@@ -283,6 +283,9 @@ hemp_mem_trace_free(
  * Generated debugging output showing status of memory allocations.
  */
 
+#define HEMP_DASHES \
+    "-----------------------------------------------------------------\n"
+
 hemp_size_t
 hemp_mem_trace_report(
     hemp_bool_t verbose
@@ -294,8 +297,8 @@ hemp_mem_trace_report(
     hemp_size_t count = 0, total = 0;
 
     if (verbose) {
-        hemp_debug_magenta("\nSTATUS    ID         LOCATION       SIZE            MREC\n");
-        hemp_debug_magenta("--------------------------------------------------------\n");
+        hemp_debug_cyan("\nID   STATUS      SIZE       LOCATION\n");
+        hemp_debug_cyan(HEMP_DASHES);
     }
 
     for(r = 0; r < hemp_mem_used; r++) {
@@ -333,20 +336,20 @@ hemp_mem_trace_report(
             "????"
         );
         if (verbose) {
-            hemp_debug_blue(
-                "line %3d of %s:\n", hmt->line, hmt->file ? hmt->file : "???"
-            );
-            hemp_debug_cyan(
-                "%6s  %4lu   %14p   %8lu  %14p  [%s]\n", 
-                status, hmt->id, hmt->ptr, hmt->size, hmt, buffer
+            hemp_debug(
+                "%s%-4lu %6s  %8lu %14p  line %3d of %-12s [%s]\n", 
+                hmt->status == HEMP_MEM_MALLOC ? HEMP_ANSI_RED : HEMP_ANSI_GREEN,
+                hmt->id, status, hmt->size, hmt->ptr, 
+                hmt->line, hmt->file ? hmt->file : "???", 
+                buffer
             );
         }
     }
 
     if (verbose) {
-        hemp_debug_magenta("--------------------------------------------------------\n");
-        hemp_debug_green("Memory used: %8lu\n", total);
-        hemp_debug_yellow("Memory wild: %8lu\n", count);
+        hemp_debug_cyan(HEMP_DASHES);
+        hemp_debug_yellow("Memory used: %8lu\n", total);
+        hemp_debug_red("Memory wild: %8lu\n", count);
     }
     
     return count;

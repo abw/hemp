@@ -1,36 +1,48 @@
-#include "hemp/type/number.h"
+#include <hemp/value.h>
+#include <hemp/context.h>
 
 
-// NO LONGER USED
+const struct hemp_type_s hemp_type_number = {
+    HEMP_NUMBER_ID, "Number",
+    &hemp_value_number_text,            /* convert number to text           */
+    &hemp_value_self,                   /* no-op to return value            */
+    &hemp_value_self,                   /* no-op to return number           */
+    &hemp_value_number_integer,         /* number -> integer conversion     */
+    &hemp_value_number_boolean,         /* number -> boolean conversion     */
+    &hemp_value_number_compare,         /* number -> comparison conversion  */
+    &hemp_value_true,                   /* number is always defined         */  /* what about NaN / Infinity? */
+};
 
 
-static struct hemp_type_number
-    hemp_type_integer = {
-        "hemp.type.integer",
-        NULL,       // base
-        1,          // size
-        NULL,       // pool
-        &hemp_integer_init,
-        &hemp_integer_free,
-        &hemp_integer_text,
-        &hemp_integer_truth,
-        &hemp_integer_integer,
-        &hemp_integer_float;
-        &hemp_integer_positive;
-        &hemp_integer_negative;
-        &hemp_integer_absolute;
-        &hemp_integer_add;
-        &hemp_integer_subtract;
-        &hemp_integer_multiply;
-        &hemp_integer_divide;
-        &hemp_integer_divint;
-        &hemp_integer_divmod;
-        &hemp_integer_power;
-    };
+HEMP_VTEXT_FUNC(hemp_value_number_text) {
+    static hemp_char_t buffer[HEMP_BUFFER_SIZE];
+    hemp_text_p text;
+
+    snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, hemp_val_num(value));
+    hemp_prepare_output(output, text, strlen(buffer));
+    hemp_text_append_cstr(text, buffer);
+
+    return output;
+}
 
 
-hemp_type_t HempTypeInteger = (hemp_type_t) &hemp_type_integer;
+HEMP_VALUE_FUNC(hemp_value_number_integer) {
+    return hemp_int_val((hemp_int_t) hemp_val_num(value));
+}
 
 
-void 
-hemp_scan_inline_tag(
+HEMP_VALUE_FUNC(hemp_value_number_boolean) {
+    /* TODO: decide if this is the right thing to do */
+    return hemp_val_num(value) == 0.0
+        ? HempFalse
+        : HempTrue;
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_number_compare) {
+    hemp_num_t cmp = hemp_val_num(value);
+    return  cmp < 0 ? HempBefore
+        :   cmp > 0 ? HempAfter
+        :             HempEqual; 
+}
+

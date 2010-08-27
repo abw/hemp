@@ -131,14 +131,17 @@ hemp_init_errors(
 
     if (e) {
 //        hemp_debug("uncaught error in hemp at %p\n", hemp);
-//        if (hemp->error && hemp->error->message) {
+////        if (hemp && hemp->error && hemp->error->message) {
+//        printf("error message at %p\n", hemp->error); //->message);
+//            printf("error message: %s\n", hemp); //, hemp->error->message);
 //            hemp_fatal(hemp->error->message);
-//        }
-////        else if (e > 0 && e < HEMP_ERROR_MAX) {
-////            hemp_fatal("%s", hemp_errmsg[e], HEMP_WTFS);
 ////        }
-//        else {
-            hemp_fatal("uncaught error code: %d", e);
+//////        else if (e > 0 && e < HEMP_ERROR_MAX) {
+//////            hemp_fatal("%s", hemp_errmsg[e], HEMP_WTFS);
+//////        }
+////        else {
+//        
+        hemp_fatal("uncaught error code: %d", e);
 //        }
     }
 }

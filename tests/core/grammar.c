@@ -37,7 +37,7 @@ void test_grammar() {
         ok( grammar, "got grammar" );
         is( grammar->name, "tt3.core", "grammar name is tt3.core" );
     HEMP_CATCH_ALL;
-        fail("caught error: %s", hemp->error->message);
+        fail("eek! caught error: %s", hemp->error->message);
     HEMP_END;
         
     HEMP_TRY;

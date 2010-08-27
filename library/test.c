@@ -382,10 +382,11 @@ hemp_mem_trace_ok(void)
 
 hemp_uint_t
 hemp_test_expect_text(
-    hemp_cstr_p language,
-    hemp_cstr_p dialect,
-    hemp_cstr_p text,
-    hemp_cstr_p alias
+    hemp_cstr_p     language,
+    hemp_cstr_p     dialect,
+    hemp_cstr_p     text,
+    hemp_cstr_p     alias,
+    hemp_context_p  context
 ) {
     hemp_p          hemp = hemp_init();
     hemp_cstr_p     test, name, expect, error, end;
@@ -470,7 +471,7 @@ hemp_test_expect_text(
                 HEMP_TEXT, 
                 test
             );
-            output = hemp_template_render(tmpl);
+            output = hemp_template_render(tmpl, context);
             ok( output, "%s rendered", name);
 
             if (expect)
@@ -497,7 +498,7 @@ hemp_test_expect_text(
     hemp_list_free(list);
     hemp_free(hemp);
 
-    hemp_uint_t result = hemp_test_done(NULL);
+    return hemp_test_done(NULL);
 }
 
 
@@ -509,12 +510,13 @@ hemp_test_expect_text(
 
 hemp_uint_t
 hemp_test_expect_file(
-    hemp_cstr_p language,
-    hemp_cstr_p dialect,
-    hemp_cstr_p file
+    hemp_cstr_p     language,
+    hemp_cstr_p     dialect,
+    hemp_cstr_p     file,
+    hemp_context_p  context
 ) {
     hemp_cstr_p text   = hemp_filesystem_read_file(file);
-    hemp_uint_t result = hemp_test_expect_text(language, dialect, text, file);
+    hemp_uint_t result = hemp_test_expect_text(language, dialect, text, file, context);
     hemp_mem_free(text);
     return result;
 }
@@ -529,19 +531,21 @@ hemp_test_expect_file(
 
 hemp_uint_t
 hemp_test_expect_script(
-    hemp_cstr_p language,
-    hemp_cstr_p dialect,
-    hemp_cstr_p testdir,
-    hemp_cstr_p name
+    hemp_cstr_p     language,
+    hemp_cstr_p     dialect,
+    hemp_cstr_p     testdir,
+    hemp_cstr_p     name,
+    hemp_context_p  context
 ) {
 //    hemp_mem_trace_reset();
     hemp_cstr_p dir    = hemp_filesystem_join_path(testdir, "scripts");
     hemp_cstr_p file   = hemp_filesystem_join_path(dir, name);
     hemp_cstr_p text   = hemp_filesystem_read_file(file);
-    hemp_uint_t result = hemp_test_expect_text(language, dialect, text, name);
+    hemp_uint_t result = hemp_test_expect_text(language, dialect, text, name, context);
     hemp_mem_free(text);
     hemp_mem_free(file);
     hemp_mem_free(dir);
+
     return result;
 }
 

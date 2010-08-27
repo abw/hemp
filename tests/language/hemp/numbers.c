@@ -6,6 +6,7 @@ int main(
 ) {
     return hemp_test_expect_script(
         HEMP_TT3, HEMP_TT3, 
-        HEMP_TESTDIR, "numbers"
+        HEMP_TESTDIR, "numbers",
+        NULL
     );
 }

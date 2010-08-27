@@ -412,6 +412,17 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
     )
 
 
+#define HEMP_UNDEF_ERROR(context,type)      \
+    hemp_error_throw(                       \
+        context->hemp,                      \
+        hemp_error_message(                 \
+            context->hemp,                  \
+            HEMP_ERROR_UNDEF,               \
+            type                            \
+        )                                   \
+    )
+
+
 #define HEMP_CONVERT_ERROR(context,from,to,val) \
     hemp_error_throw(                       \
         context->hemp,                      \
