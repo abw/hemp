@@ -312,7 +312,7 @@ HEMP_VALUE_FUNC(hemp_value_text_boolean) {
  * Text pseudo-object methods
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_METHOD(hemp_method_text_length) {
-    return hemp_int_val( hemp_val_text(object)->length );
+HEMP_VALUE_FUNC(hemp_method_text_length) {
+    return hemp_int_val( hemp_val_text(value)->length );
 }
 

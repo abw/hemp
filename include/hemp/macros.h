@@ -454,11 +454,11 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         hemp_str_p name                     \
     )
 
-#define HEMP_TYPE_METHOD(m)                 \
-    hemp_value_t m(                         \
-        hemp_value_t object,                \
-        ...                                 \
-    )
+//#define HEMP_TYPE_METHOD(m)                 \
+//    hemp_value_t m(                         \
+//        hemp_value_t object,                \
+//        ...                                 \
+//    )
 
 
 /*--------------------------------------------------------------------------

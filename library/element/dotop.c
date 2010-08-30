@@ -43,21 +43,30 @@ HEMP_POSTFIX_FUNC(hemp_element_dotop_infix) {
 HEMP_EVAL_FUNC(hemp_element_dotop_value) {
     hemp_debug_call("hemp_element_dotop_value()\n");
 
+//    hemp_debug("%p evaluating LHS...\n", element);
     hemp_element_p  lhs  = element->args.binary.lhs;
     hemp_element_p  rhs  = element->args.binary.rhs;
     hemp_value_t    lval = lhs->type->value(lhs, context);
+//    hemp_debug("%p LHS: %s\n", element, hemp_type_name(lval));
     hemp_text_p     text = hemp_text_init(16);
 
-    if (hemp_is_undefined(lval))
+    if (hemp_is_undefined(lval)) {
+//        hemp_debug("undef LHS\n");
         hemp_fatal("TODO: cannot call dotop on undefined value");
+    }
 
     /* hmmm... having to generate a text object to capture the string value 
      * of the RHS is less than ideal...
      */
     rhs->type->token(rhs, context, hemp_text_val(text));
+//    hemp_debug("%p RHS: %s\n", element, text->string);
     hemp_value_t result = hemp_send(lval, text->string, context);
 
     hemp_text_free(text);
+
+//    hemp_debug("%p Result: %s\n", element, hemp_type_name(result));
+//    hemp_dump_value(result);
+
     return result;
 }
 

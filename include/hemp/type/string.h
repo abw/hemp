@@ -101,4 +101,7 @@ hemp_list_p
     );
 
 
+HEMP_VALUE_FUNC(hemp_method_string_length);
+
+
 #endif /* HEMP_STRING_H */

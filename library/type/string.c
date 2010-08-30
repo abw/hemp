@@ -11,6 +11,9 @@ HEMP_TYPE_FUNC(hemp_type_string) {
     type->boolean    = &hemp_value_string_boolean;  /* string -> boolean    */
     type->compare    = &hemp_value_not_compare;     /* cannot compare       */
     type->defined    = &hemp_value_true;            /* always defined       */
+
+    hemp_type_extend(type, "length", &hemp_method_string_length);
+
     return type;
 };
 
@@ -411,5 +414,14 @@ HEMP_VALUE_FUNC(hemp_value_string_boolean) {
     return str && *str
         ? HempTrue
         : HempFalse;
+}
+
+
+/*--------------------------------------------------------------------------
+ * String pseudo-object methods
+ *--------------------------------------------------------------------------*/
+
+HEMP_VALUE_FUNC(hemp_method_string_length) {
+    return hemp_int_val( strlen( hemp_val_str(value) ) );
 }
 
