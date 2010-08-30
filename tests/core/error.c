@@ -115,7 +115,7 @@ void test_error_object() {
     );
     ok( error, "got error object" );
     ok( 
-        hemp_cstr_eq(error->message, "Bad badger!"),
+        hemp_string_eq(error->message, "Bad badger!"),
         "bad badger message"
     );
     hemp_error_free(error);
@@ -126,7 +126,7 @@ void test_error_object() {
     );
     ok( error, "got error object" );
     ok( 
-        hemp_cstr_eq(error->message, "Bad cheese: badger"),
+        hemp_string_eq(error->message, "Bad cheese: badger"),
         "bad cheese message"
     );
 
@@ -145,7 +145,7 @@ void test_hemp_throw() {
 
     HEMP_CATCH_ALL;
         ok( hemp->error, "caught hemp error" );
-        ok( hemp_cstr_eq(hemp->error->message, "Invalid cheese specified: badger"),
+        ok( hemp_string_eq(hemp->error->message, "Invalid cheese specified: badger"),
             "got bad cheese message"
         );
 
@@ -162,7 +162,7 @@ void test_hemp_throw() {
 
     HEMP_CATCH_ALL;
         ok( hemp->error, "caught hemp error again" );
-        ok( hemp_cstr_eq(hemp->error->message, "You silly arse! 'badger' is not a valid cheese"),
+        ok( hemp_string_eq(hemp->error->message, "You silly arse! 'badger' is not a valid cheese"),
             "got silly arse bad cheese message"
         );
 

@@ -24,10 +24,10 @@ enum hemp_tag_style_e {
 
 
 struct hemp_tag_s {
-   hemp_cstr_p      name;
+   hemp_str_p       name;
    hemp_tag_style_t style;
-   hemp_cstr_p      start;
-   hemp_cstr_p      end;
+   hemp_str_p       start;
+   hemp_str_p       end;
    hemp_tag_scan_f  scan;
    hemp_grammar_p   grammar;
 };
@@ -39,10 +39,10 @@ struct hemp_tag_s {
 
 hemp_tag_p
     hemp_tag_init(
-        hemp_cstr_p      name,
+        hemp_str_p       name,
         hemp_tag_style_t style,
-        hemp_cstr_p      start,
-        hemp_cstr_p      end,
+        hemp_str_p       start,
+        hemp_str_p       end,
         hemp_tag_scan_f  scan,
         hemp_grammar_p   grammar
     );
@@ -54,27 +54,27 @@ hemp_tag_p
 
 void
     hemp_tag_set_name(
-        hemp_tag_p  tag,
-        hemp_cstr_p name
+        hemp_tag_p tag,
+        hemp_str_p name
     );
 
 void
     hemp_tag_set_start(
-        hemp_tag_p  tag,
-        hemp_cstr_p start
+        hemp_tag_p tag,
+        hemp_str_p start
     );
 
 void
     hemp_tag_set_end(
-        hemp_tag_p  tag,
-        hemp_cstr_p end
+        hemp_tag_p tag,
+        hemp_str_p end
     );
 
 void
     hemp_tag_set_start_end(
-        hemp_tag_p  tag,
-        hemp_cstr_p start,
-        hemp_cstr_p end
+        hemp_tag_p tag,
+        hemp_str_p start,
+        hemp_str_p end
     );
 
 void

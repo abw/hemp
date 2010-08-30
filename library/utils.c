@@ -126,7 +126,7 @@ hemp_md5_init(
 void 
 hemp_md5_update(
     hemp_md5_p  md5,
-    hemp_cstr_p input,
+    hemp_str_p  input,
     hemp_size_t length
 ) {
     hemp_uint_t in[16];
@@ -169,7 +169,7 @@ hemp_md5_final(
     hemp_md5_p md5
 ) {
     hemp_uint_t in[16];
-    hemp_cstr_p str = md5->output;
+    hemp_str_p str = md5->output;
     int mdi;
     unsigned int i, ii;
     unsigned int padlen;

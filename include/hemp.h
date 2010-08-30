@@ -60,17 +60,17 @@ void            hemp_add_scheme(hemp_p, hemp_scheme_p);
                     (hemp_scheme_p) hemp_hash_fetch_pointer(hemp->schemes, name)
 
 /* source functions */
-hemp_source_p   hemp_source(hemp_p, hemp_cstr_p, hemp_cstr_p);
+hemp_source_p   hemp_source(hemp_p, hemp_str_p, hemp_str_p);
 
 /* template functions */
 void            hemp_init_templates(hemp_p);
-hemp_template_p hemp_template(hemp_p, hemp_cstr_p, hemp_cstr_p, hemp_cstr_p);
+hemp_template_p hemp_template(hemp_p, hemp_str_p, hemp_str_p, hemp_str_p);
 
 /* runtime functions */
 hemp_context_p  hemp_context(hemp_p);
 
 //void            hemp_throw(hemp_p, hemp_errno_e, ...);
-hemp_cstr_p     hemp_error_format(hemp_p, hemp_errno_e);
+hemp_str_p      hemp_error_format(hemp_p, hemp_errno_e);
 hemp_error_p    hemp_error_message(hemp_p, hemp_errno_e, ...);
 hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 void            hemp_error_throw(hemp_p, hemp_error_p);
@@ -179,9 +179,9 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
 
 
 
-//hemp_bool_t hemp_register_dialect(hemp_t, hemp_cstr_t, hemp_build_fn);
+//hemp_bool_t hemp_register_dialect(hemp_t, hemp_string_t, hemp_build_fn);
 //void        hemp_hello();
-//hemp_cstr_t hemp_render(hemp_cstr_t scheme, hemp_cstr_t source);
+//hemp_string_t hemp_render(hemp_string_t scheme, hemp_string_t source);
 
 
 #if defined(__cplusplus)

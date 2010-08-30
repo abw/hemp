@@ -3,7 +3,7 @@
 
 
 HEMP_TYPE_FUNC(hemp_type_identity) {
-    hemp_type_p type = hemp_type_init(id, name);
+    hemp_type_p type = hemp_type_subtype(HempValue, id, name);
     type->text       = &hemp_value_identity_text;    /* identity -> text    */
     type->number     = &hemp_value_identity_number;  /* identity -> number  */
     type->integer    = &hemp_value_identity_integer; /* identity -> integer */
@@ -15,7 +15,7 @@ HEMP_TYPE_FUNC(hemp_type_identity) {
 
 
 
-HEMP_DO_INLINE hemp_cstr_p
+HEMP_DO_INLINE hemp_str_p
 hemp_identity_name(
     hemp_value_t value
 ) {
@@ -41,10 +41,10 @@ HEMP_VTEXT_FUNC(hemp_value_identity_text) {
             hemp_identity_name(value)
         );
     }
-    hemp_cstr_p name = hemp_identity_name(value);
+    hemp_str_p name = hemp_identity_name(value);
     hemp_text_p text;
     hemp_prepare_output(output, text, strlen(name));
-    hemp_text_append_cstr(text, name);
+    hemp_text_append_string(text, name);
     return output;
 }
 

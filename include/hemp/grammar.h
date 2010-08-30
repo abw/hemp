@@ -23,7 +23,7 @@
 
 struct hemp_grammar_s {
     hemp_p          hemp;
-    hemp_cstr_p     name;
+    hemp_str_p      name;
     hemp_hash_p     symbols;
     hemp_hash_p     keywords;
     hemp_ptree_p    operators;
@@ -33,23 +33,23 @@ struct hemp_grammar_s {
 hemp_grammar_p
     hemp_grammar_init(
         hemp_p          hemp,
-        hemp_cstr_p     name
+        hemp_str_p      name
     );
 
 hemp_symbol_p
     hemp_grammar_new_symbol(
         hemp_grammar_p  grammar,
-        hemp_cstr_p     element,
-        hemp_cstr_p     start,
-        hemp_cstr_p     end
+        hemp_str_p      element,
+        hemp_str_p      start,
+        hemp_str_p      end
     );
 
 hemp_symbol_p
     hemp_grammar_add_symbol(
         hemp_grammar_p  grammar,
-        hemp_cstr_p     element,
-        hemp_cstr_p     start,
-        hemp_cstr_p     end,
+        hemp_str_p      element,
+        hemp_str_p      start,
+        hemp_str_p      end,
         hemp_prec_t     lprec,
         hemp_prec_t     rprec
     );

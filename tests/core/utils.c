@@ -29,7 +29,7 @@ void test_md5_dynamic() {
     pass( "finalised md5 object" );
 
     ok(
-        hemp_cstr_eq(
+        hemp_string_eq(
             md5->output,
             "b746ca570487aa55ab3f1dff25d7949a"
         ),
@@ -56,7 +56,7 @@ void test_md5_static() {
     pass( "finalised static md5 object" );
 
     ok(
-        hemp_cstr_eq(
+        hemp_string_eq(
             md5.output,
             "b746ca570487aa55ab3f1dff25d7949a"
         ),

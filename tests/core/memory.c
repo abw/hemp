@@ -20,11 +20,11 @@ void test_memory() {
     ok( b, "Allocated more memory" );
 
     hemp_mem_copy(a, b, 100);
-    ok( hemp_cstr_eq(a, b), "strings match" );
+    ok( hemp_string_eq(a, b), "strings match" );
 
-    char *c = hemp_cstr_copy(b);
+    char *c = hemp_string_copy(b);
     ok( c, "duplicated string" );
-    ok( hemp_cstr_eq(b, c), "strings match" );
+    ok( hemp_string_eq(b, c), "strings match" );
     
     hemp_mem_free(a);
     hemp_mem_free(b);

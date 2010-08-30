@@ -2,7 +2,6 @@ lib_LTLIBRARIES     =   libhemp.la
 libhemp_la_CFLAGS   =   -I../include
 libhemp_la_SOURCES  =   action.c            \
                         context.c           \
-                        cstr.c              \
                         debug.c             \
                         dialect.c           \
                         elements.c          \
@@ -45,7 +44,6 @@ libhemp_la_SOURCES  =   action.c            \
                         tagset.c            \
                         template.c          \
                         test.c              \
-                        text.c              \
                         type.c              \
                         type/identity.c     \
                         type/integer.c      \

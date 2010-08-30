@@ -8,7 +8,7 @@ int main(
     hemp_context_p  context = hemp_context(hemp);
     int             result;
 
-    hemp_text_p message = hemp_text_from_cstr("Hello World!");
+    hemp_text_p message = hemp_text_from_string("Hello World!");
     
     hemp_context_set_number(  context, "e",         2.718    );
     hemp_context_set_number(  context, "pi",        3.14159  );

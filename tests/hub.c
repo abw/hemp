@@ -22,13 +22,13 @@ void test_hub() {
     
     hemp_tag_t tag = hemp_hub_tag(hub, HempTagComment->name);
     ok( tag, "fetched tag" );
-    ok( hemp_cstr_eq(tag->name, HempTagComment->name), "tag name: %s", tag->name );
+    ok( hemp_string_eq(tag->name, HempTagComment->name), "tag name: %s", tag->name );
 
     ok( hemp_hub_add_element(hub, HempElementSpace), "added space element" );
     
     hemp_etype_t etype = hemp_hub_element(hub, HempElementSpace->name);
     ok( etype, "fetched element type" );
-    ok( hemp_cstr_eq(etype->name, HempElementSpace->name), "element name: %s", etype->name );
+    ok( hemp_string_eq(etype->name, HempElementSpace->name), "element name: %s", etype->name );
     
     hemp_hub_free(hub);
 }

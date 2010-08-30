@@ -21,13 +21,13 @@ void test_text() {
     ok( message->length   == 0, "length is %d", message->length );
     ok( message->capacity == 25, "capacity is %d", message->capacity );
 
-    ok( hemp_text_append_cstr(message, "This is some text..."),
+    ok( hemp_text_append_string(message, "This is some text..."),
         "added some text"
     );
     ok( message->length   == 20, "length is %d", message->length );
     ok( message->capacity == 25, "capacity is still %d", message->capacity );
 
-    ok( hemp_text_append_cstr(message, "and this is some more"),
+    ok( hemp_text_append_string(message, "and this is some more"),
         "added more text"
     );
 
@@ -36,7 +36,7 @@ void test_text() {
     
 //  printf("[%s] (%d)\n", message->string, strlen(message->string));
 
-    ok( hemp_text_append_cstr(message, "!"),
+    ok( hemp_text_append_string(message, "!"),
         "added exclamation"
     );
 
@@ -46,11 +46,11 @@ void test_text() {
     hemp_text_free(message);
 
 
-    message = hemp_text_from_cstr("Hello ");
+    message = hemp_text_from_string("Hello ");
     eq( message->length, 6, "length is 6" );
     is( message->string, "Hello ", message->string );
 
-    hemp_text_append_cstr(message, "World");
+    hemp_text_append_string(message, "World");
     eq( message->length, 11, "length is 11" );
     is( message->string, "Hello World", message->string );
 
@@ -58,42 +58,42 @@ void test_text() {
     eq( copycat->length, 11, "copycat length is 11" );
     is( copycat->string, "Hello World", copycat->string );
 
-    hemp_text_append_cstr(copycat, " Hello");
+    hemp_text_append_string(copycat, " Hello");
     ok( copycat->length == 17, "appended: %s", copycat->string );
     is( copycat->string, "Hello World Hello", copycat->string );
 
-    badger  = hemp_text_from_cstr(" Badger");
+    badger  = hemp_text_from_string(" Badger");
     eq( badger->length, 7, "new badger string is 7 long" );
 
     hemp_text_append_text(copycat, badger);
     eq( copycat->length,  24, "appended text is 24 long" );
     is( copycat->string, "Hello World Hello Badger", "combined text correct" );
 
-    hemp_text_insert_cstr(copycat, 0, "START ");
+    hemp_text_insert_string(copycat, 0, "START ");
     is( 
         copycat->string, "START Hello World Hello Badger",
         "inserted at start"
     );
 
-    hemp_text_insert_cstr(copycat, 12, "MID ");
+    hemp_text_insert_string(copycat, 12, "MID ");
     is( 
         copycat->string, "START Hello MID World Hello Badger",
         "inserted at offset from start"
     );
 
-    hemp_text_insert_cstr(copycat, -6, "END ");
+    hemp_text_insert_string(copycat, -6, "END ");
     is( 
         copycat->string, "START Hello MID World Hello END Badger",
         "inserted at offset from end"
     );
 
-    hemp_text_insert_cstr(copycat, 500, " AFTER");
+    hemp_text_insert_string(copycat, 500, " AFTER");
     is( 
         copycat->string, "START Hello MID World Hello END Badger AFTER",
         "inserted at offset past the end"
     );
 
-    hemp_text_insert_cstr(copycat, -500, "BEFORE ");
+    hemp_text_insert_string(copycat, -500, "BEFORE ");
     is( 
         copycat->string, "BEFORE START Hello MID World Hello END Badger AFTER",
         "inserted at offset from end past the beginning"
@@ -107,29 +107,29 @@ void test_text() {
     /* append */
     message = hemp_text_init(3);
     ok( message->capacity == 3, "capacity is %d", message->capacity );
-    hemp_text_append_cstrn(message, "foobar", 3);
+    hemp_text_append_stringn(message, "foobar", 3);
     ok( message->capacity == 3, "capacity is still %d", message->capacity );
-    ok( hemp_cstr_eq(message->string, "foo"), "added foo" );
+    ok( hemp_string_eq(message->string, "foo"), "added foo" );
 
-    hemp_text_append_cstrn(message, "pow", 1);
+    hemp_text_append_stringn(message, "pow", 1);
     ok( message->capacity == 4, "capacity is now %d", message->capacity );
-    ok( hemp_cstr_eq(message->string, "foop"), message->string );
+    ok( hemp_string_eq(message->string, "foop"), message->string );
 
-    hemp_text_append_cstrn(message, "wow", 0);
+    hemp_text_append_stringn(message, "wow", 0);
     ok( message->capacity == 4, "added nothing, capacity is %d", message->capacity );
 
-    hemp_text_append_cstr(message, "");
+    hemp_text_append_string(message, "");
     ok( message->length   == 4, "added nothing again, length is %d", message->length );
     ok( message->capacity == 4, "added nothing again, capacity is %d", message->capacity );
 
 
     /* replace */
-    hemp_text_replace_cstr(message, "replacement");
+    hemp_text_replace_string(message, "replacement");
     is( message->string, "replacement", "replaced text with 'replacement'" );
     eq( message->length, 11, "increased length to 11" );
     eq( message->capacity, 11, "increased capacity to 11" );
 
-    hemp_text_replace_cstr(message, "foo");
+    hemp_text_replace_string(message, "foo");
     is( message->string, "foo", "replaced text with 'foo'" );
     eq( message->length, 3, "reduced length to 3" );
     eq( message->capacity, 11, "capacity remains at 11" );

@@ -51,7 +51,7 @@ struct hemp_test_plan_s {
     hemp_uint_t     skipped;
     hemp_uint_t     verbose;
     hemp_uint_t     todo;
-    hemp_cstr_p     todo_msg;
+    hemp_str_p      todo_msg;
 };
 
 typedef struct hemp_test_plan_s *hemp_test_plan_p;
@@ -105,17 +105,17 @@ hemp_uint_t
 
 void 
     hemp_test_output(
-        hemp_cstr_p name,
+        hemp_str_p  name,
         hemp_text_p output,
-        hemp_cstr_p expect
+        hemp_str_p  expect
     );
 
 
 void 
     hemp_test_error(
-        hemp_cstr_p name,
-        hemp_cstr_p error,
-        hemp_cstr_p expect
+        hemp_str_p name,
+        hemp_str_p error,
+        hemp_str_p expect
     );
 
 void
@@ -129,28 +129,28 @@ void hemp_mem_trace_ok(void);
 
 hemp_uint_t
     hemp_test_expect_text(
-        hemp_cstr_p     language,
-        hemp_cstr_p     dialect,
-        hemp_cstr_p     text,
-        hemp_cstr_p     alias,
-        hemp_context_p  context
+        hemp_str_p     language,
+        hemp_str_p     dialect,
+        hemp_str_p     text,
+        hemp_str_p     alias,
+        hemp_context_p context
     );
 
 hemp_uint_t
     hemp_test_expect_file(
-        hemp_cstr_p     language,
-        hemp_cstr_p     dialect,
-        hemp_cstr_p     file,
-        hemp_context_p  context
+        hemp_str_p     language,
+        hemp_str_p     dialect,
+        hemp_str_p     file,
+        hemp_context_p context
     );
 
 hemp_uint_t
     hemp_test_expect_script(
-        hemp_cstr_p     language,
-        hemp_cstr_p     dialect,
-        hemp_cstr_p     testdir,
-        hemp_cstr_p     name,
-        hemp_context_p  context
+        hemp_str_p     language,
+        hemp_str_p     dialect,
+        hemp_str_p     testdir,
+        hemp_str_p     name,
+        hemp_context_p context
     );
 
 

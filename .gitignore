@@ -13,7 +13,6 @@ programs/hemp
 
 tests/core/action
 tests/core/context
-tests/core/cstr
 tests/core/dialect
 tests/core/element
 tests/core/elements
@@ -27,6 +26,7 @@ tests/core/memory
 tests/core/pool
 tests/core/slab
 tests/core/source
+tests/core/string
 tests/core/tag
 tests/core/tagset
 tests/core/text
@@ -34,6 +34,7 @@ tests/core/template
 tests/benchmark
 tests/core/ptree
 tests/memtrace
+tests/core/type
 tests/core/utils
 tests/core/value
 

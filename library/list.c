@@ -101,7 +101,7 @@ hemp_list_dump_item(
     hemp_pos_t      pos, 
     hemp_value_t    item
 ) {
-    hemp_cstr_p str = hemp_val_str(item);
+    hemp_str_p str = hemp_val_str(item);
     if (buffer[0])
         strcat(buffer, ", ");
     strcat(buffer, str);
@@ -109,7 +109,7 @@ hemp_list_dump_item(
 }
 
 
-hemp_cstr_p
+hemp_str_p
 hemp_list_dump(
     hemp_list_p list
 ) {

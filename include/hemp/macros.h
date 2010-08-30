@@ -35,13 +35,13 @@
  * a language with a hemp instance.  See library/language/*.c for examples.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_LANGUAGE(name, constructor) \
+#define HEMP_LANGUAGE(name, constructor)    \
     hemp_register_language(hemp, name, (hemp_actor_f) constructor);
 
 #define HEMP_LANGUAGE_FUNC(f)               \
     hemp_language_p f(                      \
-        hemp_p      hemp,                   \
-        hemp_cstr_p name                    \
+        hemp_p     hemp,                    \
+        hemp_str_p name                     \
     )
 
 
@@ -64,8 +64,8 @@
 
 #define HEMP_DIALECT_FUNC(f)                \
     hemp_dialect_p f(                       \
-        hemp_p      hemp,                   \
-        hemp_cstr_p name                    \
+        hemp_p     hemp,                    \
+        hemp_str_p name                     \
     )
 
 
@@ -83,8 +83,8 @@
 
 #define HEMP_GRAMMAR_FUNC(f)                \
     hemp_grammar_p f(                       \
-        hemp_p      hemp,                   \
-        hemp_cstr_p name                    \
+        hemp_p     hemp,                    \
+        hemp_str_p name                     \
     )
 
 
@@ -127,7 +127,7 @@
 
 #define HEMP_SYMBOLS_ARGS                   \
     hemp_p          hemp,                   \
-    hemp_cstr_p     name
+    hemp_str_p      name
 
 #define HEMP_SYMBOLS_ARG_NAMES              \
     hemp, name
@@ -135,7 +135,7 @@
 #define HEMP_SYMBOLS_FUNC(f)                \
     hemp_action_p f(                        \
         hemp_p      hemp,                   \
-        hemp_cstr_p name                    \
+        hemp_str_p  name                    \
     )
 
 #define HEMP_SYMBOL_ARGS                    \
@@ -206,9 +206,9 @@
 #define HEMP_SCAN_ARGS                      \
     hemp_template_p tmpl,                   \
     hemp_tag_p      tag,                    \
-    hemp_cstr_p     start,                  \
+    hemp_str_p      start,                  \
     hemp_pos_t      pos,                    \
-    hemp_cstr_p    *srcptr,                 \
+    hemp_str_p     *srcptr,                 \
     hemp_symbol_p   symbol
 
 #define HEMP_SCAN_ARG_NAMES                 \
@@ -451,7 +451,13 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 #define HEMP_TYPE_FUNC(f)                   \
     hemp_type_p f(                          \
         hemp_int_t  id,                     \
-        hemp_cstr_p name                    \
+        hemp_str_p name                     \
+    )
+
+#define HEMP_TYPE_METHOD(m)                 \
+    hemp_value_t m(                         \
+        hemp_value_t object,                \
+        ...                                 \
     )
 
 

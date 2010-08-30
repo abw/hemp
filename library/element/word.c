@@ -1,5 +1,4 @@
 #include <hemp/element.h>
-#include <hemp/cstr.h>
 
 
 static struct hemp_symbol_s

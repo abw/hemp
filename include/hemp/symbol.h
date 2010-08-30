@@ -12,11 +12,11 @@
 /* symbol vtable */
 
 struct hemp_symbol_s {
-    hemp_cstr_p     name;
+    hemp_str_p      name;
 
     /* symbol metadata */
-    hemp_cstr_p     start;
-    hemp_cstr_p     end;
+    hemp_str_p      start;
+    hemp_str_p      end;
     hemp_flags_t    flags;
     hemp_prec_t     lprec;
     hemp_prec_t     rprec;
@@ -43,7 +43,7 @@ struct hemp_symbol_s {
 /* symbols collection */
 
 struct hemp_symbols_s {
-    hemp_cstr_p     name;
+    hemp_str_p      name;
     hemp_symbol_f   constructor;
 };
 
@@ -53,9 +53,9 @@ struct hemp_symbols_s {
 
 hemp_symbol_p
 hemp_symbol_init(
-    hemp_cstr_p name,
-    hemp_cstr_p start,
-    hemp_cstr_p end
+    hemp_str_p name,
+    hemp_str_p start,
+    hemp_str_p end
 );
 
 

@@ -5,7 +5,7 @@ HEMP_DO_INLINE hemp_slot_p
 hemp_slot_init(
     hemp_value_t    parent,
     hemp_size_t     index,
-    hemp_cstr_p     name,
+    hemp_str_p      name,
     hemp_value_t    value,
     hemp_slot_p     next
 ) {

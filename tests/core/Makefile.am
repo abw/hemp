@@ -1,8 +1,7 @@
-#check_PROGRAMS  =   hash grammar
+#check_PROGRAMS  =   type
 
 check_PROGRAMS  =   action      \
                     context     \
-                    cstr        \
                     dialect     \
                     element     \
                     elements    \
@@ -17,10 +16,12 @@ check_PROGRAMS  =   action      \
                     ptree       \
                     slab        \
                     source      \
+                    string      \
                     tag         \
                     tagset      \
                     template    \
                     text        \
+                    type        \
                     utils       \
                     value
  

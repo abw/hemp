@@ -24,7 +24,7 @@ typedef enum {
 } hemp_errno_e;
 
 
-static hemp_cstr_p hemp_errmsg[] = {
+static hemp_str_p hemp_errmsg[] = {
     "No error",
     "Unknown error",
     "Memory allocation failed",
@@ -49,7 +49,7 @@ struct hemp_jump_s {
 
 struct hemp_error_s {
     hemp_errno_e    number;
-    hemp_cstr_p     message;
+    hemp_str_p      message;
     hemp_scan_pos_p scan_pos;
     hemp_error_p    parent;
 };
@@ -64,20 +64,20 @@ hemp_error_p
 hemp_error_p
     hemp_error_init(
         hemp_errno_e number,
-        hemp_cstr_p  message
+        hemp_str_p   message
     );
 
 hemp_error_p
     hemp_error_initf(
         hemp_errno_e number,
-        hemp_cstr_p  format,
+        hemp_str_p   format,
         ...
     );
 
 hemp_error_p
     hemp_error_initfv(
         hemp_errno_e number,
-        hemp_cstr_p  format,
+        hemp_str_p   format,
         va_list      args
     );
 

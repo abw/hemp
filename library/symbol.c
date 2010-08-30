@@ -9,9 +9,9 @@
 
 hemp_symbol_p
 hemp_symbol_init(
-    hemp_cstr_p name,
-    hemp_cstr_p start,
-    hemp_cstr_p end
+    hemp_str_p name,
+    hemp_str_p start,
+    hemp_str_p end
 ) {
     hemp_symbol_p symbol = (hemp_symbol_p) hemp_mem_alloc(
         sizeof(struct hemp_symbol_s)
@@ -41,12 +41,12 @@ hemp_symbol_init(
      * is one and it's not the same as the start token
      */
     if (start) 
-        start = hemp_cstr_clone(start, "symbol start token");
+        start = hemp_string_clone(start, "symbol start token");
 
     if (end)
-        end = (start && (start == end || hemp_cstr_eq(start, end)))
+        end = (start && (start == end || hemp_string_eq(start, end)))
             ? start
-            : hemp_cstr_clone(end, "symbol end token");
+            : hemp_string_clone(end, "symbol end token");
         
     symbol->start   = start;
     symbol->end     = end;

@@ -33,7 +33,7 @@ HEMP_ETEXT_FUNC(hemp_element_literal_token) {
     hemp_debug_call("hemp_element_literal_token()\n");
     hemp_text_p text;
     hemp_prepare_output(output, text, element->length);
-    hemp_text_append_cstrn(text, element->token, element->length);
+    hemp_text_append_stringn(text, element->token, element->length);
     return output;
 }
 
@@ -42,7 +42,7 @@ HEMP_ETEXT_FUNC(hemp_element_literal_source) {
     hemp_debug_call("hemp_element_literal_source()\n");
     hemp_text_p text;
     hemp_prepare_output(output, text, element->length);
-    hemp_text_append_cstrn(text, element->token, element->length);
+    hemp_text_append_stringn(text, element->token, element->length);
     return output;
 }
 
@@ -58,7 +58,7 @@ HEMP_ETEXT_FUNC(hemp_element_literal_text) {
      */
     hemp_text_p text;
     hemp_prepare_output(output, text, element->length);
-    hemp_text_append_cstrn(text, element->token, element->length);
+    hemp_text_append_stringn(text, element->token, element->length);
     return output;
 }
 

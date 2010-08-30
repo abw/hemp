@@ -38,7 +38,7 @@ hemp_bool_t
 hemp_action_p
     hemp_factory_register(      /* register a constructor action            */
         hemp_factory_p  factory,
-        hemp_cstr_p     name,
+        hemp_str_p      name,
         hemp_actor_f    actor,
         hemp_mem_p      script
     );
@@ -46,13 +46,13 @@ hemp_action_p
 hemp_action_p
     hemp_factory_constructor(   /* fetch a constructor action               */
         hemp_factory_p  factory,
-        hemp_cstr_p     name
+        hemp_str_p      name
     );
 
 hemp_mem_p
     hemp_factory_instance(      /* fetch/construct a singleton instance     */
         hemp_factory_p  factory,
-        hemp_cstr_p     name
+        hemp_str_p      name
     );
 
 

@@ -23,10 +23,9 @@
 #include <hemp/os.h>                /* operating system specific items      */
 #include <hemp/types.h>             /* type definitions                     */
 #include <hemp/memory.h>            /* memory managment                     */
-#include <hemp/cstr.h>              /* functions for handling C strings     */
 #include <hemp/utils.h>             /* misc utils                           */
 #include <hemp/macros.h>            /* macros sprinkling syntactic sugar    */
-
+#include <hemp/type/string.h>       /* functions for handling C strings     */
 //#include <hemp/value.h>             /* data values                          */
 
 #endif /* HEMP_CORE_H */

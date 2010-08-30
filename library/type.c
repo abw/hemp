@@ -1,6 +1,8 @@
 #include <hemp/type.h>
+#include <hemp/hash.h>
 
 
+hemp_type_p  HempValue    = NULL;
 hemp_type_p  HempNumber   = NULL;
 hemp_type_p  HempInteger  = NULL;
 hemp_type_p  HempString   = NULL;
@@ -15,7 +17,7 @@ hemp_type_p  hemp_global_types[HEMP_TYPES_SIZE];
 hemp_type_p 
 hemp_type_init(
     hemp_int_t  id,
-    hemp_cstr_p name
+    hemp_str_p  name
 ) {
     hemp_type_p type = (hemp_type_p) hemp_mem_alloc(
         sizeof(struct hemp_type_s)
@@ -25,7 +27,9 @@ hemp_type_init(
         hemp_mem_fail("type");
 
     type->id      = id;
-    type->name    = hemp_cstr_clone(name, "type name");
+    type->name    = hemp_string_clone(name, "type name");
+    type->base    = NULL;
+    type->methods = hemp_hash_init();
     type->value   = &hemp_value_self;
     type->text    = &hemp_value_not_text; 
     type->number  = &hemp_value_not_number;
@@ -34,8 +38,19 @@ hemp_type_init(
     type->compare = &hemp_value_not_compare;
     type->defined = &hemp_value_not_defined;
 
-    // TODO: vtable
+    return type;
+}
 
+
+hemp_type_p 
+hemp_type_subtype(
+    hemp_type_p base,
+    hemp_int_t  id,
+    hemp_str_p  name
+) {
+    hemp_type_p type = hemp_type_init(id, name);
+    type->base = base;
+    hemp_hash_attach(type->methods, base->methods);
     return type;
 }
 
@@ -45,6 +60,7 @@ hemp_type_free(
     hemp_type_p type
 ) {
     hemp_mem_free(type->name);
+    hemp_hash_free(type->methods);
     hemp_mem_free(type);
 }
 
@@ -59,6 +75,7 @@ hemp_global_types_init() {
         return;
 
     /* construct the global type objects */
+    HempValue    = hemp_type_init    ( HEMP_VALUE_ID,    HEMP_STR_VALUE    );
     HempNumber   = hemp_type_number  ( HEMP_NUMBER_ID,   HEMP_STR_NUMBER   );
     HempInteger  = hemp_type_integer ( HEMP_INTEGER_ID,  HEMP_STR_INTEGER  );
     HempString   = hemp_type_string  ( HEMP_STRING_ID,   HEMP_STR_STRING   );
@@ -66,6 +83,9 @@ hemp_global_types_init() {
     HempIdentity = hemp_type_identity( HEMP_IDENTITY_ID, HEMP_STR_IDENTITY );
     HempReserved = hemp_type_reserved( HEMP_RESERVED_ID, HEMP_STR_RESERVED );
     HempUnused   = hemp_type_unused  ( HEMP_UNUSED_ID,   HEMP_STR_UNUSED   );
+
+    /* add methods to types */
+    hemp_type_extend(HempValue, "name", &hemp_method_value_name);
 
     /* The first 16 type entries are reserved for hemp's internal use */
     for (n = 0; n < HEMP_TYPES_RESERVED; n++) {
@@ -77,12 +97,15 @@ hemp_global_types_init() {
         hemp_global_types[n] = HempUnused;
     }
 
-    /* add the builtin types to the type table */
+    /* add the builtin types to the type table - we don't add HempValue 
+     * because it's the uber base type and not directly instantiable 
+     */
     hemp_global_types[ HempNumber->id   ] = HempNumber;
     hemp_global_types[ HempInteger->id  ] = HempInteger;
     hemp_global_types[ HempString->id   ] = HempString;
     hemp_global_types[ HempText->id     ] = HempText;
     hemp_global_types[ HempIdentity->id ] = HempIdentity;
+
 }
 
 
@@ -95,6 +118,7 @@ hemp_global_types_free() {
         hemp_global_types[n] = NULL;
     }
 
+    hemp_type_free(HempValue);      HempValue    = NULL;
     hemp_type_free(HempNumber);     HempNumber   = NULL;
     hemp_type_free(HempInteger);    HempInteger  = NULL;
     hemp_type_free(HempString);     HempString   = NULL;
@@ -102,6 +126,7 @@ hemp_global_types_free() {
     hemp_type_free(HempIdentity);   HempIdentity = NULL;
     hemp_type_free(HempReserved);   HempReserved = NULL;
     hemp_type_free(HempUnused);     HempUnused   = NULL;
+    
 }
 
 
@@ -116,3 +141,7 @@ HEMP_TYPE_FUNC(hemp_type_unused) {
     return type;
 };
 
+
+HEMP_TYPE_METHOD(hemp_method_value_name) {
+    return hemp_str_val( hemp_type(object)->name );
+}

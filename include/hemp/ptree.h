@@ -15,7 +15,7 @@ struct hemp_ptree_s {
 };
 
 struct hemp_pnode_s {
-   hemp_cstr_p      key;
+   hemp_str_p       key;
    hemp_mem_p       value;
    hemp_pnode_p     before;
    hemp_pnode_p     equal;
@@ -41,27 +41,27 @@ void
 hemp_pnode_p
     hemp_ptree_node(
         hemp_ptree_p ptree, 
-        hemp_cstr_p  key, 
-        hemp_mem_p  value
+        hemp_str_p   key, 
+        hemp_mem_p   value
     );
 
 hemp_pnode_p
     hemp_ptree_store(
         hemp_ptree_p ptree, 
-        hemp_cstr_p  key, 
+        hemp_str_p   key, 
         hemp_mem_p   value
     );
 
 hemp_mem_p
     hemp_ptree_fetch(
         hemp_ptree_p ptree,
-        hemp_cstr_p  key
+        hemp_str_p   key
     );
 
 hemp_mem_p
     hemp_pnode_match_more(
         hemp_pnode_p    pnode, 
-        hemp_cstr_p     *srcptr
+        hemp_str_p     *srcptr
     );
 
 void 

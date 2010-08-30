@@ -15,24 +15,24 @@ void         hemp_say(char *format, ...);
 void         hemp_warn(char *format, ...);
 void         hemp_getopt(hemp_p hemp, int argc, char **argv);
 void         hemp_interactive(hemp_p hemp);
-hemp_cstr_p  hemp_prompt_init();
+hemp_str_p   hemp_prompt_init();
 void         hemp_prompt_free();
-hemp_cstr_p  hemp_input_read(hemp_cstr_p prompt);
+hemp_str_p   hemp_input_read(hemp_str_p prompt);
 void         hemp_input_free();
 char **      hemp_completion(const char *, int, int);
 char *       hemp_command_generator(const char *, int);
 
 
-hemp_bool_t  hemp_cmd_todo(hemp_p, hemp_cstr_p);
-hemp_bool_t  hemp_cmd_exprs(hemp_p, hemp_cstr_p);
-hemp_bool_t  hemp_cmd_expr(hemp_p, hemp_cstr_p);
-hemp_bool_t  hemp_cmd_help(hemp_p, hemp_cstr_p);
-hemp_bool_t  hemp_cmd_quit(hemp_p, hemp_cstr_p);
+hemp_bool_t  hemp_cmd_todo(hemp_p, hemp_str_p);
+hemp_bool_t  hemp_cmd_exprs(hemp_p, hemp_str_p);
+hemp_bool_t  hemp_cmd_expr(hemp_p, hemp_str_p);
+hemp_bool_t  hemp_cmd_help(hemp_p, hemp_str_p);
+hemp_bool_t  hemp_cmd_quit(hemp_p, hemp_str_p);
 
 static int be_quiet  = 0;
 static int read_text = 0;
-static hemp_cstr_p hemp_input  = NULL;
-static hemp_cstr_p hemp_prompt = NULL;      /* old way */
+static hemp_str_p hemp_input  = NULL;
+static hemp_str_p hemp_prompt = NULL;      /* old way */
 
 
 static struct option hemp_options[] = {
@@ -46,9 +46,9 @@ static struct option hemp_options[] = {
 };
 
 typedef struct {
-    hemp_bool_t   (*func)(hemp_p, hemp_cstr_p);
-    hemp_cstr_p     name;
-    hemp_cstr_p     about;
+    hemp_bool_t   (*func)(hemp_p, hemp_str_p);
+    hemp_str_p    name;
+    hemp_str_p    about;
 } hemp_command;
 
 hemp_command hemp_commands[] = {
@@ -83,7 +83,7 @@ int main(
     char **env
 ) {
     hemp_p          hemp = hemp_init();
-    hemp_cstr_p     filename;
+    hemp_str_p      filename;
     hemp_template_p template;
     hemp_text_p     input, output;
     
@@ -103,8 +103,8 @@ int main(
 
             while (optind < argc) {
                 filename = argv[optind++];
-                hemp_text_append_cstr(input, filename);
-                hemp_text_append_cstr(input, " ");
+                hemp_text_append_string(input, filename);
+                hemp_text_append_string(input, " ");
             }
             // hemp_verbose(hemp, "loaded text: %s", input->string);
             template = hemp_template(
@@ -162,12 +162,12 @@ int main(
 
 hemp_command *
 hemp_command_lookup(
-    hemp_cstr_p name
+    hemp_str_p name
 ) {
     int i;
     
     for (i = 0; hemp_commands[i].name; i++) {
-        if (hemp_cstr_eq(name, hemp_commands[i].name)) {
+        if (hemp_string_eq(name, hemp_commands[i].name)) {
             return &hemp_commands[i];
         }
     }
@@ -179,10 +179,10 @@ hemp_command_lookup(
 void hemp_interactive(
     hemp_p hemp
 ) {
-    hemp_cstr_p prompt = hemp_prompt;
+    hemp_str_p  prompt = hemp_prompt;
     hemp_bool_t done   = HEMP_FALSE;
     hemp_list_p words;
-    hemp_cstr_p input, word, args;
+    hemp_str_p  input, word, args;
     hemp_command *cmd;
 
     rl_readline_name = HEMP_HEMP;
@@ -197,7 +197,7 @@ void hemp_interactive(
             break;
         }
 
-        words = hemp_cstr_nwords(input, 2);
+        words = hemp_string_nwords(input, 2);
         
         if (words) {
             word = hemp_val_str( hemp_list_item(words, 0) );
@@ -245,7 +245,7 @@ void hemp_banner() {
  * input
  *--------------------------------------------------------------------------*/
 
-hemp_cstr_p
+hemp_str_p
 hemp_prompt_init() {
     if (! hemp_prompt) {
         asprintf(
@@ -265,16 +265,16 @@ hemp_prompt_free() {
 }
 
 
-hemp_cstr_p
+hemp_str_p
 hemp_input_read(
-    hemp_cstr_p prompt
+    hemp_str_p prompt
 ) {
     hemp_input_free();
 
     hemp_input = readline(prompt);
     
     if (hemp_input) {
-        hemp_cstr_trim(hemp_input);
+        hemp_string_trim(hemp_input);
         if (*hemp_input)
             add_history(hemp_input);
     }
@@ -290,7 +290,7 @@ hemp_completion(
     int end
 ) {
     return rl_completion_matches(text, &hemp_command_generator);
-//    hemp_cstr_p *matches = NULL;
+//    hemp_str_p *matches = NULL;
 ////    if (start == 0)
 //    matches = rl_completion_matches(text, &hemp_command_generator);
 }
@@ -316,8 +316,8 @@ hemp_command_generator(
     while (name = hemp_commands[list_index].name) {
         list_index++;
 
-        if (hemp_cstrn_eq(name, text, len))
-            return hemp_cstr_copy(name);
+        if (hemp_stringn_eq(name, text, len))
+            return hemp_string_copy(name);
     }
 
     return NULL;
@@ -362,8 +362,8 @@ void hemp_warn(
 
 hemp_bool_t 
 hemp_cmd_todo(
-    hemp_p      hemp, 
-    hemp_cstr_p input
+    hemp_p     hemp, 
+    hemp_str_p input
 ) {
     hemp_warn("Sorry, that functionality is still TODO");
     return HEMP_FALSE;
@@ -372,8 +372,8 @@ hemp_cmd_todo(
 
 hemp_bool_t 
 hemp_cmd_exprs(
-    hemp_p      hemp, 
-    hemp_cstr_p text
+    hemp_p     hemp, 
+    hemp_str_p text
 ) {
     /* pass text along as first expression */
     if (text) {
@@ -392,8 +392,8 @@ hemp_cmd_exprs(
 
 hemp_bool_t 
 hemp_cmd_expr(
-    hemp_p      hemp, 
-    hemp_cstr_p text
+    hemp_p     hemp, 
+    hemp_str_p text
 ) {
     hemp_text_p     input, output;
     hemp_template_p hemplate;
@@ -404,7 +404,7 @@ hemp_cmd_expr(
     if (! text)
         return HEMP_FALSE;
     
-    hemp_cstr_trim(text);
+    hemp_string_trim(text);
 
     if (! *text)
         return HEMP_FALSE;
@@ -452,8 +452,8 @@ hemp_cmd_expr(
 
 hemp_bool_t 
 hemp_cmd_help(
-    hemp_p      hemp, 
-    hemp_cstr_p input
+    hemp_p     hemp, 
+    hemp_str_p input
 ) {
     int i;
     hemp_command cmd;
@@ -476,8 +476,8 @@ hemp_cmd_help(
 
 hemp_bool_t 
 hemp_cmd_quit(
-    hemp_p      hemp, 
-    hemp_cstr_p input
+    hemp_p     hemp, 
+    hemp_str_p input
 ) {
     return HEMP_TRUE;
 }

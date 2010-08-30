@@ -31,7 +31,7 @@ struct hemp_filesystem_s {
 hemp_filesystem_p
     hemp_filesystem_init(
         hemp_p      hemp,
-        hemp_cstr_p path
+        hemp_str_p  path
     );
 
 void
@@ -42,27 +42,27 @@ void
 void
     hemp_filesystem_set_path(
         hemp_filesystem_p filesystem, 
-        hemp_cstr_p       path
+        hemp_str_p        path
     );
 
-hemp_cstr_p
+hemp_str_p
     hemp_filesystem_join_path(
-        hemp_cstr_p base,
-        hemp_cstr_p path
+        hemp_str_p base,
+        hemp_str_p path
     );
 
 
-hemp_cstr_p
+hemp_str_p
     hemp_filesystem_readable_path(
         hemp_filesystem_p   filesystem,
-        hemp_cstr_p         path
+        hemp_str_p          path
     );
     
-//hemp_cstr_t hemp_filesystem_read_file(hemp_filesystem_t filesystem, hemp_cstr_t path);
+//hemp_string_t hemp_filesystem_read_file(hemp_filesystem_t filesystem, hemp_string_t path);
 
-hemp_cstr_p 
+hemp_str_p 
     hemp_filesystem_read_file(
-        hemp_cstr_p path
+        hemp_str_p path
     );
 
 

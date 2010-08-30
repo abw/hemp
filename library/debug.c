@@ -50,9 +50,9 @@ void hemp_debug_col(char *col, char *format, ...)
 
 void 
 hemp_debug_token(
-    hemp_cstr_p type,
-    hemp_cstr_p str,
-    hemp_pos_t  len
+    hemp_str_p type,
+    hemp_str_p str,
+    hemp_pos_t len
 ) {
     static char buffer[80];
     if (len > 79)

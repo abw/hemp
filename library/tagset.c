@@ -63,10 +63,10 @@ hemp_tagset_add_tag(
 hemp_pnode_p
 hemp_tagset_new_tag(
     hemp_tagset_p    tagset, 
-    hemp_cstr_p      name,
+    hemp_str_p       name,
     hemp_tag_style_t style,
-    hemp_cstr_p      start,
-    hemp_cstr_p      end,
+    hemp_str_p       start,
+    hemp_str_p       end,
     hemp_tag_scan_f  scan,
     hemp_grammar_p   grammar
 ) {

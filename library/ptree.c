@@ -71,9 +71,9 @@ hemp_ptree_free(
 
 hemp_pnode_p
 hemp_ptree_node(
-    hemp_ptree_p    ptree, 
-    hemp_cstr_p     key, 
-    hemp_mem_p      value
+    hemp_ptree_p ptree, 
+    hemp_str_p   key, 
+    hemp_mem_p   value
 ) {
     hemp_pnode_p pnode = (hemp_pnode_p) hemp_pool_take(ptree->pool);
     pnode->key     = key;
@@ -95,13 +95,13 @@ hemp_ptree_node(
 hemp_pnode_p
 hemp_ptree_store(
     hemp_ptree_p    ptree, 
-    hemp_cstr_p     key, 
+    hemp_str_p      key, 
     hemp_mem_p      value
 ) {
     hemp_pos_t      position = *key % HEMP_PTREE_SIZE;
     hemp_pnode_p    pnode    = ptree->head[position];
-    hemp_cstr_p     keyptr   = key;
-    hemp_cstr_p     cmptr;
+    hemp_str_p      keyptr   = key;
+    hemp_str_p      cmptr;
     hemp_pnode_p    new_node;
 
     if (! pnode)
@@ -191,12 +191,12 @@ hemp_ptree_store(
 hemp_mem_p
 hemp_ptree_fetch(
     hemp_ptree_p ptree,
-    hemp_cstr_p  key
+    hemp_str_p   key
 ) {
     hemp_pos_t   position = *key % HEMP_PTREE_SIZE;
     hemp_pnode_p pnode    = ptree->head[position];
-    hemp_cstr_p  src      = key;
-    hemp_cstr_p  cmptr    = pnode ? pnode->key : NULL;
+    hemp_str_p   src      = key;
+    hemp_str_p   cmptr    = pnode ? pnode->key : NULL;
 
     hemp_debug_find("hemp_ptree_fetch(%p, %s)\n", ptree, key);
 
@@ -251,12 +251,12 @@ hemp_ptree_fetch(
 
 hemp_mem_p
 hemp_pnode_match_more(
-    hemp_pnode_p    pnode, 
-    hemp_cstr_p     *srcptr
+    hemp_pnode_p pnode, 
+    hemp_str_p  *srcptr
 ) {
-    hemp_cstr_p cmptr  = pnode->key;
-    hemp_cstr_p src    = *srcptr;
-    hemp_mem_p  value  = NULL;
+    hemp_str_p cmptr  = pnode->key;
+    hemp_str_p src    = *srcptr;
+    hemp_mem_p value  = NULL;
 
     hemp_debug_find("hemp_ptree_match_more()\n");
 

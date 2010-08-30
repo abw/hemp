@@ -16,7 +16,7 @@ void test_source() {
     hemp_p hemp = hemp_init();
     hemp_scheme_p scheme;
     hemp_source_p source;
-    hemp_cstr_p   text;
+    hemp_str_p    text;
 
     ok( hemp, "created hemp object" );
 

@@ -36,6 +36,7 @@
 #define HEMP_STR_AFTER      "After"
 #define HEMP_STR_EQUAL      "Equal"
 
+#define HEMP_STR_VALUE      "Value"
 #define HEMP_STR_NUMBER     "Number"
 #define HEMP_STR_INTEGER    "Integer"
 #define HEMP_STR_STRING     "String"
@@ -47,7 +48,6 @@
 #define HEMP_STR_QUOTED     "quoted string"
 #define HEMP_STR_NO_TEXT    "empty text"
 #define HEMP_STR_BOOLEAN    "truth"
-#define HEMP_STR_VALUE      "value"
 #define HEMP_STR_COMPARE    "comparison"
 #define HEMP_STR_DEFINED    "defined"
 #define HEMP_STR_BLANK      ""

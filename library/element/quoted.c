@@ -19,9 +19,9 @@ HEMP_SYMBOL_FUNC(hemp_element_squote_symbol) {
 
 
 HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
-    hemp_cstr_p     src       = *srcptr;
+    hemp_str_p      src       = *srcptr;
     hemp_bool_t     is_source = HEMP_TRUE;
-    hemp_cstr_p     end       = symbol->end;
+    hemp_str_p      end       = symbol->end;
     hemp_size_t     endlen    = strlen(end);
     hemp_element_p  element;
 
@@ -33,7 +33,7 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
     /* walk to the end */
     while (1) {
         if (*src == *end
-        && (endlen == 1 || hemp_cstrn_eq(src, end, endlen)))
+        && (endlen == 1 || hemp_stringn_eq(src, end, endlen)))
             break;
         if (*src == HEMP_BACKSLASH) {
             src++;
@@ -60,8 +60,8 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
     }
     else {
         /* we need to create a new string with escapes resolved */
-        hemp_cstr_p sqfrom  = *srcptr;
-        hemp_cstr_p squote  = (hemp_cstr_p) hemp_mem_alloc(end - sqfrom + 1);
+        hemp_str_p sqfrom   = *srcptr;
+        hemp_str_p squote   = (hemp_str_p) hemp_mem_alloc(end - sqfrom + 1);
         element->args.value = hemp_str_val(squote);
                     
         while (sqfrom < end) {
@@ -98,11 +98,11 @@ HEMP_SYMBOL_FUNC(hemp_element_dquote_symbol) {
 
 
 HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
-    hemp_cstr_p     src       = *srcptr;
-    hemp_bool_t     is_source = HEMP_TRUE;
-    hemp_cstr_p     end       = symbol->end;
-    hemp_size_t     endlen    = strlen(end);
-    hemp_element_p  element;
+    hemp_str_p     src       = *srcptr;
+    hemp_bool_t    is_source = HEMP_TRUE;
+    hemp_str_p     end       = symbol->end;
+    hemp_size_t    endlen    = strlen(end);
+    hemp_element_p element;
 
     hemp_debug_call("hemp_element_dquote_scanner()\n");
 
@@ -114,7 +114,7 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
     /* walk to the end */
     while (1) {
         if (*src == *end
-        && (endlen == 1 || hemp_cstrn_eq(src, end, endlen)))
+        && (endlen == 1 || hemp_stringn_eq(src, end, endlen)))
             break;
         if (*src == HEMP_BACKSLASH) {
             src++;
@@ -141,8 +141,8 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
     }
     else {
         /* we need to create a new string with escapes resolved */
-        hemp_cstr_p dqfrom  = *srcptr;
-        hemp_cstr_p dquote  = (hemp_cstr_p) hemp_mem_alloc(end - dqfrom + 1);        // CHECK ME
+        hemp_str_p dqfrom   = *srcptr;
+        hemp_str_p dquote   = (hemp_str_p) hemp_mem_alloc(end - dqfrom + 1);        // CHECK ME
         element->args.value = hemp_str_val(dquote);
                     
         while (dqfrom < end) {
@@ -204,7 +204,7 @@ HEMP_ETEXT_FUNC(hemp_element_quoted_text) {
         hemp_size_t elen     = symbol->end   ? strlen(symbol->end)   : 0;
 
         /* "pinch" in the ends of the token range to avoid the quotes */
-        hemp_text_append_cstrn(
+        hemp_text_append_stringn(
             text, 
             element->token  + slen,         /* skip past start              */
             element->length - slen - elen   /* shorten by start/end lengths */
@@ -212,7 +212,7 @@ HEMP_ETEXT_FUNC(hemp_element_quoted_text) {
     }
     else {
         /* TODO: check that it's OK to assume we always have a value */
-        hemp_text_append_cstr(text, hemp_val_str(element->args.value));
+        hemp_text_append_string(text, hemp_val_str(element->args.value));
     }
 
     return output;

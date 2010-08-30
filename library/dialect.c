@@ -6,8 +6,8 @@
 
 hemp_dialect_p
 hemp_dialect_init(
-    hemp_p      hemp,
-    hemp_cstr_p name
+    hemp_p     hemp,
+    hemp_str_p name
 ) {
     hemp_dialect_p dialect = (hemp_dialect_p) hemp_mem_alloc(
         sizeof(struct hemp_dialect_s)
@@ -20,7 +20,7 @@ hemp_dialect_init(
     dialect->scanner = NULL;
     dialect->cleanup = NULL;
     dialect->hemp    = hemp;
-    dialect->name    = hemp_cstr_clone(name, "dialect name");
+    dialect->name    = hemp_string_clone(name, "dialect name");
     dialect->tags    = hemp_hash_init();
 
 //    dialect->tagset  = hemp_tagset_init();

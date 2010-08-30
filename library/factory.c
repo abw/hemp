@@ -39,7 +39,7 @@ hemp_factory_free(
 hemp_action_p
 hemp_factory_register(
     hemp_factory_p  factory,
-    hemp_cstr_p     name,
+    hemp_str_p      name,
     hemp_actor_f    actor,
     hemp_mem_p      script
 ) {
@@ -66,8 +66,8 @@ hemp_factory_register(
 
 hemp_action_p
 hemp_factory_constructor(
-    hemp_factory_p  factory,
-    hemp_cstr_p     name
+    hemp_factory_p factory,
+    hemp_str_p     name
 ) {
     hemp_debug_call("hemp_factory_constructor(F, %s)\n", name);
     
@@ -86,13 +86,13 @@ hemp_factory_constructor(
      * to construct the constructor, e.g. ask foo.bar.* to construct baz, and 
      * if it declines, see if there's a foo.* to construct bar.baz
      */
-    if ((splits = hemp_cstr_splits(name, HEMP_STR_DOT))) {
+    if ((splits = hemp_string_splits(name, HEMP_STR_DOT))) {
         int n;
-        hemp_cstr_split_p split;
+        hemp_string_split_p split;
         hemp_action_p wildcard;
             
         for (n = splits->length - 1; n >= 0; n--) {
-            split = (hemp_cstr_split_p) hemp_val_ptr( hemp_list_item(splits, n) );
+            split = (hemp_string_split_p) hemp_val_ptr( hemp_list_item(splits, n) );
             snprintf(wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
 
             /* look for a wildcard meta-constructor */
@@ -123,8 +123,8 @@ hemp_factory_constructor(
 
 hemp_mem_p
 hemp_factory_instance(
-    hemp_factory_p  factory,
-    hemp_cstr_p     name
+    hemp_factory_p factory,
+    hemp_str_p     name
 ) {
     hemp_debug_call("hemp_factory_instance(F, %s)\n", name);
     

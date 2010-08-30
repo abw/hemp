@@ -11,9 +11,9 @@
 struct hemp_scan_pos_s {
     hemp_template_p tmpl;
     hemp_tag_p      tag;
-    hemp_cstr_p     start;
+    hemp_str_p      start;
     hemp_pos_t      pos;
-    hemp_cstr_p     current;
+    hemp_str_p      current;
     hemp_symbol_p   symbol;
 };
 
@@ -57,7 +57,7 @@ hemp_bool_t
 //hemp_tag_p
 //    hemp_scan_tag_start(
 //        hemp_pnode_p, 
-//        hemp_cstr_p *
+//        hemp_str_p *
 //    );
 
 

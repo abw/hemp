@@ -3,10 +3,10 @@
 
 hemp_tag_p
 hemp_tag_init(
-    hemp_cstr_p      name,
+    hemp_str_p       name,
     hemp_tag_style_t style,
-    hemp_cstr_p      start,
-    hemp_cstr_p      end,
+    hemp_str_p       start,
+    hemp_str_p       end,
     hemp_tag_scan_f  scan,
     hemp_grammar_p   grammar
 ) {
@@ -18,9 +18,9 @@ hemp_tag_init(
         hemp_mem_fail("tag");
 
     tag->style   = style;
-    tag->name    = hemp_cstr_copy(name);
-    tag->start   = hemp_cstr_copy(start);
-    tag->end     = end ? hemp_cstr_copy(end) : NULL;
+    tag->name    = hemp_string_copy(name);
+    tag->start   = hemp_string_copy(start);
+    tag->end     = end ? hemp_string_copy(end) : NULL;
     tag->scan    = scan;
     tag->grammar = grammar;
 
@@ -48,12 +48,12 @@ hemp_tag_copy(
 
 void
 hemp_tag_set_name(
-    hemp_tag_p  tag,
-    hemp_cstr_p name
+    hemp_tag_p tag,
+    hemp_str_p name
 ) {
     hemp_mem_free(tag->name);
 
-    tag->name = hemp_cstr_copy(name);
+    tag->name = hemp_string_copy(name);
 
     if (! tag->name)
         hemp_mem_fail("tag name");
@@ -62,12 +62,12 @@ hemp_tag_set_name(
 
 void
 hemp_tag_set_start(
-    hemp_tag_p  tag,
-    hemp_cstr_p start
+    hemp_tag_p tag,
+    hemp_str_p start
 ) {
     hemp_mem_free(tag->start);
 
-    tag->start = hemp_cstr_copy(start);
+    tag->start = hemp_string_copy(start);
 
     if (! tag->start)
         hemp_mem_fail("tag start");
@@ -76,14 +76,14 @@ hemp_tag_set_start(
 
 void
 hemp_tag_set_end(
-    hemp_tag_p  tag,
-    hemp_cstr_p end
+    hemp_tag_p tag,
+    hemp_str_p end
 ) {
     if (tag->end)
         hemp_mem_free(tag->end);
 
     if (end) {
-        tag->end = hemp_cstr_copy(end);
+        tag->end = hemp_string_copy(end);
 
         if (! tag->end)
             hemp_mem_fail("tag end");
@@ -97,9 +97,9 @@ hemp_tag_set_end(
 
 void
 hemp_tag_set_start_end(
-    hemp_tag_p  tag,
-    hemp_cstr_p start,
-    hemp_cstr_p end
+    hemp_tag_p tag,
+    hemp_str_p start,
+    hemp_str_p end
 ) {
     hemp_tag_set_start(tag, start);
     hemp_tag_set_end(tag, end);

@@ -40,7 +40,7 @@ typedef union hemp_eargs_u {
 struct hemp_element_s {
     hemp_symbol_p   type;
     hemp_element_p  next;
-    hemp_cstr_p     token;
+    hemp_str_p      token;
     hemp_pos_t      position;
     hemp_size_t     length;
     hemp_flags_t    flags;
@@ -138,7 +138,7 @@ hemp_element_p
     hemp_element_init(
         hemp_element_p,
         hemp_symbol_p, 
-        hemp_cstr_p, 
+        hemp_str_p, 
         hemp_pos_t, 
         hemp_size_t
     );

@@ -15,7 +15,7 @@
 
 @SET_MAKE@
 
-#check_PROGRAMS  =   hash grammar
+#check_PROGRAMS  =   type
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -35,13 +35,13 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = action$(EXEEXT) context$(EXEEXT) cstr$(EXEEXT) \
-	dialect$(EXEEXT) element$(EXEEXT) elements$(EXEEXT) \
-	error$(EXEEXT) factory$(EXEEXT) filesystem$(EXEEXT) \
-	grammar$(EXEEXT) hash$(EXEEXT) list$(EXEEXT) memory$(EXEEXT) \
-	pool$(EXEEXT) ptree$(EXEEXT) slab$(EXEEXT) source$(EXEEXT) \
+check_PROGRAMS = action$(EXEEXT) context$(EXEEXT) dialect$(EXEEXT) \
+	element$(EXEEXT) elements$(EXEEXT) error$(EXEEXT) \
+	factory$(EXEEXT) filesystem$(EXEEXT) grammar$(EXEEXT) \
+	hash$(EXEEXT) list$(EXEEXT) memory$(EXEEXT) pool$(EXEEXT) \
+	ptree$(EXEEXT) slab$(EXEEXT) source$(EXEEXT) string$(EXEEXT) \
 	tag$(EXEEXT) tagset$(EXEEXT) template$(EXEEXT) text$(EXEEXT) \
-	utils$(EXEEXT) value$(EXEEXT)
+	type$(EXEEXT) utils$(EXEEXT) value$(EXEEXT)
 subdir = tests/core
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -67,10 +67,6 @@ context_SOURCES = context.c
 context_OBJECTS = context.$(OBJEXT)
 context_LDADD = $(LDADD)
 context_DEPENDENCIES = ../../library/libhemp.la
-cstr_SOURCES = cstr.c
-cstr_OBJECTS = cstr.$(OBJEXT)
-cstr_LDADD = $(LDADD)
-cstr_DEPENDENCIES = ../../library/libhemp.la
 dialect_SOURCES = dialect.c
 dialect_OBJECTS = dialect.$(OBJEXT)
 dialect_LDADD = $(LDADD)
@@ -127,6 +123,10 @@ source_SOURCES = source.c
 source_OBJECTS = source.$(OBJEXT)
 source_LDADD = $(LDADD)
 source_DEPENDENCIES = ../../library/libhemp.la
+string_SOURCES = string.c
+string_OBJECTS = string.$(OBJEXT)
+string_LDADD = $(LDADD)
+string_DEPENDENCIES = ../../library/libhemp.la
 tag_SOURCES = tag.c
 tag_OBJECTS = tag.$(OBJEXT)
 tag_LDADD = $(LDADD)
@@ -143,6 +143,10 @@ text_SOURCES = text.c
 text_OBJECTS = text.$(OBJEXT)
 text_LDADD = $(LDADD)
 text_DEPENDENCIES = ../../library/libhemp.la
+type_SOURCES = type.c
+type_OBJECTS = type.$(OBJEXT)
+type_LDADD = $(LDADD)
+type_DEPENDENCIES = ../../library/libhemp.la
 utils_SOURCES = utils.c
 utils_OBJECTS = utils.$(OBJEXT)
 utils_LDADD = $(LDADD)
@@ -164,14 +168,14 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = action.c context.c cstr.c dialect.c element.c elements.c \
+SOURCES = action.c context.c dialect.c element.c elements.c error.c \
+	factory.c filesystem.c grammar.c hash.c list.c memory.c pool.c \
+	ptree.c slab.c source.c string.c tag.c tagset.c template.c \
+	text.c type.c utils.c value.c
+DIST_SOURCES = action.c context.c dialect.c element.c elements.c \
 	error.c factory.c filesystem.c grammar.c hash.c list.c \
-	memory.c pool.c ptree.c slab.c source.c tag.c tagset.c \
-	template.c text.c utils.c value.c
-DIST_SOURCES = action.c context.c cstr.c dialect.c element.c \
-	elements.c error.c factory.c filesystem.c grammar.c hash.c \
-	list.c memory.c pool.c ptree.c slab.c source.c tag.c tagset.c \
-	template.c text.c utils.c value.c
+	memory.c pool.c ptree.c slab.c source.c string.c tag.c \
+	tagset.c template.c text.c type.c utils.c value.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -371,9 +375,6 @@ action$(EXEEXT): $(action_OBJECTS) $(action_DEPENDENCIES)
 context$(EXEEXT): $(context_OBJECTS) $(context_DEPENDENCIES) 
 	@rm -f context$(EXEEXT)
 	$(LINK) $(context_OBJECTS) $(context_LDADD) $(LIBS)
-cstr$(EXEEXT): $(cstr_OBJECTS) $(cstr_DEPENDENCIES) 
-	@rm -f cstr$(EXEEXT)
-	$(LINK) $(cstr_OBJECTS) $(cstr_LDADD) $(LIBS)
 dialect$(EXEEXT): $(dialect_OBJECTS) $(dialect_DEPENDENCIES) 
 	@rm -f dialect$(EXEEXT)
 	$(LINK) $(dialect_OBJECTS) $(dialect_LDADD) $(LIBS)
@@ -416,6 +417,9 @@ slab$(EXEEXT): $(slab_OBJECTS) $(slab_DEPENDENCIES)
 source$(EXEEXT): $(source_OBJECTS) $(source_DEPENDENCIES) 
 	@rm -f source$(EXEEXT)
 	$(LINK) $(source_OBJECTS) $(source_LDADD) $(LIBS)
+string$(EXEEXT): $(string_OBJECTS) $(string_DEPENDENCIES) 
+	@rm -f string$(EXEEXT)
+	$(LINK) $(string_OBJECTS) $(string_LDADD) $(LIBS)
 tag$(EXEEXT): $(tag_OBJECTS) $(tag_DEPENDENCIES) 
 	@rm -f tag$(EXEEXT)
 	$(LINK) $(tag_OBJECTS) $(tag_LDADD) $(LIBS)
@@ -428,6 +432,9 @@ template$(EXEEXT): $(template_OBJECTS) $(template_DEPENDENCIES)
 text$(EXEEXT): $(text_OBJECTS) $(text_DEPENDENCIES) 
 	@rm -f text$(EXEEXT)
 	$(LINK) $(text_OBJECTS) $(text_LDADD) $(LIBS)
+type$(EXEEXT): $(type_OBJECTS) $(type_DEPENDENCIES) 
+	@rm -f type$(EXEEXT)
+	$(LINK) $(type_OBJECTS) $(type_LDADD) $(LIBS)
 utils$(EXEEXT): $(utils_OBJECTS) $(utils_DEPENDENCIES) 
 	@rm -f utils$(EXEEXT)
 	$(LINK) $(utils_OBJECTS) $(utils_LDADD) $(LIBS)
@@ -443,7 +450,6 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/action.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/context.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cstr.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialect.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/element.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/elements.Po@am__quote@
@@ -458,10 +464,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ptree.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/slab.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/source.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/string.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tag.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tagset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/type.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/value.Po@am__quote@
 

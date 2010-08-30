@@ -15,11 +15,11 @@ hemp_tag_t HempTagVariable = &hemp_variable_tag;
 
 void 
 hemp_scan_variable_tag(
-    hemp_template_t tmpl,
-    hemp_tag_t      tag,
-    hemp_cstr_t     tagtok,
+    hemp_template_p tmpl,
+    hemp_tag_p      tag,
+    hemp_str_p      tagtok,
     hemp_pos_t      pos,
-    hemp_cstr_t     *srcptr
+    hemp_str_p     *srcptr
 ) {
     hemp_todo("variable tag");
 }

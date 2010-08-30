@@ -170,8 +170,8 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_control) {
 
 hemp_action_p
 hemp_element_tt3_command_symbols(
-    hemp_p      hemp,
-    hemp_cstr_p name
+    hemp_p     hemp,
+    hemp_str_p name
 ) {
     hemp_debug_yellow("** Initialising tt3 command symbols (%s requested)\n", name);
 

@@ -331,9 +331,9 @@ hemp_add_scheme(
 
 hemp_source_p
 hemp_source(
-    hemp_p      hemp,
-    hemp_cstr_p scheme_name,
-    hemp_cstr_p source_name
+    hemp_p     hemp,
+    hemp_str_p scheme_name,
+    hemp_str_p source_name
 ) {
     hemp_scheme_p scheme = hemp_scheme(hemp, scheme_name);
 
@@ -371,17 +371,17 @@ hemp_free_template(
 
 hemp_template_p
 hemp_template(
-    hemp_p      hemp,
-    hemp_cstr_p dialect,
-    hemp_cstr_p scheme,
-    hemp_cstr_p source
+    hemp_p     hemp,
+    hemp_str_p dialect,
+    hemp_str_p scheme,
+    hemp_str_p source
 ) {
     hemp_template_p     tmpl;
     static hemp_md5_t   md5;
 
     hemp_md5_init(&md5);
-    hemp_md5_update_cstr(&md5, scheme);
-    hemp_md5_update_cstr(&md5, source);
+    hemp_md5_update_string(&md5, scheme);
+    hemp_md5_update_string(&md5, source);
     hemp_md5_final(&md5);
     
 //  hemp_debug("MD5 for %s template [%s] is %s\n", scheme, source, md5.output);
@@ -389,8 +389,8 @@ hemp_template(
     tmpl = hemp_hash_fetch_pointer(hemp->templates, md5.output);
     
     if (tmpl) {
-        if (hemp_cstr_eq(tmpl->source->scheme->name, scheme)
-        &&  hemp_cstr_eq(tmpl->source->name, source)) {
+        if (hemp_string_eq(tmpl->source->scheme->name, scheme)
+        &&  hemp_string_eq(tmpl->source->name, source)) {
             // TODO: bump up LRU cache
 //          hemp_debug("returning cached template\n");
             return tmpl;
@@ -432,7 +432,7 @@ hemp_context(
  * error handling
  *--------------------------------------------------------------------------*/
 
-hemp_cstr_p
+hemp_str_p
 hemp_error_format(
     hemp_p       hemp,
     hemp_errno_e number
@@ -440,7 +440,7 @@ hemp_error_format(
     if (number < 0 || number >= HEMP_ERROR_MAX) 
         hemp_fatal("Invalid error number: %d", number);
 
-    hemp_cstr_p format = hemp->errmsg[number];
+    hemp_str_p format = hemp->errmsg[number];
 
     /* Should we ever have NULL message entries? */
     if (! format)
@@ -460,7 +460,7 @@ hemp_error_message(
     ...
 ) {
     hemp_debug_call("hemp_error_message()\n");
-    hemp_cstr_p format = hemp_error_format(hemp, number);
+    hemp_str_p format = hemp_error_format(hemp, number);
 
     va_list args;
     va_start(args, number);
@@ -477,7 +477,7 @@ hemp_error_text(
 ) {
     hemp_scan_pos_p sp = error->scan_pos;
     hemp_text_p text;
-    hemp_cstr_p buffer;
+    hemp_str_p  buffer;
     
     if (sp) {
         asprintf(
@@ -486,10 +486,10 @@ hemp_error_text(
             sp->pos, hemp_source_name(sp->tmpl->source), error->message,
             sp->start
         );
-        text = hemp_text_from_cstr(buffer);
+        text = hemp_text_from_string(buffer);
     }
     else {
-        text = hemp_text_from_cstr(error->message);
+        text = hemp_text_from_string(error->message);
     }
     
     return text;

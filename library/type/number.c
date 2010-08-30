@@ -3,7 +3,7 @@
 
 
 HEMP_TYPE_FUNC(hemp_type_number) {
-    hemp_type_p type = hemp_type_init(id, name);
+    hemp_type_p type = hemp_type_subtype(HempValue, id, name);
     type->text    = &hemp_value_number_text;    /* convert number to text           */
     type->number  = &hemp_value_self;           /* no-op to return number           */
     type->integer = &hemp_value_number_integer; /* number -> integer conversion     */
@@ -20,7 +20,7 @@ HEMP_VTEXT_FUNC(hemp_value_number_text) {
 
     snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, hemp_val_num(value));
     hemp_prepare_output(output, text, strlen(buffer));
-    hemp_text_append_cstr(text, buffer);
+    hemp_text_append_string(text, buffer);
 
     return output;
 }

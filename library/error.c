@@ -28,12 +28,12 @@ hemp_error_new(
 hemp_error_p
 hemp_error_init(
     hemp_errno_e number,
-    hemp_cstr_p  message
+    hemp_str_p   message
 ) {
     hemp_error_p error = hemp_error_new(number);
 
     /* We use strdup() to deliberately avoid the memory trace that is wrapped 
-     * around mem_cstr_copy() and friend when memory debugging is enabled.
+     * around mem_string_copy() and friend when memory debugging is enabled.
      * This is because the vasprintf() functions called below also avoid our
      * basic memory allocation tracking.  So we call free() not hemp_mem_free()
      * in hemp_error_free() below.
@@ -50,7 +50,7 @@ hemp_error_init(
 hemp_error_p
 hemp_error_initf(
     hemp_errno_e number,
-    hemp_cstr_p  format,
+    hemp_str_p   format,
     ...
 ) {
     hemp_error_p error = hemp_error_new(number);
@@ -66,7 +66,7 @@ hemp_error_initf(
 hemp_error_p
 hemp_error_initfv(
     hemp_errno_e number,
-    hemp_cstr_p  format,
+    hemp_str_p   format,
     va_list      args
 ) {
     hemp_error_p error = hemp_error_new(number);

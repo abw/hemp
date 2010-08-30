@@ -46,7 +46,7 @@ void test_grammar() {
     HEMP_CATCH_ALL;
         pass("caught error for dud grammar");
         ok( 
-            hemp_cstr_eq(hemp->error->message, "Invalid grammar specified: dud"),
+            hemp_string_eq(hemp->error->message, "Invalid grammar specified: dud"),
             "dud grammar message"
         );
     HEMP_END;
@@ -58,8 +58,8 @@ void test_grammar() {
 
 hemp_grammar_p
 hemp_grammar_test(
-    hemp_p      hemp,
-    hemp_cstr_p name
+    hemp_p     hemp,
+    hemp_str_p name
 ) {
     hemp_debug("constructing test grammar\n");
     hemp_grammar_p grammar = (hemp_grammar_p) hemp_grammar_init(hemp, name);

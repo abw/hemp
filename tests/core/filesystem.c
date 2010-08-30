@@ -43,8 +43,8 @@ void test_file1() {
     hemp_p hemp      = hemp_init();
     hemp_filesystem_p filesystem 
                      = hemp_filesystem_init(hemp, HEMP_TESTDIR);
-    hemp_cstr_p path = hemp_filesystem_join_path(HEMP_TESTDIR, "data/file1");
-    hemp_cstr_p text = hemp_filesystem_read_file(path);
+    hemp_str_p path  = hemp_filesystem_join_path(HEMP_TESTDIR, "data/file1");
+    hemp_str_p text  = hemp_filesystem_read_file(path);
     ok( text, "read text from foobar: %s", text );
     hemp_mem_free(text);
     hemp_mem_free(path);

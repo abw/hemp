@@ -38,9 +38,9 @@ HEMP_SYMBOL_FUNC(hemp_element_comment_symbol) {
 
 
 HEMP_SCAN_FUNC(hemp_element_comment_scanner) {
-    hemp_cstr_p     src     = *srcptr;
-    hemp_cstr_p     tag_end = tag->end;
-    hemp_size_t     tag_len = strlen(tag->end);
+    hemp_str_p  src     = *srcptr;
+    hemp_str_p  tag_end = tag->end;
+    hemp_size_t tag_len = strlen(tag->end);
 
     hemp_debug_call("hemp_element_comment_scanner()\n");
 
@@ -56,7 +56,7 @@ HEMP_SCAN_FUNC(hemp_element_comment_scanner) {
                 src++;
             break;
         }
-        else if (*src == *tag_end && hemp_cstrn_eq(src, tag_end, tag_len)) {
+        else if (*src == *tag_end && hemp_stringn_eq(src, tag_end, tag_len)) {
             break;
         }
     }

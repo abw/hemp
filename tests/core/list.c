@@ -1,7 +1,7 @@
 #include <hemp/test.h>
 
 void test_list();
-hemp_cstr_p list_as_text(hemp_list_p);
+hemp_str_p list_as_text(hemp_list_p);
 
 
 int
@@ -31,7 +31,7 @@ void test_list() {
     );
     
     ok( 
-        hemp_cstr_eq(list_as_text(list), "foo, bar"),
+        hemp_string_eq(list_as_text(list), "foo, bar"),
         "list text is foo, bar"
     );
     
@@ -55,7 +55,7 @@ hemp_text_append(
 }
 
 
-hemp_cstr_p
+hemp_str_p
 list_as_text(
     hemp_list_p list
 ) {

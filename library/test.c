@@ -201,7 +201,7 @@ hemp_test_result(
     ...
 ) {
     va_list ap;
-    hemp_cstr_p fullname = NULL;
+    hemp_str_p  fullname = NULL;
     hemp_bool_t badname  = HEMP_TRUE;   /* assume the worst */
     char *c;
     int name_is_digits;
@@ -357,7 +357,7 @@ hemp_mem_trace_ok(void)
 {
     char *debug = getenv("HEMP_MEMORY_TRACE");
     hemp_size_t size = hemp_mem_trace_report(
-        debug && hemp_cstr_eq(debug, "1")
+        debug && hemp_string_eq(debug, "1")
     );
 
     if (size == 0) {
@@ -382,14 +382,14 @@ hemp_mem_trace_ok(void)
 
 hemp_uint_t
 hemp_test_expect_text(
-    hemp_cstr_p     language,
-    hemp_cstr_p     dialect,
-    hemp_cstr_p     text,
-    hemp_cstr_p     alias,
+    hemp_str_p      language,
+    hemp_str_p      dialect,
+    hemp_str_p      text,
+    hemp_str_p      alias,
     hemp_context_p  context
 ) {
     hemp_p          hemp = hemp_init();
-    hemp_cstr_p     test, name, expect, error, end;
+    hemp_str_p      test, name, expect, error, end;
     hemp_list_p     list;
     hemp_template_p tmpl;
     hemp_text_p     output;
@@ -402,7 +402,7 @@ hemp_test_expect_text(
     HEMP_END;
 
     if ((test = strstr(text, HEMP_TEST_START))) {
-        hemp_cstr_to_next_line(&test);
+        hemp_string_to_next_line(&test);
     }
     else {
         test = text;
@@ -418,7 +418,7 @@ hemp_test_expect_text(
     
     /* skip over first -- test */
     test += strlen(HEMP_TEST_MARKER);
-    list = hemp_cstr_split(test, HEMP_TEST_MARKER);
+    list = hemp_string_split(test, HEMP_TEST_MARKER);
 
     hemp_debug("found %d tests in %s\n", list->length, alias);
 
@@ -445,17 +445,17 @@ hemp_test_expect_text(
         if ((expect = strstr(test, HEMP_EXPECT_MARKER))) {
             *expect = '\0';
             expect += strlen(HEMP_EXPECT_MARKER);
-            hemp_cstr_to_next_line(&expect);
+            hemp_string_to_next_line(&expect);
         }
 
         if ( (error = strstr(test, HEMP_ERROR_MARKER))
           || (expect && (error = strstr(expect, HEMP_ERROR_MARKER )))) {
             *error = '\0';
             error += strlen(HEMP_ERROR_MARKER);
-            hemp_cstr_to_next_line(&error);
+            hemp_string_to_next_line(&error);
         }
 
-        hemp_cstr_chomp(test);
+        hemp_string_chomp(test);
 
 //        printf(">> test %u: %s\n", n, name);
 //        if (expect)
@@ -510,12 +510,12 @@ hemp_test_expect_text(
 
 hemp_uint_t
 hemp_test_expect_file(
-    hemp_cstr_p     language,
-    hemp_cstr_p     dialect,
-    hemp_cstr_p     file,
-    hemp_context_p  context
+    hemp_str_p     language,
+    hemp_str_p     dialect,
+    hemp_str_p     file,
+    hemp_context_p context
 ) {
-    hemp_cstr_p text   = hemp_filesystem_read_file(file);
+    hemp_str_p  text   = hemp_filesystem_read_file(file);
     hemp_uint_t result = hemp_test_expect_text(language, dialect, text, file, context);
     hemp_mem_free(text);
     return result;
@@ -531,16 +531,16 @@ hemp_test_expect_file(
 
 hemp_uint_t
 hemp_test_expect_script(
-    hemp_cstr_p     language,
-    hemp_cstr_p     dialect,
-    hemp_cstr_p     testdir,
-    hemp_cstr_p     name,
-    hemp_context_p  context
+    hemp_str_p     language,
+    hemp_str_p     dialect,
+    hemp_str_p     testdir,
+    hemp_str_p     name,
+    hemp_context_p context
 ) {
 //    hemp_mem_trace_reset();
-    hemp_cstr_p dir    = hemp_filesystem_join_path(testdir, "scripts");
-    hemp_cstr_p file   = hemp_filesystem_join_path(dir, name);
-    hemp_cstr_p text   = hemp_filesystem_read_file(file);
+    hemp_str_p  dir    = hemp_filesystem_join_path(testdir, "scripts");
+    hemp_str_p  file   = hemp_filesystem_join_path(dir, name);
+    hemp_str_p  text   = hemp_filesystem_read_file(file);
     hemp_uint_t result = hemp_test_expect_text(language, dialect, text, name, context);
     hemp_mem_free(text);
     hemp_mem_free(file);
@@ -552,14 +552,14 @@ hemp_test_expect_script(
 
 void 
 hemp_test_output(
-    hemp_cstr_p name,
+    hemp_str_p  name,
     hemp_text_p output,
-    hemp_cstr_p expect
+    hemp_str_p  expect
 ) {
-    hemp_cstr_chomp(output->string);
-    hemp_cstr_chomp(expect);
+    hemp_string_chomp(output->string);
+    hemp_string_chomp(expect);
 
-    if (hemp_cstr_eq(output->string, expect)) {
+    if (hemp_string_eq(output->string, expect)) {
 //      printf("EXPECT: [%s%s%s]\n", HEMP_ANSI_YELLOW, expect, HEMP_ANSI_RESET);
 //      printf("OUTPUT: [%s%s%s]\n", HEMP_ANSI_GREEN, output->string, HEMP_ANSI_RESET);
         ok(1, "%s output matches expected", name);
@@ -574,14 +574,14 @@ hemp_test_output(
 
 void 
 hemp_test_error(
-    hemp_cstr_p name,
-    hemp_cstr_p error,
-    hemp_cstr_p expect
+    hemp_str_p name,
+    hemp_str_p error,
+    hemp_str_p expect
 ) {
-    hemp_cstr_chomp(error);
-    hemp_cstr_chomp(expect);
+    hemp_string_chomp(error);
+    hemp_string_chomp(expect);
 
-    if (hemp_cstr_eq(error, expect)) {
+    if (hemp_string_eq(error, expect)) {
         ok(1, "%s error matches expected", name);
     }
     else {

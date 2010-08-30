@@ -7,8 +7,8 @@
 
 hemp_bool_t
     hemp_module_load(
-        hemp_t      hemp,
-        hemp_cstr_t name
+        hemp_t     hemp,
+        hemp_str_p name
     );
 
 

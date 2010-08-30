@@ -1,7 +1,6 @@
 include_HEADERS         = hemp.h
 nobase_include_HEADERS  = hemp/config.h         \
                           hemp/core.h           \
-                          hemp/cstr.h           \
                           hemp/debug.h          \
                           hemp/debug.h          \
                           hemp/defines.h        \
@@ -30,6 +29,7 @@ nobase_include_HEADERS  = hemp/config.h         \
                           hemp/text.h           \
                           hemp/type.h           \
                           hemp/type/number.h    \
+                          hemp/type/string.h    \
                           hemp/types.h          \
                           hemp/utils.h          \
                           hemp/value.h

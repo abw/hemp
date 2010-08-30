@@ -3,8 +3,8 @@
 
 hemp_grammar_p
 hemp_grammar_init(
-    hemp_p      hemp,
-    hemp_cstr_p name
+    hemp_p     hemp,
+    hemp_str_p name
 ) {
     hemp_grammar_p grammar = (hemp_grammar_p) hemp_mem_alloc(
         sizeof(struct hemp_grammar_s)
@@ -17,7 +17,7 @@ hemp_grammar_init(
     grammar->symbols   = hemp_hash_init();
 //  grammar->keywords  = hemp_hash_init();
     grammar->operators = hemp_ptree_init(HEMP_OPERATORS_SIZE);
-    grammar->name      = hemp_cstr_copy(name);
+    grammar->name      = hemp_string_copy(name);
 
     if (! grammar->name)
         hemp_mem_fail("grammar name");
@@ -28,9 +28,9 @@ hemp_grammar_init(
 hemp_symbol_p
 hemp_grammar_new_symbol(
     hemp_grammar_p grammar,
-    hemp_cstr_p    etype,
-    hemp_cstr_p    start,
-    hemp_cstr_p    end
+    hemp_str_p     etype,
+    hemp_str_p     start,
+    hemp_str_p     end
 ) {
 //  hemp_debug_call(
 //      "new [%s => %s] symbol\n", 
@@ -61,9 +61,9 @@ hemp_grammar_new_symbol(
 hemp_symbol_p
 hemp_grammar_add_symbol(
     hemp_grammar_p grammar,
-    hemp_cstr_p    etype,
-    hemp_cstr_p    start,
-    hemp_cstr_p    end,
+    hemp_str_p     etype,
+    hemp_str_p     start,
+    hemp_str_p     end,
     hemp_prec_t    lprec,
     hemp_prec_t    rprec
 ) {
@@ -88,7 +88,7 @@ hemp_grammar_add_symbol(
      * as one single token, not two instances of '+'
      */
 
-//  if (! hemp_cstr_wordlike(start)) {
+//  if (! hemp_string_wordlike(start)) {
         hemp_ptree_store(
             grammar->operators, start, (hemp_mem_p) symbol
         );

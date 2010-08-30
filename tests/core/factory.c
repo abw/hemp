@@ -31,8 +31,8 @@ constructor(
 
 hemp_action_p
 wildcard(
-    hemp_mem_p      msg,
-    hemp_cstr_p     name
+    hemp_mem_p msg,
+    hemp_str_p name
 ) {
     hemp_debug_cyan("wildcard action for %s\n", name);
     return hemp_action_init(

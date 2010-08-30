@@ -47,7 +47,7 @@ hemp_scan_text(
     hemp_pnode_p    *inhead  = tagset->inline_tags->head,
                     *outhead = tagset->outline_tags->head,
                     pnode;
-    hemp_cstr_p     text     = hemp_source_read(tmpl->source),
+    hemp_str_p      text     = hemp_source_read(tmpl->source),
                     src      = text,
                     from     = text,
                     cmptr, tagstr;

@@ -22,7 +22,7 @@ hemp_md5_p
 void 
     hemp_md5_update(
         hemp_md5_p  md5,
-        hemp_cstr_p input,
+        hemp_str_p  input,
         hemp_size_t length
     );
 
@@ -40,7 +40,7 @@ static void
 void 
     hemp_md5_free();
 
-#define hemp_md5_update_cstr(md5, str)      \
+#define hemp_md5_update_string(md5, str)      \
     hemp_md5_update(md5, str, strlen(str))
 
 void hemp_todo(char *format, ...);

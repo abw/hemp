@@ -17,14 +17,14 @@ void
 hemp_scan_inline_tag(
     hemp_template_p tmpl,
     hemp_tag_p      tag,
-    hemp_cstr_p     tagtok,
+    hemp_str_p      tagtok,
     hemp_pos_t      pos,
-    hemp_cstr_p     *srcptr
+    hemp_str_p     *srcptr
 ) {
-    hemp_cstr_p     src    = *srcptr,
+    hemp_str_p      src    = *srcptr,
                     from   = src,
                     point;
-    hemp_cstr_p     tagend = tag->end;
+    hemp_str_p      tagend = tag->end;
     hemp_size_t     endlen = strlen(tagend);
     hemp_element_p  element;
     hemp_num_t      num_val;
@@ -53,7 +53,7 @@ hemp_scan_inline_tag(
                 from, pos, src - from
             );
         }
-        else if (hemp_cstrn_eq(src, tagend, endlen)) {      // TODO: end flags
+        else if (hemp_stringn_eq(src, tagend, endlen)) {      // TODO: end flags
             /* tag end */
             hemp_debug_token("TAG END", from, endlen);
             hemp_elements_append(

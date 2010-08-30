@@ -28,7 +28,7 @@ hemp_pos_t  hemp_list_each(hemp_list_p, hemp_list_each_f);
 hemp_bool_t hemp_list_each_free(hemp_list_p, hemp_pos_t, hemp_value_t);
 
 // tmp hack for debugging
-hemp_cstr_p hemp_list_dump(hemp_list_p);
+hemp_str_p  hemp_list_dump(hemp_list_p);
 
 
 /*--------------------------------------------------------------------------

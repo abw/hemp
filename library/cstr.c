@@ -7,13 +7,13 @@
  *--------------------------------------------------------------------------*/
 
 
-hemp_cstr_p
-hemp_cstr_extract(
-    hemp_cstr_p from,
-    hemp_cstr_p to
+hemp_str_p
+hemp_string_extract(
+    hemp_str_p from,
+    hemp_str_p to
 ) {
     hemp_size_t size = to - from;
-    hemp_cstr_p str  = hemp_mem_alloc(size + 1);
+    hemp_str_p str  = hemp_mem_alloc(size + 1);
     
     if (! str)
         hemp_mem_fail("string extract");
@@ -26,14 +26,14 @@ hemp_cstr_extract(
 
 
 hemp_list_p
-hemp_cstr_split(
-    hemp_cstr_p source,
-    hemp_cstr_p split
+hemp_string_split(
+    hemp_str_p source,
+    hemp_str_p split
 ) {
     hemp_list_p list = hemp_list_init();
-    hemp_cstr_p from = source, to;
+    hemp_str_p from = source, to;
     hemp_size_t slen = strlen(split);
-    hemp_cstr_p item;
+    hemp_str_p item;
     hemp_size_t size;
     
     /* we're dynamically allocating memory for each directory so we must
@@ -43,12 +43,12 @@ hemp_cstr_split(
     list->cleaner = &hemp_list_each_free;
 
     while ((to = strstr(from, split))) {
-        item = hemp_cstr_extract(from, to);
+        item = hemp_string_extract(from, to);
         hemp_list_push(list, hemp_str_val(item));
         from = (to += slen);
     }
 
-    item = hemp_cstr_copy(from);
+    item = hemp_string_copy(from);
     if (! item)
         hemp_mem_fail("string extract");
 
@@ -59,16 +59,16 @@ hemp_cstr_split(
 
 
 hemp_list_p
-hemp_cstr_splits(
-    hemp_cstr_p source,
-    hemp_cstr_p token
+hemp_string_splits(
+    hemp_str_p source,
+    hemp_str_p token
 ) {
     hemp_list_p list = hemp_list_init();
     hemp_size_t slen = strlen(source) + 1;
     hemp_size_t tlen = strlen(token);
-    hemp_cstr_p from = source, to;
+    hemp_str_p from = source, to;
     hemp_pos_t  pos  = 0;
-    hemp_cstr_split_p split;
+    hemp_string_split_p split;
     
     /* we're dynamically allocating memory for each directory so we must
      * ensure that the list has a cleaner function associated with it that
@@ -85,10 +85,10 @@ hemp_cstr_splits(
          * we only need one call to malloc() and another to free() (called by 
          * the generic list cleaner installed above.
          */
-        split = (hemp_cstr_split_p) hemp_mem_alloc(
-            sizeof(struct hemp_cstr_split_s) + slen
+        split = (hemp_string_split_p) hemp_mem_alloc(
+            sizeof(struct hemp_string_split_s) + slen
         );
-        split->left = (hemp_cstr_p) split + sizeof(struct hemp_cstr_split_s);
+        split->left = (hemp_str_p) split + sizeof(struct hemp_string_split_s);
         strcpy(split->left, source);
         hemp_list_push(list, hemp_ptr_val(split));
 
@@ -109,22 +109,22 @@ hemp_cstr_splits(
 
 
 void
-hemp_cstr_trim(
-    hemp_cstr_p cstr
+hemp_string_trim(
+    hemp_str_p string
 ) {
-    hemp_cstr_p s = cstr;
-    hemp_cstr_p t;
+    hemp_str_p s = string;
+    hemp_str_p t;
     hemp_size_t len;
 
     while (isspace(*s))
         s++;
 
     len = strlen(s);
-    if (s > cstr)
-        hemp_mem_copy(s, cstr, len);
+    if (s > string)
+        hemp_mem_copy(s, string, len);
 
-    t = cstr + len - 1;
-    while (t > cstr && isspace(*t))
+    t = string + len - 1;
+    while (t > string && isspace(*t))
         t--;
 
     *++t = HEMP_NUL;
@@ -132,10 +132,10 @@ hemp_cstr_trim(
 
 
 void
-hemp_cstr_chomp(
-    hemp_cstr_p cstr
+hemp_string_chomp(
+    hemp_str_p string
 ) {
-    hemp_cstr_p s = cstr;
+    hemp_str_p s = string;
     hemp_assert(s);
 
     /* go to the end of the string */
@@ -143,42 +143,42 @@ hemp_cstr_chomp(
         s++;
     
     /* then walk back while the preceding character is whitespace */
-    while (s > cstr && isspace(*--s))
+    while (s > string && isspace(*--s))
         *s = HEMP_NUL;
 }
 
 hemp_bool_t
-hemp_cstr_wordlike(
-    hemp_cstr_p cstr
+hemp_string_wordlike(
+    hemp_str_p string
 ) {
-    while (isalnum(*cstr) || *cstr == HEMP_UNDERSCORE)
-        cstr++;
+    while (isalnum(*string) || *string == HEMP_UNDERSCORE)
+        string++;
 
     /* if we reached the end of the string then all characters are wordlike */
-    return *cstr
+    return *string
         ? HEMP_FALSE
         : HEMP_TRUE;
 }
 
-HEMP_INLINE hemp_cstr_p
-hemp_cstr_next_space(
-    hemp_cstr_p cstr
+HEMP_INLINE hemp_str_p
+hemp_string_next_space(
+    hemp_str_p string
 ) {
-    while (*cstr && ! isspace(*cstr))
-        cstr++;
+    while (*string && ! isspace(*string))
+        string++;
 
-    return *cstr ? cstr : NULL;
+    return *string ? string : NULL;
 }
 
 
 HEMP_INLINE hemp_bool_t
-hemp_cstr_to_next_space(
-    hemp_cstr_p *cstr
+hemp_string_to_next_space(
+    hemp_str_p *string
 ) {
-    hemp_cstr_p space = hemp_cstr_next_space(*cstr);
+    hemp_str_p space = hemp_string_next_space(*string);
 
     if (space) {
-        *cstr = space;
+        *string = space;
         return HEMP_TRUE;
     }
     else {
@@ -187,25 +187,25 @@ hemp_cstr_to_next_space(
 }
 
 
-HEMP_INLINE hemp_cstr_p
-hemp_cstr_next_nonspace(
-    hemp_cstr_p cstr
+HEMP_INLINE hemp_str_p
+hemp_string_next_nonspace(
+    hemp_str_p string
 ) {
-    while (*cstr && isspace(*cstr))
-        cstr++;
+    while (*string && isspace(*string))
+        string++;
 
-    return *cstr ? cstr : NULL;
+    return *string ? string : NULL;
 }
 
 
 HEMP_INLINE hemp_bool_t
-hemp_cstr_to_next_nonspace(
-    hemp_cstr_p *cstr
+hemp_string_to_next_nonspace(
+    hemp_str_p *string
 ) {
-    hemp_cstr_p nonspace = hemp_cstr_next_nonspace(*cstr);
+    hemp_str_p nonspace = hemp_string_next_nonspace(*string);
 
     if (nonspace) {
-        *cstr = nonspace;
+        *string = nonspace;
         return HEMP_TRUE;
     }
     else {
@@ -214,35 +214,35 @@ hemp_cstr_to_next_nonspace(
 }
 
 
-HEMP_INLINE hemp_cstr_p
-hemp_cstr_next_line(
-    hemp_cstr_p cstr
+HEMP_INLINE hemp_str_p
+hemp_string_next_line(
+    hemp_str_p string
 ) {
-    while (*cstr) {
-        if (*cstr == HEMP_LF) {
-            cstr++;
-            return cstr;
+    while (*string) {
+        if (*string == HEMP_LF) {
+            string++;
+            return string;
         }
-        else if (*cstr == HEMP_CR) {
-            cstr++;
-            if (*cstr == HEMP_LF)
-                cstr++;
-            return cstr;
+        else if (*string == HEMP_CR) {
+            string++;
+            if (*string == HEMP_LF)
+                string++;
+            return string;
         }
-        cstr++;
+        string++;
     }
     return NULL;
 }
 
 
 HEMP_INLINE hemp_bool_t
-hemp_cstr_to_next_line(
-    hemp_cstr_p *cstr
+hemp_string_to_next_line(
+    hemp_str_p *string
 ) {
-    hemp_cstr_p line = hemp_cstr_next_line(*cstr);
+    hemp_str_p line = hemp_string_next_line(*string);
 
     if (line) {
-        *cstr = line;
+        *string = line;
         return HEMP_TRUE;
     }
     else {
@@ -252,25 +252,25 @@ hemp_cstr_to_next_line(
 
 
 HEMP_INLINE hemp_list_p
-hemp_cstr_words(
-    hemp_cstr_p cstr
+hemp_string_words(
+    hemp_str_p string
 ) {
-    return hemp_cstr_nwords(cstr, 0);
+    return hemp_string_nwords(string, 0);
 }
 
 
 hemp_list_p
-hemp_cstr_nwords(
-    hemp_cstr_p cstr,
+hemp_string_nwords(
+    hemp_str_p string,
     hemp_size_t max
 ) {
     hemp_list_p list = hemp_list_init();
-    hemp_cstr_p from = cstr, to, item;
+    hemp_str_p from = string, to, item;
     hemp_size_t size = 0;
 
     list->cleaner = &hemp_list_each_free;
 
-    while (from && hemp_cstr_to_next_nonspace(&from)) {
+    while (from && hemp_string_to_next_nonspace(&from)) {
         /* If the user has requested a maximum number of word splits and if
          * this will be the maxth word then consume everything to the end of
          * the string as the final "word".  Otherwise we only consume up to 
@@ -283,14 +283,14 @@ hemp_cstr_nwords(
         if (max && size >= max)
             to = NULL;
         else
-            to = hemp_cstr_next_space(from);
+            to = hemp_string_next_space(from);
         
         if (to) {
-            item = hemp_cstr_extract(from, to);
+            item = hemp_string_extract(from, to);
             from = to;
         }
         else {
-            item = hemp_cstr_clone(from, "word");
+            item = hemp_string_clone(from, "word");
             from = NULL;
         }
         
@@ -308,10 +308,10 @@ hemp_cstr_nwords(
 
 
 //HEMP_DO_INLINE hemp_bool_t
-//hemp_cstr_to_next_line(
-//    hemp_cstr_p *cstr
+//hemp_string_to_next_line(
+//    hemp_str_p *string
 //) {
-//    hemp_cstr_p s = *cstr;
+//    hemp_str_p s = *string;
 //
 //    while (*s) {
 //        if (*s == HEMP_LF) {
@@ -326,5 +326,5 @@ hemp_cstr_nwords(
 //        }
 //        s++;
 //    }
-//    *cstr = s;
+//    *string = s;
 //}

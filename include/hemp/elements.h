@@ -32,7 +32,7 @@ hemp_element_p
     hemp_elements_create(
         hemp_elements_p elements,
         hemp_symbol_p   type,
-        hemp_cstr_p     token,
+        hemp_str_p      token,
         hemp_pos_t      position,
         hemp_size_t     length
     );
@@ -41,7 +41,7 @@ hemp_element_p
     hemp_elements_append(
         hemp_elements_p elements,
         hemp_symbol_p   type,
-        hemp_cstr_p     token,
+        hemp_str_p      token,
         hemp_pos_t      position,
         hemp_size_t     length
     );

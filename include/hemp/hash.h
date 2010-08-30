@@ -18,7 +18,7 @@ struct hemp_hash_s {
 // old hash item
 // struct hemp_hash_item_s {
 //    hemp_size_t         hash;       /* computed hash value      */
-//    hemp_cstr_p         key;        /* lookup key               */
+//    hemp_str_p         key;        /* lookup key               */
 //    hemp_mem_p          value;      /* corresponding value      */
 //    hemp_hash_item_p    next;       /* next item in column      */
 //};
@@ -27,7 +27,7 @@ struct hemp_hash_s {
 //struct hemp_slot_s {
 //    hemp_value_t        parent;     /* owner of this slot                   */
 //    hemp_size_t         index;      /* numerical hash/index value           */
-//    hemp_cstr_p         name;       /* lookup key                           */
+//    hemp_str_p         name;       /* lookup key                           */
 //    hemp_value_t        value;      /* corresponding value                  */
 //    hemp_slot_p         next;       /* next slot in hash/free linked list   */
 //};
@@ -65,73 +65,73 @@ hemp_size_t
 hemp_slot_p
     hemp_hash_store(
         hemp_hash_p     hash, 
-        hemp_cstr_p     key, 
+        hemp_str_p      key, 
         hemp_value_t    value
     );
 
 HEMP_INLINE hemp_bool_t 
     hemp_hash_key_match(
-        hemp_cstr_p key1,
-        hemp_cstr_p key2,
+        hemp_str_p  key1,
+        hemp_str_p  key2,
         hemp_size_t length
     );
 
 HEMP_INLINE hemp_value_t
     hemp_hash_fetch_keylen(
         hemp_hash_p hash, 
-        hemp_cstr_p name,
+        hemp_str_p  name,
         hemp_size_t length
     );
 
 HEMP_INLINE hemp_value_t
     hemp_hash_fetch(
-        hemp_hash_p     hash, 
-        hemp_cstr_p     key
+        hemp_hash_p hash, 
+        hemp_str_p  key
     );
 
 HEMP_INLINE hemp_num_t
     hemp_hash_fetch_number(
         hemp_hash_p hash, 
-        hemp_cstr_p name
+        hemp_str_p  name
     );
 
 HEMP_INLINE hemp_int_t
     hemp_hash_fetch_integer(
         hemp_hash_p hash, 
-        hemp_cstr_p name
+        hemp_str_p  name
     );
 
 HEMP_INLINE hemp_mem_p
     hemp_hash_fetch_pointer(
-        hemp_hash_p     hash, 
-        hemp_cstr_p     key
+        hemp_hash_p hash, 
+        hemp_str_p  key
     );
 
-HEMP_INLINE hemp_cstr_p
+HEMP_INLINE hemp_str_p
     hemp_hash_fetch_string(
-        hemp_hash_p     hash, 
-        hemp_cstr_p     key
+        hemp_hash_p hash, 
+        hemp_str_p  key
     );
 
 HEMP_INLINE hemp_text_p
     hemp_hash_fetch_text(
-        hemp_hash_p     hash, 
-        hemp_cstr_p     key
+        hemp_hash_p hash, 
+        hemp_str_p  key
     );
 
-hemp_cstr_p
-    hemp_hash_as_cstr(
+hemp_str_p
+    hemp_hash_as_string(
         hemp_hash_p hash
     );
 
 hemp_size_t
     hemp_hash_function_default(
-        hemp_cstr_p key
+        hemp_str_p key
     );
 
 HEMP_DO_INLINE hemp_size_t
     hemp_hash_function_jenkins32(
-        hemp_cstr_p key,
+        hemp_str_p  key,
         hemp_size_t length
     );
 
@@ -152,8 +152,8 @@ void
  * patch in the hash function we want to use and define some other macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_hash_function(cstr, len)       \
-    hemp_hash_function_jenkins32(cstr, len)
+#define hemp_hash_function(string, len)       \
+    hemp_hash_function_jenkins32(string, len)
 
 #define hemp_hash_store_number(h, k, n)     \
     hemp_hash_store(h, k, hemp_num_val(n))

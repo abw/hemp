@@ -10,7 +10,7 @@
  */
 
 void hemp_mem_fail(
-    hemp_cstr_p type
+    hemp_str_p type
 ) {
     hemp_fatal(hemp_errmsg[HEMP_ERROR_MEMORY], type);
 }
@@ -32,8 +32,8 @@ hemp_mem_copy(
     hemp_size_t len
 ) {
     hemp_size_t i;
-    hemp_cstr_p s = (hemp_cstr_p) src;
-    hemp_cstr_p d = (hemp_cstr_p) dest;
+    hemp_str_p s = (hemp_str_p) src;
+    hemp_str_p d = (hemp_str_p) dest;
 
     if (d > s) {
         d += len;
@@ -124,8 +124,8 @@ hemp_mem_new_trace() {
 hemp_mem_trace_p
 hemp_mem_get_trace(
     hemp_mem_p ptr,
-    hemp_cstr_p file,
-    hemp_pos_t  line
+    hemp_str_p file,
+    hemp_pos_t line
 ) {
     int r = hemp_mem_used;
 
@@ -156,7 +156,7 @@ hemp_mem_get_trace(
 hemp_mem_p
 hemp_mem_trace_malloc(
     hemp_size_t size,
-    hemp_cstr_p file,
+    hemp_str_p  file,
     hemp_pos_t  line
 ) {
     hemp_mem_trace_p hmt = hemp_mem_new_trace();
@@ -178,7 +178,7 @@ hemp_mem_p
 hemp_mem_trace_external(
     hemp_mem_p  ptr,
     hemp_size_t size,
-    hemp_cstr_p file,
+    hemp_str_p  file,
     hemp_pos_t  line
 ) {
     hemp_mem_trace_p hmt = hemp_mem_new_trace();
@@ -201,7 +201,7 @@ hemp_mem_p
 hemp_mem_trace_realloc(
     hemp_mem_p  ptr, 
     hemp_size_t size,
-    hemp_cstr_p file,
+    hemp_str_p  file,
     hemp_pos_t  line
 ) {
     hemp_mem_trace_p hmt;
@@ -244,13 +244,13 @@ hemp_mem_trace_realloc(
  * Replacement for strdup() which tracks memory allocations.
  */
 
-hemp_cstr_p
+hemp_str_p
 hemp_mem_trace_strdup(
-    hemp_cstr_p str,
-    hemp_cstr_p file,
-    hemp_pos_t  line
+    hemp_str_p str,
+    hemp_str_p file,
+    hemp_pos_t line
 ) {
-    hemp_cstr_p dup = (hemp_cstr_p) hemp_mem_trace_malloc(strlen(str) + 1, file, line);
+    hemp_str_p dup = (hemp_str_p) hemp_mem_trace_malloc(strlen(str) + 1, file, line);
     strcpy(dup, str);
     return dup;
 }
@@ -264,9 +264,9 @@ hemp_mem_trace_strdup(
 
 void 
 hemp_mem_trace_free(
-    hemp_mem_p  ptr,
-    hemp_cstr_p file,
-    hemp_pos_t  line
+    hemp_mem_p ptr,
+    hemp_str_p file,
+    hemp_pos_t line
 ) {
 //    printf("free(%s)\n");
     hemp_mem_trace_p hmt = hemp_mem_get_trace(ptr, file, line);

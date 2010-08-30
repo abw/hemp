@@ -6,12 +6,12 @@
 
 hemp_bool_t
 hemp_module_load(
-    hemp_t          hemp,
-    hemp_cstr_t     name
+    hemp_p      hemp,
+    hemp_str_p  name
 ) {
     hemp_ptr_t      plugin = dlopen(name, RTLD_NOW);
     hemp_onload_fn  onload;
-    hemp_cstr_t     error;
+    hemp_str_p      error;
     
     if (plugin == NULL) {
         hemp_debug_load("failed to load plugin %s: \n", name, dlerror());

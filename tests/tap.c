@@ -469,7 +469,7 @@ hemp_mem_trace_ok(void)
 {
     char *debug = getenv("HEMP_MEMORY_TRACE");
     hemp_size_t size = hemp_mem_trace_report(
-        debug && hemp_cstr_eq(debug, "1")
+        debug && hemp_string_eq(debug, "1")
     );
 
     if (size == 0) {

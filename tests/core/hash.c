@@ -2,15 +2,15 @@
 
 void test_hash();
 void hash_get(hemp_hash_p, char *);
-void hash_set(hemp_hash_p table, hemp_cstr_p, hemp_cstr_p);
-void hash_has(hemp_hash_p table, hemp_cstr_p, hemp_cstr_p);
-void hash_hasnt(hemp_hash_p table, hemp_cstr_p);
-void hash_has_keylen(hemp_hash_p table, hemp_cstr_p, hemp_size_t, hemp_cstr_p);
-void hash_hasnt_keylen(hemp_hash_p table, hemp_cstr_p, hemp_size_t);
-void hash_index_same(hemp_cstr_p, hemp_size_t, hemp_cstr_p, hemp_size_t);
-void hash_index_different(hemp_cstr_p, hemp_size_t, hemp_cstr_p, hemp_size_t);
-void hash_keys_do_match(hemp_cstr_p, hemp_cstr_p, hemp_size_t);
-void hash_keys_no_match(hemp_cstr_p, hemp_cstr_p, hemp_size_t);
+void hash_set(hemp_hash_p table, hemp_str_p, hemp_str_p);
+void hash_has(hemp_hash_p table, hemp_str_p, hemp_str_p);
+void hash_hasnt(hemp_hash_p table, hemp_str_p);
+void hash_has_keylen(hemp_hash_p table, hemp_str_p, hemp_size_t, hemp_str_p);
+void hash_hasnt_keylen(hemp_hash_p table, hemp_str_p, hemp_size_t);
+void hash_index_same(hemp_str_p, hemp_size_t, hemp_str_p, hemp_size_t);
+void hash_index_different(hemp_str_p, hemp_size_t, hemp_str_p, hemp_size_t);
+void hash_keys_do_match(hemp_str_p, hemp_str_p, hemp_size_t);
+void hash_keys_no_match(hemp_str_p, hemp_str_p, hemp_size_t);
 
 
 int main(
@@ -91,8 +91,8 @@ void test_hash() {
 
 
 void hash_keys_do_match(
-    hemp_cstr_p hash_key,
-    hemp_cstr_p search_key,
+    hemp_str_p  hash_key,
+    hemp_str_p  search_key,
     hemp_size_t length
 ) {
     ok(
@@ -104,8 +104,8 @@ void hash_keys_do_match(
 
 
 void hash_keys_no_match(
-    hemp_cstr_p hash_key,
-    hemp_cstr_p search_key,
+    hemp_str_p  hash_key,
+    hemp_str_p  search_key,
     hemp_size_t length
 ) {
     ok(
@@ -116,9 +116,9 @@ void hash_keys_no_match(
 }
 
 void hash_index_same(
-    hemp_cstr_p key1,
+    hemp_str_p  key1,
     hemp_size_t len1,
-    hemp_cstr_p key2,
+    hemp_str_p  key2,
     hemp_size_t len2
 ) {
     hemp_size_t hash1 = hemp_hash_function(key1, len1);
@@ -128,9 +128,9 @@ void hash_index_same(
 
 
 void hash_index_different(
-    hemp_cstr_p key1,
+    hemp_str_p  key1,
     hemp_size_t len1,
-    hemp_cstr_p key2,
+    hemp_str_p  key2,
     hemp_size_t len2
 ) {
     hemp_size_t hash1 = hemp_hash_function(key1, len1);
@@ -142,12 +142,12 @@ void hash_index_different(
 void 
 hash_has(
     hemp_hash_p table, 
-    hemp_cstr_p key, 
-    hemp_cstr_p expect
+    hemp_str_p  key, 
+    hemp_str_p  expect
 ) {
-    hemp_cstr_p value = hemp_hash_fetch_string(table, key);
+    hemp_str_p value = hemp_hash_fetch_string(table, key);
     ok( 
-        value && hemp_cstr_eq(value, expect),
+        value && hemp_string_eq(value, expect),
         "found %s => %s", key, value
     );
 }
@@ -156,9 +156,9 @@ hash_has(
 void 
 hash_hasnt(
     hemp_hash_p table, 
-    hemp_cstr_p key
+    hemp_str_p  key
 ) {
-    hemp_cstr_p value = hemp_hash_fetch_string(table, key);
+    hemp_str_p value = hemp_hash_fetch_string(table, key);
     ok( ! value, "no entry for %s", key);
 }
 
@@ -166,9 +166,9 @@ hash_hasnt(
 void 
 hash_has_keylen(
     hemp_hash_p table, 
-    hemp_cstr_p key, 
+    hemp_str_p  key, 
     hemp_size_t length,
-    hemp_cstr_p expect
+    hemp_str_p  expect
 ) {
     hemp_value_t value = hemp_hash_fetch_keylen(table, key, length);
 
@@ -176,9 +176,9 @@ hash_has_keylen(
         fail("not found: %s (length:%d)", key, length);
     }
     else {
-        hemp_cstr_p str = hemp_val_str(value); 
+        hemp_str_p str = hemp_val_str(value); 
         ok( 
-            str && hemp_cstr_eq(str, expect),
+            str && hemp_string_eq(str, expect),
             "found %s (length: %d) => %s", key, length, str
         );
     }
@@ -187,7 +187,7 @@ hash_has_keylen(
 void 
 hash_hasnt_keylen(
     hemp_hash_p table, 
-    hemp_cstr_p key,
+    hemp_str_p  key,
     hemp_size_t length
 ) {
     hemp_value_t value = hemp_hash_fetch_keylen(table, key, length);
@@ -198,8 +198,8 @@ hash_hasnt_keylen(
 void 
 hash_set(
     hemp_hash_p table, 
-    hemp_cstr_p key, 
-    hemp_cstr_p value
+    hemp_str_p  key, 
+    hemp_str_p  value
 ) {
     ok(
         hemp_hash_store_string(table, key, value),

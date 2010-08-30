@@ -24,7 +24,7 @@
  *-------------------------------------------------------------------------*/
 
 struct hemp_scheme_s {
-    hemp_cstr_p             name;
+    hemp_str_p              name;
     hemp_source_namer_f     namer;
     hemp_source_checker_f   checker;
     hemp_source_reader_f    reader;
@@ -38,7 +38,7 @@ struct hemp_scheme_s {
 
 /* generic scheme function prototypes */
 hemp_scheme_p   hemp_scheme_init(
-    hemp_cstr_p,
+    hemp_str_p,
     hemp_source_namer_f,
     hemp_source_checker_f,
     hemp_source_reader_f
@@ -46,13 +46,13 @@ hemp_scheme_p   hemp_scheme_init(
 void            hemp_scheme_free(hemp_scheme_p);
 
 /* text: scheme prototypes */
-hemp_cstr_p     hemp_scheme_text_namer  ( hemp_source_p );
-hemp_cstr_p     hemp_scheme_text_reader ( hemp_source_p );
+hemp_str_p      hemp_scheme_text_namer  ( hemp_source_p );
+hemp_str_p      hemp_scheme_text_reader ( hemp_source_p );
 hemp_bool_t     hemp_scheme_text_checker( hemp_source_p );
 
 /* file: scheme prototypes */
-hemp_cstr_p     hemp_scheme_file_namer  ( hemp_source_p );
-hemp_cstr_p     hemp_scheme_file_reader ( hemp_source_p );
+hemp_str_p      hemp_scheme_file_namer  ( hemp_source_p );
+hemp_str_p      hemp_scheme_file_reader ( hemp_source_p );
 hemp_bool_t     hemp_scheme_file_checker( hemp_source_p );
 
 

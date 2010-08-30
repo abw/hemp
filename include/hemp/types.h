@@ -22,6 +22,7 @@ typedef u_int32_t               hemp_u32_t;     /* generic 32 bit integer   */
 typedef u_int64_t               hemp_u64_t;     /* generic 64 bit integer   */
 typedef unsigned char           hemp_bool_t;    /* boolean true/false       */
 typedef unsigned char           hemp_char_t;    /* single character         */
+typedef char                  * hemp_str_p;     /* C string                 */
 typedef u_int32_t               hemp_flags_t;   /* bitmask                  */
 typedef int32_t                 hemp_offset_t;  /* -ve/+ve offset           */
 typedef int32_t                 hemp_int_t;     /* generic integer          */
@@ -40,7 +41,6 @@ typedef union  hemp_value_u     hemp_value_t;
  *--------------------------------------------------------------------------*/
 
 typedef void                    * hemp_mem_p;     /* generic memory pointer   */
-typedef char                    * hemp_cstr_p;    /* C string                 */
 typedef const char              * hemp_name_p;    /* immutable C string       */
 
 
@@ -112,7 +112,7 @@ struct hemp_s {
 //  hemp_hash_t dialect_factory;
     hemp_jump_p      jump;
     hemp_error_p     error;
-    hemp_cstr_p     *errmsg;
+    hemp_str_p      *errmsg;
 };
 
 
@@ -123,6 +123,32 @@ struct hemp_s {
 struct hemp_global_s {
     hemp_size_t     n_hemps;
 };
+
+
+/*--------------------------------------------------------------------------
+ * other data structures - I'm planning to start moving data structures out
+ * of other include/hemp/*.h files into here... There are some header files 
+ * getting locked in a deadly dependency embrace.
+ *--------------------------------------------------------------------------*/
+
+typedef union {
+    hemp_int_t      integer;
+    hemp_bool_t     boolean;
+    hemp_char_t     chars[4];
+} hemp_payload_t;
+
+typedef struct {
+    hemp_payload_t  value;
+    hemp_u32_t      type;           /* FIXME: assumes little-endian */
+} hemp_tagged_t;
+
+union hemp_value_u {
+    hemp_u64_t      bits;
+    hemp_num_t      number;
+    hemp_tagged_t   tagged;
+};
+
+
 
 
 /*--------------------------------------------------------------------------
@@ -189,16 +215,16 @@ typedef hemp_mem_p
 // HEMP_TAG_SCAN_ARGS                                                  \
 //    hemp_template_p template,   /* current template                     */  \
 //    hemp_tag_p      tag,        /* pointer to current tag               */  \
-//    hemp_cstr_p     tagtok,     /* pointer to tag start token in source */  \
+//    hemp_str_p     tagtok,     /* pointer to tag start token in source */  \
 //    hemp_pos_t      pos,        /* byte position of tag in source       */  \
-//    hemp_cstr_p    *srcptr      /* pointer to source position pointer   */
+//    hemp_str_p    *srcptr      /* pointer to source position pointer   */
 
 #define HEMP_TAG_SCAN_ARGS    \
     hemp_template_p tmpl,     \
     hemp_tag_p      tag,      \
-    hemp_cstr_p     tagtok,   \
+    hemp_str_p      tagtok,   \
     hemp_pos_t      pos,      \
-    hemp_cstr_p    *srcptr    
+    hemp_str_p     *srcptr    
 
 typedef void 
     (* hemp_tag_scan_f)(
@@ -260,6 +286,12 @@ typedef hemp_value_t
     );
 
 typedef hemp_value_t
+    (* hemp_method_f)(
+        hemp_value_t    object,     /* target value                         */
+        ...
+    );
+
+typedef hemp_value_t
     (* hemp_unop_f)(
         hemp_context_p  context,    /* runtime context                      */
         hemp_value_t    expr        /* single value                         */
@@ -276,14 +308,14 @@ typedef hemp_value_t    (* hemp_binary_fn)(hemp_value_t, hemp_value_t);
 typedef hemp_value_t    (* hemp_ternary_fn)(hemp_value_t, hemp_value_t, hemp_value_t);
 
 
-typedef hemp_cstr_p     (* hemp_source_namer_f   )( hemp_source_p );
+typedef hemp_str_p      (* hemp_source_namer_f   )( hemp_source_p );
 typedef hemp_bool_t     (* hemp_source_checker_f )( hemp_source_p );
-typedef hemp_cstr_p     (* hemp_source_reader_f  )( hemp_source_p );
+typedef hemp_str_p      (* hemp_source_reader_f  )( hemp_source_p );
 
 
 /*
 typedef hemp_bool_t     (* hemp_scan_fn)(hemp_template_t);
-typedef hemp_cstr_t     (* hemp_source_text_fn)(hemp_source_t);
+typedef hemp_string_t     (* hemp_source_text_fn)(hemp_source_t);
 typedef hemp_bool_t     (* hemp_source_bool_fn)(hemp_source_t);
 typedef hemp_bool_t     (* hemp_build_fn)(hemp_t);
 typedef hemp_bool_t     (* hemp_onload_fn)(hemp_t);

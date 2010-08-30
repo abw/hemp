@@ -2,7 +2,7 @@
 #define HEMP_SLOT_H
 
 #include <hemp/core.h>
-#include <hemp/value.h>
+#include <hemp/type.h>
 
 
 /*--------------------------------------------------------------------------
@@ -12,7 +12,7 @@
 struct hemp_slot_s {
     hemp_value_t        parent;     /* owner of this slot                   */
     hemp_size_t         index;      /* numerical hash/index value           */
-    hemp_cstr_p         name;       /* lookup key                           */
+    hemp_str_p          name;       /* lookup key                           */
     hemp_value_t        value;      /* corresponding value                  */
     hemp_slot_p         next;       /* next slot in hash/free linked list   */
 };
@@ -26,7 +26,7 @@ HEMP_INLINE hemp_slot_p
     hemp_slot_init(  
         hemp_value_t    parent,
         hemp_size_t     index,
-        hemp_cstr_p     name,
+        hemp_str_p      name,
         hemp_value_t    value,
         hemp_slot_p     next
     );

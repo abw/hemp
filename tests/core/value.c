@@ -33,9 +33,9 @@ int main(
 void type_check(
     hemp_value_t value,
     hemp_u8_t    id,
-    hemp_cstr_p  name
+    hemp_str_p   name
 ) {
-    if (hemp_cstr_eq(hemp_type_name(value), name)) {
+    if (hemp_string_eq(hemp_type_name(value), name)) {
         pass("value type is %s", name);
     }
     else {
@@ -112,7 +112,7 @@ void test_values() {
     test_integer(-69);
 
     /* tagged string pointer */
-    hemp_cstr_p es = "Hello world!";
+    hemp_str_p es = "Hello world!";
     printf("string value: %s\n", es);
     value = hemp_str_val(es);
     hemp_dump_value(value);
@@ -125,7 +125,7 @@ void test_values() {
     ok( ! hemp_is_true(value),          "string is not true" );
     ok( ! hemp_is_false(value),         "string is not false" );
 
-    hemp_cstr_p s = hemp_val_str(value);
+    hemp_str_p s = hemp_val_str(value);
     ok( hemp_is_tagged(value), "string is a tagged value" );
     ok( hemp_is_string(value), "string is a string value" );
     ok( ! hemp_is_pointer(value), "string is not a pointer (well, not a raw pointer)" );
@@ -411,12 +411,12 @@ void test_integer_conversion() {
 
 
 void test_text_conversion_is_number(
-    hemp_cstr_p string,
-    hemp_num_t  expect
+    hemp_str_p string,
+    hemp_num_t expect
 ) {
     hemp_p          hemp    = hemp_init();
     hemp_context_p  context = hemp_context(hemp);
-    hemp_text_p     text    = hemp_text_from_cstr(string);
+    hemp_text_p     text    = hemp_text_from_string(string);
     hemp_value_t    tval    = hemp_text_val(text);
     hemp_value_t    nval;
     
@@ -438,11 +438,11 @@ void test_text_conversion_is_number(
 
 
 void test_text_conversion_not_number(
-    hemp_cstr_p string
+    hemp_str_p string
 ) {
     hemp_p          hemp    = hemp_init();
     hemp_context_p  context = hemp_context(hemp);
-    hemp_text_p     text    = hemp_text_from_cstr(string);
+    hemp_text_p     text    = hemp_text_from_string(string);
     hemp_value_t    tval    = hemp_text_val(text);
     hemp_value_t    nval;
     
@@ -460,12 +460,12 @@ void test_text_conversion_not_number(
 
 
 void test_text_conversion_is_integer(
-    hemp_cstr_p string,
-    hemp_int_t  expect
+    hemp_str_p string,
+    hemp_int_t expect
 ) {
     hemp_p          hemp    = hemp_init();
     hemp_context_p  context = hemp_context(hemp);
-    hemp_text_p     text    = hemp_text_from_cstr(string);
+    hemp_text_p     text    = hemp_text_from_string(string);
     hemp_value_t    tval    = hemp_text_val(text);
     hemp_value_t    ival;
     
@@ -487,11 +487,11 @@ void test_text_conversion_is_integer(
 
 
 void test_text_conversion_not_integer(
-    hemp_cstr_p string
+    hemp_str_p string
 ) {
     hemp_p          hemp    = hemp_init();
     hemp_context_p  context = hemp_context(hemp);
-    hemp_text_p     text    = hemp_text_from_cstr(string);
+    hemp_text_p     text    = hemp_text_from_string(string);
     hemp_value_t    tval    = hemp_text_val(text);
     hemp_value_t    ival;
     
@@ -513,7 +513,7 @@ void test_text_conversion() {
     pass("testing text -> xxx conversions");
     hemp_p          hemp    = hemp_init();
     hemp_context_p  context = hemp_context(hemp);
-    hemp_text_p     text    = hemp_text_from_cstr("123");
+    hemp_text_p     text    = hemp_text_from_string("123");
     hemp_value_t    tval    = hemp_text_val(text);
 
     /* text -> integer */
@@ -543,31 +543,31 @@ void test_text_conversion() {
     ok( hemp_is_boolean(truth), "result is boolean" );
     ok( hemp_is_true(truth), "boolean value correct" );
 
-    hemp_text_replace_cstr(text, "0");
+    hemp_text_replace_string(text, "0");
     ok( 
         hemp_is_true( hemp_value_text_boolean(tval, context) ),
         "'0' string is true" 
     );
 
-    hemp_text_replace_cstr(text, "0.0");
+    hemp_text_replace_string(text, "0.0");
     ok( 
         hemp_is_true( hemp_value_text_boolean(tval, context) ), 
         "'0.0' string is true" 
     );
 
-    hemp_text_replace_cstr(text, "False");
+    hemp_text_replace_string(text, "False");
     ok( 
         hemp_is_true( hemp_value_text_boolean(tval, context) ), 
         "'False' string is true" 
     );
 
-    hemp_text_replace_cstr(text, "FALSE");
+    hemp_text_replace_string(text, "FALSE");
     ok( 
         hemp_is_true( hemp_value_text_boolean(tval, context) ),
         "'FALSE' string is true" 
     );
 
-    hemp_text_replace_cstr(text, "");
+    hemp_text_replace_string(text, "");
     ok( 
         hemp_is_false( hemp_value_text_boolean(tval, context) ), 
         "empty string is false" 

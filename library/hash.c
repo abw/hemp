@@ -144,8 +144,8 @@ hemp_hash_resize(
 
 HEMP_INLINE hemp_bool_t 
 hemp_hash_key_match(
-    hemp_cstr_p key1,
-    hemp_cstr_p key2,
+    hemp_str_p  key1,
+    hemp_str_p  key2,
     hemp_size_t length
 ) {
     /* We allow hash keys to be looked up using an unterminated C string
@@ -174,9 +174,9 @@ hemp_hash_key_match(
 
 hemp_slot_p
 hemp_hash_store(
-    hemp_hash_p     hash,
-    hemp_cstr_p     name,
-    hemp_value_t    value
+    hemp_hash_p  hash,
+    hemp_str_p   name,
+    hemp_value_t value
 ) {
     hemp_size_t length = strlen(name);
     hemp_size_t index  = hemp_hash_function(name, length);
@@ -216,7 +216,7 @@ hemp_hash_store(
 HEMP_INLINE hemp_value_t
 hemp_hash_fetch_keylen(
     hemp_hash_p hash, 
-    hemp_cstr_p name,
+    hemp_str_p  name,
     hemp_size_t length
 ) {
     hemp_debug_call("hemp_hash_fetch_keylen(%p, %s, %d)\n", hash, name, length);
@@ -256,7 +256,7 @@ hemp_hash_fetch_keylen(
 HEMP_INLINE hemp_value_t
 hemp_hash_fetch(
     hemp_hash_p hash, 
-    hemp_cstr_p name
+    hemp_str_p  name
 ) {
     return hemp_hash_fetch_keylen(
         hash, name, strlen(name)
@@ -267,7 +267,7 @@ hemp_hash_fetch(
 hemp_num_t
 hemp_hash_fetch_number(
     hemp_hash_p hash, 
-    hemp_cstr_p name
+    hemp_str_p  name
 ) {
     hemp_value_t value = hemp_hash_fetch(hash, name);
 
@@ -283,7 +283,7 @@ hemp_hash_fetch_number(
 hemp_int_t
 hemp_hash_fetch_integer(
     hemp_hash_p hash, 
-    hemp_cstr_p name
+    hemp_str_p  name
 ) {
     hemp_value_t value = hemp_hash_fetch(hash, name);
 
@@ -299,7 +299,7 @@ hemp_hash_fetch_integer(
 hemp_mem_p
 hemp_hash_fetch_pointer(
     hemp_hash_p hash, 
-    hemp_cstr_p name
+    hemp_str_p  name
 ) {
     hemp_value_t value = hemp_hash_fetch(hash, name);
 
@@ -309,10 +309,10 @@ hemp_hash_fetch_pointer(
 }
 
 
-hemp_cstr_p
+hemp_str_p
 hemp_hash_fetch_string(
     hemp_hash_p hash, 
-    hemp_cstr_p name
+    hemp_str_p  name
 ) {
     hemp_value_t value = hemp_hash_fetch(hash, name);
 
@@ -325,7 +325,7 @@ hemp_hash_fetch_string(
 hemp_text_p
 hemp_hash_fetch_text(
     hemp_hash_p hash, 
-    hemp_cstr_p name
+    hemp_str_p  name
 ) {
     hemp_value_t value = hemp_hash_fetch(hash, name);
 
@@ -376,7 +376,7 @@ hemp_hash_each(
 
 
 /*
-hemp_cstr_t
+hemp_string_t
 hemp_hash_as_text(hemp_hash_t table) {
     hemp_size_t i, s = table->size;
     hemp_hash_entry_t entry;
@@ -423,7 +423,7 @@ hemp_hash_print(hemp_hash_t table) {
 
 hemp_size_t
 hemp_hash_function_default(
-    register hemp_cstr_p s
+    register hemp_str_p s
 ) {
     register int c;
     register unsigned int val = 0;
@@ -465,7 +465,7 @@ typedef  unsigned     char  u1;
 
 HEMP_INLINE hemp_size_t
 hemp_hash_function_jenkins32(
-    register hemp_cstr_p key,
+    register hemp_str_p  key,
     register hemp_size_t length
 ) {
     register u4 a, b, c;

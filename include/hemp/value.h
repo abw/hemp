@@ -5,30 +5,16 @@
 #include <hemp/macros.h>
 #include <hemp/type.h>
 #include <hemp/text.h>
+#include <hemp/hash.h>
 
 
-HEMP_DO_INLINE hemp_cstr_p hemp_identity_name(hemp_value_t value);
+HEMP_DO_INLINE hemp_str_p hemp_identity_name(hemp_value_t value);
 
 /*--------------------------------------------------------------------------
  * Data structures
  *--------------------------------------------------------------------------*/
 
-typedef union {
-    hemp_int_t      integer;
-    hemp_bool_t     boolean;
-    hemp_char_t     chars[4];
-} hemp_payload_t;
-
-typedef struct {
-    hemp_payload_t  value;
-    hemp_u32_t      type;           /* FIXME: assumes little-endian */
-} hemp_tagged_t;
-
-union hemp_value_u {
-    hemp_u64_t      bits;
-    hemp_num_t      number;
-    hemp_tagged_t   tagged;
-};
+/* now in hemp/types.h */
 
 
 /*--------------------------------------------------------------------------
@@ -148,8 +134,9 @@ extern const hemp_value_t HempAfter;
 #define HEMP_IDENTITY_ID        0x10        /* identity values (NaN + n)    */
 
 /* out-of-band values used to mark unused/reserved type slots */
-#define HEMP_RESERVED_ID        0x80        /* reserved for future hemp use */
-#define HEMP_UNUSED_ID          0xF0        /* available for custom types   */
+#define HEMP_RESERVED_ID        0x40        /* reserved for future hemp use */
+#define HEMP_UNUSED_ID          0x80        /* available for custom types   */
+#define HEMP_VALUE_ID           0xFF        /* value uber type              */
 
 
 /* bits to twiddle to encode meaning into identity values */
@@ -233,7 +220,10 @@ extern const hemp_value_t HempAfter;
 #define HEMP_IDENTITY_TAG       HEMP_TAG_MAKE(HEMP_IDENTITY_ID)
 
 
-/* public-facing macros */
+/*--------------------------------------------------------------------------
+ * public-facing macros for general use
+ *--------------------------------------------------------------------------*/
+
 //#define hemp_identity_id(v)     HEMP_IDENT_ID(c)
 #define hemp_is_tagged(v)       HEMP_TAG_VALID(v)
 #define hemp_is_number(v)       ((hemp_u64_t) v.bits < HEMP_INFINITY)
@@ -247,8 +237,8 @@ extern const hemp_value_t HempAfter;
 //#define hemp_is_found(v)      HEMP_IDENT_ANY(v, HEMP_FOUND_BIT)
 #define hemp_is_found(v)        (! hemp_is_missing(v))
 #define hemp_is_nothing(v)      HEMP_IDENT_IS(v, HEMP_IDENT_NOTHING)
-#define hemp_is_defined(v)      HEMP_IDENT_ANY(v, HEMP_DEFINED_BIT)
 #define hemp_is_undefined(v)    HEMP_IDENT_NOT(v, HEMP_DEFINED_BIT)
+#define hemp_is_defined(v)      (! hemp_is_undefined(v))        /* HEMP_IDENT_ANY(v, HEMP_DEFINED_BIT) */
 #define hemp_is_undef(v)        HEMP_IDENT_NOT(v, HEMP_DEFINED_BIT)
 #define hemp_is_boolean(v)      HEMP_IDENT_ANY(v, HEMP_FINITE_BIT)
 #define hemp_is_true(v)         HEMP_IDENT_ANY(v, HEMP_TRUE_BIT)
@@ -259,21 +249,34 @@ extern const hemp_value_t HempAfter;
 #define hemp_is_equal(v)        HEMP_IDENT_IS(v, HEMP_IDENT_EQUAL)
 
 
-/* a global array of vtables for each of the core types */
-#define hemp_vtable(v)          (hemp_global_types[HEMP_TYPE_ID(v)])
-#define hemp_vmethod(v,n)       (hemp_vtable(v)->n)
-#define hemp_vcall(v,c,n)       (hemp_vmethod(v,n)(v,c))
-#define hemp_vtext(v,c,o)       (hemp_vmethod(v,text)(v,c,o))
-//#define hemp_ident_name(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
-#define hemp_type_name(v)       (hemp_vtable(v)->name)
-//#define hemp_type_class(v)      (hemp_vtable(v).name)
+#define hemp_type(v)            (hemp_global_types[HEMP_TYPE_ID(v)])
+#define hemp_tfunc(v,n)         (hemp_type(v)->n)
+#define hemp_call(v,c,n)        (hemp_tfunc(v,n)(v,c))
+#define hemp_text(v,c,o)        (hemp_tfunc(v,text)(v,c,o))
+#define hemp_type_name(v)       (hemp_type(v)->name)
+#define hemp_type_method(t,m)   ((hemp_method_f) hemp_hash_fetch_pointer(t->methods, m))
+#define hemp_type_extend(t,m,f) hemp_hash_store_pointer(t->methods, m, (hemp_mem_p) f)
+#define hemp_object_method(o,m) hemp_type_method(hemp_type(o), m)
+#define hemp_send(o, m) ({                              \
+    hemp_method_f method = hemp_object_method(o, m);    \
+    method                                              \
+        ? method(o)                                     \
+        : HempMissing;                                  \
+})
 
-#define hemp_to_number(v,c)     (hemp_is_number(v)  ? v : hemp_vcall(v,c,number))
-#define hemp_to_integer(v,c)    (hemp_is_integer(v) ? v : hemp_vcall(v,c,integer))
-#define hemp_to_boolean(v,c)    (hemp_is_boolean(v) ? v : hemp_vcall(v,c,boolean))
-#define hemp_to_compare(v,c)    (hemp_is_compare(v) ? v : hemp_vcall(v,c,compare))
-#define hemp_to_text(v,c)       (hemp_is_text(v)    ? v : hemp_vtext(v,c,HempNothing))
-#define hemp_onto_text(v,c,o)   hemp_vtext(v,c,o)
+
+//#define hemp_ident_name(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
+//#define hemp_type_class(v)      (hemp_type(v).name)
+
+#define hemp_to_number(v,c)     (hemp_is_number(v)  ? v : hemp_call(v,c,number))
+#define hemp_to_integer(v,c)    (hemp_is_integer(v) ? v : hemp_call(v,c,integer))
+#define hemp_to_boolean(v,c)    (hemp_is_boolean(v) ? v : hemp_call(v,c,boolean))
+#define hemp_to_compare(v,c)    (hemp_is_compare(v) ? v : hemp_call(v,c,compare))
+#define hemp_to_text(v,c)       (hemp_is_text(v)    ? v : hemp_text(v,c,HempNothing))
+#define hemp_onto_text(v,c,o)   hemp_text(v,c,o)
+
+
+
 
 
 //#define hemp_is_text(v)         HEMP_TYPE_IS(v, HEMP_TYPE_TEXT_ID)
@@ -282,8 +285,8 @@ extern const hemp_value_t HempAfter;
  * 
  *--------------------------------------------------------------------------*/
 
-typedef hemp_text_p     (* hemp_text_vfn)(hemp_value_t, hemp_context_p, hemp_text_p);
-typedef hemp_value_t    (* hemp_dot_vfn)(hemp_value_t, hemp_context_p, hemp_cstr_p);
+//typedef hemp_text_p     (* hemp_text_vfn)(hemp_value_t, hemp_context_p, hemp_text_p);
+//typedef hemp_value_t    (* hemp_dot_vfn)(hemp_value_t, hemp_context_p, hemp_str_p);
 typedef void            (* hemp_init_vfn)(hemp_value_t);
 typedef void            (* hemp_wipe_vfn)(hemp_value_t);
 
@@ -296,7 +299,7 @@ typedef void            (* hemp_wipe_vfn)(hemp_value_t);
 extern HEMP_INLINE hemp_value_t hemp_num_val(hemp_num_t n);
 extern HEMP_INLINE hemp_value_t hemp_int_val(hemp_int_t i);
 extern HEMP_INLINE hemp_value_t hemp_ptr_val(hemp_mem_p p);
-extern HEMP_INLINE hemp_value_t hemp_str_val(hemp_cstr_p s);
+extern HEMP_INLINE hemp_value_t hemp_str_val(hemp_str_p s);
 extern HEMP_INLINE hemp_value_t hemp_text_val(hemp_text_p t);
 extern HEMP_INLINE hemp_value_t hemp_ident_val(hemp_u8_t i);
 extern HEMP_INLINE hemp_value_t hemp_bool_val(hemp_bool_t b);
@@ -309,7 +312,7 @@ extern HEMP_INLINE hemp_value_t hemp_bool_val(hemp_bool_t b);
 extern HEMP_INLINE hemp_num_t  hemp_val_num(hemp_value_t v);
 extern HEMP_INLINE hemp_int_t  hemp_val_int(hemp_value_t v);
 extern HEMP_INLINE hemp_mem_p  hemp_val_ptr(hemp_value_t v);
-extern HEMP_INLINE hemp_cstr_p hemp_val_str(hemp_value_t v);
+extern HEMP_INLINE hemp_str_p  hemp_val_str(hemp_value_t v);
 extern HEMP_INLINE hemp_text_p hemp_val_text(hemp_value_t v);
 extern HEMP_INLINE hemp_bool_t hemp_val_bool(hemp_value_t v);
 
@@ -370,16 +373,6 @@ void hemp_dump_64(hemp_u64_t value);
 void hemp_dump_32(hemp_u32_t value);
 void hemp_dump_value(hemp_value_t value);
 
-
-//hemp_vtypes_p   hemp_vtypes_init();
-//void            hemp_vtypes_free(hemp_vtypes_p);
-//hemp_vtype_p    hemp_vtypes_new_type(hemp_vtypes_p, hemp_cstr_p);
-//void            hemp_vtypes_free_vtype(hemp_hash_entry_p entry);
-//hemp_vtype_p    hemp_vtypes_type(hemp_vtypes_p, hemp_cstr_p);
-//hemp_vtype_p    hemp_vtype_init(hemp_vtypes_p, hemp_cstr_p);
-//void            hemp_vtype_free();
-//hemp_value_t    hemp_value_init(hemp_vtype_p, hemp_cstr_p, hemp_data_t, hemp_value_t);
-//void            hemp_value_free(hemp_value_t); 
 
 
 #endif /* HEMP_VALUE_H */

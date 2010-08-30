@@ -22,7 +22,7 @@ hemp_element_p
 hemp_element_init(
     hemp_element_p  element,
     hemp_symbol_p   type, 
-    hemp_cstr_p     token, 
+    hemp_str_p      token, 
     hemp_pos_t      position, 
     hemp_size_t     length
 ) {
@@ -388,7 +388,7 @@ HEMP_EVAL_FUNC(hemp_element_value_number) {
     hemp_value_t value = element->type->value(element, context);
     return hemp_is_numeric(value)
         ? value
-        : hemp_vcall(value, context, number);
+        : hemp_call(value, context, number);
 
 // forced coersion is not the way forward
 //    return hemp_to_num(v);
@@ -434,20 +434,20 @@ hemp_element_dump(
         ? e->type->token(e, NULL, HempNothing)
         : e->type->text(e, NULL, HempNothing);
 
-    hemp_text_p text = hemp_val_text(output);
-    hemp_cstr_p cstr = text ? text->string : "-- NO OUTPUT --";
+    hemp_text_p text  = hemp_val_text(output);
+    hemp_str_p string = text ? text->string : "-- NO OUTPUT --";
     
     hemp_debug(
         "%p %03d:%02d %-20s %s[%s%s%s]%s\n", e,
         (int) e->position, (int) e->length, e->type->name, 
-        HEMP_ANSI_BLUE, HEMP_ANSI_YELLOW, cstr, HEMP_ANSI_BLUE, HEMP_ANSI_RESET
+        HEMP_ANSI_BLUE, HEMP_ANSI_YELLOW, string, HEMP_ANSI_BLUE, HEMP_ANSI_RESET
     );
 
     if (text) {
         hemp_text_free(text);
     }
     
-    return hemp_cstr_eq(e->type->name, "EOF")
+    return hemp_string_eq(e->type->name, "EOF")
         ? HEMP_FALSE
         : HEMP_TRUE;
 }

@@ -42,7 +42,7 @@ hemp_ptr_val(hemp_mem_p p) {
 
 
 HEMP_INLINE hemp_value_t
-hemp_str_val(hemp_cstr_p s) {
+hemp_str_val(hemp_str_p s) {
     hemp_value_t v;
     v.bits = HEMP_STRING_TAG | ((hemp_u64_t) s & HEMP_POINTER_MASK);
     return v;
@@ -95,9 +95,9 @@ hemp_val_ptr(hemp_value_t v) {
 }
 
 
-HEMP_INLINE hemp_cstr_p
+HEMP_INLINE hemp_str_p
 hemp_val_str(hemp_value_t v) {
-    return (hemp_cstr_p) HEMP_POINTER(v);
+    return (hemp_str_p) HEMP_POINTER(v);
 }
 
 
@@ -220,10 +220,10 @@ void hemp_dump_value(
 void hemp_dump_u64(
     hemp_u64_t  value
 ) {
-    hemp_u64_t  mask  = (hemp_u64_t) 1 << 63;
-    hemp_u64_t  bit;
-    hemp_int_t  n = 1;
-    hemp_cstr_p col;
+    hemp_u64_t mask = (hemp_u64_t) 1 << 63;
+    hemp_u64_t bit;
+    hemp_int_t n = 1;
+    hemp_str_p col;
     printf("0x%016llx : ", value);
 
     while (mask) {

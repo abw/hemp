@@ -10,11 +10,13 @@
 
 #define HEMP_TYPE_BASE          \
     hemp_int_t      id;         \
-    hemp_cstr_p     name;
+    hemp_str_p      name;       \
+    hemp_type_p     base;       \
+    hemp_hash_p     methods;
 
 #define HEMP_TYPE_VALUE         \
-    hemp_vtext_f    text;       \
     hemp_value_f    value;      \
+    hemp_vtext_f    text;       \
     hemp_value_f    number;     \
     hemp_value_f    integer;    \
     hemp_value_f    boolean;    \
@@ -38,6 +40,7 @@ struct hemp_type_s {
     apply     # function application
 */
 
+
 /*--------------------------------------------------------------------------
  * core types
  *
@@ -49,6 +52,7 @@ struct hemp_type_s {
  * HempBefore, HempEqual and HempAfter.
   *--------------------------------------------------------------------------*/
  
+extern hemp_type_p HempValue;
 extern hemp_type_p HempNumber;
 extern hemp_type_p HempInteger;
 extern hemp_type_p HempString;
@@ -65,8 +69,15 @@ extern hemp_type_p hemp_global_types[HEMP_TYPES_SIZE];
 
 hemp_type_p
     hemp_type_init(
+        hemp_int_t id,
+        hemp_str_p name
+    );
+
+hemp_type_p 
+    hemp_type_subtype(
+        hemp_type_p base,
         hemp_int_t  id,
-        hemp_cstr_p name
+        hemp_str_p  name
     );
 
 void
@@ -85,6 +96,7 @@ HEMP_TYPE_FUNC(hemp_type_identity);
 HEMP_TYPE_FUNC(hemp_type_reserved);
 HEMP_TYPE_FUNC(hemp_type_unused);
 
+HEMP_TYPE_METHOD(hemp_method_value_name);
 
 
 #endif /* HEMP_TYPE_H */

@@ -8,7 +8,7 @@
 hemp_source_p
 hemp_source_init(
     hemp_scheme_p scheme,
-    hemp_cstr_p   name
+    hemp_str_p    name
 ) {
     hemp_source_p source = (hemp_source_p) hemp_mem_alloc(
         sizeof(struct hemp_source_s)
@@ -17,7 +17,7 @@ hemp_source_init(
     if (! source)
         hemp_mem_fail("source");
 
-    source->name = hemp_cstr_copy(name);
+    source->name = hemp_string_copy(name);
 
     if (! source->name)
         hemp_mem_fail("source name");
@@ -40,12 +40,12 @@ hemp_source_init(
 void
 hemp_source_set_md5(
     hemp_source_p source,
-    hemp_cstr_p   md5
+    hemp_str_p    md5
 ) {
     if (source->md5)
         hem_mem_free(source->md5);
     
-    source->md5 = hemp_cstr_copy(md5);
+    source->md5 = hemp_string_copy(md5);
     
     if (! source->md5)
         hemp_mem_fail("source MD5 digest");
