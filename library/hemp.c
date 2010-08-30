@@ -13,7 +13,7 @@ hemp_size_t
 hemp_global_init() {
     if (! hemp_global.n_hemps++) {
         hemp_debug_init("Initialising global hemp data\n");
-        /* TODO: do init */
+        hemp_global_types_init();
     }
     
     hemp_debug_init(
@@ -24,6 +24,7 @@ hemp_global_init() {
     return hemp_global.n_hemps;
 }
 
+
 hemp_size_t
 hemp_global_free() {
     hemp_debug_init(
@@ -33,6 +34,7 @@ hemp_global_free() {
 
     if (! --hemp_global.n_hemps) {
         hemp_debug_init("Releasing global hemp data\n");
+        hemp_global_types_free();
     }
 
     return hemp_global.n_hemps;

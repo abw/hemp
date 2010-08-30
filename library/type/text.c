@@ -2,22 +2,21 @@
 #include <hemp/context.h>
 
 
-const struct hemp_type_s hemp_type_text = {
-    HEMP_TEXT_ID, "Text",
-    &hemp_value_text_text,              /* return or append text            */
-    &hemp_value_self,                   /* no-op to return text value       */
-    &hemp_value_text_number,            /* text -> number conversion        */
-    &hemp_value_text_integer,           /* text -> integer conversion       */
-    &hemp_value_text_boolean,           /* text -> boolean conversion       */
-    /* we could possible try and convert the text to a number, so that values
-     * of "-1", "0" and "+1" work, but I don't think there's much point...
-     */
-    &hemp_value_cannot_compare,         /* text -> comparison conversion    */
-    &hemp_value_true,                   /* number is always defined         */  /* what about NaN / Infinity? */
+HEMP_TYPE_FUNC(hemp_type_text) {
+    hemp_type_p type = hemp_type_init(id, name);
+    type->text       = &hemp_value_text_text;       /* return/append text   */
+    type->number     = &hemp_value_text_number;     /* text -> number       */
+    type->integer    = &hemp_value_text_integer;    /* text -> integer      */
+    type->boolean    = &hemp_value_text_boolean;    /* text -> boolean      */
+    type->compare    = &hemp_value_not_compare;     /* can't compare        */
+    type->defined    = &hemp_value_true;            /* always defined       */
+    return type;
 };
 
 
 HEMP_VTEXT_FUNC(hemp_value_text_text) {
+     hemp_debug_call("hemp_value_text_text\n");
+
     /* FIXME: can we safely return value?  Should we return a copy?  What 
      * happens when the caller is done and tries to free it?  Ref counts, 
      * here we come.... :-(
@@ -30,7 +29,6 @@ HEMP_VTEXT_FUNC(hemp_value_text_text) {
     /* if we have been passed an output buffer then we append the value
      * text onto the end of it 
      */
-         hemp_debug("hemp_value_text_text\n");
 //    hemp_text_p text = hemp_val_text(output);
     hemp_text_append_text(hemp_val_text(output), hemp_val_text(value));
     return output;

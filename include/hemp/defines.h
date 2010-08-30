@@ -36,16 +36,20 @@
 #define HEMP_STR_AFTER      "After"
 #define HEMP_STR_EQUAL      "Equal"
 
-#define HEMP_STR_STRING     "string"
+#define HEMP_STR_NUMBER     "Number"
+#define HEMP_STR_INTEGER    "Integer"
+#define HEMP_STR_STRING     "String"
+#define HEMP_STR_TEXT       "Text"
+#define HEMP_STR_IDENTITY   "Identity"
+#define HEMP_STR_RESERVED   "Reserved"
+#define HEMP_STR_UNUSED     "Unused"
+
 #define HEMP_STR_QUOTED     "quoted string"
-#define HEMP_STR_TEXT       "text"
 #define HEMP_STR_NO_TEXT    "empty text"
-#define HEMP_STR_NUMBER     "number"
-#define HEMP_STR_INTEGER    "integer"
 #define HEMP_STR_BOOLEAN    "truth"
 #define HEMP_STR_VALUE      "value"
-#define HEMP_STR_IDENTITY   "identity"
 #define HEMP_STR_COMPARE    "comparison"
+#define HEMP_STR_DEFINED    "defined"
 #define HEMP_STR_BLANK      ""
 #define HEMP_STR_SPACE      " "
 #define HEMP_STR_DOT        "."
@@ -70,6 +74,8 @@
 #define HEMP_HASH_DENSITY   5       /* max hash density before resizing     */
 #define HEMP_ELEMENTS_SIZE  32      /* # of elements allocated per slab     */
 #define HEMP_OPERATORS_SIZE 32      /* # of operators allocated per slab    */
+#define HEMP_TYPES_SIZE     32      /* # of data types (Nan-tagged)         */
+#define HEMP_TYPES_RESERVED 16      /* # of reserved data types             */
 #define HEMP_PTREE_SIZE     8       /* # of bucket chains in a ptree        */
 #define HEMP_VTYPES_SIZE    8
 #define HEMP_TAGSET_SIZE    8

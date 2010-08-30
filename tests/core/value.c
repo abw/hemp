@@ -17,10 +17,14 @@ int main(
     int argc, char **argv, char **env
 ) {
     plan(250);
-
+    
+    hemp_p hemp = hemp_init();
+    
     test_values();
     test_identity_values();
     test_value_conversion();
+    
+    hemp_free(hemp);
 
     return done();
 }

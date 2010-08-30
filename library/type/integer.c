@@ -2,15 +2,15 @@
 #include <hemp/context.h>
 
 
-const struct hemp_type_s hemp_type_integer = {
-    HEMP_INTEGER_ID, "Integer",
-    &hemp_value_integer_text,           /* convert integer to text          */
-    &hemp_value_self,                   /* no-op to return value            */
-    &hemp_value_integer_number,         /* integer -> number conversion     */
-    &hemp_value_self,                   /* no-op to return integer value    */
-    &hemp_value_integer_boolean,        /* integer -> boolean conversion    */
-    &hemp_value_integer_compare,        /* integer -> comparison conversion */
-    &hemp_value_true,                   /* integer is always defined        */
+HEMP_TYPE_FUNC(hemp_type_integer) {
+    hemp_type_p type = hemp_type_init(id, name);
+    type->text       = &hemp_value_integer_text;    /* integer to text      */
+    type->number     = &hemp_value_integer_number;  /* integer to number    */
+    type->integer    = &hemp_value_self;            /* no-op returns int    */
+    type->boolean    = &hemp_value_integer_boolean; /* number -> boolean    */
+    type->compare    = &hemp_value_integer_compare; /* number -> comparison */
+    type->defined    = &hemp_value_true;            /* always defined       */
+    return type;
 };
 
 

@@ -2,16 +2,17 @@
 #include <hemp/context.h>
 
 
-const struct hemp_type_s hemp_type_identity = {
-    HEMP_IDENTITY_ID, "Identity",
-    &hemp_value_identity_text,          /* identity->text conversion        */
-    &hemp_value_self,                   /* no-op to return identity value   */
-    &hemp_value_identity_number,        /* identity -> number conversion    */
-    &hemp_value_identity_integer,       /* identity -> integer conversion   */
-    &hemp_value_identity_boolean,       /* identity -> boolean check        */
-    &hemp_value_identity_compare,       /* identity -> comparison check     */
-    &hemp_value_identity_defined,       /* identity -> defined check        */
+HEMP_TYPE_FUNC(hemp_type_identity) {
+    hemp_type_p type = hemp_type_init(id, name);
+    type->text       = &hemp_value_identity_text;    /* identity -> text    */
+    type->number     = &hemp_value_identity_number;  /* identity -> number  */
+    type->integer    = &hemp_value_identity_integer; /* identity -> integer */
+    type->boolean    = &hemp_value_identity_boolean; /* identity -> boolean */
+    type->compare    = &hemp_value_identity_compare; /* identity -> compare */
+    type->defined    = &hemp_value_identity_defined; /* identity -> defined */
+    return type;
 };
+
 
 
 HEMP_DO_INLINE hemp_cstr_p

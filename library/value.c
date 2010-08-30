@@ -4,59 +4,6 @@
 #include <hemp/context.h>
 
 
-const struct hemp_type_s hemp_type_reserved = {
-    HEMP_RESERVED_ID, "Reserved",
-};
-
-const struct hemp_type_s hemp_type_unused = {
-    HEMP_UNUSED_ID, "Unused",
-};
-
-
-/*--------------------------------------------------------------------------
- * WARNING: the order of entries in this vtable is critical and must 
- * correspond to the HEMP_XXXX_ID values defined in value.h.
- *
- * Types 0x04 to 0x0F are reserved for future hemp use.
- * Types 0x11 to 0x1F are available for user-defined types (e.g. alien values)
- *--------------------------------------------------------------------------*/
-
-const struct hemp_type_s *hemp_global_types[32] = {
-    &hemp_type_number,      /* 0x00 == 00 */
-    &hemp_type_integer,     /* 0x01 == 01 */
-    &hemp_type_reserved,    /* 0x02 == 02 */        /* pointer: TODO */
-    &hemp_type_string,      /* 0x03 == 03 */
-    &hemp_type_text,        /* 0x04 == 04 */
-    &hemp_type_reserved,    /* 0x05 == 05 */
-    &hemp_type_reserved,    /* 0x06 == 06 */
-    &hemp_type_reserved,    /* 0x07 == 07 */
-    &hemp_type_reserved,    /* 0x08 == 08 */
-    &hemp_type_reserved,    /* 0x09 == 09 */
-    &hemp_type_reserved,    /* 0x0A == 10 */
-    &hemp_type_reserved,    /* 0x0B == 11 */
-    &hemp_type_reserved,    /* 0x0C == 12 */
-    &hemp_type_reserved,    /* 0x0D == 13 */
-    &hemp_type_reserved,    /* 0x0E == 14 */
-    &hemp_type_reserved,    /* 0x0F == 15 */
-    
-    &hemp_type_identity,    /* 0x10 == 16 */
-    &hemp_type_unused,      /* 0x11 == 17 */    /* available for user defined types */
-    &hemp_type_unused,      /* 0x12 == 18 */
-    &hemp_type_unused,      /* 0x13 == 19 */
-    &hemp_type_unused,      /* 0x14 == 20 */
-    &hemp_type_unused,      /* 0x15 == 21 */
-    &hemp_type_unused,      /* 0x16 == 22 */
-    &hemp_type_unused,      /* 0x17 == 23 */
-    &hemp_type_unused,      /* 0x18 == 24 */
-    &hemp_type_unused,      /* 0x19 == 25 */
-    &hemp_type_unused,      /* 0x1A == 26 */
-    &hemp_type_unused,      /* 0x1B == 27 */
-    &hemp_type_unused,      /* 0x1C == 28 */
-    &hemp_type_unused,      /* 0x1D == 29 */
-    &hemp_type_unused,      /* 0x1E == 30 */
-    &hemp_type_unused,      /* 0x1F == 31 */
-};
-
 const hemp_value_t  HempMissing = HEMP_IDENT_MAKE(HEMP_IDENT_MISSING);
 const hemp_value_t  HempNothing = HEMP_IDENT_MAKE(HEMP_IDENT_NOTHING);
 const hemp_value_t  HempFalse   = HEMP_IDENT_MAKE(HEMP_IDENT_FALSE);
@@ -196,7 +143,47 @@ HEMP_VALUE_FUNC(hemp_value_false) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_cannot_compare) {
+HEMP_VTEXT_FUNC(hemp_value_not_text) {
+    HEMP_CONVERT_ERROR(
+        context, 
+        hemp_type_name(value),
+        HEMP_STR_TEXT,
+        HEMP_STR_BLANK
+    );
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_not_number) {
+    HEMP_CONVERT_ERROR(
+        context, 
+        hemp_type_name(value),
+        HEMP_STR_NUMBER,
+        HEMP_STR_BLANK
+    );
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_not_integer) {
+    HEMP_CONVERT_ERROR(
+        context, 
+        hemp_type_name(value),
+        HEMP_STR_INTEGER,
+        HEMP_STR_BLANK
+    );
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_not_boolean) {
+    HEMP_CONVERT_ERROR(
+        context, 
+        hemp_type_name(value),
+        HEMP_STR_BOOLEAN,
+        HEMP_STR_BLANK
+    );
+}
+
+
+HEMP_VALUE_FUNC(hemp_value_not_compare) {
     HEMP_CONVERT_ERROR(
         context, 
         hemp_type_name(value),
@@ -204,6 +191,17 @@ HEMP_VALUE_FUNC(hemp_value_cannot_compare) {
         HEMP_STR_BLANK
     );
 }
+
+
+HEMP_VALUE_FUNC(hemp_value_not_defined) {
+    HEMP_CONVERT_ERROR(
+        context, 
+        hemp_type_name(value),
+        HEMP_STR_DEFINED,
+        HEMP_STR_BLANK
+    );
+}
+
 
 
 

@@ -2,18 +2,15 @@
 #include <hemp/context.h>
 
 
-const struct hemp_type_s hemp_type_string = {
-    HEMP_STRING_ID, "String",
-    &hemp_value_string_text,            /* convert/append to text           */
-    &hemp_value_self,                   /* return self as value             */
-    &hemp_value_string_number,          /* text -> number conversion        */
-    &hemp_value_string_integer,         /* text -> integer conversion       */
-    &hemp_value_string_boolean,         /* text -> boolean conversion       */
-    /* we could possible try and convert the text to a number, so that values
-     * of "-1", "0" and "+1" work, but I don't think there's much point...
-     */
-    &hemp_value_cannot_compare,         /* string is not a comparison       */
-    &hemp_value_true,                   /* string is always defined         */  /* what about NULL? */
+HEMP_TYPE_FUNC(hemp_type_string) {
+    hemp_type_p type = hemp_type_init(id, name);
+    type->text       = &hemp_value_string_text;     /* string -> text       */
+    type->number     = &hemp_value_string_number;   /* string -> number     */
+    type->integer    = &hemp_value_string_integer;  /* string -> integer    */
+    type->boolean    = &hemp_value_string_boolean;  /* string -> boolean    */
+    type->compare    = &hemp_value_not_compare;     /* cannot compare       */
+    type->defined    = &hemp_value_true;            /* always defined       */
+    return type;
 };
 
 

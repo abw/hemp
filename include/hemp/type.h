@@ -9,7 +9,7 @@
  *--------------------------------------------------------------------------*/
 
 #define HEMP_TYPE_BASE          \
-    hemp_u8_t       id;         \
+    hemp_int_t      id;         \
     hemp_cstr_p     name;
 
 #define HEMP_TYPE_VALUE         \
@@ -39,20 +39,53 @@ struct hemp_type_s {
 */
 
 /*--------------------------------------------------------------------------
- * function prototypes
- *--------------------------------------------------------------------------*/
-
-hemp_type_p hemp_type_init(hemp_cstr_p);
-void        hemp_type_free(hemp_type_p);
+ * core types
+ *
+ * We have a global list of 32 vtables, each of which contains a core set
+ * of pseudo-methods that can be called against different data types.
+ * The first 16 entries correspond to the core value types: number, integer, 
+ * C string, text, etc.  The next 16 provide vtables for the singleton 
+ * identity values: HempMissing, HempNothing, HempFalse, HempTrue, 
+ * HempBefore, HempEqual and HempAfter.
+  *--------------------------------------------------------------------------*/
+ 
+extern hemp_type_p HempNumber;
+extern hemp_type_p HempInteger;
+extern hemp_type_p HempString;
+extern hemp_type_p HempText;
+extern hemp_type_p HempIdentity;
+extern hemp_type_p HempReserved;
+extern hemp_type_p HempUnused;
+extern hemp_type_p hemp_global_types[HEMP_TYPES_SIZE];
 
 
 /*--------------------------------------------------------------------------
- * macros
+ * function prototypes
  *--------------------------------------------------------------------------*/
 
-//#define hemp_type_name(obj)     \
-//    obj->type->name
-//
+hemp_type_p
+    hemp_type_init(
+        hemp_int_t  id,
+        hemp_cstr_p name
+    );
+
+void
+    hemp_type_free(
+        hemp_type_p
+    );
+
+void hemp_global_types_init();
+void hemp_global_types_free();
+
+HEMP_TYPE_FUNC(hemp_type_number);
+HEMP_TYPE_FUNC(hemp_type_integer);
+HEMP_TYPE_FUNC(hemp_type_string);
+HEMP_TYPE_FUNC(hemp_type_text);
+HEMP_TYPE_FUNC(hemp_type_identity);
+HEMP_TYPE_FUNC(hemp_type_reserved);
+HEMP_TYPE_FUNC(hemp_type_unused);
+
+
 
 #endif /* HEMP_TYPE_H */
 

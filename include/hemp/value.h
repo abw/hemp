@@ -43,22 +43,6 @@ extern const hemp_value_t HempBefore;
 extern const hemp_value_t HempEqual;
 extern const hemp_value_t HempAfter;
 
-/* 
- * We have a global list of 32 vtables, each of which contains a core set
- * of pseudo-methods that can be called against different data types.
- * The first 16 entries correspond to the core value types: number, integer, 
- * C string, text, etc.  The next 16 provide vtables for the singleton 
- * identity values: HempMissing, HempNothing, HempFalse, HempTrue, 
- * HempBefore, HempEqual and HempAfter.
- */
- 
-extern const struct hemp_type_s  hemp_type_number;
-extern const struct hemp_type_s  hemp_type_integer;
-extern const struct hemp_type_s  hemp_type_string;
-extern const struct hemp_type_s  hemp_type_text;
-extern const struct hemp_type_s  hemp_type_identity;
-extern const struct hemp_type_s *hemp_global_types[32];
-
 
 
 /*--------------------------------------------------------------------------
@@ -330,7 +314,6 @@ extern HEMP_INLINE hemp_text_p hemp_val_text(hemp_value_t v);
 extern HEMP_INLINE hemp_bool_t hemp_val_bool(hemp_value_t v);
 
 
-
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
@@ -340,7 +323,14 @@ HEMP_VALUE_FUNC(hemp_value_no_op);
 HEMP_VALUE_FUNC(hemp_value_self);
 HEMP_VALUE_FUNC(hemp_value_true);
 HEMP_VALUE_FUNC(hemp_value_false);
-HEMP_VALUE_FUNC(hemp_value_cannot_compare);
+
+/* default "cannot convert to X" function */
+HEMP_VTEXT_FUNC(hemp_value_not_text);
+HEMP_VALUE_FUNC(hemp_value_not_number);
+HEMP_VALUE_FUNC(hemp_value_not_integer);
+HEMP_VALUE_FUNC(hemp_value_not_boolean);
+HEMP_VALUE_FUNC(hemp_value_not_compare);
+HEMP_VALUE_FUNC(hemp_value_not_defined);
 
 /* number -> xxx conversion */
 HEMP_VTEXT_FUNC(hemp_value_number_text);

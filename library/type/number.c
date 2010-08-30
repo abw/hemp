@@ -2,15 +2,15 @@
 #include <hemp/context.h>
 
 
-const struct hemp_type_s hemp_type_number = {
-    HEMP_NUMBER_ID, "Number",
-    &hemp_value_number_text,            /* convert number to text           */
-    &hemp_value_self,                   /* no-op to return value            */
-    &hemp_value_self,                   /* no-op to return number           */
-    &hemp_value_number_integer,         /* number -> integer conversion     */
-    &hemp_value_number_boolean,         /* number -> boolean conversion     */
-    &hemp_value_number_compare,         /* number -> comparison conversion  */
-    &hemp_value_true,                   /* number is always defined         */  /* what about NaN / Infinity? */
+HEMP_TYPE_FUNC(hemp_type_number) {
+    hemp_type_p type = hemp_type_init(id, name);
+    type->text    = &hemp_value_number_text;    /* convert number to text           */
+    type->number  = &hemp_value_self;           /* no-op to return number           */
+    type->integer = &hemp_value_number_integer; /* number -> integer conversion     */
+    type->boolean = &hemp_value_number_boolean; /* number -> boolean conversion     */
+    type->compare = &hemp_value_number_compare; /* number -> comparison conversion  */
+    type->defined = &hemp_value_true;           /* number is always defined         */  /* what about NaN / Infinity? */
+    return type;
 };
 
 
