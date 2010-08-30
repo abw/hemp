@@ -183,6 +183,11 @@ HEMP_POSTFIX_FUNC(hemp_element_not_postfix) {
 }
 
 
+HEMP_PREFIX_FUNC(hemp_element_not_word) {
+    return NULL;
+}
+
+
 HEMP_ETEXT_FUNC(hemp_element_not_token) {
     hemp_fatal("%s element does not yield token\n", element->type->name);
     return output;
@@ -229,6 +234,8 @@ HEMP_EVAL_FUNC(hemp_element_not_compare) {
     hemp_fatal("%s element does not yield comparison\n", element->type->name);
     return HempNothing;
 }
+
+
 
 
 /*--------------------------------------------------------------------------
@@ -388,7 +395,7 @@ HEMP_EVAL_FUNC(hemp_element_value_number) {
     hemp_value_t value = element->type->value(element, context);
     return hemp_is_numeric(value)
         ? value
-        : hemp_call(value, context, number);
+        : hemp_call(value, number, context);
 
 // forced coersion is not the way forward
 //    return hemp_to_num(v);

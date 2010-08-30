@@ -10,6 +10,7 @@ libhemp_la_SOURCES  =   action.c            \
                         element/boolean.c   \
                         element/comment.c   \
                         element/compare.c   \
+                        element/dotop.c     \
                         element/literal.c   \
                         element/number.c    \
                         element/operator.c  \

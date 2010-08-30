@@ -115,6 +115,12 @@ extern hemp_symbol_p HempSymbolBlock;
         : lhs                                           \
     )
 
+#define hemp_parse_word(ep, sc, pr, fr)                 \
+    ((*ep)->type->word                                  \
+        ? (*ep)->type->word(ep, sc, pr, fr)             \
+        : NULL                                          \
+    )
+
 //#define hemp_parse_infix_rhs(self, ep, sc, pr, fr)      \
 //    hemp_go_next(ep);                                   \
 //    self->args.binary.rhs = hemp_parse_prefix(            \
@@ -172,6 +178,7 @@ HEMP_ETEXT_FUNC(hemp_element_binary_source);
 
 HEMP_PREFIX_FUNC(hemp_element_not_prefix);
 HEMP_POSTFIX_FUNC(hemp_element_not_postfix);
+HEMP_PREFIX_FUNC(hemp_element_not_word);
 HEMP_ETEXT_FUNC(hemp_element_not_token);
 HEMP_ETEXT_FUNC(hemp_element_not_source);
 HEMP_ETEXT_FUNC(hemp_element_not_text);
@@ -203,6 +210,7 @@ HEMP_EVAL_FUNC(hemp_element_literal_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_word_symbol);
 HEMP_PREFIX_FUNC(hemp_element_word_prefix);
+HEMP_PREFIX_FUNC(hemp_element_word_word);
 HEMP_EVAL_FUNC(hemp_element_word_value);
 
 
@@ -386,6 +394,15 @@ HEMP_SYMBOL_FUNC(hemp_element_text_not_after_symbol);
 HEMP_ETEXT_FUNC(hemp_element_text_concat_value);
 HEMP_EVAL_FUNC(hemp_element_text_compare_value);
 HEMP_EVAL_FUNC(hemp_element_text_value);
+
+
+/*--------------------------------------------------------------------------
+ * other operators
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol);
+HEMP_POSTFIX_FUNC(hemp_element_dotop_infix);
+HEMP_EVAL_FUNC(hemp_element_dotop_value);
 
 
 /*--------------------------------------------------------------------------

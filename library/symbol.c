@@ -35,6 +35,7 @@ hemp_symbol_init(
     symbol->integer = &hemp_element_not_integer;
     symbol->boolean = &hemp_element_not_boolean;
     symbol->compare = &hemp_element_not_compare;
+    symbol->word    = &hemp_element_not_word;
     symbol->text    = &hemp_element_literal_text;       // tmp
 
     /* clone the start token if there is one, and the end token if there 

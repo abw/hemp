@@ -93,7 +93,6 @@ HEMP_SYMBOL_FUNC(hemp_element_text_concat_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     symbol->value = &hemp_element_text_value;
     symbol->text  = &hemp_element_text_concat_value;
-    &hemp_element_text_concat_value;
     return symbol;
 }
 

@@ -19,6 +19,8 @@ static struct hemp_symbol_s
         &hemp_element_value_number,                 /* numeric conversion   */
         &hemp_element_value_integer,                /* integer conversion   */
         &hemp_element_value_boolean,                /* boolean conversion   */
+        &hemp_element_not_compare,                  /* compare conversion   */
+        &hemp_element_word_word,                    /* parse word           */
     };
 
 hemp_symbol_p HempSymbolWord = &hemp_symbol_word;
@@ -28,7 +30,8 @@ HEMP_SYMBOL_FUNC(hemp_element_word_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     /* these aren't right, but they'll do for now, for testing purposes */
     symbol->flags  = HEMP_BE_SOURCE | HEMP_BE_STATIC;
-    symbol->prefix = &hemp_element_literal_prefix;
+    symbol->prefix = &hemp_element_word_prefix;
+    symbol->word   = &hemp_element_word_word;
     return symbol;
 }
 
@@ -47,6 +50,14 @@ HEMP_PREFIX_FUNC(hemp_element_word_prefix) {
         return hemp_parse_postfix(elemptr, scope, precedence, force, element);
     }
 
+    return element;
+}
+
+
+HEMP_PREFIX_FUNC(hemp_element_word_word) {
+    hemp_debug_call("hemp_element_word_word()\n");
+    hemp_element_p element = *elemptr;
+    hemp_go_next(elemptr);
     return element;
 }
 

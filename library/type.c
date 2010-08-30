@@ -85,7 +85,14 @@ hemp_global_types_init() {
     HempUnused   = hemp_type_unused  ( HEMP_UNUSED_ID,   HEMP_STR_UNUSED   );
 
     /* add methods to types */
-    hemp_type_extend(HempValue, "name", &hemp_method_value_name);
+    hemp_type_extend(HempValue, "name",    &hemp_method_value_name);
+    hemp_type_extend(HempValue, "text",    &hemp_method_value_text);
+    hemp_type_extend(HempValue, "num",     &hemp_method_value_number);
+    hemp_type_extend(HempValue, "number",  &hemp_method_value_number);
+    hemp_type_extend(HempValue, "int",     &hemp_method_value_integer);
+    hemp_type_extend(HempValue, "integer", &hemp_method_value_integer);
+    hemp_type_extend(HempValue, "true",    &hemp_method_value_boolean);
+    hemp_type_extend(HempValue, "boolean", &hemp_method_value_boolean);
 
     /* The first 16 type entries are reserved for hemp's internal use */
     for (n = 0; n < HEMP_TYPES_RESERVED; n++) {
@@ -142,6 +149,31 @@ HEMP_TYPE_FUNC(hemp_type_unused) {
 };
 
 
-HEMP_TYPE_METHOD(hemp_method_value_name) {
-    return hemp_str_val( hemp_type(object)->name );
+HEMP_VALUE_FUNC(hemp_method_value_name) {
+    return hemp_str_val( hemp_type(value)->name );
+}
+
+
+HEMP_VALUE_FUNC(hemp_method_value_text) {
+    return hemp_to_text(value, context);
+}
+
+
+HEMP_VALUE_FUNC(hemp_method_value_number) {
+    return hemp_to_number(value, context);
+}
+
+
+HEMP_VALUE_FUNC(hemp_method_value_integer) {
+    return hemp_to_integer(value, context);
+}
+
+
+HEMP_VALUE_FUNC(hemp_method_value_boolean) {
+    return hemp_to_boolean(value, context);
+}
+
+
+HEMP_VALUE_FUNC(hemp_method_value_defined) {
+    return hemp_call(value, defined, context);
 }

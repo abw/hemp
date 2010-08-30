@@ -28,7 +28,6 @@ HEMP_PREFIX_FUNC(hemp_element_literal_prefix) {
 }
 
 
-
 HEMP_ETEXT_FUNC(hemp_element_literal_token) {
     hemp_debug_call("hemp_element_literal_token()\n");
     hemp_text_p text;

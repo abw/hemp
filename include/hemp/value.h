@@ -251,16 +251,16 @@ extern const hemp_value_t HempAfter;
 
 #define hemp_type(v)            (hemp_global_types[HEMP_TYPE_ID(v)])
 #define hemp_tfunc(v,n)         (hemp_type(v)->n)
-#define hemp_call(v,c,n)        (hemp_tfunc(v,n)(v,c))
+#define hemp_call(v,n,c)        (hemp_tfunc(v,n)(v,c))
 #define hemp_text(v,c,o)        (hemp_tfunc(v,text)(v,c,o))
 #define hemp_type_name(v)       (hemp_type(v)->name)
-#define hemp_type_method(t,m)   ((hemp_method_f) hemp_hash_fetch_pointer(t->methods, m))
-#define hemp_type_extend(t,m,f) hemp_hash_store_pointer(t->methods, m, (hemp_mem_p) f)
+#define hemp_type_method(t,m)   ((hemp_value_f) hemp_hash_fetch_pointer(t->methods, m))
+#define hemp_type_extend(t,m,f) hemp_hash_store_pointer(t->methods, m, f)
 #define hemp_object_method(o,m) hemp_type_method(hemp_type(o), m)
-#define hemp_send(o, m) ({                              \
-    hemp_method_f method = hemp_object_method(o, m);    \
+#define hemp_send(o,m,c) ({                             \
+    hemp_value_f method = hemp_object_method(o, m);     \
     method                                              \
-        ? method(o)                                     \
+        ? method(o,c)                                   \
         : HempMissing;                                  \
 })
 
@@ -268,15 +268,12 @@ extern const hemp_value_t HempAfter;
 //#define hemp_ident_name(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
 //#define hemp_type_class(v)      (hemp_type(v).name)
 
-#define hemp_to_number(v,c)     (hemp_is_number(v)  ? v : hemp_call(v,c,number))
-#define hemp_to_integer(v,c)    (hemp_is_integer(v) ? v : hemp_call(v,c,integer))
-#define hemp_to_boolean(v,c)    (hemp_is_boolean(v) ? v : hemp_call(v,c,boolean))
-#define hemp_to_compare(v,c)    (hemp_is_compare(v) ? v : hemp_call(v,c,compare))
+#define hemp_to_number(v,c)     (hemp_is_number(v)  ? v : hemp_call(v,number,c))
+#define hemp_to_integer(v,c)    (hemp_is_integer(v) ? v : hemp_call(v,integer,c))
+#define hemp_to_boolean(v,c)    (hemp_is_boolean(v) ? v : hemp_call(v,boolean,c))
+#define hemp_to_compare(v,c)    (hemp_is_compare(v) ? v : hemp_call(v,compare,c))
 #define hemp_to_text(v,c)       (hemp_is_text(v)    ? v : hemp_text(v,c,HempNothing))
 #define hemp_onto_text(v,c,o)   hemp_text(v,c,o)
-
-
-
 
 
 //#define hemp_is_text(v)         HEMP_TYPE_IS(v, HEMP_TYPE_TEXT_ID)
@@ -285,8 +282,8 @@ extern const hemp_value_t HempAfter;
  * 
  *--------------------------------------------------------------------------*/
 
-//typedef hemp_text_p     (* hemp_text_vfn)(hemp_value_t, hemp_context_p, hemp_text_p);
-//typedef hemp_value_t    (* hemp_dot_vfn)(hemp_value_t, hemp_context_p, hemp_str_p);
+typedef hemp_text_p     (* hemp_text_vfn)(hemp_value_t, hemp_context_p, hemp_text_p);
+typedef hemp_value_t    (* hemp_dot_vfn)(hemp_value_t, hemp_context_p, hemp_str_p);
 typedef void            (* hemp_init_vfn)(hemp_value_t);
 typedef void            (* hemp_wipe_vfn)(hemp_value_t);
 

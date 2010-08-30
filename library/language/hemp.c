@@ -32,6 +32,7 @@ static struct hemp_symbols_s hemp_symbols_hemp[] = {
     { "hemp.squote",            &hemp_element_squote_symbol             },
     { "hemp.dquote",            &hemp_element_dquote_symbol             },
     { "hemp.block",             &hemp_element_block_symbol              },
+    { "hemp.dotop",             &hemp_element_dotop_symbol              },
     { "hemp.eof",               &hemp_element_eof_symbol                },
     { NULL, NULL },
 };
@@ -93,7 +94,7 @@ HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
     /* register handlers for boolean, number and text operator symbols */
     HEMP_ELEMENT("hemp.boolean.*", &hemp_element_boolean_symbols);
     HEMP_ELEMENT("hemp.number.*",  &hemp_element_number_symbols);
-    HEMP_ELEMENT("hemp.text.*", &hemp_element_text_symbols);
+    HEMP_ELEMENT("hemp.text.*",    &hemp_element_text_symbols);
 
     /* register grammars */
     HEMP_GRAMMAR("hemp.alpha", &hemp_grammar_hemp_alpha);
@@ -192,6 +193,8 @@ hemp_grammar_add_hemp_bravo(
 //    [ '@'       => sig_list         =>   0, 350 ],      # @foo
 //    [ '%'       => sig_hash         =>   0, 350 ],      # %foo
 //    [ '.'       => op_dot           => 340,   0 ],      # foo.bar
+
+    HEMP_OPERATOR1("hemp.dotop",                ".",        300,  300);
 
     HEMP_OPERATOR1("hemp.number.autoinc",       "++",       295,  295);
     HEMP_OPERATOR1("hemp.number.autodec",       "--",       295,  295);

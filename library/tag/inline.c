@@ -29,7 +29,7 @@ hemp_scan_inline_tag(
     hemp_element_p  element;
     hemp_num_t      num_val;
     hemp_int_t      int_val;
-    hemp_bool_t     is_int;
+    hemp_bool_t     is_int, is_word;
     hemp_pnode_p    pnode;
     hemp_pnode_p    *ophead  = tag->grammar->operators->head;
     hemp_symbol_p   symbol;
@@ -42,6 +42,8 @@ hemp_scan_inline_tag(
         tagtok, pos, src - tagtok
     );
     pos += src - tagtok;
+    
+    is_word = HEMP_FALSE;
 
     while (*src) {
         if (isspace(*src)) {
@@ -116,7 +118,22 @@ hemp_scan_inline_tag(
         &&  (symbol = (hemp_symbol_p) hemp_pnode_match_more(pnode, &src))
         ) {
             hemp_debug_token("OPERATOR", from, src-from);
-//          hemp_debug("[matched operator: %s]\n", symbol->name);
+
+            /* We have to be check that we haven't matched the first part of
+             * a longer word, e.g. matching 'le' at the start of 'length'.
+             * However, we also have to account for the fact that symbols
+             * may contain a mixture of word and non-word characters, e.g.
+             * 'C<', 'q/' and so on.  It's OK to have a non-word followed by
+             * a word, e.g. 'q/a' ('q/' is the operator, 'a' the next word),
+             * or a word followed by a non-word, e.g. '+foo'.
+             *
+             * If we find that we are at a word/word boundary then we pretend
+             * this bit never happened by jumping down to the next check...
+             * don't look if you're squeamish about the use of "goto"
+             */
+            if (isalpha(*src) && isalpha(*(src - 1)))
+                goto bareword;
+
             if (symbol->scanner) {
 //              hemp_debug("symbol has dedicated scanner\n");
                 symbol->scanner(tmpl, tag, from, pos, &src, symbol);
@@ -129,12 +146,10 @@ hemp_scan_inline_tag(
             }
         }
         else if (isalpha(*src)) {
+bareword:
             /* word */
             hemp_scan_while(src, isalnum);
             // TODO: check for ':' following after, e.g. file:/blah/blah
-            // TODO: lookup keyword
-            // TODO: on second thoughts, try pnode match first, for things
-            //       like C< >... DONE, by moving this down... I think ???
             hemp_debug_token("WORD", from, src-from);
             hemp_elements_append(
                 tmpl->elements, HempSymbolWord,

@@ -25,3 +25,17 @@ The message is: [% message %]
 -- expect
 The message is: Hello World!
 
+-- test text.length dotop
+length: [% message.length %]
+-- expect
+length: 12
+
+
+-- stop
+
+# need some better error handling/reporting before we can tackle this
+
+-- test text.longth dotop
+length: [% message.longth %]
+-- error
+Missing dotop error, whatever.

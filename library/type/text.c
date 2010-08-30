@@ -11,6 +11,9 @@ HEMP_TYPE_FUNC(hemp_type_text) {
     type->boolean    = &hemp_value_text_boolean;    /* text -> boolean      */
     type->compare    = &hemp_value_not_compare;     /* can't compare        */
     type->defined    = &hemp_value_true;            /* always defined       */
+
+    hemp_type_extend(type, "length", &hemp_method_text_length);
+
     return type;
 };
 
@@ -225,7 +228,6 @@ hemp_text_replace_string(
  * Runtime text evaluation methods
  *--------------------------------------------------------------------------*/
 
-
 HEMP_VTEXT_FUNC(hemp_value_text_text) {
      hemp_debug_call("hemp_value_text_text\n");
 
@@ -303,5 +305,14 @@ HEMP_VALUE_FUNC(hemp_value_text_boolean) {
     return hemp_val_text(value)->length
         ? HempTrue
         : HempFalse;
+}
+
+
+/*--------------------------------------------------------------------------
+ * Text pseudo-object methods
+ *--------------------------------------------------------------------------*/
+
+HEMP_TYPE_METHOD(hemp_method_text_length) {
+    return hemp_int_val( hemp_val_text(object)->length );
 }
 

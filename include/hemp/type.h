@@ -96,7 +96,12 @@ HEMP_TYPE_FUNC(hemp_type_identity);
 HEMP_TYPE_FUNC(hemp_type_reserved);
 HEMP_TYPE_FUNC(hemp_type_unused);
 
-HEMP_TYPE_METHOD(hemp_method_value_name);
+HEMP_VALUE_FUNC(hemp_method_value_name);
+HEMP_VALUE_FUNC(hemp_method_value_text);
+HEMP_VALUE_FUNC(hemp_method_value_number);
+HEMP_VALUE_FUNC(hemp_method_value_integer);
+HEMP_VALUE_FUNC(hemp_method_value_boolean);
+HEMP_VALUE_FUNC(hemp_method_value_defined);
 
 
 #endif /* HEMP_TYPE_H */

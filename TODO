@@ -59,6 +59,13 @@ An incomplete list of things TODO, in no particular order.
  
 -- HOT STACK --
 
+* Have static symbols created at global startup time in the same way that 
+  value type now are.
+
+* Change text to allocate header in front of text buffer (no wait... can't
+  then resize buffer, scratch that... But do change capacity to grow as a 
+  power of 2 to avoid many re-allocations.
+
 * Change elements to be values so that we can have a single value() and 
   text() interface instead of the similar (but not quite identical) 
   hemp_eval_f and hemp_value_f typedefs.

@@ -37,6 +37,8 @@ int hemp_string_equals(HEMP_STRING a, HEMP_STRING b);
 unsigned int hemp_string_hash(HEMP_STRING s);
 */
 
+HEMP_TYPE_METHOD(hemp_method_text_length);
+
 
 
 /*--------------------------------------------------------------------------
