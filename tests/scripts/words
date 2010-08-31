@@ -56,7 +56,18 @@ hash length: [% stuff.length %]
 -- expect
 hash length: 2
 
+-- test hash.type.name
+type name: [% stuff.type.name %] ([% stuff.type.id %])
+-- expect
+type name: Hash (6)
+
+-- test hash.type
+type: [% stuff.type %]
+-- expect
+type: Hash
+
 -- stop
+
 
 # need some better error handling/reporting before we can tackle this
 

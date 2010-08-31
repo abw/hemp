@@ -5,33 +5,35 @@
 
 
 /*--------------------------------------------------------------------------
- * data structures
+ * Data structures
+ *
+ * A hemp data type defines a core set of functions for manipulating the
+ * data and converting it to other core data types.  A hemp object is 
+ * loosely defined as any data structure starting with a type pointer.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_TYPE_BASE          \
-    hemp_int_t      id;         \
-    hemp_str_p      name;       \
-    hemp_type_p     base;       \
-    hemp_hash_p     methods;
-
-#define HEMP_TYPE_VALUE         \
-    hemp_value_f    value;      \
-    hemp_vtext_f    text;       \
-    hemp_value_f    number;     \
-    hemp_value_f    integer;    \
-    hemp_value_f    boolean;    \
-    hemp_value_f    compare;    \
-    hemp_value_f    defined;    \
-    hemp_fetch_f    fetch;      \
-    hemp_store_f    store;
-
 struct hemp_type_s {
-    HEMP_TYPE_BASE
-    HEMP_TYPE_VALUE
+    hemp_type_p     type;       /* allows types to be treated like objects  */
+    hemp_int_t      id;
+    hemp_str_p      name;
+    hemp_type_p     base;
+    hemp_hash_p     methods;
+    hemp_vtext_f    text;
+    hemp_value_f    value;
+    hemp_value_f    number;
+    hemp_value_f    integer;
+    hemp_value_f    boolean;
+    hemp_value_f    compare;
+    hemp_value_f    defined;
+    hemp_fetch_f    fetch;
+    hemp_store_f    store;
 };
 
+struct hemp_object_s {
+    hemp_type_p     type;
+};
 
-/* other stuff to add:
+/* other stuff to think about adding:
     # memory management
     acquire         # allocate memory
     prepare         # initialise object
@@ -45,15 +47,9 @@ struct hemp_type_s {
 
 /*--------------------------------------------------------------------------
  * core types
- *
- * We have a global list of 32 vtables, each of which contains a core set
- * of pseudo-methods that can be called against different data types.
- * The first 16 entries correspond to the core value types: number, integer, 
- * C string, text, etc.  The next 16 provide vtables for the singleton 
- * identity values: HempMissing, HempNothing, HempFalse, HempTrue, 
- * HempBefore, HempEqual and HempAfter.
-  *--------------------------------------------------------------------------*/
+ *--------------------------------------------------------------------------*/
  
+extern hemp_type_p HempType;
 extern hemp_type_p HempValue;
 extern hemp_type_p HempNumber;
 extern hemp_type_p HempInteger;
@@ -61,6 +57,7 @@ extern hemp_type_p HempString;
 extern hemp_type_p HempText;
 extern hemp_type_p HempList;
 extern hemp_type_p HempHash;
+extern hemp_type_p HempObject;
 extern hemp_type_p HempIdentity;
 extern hemp_type_p HempReserved;
 extern hemp_type_p HempUnused;
@@ -92,6 +89,7 @@ void
 void hemp_global_types_init();
 void hemp_global_types_free();
 
+HEMP_TYPE_FUNC(hemp_type_type);
 HEMP_TYPE_FUNC(hemp_type_number);
 HEMP_TYPE_FUNC(hemp_type_integer);
 //HEMP_TYPE_FUNC(hemp_type_string);
@@ -99,8 +97,7 @@ HEMP_TYPE_FUNC(hemp_type_integer);
 //HEMP_TYPE_FUNC(hemp_type_list);
 //HEMP_TYPE_FUNC(hemp_type_hash);
 HEMP_TYPE_FUNC(hemp_type_identity);
-HEMP_TYPE_FUNC(hemp_type_reserved);
-HEMP_TYPE_FUNC(hemp_type_unused);
+HEMP_TYPE_FUNC(hemp_type_object);
 
 HEMP_VALUE_FUNC(hemp_method_value_name);
 HEMP_VALUE_FUNC(hemp_method_value_text);
@@ -108,6 +105,12 @@ HEMP_VALUE_FUNC(hemp_method_value_number);
 HEMP_VALUE_FUNC(hemp_method_value_integer);
 HEMP_VALUE_FUNC(hemp_method_value_boolean);
 HEMP_VALUE_FUNC(hemp_method_value_defined);
+HEMP_VALUE_FUNC(hemp_method_value_type);
+
+HEMP_VTEXT_FUNC(hemp_value_type_text);
+HEMP_VALUE_FUNC(hemp_method_type_name);
+HEMP_VALUE_FUNC(hemp_method_type_id);
+
 
 
 #endif /* HEMP_TYPE_H */

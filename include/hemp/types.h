@@ -64,6 +64,7 @@ typedef struct hemp_hash_s      * hemp_hash_p;
 typedef struct hemp_jump_s      * hemp_jump_p;
 typedef struct hemp_language_s  * hemp_language_p;
 typedef struct hemp_list_s      * hemp_list_p;
+typedef struct hemp_object_s    * hemp_object_p;
 typedef struct hemp_pnode_s     * hemp_pnode_p;
 typedef struct hemp_pool_s      * hemp_pool_p;
 typedef struct hemp_ptree_s     * hemp_ptree_p;

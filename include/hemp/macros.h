@@ -484,7 +484,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 
 #define HEMP_TYPE_FUNC(f)                   \
     hemp_type_p f(                          \
-        hemp_int_t  id,                     \
+        hemp_int_t id,                      \
         hemp_str_p name                     \
     )
 

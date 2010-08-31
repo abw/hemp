@@ -49,6 +49,7 @@ libhemp_la_SOURCES  =   action.c            \
                         type/hash.c         \
                         type/list.c         \
                         type/number.c       \
+                        type/object.c       \
                         type/string.c       \
                         type/text.c         \
                         utils.c             \

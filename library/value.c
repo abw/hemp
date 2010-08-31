@@ -74,6 +74,14 @@ hemp_hash_val(hemp_hash_p t) {
 
 
 HEMP_INLINE hemp_value_t
+hemp_obj_val(hemp_object_p t) {
+    hemp_value_t v;
+    v.bits = HEMP_OBJECT_TAG | ((hemp_u64_t) t & HEMP_POINTER_MASK);
+    return v;
+}
+
+
+HEMP_INLINE hemp_value_t
 hemp_ident_val(hemp_u8_t i) {
     hemp_value_t v;
     v.bits = HEMP_IDENTITY_TAG | ((hemp_u64_t) i & HEMP_IDENT_MASK);
@@ -132,6 +140,12 @@ hemp_val_list(hemp_value_t v) {
 HEMP_INLINE hemp_hash_p
 hemp_val_hash(hemp_value_t v) {
     return (hemp_hash_p) HEMP_POINTER(v);
+}
+
+
+HEMP_INLINE hemp_object_p
+hemp_val_object(hemp_value_t v) {
+    return (hemp_object_p) HEMP_POINTER(v);
 }
 
 

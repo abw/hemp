@@ -133,13 +133,14 @@ extern const hemp_value_t HempAfter;
 #define HEMP_TEXT_ID            0x04        /* hemp_text_p pointer          */
 #define HEMP_LIST_ID            0x05        /* hemp_list_p pointer          */
 #define HEMP_HASH_ID            0x06        /* hemp_hash_p pointer          */
+#define HEMP_OBJECT_ID          0x0F        /* hemp_object_p pointer        */
 #define HEMP_IDENTITY_ID        0x10        /* identity values (NaN + n)    */
 
 /* out-of-band values used to mark unused/reserved type slots */
-#define HEMP_RESERVED_ID        0x40        /* reserved for future hemp use */
-#define HEMP_UNUSED_ID          0x80        /* available for custom types   */
-#define HEMP_VALUE_ID           0xFF        /* value uber type              */
-
+#define HEMP_UBER_ID            0x20        /* type uber type               */
+#define HEMP_VALUE_ID           0x21        /* value uber type              */
+#define HEMP_RESERVED_ID        0x30        /* reserved for future hemp use */
+#define HEMP_UNUSED_ID          0x40        /* available for custom types   */
 
 /* bits to twiddle to encode meaning into identity values */
 #define HEMP_FINITE_BIT         0x01        /* not infinity                 */
@@ -221,6 +222,7 @@ extern const hemp_value_t HempAfter;
 #define HEMP_TEXT_TAG           HEMP_TAG_MAKE(HEMP_TEXT_ID)
 #define HEMP_LIST_TAG           HEMP_TAG_MAKE(HEMP_LIST_ID)
 #define HEMP_HASH_TAG           HEMP_TAG_MAKE(HEMP_HASH_ID)
+#define HEMP_OBJECT_TAG         HEMP_TAG_MAKE(HEMP_OBJECT_ID)
 #define HEMP_IDENTITY_TAG       HEMP_TAG_MAKE(HEMP_IDENTITY_ID)
 
 
@@ -238,6 +240,7 @@ extern const hemp_value_t HempAfter;
 #define hemp_is_text(v)         HEMP_TYPE_IS(v, HEMP_TEXT_ID)
 #define hemp_is_list(v)         HEMP_TYPE_IS(v, HEMP_LIST_ID)
 #define hemp_is_hash(v)         HEMP_TYPE_IS(v, HEMP_HASH_ID)
+#define hemp_is_object(v)       HEMP_TYPE_IS(v, HEMP_OBJECT_ID)
 #define hemp_is_identity(v)     HEMP_TYPE_IS(v, HEMP_IDENTITY_ID)
 #define hemp_is_missing(v)      HEMP_IDENT_NOT(v, HEMP_FOUND_BIT)
 //#define hemp_is_found(v)      HEMP_IDENT_ANY(v, HEMP_FOUND_BIT)
@@ -255,7 +258,10 @@ extern const hemp_value_t HempAfter;
 #define hemp_is_equal(v)        HEMP_IDENT_IS(v, HEMP_IDENT_EQUAL)
 
 
-#define hemp_type(v)            (hemp_global_types[HEMP_TYPE_ID(v)])
+//#define hemp_type(v)            (hemp_global_types[HEMP_TYPE_ID(v)])
+#define hemp_htype(v)           (hemp_global_types[HEMP_TYPE_ID(v)])
+#define hemp_otype(v)           (((hemp_object_p) HEMP_POINTER(v))->type)
+#define hemp_type(v)            (hemp_is_object(v) ? hemp_otype(v) : hemp_htype(v))
 #define hemp_tfunc(v,n)         (hemp_type(v)->n)
 #define hemp_call(v,n,c)        (hemp_tfunc(v,n)(v,c))
 #define hemp_text(v,c,o)        (hemp_tfunc(v,text)(v,c,o))
@@ -299,29 +305,31 @@ typedef void            (* hemp_wipe_vfn)(hemp_value_t);
  * inline functions to encode native values as tagged values
  *--------------------------------------------------------------------------*/
 
-extern HEMP_INLINE hemp_value_t hemp_num_val(hemp_num_t n);
-extern HEMP_INLINE hemp_value_t hemp_int_val(hemp_int_t i);
-extern HEMP_INLINE hemp_value_t hemp_ptr_val(hemp_mem_p p);
-extern HEMP_INLINE hemp_value_t hemp_str_val(hemp_str_p s);
-extern HEMP_INLINE hemp_value_t hemp_text_val(hemp_text_p t);
-extern HEMP_INLINE hemp_value_t hemp_list_val(hemp_list_p l);
-extern HEMP_INLINE hemp_value_t hemp_hash_val(hemp_hash_p l);
-extern HEMP_INLINE hemp_value_t hemp_bool_val(hemp_bool_t b);
-extern HEMP_INLINE hemp_value_t hemp_ident_val(hemp_u8_t i);
+extern HEMP_INLINE hemp_value_t     hemp_num_val(hemp_num_t n);
+extern HEMP_INLINE hemp_value_t     hemp_int_val(hemp_int_t i);
+extern HEMP_INLINE hemp_value_t     hemp_ptr_val(hemp_mem_p p);
+extern HEMP_INLINE hemp_value_t     hemp_str_val(hemp_str_p s);
+extern HEMP_INLINE hemp_value_t     hemp_text_val(hemp_text_p t);
+extern HEMP_INLINE hemp_value_t     hemp_list_val(hemp_list_p l);
+extern HEMP_INLINE hemp_value_t     hemp_hash_val(hemp_hash_p l);
+extern HEMP_INLINE hemp_value_t     hemp_obj_val(hemp_object_p o);
+extern HEMP_INLINE hemp_value_t     hemp_bool_val(hemp_bool_t b);
+extern HEMP_INLINE hemp_value_t     hemp_ident_val(hemp_u8_t i);
 
 
 /*--------------------------------------------------------------------------
  * inline functions to decode tagged values to native values
  *--------------------------------------------------------------------------*/
 
-extern HEMP_INLINE hemp_num_t  hemp_val_num(hemp_value_t v);
-extern HEMP_INLINE hemp_int_t  hemp_val_int(hemp_value_t v);
-extern HEMP_INLINE hemp_mem_p  hemp_val_ptr(hemp_value_t v);
-extern HEMP_INLINE hemp_str_p  hemp_val_str(hemp_value_t v);
-extern HEMP_INLINE hemp_text_p hemp_val_text(hemp_value_t v);
-extern HEMP_INLINE hemp_list_p hemp_val_list(hemp_value_t v);
-extern HEMP_INLINE hemp_hash_p hemp_val_hash(hemp_value_t v);
-extern HEMP_INLINE hemp_bool_t hemp_val_bool(hemp_value_t v);
+extern HEMP_INLINE hemp_num_t       hemp_val_num(hemp_value_t v);
+extern HEMP_INLINE hemp_int_t       hemp_val_int(hemp_value_t v);
+extern HEMP_INLINE hemp_mem_p       hemp_val_ptr(hemp_value_t v);
+extern HEMP_INLINE hemp_str_p       hemp_val_str(hemp_value_t v);
+extern HEMP_INLINE hemp_text_p      hemp_val_text(hemp_value_t v);
+extern HEMP_INLINE hemp_list_p      hemp_val_list(hemp_value_t v);
+extern HEMP_INLINE hemp_hash_p      hemp_val_hash(hemp_value_t v);
+extern HEMP_INLINE hemp_object_p    hemp_val_obj(hemp_value_t v);
+extern HEMP_INLINE hemp_bool_t      hemp_val_bool(hemp_value_t v);
 
 
 /*--------------------------------------------------------------------------
@@ -366,6 +374,7 @@ HEMP_VALUE_FUNC(hemp_value_identity_compare);
 
 /* prototypes for text, list and hash are in the respective type/XXX.h files */
 
+/* debugging functions */
 void hemp_dump_u64(hemp_u64_t value);
 void hemp_dump_64(hemp_u64_t value);
 void hemp_dump_32(hemp_u32_t value);
