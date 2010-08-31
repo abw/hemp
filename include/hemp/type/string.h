@@ -2,7 +2,7 @@
 #define HEMP_STRING_H
 
 #include <hemp/core.h>
-#include <hemp/list.h>
+#include <hemp/type/list.h>
 
 struct hemp_string_split_s {
     hemp_str_p left;
@@ -101,6 +101,11 @@ hemp_list_p
     );
 
 
+HEMP_TYPE_FUNC(hemp_type_string);
+HEMP_VTEXT_FUNC(hemp_value_string_text);
+HEMP_VALUE_FUNC(hemp_value_string_number);
+HEMP_VALUE_FUNC(hemp_value_string_integer);
+HEMP_VALUE_FUNC(hemp_value_string_boolean);
 HEMP_VALUE_FUNC(hemp_method_string_length);
 
 

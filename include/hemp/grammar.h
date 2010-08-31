@@ -2,12 +2,12 @@
 #define HEMP_GRAMMAR_H
 
 #include <hemp/core.h>
-#include <hemp/hash.h>
 #include <hemp/ptree.h>
 #include <hemp/element.h>
 #include <hemp/action.h>
 #include <hemp/factory.h>
 #include <hemp/symbol.h>
+#include <hemp/type/hash.h>
 
 
 /*

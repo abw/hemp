@@ -2,13 +2,13 @@
 #define HEMP_ELEMENT_H
 
 #include <hemp/type.h>
-#include <hemp/text.h>
 #include <hemp/tag.h>
 #include <hemp/symbol.h>
 #include <hemp/template.h>
 #include <hemp/context.h>
 #include <hemp/value.h>
 #include <hemp/macros.h>
+#include <hemp/type/text.h>
 
 
 

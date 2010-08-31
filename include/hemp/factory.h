@@ -2,7 +2,7 @@
 #define HEMP_FACTORY_H
 
 #include <hemp/action.h>
-#include <hemp/hash.h>
+#include <hemp/type/hash.h>
 
 
 /*--------------------------------------------------------------------------

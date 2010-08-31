@@ -2,8 +2,8 @@
 #define HEMP_SCHEME_H
 
 #include <hemp/core.h>
-#include <hemp/hash.h>
 #include <hemp/source.h>
+#include <hemp/type/hash.h>
 
 
 /*--------------------------------------------------------------------------

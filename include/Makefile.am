@@ -9,8 +9,6 @@ nobase_include_HEADERS  = hemp/config.h         \
                           hemp/elements.h       \
                           hemp/error.h          \
                           hemp/filesystem.h     \
-                          hemp/hash.h           \
-                          hemp/list.h           \
                           hemp/memory.h         \
                           hemp/module.h         \
                           hemp/os.h             \
@@ -26,10 +24,12 @@ nobase_include_HEADERS  = hemp/config.h         \
                           hemp/tag.h            \
                           hemp/tagset.h         \
                           hemp/template.h       \
-                          hemp/text.h           \
                           hemp/type.h           \
+                          hemp/type/hash.h      \
+                          hemp/type/list.h      \
                           hemp/type/number.h    \
                           hemp/type/string.h    \
+                          hemp/type/text.h      \
                           hemp/types.h          \
                           hemp/utils.h          \
                           hemp/value.h

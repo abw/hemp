@@ -2,10 +2,10 @@
 #define HEMP_TAGSET_H
 
 #include <hemp/core.h>
-#include <hemp/hash.h>
 #include <hemp/ptree.h>
 #include <hemp/tag.h>
 #include <hemp/element.h>
+#include <hemp/type/hash.h>
 
 /*
 #include "hemp/elements.h"

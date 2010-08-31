@@ -41,6 +41,8 @@
 #define HEMP_STR_INTEGER    "Integer"
 #define HEMP_STR_STRING     "String"
 #define HEMP_STR_TEXT       "Text"
+#define HEMP_STR_LIST       "List"
+#define HEMP_STR_HASH       "Hash"
 #define HEMP_STR_IDENTITY   "Identity"
 #define HEMP_STR_RESERVED   "Reserved"
 #define HEMP_STR_UNUSED     "Unused"

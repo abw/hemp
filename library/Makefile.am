@@ -22,12 +22,10 @@ libhemp_la_SOURCES  =   action.c            \
                         factory.c           \
                         filesystem.c        \
                         grammar.c           \
-                        hash.c              \
                         hemp.c              \
                         language.c          \
                         language/hemp.c     \
                         language/tt3.c      \
-                        list.c              \
                         memory.c            \
                         pool.c              \
                         ptree.c             \
@@ -48,6 +46,8 @@ libhemp_la_SOURCES  =   action.c            \
                         type.c              \
                         type/identity.c     \
                         type/integer.c      \
+                        type/hash.c         \
+                        type/list.c         \
                         type/number.c       \
                         type/string.c       \
                         type/text.c         \

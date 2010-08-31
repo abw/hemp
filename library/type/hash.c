@@ -1,4 +1,4 @@
-#include <hemp/hash.h>
+#include <hemp/type/hash.h>
 
 
 static hemp_size_t 
@@ -34,6 +34,25 @@ hemp_primes[] = {
 };
 
 
+/*--------------------------------------------------------------------------
+ * Type constructor
+ *--------------------------------------------------------------------------*/
+
+HEMP_TYPE_FUNC(hemp_type_hash) {
+    hemp_type_p type = hemp_type_subtype(HempValue, id, name);
+    type->text       = &hemp_value_hash_text;       /* return/append text   */
+    type->boolean    = &hemp_value_true;            /* hash is always true   */  /* or hash size? */
+    type->defined    = &hemp_value_true;            /* and always defined   */
+
+    hemp_type_extend(type, "length", &hemp_method_hash_length);
+
+    return type;
+};
+
+
+/*--------------------------------------------------------------------------
+ * General purpose hash functions
+ *--------------------------------------------------------------------------*/
 
 HEMP_DO_INLINE static hemp_size_t
 hemp_hash_wider(
@@ -507,3 +526,26 @@ hemp_hash_function_jenkins32(
 
     return c;
 }
+
+
+/*--------------------------------------------------------------------------
+ * Runtime hash evaluation methods
+ *--------------------------------------------------------------------------*/
+
+HEMP_VTEXT_FUNC(hemp_value_hash_text) {
+    hemp_text_p text;
+    hemp_prepare_output(output, text, 32);
+    hemp_text_append_string(text, "TODO: hash.text");
+    return output;
+}
+
+
+/*--------------------------------------------------------------------------
+ * Hash pseudo-object methods
+ *--------------------------------------------------------------------------*/
+
+HEMP_VALUE_FUNC(hemp_method_hash_length) {
+    return hemp_int_val( hemp_val_hash(value)->size );
+}
+
+

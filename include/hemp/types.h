@@ -51,6 +51,7 @@ typedef const char              * hemp_name_p;    /* immutable C string       */
 typedef struct hemp_s           * hemp_p;
 typedef struct hemp_action_s    * hemp_action_p;
 typedef struct hemp_context_s   * hemp_context_p;
+typedef struct hemp_context_s   * hemp_cntx_p;      /* too much typing! */
 typedef struct hemp_dialect_s   * hemp_dialect_p;
 typedef struct hemp_element_s   * hemp_element_p;
 typedef struct hemp_elements_s  * hemp_elements_p;

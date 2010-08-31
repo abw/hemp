@@ -1,6 +1,6 @@
 #include <hemp/value.h>
-#include <hemp/list.h>
 #include <hemp/context.h>
+#include <hemp/type/list.h>
 
 
 HEMP_TYPE_FUNC(hemp_type_string) {

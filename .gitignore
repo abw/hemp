@@ -44,7 +44,7 @@ tests/core/value
 
 tests/type/hash
 tests/type/list
-tests/core/text
+tests/type/text
 
 tests/language/hemp/boolops
 tests/language/hemp/comments

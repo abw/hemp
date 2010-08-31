@@ -1,7 +1,7 @@
 #include <hemp/value.h>
-#include <hemp/text.h>
-#include <hemp/hash.h>
 #include <hemp/context.h>
+#include <hemp/type/text.h>
+#include <hemp/type/hash.h>
 
 
 const hemp_value_t  HempMissing = HEMP_IDENT_MAKE(HEMP_IDENT_MISSING);
@@ -66,6 +66,14 @@ hemp_list_val(hemp_list_p t) {
 
 
 HEMP_INLINE hemp_value_t
+hemp_hash_val(hemp_hash_p t) {
+    hemp_value_t v;
+    v.bits = HEMP_HASH_TAG | ((hemp_u64_t) t & HEMP_POINTER_MASK);
+    return v;
+}
+
+
+HEMP_INLINE hemp_value_t
 hemp_ident_val(hemp_u8_t i) {
     hemp_value_t v;
     v.bits = HEMP_IDENTITY_TAG | ((hemp_u64_t) i & HEMP_IDENT_MASK);
@@ -118,6 +126,12 @@ hemp_val_text(hemp_value_t v) {
 HEMP_INLINE hemp_list_p
 hemp_val_list(hemp_value_t v) {
     return (hemp_list_p) HEMP_POINTER(v);
+}
+
+
+HEMP_INLINE hemp_hash_p
+hemp_val_hash(hemp_value_t v) {
+    return (hemp_hash_p) HEMP_POINTER(v);
 }
 
 

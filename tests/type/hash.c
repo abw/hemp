@@ -1,6 +1,7 @@
 #include <hemp/test.h>
 
 void test_hash();
+void test_hash_methods();
 void hash_get(hemp_hash_p, char *);
 void hash_set(hemp_hash_p table, hemp_str_p, hemp_str_p);
 void hash_has(hemp_hash_p table, hemp_str_p, hemp_str_p);
@@ -16,8 +17,9 @@ void hash_keys_no_match(hemp_str_p, hemp_str_p, hemp_size_t);
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(23);
+    plan(28);
     test_hash();
+    test_hash_methods();
     return done();
 }
 
@@ -205,4 +207,32 @@ hash_set(
         hemp_hash_store_string(table, key, value),
         "set %s to %s", key, value
     );
+}
+
+
+void test_hash_methods() {
+    hemp_p       hemp    = hemp_init();
+    hemp_hash_p  hash    = hemp_hash_init();
+//  hemp_text_p  text    = hemp_text_from_string("Hello World!");
+    hemp_value_t value   = hemp_hash_val(hash);
+    hemp_cntx_p  context = hemp_context(hemp); 
+    
+    hemp_hash_store_string(hash, "message", "Hello World");
+    hemp_hash_store_integer(hash, "answer", 42);
+    hemp_hash_store_number(hash, "pi", 3.14159);
+    
+    ok( hemp_is_hash(value), "value is a hash" );
+    
+    hemp_value_t length = hemp_send(value, "length", context);
+    ok( hemp_is_defined(length), "got defined length" );
+    ok( hemp_is_integer(length), "got an integer length" );
+    eq( hemp_val_int(length), 3, "hash length is 3" );
+
+    hemp_value_t htext = hemp_send(value, "text", context);
+    ok( hemp_is_text(htext), "got hash as text" );
+
+    hemp_context_free(context);
+    hemp_hash_free(hash);
+//  hemp_text_free(text);
+    hemp_free(hemp);
 }

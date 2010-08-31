@@ -4,8 +4,8 @@
 #include <hemp/core.h>
 #include <hemp/macros.h>
 #include <hemp/type.h>
-#include <hemp/text.h>
-#include <hemp/hash.h>
+#include <hemp/type/text.h>
+#include <hemp/type/hash.h>
 
 
 HEMP_DO_INLINE hemp_str_p hemp_identity_name(hemp_value_t value);
@@ -305,6 +305,7 @@ extern HEMP_INLINE hemp_value_t hemp_ptr_val(hemp_mem_p p);
 extern HEMP_INLINE hemp_value_t hemp_str_val(hemp_str_p s);
 extern HEMP_INLINE hemp_value_t hemp_text_val(hemp_text_p t);
 extern HEMP_INLINE hemp_value_t hemp_list_val(hemp_list_p l);
+extern HEMP_INLINE hemp_value_t hemp_hash_val(hemp_hash_p l);
 extern HEMP_INLINE hemp_value_t hemp_bool_val(hemp_bool_t b);
 extern HEMP_INLINE hemp_value_t hemp_ident_val(hemp_u8_t i);
 
@@ -319,6 +320,7 @@ extern HEMP_INLINE hemp_mem_p  hemp_val_ptr(hemp_value_t v);
 extern HEMP_INLINE hemp_str_p  hemp_val_str(hemp_value_t v);
 extern HEMP_INLINE hemp_text_p hemp_val_text(hemp_value_t v);
 extern HEMP_INLINE hemp_list_p hemp_val_list(hemp_value_t v);
+extern HEMP_INLINE hemp_hash_p hemp_val_hash(hemp_value_t v);
 extern HEMP_INLINE hemp_bool_t hemp_val_bool(hemp_value_t v);
 
 
@@ -354,18 +356,6 @@ HEMP_VALUE_FUNC(hemp_value_integer_number);
 HEMP_VALUE_FUNC(hemp_value_integer_boolean);
 HEMP_VALUE_FUNC(hemp_value_integer_compare);
 
-/* string -> xxx conversion */
-HEMP_VTEXT_FUNC(hemp_value_string_text);
-HEMP_VALUE_FUNC(hemp_value_string_number);
-HEMP_VALUE_FUNC(hemp_value_string_integer);
-HEMP_VALUE_FUNC(hemp_value_string_boolean);
-
-/* text -> xxx conversion */
-HEMP_VTEXT_FUNC(hemp_value_text_text);
-HEMP_VALUE_FUNC(hemp_value_text_number);
-HEMP_VALUE_FUNC(hemp_value_text_integer);
-HEMP_VALUE_FUNC(hemp_value_text_boolean);
-
 /* identity -> xxx conversions */
 HEMP_VTEXT_FUNC(hemp_value_identity_text);
 HEMP_VALUE_FUNC(hemp_value_identity_number);
@@ -374,6 +364,7 @@ HEMP_VALUE_FUNC(hemp_value_identity_defined);
 HEMP_VALUE_FUNC(hemp_value_identity_boolean);
 HEMP_VALUE_FUNC(hemp_value_identity_compare);
 
+/* prototypes for text, list and hash are in the respective type/XXX.h files */
 
 void hemp_dump_u64(hemp_u64_t value);
 void hemp_dump_64(hemp_u64_t value);

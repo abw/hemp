@@ -149,6 +149,15 @@ void
 
 
 /*--------------------------------------------------------------------------
+ * type functions and methods
+ *--------------------------------------------------------------------------*/
+
+HEMP_TYPE_FUNC(hemp_type_hash);
+HEMP_VTEXT_FUNC(hemp_value_hash_text);
+HEMP_VALUE_FUNC(hemp_method_hash_length);
+
+
+/*--------------------------------------------------------------------------
  * patch in the hash function we want to use and define some other macros
  *--------------------------------------------------------------------------*/
 

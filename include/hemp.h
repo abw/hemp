@@ -14,7 +14,6 @@ extern "C" {
 #include <hemp/factory.h>
 #include <hemp/filesystem.h>
 #include <hemp/grammar.h>
-#include <hemp/hash.h>
 #include <hemp/language.h>
 #include <hemp/pool.h>
 #include <hemp/ptree.h>
@@ -26,9 +25,11 @@ extern "C" {
 #include <hemp/tag.h>
 #include <hemp/tagset.h>
 #include <hemp/template.h>
-#include <hemp/text.h>
 #include <hemp/value.h>
 #include <hemp/macros.h>
+#include <hemp/type/text.h>
+#include <hemp/type/list.h>
+#include <hemp/type/hash.h>
 
     
 //#include <hemp/module.h>

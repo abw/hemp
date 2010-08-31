@@ -2,7 +2,7 @@
 #define HEMP_SYMBOL_H
 
 #include <hemp/type.h>
-#include <hemp/text.h>
+#include <hemp/type/text.h>
 
 
 /*--------------------------------------------------------------------------

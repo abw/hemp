@@ -6,14 +6,16 @@ hemp_str_p list_as_text(hemp_list_p);
 
 int
 main(int argc, char **argv, char **env) {
-    plan(6);
+    plan(10);
     test_list();
     return done();
 }
 
 
 void test_list() {
+    hemp_p      hemp = hemp_init();
     hemp_list_p list = hemp_list_init();
+    
     pass("created list");
 
     hemp_list_push(list, hemp_str_val("foo") );
@@ -34,8 +36,20 @@ void test_list() {
         hemp_string_eq(list_as_text(list), "foo, bar"),
         "list text is foo, bar"
     );
+
+    /* test methods */
+    hemp_context_p context = hemp_context(hemp);
+    hemp_value_t   value   = hemp_list_val(list);
+    ok( hemp_is_list(value), "value is a list" );
     
+    hemp_value_t   length  = hemp_send(value, "length", context);
+    ok( hemp_is_defined(length), "got define length" );
+    ok( hemp_is_integer(length), "got an integer length" );
+    eq( hemp_val_int(length), 2, "list length is 2" );
+    
+    hemp_context_free(context);
     hemp_list_free(list);
+    hemp_free(hemp);
 }
 
 

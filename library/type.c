@@ -1,5 +1,5 @@
 #include <hemp/type.h>
-#include <hemp/hash.h>
+#include <hemp/type/hash.h>
 
 
 hemp_type_p  HempValue    = NULL;
@@ -7,6 +7,8 @@ hemp_type_p  HempNumber   = NULL;
 hemp_type_p  HempInteger  = NULL;
 hemp_type_p  HempString   = NULL;
 hemp_type_p  HempText     = NULL;
+hemp_type_p  HempList     = NULL;
+hemp_type_p  HempHash     = NULL;
 hemp_type_p  HempIdentity = NULL;
 hemp_type_p  HempReserved = NULL;
 hemp_type_p  HempUnused   = NULL;
@@ -82,11 +84,13 @@ hemp_global_types_init() {
     HempInteger  = hemp_type_integer ( HEMP_INTEGER_ID,  HEMP_STR_INTEGER  );
     HempString   = hemp_type_string  ( HEMP_STRING_ID,   HEMP_STR_STRING   );
     HempText     = hemp_type_text    ( HEMP_TEXT_ID,     HEMP_STR_TEXT     );
+    HempList     = hemp_type_list    ( HEMP_LIST_ID,     HEMP_STR_LIST     );
+    HempHash     = hemp_type_hash    ( HEMP_HASH_ID,     HEMP_STR_HASH     );
     HempIdentity = hemp_type_identity( HEMP_IDENTITY_ID, HEMP_STR_IDENTITY );
     HempReserved = hemp_type_reserved( HEMP_RESERVED_ID, HEMP_STR_RESERVED );
     HempUnused   = hemp_type_unused  ( HEMP_UNUSED_ID,   HEMP_STR_UNUSED   );
 
-    /* add methods to types */
+    /* add methods to base value types */
     hemp_type_extend(HempValue, "name",    &hemp_method_value_name);
     hemp_type_extend(HempValue, "text",    &hemp_method_value_text);
     hemp_type_extend(HempValue, "num",     &hemp_method_value_number);
@@ -113,6 +117,8 @@ hemp_global_types_init() {
     hemp_global_types[ HempInteger->id  ] = HempInteger;
     hemp_global_types[ HempString->id   ] = HempString;
     hemp_global_types[ HempText->id     ] = HempText;
+    hemp_global_types[ HempList->id     ] = HempList;
+    hemp_global_types[ HempHash->id     ] = HempHash;
     hemp_global_types[ HempIdentity->id ] = HempIdentity;
 
 }
@@ -132,6 +138,8 @@ hemp_global_types_free() {
     hemp_type_free(HempInteger);    HempInteger  = NULL;
     hemp_type_free(HempString);     HempString   = NULL;
     hemp_type_free(HempText);       HempText     = NULL;
+    hemp_type_free(HempList);       HempList     = NULL;
+    hemp_type_free(HempHash);       HempHash     = NULL;
     hemp_type_free(HempIdentity);   HempIdentity = NULL;
     hemp_type_free(HempReserved);   HempReserved = NULL;
     hemp_type_free(HempUnused);     HempUnused   = NULL;

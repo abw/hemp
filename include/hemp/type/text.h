@@ -2,7 +2,6 @@
 #define HEMP_TEXT_H
 
 #include <hemp/core.h>
-// #include "hemp/type.h"
 
 
 /*--------------------------------------------------------------------------
@@ -37,8 +36,17 @@ int hemp_string_equals(HEMP_STRING a, HEMP_STRING b);
 unsigned int hemp_string_hash(HEMP_STRING s);
 */
 
-HEMP_VALUE_FUNC(hemp_method_text_length);
 
+/*--------------------------------------------------------------------------
+ * type functions and methods
+ *--------------------------------------------------------------------------*/
+
+HEMP_TYPE_FUNC(hemp_type_text);
+HEMP_VTEXT_FUNC(hemp_value_text_text);
+HEMP_VALUE_FUNC(hemp_value_text_number);
+HEMP_VALUE_FUNC(hemp_value_text_integer);
+HEMP_VALUE_FUNC(hemp_value_text_boolean);
+HEMP_VALUE_FUNC(hemp_method_text_length);
 
 
 /*--------------------------------------------------------------------------

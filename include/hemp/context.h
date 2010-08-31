@@ -2,7 +2,7 @@
 #define HEMP_CONTEXT_H
 
 #include <hemp/core.h>
-#include <hemp/hash.h>
+#include <hemp/type/hash.h>
 
 
 /*--------------------------------------------------------------------------
