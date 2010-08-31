@@ -55,13 +55,14 @@ hemp_element_free(
 
 hemp_element_p
 hemp_element_parse(
-    hemp_element_p element
+    hemp_element_p element,
+    hemp_scope_p   scope
 ) {
     hemp_debug_call("hemp_element_parse()\n");
 
     hemp_element_p block = hemp_element_parse_block(
         &element,
-        NULL,
+        scope,
         0, 
         HEMP_FALSE
     );
@@ -275,17 +276,19 @@ HEMP_POSTFIX_FUNC(hemp_element_next_postfix) {
 HEMP_PREFIX_FUNC(hemp_element_parse_prefix) {
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
+    hemp_element_p expr;
 
     hemp_debug_call("hemp_element_parse_prefix()\n");
 
     hemp_set_flag(self, HEMP_BE_PREFIX);
     hemp_go_next(elemptr);
 
-    self->args.unary.expr = hemp_parse_prefix(elemptr, scope, type->rprec, 1);
+    expr = hemp_parse_prefix(elemptr, scope, type->rprec, 1);
 
-    if (! self->args.unary.expr)
+    if (! expr)
         hemp_fatal("missing expression on rhs of %s\n", type->start);
     
+    hemp_set_expr_element(self, expr);
     hemp_skip_whitespace(elemptr);
 
     return hemp_parse_postfix(
@@ -304,7 +307,7 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_postfix) {
     HEMP_INFIX_LEFT_PRECEDENCE;              // is that right?
     hemp_set_flag(self, HEMP_BE_POSTFIX);
 
-    self->args.unary.expr = lhs;
+    hemp_set_expr_element(self, lhs);
     hemp_go_next(elemptr);
     hemp_skip_whitespace(elemptr);
 
@@ -318,19 +321,20 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_postfix) {
 HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left) {
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
+    hemp_element_p rhs;
 
     hemp_debug_call("hemp_element_parse_infix_left()\n");
 
     HEMP_INFIX_LEFT_PRECEDENCE;
     hemp_set_flag(self, HEMP_BE_INFIX);
-
-    self->args.binary.lhs = lhs;
+    hemp_set_lhs_element(self, lhs);
     hemp_go_next(elemptr);
-    self->args.binary.rhs = hemp_parse_prefix(elemptr, scope, type->lprec, 1);
+    rhs = hemp_parse_prefix(elemptr, scope, type->lprec, 1);
 
-    if (! self->args.binary.rhs)
+    if (! rhs)
         hemp_fatal("missing expression on rhs of %s\n", type->start);
-    
+
+    hemp_set_rhs_element(self, rhs);
     hemp_skip_whitespace(elemptr);
 
     return hemp_parse_postfix(
@@ -343,19 +347,21 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left) {
 HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right) {
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
+    hemp_element_p rhs;
 
     hemp_debug_call("hemp_element_parse_infix_right()\n");
 
     HEMP_INFIX_RIGHT_PRECEDENCE;
     hemp_set_flag(self, HEMP_BE_INFIX);
 
-    self->args.binary.lhs = lhs;
+    hemp_set_lhs_element(self, lhs);
     hemp_go_next(elemptr);
-    self->args.binary.rhs = hemp_parse_prefix(elemptr, scope, type->lprec, 1);
+    rhs = hemp_parse_prefix(elemptr, scope, type->lprec, 1);
 
-    if (! self->args.binary.rhs)
+    if (! rhs)
         hemp_fatal("missing expression on rhs of %s\n", type->start);
-        
+    
+    hemp_set_rhs_element(self, rhs);
     hemp_skip_whitespace(elemptr);
 
     return hemp_parse_postfix(

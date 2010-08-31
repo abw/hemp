@@ -48,6 +48,7 @@ hemp_type_init(
     type->defined = &hemp_value_not_defined;
     type->fetch   = &hemp_value_not_fetch;
     type->store   = &hemp_value_not_store;
+    type->dot     = &hemp_value_dot;
 
     return type;
 }

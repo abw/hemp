@@ -144,7 +144,7 @@ hemp_val_hash(hemp_value_t v) {
 
 
 HEMP_INLINE hemp_object_p
-hemp_val_object(hemp_value_t v) {
+hemp_val_obj(hemp_value_t v) {
     return (hemp_object_p) HEMP_POINTER(v);
 }
 
@@ -184,6 +184,41 @@ HEMP_VALUE_FUNC(hemp_value_false) {
     return HempFalse;
 }
 
+
+HEMP_FETCH_FUNC(hemp_value_dot) {
+    hemp_debug_call("hemp_value_dot(%s)\n", hemp_type_name(container));
+    hemp_value_t result = HempMissing;
+
+    /* call the value's fetch method, if it has one */
+    hemp_type_p type = hemp_type(container);
+
+    if (type->fetch && type->fetch != &hemp_value_not_fetch) {
+        result = type->fetch(container, context, key);
+        if (hemp_is_found(result))
+            return result;
+    }
+
+    /* if we didn't find anything then look for a method */
+    if (hemp_is_text(key)) {
+        /* we got a text key */
+        result = hemp_send(container, hemp_val_text(key)->string, context);
+    }
+    else {
+        /* otherwise we have to convert the key to text */
+        hemp_text_p ktext = hemp_text_init(16);
+        hemp_onto_text(key, context, hemp_text_val(ktext));
+        result = hemp_send(container, ktext->string, context);
+        hemp_text_free(ktext);
+    }
+
+    return result;
+}
+
+
+
+/*--------------------------------------------------------------------------
+ * Default "I'm sorry Dave, I'm afraid I can't do that" functions
+ *--------------------------------------------------------------------------*/
 
 HEMP_VTEXT_FUNC(hemp_value_not_text) {
     HEMP_CONVERT_ERROR(
@@ -263,6 +298,13 @@ HEMP_STORE_FUNC(hemp_value_not_store) {
 }
 
 
+HEMP_FETCH_FUNC(hemp_value_not_dot) {
+    HEMP_FETCH_ERROR(
+        context, 
+        hemp_type_name(container),
+        "TODO: RHS text"
+    );
+}
 
 
 

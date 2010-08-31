@@ -31,6 +31,7 @@ libhemp_la_SOURCES  =   action.c            \
                         ptree.c             \
                         scanner.c           \
                         scheme.c            \
+                        scope.c             \
                         slab.c              \
                         slot.c              \
                         source.c            \

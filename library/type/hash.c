@@ -40,9 +40,11 @@ hemp_primes[] = {
 
 HEMP_TYPE_FUNC(hemp_type_hash) {
     hemp_type_p type = hemp_type_subtype(HempValue, id, name);
-    type->text       = &hemp_value_hash_text;       /* return/append text   */
-    type->boolean    = &hemp_value_true;            /* hash is always true   */  /* or hash size? */
-    type->defined    = &hemp_value_true;            /* and always defined   */
+    type->text       = &hemp_type_hash_text;
+    type->fetch      = &hemp_type_hash_fetch;
+    type->dot        = &hemp_type_hash_dot;
+    type->boolean    = &hemp_value_true;            /* hash is always true or use hash size? */
+    type->defined    = &hemp_value_true;
 
     hemp_type_extend(type, "length", &hemp_method_hash_length);
 
@@ -532,12 +534,85 @@ hemp_hash_function_jenkins32(
  * Runtime hash evaluation methods
  *--------------------------------------------------------------------------*/
 
-HEMP_VTEXT_FUNC(hemp_value_hash_text) {
+HEMP_VTEXT_FUNC(hemp_type_hash_text) {
     hemp_text_p text;
     hemp_prepare_output(output, text, 32);
     hemp_text_append_string(text, "TODO: hash.text");
     return output;
 }
+
+
+HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
+    hemp_bool_t kmine  = HEMP_FALSE;
+    hemp_text_p ktext;
+
+    if (hemp_is_text(key)) {
+        ktext = hemp_val_text(key);
+    }
+    else {
+        /* otherwise we have to convert the key to text */
+        ktext = hemp_text_init(16);
+        kmine = HEMP_TRUE;
+        hemp_onto_text(key, context, hemp_text_val(ktext));
+    }
+
+    hemp_debug_call(
+        "hemp_type_hash_fetch(%s, %s)\n", 
+        hemp_type_name(container), 
+        ktext->string
+    );
+    /* fetch the value */
+    hemp_value_t result = hemp_hash_fetch( 
+        hemp_val_hash(container),
+        ktext->string
+    );
+
+    /* release the text memory and return result */
+    if (kmine)
+        hemp_text_free(ktext);
+
+    return result;
+}
+
+
+HEMP_FETCH_FUNC(hemp_type_hash_dot) {
+    hemp_bool_t kmine  = HEMP_FALSE;
+    hemp_text_p ktext;
+
+    if (hemp_is_text(key)) {
+        ktext = hemp_val_text(key);
+    }
+    else {
+        /* otherwise we have to convert the key to text */
+        ktext = hemp_text_init(16);
+        kmine = HEMP_TRUE;
+        hemp_onto_text(key, context, hemp_text_val(ktext));
+    }
+
+    hemp_debug_call(
+        "hemp_hash_dot(%s, %s)\n", 
+        hemp_type_name(container), 
+        ktext->string
+    );
+
+    /* fetch the value */
+    hemp_value_t result = hemp_hash_fetch( 
+        hemp_val_hash(container),
+        ktext->string
+    );
+
+    /* if we didn't find it then look for a method */
+    if (hemp_is_missing(result)) {
+        result = hemp_send(container, ktext->string, context);
+    }
+
+    /* release the text memory and return result */
+    if (kmine)
+        hemp_text_free(ktext);
+
+    return result;
+}
+
 
 
 /*--------------------------------------------------------------------------
@@ -547,5 +622,7 @@ HEMP_VTEXT_FUNC(hemp_value_hash_text) {
 HEMP_VALUE_FUNC(hemp_method_hash_length) {
     return hemp_int_val( hemp_val_hash(value)->size );
 }
+
+
 
 

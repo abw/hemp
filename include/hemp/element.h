@@ -17,13 +17,13 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_unary_s {
-    hemp_element_p  expr;
+    hemp_value_t    expr;
     // TODO: args
 };
 
 struct hemp_binary_s {
-    hemp_element_p  lhs;
-    hemp_element_p  rhs;
+    hemp_value_t    lhs;
+    hemp_value_t    rhs;
 };
 
 struct hemp_block_s {
@@ -103,6 +103,42 @@ extern hemp_symbol_p HempSymbolBlock;
 #define hemp_at_eof(ep) \
     (*ep)->type == HempSymbolEof
 
+#define hemp_expr(elem)                                         \
+    (elem->args.unary.expr)
+
+#define hemp_lhs(elem)                                          \
+    (elem->args.binary.lhs)
+
+#define hemp_rhs(elem)                                          \
+    (elem->args.binary.rhs)
+
+#define hemp_expr_element(elem)                                 \
+    ((hemp_element_p) hemp_val_obj( hemp_expr(elem) ))
+
+#define hemp_lhs_element(elem)                                  \
+    ((hemp_element_p) hemp_val_obj( hemp_lhs(elem) ))
+
+#define hemp_rhs_element(elem)                                  \
+    ((hemp_element_p) hemp_val_obj( hemp_rhs(elem) ))
+
+#define hemp_set_expr(elem, ex)                                 \
+    (elem->args.unary.expr = ex)
+
+#define hemp_set_lhs(elem, ex)                                  \
+    (elem->args.binary.lhs = ex)
+
+#define hemp_set_rhs(elem, ex)                                  \
+    (elem->args.binary.rhs = ex)
+
+#define hemp_set_expr_element(elem, ex)                         \
+    (hemp_set_expr( elem, hemp_obj_val((hemp_object_p) ex) ))
+
+#define hemp_set_lhs_element(elem, ex)                          \
+    (hemp_set_lhs( elem, hemp_obj_val((hemp_object_p) ex) ))
+
+#define hemp_set_rhs_element(elem, ex)                          \
+    (hemp_set_rhs( elem, hemp_obj_val((hemp_object_p) ex) ))
+
 #define hemp_parse_prefix(ep, sc, pr, fr)               \
     ((*ep)->type->prefix                                \
         ? (*ep)->type->prefix(ep, sc, pr, fr)           \
@@ -159,7 +195,7 @@ void
  * general parsing functions
  *--------------------------------------------------------------------------*/
 
-hemp_element_p  hemp_element_parse(hemp_element_p);
+hemp_element_p  hemp_element_parse(hemp_element_p, hemp_scope_p);
 hemp_list_p     hemp_element_parse_exprs(HEMP_PREFIX_ARGS);
 
 HEMP_PREFIX_FUNC(hemp_element_parse_block);
@@ -403,6 +439,7 @@ HEMP_EVAL_FUNC(hemp_element_text_value);
 HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol);
 HEMP_POSTFIX_FUNC(hemp_element_dotop_infix);
 HEMP_EVAL_FUNC(hemp_element_dotop_value);
+void hemp_element_dotop_clean(hemp_element_p);
 
 
 /*--------------------------------------------------------------------------

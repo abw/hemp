@@ -66,6 +66,11 @@ type: [% stuff.type %]
 -- expect
 type: Hash
 
+-- test hash.foo
+foo: [% stuff.foo %]
+-- expect
+foo: 69
+
 -- stop
 
 

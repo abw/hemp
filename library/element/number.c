@@ -166,13 +166,13 @@ HEMP_EVAL_FUNC(hemp_element_number_plus_value) {
 
     /* prefix unary '+' coerces value to a number */
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
-        hemp_element_p expr = element->args.unary.expr;
+        hemp_element_p expr = hemp_expr_element(element);
         return expr->type->number(expr, context);
     }
 
     /* otherwise it's an infix addition operator */
-    hemp_element_p lhs = element->args.binary.lhs;
-    hemp_element_p rhs = element->args.binary.rhs;
+    hemp_element_p lhs = hemp_lhs_element(element);
+    hemp_element_p rhs = hemp_rhs_element(element);
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval, result;
     
@@ -214,7 +214,7 @@ HEMP_EVAL_FUNC(hemp_element_number_minus_value) {
 
     /* prefix unary '-' coerces value to a number and negates it */
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
-        hemp_element_p expr = element->args.unary.expr;
+        hemp_element_p expr = hemp_expr_element(element);
         hemp_value_t   val  = expr->type->number(expr, context);
 
         return hemp_is_integer(val)
@@ -223,8 +223,8 @@ HEMP_EVAL_FUNC(hemp_element_number_minus_value) {
     }
 
     /* otherwise it's an infix subtraction operator */
-    hemp_element_p lhs = element->args.binary.lhs;
-    hemp_element_p rhs = element->args.binary.rhs;
+    hemp_element_p lhs = hemp_lhs_element(element);
+    hemp_element_p rhs = hemp_rhs_element(element);
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval, result;
 
@@ -261,8 +261,8 @@ HEMP_SYMBOL_FUNC(hemp_element_number_power_symbol) {
 HEMP_EVAL_FUNC(hemp_element_number_power_value) {
     hemp_debug_call("hemp_element_number_power_value()\n");
 
-    hemp_element_p lhs = element->args.binary.lhs;
-    hemp_element_p rhs = element->args.binary.rhs;
+    hemp_element_p lhs = hemp_lhs_element(element);
+    hemp_element_p rhs = hemp_rhs_element(element);
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval  = rhs->type->number(rhs, context);
     hemp_value_t result;
@@ -304,8 +304,8 @@ HEMP_SYMBOL_FUNC(hemp_element_number_multiply_symbol) {
 HEMP_EVAL_FUNC(hemp_element_number_multiply_value) {
     hemp_debug_call("hemp_element_number_multiply_value()\n");
 
-    hemp_element_p lhs = element->args.binary.lhs;
-    hemp_element_p rhs = element->args.binary.rhs;
+    hemp_element_p lhs = hemp_lhs_element(element);
+    hemp_element_p rhs = hemp_rhs_element(element);
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval, result;
 
@@ -342,8 +342,8 @@ HEMP_SYMBOL_FUNC(hemp_element_number_divide_symbol) {
 HEMP_EVAL_FUNC(hemp_element_number_divide_value) {
     hemp_debug_call("hemp_element_number_divide_value()\n");
 
-    hemp_element_p lhs = element->args.binary.lhs;
-    hemp_element_p rhs = element->args.binary.rhs;
+    hemp_element_p lhs = hemp_lhs_element(element);
+    hemp_element_p rhs = hemp_rhs_element(element);
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval, result;
 
@@ -383,8 +383,8 @@ HEMP_SYMBOL_FUNC(hemp_element_number_divint_symbol) {
 HEMP_EVAL_FUNC(hemp_element_number_divint_value) {
     hemp_debug_call("hemp_element_number_divint_value()\n");
 
-    hemp_element_p lhs  = element->args.binary.lhs;
-    hemp_element_p rhs  = element->args.binary.rhs;
+    hemp_element_p lhs  = hemp_lhs_element(element);
+    hemp_element_p rhs  = hemp_rhs_element(element);
     
     return hemp_int_val(
         (hemp_int_t)
@@ -410,8 +410,8 @@ HEMP_SYMBOL_FUNC(hemp_element_number_modulus_symbol) {
 HEMP_EVAL_FUNC(hemp_element_number_modulus_value) {
     hemp_debug_call("hemp_element_number_modulus_value()\n");
 
-    hemp_element_p lhs  = element->args.binary.lhs;
-    hemp_element_p rhs  = element->args.binary.rhs;
+    hemp_element_p lhs  = hemp_lhs_element(element);
+    hemp_element_p rhs  = hemp_rhs_element(element);
     
     return hemp_int_val(
         (hemp_int_t)
@@ -436,8 +436,8 @@ HEMP_SYMBOL_FUNC(hemp_element_number_compare_symbol) {
 HEMP_EVAL_FUNC(hemp_element_number_compare_value) {
     hemp_debug_call("hemp_element_number_compare_value()\n");
 
-    hemp_element_p lhs = element->args.binary.lhs;
-    hemp_element_p rhs = element->args.binary.rhs;
+    hemp_element_p lhs = hemp_lhs_element(element);
+    hemp_element_p rhs = hemp_rhs_element(element);
     hemp_value_t lval  = lhs->type->number(lhs, context);
     hemp_value_t rval  = rhs->type->number(rhs, context);
     hemp_num_t   lnum  = HEMP_NUMOP_CAST_NUM(lval);

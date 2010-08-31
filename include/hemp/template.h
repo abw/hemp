@@ -3,6 +3,7 @@
 
 #include <hemp/dialect.h>
 #include <hemp/source.h>
+#include <hemp/scope.h>
 #include <hemp/elements.h>
 
 
@@ -14,6 +15,7 @@ struct hemp_template_s {
     hemp_dialect_p  dialect;
     hemp_source_p   source;
     hemp_tagset_p   tagset;
+    hemp_scope_p    scope;
     hemp_elements_p elements;
     hemp_element_p  tree;
 };

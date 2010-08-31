@@ -59,6 +59,8 @@ An incomplete list of things TODO, in no particular order.
  
 -- HOT STACK --
 
+* change function names in type/* from hemp_value_XXX_YYY to hemp_type_XXX_YYY
+
 * Have static symbols created at global startup time in the same way that 
   value type now are.
 
@@ -68,7 +70,9 @@ An incomplete list of things TODO, in no particular order.
 
 * Change elements to be values so that we can have a single value() and 
   text() interface instead of the similar (but not quite identical) 
-  hemp_eval_f and hemp_value_f typedefs.
+  hemp_eval_f and hemp_value_f typedefs.  UPDATE: started doing this from 
+  the inside, so that elements hold values (object tagged element pointers)
+  in their expr/lhs/rhs slots.
 
 * boolean vs truth
 

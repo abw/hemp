@@ -27,6 +27,7 @@ struct hemp_type_s {
     hemp_value_f    defined;
     hemp_fetch_f    fetch;
     hemp_store_f    store;
+    hemp_fetch_f    dot;
 };
 
 struct hemp_object_s {

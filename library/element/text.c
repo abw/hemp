@@ -106,8 +106,8 @@ HEMP_ETEXT_FUNC(hemp_element_text_concat_value) {
 
     hemp_text_p text;
     hemp_prepare_output(output, text, 0);
-    hemp_element_p lhs = element->args.binary.lhs;
-    hemp_element_p rhs = element->args.binary.rhs;
+    hemp_element_p lhs = hemp_lhs_element(element);
+    hemp_element_p rhs = hemp_rhs_element(element);
     lhs->type->text(lhs, context, output);
     rhs->type->text(rhs, context, output);
 
@@ -129,8 +129,8 @@ HEMP_SYMBOL_FUNC(hemp_element_text_compare_symbol) {
 HEMP_EVAL_FUNC(hemp_element_text_compare_value) {
     hemp_debug_call("hemp_element_text_compare_value()\n");
 
-    hemp_element_p lhs = element->args.binary.lhs;
-    hemp_element_p rhs = element->args.binary.rhs;
+    hemp_element_p lhs = hemp_lhs_element(element);
+    hemp_element_p rhs = hemp_rhs_element(element);
     hemp_value_t lval  = lhs->type->text(lhs, context, HempNothing);
     hemp_value_t rval  = rhs->type->text(rhs, context, HempNothing);
     hemp_int_t compare = strcmp( 
