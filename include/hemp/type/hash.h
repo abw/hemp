@@ -179,4 +179,10 @@ HEMP_VALUE_FUNC(hemp_method_hash_length);
 #define hemp_hash_store_text(h, k, t)       \
     hemp_hash_store(h, k, hemp_text_val(t))
 
+#define hemp_hash_store_list(h, k, l)       \
+    hemp_hash_store(h, k, hemp_list_val(l))
+
+#define hemp_hash_store_hash(h, k, v)       \
+    hemp_hash_store(h, k, hemp_hash_val(v))
+
 #endif /* HEMP_HASH_H */

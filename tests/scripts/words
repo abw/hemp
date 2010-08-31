@@ -46,6 +46,16 @@ type length: [% message . name
 -- expect
 type length: 5
 
+-- test list.length
+list length: [% items.length %]
+-- expect
+list length: 0
+
+-- test hash.length
+hash length: [% stuff.length %]
+-- expect
+hash length: 2
+
 -- stop
 
 # need some better error handling/reporting before we can tackle this

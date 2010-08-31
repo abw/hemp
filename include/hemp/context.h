@@ -46,6 +46,12 @@ void            hemp_context_free(hemp_context_p);
 #define hemp_context_set_text(c, k, t)      \
     hemp_hash_store_text(c->vars, k, t)
 
+#define hemp_context_set_list(c, k, l)      \
+    hemp_hash_store_list(c->vars, k, l)
+
+#define hemp_context_set_hash(c, k, h)      \
+    hemp_hash_store_hash(c->vars, k, h)
+
 #define hemp_context_get(c, k)              \
     hemp_hash_fetch(c->vars, k)
 
