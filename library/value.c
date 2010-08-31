@@ -58,6 +58,14 @@ hemp_text_val(hemp_text_p t) {
 
 
 HEMP_INLINE hemp_value_t
+hemp_list_val(hemp_list_p t) {
+    hemp_value_t v;
+    v.bits = HEMP_LIST_TAG | ((hemp_u64_t) t & HEMP_POINTER_MASK);
+    return v;
+}
+
+
+HEMP_INLINE hemp_value_t
 hemp_ident_val(hemp_u8_t i) {
     hemp_value_t v;
     v.bits = HEMP_IDENTITY_TAG | ((hemp_u64_t) i & HEMP_IDENT_MASK);
@@ -104,6 +112,12 @@ hemp_val_str(hemp_value_t v) {
 HEMP_INLINE hemp_text_p
 hemp_val_text(hemp_value_t v) {
     return (hemp_text_p) HEMP_POINTER(v);
+}
+
+
+HEMP_INLINE hemp_list_p
+hemp_val_list(hemp_value_t v) {
+    return (hemp_list_p) HEMP_POINTER(v);
 }
 
 
@@ -199,6 +213,24 @@ HEMP_VALUE_FUNC(hemp_value_not_defined) {
         hemp_type_name(value),
         HEMP_STR_DEFINED,
         HEMP_STR_BLANK
+    );
+}
+
+
+HEMP_FETCH_FUNC(hemp_value_not_fetch) {
+    HEMP_FETCH_ERROR(
+        context, 
+        hemp_type_name(container),
+        "TODO: RHS text"
+    );
+}
+
+
+HEMP_STORE_FUNC(hemp_value_not_store) {
+    HEMP_STORE_ERROR(
+        context, 
+        hemp_type_name(container),
+        "TODO: RHS text"
     );
 }
 

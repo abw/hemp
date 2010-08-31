@@ -60,6 +60,10 @@ HEMP_EVAL_FUNC(hemp_element_dotop_value) {
      */
     rhs->type->token(rhs, context, hemp_text_val(text));
 //    hemp_debug("%p RHS: %s\n", element, text->string);
+
+    /* right now we're only calling virtual methods, but should eventually 
+     * call dot method
+     */
     hemp_value_t result = hemp_send(lval, text->string, context);
 
     hemp_text_free(text);

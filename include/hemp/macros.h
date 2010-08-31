@@ -411,6 +411,21 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         hemp_value_t    output              \
     )
 
+#define HEMP_FETCH_FUNC(f)                  \
+    HEMP_DO_INLINE hemp_value_t f(          \
+        hemp_value_t    container,          \
+        hemp_context_p  context,            \
+        hemp_value_t    key                 \
+    )
+
+#define HEMP_STORE_FUNC(f)                  \
+    HEMP_DO_INLINE hemp_value_t f(          \
+        hemp_value_t    container,          \
+        hemp_context_p  context,            \
+        hemp_value_t    key,                \
+        hemp_value_t    value               \
+    )
+
 
 #define HEMP_UNDEF_ERROR(context,type)      \
     hemp_error_throw(                       \
@@ -421,7 +436,6 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
             type                            \
         )                                   \
     )
-
 
 #define HEMP_CONVERT_ERROR(context,from,to,val) \
     hemp_error_throw(                       \
@@ -440,6 +454,26 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
             context->hemp,                  \
             HEMP_ERROR_OVERFLOW,            \
             text                            \
+        )                                   \
+    )
+
+#define HEMP_FETCH_ERROR(context,container,key) \
+    hemp_error_throw(                       \
+        context->hemp,                      \
+        hemp_error_message(                 \
+            context->hemp,                  \
+            HEMP_ERROR_FETCH,               \
+            key, container                  \
+        )                                   \
+    )
+
+#define HEMP_STORE_ERROR(context,container,key) \
+    hemp_error_throw(                       \
+        context->hemp,                      \
+        hemp_error_message(                 \
+            context->hemp,                  \
+            HEMP_ERROR_STORE,               \
+            key, container                  \
         )                                   \
     )
 

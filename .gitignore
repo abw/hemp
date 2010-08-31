@@ -11,6 +11,15 @@ config.status
 build/libltdl/argz.h
 programs/hemp
 
+tests/benchmark
+tests/memtrace
+tests/debug
+tests/hemp
+tests/module
+tests/scanner
+tests/tests
+tests/tt3
+
 tests/core/action
 tests/core/context
 tests/core/dialect
@@ -20,8 +29,6 @@ tests/core/error
 tests/core/factory
 tests/core/filesystem
 tests/core/grammar
-tests/core/hash
-tests/core/list
 tests/core/memory
 tests/core/pool
 tests/core/slab
@@ -29,14 +36,15 @@ tests/core/source
 tests/core/string
 tests/core/tag
 tests/core/tagset
-tests/core/text
 tests/core/template
-tests/benchmark
 tests/core/ptree
-tests/memtrace
 tests/core/type
 tests/core/utils
 tests/core/value
+
+tests/type/hash
+tests/type/list
+tests/core/text
 
 tests/language/hemp/boolops
 tests/language/hemp/comments
@@ -47,11 +55,3 @@ tests/language/hemp/textops
 tests/language/hemp/words
 
 
-tests/debug
-tests/hemp
-tests/module
-tests/scanner
-tests/tests
-tests/type
-tests/hub
-tests/tt3

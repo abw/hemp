@@ -279,6 +279,21 @@ typedef hemp_value_t
     );
 
 typedef hemp_value_t
+    (* hemp_fetch_f)(
+        hemp_value_t    container,  /* value to operate on                  */
+        hemp_context_p  context,    /* runtime context                      */
+        hemp_value_t    key         /* key of item to fetch                 */
+    );
+
+typedef hemp_value_t
+    (* hemp_store_f)(
+        hemp_value_t    container,  /* value to operate on                  */
+        hemp_context_p  context,    /* runtime context                      */
+        hemp_value_t    key,        /* key to store item under              */
+        hemp_value_t    value       /* value to store                       */
+    );
+
+typedef hemp_value_t
     (* hemp_vtext_f)(
         hemp_value_t    value,      /* value to operate on                  */
         hemp_context_p  context,    /* runtime context                      */

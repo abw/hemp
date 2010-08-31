@@ -9,8 +9,6 @@ check_PROGRAMS  =   action      \
                     factory     \
                     filesystem  \
                     grammar     \
-                    hash        \
-                    list        \
                     memory      \
                     pool        \
                     ptree       \
@@ -20,7 +18,6 @@ check_PROGRAMS  =   action      \
                     tag         \
                     tagset      \
                     template    \
-                    text        \
                     type        \
                     utils       \
                     value

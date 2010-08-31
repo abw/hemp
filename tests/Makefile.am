@@ -1,6 +1,6 @@
 # check_PROGRAMS  =   
-SUBDIRS         = core language .
-#TESTS           = $(check_PROGRAMS)
+#TESTS          = $(check_PROGRAMS)
+SUBDIRS         = core type language .
 LDADD           = ../library/libhemp.la tap.o
 CFLAGS          = @CFLAGS@ \
                 -I"${top_srcdir}/include" \

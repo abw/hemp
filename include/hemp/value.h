@@ -131,6 +131,8 @@ extern const hemp_value_t HempAfter;
 #define HEMP_POINTER_ID         0x02        /* memory pointer/string        */
 #define HEMP_STRING_ID          0x03        /* memory pointer/string        */
 #define HEMP_TEXT_ID            0x04        /* hemp_text_p pointer          */
+#define HEMP_LIST_ID            0x05        /* hemp_list_p pointer          */
+#define HEMP_HASH_ID            0x06        /* hemp_hash_p pointer          */
 #define HEMP_IDENTITY_ID        0x10        /* identity values (NaN + n)    */
 
 /* out-of-band values used to mark unused/reserved type slots */
@@ -217,6 +219,8 @@ extern const hemp_value_t HempAfter;
 #define HEMP_POINTER_TAG        HEMP_TAG_MAKE(HEMP_POINTER_ID)
 #define HEMP_STRING_TAG         HEMP_TAG_MAKE(HEMP_STRING_ID)
 #define HEMP_TEXT_TAG           HEMP_TAG_MAKE(HEMP_TEXT_ID)
+#define HEMP_LIST_TAG           HEMP_TAG_MAKE(HEMP_LIST_ID)
+#define HEMP_HASH_TAG           HEMP_TAG_MAKE(HEMP_HASH_ID)
 #define HEMP_IDENTITY_TAG       HEMP_TAG_MAKE(HEMP_IDENTITY_ID)
 
 
@@ -232,6 +236,8 @@ extern const hemp_value_t HempAfter;
 #define hemp_is_pointer(v)      HEMP_TYPE_IS(v, HEMP_POINTER_ID)
 #define hemp_is_string(v)       HEMP_TYPE_IS(v, HEMP_STRING_ID)
 #define hemp_is_text(v)         HEMP_TYPE_IS(v, HEMP_TEXT_ID)
+#define hemp_is_list(v)         HEMP_TYPE_IS(v, HEMP_LIST_ID)
+#define hemp_is_hash(v)         HEMP_TYPE_IS(v, HEMP_HASH_ID)
 #define hemp_is_identity(v)     HEMP_TYPE_IS(v, HEMP_IDENTITY_ID)
 #define hemp_is_missing(v)      HEMP_IDENT_NOT(v, HEMP_FOUND_BIT)
 //#define hemp_is_found(v)      HEMP_IDENT_ANY(v, HEMP_FOUND_BIT)
@@ -298,8 +304,9 @@ extern HEMP_INLINE hemp_value_t hemp_int_val(hemp_int_t i);
 extern HEMP_INLINE hemp_value_t hemp_ptr_val(hemp_mem_p p);
 extern HEMP_INLINE hemp_value_t hemp_str_val(hemp_str_p s);
 extern HEMP_INLINE hemp_value_t hemp_text_val(hemp_text_p t);
-extern HEMP_INLINE hemp_value_t hemp_ident_val(hemp_u8_t i);
+extern HEMP_INLINE hemp_value_t hemp_list_val(hemp_list_p l);
 extern HEMP_INLINE hemp_value_t hemp_bool_val(hemp_bool_t b);
+extern HEMP_INLINE hemp_value_t hemp_ident_val(hemp_u8_t i);
 
 
 /*--------------------------------------------------------------------------
@@ -311,6 +318,7 @@ extern HEMP_INLINE hemp_int_t  hemp_val_int(hemp_value_t v);
 extern HEMP_INLINE hemp_mem_p  hemp_val_ptr(hemp_value_t v);
 extern HEMP_INLINE hemp_str_p  hemp_val_str(hemp_value_t v);
 extern HEMP_INLINE hemp_text_p hemp_val_text(hemp_value_t v);
+extern HEMP_INLINE hemp_list_p hemp_val_list(hemp_value_t v);
 extern HEMP_INLINE hemp_bool_t hemp_val_bool(hemp_value_t v);
 
 
@@ -331,6 +339,8 @@ HEMP_VALUE_FUNC(hemp_value_not_integer);
 HEMP_VALUE_FUNC(hemp_value_not_boolean);
 HEMP_VALUE_FUNC(hemp_value_not_compare);
 HEMP_VALUE_FUNC(hemp_value_not_defined);
+HEMP_FETCH_FUNC(hemp_value_not_fetch);
+HEMP_STORE_FUNC(hemp_value_not_store);
 
 /* number -> xxx conversion */
 HEMP_VTEXT_FUNC(hemp_value_number_text);

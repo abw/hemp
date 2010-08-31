@@ -21,7 +21,9 @@
     hemp_value_f    integer;    \
     hemp_value_f    boolean;    \
     hemp_value_f    compare;    \
-    hemp_value_f    defined;
+    hemp_value_f    defined;    \
+    hemp_fetch_f    fetch;      \
+    hemp_store_f    store;
 
 struct hemp_type_s {
     HEMP_TYPE_BASE

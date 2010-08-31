@@ -18,6 +18,8 @@ typedef enum {
     HEMP_ERROR_BADQUOTE,
     HEMP_ERROR_CONVERT,
     HEMP_ERROR_UNDEF,
+    HEMP_ERROR_FETCH,
+    HEMP_ERROR_STORE,
     HEMP_ERROR_OPTION,
     HEMP_ERROR_HELP,
     HEMP_ERROR_MAX
@@ -37,6 +39,8 @@ static hemp_str_p hemp_errmsg[] = {
     "Unterminated %s: %s",
     "Cannot convert %s to %s: %s",
     "%s value",
+    "Cannot fetch '%s' from %s",
+    "Cannot store '%s' in %s",
     "Invalid option: %s",
     NULL
 };
