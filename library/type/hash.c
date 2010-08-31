@@ -562,9 +562,10 @@ HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
         ktext->string
     );
     /* fetch the value */
-    hemp_value_t result = hemp_hash_fetch( 
+    hemp_value_t result = hemp_hash_fetch_keylen( 
         hemp_val_hash(container),
-        ktext->string
+        ktext->string,
+        ktext->length
     );
 
     /* release the text memory and return result */
@@ -596,14 +597,27 @@ HEMP_FETCH_FUNC(hemp_type_hash_dot) {
     );
 
     /* fetch the value */
-    hemp_value_t result = hemp_hash_fetch( 
+    hemp_value_t result = hemp_hash_fetch_keylen( 
         hemp_val_hash(container),
-        ktext->string
+        ktext->string,
+        ktext->length
     );
 
     /* if we didn't find it then look for a method */
     if (hemp_is_missing(result)) {
-        result = hemp_send(container, ktext->string, context);
+        /* we'll do this manually because we already know the key length */
+        /* result = hemp_send(container, ktext->string, context); */
+
+        result = hemp_hash_fetch_keylen(
+            hemp_type(container)->methods,
+            ktext->string,
+            ktext->length
+        );
+        
+        if (hemp_is_found(result)) {
+            hemp_value_f method = (hemp_value_f) hemp_val_ptr(result);
+            result = method(container, context);
+        }
     }
 
     /* release the text memory and return result */

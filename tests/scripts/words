@@ -54,7 +54,7 @@ list length: 0
 -- test hash.length
 hash length: [% stuff.length %]
 -- expect
-hash length: 2
+hash length: 3
 
 -- test hash.type.name
 type name: [% stuff.type.name %] ([% stuff.type.id %])
@@ -70,6 +70,12 @@ type: Hash
 foo: [% stuff.foo %]
 -- expect
 foo: 69
+
+
+-- test stuff.woo
+[% stuff.woo %]: [% stuff.woo.length %]
+-- expect
+hoo!: 4
 
 -- stop
 
