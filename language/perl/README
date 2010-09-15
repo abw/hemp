@@ -1,0 +1,26 @@
+This is a first attempt at writing a simple Perl wrapper around hemp.
+It's been a long time since I did any XS coding or had to think how to
+load a C library and make everything work as it should, so there is a 
+fair bit of stabbing in the dark going on...
+
+For now, at least, you need to build and install hemp in the top level 
+directory first:
+
+    $ cd ../..
+    $ ./configure
+    $ make
+    $ make check
+    $ sudo make install
+
+Then you can build the Perl wrapper:
+
+    $ cd language/perl
+    $ perl Makefile.PL
+    $ make
+    $ make test
+    $ sudo make install
+
+Note, however, that it doesn't actually do anything useful yet.  
+It really is the barest shell of a wrapper module. 
+
+-- abw September 2010

@@ -3,3 +3,7 @@ the hemp library that allow it to be loaded and used from other programming
 languages.  At present, there's only a *very* basic test for Perl5.
 
 For further information on SWIG, see http://www.swig.org
+
+UPDATE: The code generated is completely impenetrable to me.  I'm going to
+start by hand-rolling a nice, simple wrapper.  See ../../langauge/perl.
+
