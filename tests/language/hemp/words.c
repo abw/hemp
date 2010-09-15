@@ -23,6 +23,10 @@ int main(
     hemp_hash_store_number(hash, "foo", 69);
     hemp_hash_store_number(hash, "bar", 420);
     hemp_hash_store_string(hash, "woo", "hoo!");
+    
+    hemp_list_push_integer(list, 99);
+    hemp_list_push_number(list, 100.0);
+    hemp_list_push_string(list, "one-oh-one");
 
     result = hemp_test_expect_script(
         HEMP_TT3, HEMP_TT3, 

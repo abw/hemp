@@ -85,6 +85,8 @@ void            hemp_scan_error(hemp_p, HEMP_SCAN_ARGS, hemp_errno_e, ...);
 //#define         hemp_tag(hemp, name) \
 //                    (hemp_tag_p) hemp_hash_fetch(hemp->tags, name)
 
+hemp_str_p hemp_version();
+
 
 
 

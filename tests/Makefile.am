@@ -1,5 +1,5 @@
-# check_PROGRAMS  =   
-#TESTS          = $(check_PROGRAMS)
+check_PROGRAMS  = hemp
+TESTS           = $(check_PROGRAMS)
 SUBDIRS         = core type language .
 LDADD           = ../library/libhemp.la tap.o
 CFLAGS          = @CFLAGS@ \

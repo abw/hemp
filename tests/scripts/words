@@ -49,7 +49,7 @@ type length: 5
 -- test list.length
 list length: [% items.length %]
 -- expect
-list length: 0
+list length: 3
 
 -- test hash.length
 hash length: [% stuff.length %]
@@ -71,11 +71,15 @@ foo: [% stuff.foo %]
 -- expect
 foo: 69
 
-
 -- test stuff.woo
 [% stuff.woo %]: [% stuff.woo.length %]
 -- expect
 hoo!: 4
+
+-- test list.n
+[% items.length %] list items: [% items.0 %] / [% items.1 %] / [% items.2 %]
+-- expect
+3 list items: 99 / 100 / one-oh-one
 
 -- stop
 

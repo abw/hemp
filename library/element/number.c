@@ -25,7 +25,7 @@ static struct hemp_symbol_s
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
         HEMP_BE_SOURCE       |                      /* flags                */
-        HEMP_BE_STATIC,
+        HEMP_BE_FIXED,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
@@ -39,6 +39,7 @@ static struct hemp_symbol_s
         &hemp_element_value_integer,                /* integer conversion   */
         &hemp_element_value_boolean,                /* boolean conversion   */
         &hemp_element_value_compare,                /* to comparison        */
+        &hemp_element_fixed,                        /* parse fixed          */
     };
 
 hemp_symbol_p HempSymbolNumber = &hemp_symbol_number;
@@ -50,7 +51,7 @@ static struct hemp_symbol_s
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
         HEMP_BE_SOURCE       |                      /* flags                */
-        HEMP_BE_STATIC,
+        HEMP_BE_FIXED,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
@@ -64,6 +65,7 @@ static struct hemp_symbol_s
         &hemp_element_integer_value,                /* integer conversion   */
         &hemp_element_value_boolean,                /* boolean conversion   */
         &hemp_element_value_compare,                /* to comparison        */
+        &hemp_element_fixed,                        /* parse fixed          */
     };
     
 hemp_symbol_p HempSymbolInteger = &hemp_symbol_integer;
@@ -78,7 +80,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->value   = &hemp_element_number_value;
     symbol->number  = &hemp_element_number_value;
-    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_STATIC;
+    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }
 
@@ -87,6 +89,7 @@ HEMP_EVAL_FUNC(hemp_element_number_value) {
     hemp_debug_call("hemp_element_number_value()\n");
     return element->args.value;
 }
+
 
 
 /*--------------------------------------------------------------------------

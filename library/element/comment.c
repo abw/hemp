@@ -8,7 +8,7 @@ static struct hemp_symbol_s
         NULL,                                       /* end token            */
         HEMP_BE_WHITESPACE  |                       /* flags                */
         HEMP_BE_SOURCE      |
-        HEMP_BE_STATIC      |
+        HEMP_BE_FIXED       |
         HEMP_BE_HIDDEN,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
@@ -31,7 +31,7 @@ HEMP_SYMBOL_FUNC(hemp_element_comment_symbol) {
     symbol->scanner    = &hemp_element_comment_scanner;
     symbol->token      = &hemp_element_literal_token;
     symbol->source     = &hemp_element_literal_source;
-    symbol->flags      = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_STATIC 
+    symbol->flags      = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
                        | HEMP_BE_HIDDEN;
     return symbol;
 }

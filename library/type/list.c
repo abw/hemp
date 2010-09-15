@@ -5,6 +5,7 @@
 
 HEMP_TYPE_FUNC(hemp_type_list) {
     hemp_type_p type = hemp_type_subtype(HempValue, id, name);
+    type->fetch      = &hemp_type_list_fetch;
     type->text       = &hemp_value_list_text;       /* return/append text   */
     type->boolean    = &hemp_value_true;            /* list is always true   */  /* or list size? */
     type->defined    = &hemp_value_true;            /* and always defined   */
@@ -119,6 +120,61 @@ HEMP_VTEXT_FUNC(hemp_value_list_text) {
     hemp_text_append_string(text, "TODO: list.text");
     return output;
 }
+
+
+HEMP_FETCH_FUNC(hemp_type_list_fetch) {
+    hemp_debug(
+        "hemp_type_list_fetch()\n"
+    );
+
+    hemp_int_t  index;
+    hemp_bool_t found = HEMP_FALSE;
+
+    if (hemp_is_integer(key)) {
+        hemp_debug("got integer key\n");
+        index = hemp_val_int(key);
+        found = HEMP_TRUE;
+    }
+    else {
+        hemp_text_p ktext;
+        hemp_bool_t kmine  = HEMP_FALSE;
+
+        if (hemp_is_text(key)) {
+            hemp_debug("got text key\n");
+            ktext = hemp_val_text(key);
+        }
+        else {
+            /* otherwise we have to convert the key to text */
+            /* TODO: must be a better way to check for numeric conversion without throwing an error? */
+            hemp_debug("creating text key\n");
+            ktext = hemp_text_init(16);
+            kmine = HEMP_TRUE;
+            hemp_onto_text(key, context, hemp_text_val(ktext));
+        }
+        hemp_debug("list text key: %s\n", ktext->string);
+
+        if (hemp_string_numlike(ktext->string)) {
+            hemp_debug("got numlike string\n");
+            index = hemp_val_num( 
+                hemp_value_string_number( hemp_str_val(ktext->string), context) 
+            );
+            found = HEMP_TRUE;
+        }
+        
+        if (kmine)
+            hemp_text_free(ktext);
+    }
+    
+    if (found)
+        hemp_debug("got index key: %d\n", index);
+    else
+        hemp_debug("no index key\n");
+        
+    return found 
+        ? hemp_list_item( hemp_val_list(container), index )
+        : HempMissing;
+}
+
 
 
 /*--------------------------------------------------------------------------

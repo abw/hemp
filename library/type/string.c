@@ -175,6 +175,22 @@ hemp_string_wordlike(
         : HEMP_TRUE;
 }
 
+
+hemp_bool_t
+hemp_string_numlike(
+    hemp_str_p string
+) {
+    /* not strictly correct, but good enough for integer list indexes */
+    while (isdigit(*string))
+        string++;
+
+    /* if we reached the end of the string then all characters are wordlike */
+    return *string
+        ? HEMP_FALSE
+        : HEMP_TRUE;
+}
+
+
 HEMP_INLINE hemp_str_p
 hemp_string_next_space(
     hemp_str_p string

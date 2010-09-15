@@ -39,8 +39,7 @@ struct hemp_symbol_s {
     hemp_eval_f     boolean;
     hemp_eval_f     compare;
 
-    hemp_prefix_f   word;
-
+    hemp_prefix_f   fixed;
 };
 
 /* symbols collection */

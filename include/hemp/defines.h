@@ -99,7 +99,7 @@
 #define HEMP_BE_TERMINATOR  0x0004  /* non-skippable expression terminator  */
 #define HEMP_BE_HIDDEN      0x0008  /* generates no output                  */
 #define HEMP_BE_SOURCE      0x0010  /* source text can yield output text    */
-#define HEMP_BE_STATIC      0x0020  /* element output is pre-defined        */
+#define HEMP_BE_FIXED       0x0020  /* element output is pre-defined        */
 #define HEMP_BE_PREFIX      0x0100  /* element is a prefix operator         */
 #define HEMP_BE_INFIX       0x0200  /* element is an infix operator         */
 #define HEMP_BE_POSTFIX     0x0400  /* element is a postfix operator        */

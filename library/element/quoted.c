@@ -6,7 +6,7 @@
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_squote_symbol) {
-    symbol->flags      = HEMP_BE_STATIC;
+    symbol->flags      = HEMP_BE_FIXED;
     symbol->scanner    = &hemp_element_squote_scanner;
     symbol->cleanup    = &hemp_element_text_clean;
     symbol->prefix     = &hemp_element_literal_prefix;

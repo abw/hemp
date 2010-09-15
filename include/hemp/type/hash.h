@@ -129,7 +129,7 @@ hemp_size_t
         hemp_str_p key
     );
 
-HEMP_DO_INLINE hemp_size_t
+HEMP_INLINE hemp_size_t
     hemp_hash_function_jenkins32(
         hemp_str_p  key,
         hemp_size_t length

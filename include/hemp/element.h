@@ -151,9 +151,9 @@ extern hemp_symbol_p HempSymbolBlock;
         : lhs                                           \
     )
 
-#define hemp_parse_word(ep, sc, pr, fr)                 \
-    ((*ep)->type->word                                  \
-        ? (*ep)->type->word(ep, sc, pr, fr)             \
+#define hemp_parse_fixed(ep, sc, pr, fr)                \
+    ((*ep)->type->fixed                                 \
+        ? (*ep)->type->fixed(ep, sc, pr, fr)            \
         : NULL                                          \
     )
 
@@ -204,6 +204,7 @@ HEMP_PREFIX_FUNC(hemp_element_parse_prefix);         // TODO: s/PARSE/PREFIX
 HEMP_POSTFIX_FUNC(hemp_element_parse_postfix);        // TODO: s/INFIX/POSTFIX
 HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left);
 HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right);
+HEMP_PREFIX_FUNC(hemp_element_fixed);
 
 HEMP_ETEXT_FUNC(hemp_element_binary_source);
 
@@ -212,6 +213,7 @@ HEMP_ETEXT_FUNC(hemp_element_binary_source);
  * decline functions
  *--------------------------------------------------------------------------*/
 
+HEMP_PREFIX_FUNC(hemp_element_decline);
 HEMP_PREFIX_FUNC(hemp_element_not_prefix);
 HEMP_POSTFIX_FUNC(hemp_element_not_postfix);
 HEMP_PREFIX_FUNC(hemp_element_not_word);
@@ -256,6 +258,7 @@ HEMP_EVAL_FUNC(hemp_element_word_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_number_symbol);
 HEMP_PREFIX_FUNC(hemp_element_number_prefix);
+HEMP_PREFIX_FUNC(hemp_element_number_word);
 HEMP_ETEXT_FUNC(hemp_element_number_text);
 HEMP_EVAL_FUNC(hemp_element_number_value);
 HEMP_EVAL_FUNC(hemp_element_number_number);

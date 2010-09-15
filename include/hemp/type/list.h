@@ -36,6 +36,7 @@ hemp_str_p  hemp_list_dump(hemp_list_p);
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_list);
+HEMP_FETCH_FUNC(hemp_type_list_fetch);
 HEMP_VTEXT_FUNC(hemp_value_list_text);
 HEMP_VALUE_FUNC(hemp_method_list_length);
 
@@ -48,6 +49,12 @@ HEMP_VALUE_FUNC(hemp_method_list_length);
 
 #define hemp_list_item_string(list, n)  \
     hemp_val_str( hemp_list_item(list, n) )
+
+#define hemp_list_push_number(list, n)  \
+    hemp_list_push( list, hemp_num_val(n) )
+
+#define hemp_list_push_integer(list, i)  \
+    hemp_list_push( list, hemp_int_val(i) )
 
 #define hemp_list_push_string(list, s)  \
     hemp_list_push( list, hemp_str_val(s) )

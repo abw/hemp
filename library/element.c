@@ -169,9 +169,23 @@ hemp_element_parse_exprs(
 }
 
 
+HEMP_PREFIX_FUNC(hemp_element_fixed) {
+    hemp_debug_call("hemp_element_fixed()\n");
+    hemp_element_p element = *elemptr;
+    hemp_go_next(elemptr);
+    hemp_set_flag(element, HEMP_BE_FIXED);
+    return element;
+}
+
+
 /*--------------------------------------------------------------------------
  * decline functions
  *--------------------------------------------------------------------------*/
+
+HEMP_PREFIX_FUNC(hemp_element_decline) {
+    return NULL;
+}
+
 
 HEMP_PREFIX_FUNC(hemp_element_not_prefix) {
     return NULL;

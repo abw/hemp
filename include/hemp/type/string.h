@@ -59,6 +59,11 @@ hemp_bool_t
         hemp_str_p str
     );
 
+hemp_bool_t
+    hemp_string_numlike(
+        hemp_str_p string
+    );
+
 HEMP_INLINE hemp_str_p
     hemp_string_next_space(
         hemp_str_p string

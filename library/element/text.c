@@ -11,7 +11,7 @@ static struct hemp_symbol_s
         NULL,                                       /* start token          */
         NULL,                                       /* end token            */
         HEMP_BE_SOURCE  |                           /* flags                */
-        HEMP_BE_STATIC,
+        HEMP_BE_FIXED,
         0, 0,                                       /* l/r precedence       */
         NULL,                                       /* scanner callback     */
         NULL,                                       /* cleanup callback     */
@@ -35,7 +35,7 @@ hemp_symbol_p HempSymbolText = &hemp_symbol_text;
 
 HEMP_SYMBOL_FUNC(hemp_element_text_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
-    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_STATIC;
+    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     symbol->prefix  = &hemp_element_literal_prefix;
     return symbol;
 }
