@@ -1,0 +1,5 @@
+TYPEMAP
+    Hemp            T_PTROBJ
+    Hemp::Template  T_PTROBJ
+    Hemp::Context   T_PTROBJ
+
