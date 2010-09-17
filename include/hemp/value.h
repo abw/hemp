@@ -179,6 +179,7 @@ extern const hemp_value_t HempAfter;
 /* internal macros to fetch/test the type identifier in a tagged value */
 #define HEMP_TYPE_ID(v)         (HEMP_TAG_VALID(v) ? HEMP_TAG_TYPE(v) : HEMP_NUMBER_ID)
 #define HEMP_TYPE_IS(v,t)       (HEMP_TYPE_ID(v) == t)
+#define HEMP_TYPE_MAX(v,t)      (HEMP_TYPE_ID(v) <= t)
 #define HEMP_TYPE_BELOW(v,t)    (HEMP_TYPE_ID(v) < t)
 
 /* macros for manipulating identity values */
@@ -233,7 +234,7 @@ extern const hemp_value_t HempAfter;
 //#define hemp_identity_id(v)     HEMP_IDENT_ID(c)
 #define hemp_is_tagged(v)       HEMP_TAG_VALID(v)
 #define hemp_is_number(v)       ((hemp_u64_t) v.bits < HEMP_INFINITY)
-#define hemp_is_numeric(v)      HEMP_IDENT_MAX(v, HEMP_INTEGER_ID)
+#define hemp_is_numeric(v)      HEMP_TYPE_MAX(v, HEMP_INTEGER_ID)
 #define hemp_is_integer(v)      HEMP_TYPE_IS(v, HEMP_INTEGER_ID)
 #define hemp_is_pointer(v)      HEMP_TYPE_IS(v, HEMP_POINTER_ID)
 #define hemp_is_string(v)       HEMP_TYPE_IS(v, HEMP_STRING_ID)

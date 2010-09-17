@@ -29,12 +29,10 @@
 -- expect
 420
 
--- start
 -- test integer division
 [% 10 / 4 %]
 -- expect
 2
--- stop
 
 -- test floating point division
 [% 10.0 / 4 %]
@@ -211,3 +209,16 @@ Equal
 [% 6 <=> 5 %]
 -- expect
 After
+
+-- start
+-- test answer + 1
+answer: [% answer + 1 %]
+-- expect
+answer: 43
+
+-- test n + 20
+result: [% n + 20 %]
+-- expect
+result: 420
+
+

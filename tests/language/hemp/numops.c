@@ -4,9 +4,29 @@
 int main(
     int argc, char **argv, char **env
 ) {
-    return hemp_test_expect_script(
-        HEMP_TT3, HEMP_TT3, 
-        HEMP_TESTDIR, "numops",
-        NULL
-    );
+    hemp_p      hemp    = hemp_init();
+    hemp_cntx_p context = hemp_context(hemp);
+    int         result;
+
+    hemp_context_set_integer( context, "answer", 42 );
+    hemp_context_set_string( context, "n", "400" );
+
+    HEMP_TRY;
+        result = hemp_test_expect_script(
+            HEMP_TT3, HEMP_TT3, 
+            HEMP_TESTDIR, "numops",
+            context
+        );
+
+        hemp_context_free(context);
+        hemp_free(hemp);
+        hemp_mem_trace_ok();
+
+    HEMP_CATCH_ALL;
+        fprintf(stderr, "Hemp error: %s", hemp->error->message);
+
+    HEMP_END;
+
+
+    return result;
 }
