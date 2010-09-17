@@ -143,12 +143,25 @@ hemp_global_types_init() {
 void
 hemp_global_types_free() {
     hemp_debug_call("hemp_global_types_free()\n");
-    hemp_int_t n;
+    hemp_int_t  n;
+    hemp_type_p t;
 
-    for (n = 0; n < HEMP_TYPES_SIZE; n++) {
+    /* clear out all the reserved type up to and including IDENTITY @ 16 */
+    for (n = 0; n <= HEMP_TYPES_RESERVED; n++) {
         hemp_global_types[n] = NULL;
     }
 
+    /* anything after that is a user-registered custom type */
+    for ( ; n < HEMP_TYPES_SIZE; n++) {
+        t = hemp_global_types[n];
+        if (t && t != HempUnused) {
+            hemp_debug("freeing custom type #%d in slot %d: %s\n", t->id, n, t->name);
+            hemp_type_free(t);
+        }
+        hemp_global_types[n] = NULL;
+    }
+
+    /* now we can safely free the inbuilt types (HempUnused is used above) */
     hemp_type_free(HempType);       HempType     = NULL;
     hemp_type_free(HempValue);      HempValue    = NULL;
     hemp_type_free(HempReserved);   HempReserved = NULL;
@@ -161,8 +174,30 @@ hemp_global_types_free() {
     hemp_type_free(HempHash);       HempHash     = NULL;
     hemp_type_free(HempObject);     HempObject   = NULL;
     hemp_type_free(HempIdentity);   HempIdentity = NULL;
-    
 }
+
+
+hemp_int_t
+hemp_register_type(
+    hemp_type_p type
+) {
+    int n;
+    
+    /* The second 16 type entries are available for use, e.g. for alien data */
+    for (n = HEMP_TYPES_RESERVED + 1; n < HEMP_TYPES_SIZE; n++) {
+        if (hemp_global_types[n] == HempUnused) {
+            hemp_global_types[n] = type;
+            type->id = n;
+            return n;
+        }
+    }
+    hemp_fatal(
+        "Failed to register %s type (global type registry is full)",
+        type->name
+    );
+}
+
+
 
 
 /*--------------------------------------------------------------------------

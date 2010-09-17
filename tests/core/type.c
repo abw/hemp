@@ -2,13 +2,15 @@
 #include <math.h>
 
 void test_types();
+void test_type_registration();
 
 
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(9);
+    plan(12);
     test_types();
+    test_type_registration();
     return done();
 }
 
@@ -48,6 +50,20 @@ void test_types() {
     hemp_text_free( hemp_val_text(value) );
     
     hemp_context_free(context);
+    hemp_free(hemp);
+}
+
+
+void test_type_registration() {
+    hemp_p hemp = hemp_init();
+    ok( hemp, "created hemp" );
+
+    hemp_type_p type1 = hemp_type_init(0, "Type1");
+    ok( type1, "created custom type 1" );
+
+    int n = hemp_register_type(type1);
+    ok( n, "registered type: %d", n );
+
     hemp_free(hemp);
 }
 
