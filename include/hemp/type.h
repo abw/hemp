@@ -87,8 +87,16 @@ void
         hemp_type_p
     );
 
+hemp_type_p
+    hemp_use_type(
+        hemp_str_p  name,
+        hemp_type_f constructor
+    );
+
 void hemp_global_types_init();
 void hemp_global_types_free();
+
+
 
 HEMP_TYPE_FUNC(hemp_type_type);
 HEMP_TYPE_FUNC(hemp_type_number);

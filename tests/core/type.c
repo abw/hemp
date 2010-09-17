@@ -8,7 +8,7 @@ void test_type_registration();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(12);
+    plan(14);
     test_types();
     test_type_registration();
     return done();
@@ -54,14 +54,26 @@ void test_types() {
 }
 
 
+hemp_type_p type1_constructor(
+    hemp_int_t id,
+    hemp_str_p name
+) {
+    return hemp_type_init(id, name);
+}
+    
+
 void test_type_registration() {
     hemp_p hemp = hemp_init();
     ok( hemp, "created hemp" );
 
-    hemp_type_p type1 = hemp_type_init(0, "Type1");
+    hemp_type_p type1 = hemp_use_type("Type1", &type1_constructor);
     ok( type1, "created custom type 1" );
 
-    int n = hemp_register_type(type1);
+    hemp_type_p type2 = hemp_use_type("Type1", &type1_constructor);
+    ok( type2, "created custom type 2" );
+    ok( type1 == type2, "both the same type" );
+
+    int n = type1->id;
     ok( n, "registered type: %d", n );
 
     hemp_free(hemp);

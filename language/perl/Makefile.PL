@@ -31,6 +31,8 @@ WriteMakefile(
     CCFLAGS         => $CCFLAGS, 
     LIBS            => $LIBFLAGS,
     INC             => $INCFLAGS,
+    OBJECT          => 'Hemp.o types.o',
+#   DIR             => ['xs'],
     PREREQ_PM       => {
         "Badger"        => 0.06,
         "Test::More"    => 0,

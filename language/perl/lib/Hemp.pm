@@ -33,7 +33,7 @@ Hemp - Hemp weaves data into text
     my $template = $hemp->template(
         'tt3',                          # dialect
         text => "Hello [% name %]!"     # source
-    )
+    );
     
     # create a runtime context
     my $context = $hemp->context;

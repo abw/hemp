@@ -3,6 +3,7 @@
 #include "XSUB.h"
 #include "ppport.h"
 #include <hemp.h>
+#include "types.h"
 
 typedef hemp_p          Hemp;
 typedef hemp_template_p Hemp__Template;
@@ -33,6 +34,7 @@ new(package)
         fprintf(stderr, "Hemp->new()\n");
     CODE:
         RETVAL = hemp_init();
+        hemp_perl_init();
     OUTPUT:
         RETVAL
 
@@ -97,7 +99,12 @@ render(template, context)
     INIT:
         fprintf(stderr, "Hemp::Template->render()\n");
     CODE:
-        RETVAL = hemp_template_render(template, context)->string;
+        hemp_p hemp = context->hemp;
+        HEMP_TRY;
+            RETVAL = hemp_template_render(template, context)->string;
+        HEMP_CATCH_ALL;
+            croak("Hemp error: %s", hemp->error->message);
+        HEMP_END;
     OUTPUT:
         RETVAL
 
@@ -114,12 +121,12 @@ PROTOTYPES: enable
 void 
 set(context, name, value)
     Hemp::Context   context
-    char *          name
-    char *          value
+    char *  name
+    SV   *  value
     INIT:
-        fprintf(stderr, "Hemp::Context->set(%s, %s)\n", name, value);
+        fprintf(stderr, "Hemp::Context->set(%s, %s)\n", name, SvPV_nolen(value));
     PPCODE:
-        hemp_context_set_string(context, name, value);
+        hemp_context_set(context, name, hemp_perl_value(value));
 
 
 void

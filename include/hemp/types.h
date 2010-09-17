@@ -261,8 +261,14 @@ typedef hemp_element_p
         hemp_element_p  element     /* preceding element                    */
     );
 
+typedef hemp_type_p 
+    (* hemp_type_f)(
+        hemp_int_t      id,         /* numerical id                         */
+        hemp_str_p      name        /* unique type name                     */
+    );
+
 typedef hemp_value_t 
-    (* hemp_text_f )(
+    (* hemp_text_f)(
         hemp_element_p  element,    /* pointer to element                   */
         hemp_context_p  context,    /* runtime context                      */
         hemp_value_t    output      /* optional output buffer               */

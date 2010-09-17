@@ -54,4 +54,9 @@ tests/language/hemp/quotes
 tests/language/hemp/textops
 tests/language/hemp/words
 
+language/perl/Makefile.old
+language/perl/Hemp.c
+language/perl/Hemp.bs
+language/perl/blib
+language/perl/pm_to_blib
 

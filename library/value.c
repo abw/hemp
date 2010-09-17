@@ -97,6 +97,17 @@ hemp_bool_val(hemp_bool_t b) {
 }
 
 
+HEMP_INLINE hemp_value_t
+hemp_type_val(
+    hemp_type_p type, 
+    hemp_mem_p  ptr
+) {
+    hemp_value_t v;
+    v.bits = HEMP_TAG_MAKE(type->id) | ((hemp_u64_t) ptr & HEMP_POINTER_MASK);
+    return v;
+}
+
+
 /*--------------------------------------------------------------------------
  * inline functions to decode tagged values to native values
  *--------------------------------------------------------------------------*/

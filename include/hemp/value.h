@@ -317,6 +317,7 @@ extern HEMP_INLINE hemp_value_t     hemp_hash_val(hemp_hash_p l);
 extern HEMP_INLINE hemp_value_t     hemp_obj_val(hemp_object_p o);
 extern HEMP_INLINE hemp_value_t     hemp_bool_val(hemp_bool_t b);
 extern HEMP_INLINE hemp_value_t     hemp_ident_val(hemp_u8_t i);
+extern HEMP_INLINE hemp_value_t     hemp_type_val(hemp_type_p t, hemp_mem_p p);
 
 
 /*--------------------------------------------------------------------------

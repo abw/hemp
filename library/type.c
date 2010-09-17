@@ -155,7 +155,7 @@ hemp_global_types_free() {
     for ( ; n < HEMP_TYPES_SIZE; n++) {
         t = hemp_global_types[n];
         if (t && t != HempUnused) {
-            hemp_debug("freeing custom type #%d in slot %d: %s\n", t->id, n, t->name);
+            hemp_debug_init("Releasing custom type #%d: %s\n", t->id, t->name);
             hemp_type_free(t);
         }
         hemp_global_types[n] = NULL;
@@ -177,27 +177,36 @@ hemp_global_types_free() {
 }
 
 
-hemp_int_t
-hemp_register_type(
-    hemp_type_p type
+hemp_type_p
+hemp_use_type(
+    hemp_str_p  name,
+    hemp_type_f constructor
 ) {
-    int n;
+    hemp_int_t  n;
+    hemp_int_t  empty = 0;
+    hemp_type_p type;
     
-    /* The second 16 type entries are available for use, e.g. for alien data */
     for (n = HEMP_TYPES_RESERVED + 1; n < HEMP_TYPES_SIZE; n++) {
+        /* look for non-empty slot matching name */
         if (hemp_global_types[n] == HempUnused) {
-            hemp_global_types[n] = type;
-            type->id = n;
-            return n;
+            if (! empty)
+                empty = n;
+        }
+        else if (hemp_string_eq(name, hemp_global_types[n]->name)) {
+            return hemp_global_types[n];
         }
     }
+
+    if (empty) {
+        /* construct the type and install it in the first empty slot */
+        return (hemp_global_types[empty] = constructor(empty, name));
+    }
+
     hemp_fatal(
         "Failed to register %s type (global type registry is full)",
         type->name
     );
 }
-
-
 
 
 /*--------------------------------------------------------------------------
