@@ -1,0 +1,10 @@
+-- test this is test one
+Hello World!
+-- expect --
+Hello World!
+
+-- test other tags are ignored
+x: [% x %] 
+-- expect --
+x: 10
+

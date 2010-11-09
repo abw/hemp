@@ -14,7 +14,7 @@
 
 
 void 
-hemp_scan_inline_tag(
+hemp_inline_tag_scanner(
     hemp_template_p tmpl,
     hemp_tag_p      tag,
     hemp_str_p      tagtok,
@@ -168,3 +168,22 @@ bareword:
     *srcptr = src;
 }
 
+
+hemp_str_p
+hemp_inline_tag_to_end_of_line(
+    HEMP_TAG_SKIP_ARGS
+) {
+    hemp_debug_call("hemp_inline_tag_to_end_of_line()\n");
+    hemp_str_p  tag_end = tag->end;
+    hemp_size_t tag_len = strlen(tag->end);
+
+    /* walk to the end of line or end of tag */
+    while ( *src
+        &&  hemp_not_newline(src) 
+        &&  hemp_not_tag_end(src, tag_end, tag_len)
+    ) {
+        src++;
+    }
+    
+    return src;
+}

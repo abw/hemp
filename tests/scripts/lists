@@ -1,0 +1,5 @@
+-- test list  
+[% [4, 2, 0].join %]
+-- expect
+420
+

@@ -111,6 +111,7 @@ hemp_element_parse_exprs(
     HEMP_PREFIX_ARGS
 ) {
     hemp_debug_call("hemp_element_parse_exprs()\n");
+    hemp_debug("hemp_element_parse_exprs( precedence => %d )\n", precedence);
 
     hemp_element_p expr;
     hemp_list_p    exprs = hemp_list_init();
@@ -164,6 +165,10 @@ hemp_element_parse_exprs(
         hemp_list_free(exprs);
         exprs = NULL;
     }
+
+#if HEMP_DEBUG & HEMP_DEBUG_PARSE
+    hemp_debug("-- /EXPRS --\n");
+#endif
     
     return exprs;
 }
@@ -188,11 +193,13 @@ HEMP_PREFIX_FUNC(hemp_element_decline) {
 
 
 HEMP_PREFIX_FUNC(hemp_element_not_prefix) {
+    hemp_debug("%s is not prefix\n", (*elemptr)->type->name);
     return NULL;
 }
 
 
 HEMP_POSTFIX_FUNC(hemp_element_not_postfix) {
+    hemp_debug("%s is not postfix\n", (*elemptr)->type->name);
     hemp_debug_call("hemp_element_not_postfix()\n");
     return lhs;
 }

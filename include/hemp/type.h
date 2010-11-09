@@ -18,6 +18,7 @@ struct hemp_type_s {
     hemp_str_p      name;
     hemp_type_p     base;
     hemp_hash_p     methods;
+//    hemp_method_f   method;     /* TODO: method auto-generator */
     hemp_vtext_f    text;
     hemp_value_f    value;
     hemp_value_f    number;
@@ -25,6 +26,7 @@ struct hemp_type_s {
     hemp_value_f    boolean;
     hemp_value_f    compare;
     hemp_value_f    defined;
+    hemp_value_f    apply;
     hemp_fetch_f    fetch;
     hemp_store_f    store;
     hemp_fetch_f    dot;
@@ -40,9 +42,10 @@ struct hemp_object_s {
     prepare         # initialise object
     cleanup         # cleanup object
     release         # release memory
-    dot/get/set
+
+    # data representation
+    values
     pairs
-    apply     # function application
 */
 
 
@@ -92,6 +95,7 @@ hemp_type_p
         hemp_str_p  name,
         hemp_type_f constructor
     );
+
 
 void hemp_global_types_init();
 void hemp_global_types_free();

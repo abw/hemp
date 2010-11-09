@@ -1,30 +1,16 @@
 #include <hemp/element.h>
 
 
-static struct hemp_symbol_s
-    hemp_symbol_comment = { 
-        "comment",                                  /* name                 */
-        NULL,                                       /* start token          */
-        NULL,                                       /* end token            */
-        HEMP_BE_WHITESPACE  |                       /* flags                */
-        HEMP_BE_SOURCE      |
-        HEMP_BE_FIXED       |
-        HEMP_BE_HIDDEN,
-        0, 0,                                       /* l/r precedence       */
-        NULL,                                       /* scanner callback     */
-        NULL,                                       /* cleanup callback     */
-        &hemp_element_not_prefix,                   /* prefix expression    */
-        &hemp_element_not_postfix,                  /* postfix expression   */
-        &hemp_element_literal_token,                /* source token         */
-        &hemp_element_literal_source,               /* source code          */
-        &hemp_element_not_text,                     /* output text          */
-        &hemp_element_not_value,                    /* output text          */
-        &hemp_element_not_number,                   /* numeric conversion   */
-        &hemp_element_not_integer,                  /* integer conversion   */
-        &hemp_element_not_boolean,                  /* boolean conversion   */
-    };
+hemp_symbol_p HempSymbolComment = NULL;
 
-hemp_symbol_p HempSymbolComment = &hemp_symbol_comment;
+
+HEMP_GLOBAL_SYMBOL(hemp_symbol_comment) {
+    hemp_debug_call("hemp_symbol_comment()\n");
+    return hemp_element_comment_symbol(
+        NULL,
+        hemp_symbol_init("hemp.comment", NULL, NULL)
+    );
+}
 
 
 HEMP_SYMBOL_FUNC(hemp_element_comment_symbol) {
@@ -38,36 +24,18 @@ HEMP_SYMBOL_FUNC(hemp_element_comment_symbol) {
 
 
 HEMP_SCAN_FUNC(hemp_element_comment_scanner) {
-    hemp_str_p  src     = *srcptr;
     hemp_str_p  tag_end = tag->end;
     hemp_size_t tag_len = strlen(tag->end);
 
     hemp_debug_call("hemp_element_comment_scanner()\n");
 
-    /* walk to the end of line or end of tag */
-    while (* ++src) {
-        if (*src == HEMP_LF) {
-            src++;
-            break;
-        }
-        else if (*src == HEMP_CR) {
-            src++;
-            if (*src == HEMP_LF)
-                src++;
-            break;
-        }
-        else if (*src == *tag_end && hemp_stringn_eq(src, tag_end, tag_len)) {
-            break;
-        }
-    }
-
     /* update the source pointer past the text we've consumed */
-    *srcptr = src;
+    *srcptr = tag->to_end_of_line(tag, *srcptr);
 
     /* add a comment element to the list of scanned tokens */
     return hemp_elements_append(
         tmpl->elements, symbol,
-        start, pos, src - start
+        start, pos, *srcptr - start
     );
 }
 

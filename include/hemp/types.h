@@ -64,6 +64,7 @@ typedef struct hemp_hash_s      * hemp_hash_p;
 typedef struct hemp_jump_s      * hemp_jump_p;
 typedef struct hemp_language_s  * hemp_language_p;
 typedef struct hemp_list_s      * hemp_list_p;
+typedef struct hemp_namespace_s * hemp_namespace_p;
 typedef struct hemp_object_s    * hemp_object_p;
 typedef struct hemp_pnode_s     * hemp_pnode_p;
 typedef struct hemp_pool_s      * hemp_pool_p;
@@ -108,6 +109,8 @@ struct hemp_s {
 //  hemp_hash_p      tags;
     hemp_hash_p      templates;
     hemp_dialect_p   dialect;
+    hemp_u16_t       namespace_id;
+    hemp_hash_p      namespaces;
 
     hemp_bool_t      verbose;
     hemp_bool_t      debug;
@@ -195,12 +198,17 @@ typedef hemp_bool_t
 
 typedef void
     (* hemp_clean_f)(
-        hemp_mem_p      item        /* pointer to object to clean           */
+        hemp_template_p template    /* pointer to template to clean         */
     );
 
 typedef void
     (* hemp_eclean_f)(
         hemp_element_p  element     /* pointer to element to clean          */
+    );
+
+typedef void
+    (* hemp_dclean_f)(
+        hemp_dialect_p  dialect     /* pointer to dialect to clean          */
     );
 
 typedef hemp_mem_p
@@ -226,11 +234,20 @@ typedef hemp_mem_p
     hemp_tag_p      tag,      \
     hemp_str_p      tagtok,   \
     hemp_pos_t      pos,      \
-    hemp_str_p     *srcptr    
+    hemp_str_p     *srcptr
+
+#define HEMP_TAG_SKIP_ARGS    \
+    hemp_tag_p      tag,      \
+    hemp_str_p      src
 
 typedef void 
     (* hemp_tag_scan_f)(
         HEMP_TAG_SCAN_ARGS
+    );
+
+typedef hemp_str_p
+    (* hemp_tag_skip_f)(
+        HEMP_TAG_SKIP_ARGS
     );
 
 typedef hemp_element_p
@@ -259,12 +276,6 @@ typedef hemp_element_p
         hemp_prec_t     precedence, /* operator precedence level            */
         hemp_bool_t     force,      /* yes, really parse something          */
         hemp_element_p  element     /* preceding element                    */
-    );
-
-typedef hemp_type_p 
-    (* hemp_type_f)(
-        hemp_int_t      id,         /* numerical id                         */
-        hemp_str_p      name        /* unique type name                     */
     );
 
 typedef hemp_value_t 
@@ -320,6 +331,19 @@ typedef hemp_value_t
         hemp_value_t    lhs,        /* expression on left hand side         */
         hemp_value_t    rhs         /* expression on right hand side        */
     );
+
+typedef hemp_type_p 
+    (* hemp_type_f)(
+        hemp_int_t      id,         /* numerical id                         */
+        hemp_str_p      name        /* unique type name                     */
+    );
+
+typedef hemp_mem_p 
+    (* hemp_method_f)(
+        hemp_type_p     type,       /* pointer to type                      */
+        hemp_str_p      name        /* method name                          */
+    );
+
 
 typedef hemp_value_t    (* hemp_binary_fn)(hemp_value_t, hemp_value_t);
 typedef hemp_value_t    (* hemp_ternary_fn)(hemp_value_t, hemp_value_t, hemp_value_t);

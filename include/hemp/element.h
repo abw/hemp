@@ -49,22 +49,6 @@ struct hemp_element_s {
 
 
 /*--------------------------------------------------------------------------
- * external static element types
- *--------------------------------------------------------------------------*/
-
-extern hemp_symbol_p HempSymbolSpace;
-extern hemp_symbol_p HempSymbolComment;
-extern hemp_symbol_p HempSymbolTagStart;
-extern hemp_symbol_p HempSymbolTagEnd;
-extern hemp_symbol_p HempSymbolEof;
-extern hemp_symbol_p HempSymbolText;
-extern hemp_symbol_p HempSymbolWord;
-extern hemp_symbol_p HempSymbolNumber;
-extern hemp_symbol_p HempSymbolInteger;
-extern hemp_symbol_p HempSymbolBlock;
-
-
-/*--------------------------------------------------------------------------
  * macros
  *--------------------------------------------------------------------------*/
 
@@ -101,7 +85,7 @@ extern hemp_symbol_p HempSymbolBlock;
     hemp_skip_while(ep, HEMP_BE_TERMINATOR)
 
 #define hemp_at_eof(ep) \
-    (*ep)->type == HempSymbolEof
+    (*ep)->type == HempSymbolEOF
 
 #define hemp_expr(elem)                                         \
     (elem->args.unary.expr)
@@ -148,6 +132,12 @@ extern hemp_symbol_p HempSymbolBlock;
 #define hemp_parse_postfix(ep, sc, pr, fr, lhs)         \
     ((*ep)->type->postfix                               \
         ? (*ep)->type->postfix(ep, sc, pr, fr, lhs)     \
+        : lhs                                           \
+    )
+
+#define hemp_parse_infix(ep, sc, pr, fr, lhs)           \
+    ((*ep)->type->infix                                 \
+        ? (*ep)->type->infix(ep, sc, pr, fr, lhs)       \
         : lhs                                           \
     )
 
@@ -284,6 +274,8 @@ HEMP_SYMBOL_FUNC(hemp_element_comment_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_tag_start_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_tag_end_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_eof_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_terminator_symbol);
+
 
 HEMP_SCAN_FUNC(hemp_element_comment_scanner);
 HEMP_PREFIX_FUNC(hemp_element_space_parse_expr);
@@ -328,6 +320,18 @@ HEMP_ETEXT_FUNC(hemp_element_prefix_source);
 HEMP_ETEXT_FUNC(hemp_element_postfix_source);
 HEMP_ETEXT_FUNC(hemp_element_prepostfix_source);
 HEMP_ETEXT_FUNC(hemp_element_infix_source);
+
+
+
+/*--------------------------------------------------------------------------
+ * brackets
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_parens_symbol);
+HEMP_PREFIX_FUNC(hemp_element_parens_prefix);
+HEMP_POSTFIX_FUNC(hemp_element_parens_postfix);
+HEMP_EVAL_FUNC(hemp_element_parens_value);
+
 
 
 /*--------------------------------------------------------------------------

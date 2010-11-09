@@ -22,7 +22,15 @@ hello [# this is a
         is another one 
 #] once more
 
-
 -- expect
 hello world once more
+
+
+-- test outline comment
+%% 'Hello ' # this comment is ignored
+World!
+
+-- expect
+Hello World!
+
 

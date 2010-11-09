@@ -1,42 +1,26 @@
 #include <hemp/element.h>
 
 
-/*--------------------------------------------------------------------------
- * static element to represent literal text
- *--------------------------------------------------------------------------*/
-
-static struct hemp_symbol_s
-    hemp_symbol_text = { 
-        "text",                                     /* name                 */
-        NULL,                                       /* start token          */
-        NULL,                                       /* end token            */
-        HEMP_BE_SOURCE  |                           /* flags                */
-        HEMP_BE_FIXED,
-        0, 0,                                       /* l/r precedence       */
-        NULL,                                       /* scanner callback     */
-        NULL,                                       /* cleanup callback     */
-        &hemp_element_text_prefix,                  /* prefix expression    */
-        &hemp_element_not_postfix,                  /* postfix expression   */
-        &hemp_element_literal_token,                /* source token         */
-        &hemp_element_literal_source,               /* source code          */
-        &hemp_element_literal_text,                 /* output text          */
-        &hemp_element_literal_value,                /* output value         */
-        &hemp_element_value_number,                 /* numeric conversion   */
-        &hemp_element_value_integer,                /* integer conversion   */
-        &hemp_element_value_boolean,                /* boolean conversion   */
-    };
-
-hemp_symbol_p HempSymbolText = &hemp_symbol_text;
+hemp_symbol_p HempSymbolText = NULL;
 
 
 /*--------------------------------------------------------------------------
  * text elements and operators created as dynamic grammar symbols
  *--------------------------------------------------------------------------*/
 
+HEMP_GLOBAL_SYMBOL(hemp_symbol_text) {
+    hemp_debug_call("hemp_symbol_text()\n");
+    return hemp_element_text_symbol(
+        NULL,
+        hemp_symbol_init("hemp.text", NULL, NULL)
+    );
+}
+
+
 HEMP_SYMBOL_FUNC(hemp_element_text_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
-    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     symbol->prefix  = &hemp_element_literal_prefix;
+    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }
 

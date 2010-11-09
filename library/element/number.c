@@ -15,71 +15,36 @@
     )
 
 
+hemp_symbol_p HempSymbolNumber  = NULL;
+hemp_symbol_p HempSymbolInteger = NULL;
+
+
 /*--------------------------------------------------------------------------
  * static elements to represent literal numbers and integers
  *--------------------------------------------------------------------------*/
 
-static struct hemp_symbol_s
-    hemp_symbol_number = { 
-        "number",                                   /* name                 */
-        NULL,                                       /* start token          */
-        NULL,                                       /* end token            */
-        HEMP_BE_SOURCE       |                      /* flags                */
-        HEMP_BE_FIXED,
-        0, 0,                                       /* l/r precedence       */
-        NULL,                                       /* scanner callback     */
-        NULL,                                       /* cleanup callback     */
-        &hemp_element_literal_prefix,               /* prefix expression    */
-        &hemp_element_not_postfix,                  /* postfix expression   */
-        &hemp_element_literal_token,                /* source token         */
-        &hemp_element_literal_source,               /* source code          */
-        &hemp_element_literal_text,                 /* output text          */
-        &hemp_element_number_value,                 /* output value         */
-        &hemp_element_number_value,                 /* numeric non-convert  */
-        &hemp_element_value_integer,                /* integer conversion   */
-        &hemp_element_value_boolean,                /* boolean conversion   */
-        &hemp_element_value_compare,                /* to comparison        */
-        &hemp_element_fixed,                        /* parse fixed          */
-    };
-
-hemp_symbol_p HempSymbolNumber = &hemp_symbol_number;
-
-
-static struct hemp_symbol_s
-    hemp_symbol_integer = { 
-        "integer",                                  /* name                 */
-        NULL,                                       /* start token          */
-        NULL,                                       /* end token            */
-        HEMP_BE_SOURCE       |                      /* flags                */
-        HEMP_BE_FIXED,
-        0, 0,                                       /* l/r precedence       */
-        NULL,                                       /* scanner callback     */
-        NULL,                                       /* cleanup callback     */
-        &hemp_element_literal_prefix,               /* prefix expression    */
-        &hemp_element_not_postfix,                  /* postfix expression   */
-        &hemp_element_literal_token,                /* source token         */
-        &hemp_element_literal_source,               /* source code          */
-        &hemp_element_literal_text,                 /* output text          */
-        &hemp_element_integer_value,                /* output value         */
-        &hemp_element_value_number,                 /* numeric conversion   */
-        &hemp_element_integer_value,                /* integer conversion   */
-        &hemp_element_value_boolean,                /* boolean conversion   */
-        &hemp_element_value_compare,                /* to comparison        */
-        &hemp_element_fixed,                        /* parse fixed          */
-    };
-    
-hemp_symbol_p HempSymbolInteger = &hemp_symbol_integer;
-
-
-
+//
 /*--------------------------------------------------------------------------
  * element to represent a literal number
  *--------------------------------------------------------------------------*/
 
+HEMP_GLOBAL_SYMBOL(hemp_symbol_number) {
+    hemp_debug_call("hemp_symbol_number()\n");
+    return hemp_element_number_symbol(
+        NULL,
+        hemp_symbol_init("hemp.number", NULL, NULL)
+    );
+}
+
+
 HEMP_SYMBOL_FUNC(hemp_element_number_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
+    symbol->prefix  = &hemp_element_literal_prefix;
     symbol->value   = &hemp_element_number_value;
     symbol->number  = &hemp_element_number_value;
+    symbol->integer = &hemp_element_value_integer;
+    symbol->boolean = &hemp_element_value_boolean;
+    symbol->compare = &hemp_element_value_compare;
     symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }
@@ -95,6 +60,15 @@ HEMP_EVAL_FUNC(hemp_element_number_value) {
 /*--------------------------------------------------------------------------
  * element to represent a literal integer
  *--------------------------------------------------------------------------*/
+
+HEMP_GLOBAL_SYMBOL(hemp_symbol_integer) {
+    hemp_debug_call("hemp_symbol_integer()\n");
+    return hemp_element_integer_symbol(
+        NULL,
+        hemp_symbol_init("hemp.integer", NULL, NULL)
+    );
+}
+
 
 HEMP_SYMBOL_FUNC(hemp_element_integer_symbol) {
     hemp_element_number_symbol(hemp, symbol);

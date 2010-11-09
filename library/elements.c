@@ -104,7 +104,7 @@ hemp_elements_eof(
     hemp_pos_t      position
 ) {
     return hemp_elements_append(
-        elements, HempSymbolEof,
+        elements, HempSymbolEOF,
         NULL, position, 0
     );
 }
@@ -123,4 +123,5 @@ hemp_elements_dump(
             break;
         e = e->next;
     }
+    hemp_debug("-- /Elements --\n");
 }

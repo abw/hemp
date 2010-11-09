@@ -8,6 +8,14 @@ our $VERSION = 0.01;
 
 XSLoader::load('Hemp', $VERSION);
 
+
+package Hemp::Text;
+
+use Badger::Class 
+    as_text => sub {
+        shift->text;
+    };
+
 1;
 
 __END__

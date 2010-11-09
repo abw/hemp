@@ -8,6 +8,7 @@ libhemp_la_SOURCES  =   action.c            \
                         element.c           \
                         element/block.c     \
                         element/boolean.c   \
+                        element/bracket.c   \
                         element/comment.c   \
                         element/compare.c   \
                         element/dotop.c     \
@@ -25,8 +26,10 @@ libhemp_la_SOURCES  =   action.c            \
                         hemp.c              \
                         language.c          \
                         language/hemp.c     \
+                        language/test.c     \
                         language/tt3.c      \
                         memory.c            \
+                        namespace.c         \
                         pool.c              \
                         ptree.c             \
                         scanner.c           \

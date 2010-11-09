@@ -15,6 +15,7 @@ extern "C" {
 #include <hemp/filesystem.h>
 #include <hemp/grammar.h>
 #include <hemp/language.h>
+#include <hemp/namespace.h>
 #include <hemp/pool.h>
 #include <hemp/ptree.h>
 #include <hemp/scanner.h>
@@ -30,6 +31,7 @@ extern "C" {
 #include <hemp/type/text.h>
 #include <hemp/type/list.h>
 #include <hemp/type/hash.h>
+#include <hemp/language/test.h>
 
     
 //#include <hemp/module.h>
@@ -178,8 +180,6 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
         if (! _dial) hemp_throw(hemp, HEMP_ERROR_INVALID, "dialect", name); \
         _dial;                                                              \
     })
-
-
 
 
 //hemp_bool_t hemp_register_dialect(hemp_t, hemp_string_t, hemp_build_fn);

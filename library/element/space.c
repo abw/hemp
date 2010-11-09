@@ -1,32 +1,42 @@
 #include <hemp/element.h>
 
+/*--------------------------------------------------------------------------
+ * global symbol types
+ *--------------------------------------------------------------------------*/
+
+hemp_symbol_p HempSymbolSpace     = NULL;
+hemp_symbol_p HempSymbolTagStart  = NULL;
+hemp_symbol_p HempSymbolTagEnd    = NULL;
+hemp_symbol_p HempSymbolEOF       = NULL;
+
+
+/*--------------------------------------------------------------------------
+ * generic symbol constructor functions
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_terminator_symbol) {
+    hemp_element_literal_symbol(hemp, symbol);
+    symbol->prefix  = hemp_element_not_prefix;
+    symbol->postfix = hemp_element_not_postfix;
+    symbol->fixed   = hemp_element_decline;
+    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED | HEMP_BE_HIDDEN
+                    | HEMP_BE_TERMINATOR;
+    return symbol;
+}
+
+
 
 /*--------------------------------------------------------------------------
  * space
  *--------------------------------------------------------------------------*/
 
-static struct hemp_symbol_s
-    hemp_symbol_space = { 
-        "space",                                    /* name                 */
-        NULL,                                       /* start token          */
-        NULL,                                       /* end token            */
-        HEMP_BE_WHITESPACE  |                       /* flags                */
-        HEMP_BE_SOURCE      |
-        HEMP_BE_FIXED       | 
-        HEMP_BE_HIDDEN,
-        0, 0,                                       /* l/r precedence       */
-        NULL,                                       /* scanner callback     */
-        NULL,                                       /* cleanup callback     */
-        &hemp_element_next_prefix,                  /* prefix expression    */
-        &hemp_element_next_postfix,                 /* postfix expression   */
-        &hemp_element_literal_token,                /* source token         */
-        &hemp_element_literal_source,               /* source code          */
-        &hemp_element_literal_text,                 /* output text          */
-        &hemp_element_literal_value,                /* output value         */
-        &hemp_element_value_number,                 /* numeric conversion   */
-        &hemp_element_value_integer,                /* integer conversion   */
-        &hemp_element_value_boolean,                /* boolean conversion   */
-    };
+HEMP_GLOBAL_SYMBOL(hemp_symbol_space) {
+    hemp_debug_call("hemp_symbol_space()\n");
+    return hemp_element_space_symbol(
+        NULL,
+        hemp_symbol_init("hemp.space", NULL, NULL)
+    );
+}
 
 
 HEMP_SYMBOL_FUNC(hemp_element_space_symbol) {
@@ -43,29 +53,13 @@ HEMP_SYMBOL_FUNC(hemp_element_space_symbol) {
  * tag start
  *--------------------------------------------------------------------------*/
 
-static struct hemp_symbol_s
-    hemp_symbol_tag_start = { 
-        "tag_start",                                /* name                 */
-        NULL,                                       /* start token          */
-        NULL,                                       /* end token            */
-        HEMP_BE_WHITESPACE  |                       /* flags                */
-        HEMP_BE_SOURCE      |
-        HEMP_BE_FIXED       | 
-        HEMP_BE_HIDDEN      |
-        HEMP_BE_SEPARATOR,
-        0, 0,                                       /* l/r precedence       */
-        NULL,                                       /* scanner callback     */
-        NULL,                                       /* cleanup callback     */
-        &hemp_element_next_prefix,                  /* prefix expression    */
-        &hemp_element_next_postfix,                 /* postfix expression   */
-        &hemp_element_literal_token,                /* source token         */
-        &hemp_element_literal_source,               /* source code          */
-        &hemp_element_not_text,                     /* output text          */
-        &hemp_element_not_value,                    /* output value         */
-        &hemp_element_not_number,                   /* numeric conversion   */
-        &hemp_element_not_integer,                  /* integer conversion   */
-        &hemp_element_not_boolean,                  /* boolean conversion   */
-    };
+HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_start) {
+    hemp_debug_call("hemp_symbol_tag_start()\n");
+    return hemp_element_tag_start_symbol(
+        NULL,
+        hemp_symbol_init("hemp.tag_start", NULL, NULL)
+    );
+}
 
 
 HEMP_SYMBOL_FUNC(hemp_element_tag_start_symbol) {
@@ -82,34 +76,17 @@ HEMP_SYMBOL_FUNC(hemp_element_tag_start_symbol) {
  * tag end
  *--------------------------------------------------------------------------*/
 
-static struct hemp_symbol_s
-    hemp_symbol_tag_end = { 
-        "tag_end",                                  /* name                 */
-        NULL,                                       /* start token          */
-        NULL,                                       /* end token            */
-        HEMP_BE_SOURCE      |                       /* flags                */
-        HEMP_BE_FIXED       | 
-        HEMP_BE_HIDDEN      |
-        HEMP_BE_TERMINATOR,
-        0, 0,                                       /* l/r precedence       */
-        NULL,                                       /* scanner callback     */
-        NULL,                                       /* cleanup callback     */
-        &hemp_element_not_prefix,                   /* prefix expression    */
-        &hemp_element_not_postfix,                  /* postfix expr         */
-        &hemp_element_literal_token,                /* source token         */
-        &hemp_element_literal_source,               /* source code          */
-        &hemp_element_not_text,                     /* output text          */
-        &hemp_element_not_value,                    /* output value         */
-        &hemp_element_not_number,                   /* numeric conversion   */
-        &hemp_element_not_integer,                  /* integer conversion   */
-        &hemp_element_not_boolean,                  /* boolean conversion   */
-    };
+HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_end) {
+    hemp_debug_call("hemp_symbol_tag_end()\n");
+    return hemp_element_tag_end_symbol(
+        NULL,
+        hemp_symbol_init("hemp.tag_end", NULL, NULL)
+    );
+}
 
 
 HEMP_SYMBOL_FUNC(hemp_element_tag_end_symbol) {
-    hemp_element_literal_symbol(hemp, symbol);
-    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED | HEMP_BE_HIDDEN
-                    | HEMP_BE_TERMINATOR;
+    hemp_element_terminator_symbol(hemp, symbol);
     return symbol;
 }
 
@@ -119,28 +96,13 @@ HEMP_SYMBOL_FUNC(hemp_element_tag_end_symbol) {
  * end of file element
  *--------------------------------------------------------------------------*/
 
-static struct hemp_symbol_s
-    hemp_symbol_eof = { 
-        "eof",                                      /* name                 */
-        "--EOF--",                                  /* start token          */
-        NULL,                                       /* end token            */
-        HEMP_BE_SOURCE      |                       /* flags                */
-        HEMP_BE_FIXED       | 
-        HEMP_BE_HIDDEN      |
-        HEMP_BE_EOF,
-        0, 0,                                       /* l/r precedence       */
-        NULL,                                       /* scanner callback     */
-        NULL,                                       /* cleanup callback     */
-        &hemp_element_not_prefix,                   /* prefix expression    */
-        &hemp_element_not_postfix,                  /* postfix expression   */
-        &hemp_element_eof_token,                    /* source token         */
-        &hemp_element_not_source,                   /* source code          */
-        &hemp_element_not_text,                     /* output text          */
-        &hemp_element_not_value,                    /* output value         */
-        &hemp_element_not_number,                   /* numeric conversion   */
-        &hemp_element_not_integer,                  /* integer conversion   */
-        &hemp_element_not_boolean,                  /* boolean conversion   */
-    };
+HEMP_GLOBAL_SYMBOL(hemp_symbol_eof) {
+    hemp_debug_call("hemp_symbol_eof()\n");
+    return hemp_element_eof_symbol(
+        NULL,
+        hemp_symbol_init("hemp.eof", NULL, NULL)
+    );
+}
 
 
 HEMP_SYMBOL_FUNC(hemp_element_eof_symbol) {
@@ -150,6 +112,7 @@ HEMP_SYMBOL_FUNC(hemp_element_eof_symbol) {
     return symbol;
 }
 
+
 HEMP_ETEXT_FUNC(hemp_element_eof_token) {
     hemp_debug_call("hemp_element_eof_token()\n");
     hemp_text_p text;
@@ -158,14 +121,4 @@ HEMP_ETEXT_FUNC(hemp_element_eof_token) {
     return output;
 }
 
-
-
-/*--------------------------------------------------------------------------
- * static symbol types
- *--------------------------------------------------------------------------*/
-
-hemp_symbol_p HempSymbolSpace     = &hemp_symbol_space;
-hemp_symbol_p HempSymbolTagStart  = &hemp_symbol_tag_start;
-hemp_symbol_p HempSymbolTagEnd    = &hemp_symbol_tag_end;
-hemp_symbol_p HempSymbolEof       = &hemp_symbol_eof;
 

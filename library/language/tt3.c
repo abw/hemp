@@ -103,7 +103,7 @@ hemp_dialect_tt3_prepare(
             "outline", 
             HEMP_OUTLINE_TAG,
             "%%", NULL,
-            &hemp_scan_outline_tag,
+            &hemp_outline_tag_scanner,
             command
         )
     );
@@ -114,7 +114,7 @@ hemp_dialect_tt3_prepare(
             "inline", 
             HEMP_INLINE_TAG,
             "[%", "%]",
-            &hemp_scan_inline_tag,
+            &hemp_inline_tag_scanner,
             command
         )
     );

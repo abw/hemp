@@ -28,6 +28,7 @@ struct hemp_symbol_s {
     /* parsing methods */
     hemp_prefix_f   prefix;
     hemp_postfix_f  postfix;
+    hemp_postfix_f  infix;
 
     /* value methods */
     hemp_text_f     token;
@@ -70,6 +71,34 @@ void
 hemp_symbol_dump(
     hemp_symbol_p symbol
 );
+
+
+/*--------------------------------------------------------------------------
+ * global symbols and symbol constructors
+ *--------------------------------------------------------------------------*/
+
+extern hemp_symbol_p HempSymbolSpace;
+extern hemp_symbol_p HempSymbolComment;
+extern hemp_symbol_p HempSymbolTagStart;
+extern hemp_symbol_p HempSymbolTagEnd;
+extern hemp_symbol_p HempSymbolBlock;
+extern hemp_symbol_p HempSymbolText;
+extern hemp_symbol_p HempSymbolWord;
+extern hemp_symbol_p HempSymbolNumber;
+extern hemp_symbol_p HempSymbolInteger;
+extern hemp_symbol_p HempSymbolEOF;
+
+
+HEMP_GLOBAL_SYMBOL(hemp_symbol_space);
+HEMP_GLOBAL_SYMBOL(hemp_symbol_comment);
+HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_start);
+HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_end);
+HEMP_GLOBAL_SYMBOL(hemp_symbol_block);
+HEMP_GLOBAL_SYMBOL(hemp_symbol_text);
+HEMP_GLOBAL_SYMBOL(hemp_symbol_word);
+HEMP_GLOBAL_SYMBOL(hemp_symbol_number);
+HEMP_GLOBAL_SYMBOL(hemp_symbol_integer);
+HEMP_GLOBAL_SYMBOL(hemp_symbol_eof);
 
 
 /*--------------------------------------------------------------------------

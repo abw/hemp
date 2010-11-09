@@ -1,7 +1,9 @@
 check_PROGRAMS  =   boolops     \
                     comments    \
+                    lists       \
                     numbers     \
                     numops      \
+                    parens      \
                     quotes      \
                     textops     \
                     words

@@ -1,26 +1,27 @@
-#check_PROGRAMS  =   type
+check_PROGRAMS  =   namespace
 
-check_PROGRAMS  =   action      \
-                    context     \
-                    dialect     \
-                    element     \
-                    elements    \
-                    error       \
-                    factory     \
-                    filesystem  \
-                    grammar     \
-                    memory      \
-                    pool        \
-                    ptree       \
-                    slab        \
-                    source      \
-                    string      \
-                    tag         \
-                    tagset      \
-                    template    \
-                    type        \
-                    utils       \
-                    value
+#check_PROGRAMS  =   action      \
+#                    context     \
+#                    dialect     \
+#                    element     \
+#                    elements    \
+#                    error       \
+#                    factory     \
+#                    filesystem  \
+#                    grammar     \
+#                    memory      \
+#                    namespace   \
+#                    pool        \
+#                    ptree       \
+#                    slab        \
+#                    source      \
+#                    string      \
+#                    tag         \
+#                    tagset      \
+#                    template    \
+#                    type        \
+#                    utils       \
+#                    value
  
 TESTS           = $(check_PROGRAMS)
 LDADD           = ../../library/libhemp.la

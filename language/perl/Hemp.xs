@@ -8,6 +8,7 @@
 typedef hemp_p          Hemp;
 typedef hemp_template_p Hemp__Template;
 typedef hemp_context_p  Hemp__Context;
+typedef hemp_text_p     Hemp__Text;
 
 /*
 #--------------------------------------------------------------------------
@@ -92,7 +93,7 @@ MODULE = Hemp           PACKAGE = Hemp::Template
 PROTOTYPES: enable
 
 
-char *
+Hemp::Text
 render(template, context)
     Hemp::Template template
     Hemp::Context  context
@@ -101,7 +102,7 @@ render(template, context)
     CODE:
         hemp_p hemp = context->hemp;
         HEMP_TRY;
-            RETVAL = hemp_template_render(template, context)->string;
+            RETVAL = hemp_template_render(template, context);
         HEMP_CATCH_ALL;
             croak("Hemp error: %s", hemp->error->message);
         HEMP_END;
@@ -136,3 +137,33 @@ DESTROY(context)
         fprintf(stderr, "Hemp::Context->DESTROY()\n"); 
     PPCODE:
         hemp_context_free(context);
+
+
+#--------------------------------------------------------------------------
+# Hemp::Text
+#--------------------------------------------------------------------------
+
+MODULE = Hemp           PACKAGE = Hemp::Text
+
+PROTOTYPES: enable
+
+
+char *
+text(text)
+    Hemp::Text text
+    INIT:
+        fprintf(stderr, "Hemp::Text->text()\n");
+    CODE:
+        RETVAL = text->string;
+    OUTPUT:
+        RETVAL
+
+
+void
+DESTROY(text)
+    Hemp::Text text
+    INIT:
+        fprintf(stderr, "Hemp::Text->DESTROY()\n"); 
+    PPCODE:
+        hemp_text_free(text);
+

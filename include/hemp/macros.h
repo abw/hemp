@@ -125,6 +125,9 @@
  * See library/language/*.c for examples of these in action.
  *--------------------------------------------------------------------------*/
 
+#define HEMP_GLOBAL_SYMBOL(f)               \
+    hemp_symbol_p f()
+
 #define HEMP_SYMBOLS_ARGS                   \
     hemp_p          hemp,                   \
     hemp_str_p      name
@@ -164,6 +167,9 @@
 
 #define HEMP_OPERATOR2(name, start, end, lprec, rprec)          \
     hemp_grammar_add_symbol(grammar, name, start, end, lprec, rprec);
+
+#define HEMP_BLOCKOP(name, start, prec)                         \
+    hemp_grammar_add_symbol(grammar, name, start, NULL, prec, prec);
 
 
 /*--------------------------------------------------------------------------
@@ -293,6 +299,13 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         lhs->type->name, prec, action                                       \
     )
 
+#define HEMP_PREFIX_DBG(type, prec, compare, action)                        \
+    hemp_debug_parse(                                                       \
+        "precedence of %s (%d) is %s than %d, %s\n",                        \
+        type->name, type->rprec, compare,                                   \
+        prec, action                                                        \
+    )
+
 #define HEMP_LPREC_DBG(type, lhs, prec, compare, action)                    \
     HEMP_PREC_DBG(type, type->lprec, lhs, prec, compare, action)
 
@@ -300,13 +313,14 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
     HEMP_PREC_DBG(type, type->rprec, lhs, prec, compare, action)
 
 
+// NOTE: this macro produces stupid debugging messages... can't be arsed to fix right now
 #define HEMP_PREFIX_PRECEDENCE                                              \
-    if (precedence && type->rprec < precedence) {                           \
-        HEMP_RPREC_DBG(type, lhs, precedence, "not more", "returning lhs"); \
-        return lhs;                                                         \
+    if (precedence && type->rprec <= precedence) {                          \
+        HEMP_PREFIX_DBG(type, precedence, "not more", "returning NULL");    \
+        return NULL;                                                        \
     }                                                                       \
     else {                                                                  \
-        HEMP_RPREC_DBG(type, lhs, precedence, "less", "continuing");        \
+        HEMP_PREFIX_DBG(type, precedence, "less", "continuing");            \
     }
 
 #define HEMP_INFIX_LEFT_PRECEDENCE                                          \
@@ -350,7 +364,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         element, context
 
 #define HEMP_EVAL_FUNC(f)                   \
-    HEMP_DO_INLINE hemp_value_t f(          \
+    HEMP_INLINE hemp_value_t f(             \
         HEMP_EVAL_ARGS                      \
     )
 
@@ -381,7 +395,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
     element, context, output
 
 #define HEMP_ETEXT_FUNC(f)                  \
-    HEMP_DO_INLINE hemp_value_t f(          \
+    HEMP_INLINE hemp_value_t f(             \
         HEMP_ETEXT_ARGS                     \
     )
 
@@ -399,27 +413,27 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  *--------------------------------------------------------------------------*/
 
 #define HEMP_VALUE_FUNC(f)                  \
-    HEMP_DO_INLINE hemp_value_t f(          \
+    HEMP_INLINE hemp_value_t f(             \
         hemp_value_t    value,              \
         hemp_context_p  context             \
     )
 
 #define HEMP_VTEXT_FUNC(f)                  \
-    HEMP_DO_INLINE hemp_value_t f(          \
+    HEMP_INLINE hemp_value_t f(             \
         hemp_value_t    value,              \
         hemp_context_p  context,            \
         hemp_value_t    output              \
     )
 
 #define HEMP_FETCH_FUNC(f)                  \
-    HEMP_DO_INLINE hemp_value_t f(          \
+    HEMP_INLINE hemp_value_t f(             \
         hemp_value_t    container,          \
         hemp_context_p  context,            \
         hemp_value_t    key                 \
     )
 
 #define HEMP_STORE_FUNC(f)                  \
-    HEMP_DO_INLINE hemp_value_t f(          \
+    HEMP_INLINE hemp_value_t f(             \
         hemp_value_t    container,          \
         hemp_context_p  context,            \
         hemp_value_t    key,                \

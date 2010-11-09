@@ -30,6 +30,7 @@ tests/core/factory
 tests/core/filesystem
 tests/core/grammar
 tests/core/memory
+tests/core/namespace
 tests/core/pool
 tests/core/slab
 tests/core/source
@@ -48,11 +49,15 @@ tests/type/text
 
 tests/language/hemp/boolops
 tests/language/hemp/comments
+tests/language/hemp/lists
 tests/language/hemp/numbers
 tests/language/hemp/numops
+tests/language/hemp/parens
 tests/language/hemp/quotes
 tests/language/hemp/textops
 tests/language/hemp/words
+
+tests/language/test/test1
 
 language/perl/Makefile.old
 language/perl/Hemp.c

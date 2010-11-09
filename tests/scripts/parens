@@ -1,0 +1,10 @@
+-- test parens with simple expression 
+[% (400 + 20) %]
+-- expect
+420
+
+-- test parens for precedence
+[% ((3 + 1) * (6 + 4) + 2) * (3 + 7) %]
+-- expect
+420
+

@@ -59,6 +59,21 @@ An incomplete list of things TODO, in no particular order.
  
 -- HOT STACK --
 
+* prefix/postfix/infix element methods
+
+* Add parens with postfix handler to create args
+
+* Add args() method to element and provide implementation for ()
+
+* Add hemp_args_s data structure
+
+* Add context caller/argument stack, or something similar to pass args from
+  one place to another.
+
+* Perl CODE
+
+* Add apply() method to value types (or call() ?)
+
 * change function names in type/* from hemp_value_XXX_YYY to hemp_type_XXX_YYY
 
 * Have static symbols created at global startup time in the same way that 
@@ -91,3 +106,17 @@ An incomplete list of things TODO, in no particular order.
 
 * change 'tmpl' to 'hemplate'?
 
+* figure out how to scan/parse items.1.2.3 and not have the scanner parse
+  it as (items).(1.2).3 (with a float in the middle)
+  
+-- NOV 2010 --
+
+* Add namespace object so hemp.foo.bar.baz can be represented as a tree, with
+  each namespace object being assigned a unique id.
+
+* Function(s) to resolve namespace tree from a namespace string.
+
+* Change grammar definitions to fit hierarchy corresponding to operator type
+  e.g. hemp.operator.binary.number.add allows a single view method to be
+  defined for hemp.operator.binary which renders all binary operators using
+  a similar process (e.g.for syntax highlighting)

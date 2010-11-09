@@ -27,6 +27,19 @@ hemp_tag_init(
     if (! tag->name || ! tag->start || (end && ! tag->end))
         hemp_mem_fail("tag");
 
+    /* feck... this is going to need a little re-organisation... but for
+     * now I'll just leave this here...
+     */
+    switch (style) {
+        case HEMP_INLINE_TAG:
+            tag->to_end_of_line = &hemp_inline_tag_to_end_of_line;
+            break;
+
+        case HEMP_OUTLINE_TAG:
+            tag->to_end_of_line = &hemp_outline_tag_to_end_of_line;
+            break;
+    }
+
     return tag;
 }
 

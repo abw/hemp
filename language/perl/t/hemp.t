@@ -17,6 +17,13 @@ use Badger::Test
     debug => 'Hemp',
     args  => \@ARGV;
 
+use Debug::FaultAutoBT;
+Debug::FaultAutoBT->new( 
+    verbose  => 1,
+    dir      => "/Users/abw/tmp",
+    debugger => "gdb",
+)->ready;
+
 use Hemp;
 pass( 'Loaded Hemp' );
 
@@ -28,7 +35,7 @@ use Badger::Class
     as_text => \&text;
 
 sub text {
-    return "THIS IS A FOO OBJECT\n";
+    return "THIS IS A FOO OBJECT";
 }
 
 package main;
@@ -53,10 +60,11 @@ sub test_hemp() {
 
     my $items  = ['foo', 10, 3.14];
     my $empty  = [ ];
-    my $hash   = { a => 10, b => 20 };
+    my $hash   = { a => 10, b => "twenty", c => Foo->new };
     my $nohash = { };
     my $object = Foo->new();
-    print "Foo: $object\n";
+    my $code   = sub { warn "in Perl subroutine\n"; return "Returned from Perl code" };
+#    print "Foo: $object\n";
 
     # define a template variable
     $context->set( name   => "World" );
@@ -66,16 +74,25 @@ sub test_hemp() {
     $context->set( hash   => $hash );
     $context->set( nohash => $nohash );
     $context->set( object => $object );
+    $context->set( plcode => $code );
 
     # render the template
-    my $output = $template->render($context);
-    ok( $output, "Processed template: $output" );
-    is( $output, "Hello World! 420", "got correct output" );
-    print STDERR "OUTPUT: $output\n";
+#    my $output = $template->render($context);
+#    ok( $output, "Processed template: $output" );
+#    is( $output, "Hello World! 420", "got correct output" );
+#    print STDERR "OUTPUT: $output\n";
 
-    $template = $hemp->template( tt3 => text => "World:[% name.length %] [% n %]:[% n.length %]" );
+    $template = $hemp->template( 
+#        tt3 => text => "hash.a:[% hash.a %]  hash.b:[% hash.b %]  hash.c:[% hash.c %]" 
+        tt3 => text => "code: [% plcode(n) %]" 
+    );
     ok( $template, "Got hemp template: $template\n" );
-    print STDERR "OUTPUT: ", $template->render($context), "\n";
+    my $r = $template->render($context);
+    my $t = $r->text;
+    print "rendered: ", $r->text, "\n";
+    print "autostring: $r\n";
+
+#    print STDERR "OUTPUT: $r\n"; 
 
 #    $template = $hemp->template( tt3 => text => "World:[% name.length %] [% n %]:[% n.length %]" );
 #    ok( $template, "Got hemp template: $template\n" );

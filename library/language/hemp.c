@@ -6,9 +6,10 @@
 HEMP_LANGUAGE_FUNC(hemp_language_hemp_init);
 
 /* symbol collections */
-HEMP_SYMBOLS_FUNC(hemp_element_text_symbols);
-HEMP_SYMBOLS_FUNC(hemp_element_number_symbols);
+HEMP_SYMBOLS_FUNC(hemp_element_bracket_symbols);
 HEMP_SYMBOLS_FUNC(hemp_element_boolean_symbols);
+HEMP_SYMBOLS_FUNC(hemp_element_number_symbols);
+HEMP_SYMBOLS_FUNC(hemp_element_text_symbols);
 
 /* grammar initialisers */
 HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_alpha);
@@ -26,6 +27,7 @@ static struct hemp_symbols_s hemp_symbols_hemp[] = {
     { "hemp.comment",           &hemp_element_comment_symbol            },
     { "hemp.tag_start",         &hemp_element_tag_start_symbol          },
     { "hemp.tag_end",           &hemp_element_tag_end_symbol            },
+//  { "hemp.terminator",        &hemp_element_terminator_symbol         },
     { "hemp.number",            &hemp_element_number_symbol             },
     { "hemp.integer",           &hemp_element_integer_symbol            },
     { "hemp.word",              &hemp_element_word_symbol               },
@@ -34,6 +36,14 @@ static struct hemp_symbols_s hemp_symbols_hemp[] = {
     { "hemp.block",             &hemp_element_block_symbol              },
     { "hemp.dotop",             &hemp_element_dotop_symbol              },
     { "hemp.eof",               &hemp_element_eof_symbol                },
+    { NULL, NULL },
+};
+
+static struct hemp_symbols_s hemp_symbols_hemp_bracket[] = {
+    { "hemp.bracket.parens",    &hemp_element_parens_symbol             },
+    { "hemp.bracket.end_parens",&hemp_element_terminator_symbol         },
+//  { "hemp.bracket.square",    &hemp_element_list_symbol               },
+//  { "hemp.bracket.end_square",&hemp_element_terminator_symbol         },
     { NULL, NULL },
 };
 
@@ -91,7 +101,8 @@ HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
     /* register all the basic symbols */
     HEMP_ELEMENTS(hemp_symbols_hemp);
 
-    /* register handlers for boolean, number and text operator symbols */
+    /* register factories for bracket, boolean, number and text operator symbols */
+    HEMP_ELEMENT("hemp.bracket.*", &hemp_element_bracket_symbols);
     HEMP_ELEMENT("hemp.boolean.*", &hemp_element_boolean_symbols);
     HEMP_ELEMENT("hemp.number.*",  &hemp_element_number_symbols);
     HEMP_ELEMENT("hemp.text.*",    &hemp_element_text_symbols);
@@ -101,6 +112,21 @@ HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
     HEMP_GRAMMAR("hemp.bravo", &hemp_grammar_hemp_bravo);
 
     return language;
+}
+
+
+/*--------------------------------------------------------------------------
+ * bracket elements
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOLS_FUNC(hemp_element_bracket_symbols) {
+    /* we should detect if we've done this already and skip it */
+    HEMP_ELEMENTS(hemp_symbols_hemp_bracket);
+
+    /* now try again */
+    return (hemp_action_p) hemp_hash_fetch_pointer(
+        hemp->elements->constructors, name
+    );
 }
 
 
@@ -194,39 +220,39 @@ hemp_grammar_add_hemp_bravo(
 //    [ '%'       => sig_hash         =>   0, 350 ],      # %foo
 //    [ '.'       => op_dot           => 340,   0 ],      # foo.bar
 
-    HEMP_OPERATOR1("hemp.dotop",                ".",        300,  300);
+    HEMP_OPERATOR1("hemp.dotop",                ".",        200,  200);
 
-    HEMP_OPERATOR1("hemp.number.autoinc",       "++",       295,  295);
-    HEMP_OPERATOR1("hemp.number.autodec",       "--",       295,  295);
-    HEMP_OPERATOR1("hemp.number.power",         "**",       290,    0);
-    HEMP_OPERATOR1("hemp.number.plus",          "+",        275,  285);
-    HEMP_OPERATOR1("hemp.number.minus",         "-",        275,  285);
-    HEMP_OPERATOR1("hemp.number.multiply",      "*",        280,    0);
-    HEMP_OPERATOR1("hemp.number.divide",        "/",        280,    0);
-    HEMP_OPERATOR1("hemp.number.modulus",       "%",        280,    0);
-    HEMP_OPERATOR1("hemp.number.divint",        "/i",       280,    0);
+    HEMP_OPERATOR1("hemp.number.autoinc",       "++",       195,  195);
+    HEMP_OPERATOR1("hemp.number.autodec",       "--",       195,  195);
+    HEMP_OPERATOR1("hemp.number.power",         "**",       190,    0);
+    HEMP_OPERATOR1("hemp.number.plus",          "+",        175,  185);
+    HEMP_OPERATOR1("hemp.number.minus",         "-",        175,  185);
+    HEMP_OPERATOR1("hemp.number.multiply",      "*",        180,    0);
+    HEMP_OPERATOR1("hemp.number.divide",        "/",        180,    0);
+    HEMP_OPERATOR1("hemp.number.modulus",       "%",        180,    0);
+    HEMP_OPERATOR1("hemp.number.divint",        "/i",       180,    0);
 
-    HEMP_OPERATOR1("hemp.text.concat",          "~",        270,  270);
+    HEMP_OPERATOR1("hemp.text.concat",          "~",        170,  170);
                 
-    HEMP_OPERATOR1("hemp.number.compare",       "<=>",      260,    0);
-    HEMP_OPERATOR1("hemp.number.equal",         "==",       260,    0);
-    HEMP_OPERATOR1("hemp.number.not_equal",     "!=",       260,    0);
-    HEMP_OPERATOR1("hemp.number.before",        "<",        260,    0);
-    HEMP_OPERATOR1("hemp.number.not_before",    ">=",       260,    0);
-    HEMP_OPERATOR1("hemp.number.after",         ">",        260,    0);
-    HEMP_OPERATOR1("hemp.number.not_after",     "<=",       260,    0);
+    HEMP_OPERATOR1("hemp.number.compare",       "<=>",      160,    0);
+    HEMP_OPERATOR1("hemp.number.equal",         "==",       160,    0);
+    HEMP_OPERATOR1("hemp.number.not_equal",     "!=",       160,    0);
+    HEMP_OPERATOR1("hemp.number.before",        "<",        160,    0);
+    HEMP_OPERATOR1("hemp.number.not_before",    ">=",       160,    0);
+    HEMP_OPERATOR1("hemp.number.after",         ">",        160,    0);
+    HEMP_OPERATOR1("hemp.number.not_after",     "<=",       160,    0);
 
-    HEMP_OPERATOR1("hemp.text.compare",         "cmp",      260,    0);
-    HEMP_OPERATOR1("hemp.text.equal",           "eq",       260,    0);
-    HEMP_OPERATOR1("hemp.text.not_equal",       "ne",       260,    0);
-    HEMP_OPERATOR1("hemp.text.before",          "lt",       260,    0);
-    HEMP_OPERATOR1("hemp.text.not_before",      "ge",       260,    0);
-    HEMP_OPERATOR1("hemp.text.after",           "gt",       260,    0);
-    HEMP_OPERATOR1("hemp.text.not_after",       "le",       260,    0);
+    HEMP_OPERATOR1("hemp.text.compare",         "cmp",      160,    0);
+    HEMP_OPERATOR1("hemp.text.equal",           "eq",       160,    0);
+    HEMP_OPERATOR1("hemp.text.not_equal",       "ne",       160,    0);
+    HEMP_OPERATOR1("hemp.text.before",          "lt",       160,    0);
+    HEMP_OPERATOR1("hemp.text.not_before",      "ge",       160,    0);
+    HEMP_OPERATOR1("hemp.text.after",           "gt",       160,    0);
+    HEMP_OPERATOR1("hemp.text.not_after",       "le",       160,    0);
 
-    HEMP_OPERATOR1("hemp.boolean.not",          "!",          0,  285);
-    HEMP_OPERATOR1("hemp.boolean.and",          "&&",       255,    0);
-    HEMP_OPERATOR1("hemp.boolean.or",           "||",       250,    0);
+    HEMP_OPERATOR1("hemp.boolean.not",          "!",          0,  185);
+    HEMP_OPERATOR1("hemp.boolean.and",          "&&",       155,    0);
+    HEMP_OPERATOR1("hemp.boolean.or",           "||",       150,    0);
 //  HEMP_OPERATOR1("hemp.boolean.nor",          "!!",       250,    0);
 
 //    [ '..'      => op_range         => 240,   0 ],      # 1 .. 91
@@ -252,13 +278,17 @@ hemp_grammar_add_hemp_bravo(
 //    [ '||='     => bool_or_set      => 200,   0 ],      # foo ||= bar
 //    [ '!!='     => bool_nor_set     => 200,   0 ],      # foo !!= bar
 
-    HEMP_OPERATOR1("hemp.boolean.not",          "not",        0,  190);
-    HEMP_OPERATOR1("hemp.boolean.and",          "and",      180,    0);
-    HEMP_OPERATOR1("hemp.boolean.or",           "or",       170,    0);
-//  HEMP_OPERATOR1("hemp.boolean.nor",          "nor",      170,    0);
+    HEMP_OPERATOR1("hemp.boolean.not",          "not",        0,  120);
+    HEMP_OPERATOR1("hemp.boolean.and",          "and",      115,    0);
+    HEMP_OPERATOR1("hemp.boolean.or",           "or",       110,    0);
+//  HEMP_OPERATOR1("hemp.boolean.nor",          "nor",      110,    0);
 
 //    # grouping constructs...
-//    [ '('       => con_parens       =>   0,   0 ],
+    HEMP_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);
+    HEMP_OPERATOR1("hemp.bracket.end_parens",   ")",          0,    0);
+//  HEMP_OPERATOR2("hemp.bracket.square",       "[", "]",     0,    0);
+//  HEMP_OPERATOR1("hemp.bracket.end_square",   "]",          0,    0);
+
 //    [ '['       => con_list         =>   0,   0 ],
 //    [ '{'       => con_hash         =>   0,   0 ],
 //    

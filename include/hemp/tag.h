@@ -3,6 +3,9 @@
 
 #include <hemp/core.h>
 #include <hemp/element.h>
+#include <hemp/ptree.h>
+#include <hemp/grammar.h>
+#include <hemp/scanner.h>
 
 /*
 #include "hemp/ptree.h"
@@ -29,6 +32,7 @@ struct hemp_tag_s {
    hemp_str_p       start;
    hemp_str_p       end;
    hemp_tag_scan_f  scan;
+   hemp_tag_skip_f  to_end_of_line;
    hemp_grammar_p   grammar;
 };
 
@@ -87,14 +91,33 @@ void
  * function protoypes for builtin tag types
  *--------------------------------------------------------------------------*/
 
-//    hemp_template_t     tmpl,   \
+void        hemp_outline_tag_scanner( HEMP_TAG_SCAN_ARGS );
+hemp_str_p  hemp_outline_tag_to_end_of_line( HEMP_TAG_SKIP_ARGS );
 
-void hemp_scan_inline_tag   ( HEMP_TAG_SCAN_ARGS );
-void hemp_scan_outline_tag  ( HEMP_TAG_SCAN_ARGS );
+void        hemp_inline_tag_scanner( HEMP_TAG_SCAN_ARGS );
+hemp_str_p  hemp_inline_tag_to_end_of_line( HEMP_TAG_SKIP_ARGS );
+
+
+/* These are TODO (change name/implement/cleanup) */
 void hemp_scan_comment_tag  ( HEMP_TAG_SCAN_ARGS );
 void hemp_scan_control_tag  ( HEMP_TAG_SCAN_ARGS );
 void hemp_scan_variable_tag ( HEMP_TAG_SCAN_ARGS );
 void hemp_scan_embed_tag    ( HEMP_TAG_SCAN_ARGS );
+
+
+/*--------------------------------------------------------------------------
+ * macros
+ *--------------------------------------------------------------------------*/
+
+#define hemp_not_newline(src)                   \
+    (   *src != HEMP_LF                         \
+    &&  *src != HEMP_CR                         \
+    )
+
+#define hemp_not_tag_end(src, tag_end, tag_len) \
+    (  *src != *tag_end                         \
+    || strncmp(src, tag_end, tag_len)           \
+    )
 
 
 

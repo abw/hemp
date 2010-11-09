@@ -89,6 +89,8 @@ hemp_grammar_add_symbol(
      */
 
 //  if (! hemp_string_wordlike(start)) {
+    
+    /* No, on second thoughts they can all go in */
         hemp_ptree_store(
             grammar->operators, start, (hemp_mem_p) symbol
         );

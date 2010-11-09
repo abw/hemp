@@ -16,9 +16,9 @@ HEMP_PREFIX_FUNC(hemp_element_literal_prefix) {
         "hemp_element_number_prefix() precedence is %d, parg: %d\n", 
         (*elemptr)->type->lprec, precedence
     );
-    
+
     hemp_element_p element = *elemptr;
-  
+
     if (hemp_has_next(elemptr)) {
         hemp_go_next(elemptr);
         hemp_skip_whitespace(elemptr);

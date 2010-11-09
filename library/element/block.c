@@ -1,34 +1,23 @@
 #include <hemp/element.h>
 
 
-static struct hemp_symbol_s
-    hemp_symbol_block = { 
-        "block",                                /* name                     */
-        NULL,                                   /* start token              */
-        NULL,                                   /* end token                */
-        0,                                      /* flags                    */
-        0, 0,                                   /* l/r precedence           */
-        NULL,                                   /* scanner callback         */
-        &hemp_element_block_clean,              /* cleanup callback         */
-        &hemp_element_not_prefix,               /* prefix expr parser       */      // CHECK ME
-        &hemp_element_not_postfix,              /* parse postfix expr       */
-        &hemp_element_block_token,              /* source token(s)          */
-        &hemp_element_block_source,             /* source code              */
-        &hemp_element_block_text,               /* output text              */
-        &hemp_element_block_value,              /* output value             */
-        &hemp_element_not_number,               /* numeric conversion       */
-        &hemp_element_not_integer,              /* integer conversion       */
-        &hemp_element_not_boolean,              /* boolean conversion       */
-        &hemp_element_not_compare,              /* comparison conversion    */
-    };
+hemp_symbol_p HempSymbolBlock = NULL;
 
-hemp_symbol_p HempSymbolBlock = &hemp_symbol_block;
+
+hemp_symbol_p
+hemp_symbol_block() {
+    hemp_debug_call("hemp_symbol_block()\n");
+    return hemp_element_block_symbol(
+        NULL,
+        hemp_symbol_init("hemp.block", NULL, NULL)
+    );
+}
 
 
 HEMP_SYMBOL_FUNC(hemp_element_block_symbol) {
     symbol->source     = &hemp_element_block_source;
     symbol->text       = &hemp_element_block_text;
-//   symbol->cleanup    = &hemp_element_block_clean;       // FIXME
+    symbol->cleanup    = &hemp_element_block_clean;
     return symbol;
 }
 
