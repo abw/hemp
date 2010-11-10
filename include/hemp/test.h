@@ -252,8 +252,7 @@ hemp_uint_t
     hemp_test_plan(n)
 
 #define done()              \
-    hemp_test_done(NULL);   \
-    hemp_mem_trace_ok();
+    hemp_test_all_done(NULL)
 
 
 #endif /* HEMP_TEST_H */

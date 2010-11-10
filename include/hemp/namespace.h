@@ -18,23 +18,17 @@ struct hemp_namespace_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
+void 
+    hemp_global_namespace_init();
+
+void 
+    hemp_global_namespace_free();
+
 hemp_namespace_p
     hemp_namespace_init(
         hemp_p      hemp,
         hemp_u16_t  id,
         hemp_str_p  name
-    );
-
-hemp_bool_t
-    hemp_namespace_free_child(
-        hemp_hash_p     namespaces,
-        hemp_pos_t      position,
-        hemp_slot_p     item
-    );
-
-void
-    hemp_namespace_free(
-        hemp_namespace_p namespace
     );
 
 hemp_namespace_p
@@ -45,6 +39,25 @@ hemp_namespace_p
         hemp_namespace_p parent
     );
 
+hemp_namespace_p
+    hemp_resolve_namespace(
+        hemp_p           hemp,
+        hemp_str_p       fullname
+    );
+
+void
+    hemp_namespace_free(
+        hemp_namespace_p namespace
+    );
+
+hemp_bool_t
+    hemp_namespace_free_child(
+        hemp_hash_p     namespaces,
+        hemp_pos_t      position,
+        hemp_slot_p     item
+    );
+
+
 
 /*--------------------------------------------------------------------------
  * macros
@@ -54,10 +67,18 @@ hemp_namespace_p
     (++hemp->namespace_id)
 
 
-#define hemp_namespace(hemp, name)                              \
+#define hemp_root_namespace(hemp, name)                         \
     hemp_namespace_instance(                                    \
         hemp, hemp->namespaces, name, NULL                      \
     )
+
+#define hemp_namespace(hemp, name) (                            \
+    strchr(name, HEMP_DOT)                                      \
+        ? hemp_resolve_namespace(hemp, name)                    \
+        : hemp_root_namespace(hemp, name)                       \
+)
+
+
 
 #define hemp_namespace_child(namespace, name)                   \
     hemp_namespace_instance(                                    \

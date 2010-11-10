@@ -1,6 +1,26 @@
 #include <hemp/namespace.h>
 
+void hemp_global_namespace_init() {
+    /* return silently if we've already done this */
+    if (hemp_global.namespaces)
+        return;
 
+    hemp_global.namespace_id = 0;
+    hemp_global.namespaces   = hemp_hash_init();
+}
+
+
+void hemp_global_namespace_free() {
+    /* return silently if this has already been done */
+    if (! hemp_global.namespaces)
+        return;
+
+    hemp_global.namespace_id = 0;
+    hemp_hash_free(hemp_global.namespaces);
+    hemp_global.namespaces = NULL;
+}
+
+    
 hemp_namespace_p
 hemp_namespace_init(
     hemp_p      hemp,
@@ -22,6 +42,7 @@ hemp_namespace_init(
 
     return namespace;
 }
+
 
 hemp_namespace_p
 hemp_namespace_instance(
@@ -54,6 +75,27 @@ hemp_namespace_instance(
     }
 
     return child;
+}
+
+
+hemp_namespace_p
+hemp_resolve_namespace(
+    hemp_p           hemp,
+    hemp_str_p       fullname
+) {
+    hemp_list_p      names = hemp_string_split(fullname, HEMP_STR_DOT);
+    hemp_str_p       name  = hemp_val_str( hemp_list_item(names, 0) );
+    hemp_namespace_p space = hemp_namespace(hemp, name);
+    hemp_size_t      n;
+    
+    for (n = 1; n < names->length; n++) {
+        name  = hemp_val_str( hemp_list_item(names, n) );
+        space = hemp_namespace_child(space, name);
+    }
+
+    hemp_list_free(names);
+
+    return space;
 }
 
 

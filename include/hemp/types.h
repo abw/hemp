@@ -109,8 +109,6 @@ struct hemp_s {
 //  hemp_hash_p      tags;
     hemp_hash_p      templates;
     hemp_dialect_p   dialect;
-    hemp_u16_t       namespace_id;
-    hemp_hash_p      namespaces;
 
     hemp_bool_t      verbose;
     hemp_bool_t      debug;
@@ -127,6 +125,8 @@ struct hemp_s {
 
 struct hemp_global_s {
     hemp_size_t     n_hemps;
+    hemp_u16_t      namespace_id;
+    hemp_hash_p     namespaces;
 };
 
 

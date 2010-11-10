@@ -11,6 +11,7 @@
 
 /* symbol vtable */
 
+
 struct hemp_symbol_s {
     hemp_str_p      name;
 

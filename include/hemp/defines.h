@@ -18,6 +18,7 @@
 #define HEMP_LF             10
 #define HEMP_CR             13
 #define HEMP_NUL            '\0'
+#define HEMP_DOT            '.'
 #define HEMP_SQUOTE         '\''
 #define HEMP_DQUOTE         '"'
 #define HEMP_COMMENT        '#'

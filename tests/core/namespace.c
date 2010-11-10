@@ -6,7 +6,7 @@ void test_namespace();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(9);
+    plan(17);
     test_namespace();
     return done();
 }
@@ -28,7 +28,33 @@ void test_namespace() {
     ok( bar->parent == foo, "bar parent is foo" );
     is( bar->parent->name, "foo", "bar's parent is foo" );
     eq( bar->id, 2, "bar id is 1" );
-    
+
+    hemp_namespace_p foobar = hemp_namespace(hemp, "foo.bar");
+    ok( foobar, "fetched foo.bar namespace" );
+    ok( foobar->id == bar->id, "foo.bar id is correct" );
+
+    hemp_namespace_p wam = hemp_namespace(hemp, "foo.bar.baz.wam");
+    ok( wam, "fetched foo.bar.baz.wam namespace" );
+    ok( 
+        wam->parent->parent->id == bar->id, 
+        "foo.bar.baz.wam has correct grandparent" 
+    );
+
+    hemp_namespace_p bam = hemp_namespace(hemp, "foo.bar.baz.bam");
+    ok( bam, "fetched foo.bar.baz.bam namespace" );
+    ok( 
+        bam->parent->parent->id == bar->id, 
+        "foo.bar.baz.bam has correct grandparent" 
+    );
+    ok( 
+        wam->parent->id == bam->parent->id, 
+        "wam and bam have same parent" 
+    );
+    is( 
+        wam->parent->name, "baz",
+        "wam and bam's parent is baz"
+    );
+
     hemp_free(hemp);
 }
 

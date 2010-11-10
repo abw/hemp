@@ -338,6 +338,15 @@ hemp_test_done(
 }
 
 
+int
+hemp_test_all_done(
+    hemp_test_plan_p plan
+) {
+    int result = hemp_test_done(plan);
+    hemp_mem_trace_ok();
+    return result;
+}
+
 
 void
 hemp_test_warning(
