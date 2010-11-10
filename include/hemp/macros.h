@@ -406,27 +406,24 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  *--------------------------------------------------------------------------*/
 
 #define HEMP_VIEW_ARGS                      \
-    hemp_view_p     view,                   \
+    hemp_viewer_p   viewer,                 \
     hemp_element_p  element,                \
     hemp_context_p  context,                \
     hemp_value_t    output
 
 #define HEMP_VIEW_ARG_NAMES                 \
-    view, element, context, output
+    viewer, element, context, output
 
 #define HEMP_VIEW_FUNC(f)                   \
     HEMP_INLINE hemp_value_t f(             \
         HEMP_VIEW_ARGS                      \
     )
 
-#define HEMP_VIEW(name, constructor)        \
-    hemp_register_view(hemp, name, (hemp_actor_f) constructor);
-
 #define HEMP_VIEWER(name, constructor)        \
-    hemp_register_view(hemp, name, (hemp_actor_f) constructor);
+    hemp_register_viewer(hemp, name, (hemp_actor_f) constructor);
 
 #define HEMP_VIEWER_FUNC(f)                 \
-    hemp_view_p f(                          \
+    hemp_viewer_p f(                        \
         hemp_p     hemp,                    \
         hemp_str_p name                     \
     )

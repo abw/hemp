@@ -1,19 +1,19 @@
 #include <hemp/test.h>
 
 
-void test_view();
+void test_viewer();
 
 int main(
     int argc, char **argv, char **env
 ) {
     plan(15);
-    test_view();
+    test_viewer();
     return done();
 }
 
 
 
-void test_view() {
+void test_viewer() {
     hemp_p hemp = hemp_init();
     ok( hemp, "created hemp object" );
 
@@ -28,11 +28,11 @@ void test_view() {
     ok( context, "created hemp context" );
     ok( hemp_context_set_string(context, "name", "World"), "set name" );
 
-    hemp_view_p text = hemp_view(hemp, "text");
+    hemp_viewer_p text = hemp_viewer(hemp, "text");
     ok( text, "created text view" );
     is( text->name, "text", "name is set: text" );
 
-    text = hemp_view(hemp, "text");
+    text = hemp_viewer(hemp, "text");
     ok( text, "fetched text view again" );
 
 //    hemp_view_free(text);
@@ -52,7 +52,7 @@ void test_view() {
     hemp_element_p root = hemp_template_tree(tmpl);
     ok( root, "got root element: %p", root);
 
-    hemp_value_t result = hemp_view_element(text, root, context, HempNothing);
+    hemp_value_t result = hemp_viewer_element(text, root, context, HempNothing);
 
     hemp_context_free(context);
     hemp_free(hemp);

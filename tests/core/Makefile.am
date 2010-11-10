@@ -1,4 +1,4 @@
-check_PROGRAMS  =   namespace view
+check_PROGRAMS  =   namespace viewer
 
 #check_PROGRAMS  =   action      \
 #                    context     \
@@ -22,7 +22,7 @@ check_PROGRAMS  =   namespace view
 #                    type        \
 #                    utils       \
 #                    value       \
-#                    view
+#                    viewer
  
 TESTS           = $(check_PROGRAMS)
 LDADD           = ../../library/libhemp.la

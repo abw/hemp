@@ -102,8 +102,8 @@ am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-context.lo \
 	type/libhemp_la-hash.lo type/libhemp_la-list.lo \
 	type/libhemp_la-number.lo type/libhemp_la-object.lo \
 	type/libhemp_la-string.lo type/libhemp_la-text.lo \
-	libhemp_la-utils.lo libhemp_la-value.lo libhemp_la-view.lo \
-	view/libhemp_la-text.lo
+	libhemp_la-utils.lo libhemp_la-value.lo libhemp_la-viewer.lo \
+	viewer/libhemp_la-text.lo
 libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
 libhemp_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libhemp_la_CFLAGS) \
@@ -313,8 +313,8 @@ libhemp_la_SOURCES = action.c            \
                         type/text.c         \
                         utils.c             \
                         value.c             \
-                        view.c              \
-                        view/text.c
+                        viewer.c            \
+                        viewer/text.c
 
 all: all-am
 
@@ -461,14 +461,14 @@ type/libhemp_la-string.lo: type/$(am__dirstamp) \
 	type/$(DEPDIR)/$(am__dirstamp)
 type/libhemp_la-text.lo: type/$(am__dirstamp) \
 	type/$(DEPDIR)/$(am__dirstamp)
-view/$(am__dirstamp):
-	@$(MKDIR_P) view
-	@: > view/$(am__dirstamp)
-view/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) view/$(DEPDIR)
-	@: > view/$(DEPDIR)/$(am__dirstamp)
-view/libhemp_la-text.lo: view/$(am__dirstamp) \
-	view/$(DEPDIR)/$(am__dirstamp)
+viewer/$(am__dirstamp):
+	@$(MKDIR_P) viewer
+	@: > viewer/$(am__dirstamp)
+viewer/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) viewer/$(DEPDIR)
+	@: > viewer/$(DEPDIR)/$(am__dirstamp)
+viewer/libhemp_la-text.lo: viewer/$(am__dirstamp) \
+	viewer/$(DEPDIR)/$(am__dirstamp)
 libhemp.la: $(libhemp_la_OBJECTS) $(libhemp_la_DEPENDENCIES) 
 	$(libhemp_la_LINK) -rpath $(libdir) $(libhemp_la_OBJECTS) $(libhemp_la_LIBADD) $(LIBS)
 
@@ -530,8 +530,8 @@ mostlyclean-compile:
 	-rm -f type/libhemp_la-string.lo
 	-rm -f type/libhemp_la-text.$(OBJEXT)
 	-rm -f type/libhemp_la-text.lo
-	-rm -f view/libhemp_la-text.$(OBJEXT)
-	-rm -f view/libhemp_la-text.lo
+	-rm -f viewer/libhemp_la-text.$(OBJEXT)
+	-rm -f viewer/libhemp_la-text.lo
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -566,7 +566,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-type.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-utils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-value.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-view.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-viewer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-block.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-boolean.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-bracket.Plo@am__quote@
@@ -595,7 +595,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-object.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-string.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-text.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@view/$(DEPDIR)/libhemp_la-text.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@viewer/$(DEPDIR)/libhemp_la-text.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -1027,19 +1027,19 @@ libhemp_la-value.lo: value.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-value.lo `test -f 'value.c' || echo '$(srcdir)/'`value.c
 
-libhemp_la-view.lo: view.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-view.lo -MD -MP -MF $(DEPDIR)/libhemp_la-view.Tpo -c -o libhemp_la-view.lo `test -f 'view.c' || echo '$(srcdir)/'`view.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-view.Tpo $(DEPDIR)/libhemp_la-view.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='view.c' object='libhemp_la-view.lo' libtool=yes @AMDEPBACKSLASH@
+libhemp_la-viewer.lo: viewer.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-viewer.lo -MD -MP -MF $(DEPDIR)/libhemp_la-viewer.Tpo -c -o libhemp_la-viewer.lo `test -f 'viewer.c' || echo '$(srcdir)/'`viewer.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-viewer.Tpo $(DEPDIR)/libhemp_la-viewer.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='viewer.c' object='libhemp_la-viewer.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-view.lo `test -f 'view.c' || echo '$(srcdir)/'`view.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-viewer.lo `test -f 'viewer.c' || echo '$(srcdir)/'`viewer.c
 
-view/libhemp_la-text.lo: view/text.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT view/libhemp_la-text.lo -MD -MP -MF view/$(DEPDIR)/libhemp_la-text.Tpo -c -o view/libhemp_la-text.lo `test -f 'view/text.c' || echo '$(srcdir)/'`view/text.c
-@am__fastdepCC_TRUE@	$(am__mv) view/$(DEPDIR)/libhemp_la-text.Tpo view/$(DEPDIR)/libhemp_la-text.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='view/text.c' object='view/libhemp_la-text.lo' libtool=yes @AMDEPBACKSLASH@
+viewer/libhemp_la-text.lo: viewer/text.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT viewer/libhemp_la-text.lo -MD -MP -MF viewer/$(DEPDIR)/libhemp_la-text.Tpo -c -o viewer/libhemp_la-text.lo `test -f 'viewer/text.c' || echo '$(srcdir)/'`viewer/text.c
+@am__fastdepCC_TRUE@	$(am__mv) viewer/$(DEPDIR)/libhemp_la-text.Tpo viewer/$(DEPDIR)/libhemp_la-text.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='viewer/text.c' object='viewer/libhemp_la-text.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o view/libhemp_la-text.lo `test -f 'view/text.c' || echo '$(srcdir)/'`view/text.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o viewer/libhemp_la-text.lo `test -f 'viewer/text.c' || echo '$(srcdir)/'`viewer/text.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -1050,7 +1050,7 @@ clean-libtool:
 	-rm -rf language/.libs language/_libs
 	-rm -rf tag/.libs tag/_libs
 	-rm -rf type/.libs type/_libs
-	-rm -rf view/.libs view/_libs
+	-rm -rf viewer/.libs viewer/_libs
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -1170,8 +1170,8 @@ distclean-generic:
 	-rm -f tag/$(am__dirstamp)
 	-rm -f type/$(DEPDIR)/$(am__dirstamp)
 	-rm -f type/$(am__dirstamp)
-	-rm -f view/$(DEPDIR)/$(am__dirstamp)
-	-rm -f view/$(am__dirstamp)
+	-rm -f viewer/$(DEPDIR)/$(am__dirstamp)
+	-rm -f viewer/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -1182,7 +1182,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) tag/$(DEPDIR) type/$(DEPDIR) view/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) tag/$(DEPDIR) type/$(DEPDIR) viewer/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -1228,7 +1228,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) tag/$(DEPDIR) type/$(DEPDIR) view/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) tag/$(DEPDIR) type/$(DEPDIR) viewer/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

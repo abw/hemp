@@ -84,7 +84,7 @@ typedef struct hemp_template_s  * hemp_template_p;
 typedef struct hemp_text_s      * hemp_text_p;
 typedef struct hemp_type_s      * hemp_type_p;
 typedef struct hemp_variable_s  * hemp_variable_p;
-typedef struct hemp_view_s      * hemp_view_p;
+typedef struct hemp_viewer_s    * hemp_viewer_p;
 //typedef union  hemp_value_t     * hemp_value_p;
 
 
@@ -106,7 +106,7 @@ struct hemp_s {
     hemp_factory_p   elements;
     hemp_factory_p   grammars;
     hemp_factory_p   dialects;
-    hemp_factory_p   views;
+    hemp_factory_p   viewers;
 
     hemp_hash_p      schemes;
 //  hemp_hash_p      tags;
@@ -296,7 +296,7 @@ typedef hemp_value_t
 
 typedef hemp_value_t 
     (* hemp_view_f)(
-        hemp_view_p     view,       /* pointer to view                      */
+        hemp_viewer_p   view,       /* pointer to viewer                    */
         hemp_element_p  element,    /* pointer to element                   */
         hemp_context_p  context,    /* runtime context                      */
         hemp_value_t    output      /* optional output buffer               */

@@ -58,8 +58,8 @@ libhemp_la_SOURCES  =   action.c            \
                         type/text.c         \
                         utils.c             \
                         value.c             \
-                        view.c              \
-                        view/text.c
+                        viewer.c            \
+                        viewer/text.c
 
 # these ones have to stay behind after school
 #                       module.c            \

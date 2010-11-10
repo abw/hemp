@@ -67,14 +67,14 @@ hemp_init() {
     hemp->dialects      = hemp_factory_init();
     hemp->grammars      = hemp_factory_init();
     hemp->elements      = hemp_factory_init();
-    hemp->views         = hemp_factory_init();
+    hemp->viewers       = hemp_factory_init();
 
     /* install the cleaners to automatically tidy up */
     hemp->languages->cleaner = &hemp_free_language;
     hemp->dialects->cleaner  = &hemp_free_dialect;
     hemp->grammars->cleaner  = &hemp_free_grammar;
     hemp->elements->cleaner  = &hemp_free_element;
-    hemp->views->cleaner     = &hemp_free_view;
+    hemp->viewers->cleaner   = &hemp_free_viewer;
 
     hemp_init_schemes(hemp);
     hemp_init_templates(hemp);
@@ -88,7 +88,7 @@ hemp_init() {
     hemp_language_p language = hemp_language(hemp, "hemp");
 //  debug_magenta("LANGUAGE: %s v%0.2f\n", language->name, language->version);
 
-    HEMP_VIEWER("text", &hemp_view_text_init);
+    HEMP_VIEWER("text", &hemp_viewer_text_init);
 
     return hemp;
 }
@@ -180,8 +180,8 @@ hemp_free(
     //  hemp_hash_free(hemp->tags);
 
     /* free factories */
-//  hemp_debug("freeing view factory\n");
-    hemp_factory_free(hemp->views);
+//  hemp_debug("freeing viewer factory\n");
+    hemp_factory_free(hemp->viewers);
 //  hemp_debug("freeing elements factory\n");
     hemp_factory_free(hemp->elements);
 //  hemp_debug("freeing grammars factory\n");
@@ -282,12 +282,12 @@ hemp_free_element(
 
 
 hemp_bool_t
-hemp_free_view(
-    hemp_hash_p views,
+hemp_free_viewer(
+    hemp_hash_p viewers,
     hemp_pos_t  position,
     hemp_slot_p item
 ) {
-    hemp_view_free( (hemp_view_p) hemp_val_ptr(item->value) );
+    hemp_viewer_free( (hemp_viewer_p) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
