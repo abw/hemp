@@ -42,6 +42,7 @@ tests/core/ptree
 tests/core/type
 tests/core/utils
 tests/core/value
+tests/core/view
 
 tests/type/hash
 tests/type/list

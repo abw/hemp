@@ -48,8 +48,14 @@ hemp_bool_t
 
 hemp_bool_t
     hemp_template_compile(
-        hemp_template_p
+        hemp_template_p tmpl
     );
+    
+hemp_element_p
+    hemp_template_tree(
+        hemp_template_p tmpl
+    );
+
 
 hemp_text_p
     hemp_template_render(

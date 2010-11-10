@@ -25,8 +25,9 @@
 #include <hemp/memory.h>            /* memory managment                     */
 #include <hemp/utils.h>             /* misc utils                           */
 #include <hemp/macros.h>            /* macros sprinkling syntactic sugar    */
+//#include <hemp/view.h>              /* view object to render documents      */
 #include <hemp/type/string.h>       /* functions for handling C strings     */
 
- extern struct hemp_global_s hemp_global;
+extern struct hemp_global_s hemp_global;
 
 #endif /* HEMP_CORE_H */

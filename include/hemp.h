@@ -27,6 +27,7 @@ extern "C" {
 #include <hemp/tagset.h>
 #include <hemp/template.h>
 #include <hemp/value.h>
+#include <hemp/view.h>
 #include <hemp/macros.h>
 #include <hemp/type/text.h>
 #include <hemp/type/list.h>
@@ -56,6 +57,7 @@ hemp_bool_t     hemp_free_dialect(  hemp_hash_p, hemp_pos_t, hemp_slot_p);
 hemp_bool_t     hemp_free_grammar(  hemp_hash_p, hemp_pos_t, hemp_slot_p);
 hemp_bool_t     hemp_free_element(  hemp_hash_p, hemp_pos_t, hemp_slot_p);
 hemp_bool_t     hemp_free_template( hemp_hash_p, hemp_pos_t, hemp_slot_p);
+hemp_bool_t     hemp_free_view(     hemp_hash_p, hemp_pos_t, hemp_slot_p);
 
 /* scheme functions */
 void            hemp_add_scheme(hemp_p, hemp_scheme_p);
@@ -179,6 +181,25 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
         );                                                                  \
         if (! _dial) hemp_throw(hemp, HEMP_ERROR_INVALID, "dialect", name); \
         _dial;                                                              \
+    })
+
+
+/* view macros */
+
+#define hemp_register_view(hemp,name,constructor)           \
+    hemp_factory_register(                                  \
+        hemp->views,                                        \
+        name,                                               \
+        constructor,                                        \
+        hemp                                                \
+    )
+
+#define hemp_view(hemp,name) ({                                             \
+        hemp_view_p _view = (hemp_view_p) hemp_factory_instance(            \
+            hemp->views, name                                               \
+        );                                                                  \
+        if (! _view) hemp_throw(hemp, HEMP_ERROR_INVALID, "view", name);    \
+        _view;                                                              \
     })
 
 

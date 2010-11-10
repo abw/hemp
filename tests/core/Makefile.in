@@ -33,7 +33,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = namespace$(EXEEXT)
+check_PROGRAMS = namespace$(EXEEXT) view$(EXEEXT)
 subdir = tests/core
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -55,6 +55,10 @@ namespace_SOURCES = namespace.c
 namespace_OBJECTS = namespace.$(OBJEXT)
 namespace_LDADD = $(LDADD)
 namespace_DEPENDENCIES = ../../library/libhemp.la
+view_SOURCES = view.c
+view_OBJECTS = view.$(OBJEXT)
+view_LDADD = $(LDADD)
+view_DEPENDENCIES = ../../library/libhemp.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/hemp
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -68,8 +72,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = namespace.c
-DIST_SOURCES = namespace.c
+SOURCES = namespace.c view.c
+DIST_SOURCES = namespace.c view.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -240,7 +244,8 @@ top_srcdir = @top_srcdir@
 #                    template    \
 #                    type        \
 #                    utils       \
-#                    value
+#                    value       \
+#                    view
 TESTS = $(check_PROGRAMS)
 LDADD = ../../library/libhemp.la
 all: all-am
@@ -289,6 +294,9 @@ clean-checkPROGRAMS:
 namespace$(EXEEXT): $(namespace_OBJECTS) $(namespace_DEPENDENCIES) 
 	@rm -f namespace$(EXEEXT)
 	$(LINK) $(namespace_OBJECTS) $(namespace_LDADD) $(LIBS)
+view$(EXEEXT): $(view_OBJECTS) $(view_DEPENDENCIES) 
+	@rm -f view$(EXEEXT)
+	$(LINK) $(view_OBJECTS) $(view_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -297,6 +305,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/namespace.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/view.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

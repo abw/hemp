@@ -111,10 +111,10 @@ An incomplete list of things TODO, in no particular order.
   
 -- NOV 2010 --
 
-* Add namespace object so hemp.foo.bar.baz can be represented as a tree, with
-  each namespace object being assigned a unique id.
+* Create view object to walk element tree using symbol->namespace->id,
+  following parent.
 
-* Function(s) to resolve namespace tree from a namespace string.
+* Rename view to viewer.
 
 * Change grammar definitions to fit hierarchy corresponding to operator type
   e.g. hemp.operator.binary.number.add allows a single view method to be
