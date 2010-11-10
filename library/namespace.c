@@ -1,29 +1,33 @@
 #include <hemp/namespace.h>
 
-void hemp_global_namespace_init() {
+void hemp_global_namespace_init(
+    hemp_global_p global
+) {
     /* return silently if we've already done this */
-    if (hemp_global.namespaces)
+    if (global->namespaces)
         return;
 
-    hemp_global.namespace_id = 0;
-    hemp_global.namespaces   = hemp_hash_init();
+    global->namespace_id = 0;
+    global->namespaces   = hemp_hash_init();
 }
 
 
-void hemp_global_namespace_free() {
+void hemp_global_namespace_free(
+    hemp_global_p global
+) {
     /* return silently if this has already been done */
-    if (! hemp_global.namespaces)
+    if (! global->namespaces)
         return;
 
-    hemp_global.namespace_id = 0;
-    hemp_hash_free(hemp_global.namespaces);
-    hemp_global.namespaces = NULL;
+    hemp_hash_each(global->namespaces, &hemp_namespace_free_child);
+    hemp_hash_free(global->namespaces);
+    global->namespaces   = NULL;
+    global->namespace_id = 0;
 }
 
     
 hemp_namespace_p
 hemp_namespace_init(
-    hemp_p      hemp,
     hemp_u16_t  id,
     hemp_str_p  name
 ) {
@@ -34,7 +38,6 @@ hemp_namespace_init(
     if (! namespace)
         hemp_mem_fail("namespace");
 
-    namespace->hemp     = hemp;
     namespace->id       = id;
     namespace->name     = hemp_string_clone(name, "namespace name");
     namespace->children = hemp_hash_init();
@@ -46,7 +49,6 @@ hemp_namespace_init(
 
 hemp_namespace_p
 hemp_namespace_instance(
-    hemp_p           hemp,
     hemp_hash_p      hash,
     hemp_str_p       name,
     hemp_namespace_p parent
@@ -59,8 +61,7 @@ hemp_namespace_instance(
 
     if (hemp_is_missing(value)) {
         child = hemp_namespace_init(
-            hemp,
-            hemp_namespace_next_id(hemp),
+            hemp_namespace_next_id(),
             name
         );
         child->parent = parent;
@@ -80,12 +81,11 @@ hemp_namespace_instance(
 
 hemp_namespace_p
 hemp_resolve_namespace(
-    hemp_p           hemp,
     hemp_str_p       fullname
 ) {
     hemp_list_p      names = hemp_string_split(fullname, HEMP_STR_DOT);
     hemp_str_p       name  = hemp_val_str( hemp_list_item(names, 0) );
-    hemp_namespace_p space = hemp_namespace(hemp, name);
+    hemp_namespace_p space = hemp_namespace_root(name);
     hemp_size_t      n;
     
     for (n = 1; n < names->length; n++) {

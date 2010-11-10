@@ -27,4 +27,6 @@
 #include <hemp/macros.h>            /* macros sprinkling syntactic sugar    */
 #include <hemp/type/string.h>       /* functions for handling C strings     */
 
+ extern struct hemp_global_s hemp_global;
+
 #endif /* HEMP_CORE_H */

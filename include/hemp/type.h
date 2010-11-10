@@ -74,32 +74,37 @@ extern hemp_type_p hemp_global_types[HEMP_TYPES_SIZE];
 
 hemp_type_p
     hemp_type_init(
-        hemp_int_t id,
-        hemp_str_p name
+        hemp_int_t      id,
+        hemp_str_p      name
     );
 
 hemp_type_p 
     hemp_type_subtype(
-        hemp_type_p base,
-        hemp_int_t  id,
-        hemp_str_p  name
+        hemp_type_p     base,
+        hemp_int_t      id,
+        hemp_str_p      name
     );
 
 void
     hemp_type_free(
-        hemp_type_p
+        hemp_type_p     type
     );
 
 hemp_type_p
     hemp_use_type(
-        hemp_str_p  name,
-        hemp_type_f constructor
+        hemp_str_p      name,
+        hemp_type_f     constructor
     );
 
 
-void hemp_global_types_init();
-void hemp_global_types_free();
+void 
+    hemp_global_types_init(
+        hemp_global_p   global
+    );
 
+void hemp_global_types_free(
+        hemp_global_p   global
+    );
 
 
 HEMP_TYPE_FUNC(hemp_type_type);

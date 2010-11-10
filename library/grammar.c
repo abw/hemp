@@ -44,9 +44,6 @@ hemp_grammar_new_symbol(
     if (! constructor)
         hemp_throw(grammar->hemp, HEMP_ERROR_INVALID, "element", etype);
 
-    hemp_namespace_p namespace = hemp_namespace( grammar->hemp, etype );
-    hemp_debug("got namespace #%d for %s\n", namespace->id, etype);
-
     hemp_symbol_p symbol = hemp_symbol_init(
         etype, start, end
     );

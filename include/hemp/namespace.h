@@ -6,7 +6,6 @@
 
 
 struct hemp_namespace_s {
-    hemp_p              hemp;
     hemp_u16_t          id;
     hemp_str_p          name;
     hemp_namespace_p    parent;
@@ -19,21 +18,23 @@ struct hemp_namespace_s {
  *--------------------------------------------------------------------------*/
 
 void 
-    hemp_global_namespace_init();
+    hemp_global_namespace_init(
+        hemp_global_p   global
+    );
 
 void 
-    hemp_global_namespace_free();
+    hemp_global_namespace_free(
+        hemp_global_p   global
+    );
 
 hemp_namespace_p
     hemp_namespace_init(
-        hemp_p      hemp,
-        hemp_u16_t  id,
-        hemp_str_p  name
+        hemp_u16_t      id,
+        hemp_str_p      name
     );
 
 hemp_namespace_p
     hemp_namespace_instance(
-        hemp_p           hemp,
         hemp_hash_p      hash,
         hemp_str_p       name,
         hemp_namespace_p parent
@@ -41,7 +42,6 @@ hemp_namespace_p
 
 hemp_namespace_p
     hemp_resolve_namespace(
-        hemp_p           hemp,
         hemp_str_p       fullname
     );
 
@@ -63,26 +63,24 @@ hemp_bool_t
  * macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_namespace_next_id(hemp)                            \
-    (++hemp->namespace_id)
+#define hemp_namespace_next_id()                                \
+    (++hemp_global.namespace_id)
 
 
-#define hemp_root_namespace(hemp, name)                         \
+#define hemp_namespace_root(name)                               \
     hemp_namespace_instance(                                    \
-        hemp, hemp->namespaces, name, NULL                      \
+        hemp_global.namespaces, name, NULL                      \
     )
 
-#define hemp_namespace(hemp, name) (                            \
+#define hemp_namespace(name) (                                  \
     strchr(name, HEMP_DOT)                                      \
-        ? hemp_resolve_namespace(hemp, name)                    \
-        : hemp_root_namespace(hemp, name)                       \
+        ? hemp_resolve_namespace(name)                          \
+        : hemp_namespace_root(name)                             \
 )
-
-
 
 #define hemp_namespace_child(namespace, name)                   \
     hemp_namespace_instance(                                    \
-        namespace->hemp, namespace->children, name, namespace   \
+        namespace->children, name, namespace                    \
     )
 
 

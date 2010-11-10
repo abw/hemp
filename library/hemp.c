@@ -15,9 +15,9 @@ hemp_size_t
 hemp_global_init() {
     if (! hemp_global.n_hemps++) {
         hemp_debug_init("Initialising global hemp data\n");
-        hemp_global_namespace_init();
-        hemp_global_types_init();
-        hemp_global_symbols_init();
+        hemp_global_namespace_init(&hemp_global);
+        hemp_global_types_init(&hemp_global);
+        hemp_global_symbols_init(&hemp_global);
     }
     
     hemp_debug_init(
@@ -38,9 +38,9 @@ hemp_global_free() {
 
     if (! --hemp_global.n_hemps) {
         hemp_debug_init("Releasing global hemp data\n");
-        hemp_global_types_free();
-        hemp_global_symbols_free();
-        hemp_global_namespace_free();
+        hemp_global_types_free(&hemp_global);
+        hemp_global_symbols_free(&hemp_global);
+        hemp_global_namespace_free(&hemp_global);
     }
 
     return hemp_global.n_hemps;
@@ -67,8 +67,6 @@ hemp_init() {
     hemp->dialects      = hemp_factory_init();
     hemp->grammars      = hemp_factory_init();
     hemp->elements      = hemp_factory_init();
-    hemp->namespaces    = hemp_hash_init();
-    hemp->namespace_id  = 0;
 
     /* install the cleaners to automatically tidy up */
     hemp->languages->cleaner = &hemp_free_language;
@@ -191,11 +189,6 @@ hemp_free(
 //  hemp_debug("freeing schemes\n");
     hemp_hash_each(hemp->schemes, &hemp_free_scheme);
     hemp_hash_free(hemp->schemes);
-
-    /* namespaces */
-//  hemp_debug("freeing namespaces\n");
-    hemp_hash_each(hemp->namespaces, &hemp_namespace_free_child);
-    hemp_hash_free(hemp->namespaces);
 
     /* free parent jump buffer, discard all others (statically allocated) */
     hemp_jump_p j = hemp->jump;

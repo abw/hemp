@@ -19,7 +19,8 @@ hemp_symbol_init(
     if (! symbol)
         hemp_mem_fail("symbol");
 
-    symbol->name    = name;    // should be const?
+    symbol->name      = name;    // should be const?
+    symbol->namespace = hemp_namespace(name);
     symbol->flags   = 0;
     symbol->lprec   = 0;
     symbol->rprec   = 0;
@@ -86,7 +87,9 @@ hemp_symbol_free(
  *--------------------------------------------------------------------------*/
 
 void
-hemp_global_symbols_init() {
+hemp_global_symbols_init(
+    hemp_global_p   global
+) {
     hemp_debug_call("hemp_global_symbols_init()\n");
     hemp_int_t n;
 
@@ -109,7 +112,9 @@ hemp_global_symbols_init() {
 
 
 void
-hemp_global_symbols_free() {
+hemp_global_symbols_free(
+    hemp_global_p   global
+) {
     hemp_debug_call("hemp_global_symbols_free()\n");
     hemp_symbol_free(HempSymbolSpace);      HempSymbolSpace     = NULL;
     hemp_symbol_free(HempSymbolComment);    HempSymbolComment   = NULL;

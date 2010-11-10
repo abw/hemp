@@ -1,6 +1,7 @@
 #ifndef HEMP_SYMBOL_H
 #define HEMP_SYMBOL_H
 
+#include <hemp/namespace.h>
 #include <hemp/type.h>
 #include <hemp/type/text.h>
 
@@ -13,7 +14,8 @@
 
 
 struct hemp_symbol_s {
-    hemp_str_p      name;
+    hemp_str_p       name;          /* old */
+    hemp_namespace_p namespace;     /* new */
 
     /* symbol metadata */
     hemp_str_p      start;

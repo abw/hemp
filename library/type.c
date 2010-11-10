@@ -83,7 +83,9 @@ hemp_type_free(
  *--------------------------------------------------------------------------*/
 
 void
-hemp_global_types_init() {
+hemp_global_types_init(
+    hemp_global_p   global
+) {
     hemp_debug_call("hemp_global_types_init()\n");
     hemp_int_t n;
 
@@ -142,7 +144,9 @@ hemp_global_types_init() {
 
 
 void
-hemp_global_types_free() {
+hemp_global_types_free(
+    hemp_global_p   global
+) {
     hemp_debug_call("hemp_global_types_free()\n");
     hemp_int_t  n;
     hemp_type_p t;
