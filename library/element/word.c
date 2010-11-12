@@ -48,7 +48,6 @@ HEMP_PREFIX_FUNC(hemp_element_word_prefix) {
 
 HEMP_EVAL_FUNC(hemp_element_word_value) {
     hemp_debug_call("hemp_element_word_value()\n");
-    hemp_debug("hemp_element_word_value()\n");
 
     if (hemp_has_flag(element, HEMP_BE_FIXED)) {
         return element->type->token(element, context, HempNothing);

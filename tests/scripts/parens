@@ -3,8 +3,6 @@
 -- expect
 420
 
--- stop --
-
 -- test parens for precedence
 [% ((3 + 1) * (6 + 4) + 2) * (3 + 7) %]
 -- expect
@@ -14,3 +12,24 @@
 [% (3 + 1 2 0) %]
 -- expect
 420
+
+-- test nested parens text squishing --
+[% ((4) 2 0) %]
+-- expect
+420
+
+-- test nested parens text squishing --
+[% ((3 + 1) (2 (0))) %]
+-- expect
+420
+
+-- test empty parens text squishing --
+[% ((3 + 1) ( ) (2 ( ) (0))) %]
+-- expect
+420
+
+-- stop --
+-- test empty parens
+NO[% () %]THING
+-- expect --
+NOTHING

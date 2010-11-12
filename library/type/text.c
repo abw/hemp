@@ -86,7 +86,7 @@ hemp_text_release(
     hemp_text_p text
 ) {
     if (text->string) {
-        hemp_debug_mem("releasing text string at %p -> %p\n", text, text->string);
+//      hemp_debug_mem("releasing text string at %p -> %p\n", text, text->string);
         hemp_mem_free(text->string);
         text->string = NULL;
     }
@@ -98,7 +98,7 @@ hemp_text_free(
     hemp_text_p text
 ) {
     hemp_text_release(text);
-    hemp_debug_mem("freeing text at %p\n", text);
+//  hemp_debug_mem("freeing text at %p\n", text);
     hemp_mem_free(text);
 }
 

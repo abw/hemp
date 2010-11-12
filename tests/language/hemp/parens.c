@@ -11,11 +11,15 @@ int main(
     hemp_context_set_number(context, "a", 2);
     hemp_context_set_number(context, "b", 4);
 
-    result = hemp_test_expect_script(
-        HEMP_TT3, HEMP_TT3, 
-        HEMP_TESTDIR, "parens", 
-        context
-    );
+    HEMP_TRY;
+        result = hemp_test_expect_script(
+            HEMP_TT3, HEMP_TT3, 
+            HEMP_TESTDIR, "parens", 
+            context
+            );
+    HEMP_CATCH_ALL;
+        printf("FAILED: %s\n", hemp_error_text(hemp->error)->string);
+    HEMP_END;
 
     hemp_context_free(context);
     hemp_free(hemp);

@@ -23,6 +23,7 @@ hemp_identity_name(
         case 0:                     return HEMP_STR_INFINITY;
         case HEMP_IDENT_MISSING:    return HEMP_STR_MISSING;
         case HEMP_IDENT_NOTHING:    return HEMP_STR_NOTHING;
+        case HEMP_IDENT_EMPTY:      return HEMP_STR_EMPTY;
         case HEMP_IDENT_FALSE:      return HEMP_STR_FALSE;
         case HEMP_IDENT_TRUE:       return HEMP_STR_TRUE;
         case HEMP_IDENT_BEFORE:     return HEMP_STR_BEFORE;
@@ -36,6 +37,7 @@ hemp_identity_name(
 
 HEMP_VTEXT_FUNC(hemp_value_identity_text) {
     if (hemp_is_undefined(value)) {
+        hemp_debug("throwing undefined entity error\n");
         HEMP_UNDEF_ERROR(
             context, 
             hemp_identity_name(value)

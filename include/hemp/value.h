@@ -23,6 +23,7 @@ HEMP_DO_INLINE hemp_str_p hemp_identity_name(hemp_value_t value);
 
 extern const hemp_value_t HempMissing;
 extern const hemp_value_t HempNothing;
+extern const hemp_value_t HempEmpty;
 extern const hemp_value_t HempFalse;
 extern const hemp_value_t HempTrue;
 extern const hemp_value_t HempBefore;
@@ -146,21 +147,22 @@ extern const hemp_value_t HempAfter;
 #define HEMP_FINITE_BIT         0x01        /* not infinity                 */
 #define HEMP_FOUND_BIT          0x02        /* not missing                  */
 #define HEMP_DEFINED_BIT        0x04        /* not undefined                */
-#define HEMP_TRUE_BIT           0x08        /* boolean true/false value     */
-#define HEMP_NOT_AFTER_BIT      0x10        /* less than or equal to        */
-#define HEMP_NOT_BEFORE_BIT     0x20        /* greater than or equal to     */
+#define HEMP_VALUED_BIT         0x08        /* has a value (not empty)      */
+#define HEMP_TRUE_BIT           0x10        /* boolean true/false value     */
+#define HEMP_NOT_AFTER_BIT      0x20        /* less than or equal to        */
+#define HEMP_NOT_BEFORE_BIT     0x40        /* greater than or equal to     */
 #define HEMP_COMPARE_BITS       (HEMP_NOT_BEFORE_BIT | HEMP_NOT_AFTER_BIT)
 
-/* twiddle dem bits to define indentity values */
-#define HEMP_IDENT_MISSING      (HEMP_FINITE_BIT)                         /* 000001 */
-#define HEMP_IDENT_NOTHING      (HEMP_FINITE_BIT | HEMP_FOUND_BIT)        /* 000011 */
-#define HEMP_IDENT_DEFINED      (HEMP_FINITE_BIT | HEMP_FOUND_BIT | HEMP_DEFINED_BIT)
-/* bollox!   don't have a separate Empty identity value */
-#define HEMP_IDENT_FALSE        (HEMP_IDENT_DEFINED)                       /* 000111 */
-#define HEMP_IDENT_TRUE         (HEMP_IDENT_FALSE | HEMP_TRUE_BIT)         /* 001111 */
-#define HEMP_IDENT_BEFORE       (HEMP_IDENT_TRUE  | HEMP_NOT_AFTER_BIT)    /* 011111 */
-#define HEMP_IDENT_AFTER        (HEMP_IDENT_TRUE  | HEMP_NOT_BEFORE_BIT)   /* 101111 */
-#define HEMP_IDENT_EQUAL        (HEMP_IDENT_FALSE | HEMP_COMPARE_BITS)     /* 110111 */
+/* twiddle dem bits to define identity values */
+#define HEMP_IDENT_MISSING      (HEMP_FINITE_BIT)                         /* 0000001 */
+#define HEMP_IDENT_NOTHING      (HEMP_FINITE_BIT | HEMP_FOUND_BIT)        /* 0000011 */
+#define HEMP_IDENT_EMPTY        (HEMP_IDENT_NOTHING | HEMP_DEFINED_BIT)   /* 0000111 */
+#define HEMP_IDENT_VALUED       (HEMP_IDENT_EMPTY   | HEMP_VALUED_BIT)    /* 0001111 */
+#define HEMP_IDENT_FALSE        (HEMP_IDENT_VALUED)                       /* 0001111 */
+#define HEMP_IDENT_TRUE         (HEMP_IDENT_FALSE | HEMP_TRUE_BIT)        /* 0011111 */
+#define HEMP_IDENT_BEFORE       (HEMP_IDENT_TRUE  | HEMP_NOT_AFTER_BIT)   /* 0111111 */
+#define HEMP_IDENT_AFTER        (HEMP_IDENT_TRUE  | HEMP_NOT_BEFORE_BIT)  /* 1011111 */
+#define HEMP_IDENT_EQUAL        (HEMP_IDENT_FALSE | HEMP_COMPARE_BITS)    /* 1111111 */
 
 /* special identity values */
 #define HEMP_INFINITY           0xFFF0000000000000ULL
@@ -250,6 +252,8 @@ extern const hemp_value_t HempAfter;
 #define hemp_is_undefined(v)    HEMP_IDENT_NOT(v, HEMP_DEFINED_BIT)
 #define hemp_is_defined(v)      (! hemp_is_undefined(v))        /* HEMP_IDENT_ANY(v, HEMP_DEFINED_BIT) */
 #define hemp_is_undef(v)        HEMP_IDENT_NOT(v, HEMP_DEFINED_BIT)
+#define hemp_is_empty(v)        HEMP_IDENT_IS(v, HEMP_IDENT_EMPTY)
+#define hemp_is_valued(v)       HEMP_IDENT_ANY(v, HEMP_VALUED_BIT)
 #define hemp_is_boolean(v)      HEMP_IDENT_ANY(v, HEMP_FINITE_BIT)
 #define hemp_is_true(v)         HEMP_IDENT_ANY(v, HEMP_TRUE_BIT)
 #define hemp_is_false(v)        HEMP_IDENT_NOT(v, HEMP_TRUE_BIT)

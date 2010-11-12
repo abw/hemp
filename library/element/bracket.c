@@ -6,7 +6,7 @@
  *--------------------------------------------------------------------------*/
 
 HEMP_PREFIX_FUNC(hemp_element_brackets_prefix) {
-    hemp_debug("hemp_element_brackets_prefix()\n");
+    hemp_debug_call("hemp_element_brackets_prefix()\n");
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
     hemp_element_p block;
@@ -35,7 +35,7 @@ HEMP_PREFIX_FUNC(hemp_element_brackets_prefix) {
 
 
 HEMP_POSTFIX_FUNC(hemp_element_brackets_postfix) {
-    hemp_debug("TODO: hemp_element_brackets_prefix()\n");
+    hemp_debug("TODO: hemp_element_brackets_postfix(), skipping for now\n");
     return lhs;
 }
 
@@ -84,17 +84,17 @@ HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
 
 
 HEMP_EVAL_FUNC(hemp_element_parens_value) {
-    hemp_debug("hemp_element_parens_value()\n");
+    hemp_debug_call("hemp_element_parens_value()\n");
     hemp_element_p block  = hemp_expr_element(element);
     hemp_value_t   values = block->type->values(block, context, HempNothing);
     hemp_list_p    list   = hemp_val_list(values);
-//    hemp_debug("got %d values returned by parens\n", list->length);
+    hemp_debug("got %d values returned by parens\n", list->length);
     if (list->length > 1) {
-        hemp_debug("squishing list of %d items to text\n", list->length);
+//      hemp_debug("squishing list of %d items to text\n", list->length);
         return hemp_text(values, context, HempNothing);
     }
     else if (list->length == 1) {
-        hemp_debug("got one value returned by parens\n");
+//      hemp_debug("got one value returned by parens\n");
         return hemp_list_item(list, 0);
     }
     else {
@@ -106,13 +106,9 @@ HEMP_EVAL_FUNC(hemp_element_parens_value) {
 
 
 HEMP_EVALS_FUNC(hemp_element_parens_values) {
-    hemp_debug("hemp_element_parens_values()\n");
-//    hemp_element_p block  = hemp_expr_element(element);
-//    hemp_value_t   values = block->type->values(block, context, HempNothing);
-//    hemp_list_p    list   = hemp_val_list(values);
-//    hemp_debug("got %s values returned by parens\n", hemp_val_list(values)->length);
-//    return hemp_num_val(42);
-    return HempNothing;
+    hemp_debug_call("hemp_element_parens_values()\n");
+    hemp_element_p block = hemp_expr_element(element);
+    return block->type->values(block, context, output);
 }
 
 

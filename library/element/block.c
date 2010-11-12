@@ -79,10 +79,11 @@ HEMP_EVALS_FUNC(hemp_element_block_values) {
     
     for (n = 0; n < exprs->length; n++) {
         expr = (hemp_element_p) hemp_val_ptr( hemp_list_item(exprs, n) );
+//      hemp_debug("calling values() on %s\n", expr->type->name);
         expr->type->values(expr, context, output);
     }
 
-    hemp_debug("returning block values (%d items)\n", values->length);
+//    hemp_debug("returning block values (%d items)\n", values->length);
 
     return output;
 }

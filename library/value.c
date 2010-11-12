@@ -6,6 +6,7 @@
 
 const hemp_value_t  HempMissing = HEMP_IDENT_MAKE(HEMP_IDENT_MISSING);
 const hemp_value_t  HempNothing = HEMP_IDENT_MAKE(HEMP_IDENT_NOTHING);
+const hemp_value_t  HempEmpty   = HEMP_IDENT_MAKE(HEMP_IDENT_EMPTY);
 const hemp_value_t  HempFalse   = HEMP_IDENT_MAKE(HEMP_IDENT_FALSE);
 const hemp_value_t  HempTrue    = HEMP_IDENT_MAKE(HEMP_IDENT_TRUE);
 const hemp_value_t  HempBefore  = HEMP_IDENT_MAKE(HEMP_IDENT_BEFORE);
@@ -201,7 +202,7 @@ HEMP_VALUES_FUNC(hemp_value_values) {
     hemp_list_p values;
     hemp_prepare_values(context, output, values);
     hemp_list_push(values, value);
-    hemp_debug("hemp_value_values() added value to list, now has %d items\n", values->length);
+//    hemp_debug("hemp_value_values() added value to list, now has %d items\n", values->length);
     return output;
 }
 

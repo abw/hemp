@@ -16,7 +16,7 @@ void test_identity_conversion();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(250);
+    plan(263);
     
     hemp_p hemp = hemp_init();
     
@@ -175,6 +175,22 @@ void test_identity_values() {
     ok( ! hemp_is_equal(HempNothing),       "nothing is not equal" );
     ok( ! hemp_is_before(HempNothing),      "nothing is not before" );
     ok( ! hemp_is_after(HempNothing),       "nothing is not after" );
+
+    printf("HempEmpty:\n");
+    hemp_dump_value(HempEmpty);
+    is(   hemp_type_name(HempEmpty),      "Identity", "Empty type name is Identity" );
+    is(   hemp_identity_name(HempEmpty),  "Empty",  "Empty ident name is Empty" );
+    ok( ! hemp_is_undef(HempEmpty),       "empty is not undef" );
+    ok( ! hemp_is_missing(HempEmpty),     "empty is not missing" );
+    ok( ! hemp_is_nothing(HempEmpty),     "empty is not nothing" );
+    ok(   hemp_is_empty(HempEmpty),       "empty is empty" );
+    ok(   hemp_is_boolean(HempEmpty),     "empty is boolean" );
+    ok( ! hemp_is_compare(HempEmpty),     "empty is not compare" );
+    ok( ! hemp_is_true(HempEmpty),        "empty is not true" );
+    ok(   hemp_is_false(HempEmpty),       "empty is false" );
+    ok( ! hemp_is_equal(HempEmpty),       "empty is not equal" );
+    ok( ! hemp_is_before(HempEmpty),      "empty is not before" );
+    ok( ! hemp_is_after(HempEmpty),       "empty is not after" );
 
     printf("HempFalse:\n");
     hemp_dump_value(HempFalse);

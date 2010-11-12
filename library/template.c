@@ -131,7 +131,7 @@ hemp_template_render(
 //    HEMP_END;
 
     /* v is a temporary value which will be freed by the context */
-    hemp_debug_mem("making return value mortal: %p\n", v);
+//  hemp_debug_mem("making return value mortal: %p\n", v);
     
     output = hemp_text_from_text( hemp_val_text(v) );
 

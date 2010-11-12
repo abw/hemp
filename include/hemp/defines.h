@@ -31,6 +31,7 @@
 #define HEMP_STR_MISSING    "Missing"
 #define HEMP_STR_NOTHING    "Nothing"
 #define HEMP_STR_UNDEFINED  "Undefined"
+#define HEMP_STR_EMPTY      "Empty"
 #define HEMP_STR_FALSE      "False"
 #define HEMP_STR_TRUE       "True"
 #define HEMP_STR_BEFORE     "Before"
