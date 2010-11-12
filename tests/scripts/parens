@@ -28,7 +28,6 @@
 -- expect
 420
 
--- stop --
 -- test empty parens
 NO[% () %]THING
 -- expect --

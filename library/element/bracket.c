@@ -99,9 +99,8 @@ HEMP_EVAL_FUNC(hemp_element_parens_value) {
     }
     else {
         hemp_debug("nothing in list\n");
-        return HempNothing;
+        return HempEmpty;
     }
-    return HempNothing;
 }
 
 

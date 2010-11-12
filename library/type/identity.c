@@ -43,10 +43,14 @@ HEMP_VTEXT_FUNC(hemp_value_identity_text) {
             hemp_identity_name(value)
         );
     }
-    hemp_str_p name = hemp_identity_name(value);
     hemp_text_p text;
+    hemp_str_p name = hemp_identity_name(value);
     hemp_prepare_text_size(context, output, text, strlen(name));
-    hemp_text_append_string(text, name);
+
+    /* HempEmpty silently bypassed generating any text output */
+    if (! hemp_is_empty(value))
+        hemp_text_append_string(text, hemp_identity_name(value) );
+
     return output;
 }
 
