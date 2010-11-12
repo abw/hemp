@@ -1,4 +1,5 @@
 #include <hemp/type/hash.h>
+#include <hemp/context.h>
 
 
 static hemp_size_t 
@@ -536,7 +537,7 @@ hemp_hash_function_jenkins32(
 
 HEMP_VTEXT_FUNC(hemp_type_hash_text) {
     hemp_text_p text;
-    hemp_prepare_output(output, text, 32);
+    hemp_prepare_text(context, output, text);
     hemp_text_append_string(text, "TODO: hash.text");
     return output;
 }

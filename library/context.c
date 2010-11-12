@@ -53,6 +53,16 @@ hemp_context_tmp_text(
     return text;
 }
 
+hemp_text_p
+hemp_context_tmp_text_size(
+    hemp_context_p context,
+    hemp_size_t    size
+) {
+    hemp_text_p text = (hemp_text_p) hemp_pool_take(context->text_pool);
+    hemp_text_init_size(text, size);
+    return text;
+}
+
 hemp_list_p
 hemp_context_tmp_list(
     hemp_context_p context

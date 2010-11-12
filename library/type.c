@@ -1,5 +1,6 @@
 #include <hemp/type.h>
 #include <hemp/type/hash.h>
+#include <hemp/context.h>
 
 
 hemp_type_p  HempType     = NULL;
@@ -236,7 +237,17 @@ HEMP_TYPE_FUNC(hemp_type_type) {
 HEMP_VTEXT_FUNC(hemp_value_type_text) {
     hemp_type_p type = (hemp_type_p) hemp_val_ptr(value);
     hemp_text_p text;
-    hemp_prepare_output(output, text, strlen(type->name));
+    
+//    hemp_prepare_text_size(context, output, text, strlen(type->name));
+
+    if (hemp_is_undef(output)) {
+        text   = hemp_context_tmp_text_size(context, strlen(type->name));
+        output = hemp_text_val(text);
+    }
+    else {
+        text   = hemp_val_text(output);
+    }
+
     hemp_text_append_string(text, type->name);
     return output;
 }

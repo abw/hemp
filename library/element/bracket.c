@@ -18,12 +18,12 @@ HEMP_PREFIX_FUNC(hemp_element_brackets_prefix) {
 
     if (! block)
         hemp_fatal("missing block for %s\n", type->start);
-    
+
     hemp_set_expr_element(self, block);
     hemp_skip_whitespace(elemptr);
 
     if (hemp_element_terminator_matches(*elemptr, type->end)) {
-        hemp_debug("found matching terminator for %s => %s\n", type->start, type->end);
+//      hemp_debug("found matching terminator for %s => %s\n", type->start, type->end);
         hemp_go_next(elemptr);
     }
     else {
@@ -33,10 +33,12 @@ HEMP_PREFIX_FUNC(hemp_element_brackets_prefix) {
     return hemp_parse_postfix(elemptr, scope, precedence, force, self);
 }
 
+
 HEMP_POSTFIX_FUNC(hemp_element_brackets_postfix) {
     hemp_debug("TODO: hemp_element_brackets_prefix()\n");
     return lhs;
 }
+
 
 HEMP_SYMBOL_FUNC(hemp_element_brackets_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
@@ -56,7 +58,6 @@ hemp_element_brackets_clean(
     hemp_element_p element
 ) {
     hemp_debug_call("hemp_element_brackets_clean(%p)\n", element);
-    hemp_debug("hemp_element_brackets_clean(%p)\n", element);
 
     hemp_element_block_clean(
         hemp_expr_element(element)
@@ -87,9 +88,10 @@ HEMP_EVAL_FUNC(hemp_element_parens_value) {
     hemp_element_p block  = hemp_expr_element(element);
     hemp_value_t   values = block->type->values(block, context, HempNothing);
     hemp_list_p    list   = hemp_val_list(values);
-    hemp_debug("got %d values returned by parens\n", list->length);
+//    hemp_debug("got %d values returned by parens\n", list->length);
     if (list->length > 1) {
-        hemp_debug("TODO: squish list (%d items) to text\n", list->length);
+        hemp_debug("squishing list of %d items to text\n", list->length);
+        return hemp_text(values, context, HempNothing);
     }
     else if (list->length == 1) {
         hemp_debug("got one value returned by parens\n");

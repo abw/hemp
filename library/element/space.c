@@ -207,7 +207,7 @@ HEMP_SYMBOL_FUNC(hemp_element_eof_symbol) {
 HEMP_ETEXT_FUNC(hemp_element_eof_token) {
     hemp_debug_call("hemp_element_eof_token()\n");
     hemp_text_p text;
-    hemp_prepare_output(output, text, 6);
+    hemp_prepare_text_size(context, output, text, 6);
     hemp_text_append_string(text, "--EOF--");     // TMP
     return output;
 }

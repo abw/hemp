@@ -19,7 +19,7 @@ HEMP_VTEXT_FUNC(hemp_value_number_text) {
     hemp_text_p text;
 
     snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, hemp_val_num(value));
-    hemp_prepare_output(output, text, strlen(buffer));
+    hemp_prepare_text_size(context, output, text, strlen(buffer));
     hemp_text_append_string(text, buffer);
 
     return output;

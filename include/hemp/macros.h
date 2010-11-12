@@ -576,22 +576,31 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * other stuff
  *--------------------------------------------------------------------------*/
 
-#define hemp_prepare_output(output, text, length)       \
-    if (hemp_is_undef(output)) {                        \
-        text   = hemp_text_new_size(length);                \
-        output = hemp_text_val(text);                   \
-    }                                                   \
-    else {                                              \
-        text   = hemp_val_text(output);                 \
+#define hemp_prepare_text(context, output, text)                    \
+    if (hemp_is_undef(output)) {                                    \
+        text   = hemp_context_tmp_text(context);                    \
+        output = hemp_text_val(text);                               \
+    }                                                               \
+    else {                                                          \
+        text   = hemp_val_text(output);                             \
     }
 
-#define hemp_prepare_values(context, output, list)      \
-    if (hemp_is_undef(output)) {                        \
-        list   = hemp_context_tmp_list(context);        \
-        output = hemp_list_val(list);                   \
-    }                                                   \
-    else {                                              \
-        list   = hemp_val_list(output);                 \
+#define hemp_prepare_text_size(context, output, text, size)         \
+    if (hemp_is_undef(output)) {                                    \
+        text   = hemp_context_tmp_text_size(context, size);         \
+        output = hemp_text_val(text);                               \
+    }                                                               \
+    else {                                                          \
+        text   = hemp_val_text(output);                             \
+    }
+
+#define hemp_prepare_values(context, output, list)                  \
+    if (hemp_is_undef(output)) {                                    \
+        list   = hemp_context_tmp_list(context);                    \
+        output = hemp_list_val(list);                               \
+    }                                                               \
+    else {                                                          \
+        list   = hemp_val_list(output);                             \
     }
 
 

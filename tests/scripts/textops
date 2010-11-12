@@ -8,7 +8,6 @@ foobar
 -- expect
 foobar
 
-
 -- test text equal when false 
 [% 'foo' eq 'bar' %]
 -- expect 
@@ -38,6 +37,8 @@ False
 [% 'bar' lt 'foo' %]
 -- expect 
 True
+
+
 
 -- test text less than when equal
 [% 'bar' lt 'bar' %]

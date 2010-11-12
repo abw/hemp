@@ -136,9 +136,18 @@ hemp_list_each_free(
 
 
 HEMP_VTEXT_FUNC(hemp_value_list_text) {
-    hemp_text_p text;
-    hemp_prepare_output(output, text, 32);
-    hemp_text_append_string(text, "TODO: list.text");
+    hemp_list_p  list = hemp_val_list(value);
+    hemp_value_t item;
+    hemp_text_p  text;
+    hemp_size_t  pos;
+
+    hemp_prepare_text(context, output, text);
+
+    for (pos = 0; pos < list->length; pos++) {
+        item = hemp_list_item(list, pos);
+        hemp_text(item, context, output);
+    }
+
     return output;
 }
 

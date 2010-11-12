@@ -7,6 +7,7 @@ HEMP_SYMBOL_FUNC(hemp_element_literal_symbol) {
     symbol->text    = &hemp_element_literal_text;
     symbol->value   = &hemp_element_literal_value;
     symbol->fixed   = &hemp_element_fixed;
+    symbol->values  = &hemp_element_value_values;
     return symbol;
 }
 
@@ -32,7 +33,7 @@ HEMP_PREFIX_FUNC(hemp_element_literal_prefix) {
 HEMP_ETEXT_FUNC(hemp_element_literal_token) {
     hemp_debug_call("hemp_element_literal_token()\n");
     hemp_text_p text;
-    hemp_prepare_output(output, text, element->length);
+    hemp_prepare_text_size(context, output, text, element->length);
     hemp_text_append_stringn(text, element->token, element->length);
     return output;
 }
@@ -41,7 +42,7 @@ HEMP_ETEXT_FUNC(hemp_element_literal_token) {
 HEMP_ETEXT_FUNC(hemp_element_literal_source) {
     hemp_debug_call("hemp_element_literal_source()\n");
     hemp_text_p text;
-    hemp_prepare_output(output, text, element->length);
+    hemp_prepare_text_size(context, output, text, element->length);
     hemp_text_append_stringn(text, element->token, element->length);
     return output;
 }
@@ -57,7 +58,7 @@ HEMP_ETEXT_FUNC(hemp_element_literal_text) {
      * different but are now the same
      */
     hemp_text_p text;
-    hemp_prepare_output(output, text, element->length);
+    hemp_prepare_text_size(context, output, text, element->length);
     hemp_text_append_stringn(text, element->token, element->length);
     return output;
 }

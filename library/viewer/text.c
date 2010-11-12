@@ -27,7 +27,7 @@ HEMP_VIEW_FUNC(hemp_viewer_text_view_hemp_block) {
     hemp_size_t     n;
 
     hemp_text_p text;
-    hemp_prepare_output(output, text, 0);
+    hemp_prepare_text(context, output, text);
     
     for (n = 0; n < exprs->length; n++) {
         expr = (hemp_element_p) hemp_val_ptr( hemp_list_item(exprs, n) );

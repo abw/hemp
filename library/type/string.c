@@ -370,7 +370,7 @@ HEMP_VTEXT_FUNC(hemp_value_string_text) {
     hemp_str_p  str = hemp_val_str(value);
     hemp_text_p text;
 
-    hemp_prepare_output(output, text, strlen(str));
+    hemp_prepare_text_size(context, output, text, strlen(str));
 
     hemp_text_append_string(text, str);
     return output;

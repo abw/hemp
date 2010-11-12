@@ -66,16 +66,6 @@ hemp_element_parse(
         0, 
         HEMP_FALSE
     );
-/*    
-    if (block) {
-        hemp_text_t text = block->type->text(block, NULL);
-        hemp_debug("OUTPUT: %s\n", text->string);
-        hemp_text_free(text);
-    }
-    else {
-        hemp_debug_red("did not parse a block\n");
-    }
-*/
     
     return block;
 }
@@ -112,6 +102,7 @@ hemp_element_parse_exprs(
 ) {
     hemp_debug_call("hemp_element_parse_exprs()\n");
     hemp_debug_parse("hemp_element_parse_exprs( precedence => %d )\n", precedence);
+//    hemp_debug("hemp_element_parse_exprs(%p, %p, %d, %d)\n", elemptr, scope, precedence, force);
 
     hemp_element_p expr;
     hemp_list_p    exprs = hemp_list_new();
@@ -124,8 +115,6 @@ hemp_element_parse_exprs(
         /* skip whitespace, delimiters (commas) and separators (semi-colons) */
         hemp_skip_separator(elemptr);
 
-//      hemp_debug_parse("about to parse expr:\n");
-
         /* tmp hack to catch TODO stuff while developing */
 //        if (! (*elemptr)->type->prefix) {
 //            hemp_symbol_dump((*elemptr)->type);
@@ -136,7 +125,7 @@ hemp_element_parse_exprs(
 //        }
 
         expr = hemp_parse_prefix(elemptr, scope, precedence, HEMP_FALSE);
-        
+
         if (! expr)
             break;
 
@@ -153,9 +142,8 @@ hemp_element_parse_exprs(
     }
     else {
         hemp_debug_parse("%sNot an expression: %s:%s\n", HEMP_ANSI_RED, (*elemptr)->type->name, HEMP_ANSI_RESET);
-        hemp_element_dump(*elemptr);
     }
-    
+
     // hemp_debug("n expressions: %d\n", exprs->length);
     
     if (! exprs->length && ! force) {
@@ -484,14 +472,14 @@ hemp_bool_t
 hemp_element_dump(
     hemp_element_p e
 ) {
+    hemp_context_p context = hemp_context_init(NULL);       // tmp ugly hack
+
     if (! e->type->text)
         hemp_fatal("%s type does not define a text() method", e->type->name);
 
-//    hemp_debug("calling text() method for %s\n", e->type->name);
-
     hemp_value_t output = e->type->token
-        ? e->type->token(e, NULL, HempNothing)
-        : e->type->text(e, NULL, HempNothing);
+        ? e->type->token(e, context, HempNothing)
+        : e->type->text(e, context, HempNothing);
 
     hemp_text_p text  = hemp_val_text(output);
     hemp_str_p string = text ? text->string : "-- NO OUTPUT --";
@@ -503,9 +491,11 @@ hemp_element_dump(
     );
 
     if (text) {
-        hemp_text_free(text);
+//        hemp_text_free(text);
     }
-    
+
+    hemp_context_free(context);
+
     return hemp_string_eq(e->type->name, "EOF")
         ? HEMP_FALSE
         : HEMP_TRUE;

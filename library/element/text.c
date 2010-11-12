@@ -89,7 +89,7 @@ HEMP_ETEXT_FUNC(hemp_element_text_concat_value) {
     hemp_debug_call("hemp_element_text_concat_value()\n");
 
     hemp_text_p text;
-    hemp_prepare_output(output, text, 0);
+    hemp_prepare_text(context, output, text);
     hemp_element_p lhs = hemp_lhs_element(element);
     hemp_element_p rhs = hemp_rhs_element(element);
     lhs->type->text(lhs, context, output);
@@ -121,8 +121,8 @@ HEMP_EVAL_FUNC(hemp_element_text_compare_value) {
         hemp_val_text(lval)->string,
         hemp_val_text(rval)->string
     );
-    hemp_text_free( hemp_val_text(lval) );
-    hemp_text_free( hemp_val_text(rval) );
+//    hemp_text_free( hemp_val_text(lval) );
+//    hemp_text_free( hemp_val_text(rval) );
     
     return  compare < 0 ? HempBefore
         :   compare > 0 ? HempAfter

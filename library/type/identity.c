@@ -43,7 +43,7 @@ HEMP_VTEXT_FUNC(hemp_value_identity_text) {
     }
     hemp_str_p name = hemp_identity_name(value);
     hemp_text_p text;
-    hemp_prepare_output(output, text, strlen(name));
+    hemp_prepare_text_size(context, output, text, strlen(name));
     hemp_text_append_string(text, name);
     return output;
 }

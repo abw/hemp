@@ -32,7 +32,7 @@ HEMP_POSTFIX_FUNC(hemp_element_dotop_postfix) {
     if (! rhs)
         hemp_fatal("missing expression on rhs of %s\n", type->start);
 
-    hemp_set_flag(self, HEMP_BE_FIXED);
+    hemp_set_flag(self, HEMP_BE_INFIX);
     
     // make rhs yield static token name
     hemp_set_rhs(
@@ -84,12 +84,18 @@ hemp_element_dotop_clean(
 
     if (hemp_has_flag(element, HEMP_BE_FIXED)) {
 //      hemp_debug("cleaning static dotop element...");
-        // TODO: more comprehensive check, probably via type->cleanup
+//      TODO: more comprehensive check, probably via type->cleanup
 
         hemp_value_t rhs = hemp_rhs(element);
         if (hemp_is_text(rhs)) {
-//          hemp_debug("rhs is text, freeing\n");
-            hemp_text_free( hemp_val_text(rhs) );
+            // TODO: It appears to be the case that the context is managing
+            // the memory allocated by the fixed RHS so we don't need to free
+            // it explicitly.  However, I haven't been able to convince 
+            // myself where and when this is happening, so it is to be taken
+            // with a pinch of salt.
+            
+            // hemp_debug("rhs is text, freeing\n");
+            // hemp_text_free( hemp_val_text(rhs) );
         }
         else {
 //          hemp_debug("not freeing %s RHS\n", hemp_type_name(rhs));

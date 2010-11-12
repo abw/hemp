@@ -195,7 +195,7 @@ HEMP_ETEXT_FUNC(hemp_element_quoted_text) {
     hemp_debug_call("hemp_element_quoted_text(%p) [%s]\n", element, element->type->name);
 
     hemp_text_p text;
-    hemp_prepare_output(output, text, element->length);
+    hemp_prepare_text_size(context, output, text, element->length);
 
     if (hemp_has_flag(element, HEMP_BE_SOURCE)) {
         /* quoted string can be regenerated from source */

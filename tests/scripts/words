@@ -30,6 +30,9 @@ length: [% message.length %]
 -- expect
 length: 12
 
+-- stop --
+
+
 -- test text.name
 type: [% message.name %]
 -- expect

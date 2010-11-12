@@ -310,6 +310,7 @@ void test_value_conversion() {
     test_number_conversion();
     test_integer_conversion();
 //    test_boolean_conversion();
+
     test_text_conversion();
     test_identity_conversion();
 }
@@ -336,7 +337,9 @@ void test_number_conversion() {
     hemp_value_t text = hemp_value_number_text(number, context, HempNothing);
     ok( hemp_is_text(text), "result is text" );
     is( hemp_val_text(text)->string, "3.14159", "text string correct" );
-    hemp_text_free( hemp_val_text(text) );
+
+// Text now managed by context
+//    hemp_text_free( hemp_val_text(text) );
 
     hemp_context_free(context);
     hemp_free(hemp);
@@ -366,7 +369,9 @@ void test_integer_conversion() {
     hemp_value_t text = hemp_value_integer_text(integer, context, HempNothing);
     ok( hemp_is_text(text), "result is text" );
     is( hemp_val_text(text)->string, "42", "text string correct" );
-    hemp_text_free( hemp_val_text(text) );
+
+// Text now managed by context
+//    hemp_text_free( hemp_val_text(text) );
 
     hemp_context_free(context);
     hemp_free(hemp);
@@ -572,7 +577,7 @@ void test_text_conversion() {
         hemp_is_false( hemp_value_text_boolean(tval, context) ), 
         "empty string is false" 
     );
-    
+
     hemp_text_free(text);
     hemp_context_free(context);
     hemp_free(hemp);
@@ -606,26 +611,26 @@ void test_identity_conversion() {
     text = hemp_value_identity_text(HempFalse, context, HempNothing);
     ok( hemp_is_text(text), "false converts to text" );
     is( hemp_val_text(text)->string, "False", "False text" );
-    hemp_text_free( hemp_val_text(text) );
+// Text now managed by context
+//  hemp_text_free( hemp_val_text(text) );
 
     text = hemp_value_identity_text(HempTrue, context, HempNothing);
     ok( hemp_is_text(text), "true converts to text" );
     is( hemp_val_text(text)->string, "True", "True text" );
-    hemp_text_free( hemp_val_text(text) );
+//  hemp_text_free( hemp_val_text(text) );
 
     text = hemp_value_identity_text(HempBefore, context, HempNothing);
     ok( hemp_is_text(text), "before converts to text" );
     is( hemp_val_text(text)->string, "Before", "Before text" );
-    hemp_text_free( hemp_val_text(text) );
+//  hemp_text_free( hemp_val_text(text) );
 
     text = hemp_value_identity_text(HempAfter, context, HempNothing);
     ok( hemp_is_text(text), "after converts to text" );
     is( hemp_val_text(text)->string, "After", "After text" );
-    hemp_text_free( hemp_val_text(text) );
+//  hemp_text_free( hemp_val_text(text) );
 
 
     // TODO
-
     hemp_context_free(context);
     hemp_free(hemp);
 }

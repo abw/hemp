@@ -110,6 +110,7 @@ hemp_template_render(
     hemp_p hemp = tmpl->dialect->hemp;
     hemp_bool_t my_context = HEMP_FALSE;
     hemp_value_t v;
+    hemp_text_p output;
 
     hemp_element_p root = hemp_template_tree(tmpl);
 
@@ -129,9 +130,14 @@ hemp_template_render(
 //       hemp_fatal("Error processing template: %s", hemp->error->message);
 //    HEMP_END;
 
+    /* v is a temporary value which will be freed by the context */
+    hemp_debug_mem("making return value mortal: %p\n", v);
+    
+    output = hemp_text_from_text( hemp_val_text(v) );
+
     if (my_context)
         hemp_context_free(context);
 
-    return hemp_val_text(v);
+    return output;
 }
 

@@ -47,7 +47,9 @@ void test_types() {
     }
     ok( hemp_is_defined(value), "got length as text" );
     is( hemp_val_text(value)->string, "12", "length text is 12" );
-    hemp_text_free( hemp_val_text(value) );
+
+// Text value is now managed by context
+//    hemp_text_free( hemp_val_text(value) );
     
     hemp_context_free(context);
     hemp_free(hemp);

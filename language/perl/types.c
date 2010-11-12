@@ -95,7 +95,7 @@ HEMP_VTEXT_FUNC(hemp_perl_scalar_text) {
     hemp_text_p text;
 
     string = SvPV( hemp_perl_val_sv(value), length );
-    hemp_prepare_output(output, text, length);
+    hemp_prepare_text_size(context, output, text, length);
     hemp_text_append_stringn(text, string, length);
 
     return output;

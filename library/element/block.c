@@ -26,7 +26,7 @@ HEMP_SYMBOL_FUNC(hemp_element_block_symbol) {
 HEMP_ETEXT_FUNC(hemp_element_block_token) {
     hemp_debug_call("hemp_element_block_token()\n");
     hemp_text_p text;
-    hemp_prepare_output(output, text, 0);
+    hemp_prepare_text(context, output, text);
     hemp_todo("hemp_element_block_token()");
     return output;
 }
@@ -36,7 +36,7 @@ HEMP_ETEXT_FUNC(hemp_element_block_source) {
     hemp_debug_call("hemp_element_block_source()\n");
 
     hemp_text_p text;
-    hemp_prepare_output(output, text, element->length);
+    hemp_prepare_text_size(context, output, text, element->length);
 
     hemp_todo("hemp_element_block_source()");
 
@@ -51,7 +51,7 @@ HEMP_ETEXT_FUNC(hemp_element_block_text) {
     hemp_size_t     n;
 
     hemp_text_p text;
-    hemp_prepare_output(output, text, 0);
+    hemp_prepare_text(context, output, text);
     
     for (n = 0; n < exprs->length; n++) {
         expr = (hemp_element_p) hemp_val_ptr( hemp_list_item(exprs, n) );

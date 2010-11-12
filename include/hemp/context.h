@@ -27,6 +27,7 @@ hemp_context_p  hemp_context_init(hemp_p);
 void            hemp_context_free(hemp_context_p);
 hemp_list_p     hemp_context_tmp_list(hemp_context_p);
 hemp_text_p     hemp_context_tmp_text(hemp_context_p);
+hemp_text_p     hemp_context_tmp_text_size(hemp_context_p, hemp_size_t);
 hemp_bool_t     hemp_context_list_pool_cleaner(hemp_mem_p item);
 hemp_bool_t     hemp_context_text_pool_cleaner(hemp_mem_p item);
 

@@ -197,7 +197,7 @@ HEMP_VALUE_FUNC(hemp_value_false) {
 
 
 HEMP_VALUES_FUNC(hemp_value_values) {
-    hemp_debug("hemp_value_values()\n");
+    hemp_debug_call("hemp_value_values()\n");
     hemp_list_p values;
     hemp_prepare_values(context, output, values);
     hemp_list_push(values, value);
