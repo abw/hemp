@@ -5,7 +5,7 @@
 
 HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
-    symbol->postfix = &hemp_element_dotop_infix;
+    symbol->infix   = &hemp_element_dotop_infix;
     symbol->value   = &hemp_element_dotop_value;
     symbol->cleanup = &hemp_element_dotop_clean;
 
@@ -46,8 +46,10 @@ HEMP_POSTFIX_FUNC(hemp_element_dotop_infix) {
             rhs, scope->context
         )
     );
+
+    hemp_skip_whitespace(elemptr);
     
-    return hemp_parse_postfix(
+    return hemp_parse_infix(
         elemptr, scope, precedence, 0,
         self
     );
@@ -81,16 +83,16 @@ hemp_element_dotop_clean(
     hemp_debug_call("hemp_element_dotop_clean(%p)\n", element);
 
     if (hemp_has_flag(element, HEMP_BE_FIXED)) {
-        hemp_debug("cleaning static dotop element...");
+//      hemp_debug("cleaning static dotop element...");
         // TODO: more comprehensive check, probably via type->cleanup
 
         hemp_value_t rhs = hemp_rhs(element);
         if (hemp_is_text(rhs)) {
-            hemp_debug("rhs is text, freeing\n");
+//          hemp_debug("rhs is text, freeing\n");
             hemp_text_free( hemp_val_text(rhs) );
         }
         else {
-            hemp_debug("not freeing %s RHS\n", hemp_type_name(rhs));
+//          hemp_debug("not freeing %s RHS\n", hemp_type_name(rhs));
         }
     }
 }

@@ -16,10 +16,8 @@ hemp_symbol_p HempSymbolEOF       = NULL;
 
 HEMP_SYMBOL_FUNC(hemp_element_punctuation_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
-    symbol->prefix  = hemp_element_not_prefix;
-    symbol->postfix = hemp_element_not_postfix;
-    symbol->fixed   = hemp_element_decline;
-    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED | HEMP_BE_HIDDEN;
+    symbol->fixed = hemp_element_decline;
+    symbol->flags = HEMP_BE_SOURCE | HEMP_BE_FIXED | HEMP_BE_HIDDEN;
     return symbol;
 }
 
@@ -136,7 +134,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_space) {
 HEMP_SYMBOL_FUNC(hemp_element_space_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->prefix  = &hemp_element_next_prefix;
-    symbol->postfix = &hemp_element_next_postfix;
+    symbol->infix   = &hemp_element_next_infix;
     symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
                     | HEMP_BE_HIDDEN;
     return symbol;
@@ -159,7 +157,6 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_start) {
 HEMP_SYMBOL_FUNC(hemp_element_tag_start_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->prefix  = &hemp_element_next_prefix;
-    symbol->postfix = &hemp_element_next_postfix;
     symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
                     | HEMP_BE_HIDDEN | HEMP_BE_DELIMITER;
     return symbol;

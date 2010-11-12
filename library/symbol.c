@@ -26,8 +26,9 @@ hemp_symbol_init(
     symbol->rprec   = 0;
     symbol->scanner = NULL;
     symbol->cleanup = NULL;
-    symbol->prefix  = &hemp_element_not_prefix;
-    symbol->postfix = &hemp_element_not_postfix;
+    symbol->prefix  = NULL;
+    symbol->postfix = NULL;
+    symbol->infix   = NULL;
     symbol->token   = &hemp_element_not_token;
     symbol->source  = &hemp_element_not_source;
     symbol->text    = &hemp_element_not_text;
@@ -143,18 +144,18 @@ hemp_symbol_dump(
     hemp_debug("      start: %s\n", symbol->start ? symbol->start : "<none>");
     hemp_debug("        end: %s\n", symbol->end ? symbol->end : "<none>");
     hemp_debug("      flags: %04x\n", symbol->flags);
-    hemp_debug("      lprec: %dx\n", symbol->lprec);
-    hemp_debug("      rprec: %dx\n", symbol->rprec);
-    hemp_debug("    scanner: %px\n", symbol->scanner);
-    hemp_debug("    cleanup: %px\n", symbol->cleanup);
-    hemp_debug("     prefix: %px\n", symbol->prefix);
-    hemp_debug("    postfix: %px\n", symbol->postfix);
-    hemp_debug("      token: %px\n", symbol->token);
-    hemp_debug("     source: %px\n", symbol->source);
-    hemp_debug("       text: %px\n", symbol->text);
-    hemp_debug("      value: %px\n", symbol->value);
-    hemp_debug("     number: %px\n", symbol->number);
-    hemp_debug("    integer: %px\n", symbol->integer);
-    hemp_debug("    boolean: %px\n", symbol->boolean);
+    hemp_debug("      lprec: %d\n", symbol->lprec);
+    hemp_debug("      rprec: %d\n", symbol->rprec);
+    hemp_debug("    scanner: %p\n", symbol->scanner);
+    hemp_debug("    cleanup: %p\n", symbol->cleanup);
+    hemp_debug("     prefix: %p\n", symbol->prefix);
+    hemp_debug("    postfix: %p\n", symbol->postfix);
+    hemp_debug("      token: %p\n", symbol->token);
+    hemp_debug("     source: %p\n", symbol->source);
+    hemp_debug("       text: %p\n", symbol->text);
+    hemp_debug("      value: %p\n", symbol->value);
+    hemp_debug("     number: %p\n", symbol->number);
+    hemp_debug("    integer: %p\n", symbol->integer);
+    hemp_debug("    boolean: %p\n", symbol->boolean);
 }
 

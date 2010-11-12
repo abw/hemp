@@ -83,7 +83,6 @@ hemp_element_brackets_clean(
 
 HEMP_SYMBOL_FUNC(hemp_element_parens_symbol) {
     hemp_element_brackets_symbol(hemp, symbol);
-//    symbol->postfix = &hemp_element_parens_postfix;
     symbol->value   = &hemp_element_parens_value;
     symbol->values  = &hemp_element_parens_values;
     return symbol;

@@ -289,6 +289,17 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         HEMP_POSTFIX_ARGS                   \
     )
 
+/* Add these for completeness, in case we ever need to make them different */
+
+#define HEMP_INFIX_ARGS                     \
+    HEMP_POSTFIX_ARGS
+
+#define HEMP_INFIX_ARG_NAMES                \
+    HEMP_POSTFIX_ARG_NAMES
+
+#define HEMP_INFIX_FUNC(f)                  \
+    HEMP_POSTFIX_FUNC(f)
+
 
 /* operator precedence */
 

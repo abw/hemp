@@ -139,7 +139,7 @@ struct hemp_element_s {
     )
 
 #define hemp_parse_infix(ep, sc, pr, fr, lhs)           \
-    ((*ep)->type->infix                                 \
+    ( (*ep)->type->infix                                \
         ? (*ep)->type->infix(ep, sc, pr, fr, lhs)       \
         : lhs                                           \
     )
@@ -227,6 +227,7 @@ HEMP_EVALS_FUNC(hemp_element_not_values);
 
 HEMP_PREFIX_FUNC(hemp_element_next_prefix);
 HEMP_POSTFIX_FUNC(hemp_element_next_postfix);
+HEMP_INFIX_FUNC(hemp_element_next_infix);
 
 
 /*--------------------------------------------------------------------------

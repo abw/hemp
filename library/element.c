@@ -127,13 +127,13 @@ hemp_element_parse_exprs(
 //      hemp_debug_parse("about to parse expr:\n");
 
         /* tmp hack to catch TODO stuff while developing */
-        if (! (*elemptr)->type->prefix) {
-            hemp_symbol_dump((*elemptr)->type);
-            hemp_fatal(
-                "%s does not define a parse_expr() method",
-                (*elemptr)->type->name
-            );
-        }
+//        if (! (*elemptr)->type->prefix) {
+//            hemp_symbol_dump((*elemptr)->type);
+//            hemp_fatal(
+//                "%s does not define a parse_expr() method",
+//                (*elemptr)->type->name
+//            );
+//        }
 
         expr = hemp_parse_prefix(elemptr, scope, precedence, HEMP_FALSE);
         
@@ -275,7 +275,6 @@ HEMP_PREFIX_FUNC(hemp_element_next_prefix) {
     if (hemp_has_next(elemptr)) {
         hemp_go_next(elemptr);
         return hemp_parse_prefix(elemptr, scope, precedence, force);
-//      return (*elemptr)->type->prefix(HEMP_PREFIX_ARG_NAMES);
     }
 
     return NULL;
@@ -288,10 +287,23 @@ HEMP_POSTFIX_FUNC(hemp_element_next_postfix) {
     if (hemp_has_next(elemptr)) {
         hemp_go_next(elemptr);
         return hemp_parse_postfix(elemptr, scope, precedence, force, lhs);
-//      return (*elemptr)->type->infix(HEMP_POSTFIX_ARG_NAMES);
     }
 
-    return NULL;
+    return lhs;
+}
+
+
+HEMP_INFIX_FUNC(hemp_element_next_infix) {
+    hemp_debug_call("hemp_element_next_infix()\n");
+
+    hemp_skip_whitespace(elemptr);
+
+    if (hemp_has_next(elemptr)) {
+        hemp_go_next(elemptr);
+        return hemp_parse_infix(elemptr, scope, precedence, force, lhs);
+    }
+
+    return lhs;
 }
 
 
@@ -317,7 +329,7 @@ HEMP_PREFIX_FUNC(hemp_element_parse_prefix) {
     hemp_set_expr_element(self, expr);
     hemp_skip_whitespace(elemptr);
 
-    return hemp_parse_postfix(
+    return hemp_parse_infix(
         elemptr, scope, precedence, 0,
         self
     );
@@ -370,7 +382,7 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left) {
 
     hemp_debug_parse("next element is %s:\n", (*elemptr)->type->name);
 
-    return hemp_parse_postfix(
+    return hemp_parse_infix(
         elemptr, scope, precedence, 0,
         self
     );
@@ -397,7 +409,7 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right) {
     hemp_set_rhs_element(self, rhs);
     hemp_skip_whitespace(elemptr);
 
-    return hemp_parse_postfix(
+    return hemp_parse_infix(
         elemptr, scope, precedence, 0,
         self
     );

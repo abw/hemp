@@ -41,7 +41,7 @@ HEMP_EVAL_FUNC(hemp_element_boolean_value) {
 HEMP_SYMBOL_FUNC(hemp_element_boolean_not_symbol) {
     hemp_element_boolean_symbol(HEMP_SYMBOL_ARG_NAMES);
     symbol->prefix  = &hemp_element_parse_prefix;
-    symbol->postfix = &hemp_element_not_postfix;
+    symbol->infix   = NULL;
     symbol->boolean = &hemp_element_boolean_not_value;
     return symbol;
 }

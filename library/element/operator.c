@@ -12,8 +12,6 @@
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_operator_symbol) {
-    symbol->prefix  = &hemp_element_not_prefix;
-    symbol->postfix = &hemp_element_not_postfix;
     symbol->token   = &hemp_element_literal_token;
     symbol->source  = &hemp_element_literal_source;
     symbol->text    = &hemp_element_value_text;
@@ -54,21 +52,21 @@ HEMP_SYMBOL_FUNC(hemp_element_prepostfix_symbol) {
 
 HEMP_SYMBOL_FUNC(hemp_element_infix_symbol) {
     hemp_element_operator_symbol(hemp, symbol);
-    symbol->postfix = &hemp_element_parse_infix_left;   /* hmmm.... should be non-assoc */
-    symbol->source  = &hemp_element_infix_source;
+    symbol->infix  = &hemp_element_parse_infix_left;   /* hmmm.... should be non-assoc */
+    symbol->source = &hemp_element_infix_source;
     return symbol;
 }
 
 
 HEMP_SYMBOL_FUNC(hemp_element_infix_left_symbol) {
     hemp_element_infix_symbol(hemp, symbol);
-    symbol->postfix = &hemp_element_parse_infix_left;
+    symbol->infix = &hemp_element_parse_infix_left;
     return symbol;
 }
 
 HEMP_SYMBOL_FUNC(hemp_element_infix_right_symbol) {
     hemp_element_infix_symbol(hemp, symbol);
-    symbol->postfix = &hemp_element_parse_infix_right;
+    symbol->infix = &hemp_element_parse_infix_right;
     return symbol;
 }
 
