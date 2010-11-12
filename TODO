@@ -59,9 +59,15 @@ An incomplete list of things TODO, in no particular order.
  
 -- HOT STACK --
 
-* prefix/postfix/infix element methods
+* postfix element should have option (HEMP_BE_POSTBOUND?) that space lookahead 
+  (hemp_element_next_postfix()) can check to see if it allows space before it
+  when used as a postfix operator.  This is so that () [] {} can be required 
+  to bind tight when used for function application / element access, e.g.
+  foo(bar), foo[bar], foo{bar} while rejecting those cases where spaces are 
+  present, treating them instead as separate expressions, e.g. 
+  foo (bar) [bar] {baz=10}
 
-* Add parens with postfix handler to create args
+* Add postfix handler to parens to create args for function application
 
 * Add args() method to element and provide implementation for ()
 
@@ -77,11 +83,12 @@ An incomplete list of things TODO, in no particular order.
 * change function names in type/* from hemp_value_XXX_YYY to hemp_type_XXX_YYY
 
 * Have static symbols created at global startup time in the same way that 
-  value type now are.
+  value type now are. (now done?)
 
 * Change text to allocate header in front of text buffer (no wait... can't
   then resize buffer, scratch that... But do change capacity to grow as a 
-  power of 2 to avoid many re-allocations.
+  power of 2 to avoid many re-allocations.  Same for list which currently 
+  grows +1 each time.
 
 * Change elements to be values so that we can have a single value() and 
   text() interface instead of the similar (but not quite identical) 
@@ -89,7 +96,7 @@ An incomplete list of things TODO, in no particular order.
   the inside, so that elements hold values (object tagged element pointers)
   in their expr/lhs/rhs slots.
 
-* boolean vs truth
+* boolean vs truth: decide on the best terminology and stick to it.
 
 * Clean up all the macros and inline functions so that they're consistently
   name, e.g. HEMP_IS_NUM() and so on.  Change 'num' to 'number' and so on.
@@ -104,19 +111,16 @@ An incomplete list of things TODO, in no particular order.
   values (e.g. less than).  Is it an error to ask for those as int/num?
   I think so...
 
-* change 'tmpl' to 'hemplate'?
-
 * figure out how to scan/parse items.1.2.3 and not have the scanner parse
   it as (items).(1.2).3 (with a float in the middle)
   
--- NOV 2010 --
-
 * Create view object to walk element tree using symbol->namespace->id,
-  following parent.
-
-* Rename view to viewer.
+  following parent. (first attempt done, needs more work)
 
 * Change grammar definitions to fit hierarchy corresponding to operator type
   e.g. hemp.operator.binary.number.add allows a single view method to be
   defined for hemp.operator.binary which renders all binary operators using
   a similar process (e.g.for syntax highlighting)
+
+* Should OPERATOR2 register terminator token?  e.g. in:
+    HEMP_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);

@@ -38,8 +38,6 @@ False
 -- expect 
 True
 
-
-
 -- test text less than when equal
 [% 'bar' lt 'bar' %]
 -- expect 
