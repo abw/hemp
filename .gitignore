@@ -31,6 +31,7 @@ tests/core/filesystem
 tests/core/grammar
 tests/core/memory
 tests/core/namespace
+tests/core/parser
 tests/core/pool
 tests/core/slab
 tests/core/source

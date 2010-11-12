@@ -196,6 +196,16 @@ HEMP_VALUE_FUNC(hemp_value_false) {
 }
 
 
+HEMP_VALUES_FUNC(hemp_value_values) {
+    hemp_debug("hemp_value_values()\n");
+    hemp_list_p values;
+    hemp_prepare_values(context, output, values);
+    hemp_list_push(values, value);
+    hemp_debug("hemp_value_values() added value to list, now has %d items\n", values->length);
+    return output;
+}
+
+
 HEMP_FETCH_FUNC(hemp_value_dot) {
     hemp_debug_call("hemp_value_dot(%s)\n", hemp_type_name(container));
     hemp_value_t result = HempMissing;
@@ -216,7 +226,7 @@ HEMP_FETCH_FUNC(hemp_value_dot) {
     }
     else {
         /* otherwise we have to convert the key to text */
-        hemp_text_p ktext = hemp_text_init(16);
+        hemp_text_p ktext = hemp_text_new_size(16);
         hemp_onto_text(key, context, hemp_text_val(ktext));
         result = hemp_send(container, ktext->string, context);
         hemp_text_free(ktext);
@@ -338,6 +348,7 @@ void hemp_dump_u64(
     hemp_int_t n = 1;
     hemp_str_p col;
     printf("0x%016llx : ", value);
+    printf("DUMPING....\n");
 
     while (mask) {
         bit = value & mask;

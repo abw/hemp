@@ -12,7 +12,6 @@
 
 /* symbol vtable */
 
-
 struct hemp_symbol_s {
     hemp_str_p       name;          /* old */
     hemp_namespace_p namespace;     /* new */
@@ -42,6 +41,7 @@ struct hemp_symbol_s {
     hemp_eval_f     integer;
     hemp_eval_f     boolean;
     hemp_eval_f     compare;
+    hemp_evals_f    values;
 
     hemp_prefix_f   fixed;
 };

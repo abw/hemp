@@ -35,7 +35,10 @@ hemp_slab_free(
 ) {
     hemp_slab_p next_slab;
 
+//    hemp_debug_mem("hemp_slab_free(%p)\n", slab);
+
     while (slab) {
+//        hemp_debug_mem("freeing slab at %p\n", slab);
         next_slab = slab->next;
         hemp_mem_free(slab);
         slab = next_slab;

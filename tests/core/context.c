@@ -30,6 +30,13 @@ void test_context() {
     ok( hemp_context_set_string(context, "message", "hello world"), "set message" );
     is( hemp_context_get_string(context, "message"), "hello world", "get message" );
 
+    int n;
+    for (n = 0; n < 10; n++) {
+        hemp_list_p list = hemp_context_tmp_list(context);
+        hemp_text_p text = hemp_context_tmp_text(context);
+        hemp_text_append_string(text, "hello world!");
+    }
+        
     hemp_context_free(context);
     hemp_free(hemp);
 }

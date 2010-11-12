@@ -368,6 +368,19 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         HEMP_EVAL_ARGS                      \
     )
 
+#define HEMP_EVALS_ARGS                     \
+        hemp_element_p  element,            \
+        hemp_context_p  context,            \
+        hemp_value_t    output
+
+#define HEMP_EVALS_ARG_NAMES                \
+        element, context, output
+
+#define HEMP_EVALS_FUNC(f)                  \
+    HEMP_INLINE hemp_value_t f(             \
+        HEMP_EVALS_ARGS                     \
+    )
+
 
 /*--------------------------------------------------------------------------
  * Element Text Output
@@ -419,14 +432,17 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         HEMP_VIEW_ARGS                      \
     )
 
-#define HEMP_VIEWER(name, constructor)        \
-    hemp_register_viewer(hemp, name, (hemp_actor_f) constructor);
-
 #define HEMP_VIEWER_FUNC(f)                 \
     hemp_viewer_p f(                        \
         hemp_p     hemp,                    \
         hemp_str_p name                     \
     )
+
+#define HEMP_VIEWER(name, constructor)      \
+    hemp_register_viewer(hemp, name, (hemp_actor_f) constructor);
+
+#define HEMP_VIEW(name, view)               \
+    hemp_viewer_add_view(viewer, name, view);
 
 
 /*--------------------------------------------------------------------------
@@ -445,6 +461,13 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
     HEMP_INLINE hemp_value_t f(             \
         hemp_value_t    value,              \
         hemp_context_p  context             \
+    )
+
+#define HEMP_VALUES_FUNC(f)                 \
+    HEMP_INLINE hemp_value_t f(             \
+        hemp_value_t    value,              \
+        hemp_context_p  context,            \
+        hemp_value_t    output              \
     )
 
 #define HEMP_VTEXT_FUNC(f)                  \
@@ -544,11 +567,20 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 
 #define hemp_prepare_output(output, text, length)       \
     if (hemp_is_undef(output)) {                        \
-        text   = hemp_text_init(length);                \
+        text   = hemp_text_new_size(length);                \
         output = hemp_text_val(text);                   \
     }                                                   \
     else {                                              \
         text   = hemp_val_text(output);                 \
+    }
+
+#define hemp_prepare_values(context, output, list)      \
+    if (hemp_is_undef(output)) {                        \
+        list   = hemp_context_tmp_list(context);        \
+        output = hemp_list_val(list);                   \
+    }                                                   \
+    else {                                              \
+        list   = hemp_val_list(output);                 \
     }
 
 

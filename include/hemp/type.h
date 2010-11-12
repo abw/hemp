@@ -20,13 +20,15 @@ struct hemp_type_s {
     hemp_hash_p     methods;
 //    hemp_method_f   method;     /* TODO: method auto-generator */
     hemp_vtext_f    text;
-    hemp_value_f    value;
+    hemp_vlist_f    list;
+//    hemp_value_f    value;
     hemp_value_f    number;
     hemp_value_f    integer;
     hemp_value_f    boolean;
     hemp_value_f    compare;
     hemp_value_f    defined;
     hemp_value_f    apply;
+    hemp_values_f   values;
     hemp_fetch_f    fetch;
     hemp_store_f    store;
     hemp_fetch_f    dot;

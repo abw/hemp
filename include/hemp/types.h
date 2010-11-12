@@ -177,6 +177,11 @@ typedef hemp_bool_t
         hemp_slot_p     item        /* pointer to hash item entry           */
     );
 
+typedef hemp_bool_t     
+    (* hemp_pool_each_f)(           /* function called against pool items   */
+        hemp_mem_p      item
+    );
+
 typedef hemp_symbol_p
     (* hemp_symbol_f)(
         hemp_p          hemp,       /* pointer to current hemp context      */
@@ -295,6 +300,13 @@ typedef hemp_value_t
     );
 
 typedef hemp_value_t 
+    (* hemp_evals_f)(
+        hemp_element_p  element,    /* pointer to element                   */
+        hemp_context_p  context,    /* runtime context                      */
+        hemp_value_t    output      /* optional output buffer               */
+    );
+
+typedef hemp_value_t 
     (* hemp_view_f)(
         hemp_viewer_p   view,       /* pointer to viewer                    */
         hemp_element_p  element,    /* pointer to element                   */
@@ -306,6 +318,13 @@ typedef hemp_value_t
     (* hemp_value_f)(
         hemp_value_t    value,      /* value to operate on                  */
         hemp_context_p  context     /* runtime context                      */
+    );
+
+typedef hemp_value_t
+    (* hemp_values_f)(
+        hemp_value_t    value,      /* value to operate on                  */
+        hemp_context_p  context,    /* runtime context                      */
+        hemp_value_t    output      /* optional output buffer               */
     );
 
 typedef hemp_value_t
@@ -325,6 +344,13 @@ typedef hemp_value_t
 
 typedef hemp_value_t
     (* hemp_vtext_f)(
+        hemp_value_t    value,      /* value to operate on                  */
+        hemp_context_p  context,    /* runtime context                      */
+        hemp_value_t    output      /* output to append onto                */
+    );
+
+typedef hemp_value_t
+    (* hemp_vlist_f)(
         hemp_value_t    value,      /* value to operate on                  */
         hemp_context_p  context,    /* runtime context                      */
         hemp_value_t    output      /* output to append onto                */

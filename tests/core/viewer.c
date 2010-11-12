@@ -6,7 +6,7 @@ void test_viewer();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(15);
+    plan(9);
     test_viewer();
     return done();
 }
@@ -34,8 +34,6 @@ void test_viewer() {
 
     text = hemp_viewer(hemp, "text");
     ok( text, "fetched text view again" );
-
-//    hemp_view_free(text);
 
     hemp_text_p output;
 

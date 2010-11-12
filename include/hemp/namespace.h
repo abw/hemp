@@ -78,6 +78,10 @@ hemp_bool_t
         : hemp_namespace_root(name)                             \
 )
 
+#define hemp_namespace_id(name) (                               \
+    hemp_namespace(name)->id                                    \
+)
+
 #define hemp_namespace_child(namespace, name)                   \
     hemp_namespace_instance(                                    \
         namespace->children, name, namespace                    \

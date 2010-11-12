@@ -18,6 +18,7 @@ HEMP_SYMBOL_FUNC(hemp_element_operator_symbol) {
     symbol->source  = &hemp_element_literal_source;
     symbol->text    = &hemp_element_value_text;
     symbol->value   = &hemp_element_not_value;   /* sub-types redefine this */
+    symbol->values  = &hemp_element_value_values;
     symbol->number  = &hemp_element_value_number;
     symbol->integer = &hemp_element_value_integer;
     symbol->boolean = &hemp_element_value_boolean;

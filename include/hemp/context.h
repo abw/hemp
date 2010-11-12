@@ -2,6 +2,7 @@
 #define HEMP_CONTEXT_H
 
 #include <hemp/core.h>
+#include <hemp/pool.h>
 #include <hemp/type/hash.h>
 
 
@@ -13,6 +14,8 @@ struct hemp_context_s {
     hemp_p          hemp;
     hemp_hash_p     vars;
 /*  hemp_value_t    variables; */
+    hemp_pool_p     list_pool;          /* tmp hack */
+    hemp_pool_p     text_pool;          /* tmp hack */
 };
 
 
@@ -22,6 +25,10 @@ struct hemp_context_s {
 
 hemp_context_p  hemp_context_init(hemp_p);
 void            hemp_context_free(hemp_context_p);
+hemp_list_p     hemp_context_tmp_list(hemp_context_p);
+hemp_text_p     hemp_context_tmp_text(hemp_context_p);
+hemp_bool_t     hemp_context_list_pool_cleaner(hemp_mem_p item);
+hemp_bool_t     hemp_context_text_pool_cleaner(hemp_mem_p item);
 
 
 /*--------------------------------------------------------------------------

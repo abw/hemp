@@ -111,20 +111,18 @@ hemp_element_parse_exprs(
     HEMP_PREFIX_ARGS
 ) {
     hemp_debug_call("hemp_element_parse_exprs()\n");
-    hemp_debug("hemp_element_parse_exprs( precedence => %d )\n", precedence);
+    hemp_debug_parse("hemp_element_parse_exprs( precedence => %d )\n", precedence);
 
     hemp_element_p expr;
-    hemp_list_p    exprs = hemp_list_init();
+    hemp_list_p    exprs = hemp_list_new();
 
 #if HEMP_DEBUG & HEMP_DEBUG_PARSE
     hemp_debug("\n-- EXPRS --\n");
 #endif
 
     while (1) {
-        // TODO: skip whitespace/delimiter all in one
-        hemp_skip_whitespace(elemptr);
-        hemp_skip_terminator(elemptr);
-        hemp_skip_whitespace(elemptr);
+        /* skip whitespace, delimiters (commas) and separators (semi-colons) */
+        hemp_skip_separator(elemptr);
 
 //      hemp_debug_parse("about to parse expr:\n");
 
@@ -193,7 +191,8 @@ HEMP_PREFIX_FUNC(hemp_element_decline) {
 
 
 HEMP_PREFIX_FUNC(hemp_element_not_prefix) {
-    hemp_debug("%s is not prefix\n", (*elemptr)->type->name);
+//  hemp_debug("%s is not prefix\n", (*elemptr)->type->name);
+    hemp_debug_call("hemp_element_not_prefix()\n");
     return NULL;
 }
 
@@ -230,6 +229,12 @@ HEMP_ETEXT_FUNC(hemp_element_not_text) {
 
 HEMP_EVAL_FUNC(hemp_element_not_value) {
     hemp_fatal("%s element does not yield value\n", element->type->name);
+    return HempNothing;
+}
+
+
+HEMP_EVALS_FUNC(hemp_element_not_values) {
+    hemp_fatal("%s element does not yield values\n", element->type->name);
     return HempNothing;
 }
 
@@ -358,6 +363,13 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left) {
     hemp_set_rhs_element(self, rhs);
     hemp_skip_whitespace(elemptr);
 
+    hemp_debug_parse(
+        "parsed infix [%s] [%s] [%s]\n", 
+        lhs->type->name, self->type->start, rhs->type->name
+    );
+
+    hemp_debug_parse("next element is %s:\n", (*elemptr)->type->name);
+
     return hemp_parse_postfix(
         elemptr, scope, precedence, 0,
         self
@@ -447,8 +459,15 @@ HEMP_EVAL_FUNC(hemp_element_value_compare) {
     hemp_debug_call("hemp_element_value_compare()\n");
     hemp_value_t value = element->type->value(element, context);
     return hemp_to_compare(value, context);
-
 }
+
+HEMP_EVALS_FUNC(hemp_element_value_values) {
+    hemp_debug_call("hemp_element_value_values()\n");
+    hemp_value_t value = element->type->value(element, context);
+    return hemp_values(value, context, output);
+}
+
+
 
 
 /*--------------------------------------------------------------------------

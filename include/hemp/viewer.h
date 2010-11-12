@@ -15,7 +15,7 @@ struct hemp_viewer_s {
     hemp_str_p      name;
     hemp_viewer_p   parent;
     hemp_view_f    *view;
-    hemp_size_t     size;
+    hemp_u16_t      size;
 };
 
 
@@ -33,6 +33,13 @@ hemp_viewer_p
 void
     hemp_viewer_free( 
         hemp_viewer_p view
+    );
+
+hemp_bool_t
+    hemp_viewer_add_view(
+        hemp_viewer_p viewer,
+        hemp_str_p    name,
+        hemp_view_f   view
     );
 
 hemp_viewer_p 

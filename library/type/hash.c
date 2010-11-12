@@ -402,7 +402,7 @@ hemp_hash_as_text(hemp_hash_t table) {
     hemp_size_t i, s = table->size;
     hemp_hash_entry_t entry;
     HEMP_VALUE  value;
-    HEMP_TEXT   text = hemp_text_init(4 + table->size * 32);
+    HEMP_TEXT   text = hemp_text_new_size(4 + table->size * 32);
     
     hemp_text_append_string(text, "{ ");
 
@@ -551,7 +551,7 @@ HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
     }
     else {
         /* otherwise we have to convert the key to text */
-        ktext = hemp_text_init(16);
+        ktext = hemp_text_new_size(16);
         kmine = HEMP_TRUE;
         hemp_onto_text(key, context, hemp_text_val(ktext));
     }
@@ -585,7 +585,7 @@ HEMP_FETCH_FUNC(hemp_type_hash_dot) {
     }
     else {
         /* otherwise we have to convert the key to text */
-        ktext = hemp_text_init(16);
+        ktext = hemp_text_new_size(16);
         kmine = HEMP_TRUE;
         hemp_onto_text(key, context, hemp_text_val(ktext));
     }

@@ -23,30 +23,14 @@ HEMP_TYPE_FUNC(hemp_type_text) {
  * General purpose text functions.
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_text_p
-hemp_text_new( ) {
-    hemp_text_p text = (hemp_text_p) hemp_mem_alloc(
-        sizeof(struct hemp_text_s)
-    );
-    
-    /* TODO: allocate both header and body in one block */
-    if (! text)
-        hemp_mem_fail("text");
-
-    text->capacity = 
-    text->length   = 0;
-    text->string   = NULL;
-
-    return text;
-}
-
 
 hemp_text_p
-hemp_text_init(
+hemp_text_init_size(
+    hemp_text_p text,
     hemp_size_t size
 ) {
-    hemp_text_p text = hemp_text_new();
-
+    hemp_text_allocate(text);
+    
     if (size) {
         text->string = hemp_mem_alloc(size + 1);
         
@@ -56,6 +40,11 @@ hemp_text_init(
         text->capacity = size;
         text->length   = 0;
     }
+    else {
+        text->capacity = 
+        text->length   = 0;
+        text->string   = NULL;
+    }
 
     return text;
 }
@@ -63,11 +52,12 @@ hemp_text_init(
 
 hemp_text_p
 hemp_text_init_format(
+    hemp_text_p text,
     const hemp_str_p format,
     ...
 ) {
-    hemp_text_p text = hemp_text_new();
     hemp_str_p  string;
+    hemp_text_allocate(text);
 
     va_list args;
     va_start(args, format);
@@ -90,13 +80,24 @@ hemp_text_init_format(
 }
 
 
+HEMP_INLINE void
+hemp_text_release(
+    hemp_text_p text
+) {
+//    hemp_debug("releasing text at %p\n", text);
+    if (text->string) {
+        hemp_mem_free(text->string);
+        text->string = NULL;
+    }
+}
+
+
 void
 hemp_text_free(
     hemp_text_p text
 ) {
-    if (text->string)
-        hemp_mem_free(text->string);
-
+//    hemp_debug("freeing text at %p\n", text);
+    hemp_text_release(text);
     hemp_mem_free(text);
 }
 
@@ -108,13 +109,13 @@ hemp_text_capacity(
 ) {
     /* increment string length by 1 to account for terminating '\0' */
     if (text->capacity < ++length) {
-        text->string = text->string
+        text->string = (text->string
             ? hemp_mem_resize(text->string, length)  
-            : hemp_mem_alloc(length);
+            : hemp_mem_alloc(length));
 
         if (! text->string)
             hemp_mem_fail("text string");
-
+        
         text->capacity = length - 1;
     }
     
@@ -126,7 +127,7 @@ hemp_text_p
 hemp_text_from_text(
     hemp_text_p source
 ) {
-    hemp_text_p text = hemp_text_init(source->length);
+    hemp_text_p text = hemp_text_new_size(source->length);
     hemp_text_append_text(text, source);
     return text;
 }
@@ -136,7 +137,7 @@ hemp_text_p
 hemp_text_from_string(
     hemp_str_p source
 ) {
-    hemp_text_p text = hemp_text_init(strlen(source));
+    hemp_text_p text = hemp_text_new_size(strlen(source));
     hemp_text_append_string(text, source);
     return text;
 }

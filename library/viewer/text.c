@@ -1,5 +1,10 @@
 #include <hemp/viewer.h>
 
+/* This is still something of an experiment in progress */
+
+
+HEMP_VIEW_FUNC(hemp_viewer_text_view_hemp_block);
+
 
 HEMP_VIEWER_FUNC(hemp_viewer_text_init) {
     hemp_debug("hemp_viewer_text_init(%p, %s)\n", hemp, name);
@@ -7,6 +12,9 @@ HEMP_VIEWER_FUNC(hemp_viewer_text_init) {
     hemp_viewer_p viewer = hemp_viewer_init(
         hemp, name
     );
+    
+    HEMP_VIEW("hemp.block", &hemp_viewer_text_view_hemp_block);
+    HEMP_VIEW("hemp.number.minus", &hemp_viewer_text_view_hemp_block);
 
     return viewer;
 }

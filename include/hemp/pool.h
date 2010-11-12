@@ -42,6 +42,13 @@ void
         hemp_pool_p pool
     );
 
+void
+    hemp_pool_each(
+        hemp_pool_p      pool,
+        hemp_pool_each_f func
+    );
+
+
 
 #endif /* HEMP_POOL_H */
 

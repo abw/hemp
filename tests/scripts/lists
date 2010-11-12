@@ -1,5 +1,17 @@
--- test list  
+-- test dummy
+TODO: Lists aren't implemented yet.  This test will be enabled when they are.
+-- expect
+TODO: Lists aren't implemented yet.  This test will be enabled when they are.
+
+-- stop --
+
+-- test list
 [% [4, 2, 0].join %]
+-- expect
+420
+
+-- test list assignment
+[% nums = [4, 2, 0]; nums.join %]
 -- expect
 420
 

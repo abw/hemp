@@ -206,7 +206,7 @@ HEMP_FETCH_FUNC(hemp_perl_array_fetch) {
             /* otherwise we have to convert the key to text */
             /* TODO: must be a better way to check for numeric conversion without throwing an error? */
             hemp_debug_perl("creating text key\n");
-            ktext = hemp_text_init(16);
+            ktext = hemp_text_new_size(16);
             kmine = HEMP_TRUE;
             hemp_onto_text(key, context, hemp_text_val(ktext));
         }
@@ -291,7 +291,7 @@ HEMP_FETCH_FUNC(hemp_perl_hash_fetch) {
     }
     else {
         /* otherwise we have to convert the key to text */
-        ktext = hemp_text_init(16);
+        ktext = hemp_text_new_size(16);
         kmine = HEMP_TRUE;
         hemp_onto_text(key, context, hemp_text_val(ktext));
     }

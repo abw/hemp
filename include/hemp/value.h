@@ -267,6 +267,7 @@ extern const hemp_value_t HempAfter;
 #define hemp_call(v,n,c)        (hemp_tfunc(v,n)(v,c))
 #define hemp_dot(v,c,k)         (hemp_tfunc(v,dot)(v,c,k))
 #define hemp_text(v,c,o)        (hemp_tfunc(v,text)(v,c,o))
+#define hemp_values(v,c,o)      (hemp_tfunc(v,values)(v,c,o))
 #define hemp_type_name(v)       (hemp_type(v)->name)
 #define hemp_type_method(t,m)   ((hemp_value_f) hemp_hash_fetch_pointer(t->methods, m))
 #define hemp_type_extend(t,m,f) hemp_hash_store_pointer(t->methods, m, f)
@@ -345,6 +346,8 @@ HEMP_VALUE_FUNC(hemp_value_self);
 HEMP_VALUE_FUNC(hemp_value_true);
 HEMP_VALUE_FUNC(hemp_value_false);
 HEMP_FETCH_FUNC(hemp_value_dot);
+
+HEMP_VALUES_FUNC(hemp_value_values);
 
 /* default "cannot convert to X" function */
 HEMP_VTEXT_FUNC(hemp_value_not_text);

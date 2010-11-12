@@ -14,7 +14,7 @@ int main(
 
 
 void test_text() {
-    hemp_text_p message = hemp_text_init(25);
+    hemp_text_p message = hemp_text_new_size(25);
     hemp_text_p badger, copycat;
 
     ok( message, "created message" );
@@ -105,7 +105,7 @@ void test_text() {
 
 
     /* append */
-    message = hemp_text_init(3);
+    message = hemp_text_new_size(3);
     ok( message->capacity == 3, "capacity is %d", message->capacity );
     hemp_text_append_stringn(message, "foobar", 3);
     ok( message->capacity == 3, "capacity is still %d", message->capacity );
@@ -137,7 +137,7 @@ void test_text() {
     hemp_text_free(message);
 
 
-    message = hemp_text_init_format(
+    message = hemp_text_new_format(
         "The %s sat on the %s and %s.", 
         "cat", "mat", "shat"
     );

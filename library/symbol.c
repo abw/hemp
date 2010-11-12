@@ -32,6 +32,7 @@ hemp_symbol_init(
     symbol->source  = &hemp_element_not_source;
     symbol->text    = &hemp_element_not_text;
     symbol->value   = &hemp_element_not_value;
+    symbol->values  = &hemp_element_not_values;
     symbol->number  = &hemp_element_not_number;
     symbol->integer = &hemp_element_not_integer;
     symbol->boolean = &hemp_element_not_boolean;

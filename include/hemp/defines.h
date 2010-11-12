@@ -84,6 +84,7 @@
 #define HEMP_PTREE_SIZE     8       /* # of bucket chains in a ptree        */
 #define HEMP_VTYPES_SIZE    8
 #define HEMP_TAGSET_SIZE    8
+#define HEMP_VIEW_SIZE      32
 
 /* 
  * Arrrr!  These be the element flags, m'hearties.  They be the bits what'll
@@ -96,11 +97,12 @@
  * serve you well on yer merry sea-faring escapades... Arrrr!
  */
 #define HEMP_BE_WHITESPACE  0x0001  /* skippabled whitespace, comment, etc  */
-#define HEMP_BE_SEPARATOR   0x0002  /* skippable separator in lists         */
-#define HEMP_BE_TERMINATOR  0x0004  /* non-skippable expression terminator  */
-#define HEMP_BE_HIDDEN      0x0008  /* generates no output                  */
-#define HEMP_BE_SOURCE      0x0010  /* source text can yield output text    */
-#define HEMP_BE_FIXED       0x0020  /* element output is pre-defined        */
+#define HEMP_BE_DELIMITER   0x0002  /* skippable list item delimiter        */
+#define HEMP_BE_SEPARATOR   0x0004  /* expression separator                 */
+#define HEMP_BE_TERMINATOR  0x0008  /* non-skippable expression terminator  */
+#define HEMP_BE_HIDDEN      0x0010  /* generates no output                  */
+#define HEMP_BE_SOURCE      0x0020  /* source text can yield output text    */
+#define HEMP_BE_FIXED       0x0040  /* element output is pre-defined        */
 #define HEMP_BE_PREFIX      0x0100  /* element is a prefix operator         */
 #define HEMP_BE_INFIX       0x0200  /* element is an infix operator         */
 #define HEMP_BE_POSTFIX     0x0400  /* element is a postfix operator        */

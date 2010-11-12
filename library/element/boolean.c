@@ -78,11 +78,11 @@ HEMP_EVAL_FUNC(hemp_element_boolean_and_value) {
 
     hemp_element_p lhs = hemp_lhs_element(element);
     hemp_element_p rhs = hemp_rhs_element(element);
-    hemp_debug("[and] evaluating LHS (%s) as boolean\n", lhs->type->name);
+//  hemp_debug("[and] evaluating LHS (%s) as boolean\n", lhs->type->name);
     hemp_value_t lval  = lhs->type->boolean(lhs, context);
     
     /* TODO: short-circuit if false */
-    hemp_debug("[and] evaluating RHS (%s) as boolean\n", rhs->type->name);
+//  hemp_debug("[and] evaluating RHS (%s) as boolean\n", rhs->type->name);
     hemp_value_t rval  = rhs->type->boolean(rhs, context);
 
     return (hemp_is_true(lval) && hemp_is_true(rval))

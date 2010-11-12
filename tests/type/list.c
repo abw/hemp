@@ -14,7 +14,7 @@ main(int argc, char **argv, char **env) {
 
 void test_list() {
     hemp_p      hemp = hemp_init();
-    hemp_list_p list = hemp_list_init();
+    hemp_list_p list = hemp_list_new();
     
     pass("created list");
 

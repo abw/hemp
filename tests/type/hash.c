@@ -233,6 +233,6 @@ void test_hash_methods() {
 
     hemp_context_free(context);
     hemp_hash_free(hash);
-//  hemp_text_free(text);
+    hemp_text_free( hemp_val_text(htext) );
     hemp_free(hemp);
 }

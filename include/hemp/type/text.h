@@ -19,9 +19,10 @@ struct hemp_text_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_text_p hemp_text_new();
-hemp_text_p hemp_text_init(hemp_size_t);
-hemp_text_p hemp_text_init_format(hemp_str_p, ...);
+//hemp_text_p hemp_text_new();
+//hemp_text_p hemp_text_init(hemp_size_t);
+hemp_text_p hemp_text_init_size(hemp_text_p, hemp_size_t);
+hemp_text_p hemp_text_init_format(hemp_text_p, hemp_str_p, ...);
 void        hemp_text_free(hemp_text_p);
 hemp_text_p hemp_text_from_text(hemp_text_p);
 hemp_text_p hemp_text_from_string(hemp_str_p);
@@ -30,6 +31,7 @@ hemp_text_p hemp_text_append_string(hemp_text_p, hemp_str_p);
 hemp_text_p hemp_text_append_stringn(hemp_text_p, hemp_str_p, hemp_size_t);
 hemp_text_p hemp_text_insert_string(hemp_text_p, hemp_offset_t, hemp_str_p);
 hemp_text_p hemp_text_replace_string(hemp_text_p, hemp_str_p);
+void        hemp_text_release(hemp_text_p);
 
 /*
 int hemp_string_equals(HEMP_STRING a, HEMP_STRING b);
@@ -52,6 +54,30 @@ HEMP_VALUE_FUNC(hemp_method_text_length);
 /*--------------------------------------------------------------------------
  * macros
  *--------------------------------------------------------------------------*/
+
+#define hemp_text_init(text)                            \
+    hemp_text_init_size(text, 0)
+
+#define hemp_text_new()                                 \
+    hemp_text_init(NULL)
+
+#define hemp_text_new_size(size)                        \
+    hemp_text_init_size(NULL, size)
+
+#define hemp_text_new_format(format, ...)               \
+    hemp_text_init_format(NULL, format, __VA_ARGS__)
+
+#define hemp_text_allocate(text) ({                     \
+    if (! text) {                                       \
+        text = (hemp_text_p) hemp_mem_alloc(            \
+            sizeof(struct hemp_text_s)                  \
+        );                                              \
+        if (! text)                                     \
+            hemp_mem_fail("text");                      \
+    }                                                   \
+})
+
+
 
 #define hemp_text_append_string(text, append)         \
     hemp_text_append_stringn(text, append, strlen(append))

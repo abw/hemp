@@ -21,13 +21,16 @@ HEMP_TYPE_FUNC(hemp_type_list) {
  *--------------------------------------------------------------------------*/
 
 hemp_list_p
-hemp_list_init() {
-    hemp_list_p list = (hemp_list_p) hemp_mem_alloc(
-        sizeof(struct hemp_list_s)
-    );
-
-    if (! list)
-        hemp_mem_fail("list");
+hemp_list_init(
+    hemp_list_p list
+) {
+    if (! list) {
+        list = (hemp_list_p) hemp_mem_alloc(
+            sizeof(struct hemp_list_s)
+        );
+        if (! list)
+            hemp_mem_fail("list");
+    }
 
     list->items    = NULL;
     list->length   = 0;
@@ -38,8 +41,8 @@ hemp_list_init() {
 }
 
 
-void
-hemp_list_free(
+HEMP_INLINE void
+hemp_list_release(
     hemp_list_p list
 ) {
     if (list->items) {
@@ -49,6 +52,14 @@ hemp_list_free(
         hemp_mem_free(list->items);
         list->items = NULL;
     }
+}
+
+
+void
+hemp_list_free(
+    hemp_list_p list
+) {
+    hemp_list_release(list);
     hemp_mem_free(list);
 }
 
@@ -59,6 +70,16 @@ hemp_list_push(
     hemp_value_t    value
 ) {
     if (list->length == list->capacity) {
+        /* TODO: grow capacity by 2 each time... 
+        int new_capacity = list->capacity;
+        if (new_capacity) {
+            new_capacity *= 2;
+        }
+        else {
+            new_capacity = 2;
+        }
+        */
+        
         // TODO: slab allocate with overflow to avoid repeated realloc
         // (or just plug in an off-the-shelf list library...)
         list->items = hemp_mem_resize(
@@ -123,9 +144,7 @@ HEMP_VTEXT_FUNC(hemp_value_list_text) {
 
 
 HEMP_FETCH_FUNC(hemp_type_list_fetch) {
-    hemp_debug(
-        "hemp_type_list_fetch()\n"
-    );
+    hemp_debug_call("hemp_type_list_fetch()\n");
 
     hemp_int_t  index;
     hemp_bool_t found = HEMP_FALSE;
@@ -147,7 +166,7 @@ HEMP_FETCH_FUNC(hemp_type_list_fetch) {
             /* otherwise we have to convert the key to text */
             /* TODO: must be a better way to check for numeric conversion without throwing an error? */
             hemp_debug("creating text key\n");
-            ktext = hemp_text_init(16);
+            ktext = hemp_text_new_size(16);
             kmine = HEMP_TRUE;
             hemp_onto_text(key, context, hemp_text_val(ktext));
         }
@@ -169,7 +188,9 @@ HEMP_FETCH_FUNC(hemp_type_list_fetch) {
         hemp_debug("got index key: %d\n", index);
     else
         hemp_debug("no index key\n");
-        
+
+    // TODO: bounds check
+
     return found 
         ? hemp_list_item( hemp_val_list(container), index )
         : HempMissing;

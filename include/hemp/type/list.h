@@ -21,7 +21,7 @@ struct hemp_list_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_list_p hemp_list_init(void);
+hemp_list_p hemp_list_init(hemp_list_p);
 void        hemp_list_free(hemp_list_p);
 hemp_list_p hemp_list_push(hemp_list_p, hemp_value_t);
 hemp_pos_t  hemp_list_each(hemp_list_p, hemp_list_each_f);
@@ -43,6 +43,9 @@ HEMP_VALUE_FUNC(hemp_method_list_length);
 /*--------------------------------------------------------------------------
  * macros
  *--------------------------------------------------------------------------*/
+
+#define hemp_list_new()                 \
+    hemp_list_init(NULL)
 
 #define hemp_list_item(list, n)         \
     list->items[n]

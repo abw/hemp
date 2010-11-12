@@ -45,7 +45,7 @@ hemp_string_split(
     hemp_str_p source,
     hemp_str_p split
 ) {
-    hemp_list_p list = hemp_list_init();
+    hemp_list_p list = hemp_list_new();
     hemp_str_p  from = source, to;
     hemp_size_t slen = strlen(split);
     hemp_str_p  item;
@@ -78,7 +78,7 @@ hemp_string_splits(
     hemp_str_p source,
     hemp_str_p token
 ) {
-    hemp_list_p list = hemp_list_init();
+    hemp_list_p list = hemp_list_new();
     hemp_size_t slen = strlen(source) + 1;
     hemp_size_t tlen = strlen(token);
     hemp_str_p  from  = source, to;
@@ -295,7 +295,7 @@ hemp_string_nwords(
     hemp_str_p  string,
     hemp_size_t max
 ) {
-    hemp_list_p list = hemp_list_init();
+    hemp_list_p list = hemp_list_new();
     hemp_str_p  from = string, to, item;
     hemp_size_t size = 0;
 
