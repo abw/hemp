@@ -52,21 +52,22 @@ HEMP_SYMBOL_FUNC(hemp_element_prepostfix_symbol) {
 
 HEMP_SYMBOL_FUNC(hemp_element_infix_symbol) {
     hemp_element_operator_symbol(hemp, symbol);
-    symbol->infix  = &hemp_element_parse_infix_left;   /* hmmm.... should be non-assoc */
-    symbol->source = &hemp_element_infix_source;
+    symbol->postfix = &hemp_element_parse_infix_left;   /* hmmm.... should be non-assoc */
+    symbol->source  = &hemp_element_infix_source;
+    symbol->flags  |= HEMP_BE_INFIX;
     return symbol;
 }
 
 
 HEMP_SYMBOL_FUNC(hemp_element_infix_left_symbol) {
     hemp_element_infix_symbol(hemp, symbol);
-    symbol->infix = &hemp_element_parse_infix_left;
+    symbol->postfix = &hemp_element_parse_infix_left;
     return symbol;
 }
 
 HEMP_SYMBOL_FUNC(hemp_element_infix_right_symbol) {
     hemp_element_infix_symbol(hemp, symbol);
-    symbol->infix = &hemp_element_parse_infix_right;
+    symbol->postfix = &hemp_element_parse_infix_right;
     return symbol;
 }
 

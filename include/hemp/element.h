@@ -138,12 +138,6 @@ struct hemp_element_s {
         : lhs                                           \
     )
 
-#define hemp_parse_infix(ep, sc, pr, fr, lhs)           \
-    ( (*ep)->type->infix                                \
-        ? (*ep)->type->infix(ep, sc, pr, fr, lhs)       \
-        : lhs                                           \
-    )
-
 #define hemp_parse_fixed(ep, sc, pr, fr)                \
     ((*ep)->type->fixed                                 \
         ? (*ep)->type->fixed(ep, sc, pr, fr)            \
@@ -227,7 +221,6 @@ HEMP_EVALS_FUNC(hemp_element_not_values);
 
 HEMP_PREFIX_FUNC(hemp_element_next_prefix);
 HEMP_POSTFIX_FUNC(hemp_element_next_postfix);
-HEMP_INFIX_FUNC(hemp_element_next_infix);
 
 
 /*--------------------------------------------------------------------------
@@ -346,6 +339,9 @@ HEMP_SYMBOL_FUNC(hemp_element_parens_symbol);
 HEMP_EVAL_FUNC(hemp_element_parens_value);
 HEMP_EVALS_FUNC(hemp_element_parens_values);
 
+HEMP_SYMBOL_FUNC(hemp_element_list_symbol);
+HEMP_SYMBOL_FUNC(hemp_element_hash_symbol);
+
 
 
 /*--------------------------------------------------------------------------
@@ -458,7 +454,7 @@ HEMP_EVAL_FUNC(hemp_element_text_value);
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol);
-HEMP_POSTFIX_FUNC(hemp_element_dotop_infix);
+HEMP_POSTFIX_FUNC(hemp_element_dotop_postfix);
 HEMP_EVAL_FUNC(hemp_element_dotop_value);
 void hemp_element_dotop_clean(hemp_element_p);
 

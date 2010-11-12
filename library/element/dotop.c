@@ -5,7 +5,7 @@
 
 HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
-    symbol->infix   = &hemp_element_dotop_infix;
+    symbol->postfix = &hemp_element_dotop_postfix;
     symbol->value   = &hemp_element_dotop_value;
     symbol->cleanup = &hemp_element_dotop_clean;
 
@@ -13,11 +13,11 @@ HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol) {
 }
 
 
-HEMP_POSTFIX_FUNC(hemp_element_dotop_infix) {
+HEMP_POSTFIX_FUNC(hemp_element_dotop_postfix) {
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
 
-    hemp_debug_call("hemp_element_dotop_parse_infix()\n");
+    hemp_debug_call("hemp_element_dotop_parse_postfix()\n");
 
     HEMP_INFIX_LEFT_PRECEDENCE;
     hemp_set_flag(self, HEMP_BE_INFIX);
@@ -49,7 +49,7 @@ HEMP_POSTFIX_FUNC(hemp_element_dotop_infix) {
 
     hemp_skip_whitespace(elemptr);
     
-    return hemp_parse_infix(
+    return hemp_parse_postfix(
         elemptr, scope, precedence, 0,
         self
     );

@@ -134,7 +134,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_space) {
 HEMP_SYMBOL_FUNC(hemp_element_space_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->prefix  = &hemp_element_next_prefix;
-    symbol->infix   = &hemp_element_next_infix;
+    symbol->postfix = &hemp_element_next_postfix;
     symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
                     | HEMP_BE_HIDDEN;
     return symbol;

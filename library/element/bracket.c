@@ -31,19 +31,6 @@ HEMP_PREFIX_FUNC(hemp_element_brackets_prefix) {
     }
 
     return hemp_parse_postfix(elemptr, scope, precedence, force, self);
-
-//    # check next token matches our FINISH token
-//    return $self->fail_missing( $self->FINISH, $token)
-//        unless $$token->is( $self->FINISH );
-//    
-//    # advance past finish token
-//    $$token = $$token->next;
-//
-//    # list/hash constructs can be followed by postops 
-//    return $$token->skip_ws->parse_infix($self, $token, $scope, $prec);
-
-
-    return self;
 }
 
 HEMP_POSTFIX_FUNC(hemp_element_brackets_postfix) {
@@ -150,49 +137,21 @@ HEMP_SYMBOL_FUNC(hemp_element_list_symbol) {
 }
 
 
-HEMP_PREFIX_FUNC(hemp_element_list_prefix) {
-    hemp_debug("hemp_element_list_prefix()\n");
-    hemp_element_p self = *elemptr;
-    hemp_symbol_p  type = self->type;
-    hemp_element_p block;
-
-    HEMP_PREFIX_PRECEDENCE;
-    hemp_go_next(elemptr);
-
-    block = hemp_element_parse_block(elemptr, scope, type->rprec, 1);
-
-    if (! block)
-        hemp_fatal("missing block for %s\n", type->start);
-    
-    hemp_set_expr_element(self, block);
-    hemp_skip_whitespace(elemptr);
-
-    hemp_debug("parsed test, next element is %s:\n", (*elemptr)->type->name);
-
-//  return hemp_parse_postfix(elemptr, scope, precedence, force, element);
-
-//    # check next token matches our FINISH token
-//    return $self->fail_missing( $self->FINISH, $token)
-//        unless $$token->is( $self->FINISH );
-//    
-//    # advance past finish token
-//    $$token = $$token->next;
-//
-//    # list/hash constructs can be followed by postops 
-//    return $$token->skip_ws->parse_infix($self, $token, $scope, $prec);
-
-
-    return self;
-}
-
-
-HEMP_POSTFIX_FUNC(hemp_element_list_postfix) {
-    hemp_debug("hemp_element_parens_postfix()\n");
-    return NULL;
-}
-
 
 HEMP_EVAL_FUNC(hemp_element_list_value) {
     hemp_debug("hemp_element_list_value()\n");
     return HempNothing;
+}
+
+
+/*--------------------------------------------------------------------------
+ * hash
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_hash_symbol) {
+    hemp_element_literal_symbol(hemp, symbol);
+/*
+    TODO
+*/
+    return symbol;
 }

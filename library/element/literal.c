@@ -21,8 +21,8 @@ HEMP_PREFIX_FUNC(hemp_element_literal_prefix) {
 
     if (hemp_has_next(elemptr)) {
         hemp_go_next(elemptr);
-        hemp_skip_whitespace(elemptr);
-        return hemp_parse_infix(elemptr, scope, precedence, force, element);
+//      hemp_skip_whitespace(elemptr);
+        return hemp_parse_postfix(elemptr, scope, precedence, force, element);
     }
 
     return element;

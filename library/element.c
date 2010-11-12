@@ -284,6 +284,13 @@ HEMP_PREFIX_FUNC(hemp_element_next_prefix) {
 HEMP_POSTFIX_FUNC(hemp_element_next_postfix) {
     hemp_debug_call("hemp_element_next_postfix()\n");
 
+    /* TODO: add check for HEMP_BE_XXXX flag to indicate if spaces are allowed
+     * or not before postfix operator.  For now, we allow them.  We currently
+     * use "infix" to distinguish "spacey" operators from "pure" postfix 
+     * operators that bind tight.  But none of this is currently enforced,
+     * and won't be until I've had a chance to rethink the terminology and 
+     * overall strategy.
+     */
     if (hemp_has_next(elemptr)) {
         hemp_go_next(elemptr);
         return hemp_parse_postfix(elemptr, scope, precedence, force, lhs);
@@ -292,19 +299,6 @@ HEMP_POSTFIX_FUNC(hemp_element_next_postfix) {
     return lhs;
 }
 
-
-HEMP_INFIX_FUNC(hemp_element_next_infix) {
-    hemp_debug_call("hemp_element_next_infix()\n");
-
-    hemp_skip_whitespace(elemptr);
-
-    if (hemp_has_next(elemptr)) {
-        hemp_go_next(elemptr);
-        return hemp_parse_infix(elemptr, scope, precedence, force, lhs);
-    }
-
-    return lhs;
-}
 
 
 /*--------------------------------------------------------------------------
@@ -327,9 +321,9 @@ HEMP_PREFIX_FUNC(hemp_element_parse_prefix) {
         hemp_fatal("missing expression on rhs of %s\n", type->start);
     
     hemp_set_expr_element(self, expr);
-    hemp_skip_whitespace(elemptr);
+//  hemp_skip_whitespace(elemptr);
 
-    return hemp_parse_infix(
+    return hemp_parse_postfix(
         elemptr, scope, precedence, 0,
         self
     );
@@ -347,7 +341,7 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_postfix) {
 
     hemp_set_expr_element(self, lhs);
     hemp_go_next(elemptr);
-    hemp_skip_whitespace(elemptr);
+//  hemp_skip_whitespace(elemptr);
 
     return hemp_parse_postfix(
         elemptr, scope, precedence, 0,
@@ -373,7 +367,7 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left) {
         hemp_fatal("missing expression on rhs of %s\n", type->start);
 
     hemp_set_rhs_element(self, rhs);
-    hemp_skip_whitespace(elemptr);
+//  hemp_skip_whitespace(elemptr);
 
     hemp_debug_parse(
         "parsed infix [%s] [%s] [%s]\n", 
@@ -382,7 +376,7 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left) {
 
     hemp_debug_parse("next element is %s:\n", (*elemptr)->type->name);
 
-    return hemp_parse_infix(
+    return hemp_parse_postfix(
         elemptr, scope, precedence, 0,
         self
     );
@@ -407,9 +401,9 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right) {
         hemp_fatal("missing expression on rhs of %s\n", type->start);
     
     hemp_set_rhs_element(self, rhs);
-    hemp_skip_whitespace(elemptr);
+//  hemp_skip_whitespace(elemptr);
 
-    return hemp_parse_infix(
+    return hemp_parse_postfix(
         elemptr, scope, precedence, 0,
         self
     );

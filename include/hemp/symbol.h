@@ -30,7 +30,6 @@ struct hemp_symbol_s {
     /* parsing methods */
     hemp_prefix_f   prefix;
     hemp_postfix_f  postfix;
-    hemp_postfix_f  infix;
 
     /* value methods */
     hemp_text_f     token;
