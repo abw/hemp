@@ -97,7 +97,7 @@ int main(
     if (optind < argc) {
         if (read_text) {
             filename = "input text";
-            input    = hemp_text_init(80);
+            input    = hemp_text_new_size(80);
             if (! input)
                 hemp_fatal("could not initialise input text");
 
@@ -409,7 +409,7 @@ hemp_cmd_expr(
     if (! *text)
         return HEMP_FALSE;
 
-    input = hemp_text_init_format("[%% %s %%]", text);
+    input = hemp_text_new_format("[%% %s %%]", text);
 
     hemplate = NULL;
     output   = NULL;

@@ -117,19 +117,8 @@ HEMP_EVALS_FUNC(hemp_element_parens_values) {
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_list_symbol) {
-    hemp_element_literal_symbol(hemp, symbol);
-/*
-    TODO
-    symbol->cleanup = &hemp_element_text_clean;
-    symbol->prefix  = &hemp_element_list_prefix;
-    symbol->postfix = &hemp_element_list_postfix;
-    symbol->text    = &hemp_element_value_text;
-    symbol->value   = &hemp_element_list_value;
-    symbol->number  = &hemp_element_value_number;
-    symbol->integer = &hemp_element_value_integer;
-    symbol->boolean = &hemp_element_value_boolean;
-    symbol->compare = &hemp_element_value_compare;
-*/
+    hemp_element_brackets_symbol(hemp, symbol);
+    symbol->value = &hemp_element_list_value;
     return symbol;
 }
 
@@ -137,7 +126,8 @@ HEMP_SYMBOL_FUNC(hemp_element_list_symbol) {
 
 HEMP_EVAL_FUNC(hemp_element_list_value) {
     hemp_debug("hemp_element_list_value()\n");
-    return HempNothing;
+    hemp_element_p block  = hemp_expr_element(element);
+    return block->type->values(block, context, HempNothing);
 }
 
 

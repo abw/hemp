@@ -288,9 +288,11 @@ hemp_grammar_add_hemp_bravo(
 
 //    # grouping constructs...
     HEMP_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);
+    HEMP_OPERATOR2("hemp.bracket.list",         "[", "]",     0,    0);
     HEMP_OPERATOR1("hemp.terminator",           ")",          0,    0);
-//  HEMP_OPERATOR2("hemp.bracket.square",       "[", "]",     0,    0);
-//  HEMP_OPERATOR1("hemp.bracket.end_square",   "]",          0,    0);
+    HEMP_OPERATOR1("hemp.terminator",           "]",          0,    0);
+
+    HEMP_OPERATOR1("hemp.delimiter",            ",",          0,    0);
 
 //    [ '['       => con_list         =>   0,   0 ],
 //    [ '{'       => con_hash         =>   0,   0 ],

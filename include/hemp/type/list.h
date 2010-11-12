@@ -39,6 +39,7 @@ HEMP_TYPE_FUNC(hemp_type_list);
 HEMP_FETCH_FUNC(hemp_type_list_fetch);
 HEMP_VTEXT_FUNC(hemp_value_list_text);
 HEMP_VALUE_FUNC(hemp_method_list_length);
+HEMP_VALUE_FUNC(hemp_method_list_text);
 
 /*--------------------------------------------------------------------------
  * macros

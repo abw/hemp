@@ -6,8 +6,8 @@ HEMP_SYMBOL_FUNC(hemp_element_literal_symbol) {
     symbol->source  = &hemp_element_literal_source;
     symbol->text    = &hemp_element_literal_text;
     symbol->value   = &hemp_element_literal_value;
-    symbol->fixed   = &hemp_element_fixed;
     symbol->values  = &hemp_element_value_values;
+    symbol->fixed   = &hemp_element_fixed;
     return symbol;
 }
 

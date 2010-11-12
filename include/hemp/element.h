@@ -340,6 +340,8 @@ HEMP_EVAL_FUNC(hemp_element_parens_value);
 HEMP_EVALS_FUNC(hemp_element_parens_values);
 
 HEMP_SYMBOL_FUNC(hemp_element_list_symbol);
+HEMP_EVAL_FUNC(hemp_element_list_value);
+
 HEMP_SYMBOL_FUNC(hemp_element_hash_symbol);
 
 

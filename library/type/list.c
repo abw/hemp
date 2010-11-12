@@ -11,6 +11,7 @@ HEMP_TYPE_FUNC(hemp_type_list) {
     type->defined    = &hemp_value_true;            /* and always defined   */
 
     hemp_type_extend(type, "length", &hemp_method_list_length);
+    hemp_type_extend(type, "text",   &hemp_method_list_text);
 
     return type;
 };
@@ -213,6 +214,11 @@ HEMP_FETCH_FUNC(hemp_type_list_fetch) {
 
 HEMP_VALUE_FUNC(hemp_method_list_length) {
     return hemp_int_val( hemp_val_list(value)->length );
+}
+
+
+HEMP_VALUE_FUNC(hemp_method_list_text) {
+    return hemp_value_list_text(value, context, HempNothing);
 }
 
 
