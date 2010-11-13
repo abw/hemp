@@ -49,6 +49,7 @@ tests/type/hash
 tests/type/list
 tests/type/text
 
+tests/language/hemp/assign
 tests/language/hemp/boolops
 tests/language/hemp/comments
 tests/language/hemp/lists

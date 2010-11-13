@@ -33,9 +33,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = boolops$(EXEEXT) comments$(EXEEXT) lists$(EXEEXT) \
-	numbers$(EXEEXT) numops$(EXEEXT) parens$(EXEEXT) \
-	quotes$(EXEEXT) textops$(EXEEXT) words$(EXEEXT)
+check_PROGRAMS = assign$(EXEEXT)
 subdir = tests/language/hemp
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -53,42 +51,10 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/hemp/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-boolops_SOURCES = boolops.c
-boolops_OBJECTS = boolops.$(OBJEXT)
-boolops_LDADD = $(LDADD)
-boolops_DEPENDENCIES = ../../../library/libhemp.la
-comments_SOURCES = comments.c
-comments_OBJECTS = comments.$(OBJEXT)
-comments_LDADD = $(LDADD)
-comments_DEPENDENCIES = ../../../library/libhemp.la
-lists_SOURCES = lists.c
-lists_OBJECTS = lists.$(OBJEXT)
-lists_LDADD = $(LDADD)
-lists_DEPENDENCIES = ../../../library/libhemp.la
-numbers_SOURCES = numbers.c
-numbers_OBJECTS = numbers.$(OBJEXT)
-numbers_LDADD = $(LDADD)
-numbers_DEPENDENCIES = ../../../library/libhemp.la
-numops_SOURCES = numops.c
-numops_OBJECTS = numops.$(OBJEXT)
-numops_LDADD = $(LDADD)
-numops_DEPENDENCIES = ../../../library/libhemp.la
-parens_SOURCES = parens.c
-parens_OBJECTS = parens.$(OBJEXT)
-parens_LDADD = $(LDADD)
-parens_DEPENDENCIES = ../../../library/libhemp.la
-quotes_SOURCES = quotes.c
-quotes_OBJECTS = quotes.$(OBJEXT)
-quotes_LDADD = $(LDADD)
-quotes_DEPENDENCIES = ../../../library/libhemp.la
-textops_SOURCES = textops.c
-textops_OBJECTS = textops.$(OBJEXT)
-textops_LDADD = $(LDADD)
-textops_DEPENDENCIES = ../../../library/libhemp.la
-words_SOURCES = words.c
-words_OBJECTS = words.$(OBJEXT)
-words_LDADD = $(LDADD)
-words_DEPENDENCIES = ../../../library/libhemp.la
+assign_SOURCES = assign.c
+assign_OBJECTS = assign.$(OBJEXT)
+assign_LDADD = $(LDADD)
+assign_DEPENDENCIES = ../../../library/libhemp.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/hemp
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -102,10 +68,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = boolops.c comments.c lists.c numbers.c numops.c parens.c \
-	quotes.c textops.c words.c
-DIST_SOURCES = boolops.c comments.c lists.c numbers.c numops.c \
-	parens.c quotes.c textops.c words.c
+SOURCES = assign.c
+DIST_SOURCES = assign.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -254,6 +218,16 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+
+#check_PROGRAMS  =   boolops     \
+#                    comments    \
+#                    lists       \
+#                    numbers     \
+#                    numops      \
+#                    parens      \
+#                    quotes      \
+#                    textops     \
+#                    words
 TESTS = $(check_PROGRAMS)
 LDADD = ../../../library/libhemp.la
 all: all-am
@@ -299,33 +273,9 @@ clean-checkPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-boolops$(EXEEXT): $(boolops_OBJECTS) $(boolops_DEPENDENCIES) 
-	@rm -f boolops$(EXEEXT)
-	$(LINK) $(boolops_OBJECTS) $(boolops_LDADD) $(LIBS)
-comments$(EXEEXT): $(comments_OBJECTS) $(comments_DEPENDENCIES) 
-	@rm -f comments$(EXEEXT)
-	$(LINK) $(comments_OBJECTS) $(comments_LDADD) $(LIBS)
-lists$(EXEEXT): $(lists_OBJECTS) $(lists_DEPENDENCIES) 
-	@rm -f lists$(EXEEXT)
-	$(LINK) $(lists_OBJECTS) $(lists_LDADD) $(LIBS)
-numbers$(EXEEXT): $(numbers_OBJECTS) $(numbers_DEPENDENCIES) 
-	@rm -f numbers$(EXEEXT)
-	$(LINK) $(numbers_OBJECTS) $(numbers_LDADD) $(LIBS)
-numops$(EXEEXT): $(numops_OBJECTS) $(numops_DEPENDENCIES) 
-	@rm -f numops$(EXEEXT)
-	$(LINK) $(numops_OBJECTS) $(numops_LDADD) $(LIBS)
-parens$(EXEEXT): $(parens_OBJECTS) $(parens_DEPENDENCIES) 
-	@rm -f parens$(EXEEXT)
-	$(LINK) $(parens_OBJECTS) $(parens_LDADD) $(LIBS)
-quotes$(EXEEXT): $(quotes_OBJECTS) $(quotes_DEPENDENCIES) 
-	@rm -f quotes$(EXEEXT)
-	$(LINK) $(quotes_OBJECTS) $(quotes_LDADD) $(LIBS)
-textops$(EXEEXT): $(textops_OBJECTS) $(textops_DEPENDENCIES) 
-	@rm -f textops$(EXEEXT)
-	$(LINK) $(textops_OBJECTS) $(textops_LDADD) $(LIBS)
-words$(EXEEXT): $(words_OBJECTS) $(words_DEPENDENCIES) 
-	@rm -f words$(EXEEXT)
-	$(LINK) $(words_OBJECTS) $(words_LDADD) $(LIBS)
+assign$(EXEEXT): $(assign_OBJECTS) $(assign_DEPENDENCIES) 
+	@rm -f assign$(EXEEXT)
+	$(LINK) $(assign_OBJECTS) $(assign_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -333,15 +283,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/boolops.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/comments.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lists.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numbers.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numops.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parens.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/quotes.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textops.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/words.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/assign.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

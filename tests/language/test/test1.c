@@ -1,9 +1,18 @@
 #include <hemp/test.h>
 
 
+int test_test_language();
+
 int main(
     int argc, char **argv, char **env
 ) {
+//    plan(20);
+    return test_test_language();
+//    return done();
+}
+
+
+int test_test_language() {
     hemp_p          hemp    = hemp_init();
     hemp_cntx_p     context = hemp_context(hemp);
     hemp_str_p      name    = "test1";
@@ -17,7 +26,7 @@ int main(
     hemp_debug("text: %s\n", text);
     hemp_language(hemp, HEMP_TEST);
 
-    hemp_test_plan(5);
+    hemp_test_plan_p plan = hemp_test_plan(5);
 
     HEMP_TRY;
         tmpl = hemp_template(
@@ -43,5 +52,6 @@ int main(
 
     HEMP_END;
 
-    return 0;
+    return hemp_test_done(plan);
+//    return 0;
 }

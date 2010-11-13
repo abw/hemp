@@ -251,6 +251,12 @@ HEMP_EVAL_FUNC(hemp_element_not_compare) {
 }
 
 
+HEMP_OPERATE_FUNC(hemp_element_not_assign) {
+    hemp_fatal("%s element cannot be assigned to\n", element->type->name);
+    return HempNothing;
+}
+
+
 
 
 /*--------------------------------------------------------------------------

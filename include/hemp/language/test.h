@@ -14,9 +14,13 @@ HEMP_SYMBOL_FUNC(hemp_element_test_test_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_test_expect_symbol);
 HEMP_SCAN_FUNC(hemp_element_test_test_scanner);
 HEMP_PREFIX_FUNC(hemp_element_test_test_prefix);
+HEMP_EVAL_FUNC(hemp_element_test_test_value);
+void hemp_element_test_test_clean(hemp_element_p);
 
 HEMP_SCAN_FUNC(hemp_element_test_expect_scanner);
 HEMP_PREFIX_FUNC(hemp_element_test_expect_prefix);
+HEMP_EVAL_FUNC(hemp_element_test_expect_value);
+void hemp_element_test_expect_clean(hemp_element_p);
 
 
 hemp_template_p hemp_dialect_test_prepare(hemp_template_p tmpl);

@@ -392,6 +392,19 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         HEMP_EVALS_ARGS                     \
     )
 
+#define HEMP_OPERATE_ARGS                   \
+        hemp_element_p  element,            \
+        hemp_context_p  context,            \
+        hemp_value_t    operand
+
+#define HEMP_OPERATE_ARG_NAMES              \
+        element, context, operand
+
+#define HEMP_OPERATE_FUNC(f)                \
+    HEMP_INLINE hemp_value_t f(             \
+        HEMP_OPERATE_ARGS                   \
+    )
+
 
 /*--------------------------------------------------------------------------
  * Element Text Output

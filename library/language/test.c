@@ -72,7 +72,7 @@ void
 hemp_dialect_test_cleanup(
     hemp_template_p tmpl
 ) {
-    hemp_debug("hemp_dialect_test_cleanup(%p)\n", tmpl);
+    hemp_debug_call("hemp_dialect_test_cleanup(%p)\n", tmpl);
 }
 
 
@@ -97,6 +97,9 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_test) {
 HEMP_SYMBOL_FUNC(hemp_element_test_test_symbol) {
     hemp_debug("test.test symbol: %s\n", symbol->name);
     symbol->scanner    = &hemp_element_test_test_scanner;
+    symbol->cleanup    = &hemp_element_test_test_clean,
+    symbol->value      = &hemp_element_test_test_value,
+    symbol->text       = &hemp_element_value_text,
     symbol->token      = &hemp_element_literal_token;
     symbol->source     = &hemp_element_literal_source;
     symbol->prefix     = &hemp_element_test_test_prefix;
@@ -157,6 +160,23 @@ HEMP_PREFIX_FUNC(hemp_element_test_test_prefix) {
 }
 
 
+HEMP_EVAL_FUNC(hemp_element_test_test_value) {
+    hemp_text_p text = hemp_context_tmp_text(context);
+    hemp_todo("hemp_element_test_test_value()\n");
+}
+
+
+void
+hemp_element_test_test_clean(
+    hemp_element_p element
+) {
+    hemp_debug_call("hemp_element_test_test_clean()\n");
+    hemp_element_block_clean(
+        hemp_expr_element(element)
+    );
+}
+
+
 /*--------------------------------------------------------------------------
  * expect
  *--------------------------------------------------------------------------*/
@@ -168,6 +188,7 @@ hemp_element_test_expect_symbol(
 ) {
     hemp_debug("test.test symbol: %s\n", symbol->name);
     symbol->scanner    = &hemp_element_test_expect_scanner;
+    symbol->cleanup    = &hemp_element_test_expect_clean,
     symbol->token      = &hemp_element_literal_token;
     symbol->source     = &hemp_element_literal_source;
     symbol->prefix     = &hemp_element_test_expect_prefix;
@@ -227,3 +248,13 @@ HEMP_PREFIX_FUNC(hemp_element_test_expect_prefix) {
     return self;
 }
 
+
+void
+hemp_element_test_expect_clean(
+    hemp_element_p element
+) {
+    hemp_debug_call("hemp_element_test_expect_clean()\n");
+    hemp_element_block_clean(
+        hemp_expr_element(element)
+    );
+}

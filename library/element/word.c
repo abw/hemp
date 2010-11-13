@@ -23,6 +23,7 @@ HEMP_SYMBOL_FUNC(hemp_element_word_symbol) {
     symbol->number   = &hemp_element_value_number;
     symbol->integer  = &hemp_element_value_integer;
     symbol->boolean  = &hemp_element_value_boolean;
+    symbol->assign   = &hemp_element_word_assign;
 //    symbol->flags    = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }
@@ -60,5 +61,12 @@ HEMP_EVAL_FUNC(hemp_element_word_value) {
 }
 
 
+HEMP_OPERATE_FUNC(hemp_element_word_assign) {
+    hemp_todo("hemp_element_word_assign()");
+    hemp_hash_store_keylen(
+        context->vars, element->token, operand, element->length
+    );
+    return operand;
+}
 
 

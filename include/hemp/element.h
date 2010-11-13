@@ -213,6 +213,7 @@ HEMP_EVAL_FUNC(hemp_element_not_integer);
 HEMP_EVAL_FUNC(hemp_element_not_boolean);
 HEMP_EVAL_FUNC(hemp_element_not_compare);
 HEMP_EVALS_FUNC(hemp_element_not_values);
+HEMP_OPERATE_FUNC(hemp_element_not_assign);
 
 
 /*--------------------------------------------------------------------------
@@ -238,6 +239,7 @@ HEMP_SYMBOL_FUNC(hemp_element_word_symbol);
 HEMP_PREFIX_FUNC(hemp_element_word_prefix);
 HEMP_PREFIX_FUNC(hemp_element_word_word);
 HEMP_EVAL_FUNC(hemp_element_word_value);
+HEMP_OPERATE_FUNC(hemp_element_word_assign);
 
 
 /*--------------------------------------------------------------------------
@@ -452,13 +454,24 @@ HEMP_EVAL_FUNC(hemp_element_text_value);
 
 
 /*--------------------------------------------------------------------------
+ * assignment operator
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_assign_symbol);
+HEMP_ETEXT_FUNC(hemp_element_assign_text);
+HEMP_EVAL_FUNC(hemp_element_assign_value);
+
+
+/*--------------------------------------------------------------------------
  * other operators
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol);
 HEMP_POSTFIX_FUNC(hemp_element_dotop_postfix);
 HEMP_EVAL_FUNC(hemp_element_dotop_value);
+HEMP_OPERATE_FUNC(hemp_element_dotop_assign);
 void hemp_element_dotop_clean(hemp_element_p);
+
 
 
 /*--------------------------------------------------------------------------

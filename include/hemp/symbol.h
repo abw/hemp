@@ -40,6 +40,7 @@ struct hemp_symbol_s {
     hemp_eval_f     integer;
     hemp_eval_f     boolean;
     hemp_eval_f     compare;
+    hemp_operate_f  assign;
     hemp_evals_f    values;
 
     hemp_prefix_f   fixed;

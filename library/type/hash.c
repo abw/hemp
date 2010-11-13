@@ -194,13 +194,13 @@ hemp_hash_key_match(
 }
 
 
-hemp_slot_p
-hemp_hash_store(
+HEMP_INLINE hemp_slot_p
+hemp_hash_store_keylen(
     hemp_hash_p  hash,
     hemp_str_p   name,
-    hemp_value_t value
+    hemp_value_t value,
+    hemp_size_t  length
 ) {
-    hemp_size_t length = strlen(name);
     hemp_size_t index  = hemp_hash_function(name, length);
     hemp_size_t column;
     hemp_slot_p slot;
@@ -232,6 +232,18 @@ hemp_hash_store(
     }
 
     return slot;
+}
+
+
+hemp_slot_p
+hemp_hash_store(
+    hemp_hash_p  hash,
+    hemp_str_p   name,
+    hemp_value_t value
+) {
+    return hemp_hash_store_keylen(
+        hash, name, value, strlen(name)
+    );
 }
 
 

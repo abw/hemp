@@ -1,0 +1,24 @@
+-- test number assignment
+[% a = 10 %]a is [% a %]
+-- expect
+a is 10
+
+-- test list assignment
+[% a = [4,2,0] %]a is [% a.text %]
+-- expect
+a is 420
+
+-- test list assignment and access
+[% a = [310, 420, 530] %]a is [% a.1 %]
+-- expect
+a is 420
+
+-- test list item assignment
+[% a = [310, 400, 530]; a.1 = 420 %]a is [% a.1 %]
+-- expect
+a is 420
+
+-- test out-of-bounds list item assignment
+[% a = []; a.3 = 420 %]a is [% a.3 %]
+-- expect
+a is 420

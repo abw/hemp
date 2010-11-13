@@ -1,8 +1,3 @@
--- test dummy
-TODO: Lists aren't implemented yet.  This test will be enabled when they are.
--- expect
-TODO: Lists aren't implemented yet.  This test will be enabled when they are.
-
 -- test list
 [% [4, 2, 0].text %]
 -- expect
@@ -18,10 +13,8 @@ TODO: Lists aren't implemented yet.  This test will be enabled when they are.
 -- expect
 420
 
--- stop --
-
 -- test list assignment
-[% nums = [4, 2, 0]; nums.join %]
+[% nums = [4, 2, 0]; nums.text %]
 -- expect
 420
 

@@ -29,6 +29,7 @@ hemp_language_free(
 hemp_language_p hemp_language_hemp_init(hemp_p hemp, hemp_str_p name);
 hemp_grammar_p  hemp_grammar_hemp_alpha(hemp_p, hemp_str_p);
 hemp_grammar_p  hemp_grammar_hemp_bravo(hemp_p, hemp_str_p);
+hemp_grammar_p  hemp_grammar_hemp_charlie(hemp_p, hemp_str_p);
 
 
 /*--------------------------------------------------------------------------

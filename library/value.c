@@ -209,6 +209,7 @@ HEMP_VALUES_FUNC(hemp_value_values) {
 
 HEMP_FETCH_FUNC(hemp_value_dot) {
     hemp_debug_call("hemp_value_dot(%s)\n", hemp_type_name(container));
+    hemp_debug("hemp_value_dot(%s)\n", hemp_type_name(container));
     hemp_value_t result = HempMissing;
 
     /* call the value's fetch method, if it has one */
@@ -306,7 +307,7 @@ HEMP_FETCH_FUNC(hemp_value_not_fetch) {
     HEMP_FETCH_ERROR(
         context, 
         hemp_type_name(container),
-        "TODO: RHS text"
+        "Cannot fetch"
     );
 }
 
@@ -315,7 +316,7 @@ HEMP_STORE_FUNC(hemp_value_not_store) {
     HEMP_STORE_ERROR(
         context, 
         hemp_type_name(container),
-        "TODO: RHS text"
+        "Cannot store"
     );
 }
 
@@ -324,7 +325,7 @@ HEMP_FETCH_FUNC(hemp_value_not_dot) {
     HEMP_FETCH_ERROR(
         context, 
         hemp_type_name(container),
-        "TODO: RHS text"
+        "Cannot dot"
     );
 }
 

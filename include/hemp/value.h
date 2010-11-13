@@ -272,6 +272,8 @@ extern const hemp_value_t HempAfter;
 #define hemp_dot(v,c,k)         (hemp_tfunc(v,dot)(v,c,k))
 #define hemp_text(v,c,o)        (hemp_tfunc(v,text)(v,c,o))
 #define hemp_values(v,c,o)      (hemp_tfunc(v,values)(v,c,o))
+#define hemp_fetch(v,c,k)       (hemp_tfunc(v,fetch)(v,c,k))
+#define hemp_store(v,c,k,i)     (hemp_tfunc(v,store)(v,c,k,i))
 #define hemp_type_name(v)       (hemp_type(v)->name)
 #define hemp_type_method(t,m)   ((hemp_value_f) hemp_hash_fetch_pointer(t->methods, m))
 #define hemp_type_extend(t,m,f) hemp_hash_store_pointer(t->methods, m, f)

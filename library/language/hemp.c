@@ -6,6 +6,7 @@
 HEMP_LANGUAGE_FUNC(hemp_language_hemp_init);
 
 /* symbol collections */
+HEMP_SYMBOLS_FUNC(hemp_element_assign_symbols);
 HEMP_SYMBOLS_FUNC(hemp_element_bracket_symbols);
 HEMP_SYMBOLS_FUNC(hemp_element_boolean_symbols);
 HEMP_SYMBOLS_FUNC(hemp_element_number_symbols);
@@ -14,10 +15,12 @@ HEMP_SYMBOLS_FUNC(hemp_element_text_symbols);
 /* grammar initialisers */
 HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_alpha);
 HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_bravo);
+HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_charlie);
 
 /* grammar mixins */
 void hemp_grammar_add_hemp_alpha(hemp_grammar_p);
 void hemp_grammar_add_hemp_bravo(hemp_grammar_p);
+void hemp_grammar_add_hemp_charlie(hemp_grammar_p);
 
 
 /* static tables defining symbol collections */
@@ -89,6 +92,11 @@ static struct hemp_symbols_s hemp_symbols_hemp_text[] = {
     { NULL, NULL },
 };
 
+static struct hemp_symbols_s hemp_symbols_hemp_assign[] = {
+    { "hemp.operator.assign.equals", &hemp_element_assign_symbol        },
+    { NULL, NULL },
+};
+
 
 /*--------------------------------------------------------------------------
  * hemp language initialisation
@@ -105,10 +113,11 @@ HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
     HEMP_ELEMENTS(hemp_symbols_hemp);
 
     /* register factories for bracket, boolean, number and text operator symbols */
-    HEMP_ELEMENT("hemp.bracket.*", &hemp_element_bracket_symbols);
-    HEMP_ELEMENT("hemp.boolean.*", &hemp_element_boolean_symbols);
-    HEMP_ELEMENT("hemp.number.*",  &hemp_element_number_symbols);
-    HEMP_ELEMENT("hemp.text.*",    &hemp_element_text_symbols);
+    HEMP_ELEMENT("hemp.operator.assign.*",  &hemp_element_assign_symbols);
+    HEMP_ELEMENT("hemp.bracket.*",          &hemp_element_bracket_symbols);
+    HEMP_ELEMENT("hemp.boolean.*",          &hemp_element_boolean_symbols);
+    HEMP_ELEMENT("hemp.number.*",           &hemp_element_number_symbols);
+    HEMP_ELEMENT("hemp.text.*",             &hemp_element_text_symbols);
 
     /* register grammars */
     HEMP_GRAMMAR("hemp.alpha", &hemp_grammar_hemp_alpha);
@@ -179,6 +188,22 @@ HEMP_SYMBOLS_FUNC(hemp_element_text_symbols) {
 
 
 /*--------------------------------------------------------------------------
+ * assignment operator elements
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOLS_FUNC(hemp_element_assign_symbols) {
+    /* I'm getting tired of this... should have some way to specify the 
+     * symbol set instead of a function... oh well it'll do for now...
+     */
+    HEMP_ELEMENTS(hemp_symbols_hemp_assign);
+
+    return (hemp_action_p) hemp_hash_fetch_pointer(
+        hemp->elements->constructors, name
+    );
+}
+
+
+/*--------------------------------------------------------------------------
  * grammars
  *--------------------------------------------------------------------------*/
 
@@ -192,9 +217,15 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_alpha) {
 
 HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_bravo) {
     hemp_debug_call("hemp_grammar_hemp_bravo(%p, %s)\n", hemp, name);
-    hemp_grammar_p grammar = (hemp_grammar_p) hemp_grammar_init(hemp, name);
-    hemp_grammar_add_hemp_alpha(grammar);
+    hemp_grammar_p grammar = hemp_grammar_hemp_alpha(hemp, name);
     hemp_grammar_add_hemp_bravo(grammar);
+    return grammar;
+}
+
+HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_charlie) {
+    hemp_debug_call("hemp_grammar_hemp_charlie(%p, %s)\n", hemp, name);
+    hemp_grammar_p grammar = hemp_grammar_hemp_bravo(hemp, name);
+    hemp_grammar_add_hemp_charlie(grammar);
     return grammar;
 }
 
@@ -225,8 +256,8 @@ hemp_grammar_add_hemp_bravo(
 
     HEMP_OPERATOR1("hemp.dotop",                ".",        200,  200);
 
-    HEMP_OPERATOR1("hemp.number.autoinc",       "++",       195,  195);
-    HEMP_OPERATOR1("hemp.number.autodec",       "--",       195,  195);
+//  HEMP_OPERATOR1("hemp.number.autoinc",       "++",       195,  195);
+//  HEMP_OPERATOR1("hemp.number.autodec",       "--",       195,  195);
     HEMP_OPERATOR1("hemp.number.power",         "**",       190,    0);
     HEMP_OPERATOR1("hemp.number.plus",          "+",        175,  185);
     HEMP_OPERATOR1("hemp.number.minus",         "-",        175,  185);
@@ -269,17 +300,6 @@ hemp_grammar_add_hemp_bravo(
 //    # a -> ((a > 10) ? "big" : "small")
 //    [ '->'      => arrow            => 230,   0 ],      # a -> a + 1
 //
-//    # binary assignment operators
-//    [ '='       => op_assign        => 200,   0 ],      # foo = bar
-//    [ '=>'      => op_pair          => 200,   0 ],      # foo => bar
-//    [ '~='      => txt_combine_set  => 200,   0 ],      # foo ~= bar
-//    [ '+='      => num_add_set      => 200,   0 ],      # foo += bar
-//    [ '-='      => num_sub_set      => 200,   0 ],      # foo -= bar
-//    [ '*='      => num_mul_set      => 200,   0 ],      # foo *= bar
-//    [ '/='      => num_div_set      => 200,   0 ],      # foo /= bar
-//    [ '&&='     => bool_and_set     => 200,   0 ],      # foo &&= bar
-//    [ '||='     => bool_or_set      => 200,   0 ],      # foo ||= bar
-//    [ '!!='     => bool_nor_set     => 200,   0 ],      # foo !!= bar
 
     HEMP_OPERATOR1("hemp.boolean.not",          "not",        0,  120);
     HEMP_OPERATOR1("hemp.boolean.and",          "and",      115,    0);
@@ -293,15 +313,8 @@ hemp_grammar_add_hemp_bravo(
     HEMP_OPERATOR1("hemp.terminator",           "]",          0,    0);
 
     HEMP_OPERATOR1("hemp.delimiter",            ",",          0,    0);
+    HEMP_OPERATOR1("hemp.separator",            ";",          0,    0);
 
-//    [ '['       => con_list         =>   0,   0 ],
-//    [ '{'       => con_hash         =>   0,   0 ],
-//    
-//    # ...and their respective terminators
-//    [ ')'       => terminator       =>   0,   0 ],
-//    [ ']'       => terminator       =>   0,   0 ],
-//    [ '}'       => terminator       =>   0,   0 ],
-//
 //    # Other punctuation marks
 //    [ ','       => separator        =>   0,   0 ],
 //    [ ';'       => delimiter        =>   0,   0 ],
@@ -311,4 +324,30 @@ hemp_grammar_add_hemp_bravo(
 //    
 //    # One token to end them all and in the darkness bind them
 //    [ 'end'     => end              =>   0,   0 ],
+}
+
+
+void
+hemp_grammar_add_hemp_charlie(
+    hemp_grammar_p grammar
+) {
+    hemp_debug_call("hemp_grammar_add_hemp_charlie(%p)\n", grammar);
+
+    HEMP_OPERATOR1("hemp.number.autoinc",       "++",       195,  195);
+    HEMP_OPERATOR1("hemp.number.autodec",       "--",       195,  195);
+
+    /* binary assignment operators */
+    HEMP_OPERATOR1("hemp.operator.assign.equals",  "=",      0,  130);
+//    [ '='       => op_assign        => 200,   0 ],      # foo = bar
+
+//    [ '=>'      => op_pair          => 200,   0 ],      # foo => bar
+//    [ '~='      => txt_combine_set  => 200,   0 ],      # foo ~= bar
+//    [ '+='      => num_add_set      => 200,   0 ],      # foo += bar
+//    [ '-='      => num_sub_set      => 200,   0 ],      # foo -= bar
+//    [ '*='      => num_mul_set      => 200,   0 ],      # foo *= bar
+//    [ '/='      => num_div_set      => 200,   0 ],      # foo /= bar
+//    [ '&&='     => bool_and_set     => 200,   0 ],      # foo &&= bar
+//    [ '||='     => bool_or_set      => 200,   0 ],      # foo ||= bar
+//    [ '!!='     => bool_nor_set     => 200,   0 ],      # foo !!= bar
+
 }

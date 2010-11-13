@@ -53,6 +53,7 @@ HEMP_SYMBOL_FUNC(hemp_element_brackets_symbol) {
     return symbol;
 }
 
+
 void
 hemp_element_brackets_clean(
     hemp_element_p element

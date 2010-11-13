@@ -306,6 +306,13 @@ typedef hemp_value_t
         hemp_value_t    output      /* optional output buffer               */
     );
 
+typedef hemp_value_t
+    (* hemp_operate_f)(
+        hemp_element_p  element,    /* pointer to element                   */
+        hemp_context_p  context,    /* runtime context                      */
+        hemp_value_t    operand     /* additional operand value             */
+    );
+
 typedef hemp_value_t 
     (* hemp_view_f)(
         hemp_viewer_p   view,       /* pointer to viewer                    */

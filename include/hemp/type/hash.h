@@ -62,12 +62,21 @@ hemp_size_t
         hemp_hash_p     hash
     );
 
+HEMP_INLINE hemp_slot_p
+    hemp_hash_store_keylen(
+        hemp_hash_p     hash, 
+        hemp_str_p      key, 
+        hemp_value_t    value,
+        hemp_size_t     length
+    );
+
 hemp_slot_p
     hemp_hash_store(
         hemp_hash_p     hash, 
         hemp_str_p      key, 
         hemp_value_t    value
     );
+
 
 HEMP_INLINE hemp_bool_t 
     hemp_hash_key_match(

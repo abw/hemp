@@ -7,6 +7,7 @@ HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     symbol->postfix = &hemp_element_dotop_postfix;
     symbol->value   = &hemp_element_dotop_value;
+    symbol->assign  = &hemp_element_dotop_assign;
     symbol->cleanup = &hemp_element_dotop_clean;
 
     return symbol;
@@ -57,7 +58,7 @@ HEMP_POSTFIX_FUNC(hemp_element_dotop_postfix) {
 
 
 HEMP_EVAL_FUNC(hemp_element_dotop_value) {
-    hemp_debug_call("hemp_element_dotop_value()\n");
+    hemp_debug("hemp_element_dotop_value()\n");
 
     /* Note the temporary hack: rhs is always a pre-evaluated value */
     hemp_element_p  lhs  = hemp_lhs_element(element);
@@ -74,6 +75,22 @@ HEMP_EVAL_FUNC(hemp_element_dotop_value) {
 
     return hemp_dot(lval, context, rval);
 }
+
+
+HEMP_OPERATE_FUNC(hemp_element_dotop_assign) {
+    hemp_todo("hemp_element_dotop_assign()");
+
+    /* Note the temporary hack: rhs is always a pre-evaluated value */
+    hemp_element_p  lhs  = hemp_lhs_element(element);
+    hemp_value_t    lval = lhs->type->value(lhs, context);
+    hemp_value_t    rval = hemp_rhs(element);
+
+    return hemp_store(
+        lval, context, rval, operand
+    );
+}
+
+
 
 
 void

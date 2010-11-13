@@ -6,6 +6,7 @@ libhemp_la_SOURCES  =   action.c            \
                         dialect.c           \
                         elements.c          \
                         element.c           \
+                        element/assign.c    \
                         element/block.c     \
                         element/boolean.c   \
                         element/bracket.c   \
