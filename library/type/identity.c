@@ -4,12 +4,12 @@
 
 HEMP_TYPE_FUNC(hemp_type_identity) {
     hemp_type_p type = hemp_type_subtype(HempValue, id, name);
-    type->text       = &hemp_value_identity_text;    /* identity -> text    */
-    type->number     = &hemp_value_identity_number;  /* identity -> number  */
-    type->integer    = &hemp_value_identity_integer; /* identity -> integer */
-    type->boolean    = &hemp_value_identity_boolean; /* identity -> boolean */
-    type->compare    = &hemp_value_identity_compare; /* identity -> compare */
-    type->defined    = &hemp_value_identity_defined; /* identity -> defined */
+    type->text       = &hemp_type_identity_text;    /* identity -> text    */
+    type->number     = &hemp_type_identity_number;  /* identity -> number  */
+    type->integer    = &hemp_type_identity_integer; /* identity -> integer */
+    type->boolean    = &hemp_type_identity_boolean; /* identity -> boolean */
+    type->compare    = &hemp_type_identity_compare; /* identity -> compare */
+    type->defined    = &hemp_type_identity_defined; /* identity -> defined */
     return type;
 };
 
@@ -35,7 +35,7 @@ hemp_identity_name(
 
 
 
-HEMP_OUTPUT_FUNC(hemp_value_identity_text) {
+HEMP_OUTPUT_FUNC(hemp_type_identity_text) {
     if (hemp_is_undefined(value)) {
         hemp_debug("throwing undefined entity error\n");
         HEMP_UNDEF_ERROR(
@@ -55,7 +55,7 @@ HEMP_OUTPUT_FUNC(hemp_value_identity_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_identity_number) {
+HEMP_VALUE_FUNC(hemp_type_identity_number) {
     /* might want to auto-convert true(1), false(0), before(-1), equal(0)
      * and after(1)
      */
@@ -68,7 +68,7 @@ HEMP_VALUE_FUNC(hemp_value_identity_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_identity_integer) {
+HEMP_VALUE_FUNC(hemp_type_identity_integer) {
     /* might want to auto-convert true(1), false(0), before(-1), equal(0)
      * and after(1)
      */
@@ -81,7 +81,7 @@ HEMP_VALUE_FUNC(hemp_value_identity_integer) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_identity_boolean) {
+HEMP_VALUE_FUNC(hemp_type_identity_boolean) {
     if (hemp_is_boolean(value)) 
         return hemp_is_true(value) 
             ? HempTrue 
@@ -96,7 +96,7 @@ HEMP_VALUE_FUNC(hemp_value_identity_boolean) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_identity_compare) {
+HEMP_VALUE_FUNC(hemp_type_identity_compare) {
     if (hemp_is_compare(value)) 
         return value;
     else 
@@ -109,7 +109,7 @@ HEMP_VALUE_FUNC(hemp_value_identity_compare) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_identity_defined) {
+HEMP_VALUE_FUNC(hemp_type_identity_defined) {
     return hemp_is_defined(value) 
         ? HempTrue 
         : HempFalse;

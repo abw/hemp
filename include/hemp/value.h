@@ -379,12 +379,12 @@ HEMP_VALUE_FUNC(hemp_value_integer_boolean);
 HEMP_VALUE_FUNC(hemp_value_integer_compare);
 
 /* identity -> xxx conversions */
-HEMP_OUTPUT_FUNC(hemp_value_identity_text);
-HEMP_VALUE_FUNC(hemp_value_identity_number);
-HEMP_VALUE_FUNC(hemp_value_identity_integer);
-HEMP_VALUE_FUNC(hemp_value_identity_defined);
-HEMP_VALUE_FUNC(hemp_value_identity_boolean);
-HEMP_VALUE_FUNC(hemp_value_identity_compare);
+HEMP_OUTPUT_FUNC(hemp_type_identity_text);
+HEMP_VALUE_FUNC(hemp_type_identity_number);
+HEMP_VALUE_FUNC(hemp_type_identity_integer);
+HEMP_VALUE_FUNC(hemp_type_identity_defined);
+HEMP_VALUE_FUNC(hemp_type_identity_boolean);
+HEMP_VALUE_FUNC(hemp_type_identity_compare);
 
 /* prototypes for text, list and hash are in the respective type/XXX.h files */
 
