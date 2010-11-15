@@ -340,17 +340,17 @@ void test_number_conversion() {
     hemp_value_t number = hemp_num_val(3.14159);
 
     /* number -> integer */
-    hemp_value_t integer = hemp_value_number_integer(number, context);
+    hemp_value_t integer = hemp_type_number_integer(number, context);
     ok( hemp_is_integer(integer), "result is integer" );
     ok( hemp_val_int(integer) == 3, "integer value correct" );
 
     /* number -> boolean */
-    hemp_value_t truth = hemp_value_number_boolean(number, context);
+    hemp_value_t truth = hemp_type_number_boolean(number, context);
     ok( hemp_is_boolean(truth), "result is boolean" );
     ok( hemp_is_true(truth), "boolean value correct" );
 
     /* number -> text */
-    hemp_value_t text = hemp_value_number_text(number, context, HempNothing);
+    hemp_value_t text = hemp_type_number_text(number, context, HempNothing);
     ok( hemp_is_text(text), "result is text" );
     is( hemp_val_text(text)->string, "3.14159", "text string correct" );
 
@@ -370,19 +370,19 @@ void test_integer_conversion() {
     hemp_value_t integer = hemp_int_val(42);
 
     /* integer -> number */
-    hemp_value_t number = hemp_value_integer_number(integer, context);
+    hemp_value_t number = hemp_type_integer_number(integer, context);
     ok( hemp_is_number(number), "result is number" );
     eq( hemp_val_num(number), 42.0, "number value correct" );
     eq( hemp_val_num( hemp_to_number(integer, context) ), 42.0, "hemp_to_number()" );
 
     /* integer -> boolean */
-    hemp_value_t truth = hemp_value_integer_boolean(integer, context);
+    hemp_value_t truth = hemp_type_integer_boolean(integer, context);
     ok( hemp_is_boolean(truth), "result is boolean" );
     ok( hemp_is_true(truth), "boolean value correct" );
     ok( hemp_is_true( hemp_to_boolean(integer, context) ), "hemp_to_boolean()" );
 
     /* integer -> text */
-    hemp_value_t text = hemp_value_integer_text(integer, context, HempNothing);
+    hemp_value_t text = hemp_type_integer_text(integer, context, HempNothing);
     ok( hemp_is_text(text), "result is text" );
     is( hemp_val_text(text)->string, "42", "text string correct" );
 
@@ -442,7 +442,7 @@ void test_text_conversion_is_number(
     hemp_value_t    nval;
     
     HEMP_TRY; 
-        nval = hemp_value_text_number(tval, context);
+        nval = hemp_type_text_number(tval, context);
         ok( 
             hemp_val_num(nval) == expect, 
             "text conversion to number: %s [%g] [%g]", 
@@ -468,7 +468,7 @@ void test_text_conversion_not_number(
     hemp_value_t    nval;
     
     HEMP_TRY; 
-        nval = hemp_value_text_number(tval, context);
+        nval = hemp_type_text_number(tval, context);
         fail("string should not convert to a number:\n  %s", string);
     HEMP_CATCH_ALL;
         pass("caught error [%s]->number: %s", string, hemp->error->message);
@@ -491,7 +491,7 @@ void test_text_conversion_is_integer(
     hemp_value_t    ival;
     
     HEMP_TRY; 
-        ival = hemp_value_text_integer(tval, context);
+        ival = hemp_type_text_integer(tval, context);
         ok( 
             hemp_val_int(ival) == expect, 
             "text conversion to integer: %s [%d] [%d]", 
@@ -517,7 +517,7 @@ void test_text_conversion_not_integer(
     hemp_value_t    ival;
     
     HEMP_TRY; 
-        ival = hemp_value_text_integer(tval, context);
+        ival = hemp_type_text_integer(tval, context);
         fail("string should not convert to a integer: %s", string);
     HEMP_CATCH_ALL;
         pass("caught error [%s]->integer: %s", string, hemp->error->message);
@@ -560,37 +560,37 @@ void test_text_conversion() {
     test_text_conversion_not_number("");
 
     /* text -> boolean */
-    hemp_value_t truth = hemp_value_text_boolean(tval, context);
+    hemp_value_t truth = hemp_type_text_boolean(tval, context);
     ok( hemp_is_boolean(truth), "result is boolean" );
     ok( hemp_is_true(truth), "boolean value correct" );
 
     hemp_text_replace_string(text, "0");
     ok( 
-        hemp_is_true( hemp_value_text_boolean(tval, context) ),
+        hemp_is_true( hemp_type_text_boolean(tval, context) ),
         "'0' string is true" 
     );
 
     hemp_text_replace_string(text, "0.0");
     ok( 
-        hemp_is_true( hemp_value_text_boolean(tval, context) ), 
+        hemp_is_true( hemp_type_text_boolean(tval, context) ), 
         "'0.0' string is true" 
     );
 
     hemp_text_replace_string(text, "False");
     ok( 
-        hemp_is_true( hemp_value_text_boolean(tval, context) ), 
+        hemp_is_true( hemp_type_text_boolean(tval, context) ), 
         "'False' string is true" 
     );
 
     hemp_text_replace_string(text, "FALSE");
     ok( 
-        hemp_is_true( hemp_value_text_boolean(tval, context) ),
+        hemp_is_true( hemp_type_text_boolean(tval, context) ),
         "'FALSE' string is true" 
     );
 
     hemp_text_replace_string(text, "");
     ok( 
-        hemp_is_false( hemp_value_text_boolean(tval, context) ), 
+        hemp_is_false( hemp_type_text_boolean(tval, context) ), 
         "empty string is false" 
     );
 

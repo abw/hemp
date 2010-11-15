@@ -87,7 +87,7 @@ HEMP_TYPE_FUNC(hemp_type_perl_scalar) {
 };
 
 
-HEMP_VTEXT_FUNC(hemp_perl_scalar_text) {
+HEMP_OUTPUT_FUNC(hemp_perl_scalar_text) {
     hemp_debug_call("hemp_perl_scalar_text()\n");
 
     hemp_str_p  string;
@@ -215,7 +215,7 @@ HEMP_FETCH_FUNC(hemp_perl_array_fetch) {
         if (hemp_string_numlike(ktext->string)) {
             hemp_debug_perl("got numlike string\n");
             index = hemp_val_num( 
-                hemp_value_string_number( hemp_str_val(ktext->string), context) 
+                hemp_type_string_number( hemp_str_val(ktext->string), context) 
             );
             found = HEMP_TRUE;
         }
@@ -336,7 +336,7 @@ HEMP_TYPE_FUNC(hemp_type_perl_code) {
 };
 
 
-HEMP_VTEXT_FUNC(hemp_perl_code_text) {
+HEMP_OUTPUT_FUNC(hemp_perl_code_text) {
     hemp_debug_call("hemp_perl_code_text()\n");
     hemp_debug("hemp_perl_code_text() calling hemp_perl_code_apply()\n");
     hemp_value_t result = hemp_perl_code_apply(value, context);

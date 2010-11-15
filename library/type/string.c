@@ -5,10 +5,10 @@
 
 HEMP_TYPE_FUNC(hemp_type_string) {
     hemp_type_p type = hemp_type_subtype(HempValue, id, name);
-    type->text       = &hemp_value_string_text;     /* string -> text       */
-    type->number     = &hemp_value_string_number;   /* string -> number     */
-    type->integer    = &hemp_value_string_integer;  /* string -> integer    */
-    type->boolean    = &hemp_value_string_boolean;  /* string -> boolean    */
+    type->text       = &hemp_type_string_text;     /* string -> text       */
+    type->number     = &hemp_type_string_number;   /* string -> number     */
+    type->integer    = &hemp_type_string_integer;  /* string -> integer    */
+    type->boolean    = &hemp_type_string_boolean;  /* string -> boolean    */
     type->compare    = &hemp_value_not_compare;     /* cannot compare       */
     type->defined    = &hemp_value_true;            /* always defined       */
 
@@ -366,7 +366,7 @@ hemp_string_nwords(
  *--------------------------------------------------------------------------*/
 
 
-HEMP_OUTPUT_FUNC(hemp_value_string_text) {
+HEMP_OUTPUT_FUNC(hemp_type_string_text) {
     hemp_str_p  str = hemp_val_str(value);
     hemp_text_p text;
 
@@ -377,7 +377,7 @@ HEMP_OUTPUT_FUNC(hemp_value_string_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_string_number) {
+HEMP_VALUE_FUNC(hemp_type_string_number) {
     hemp_str_p str = hemp_val_str(value);
     hemp_str_p end;
     hemp_num_t nval;
@@ -416,13 +416,13 @@ HEMP_VALUE_FUNC(hemp_value_string_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_string_integer) {
-    hemp_value_t nval = hemp_value_string_number(value, context);
+HEMP_VALUE_FUNC(hemp_type_string_integer) {
+    hemp_value_t nval = hemp_type_string_number(value, context);
     return hemp_int_val((hemp_int_t) hemp_val_num(nval));
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_string_boolean) {
+HEMP_VALUE_FUNC(hemp_type_string_boolean) {
     hemp_str_p str = hemp_val_str(value);
     /* TODO: check this is right: any non-zero length string is true.
      * What about "0" and "0.000" ?

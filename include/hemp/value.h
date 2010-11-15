@@ -367,16 +367,16 @@ HEMP_STORE_FUNC(hemp_value_not_store);
 HEMP_FETCH_FUNC(hemp_value_not_dot);
 
 /* number -> xxx conversion */
-HEMP_OUTPUT_FUNC(hemp_value_number_text);
-HEMP_VALUE_FUNC(hemp_value_number_integer);
-HEMP_VALUE_FUNC(hemp_value_number_boolean);
-HEMP_VALUE_FUNC(hemp_value_number_compare);
+HEMP_OUTPUT_FUNC(hemp_type_number_text);
+HEMP_VALUE_FUNC(hemp_type_number_integer);
+HEMP_VALUE_FUNC(hemp_type_number_boolean);
+HEMP_VALUE_FUNC(hemp_type_number_compare);
 
 /* integer -> xxx conversion */
-HEMP_OUTPUT_FUNC(hemp_value_integer_text);
-HEMP_VALUE_FUNC(hemp_value_integer_number);
-HEMP_VALUE_FUNC(hemp_value_integer_boolean);
-HEMP_VALUE_FUNC(hemp_value_integer_compare);
+HEMP_OUTPUT_FUNC(hemp_type_integer_text);
+HEMP_VALUE_FUNC(hemp_type_integer_number);
+HEMP_VALUE_FUNC(hemp_type_integer_boolean);
+HEMP_VALUE_FUNC(hemp_type_integer_compare);
 
 /* identity -> xxx conversions */
 HEMP_OUTPUT_FUNC(hemp_type_identity_text);

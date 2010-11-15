@@ -163,7 +163,7 @@ hemp_list_index(
         if (hemp_string_numlike(ktext->string)) {
 //          hemp_debug("got numlike string\n");
             *index = hemp_val_num( 
-                hemp_value_string_number( hemp_str_val(ktext->string), context) 
+                hemp_type_string_number( hemp_str_val(ktext->string), context) 
             );
             found = HEMP_TRUE;
         }

@@ -5,10 +5,10 @@
 
 HEMP_TYPE_FUNC(hemp_type_text) {
     hemp_type_p type = hemp_type_subtype(HempValue, id, name);
-    type->text       = &hemp_value_text_text;       /* return/append text   */
-    type->number     = &hemp_value_text_number;     /* text -> number       */
-    type->integer    = &hemp_value_text_integer;    /* text -> integer      */
-    type->boolean    = &hemp_value_text_boolean;    /* text -> boolean      */
+    type->text       = &hemp_type_text_text;       /* return/append text   */
+    type->number     = &hemp_type_text_number;      /* text -> number       */
+    type->integer    = &hemp_type_text_integer;     /* text -> integer      */
+    type->boolean    = &hemp_type_text_boolean;     /* text -> boolean      */
     type->compare    = &hemp_value_not_compare;     /* can't compare        */
     type->defined    = &hemp_value_true;            /* always defined       */
 
@@ -230,8 +230,8 @@ hemp_text_replace_string(
  * Runtime text evaluation methods
  *--------------------------------------------------------------------------*/
 
-HEMP_OUTPUT_FUNC(hemp_value_text_text) {
-     hemp_debug_call("hemp_value_text_text\n");
+HEMP_OUTPUT_FUNC(hemp_type_text_text) {
+     hemp_debug_call("hemp_type_text_text\n");
 
     /* FIXME: can we safely return value?  Should we return a copy?  What 
      * happens when the caller is done and tries to free it?  Ref counts, 
@@ -251,7 +251,7 @@ HEMP_OUTPUT_FUNC(hemp_value_text_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_text_number) {
+HEMP_VALUE_FUNC(hemp_type_text_number) {
     hemp_text_p text = hemp_val_text(value);
     hemp_str_p  end;
     hemp_num_t  nval;
@@ -290,13 +290,13 @@ HEMP_VALUE_FUNC(hemp_value_text_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_text_integer) {
-    hemp_value_t nval = hemp_value_text_number(value, context);
+HEMP_VALUE_FUNC(hemp_type_text_integer) {
+    hemp_value_t nval = hemp_type_text_number(value, context);
     return hemp_int_val((hemp_int_t) hemp_val_num(nval));
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_text_boolean) {
+HEMP_VALUE_FUNC(hemp_type_text_boolean) {
     /* hmmm... must be careful here... I think the best approach is to say 
      * that any non-zero length string is true, but unlike Perl, we won't 
      * perform any implicit text->number conversion.  The end result is that 
