@@ -13,8 +13,7 @@
 /* symbol vtable */
 
 struct hemp_symbol_s {
-    hemp_str_p       name;          /* old */
-    hemp_namespace_p namespace;     /* new */
+    HEMP_TYPE_BASE
 
     /* symbol metadata */
     hemp_str_p      start;
@@ -34,17 +33,21 @@ struct hemp_symbol_s {
     hemp_postfix_f  parse_params;
 
     /* value methods */
-    hemp_text_f     token;
-    hemp_text_f     source;
-    hemp_text_f     text;
-    hemp_eval_f     value;
-    hemp_eval_f     number;
-    hemp_eval_f     integer;
-    hemp_eval_f     boolean;
-    hemp_eval_f     compare;
-    hemp_operate_f  assign;
-    hemp_evals_f    values;
+    hemp_output_f     token;
+    hemp_output_f     source;
+
+//    hemp_text_f     text;
+//    hemp_eval_f     value;
+//    hemp_eval_f     number;
+//    hemp_eval_f     integer;
+//    hemp_eval_f     boolean;
+//    hemp_eval_f     compare;
+//    hemp_operate_f  assign;
+//    hemp_evals_f    values;
 };
+
+
+//    + assign
 
 /* symbols collection */
 

@@ -281,6 +281,13 @@ typedef hemp_value_t
         hemp_value_t    output
     );
 
+typedef hemp_value_t 
+    (* hemp_operate_f)(
+        hemp_value_t    value,
+        hemp_context_p  context,
+        hemp_value_t    operand
+    );
+
 
 typedef hemp_element_p
     (* hemp_skip_f )( 
@@ -305,46 +312,12 @@ typedef hemp_element_p
     );
 
 typedef hemp_value_t 
-    (* hemp_text_f)(
-        hemp_element_p  element,    /* pointer to element                   */
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    output      /* optional output buffer               */
-    );
-
-typedef hemp_value_t
-    (* hemp_eval_f)(
-        hemp_element_p  element,    /* element to evaluate                  */
-        hemp_context_p  context     /* runtime context                      */
-    );
-
-typedef hemp_value_t 
-    (* hemp_evals_f)(
-        hemp_element_p  element,    /* pointer to element                   */
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    output      /* optional output buffer               */
-    );
-
-typedef hemp_value_t
-    (* hemp_operate_f)(
-        hemp_element_p  element,    /* pointer to element                   */
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    operand     /* additional operand value             */
-    );
-
-typedef hemp_value_t 
     (* hemp_view_f)(
         hemp_viewer_p   view,       /* pointer to viewer                    */
         hemp_element_p  element,    /* pointer to element                   */
         hemp_context_p  context,    /* runtime context                      */
         hemp_value_t    output      /* optional output buffer               */
     );
-
-//typedef hemp_value_t
-//    (* hemp_values_f)(
-//        hemp_value_t    value,      /* value to operate on                  */
-//        hemp_context_p  context,    /* runtime context                      */
-//        hemp_value_t    output      /* optional output buffer               */
-//    );
 
 typedef hemp_value_t
     (* hemp_fetch_f)(
@@ -360,20 +333,6 @@ typedef hemp_value_t
         hemp_value_t    key,        /* key to store item under              */
         hemp_value_t    value       /* value to store                       */
     );
-
-//typedef hemp_value_t
-//    (* hemp_vtext_f)(
-//        hemp_value_t    value,      /* value to operate on                  */
-//        hemp_context_p  context,    /* runtime context                      */
-//        hemp_value_t    output      /* output to append onto                */
-//    );
-//
-//typedef hemp_value_t
-//    (* hemp_vlist_f)(
-//        hemp_value_t    value,      /* value to operate on                  */
-//        hemp_context_p  context,    /* runtime context                      */
-//        hemp_value_t    output      /* output to append onto                */
-//    );
 
 typedef hemp_value_t
     (* hemp_unop_f)(

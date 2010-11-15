@@ -12,7 +12,7 @@ HEMP_SYMBOL_FUNC(hemp_element_tt3_TODO_symbol);
 
 HEMP_SYMBOL_FUNC(hemp_element_tt3_sub_symbol);
 HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix);
-HEMP_EVAL_FUNC(hemp_element_tt3_sub_value);
+HEMP_VALUE_FUNC(hemp_element_tt3_sub_value);
 
 /* see comment in language/hemp.c */
 #define DONT_OPTIMISE_ME_AWAY  asm("");
@@ -282,7 +282,7 @@ HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix) {
     hemp_debug("parsed block for sub\n");
     hemp_set_lhs_element(self, name);
     hemp_set_rhs_element(self, block);
-    hemp_set_block_args(block, args);
+    hemp_set_block_args(block, hemp_elem_val(args));
 
     if (hemp_element_terminator_matches(*elemptr, type->end)) {
         hemp_debug("found matching terminator for %s => %s\n", type->start, type->end);
@@ -296,20 +296,25 @@ HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix) {
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_tt3_sub_value) {
+HEMP_VALUE_FUNC(hemp_element_tt3_sub_value) {
     hemp_debug("hemp_element_sub_value()\n");
-    hemp_element_p name  = hemp_lhs_element(element);
-    hemp_element_p block = hemp_rhs_element(element);
-    hemp_element_p args  = hemp_block_args(block);
 
-    if (name) {
+    hemp_element_p  element = hemp_val_elem(value);
+    hemp_value_t    name    = hemp_lhs(element);
+    hemp_value_t    block   = hemp_rhs(element);
+
+    hemp_value_t    args    = hemp_block_args( hemp_val_elem(block) );
+
+
+    if (hemp_val_elem(name)) {
         hemp_text_p text  = hemp_text_new();
-        name->type->text(name, context, hemp_text_val(text));
+        hemp_val_elem(name)->type->text(name, context, hemp_text_val(text));
         hemp_debug("sub is named: %s\n", text->string);
         hemp_text_free(text);
+
     }
     
-    if (args) {
+    if (hemp_val_elem(args)) {
         hemp_debug("sub has params\n");
     }
 

@@ -27,7 +27,7 @@ struct hemp_binary_s {
 };
 
 struct hemp_block_s {
-    hemp_element_p  args;
+    hemp_value_t    args;
     hemp_list_p     exprs;
 };
 
@@ -218,7 +218,7 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left);
 HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right);
 HEMP_PREFIX_FUNC(hemp_element_fixed);
 
-HEMP_ETEXT_FUNC(hemp_element_binary_source);
+HEMP_OUTPUT_FUNC(hemp_element_binary_source);
 
 
 /*--------------------------------------------------------------------------
@@ -229,15 +229,15 @@ HEMP_PREFIX_FUNC(hemp_element_decline);
 HEMP_PREFIX_FUNC(hemp_element_not_prefix);
 HEMP_POSTFIX_FUNC(hemp_element_not_postfix);
 HEMP_PREFIX_FUNC(hemp_element_not_word);
-HEMP_ETEXT_FUNC(hemp_element_not_token);
-HEMP_ETEXT_FUNC(hemp_element_not_source);
-HEMP_ETEXT_FUNC(hemp_element_not_text);
-HEMP_EVAL_FUNC(hemp_element_not_value);
-HEMP_EVAL_FUNC(hemp_element_not_number);
-HEMP_EVAL_FUNC(hemp_element_not_integer);
-HEMP_EVAL_FUNC(hemp_element_not_boolean);
-HEMP_EVAL_FUNC(hemp_element_not_compare);
-HEMP_EVALS_FUNC(hemp_element_not_values);
+HEMP_OUTPUT_FUNC(hemp_element_not_token);
+HEMP_OUTPUT_FUNC(hemp_element_not_source);
+HEMP_OUTPUT_FUNC(hemp_element_not_text);
+HEMP_VALUE_FUNC(hemp_element_not_value);
+HEMP_VALUE_FUNC(hemp_element_not_number);
+HEMP_VALUE_FUNC(hemp_element_not_integer);
+HEMP_VALUE_FUNC(hemp_element_not_boolean);
+HEMP_VALUE_FUNC(hemp_element_not_compare);
+HEMP_OUTPUT_FUNC(hemp_element_not_values);
 HEMP_OPERATE_FUNC(hemp_element_not_assign);
 
 
@@ -255,15 +255,15 @@ HEMP_POSTFIX_FUNC(hemp_element_next_postfix);
 
 HEMP_SYMBOL_FUNC(hemp_element_literal_symbol);
 HEMP_PREFIX_FUNC(hemp_element_literal_prefix);
-HEMP_ETEXT_FUNC(hemp_element_literal_token);
-HEMP_ETEXT_FUNC(hemp_element_literal_source);
-HEMP_ETEXT_FUNC(hemp_element_literal_text);
-HEMP_EVAL_FUNC(hemp_element_literal_value);
+HEMP_OUTPUT_FUNC(hemp_element_literal_token);
+HEMP_OUTPUT_FUNC(hemp_element_literal_source);
+HEMP_OUTPUT_FUNC(hemp_element_literal_text);
+HEMP_VALUE_FUNC(hemp_element_literal_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_word_symbol);
 HEMP_PREFIX_FUNC(hemp_element_word_prefix);
 HEMP_PREFIX_FUNC(hemp_element_word_word);
-HEMP_EVAL_FUNC(hemp_element_word_value);
+HEMP_VALUE_FUNC(hemp_element_word_value);
 HEMP_OPERATE_FUNC(hemp_element_word_assign);
 
 
@@ -274,20 +274,20 @@ HEMP_OPERATE_FUNC(hemp_element_word_assign);
 HEMP_SYMBOL_FUNC(hemp_element_number_symbol);
 HEMP_PREFIX_FUNC(hemp_element_number_prefix);
 HEMP_PREFIX_FUNC(hemp_element_number_word);
-HEMP_ETEXT_FUNC(hemp_element_number_text);
-HEMP_EVAL_FUNC(hemp_element_number_value);
-HEMP_EVAL_FUNC(hemp_element_number_number);
-HEMP_EVAL_FUNC(hemp_element_number_integer);
-HEMP_EVAL_FUNC(hemp_element_number_boolean);
-HEMP_EVAL_FUNC(hemp_element_number_compare);
+HEMP_OUTPUT_FUNC(hemp_element_number_text);
+HEMP_VALUE_FUNC(hemp_element_number_value);
+HEMP_VALUE_FUNC(hemp_element_number_number);
+HEMP_VALUE_FUNC(hemp_element_number_integer);
+HEMP_VALUE_FUNC(hemp_element_number_boolean);
+HEMP_VALUE_FUNC(hemp_element_number_compare);
 
 HEMP_SYMBOL_FUNC(hemp_element_integer_symbol);
-HEMP_ETEXT_FUNC(hemp_element_integer_text);
-HEMP_EVAL_FUNC(hemp_element_integer_value);
-HEMP_EVAL_FUNC(hemp_element_integer_number);
-HEMP_EVAL_FUNC(hemp_element_integer_integer);
-HEMP_EVAL_FUNC(hemp_element_integer_boolean);
-HEMP_EVAL_FUNC(hemp_element_integer_compare);
+HEMP_OUTPUT_FUNC(hemp_element_integer_text);
+HEMP_VALUE_FUNC(hemp_element_integer_value);
+HEMP_VALUE_FUNC(hemp_element_integer_number);
+HEMP_VALUE_FUNC(hemp_element_integer_integer);
+HEMP_VALUE_FUNC(hemp_element_integer_boolean);
+HEMP_VALUE_FUNC(hemp_element_integer_compare);
 
 
 /*--------------------------------------------------------------------------
@@ -308,7 +308,7 @@ hemp_bool_t hemp_element_terminator_matches(hemp_element_p, hemp_str_p);
 
 HEMP_SCAN_FUNC(hemp_element_comment_scanner);
 HEMP_PREFIX_FUNC(hemp_element_space_parse_expr);
-HEMP_ETEXT_FUNC(hemp_element_eof_token);
+HEMP_OUTPUT_FUNC(hemp_element_eof_token);
 
 
 /*--------------------------------------------------------------------------
@@ -329,8 +329,8 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner);
 HEMP_SYMBOL_FUNC(hemp_element_dquote_symbol);
 HEMP_SCAN_FUNC(hemp_element_dquote_scanner);
 
-HEMP_ETEXT_FUNC(hemp_element_quoted_text);
-HEMP_EVAL_FUNC(hemp_element_quoted_value);
+HEMP_OUTPUT_FUNC(hemp_element_quoted_text);
+HEMP_VALUE_FUNC(hemp_element_quoted_value);
 
 
 /*--------------------------------------------------------------------------
@@ -345,10 +345,10 @@ HEMP_SYMBOL_FUNC(hemp_element_infix_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_infix_left_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_infix_right_symbol);
 
-HEMP_ETEXT_FUNC(hemp_element_prefix_source);
-HEMP_ETEXT_FUNC(hemp_element_postfix_source);
-HEMP_ETEXT_FUNC(hemp_element_prepostfix_source);
-HEMP_ETEXT_FUNC(hemp_element_infix_source);
+HEMP_OUTPUT_FUNC(hemp_element_prefix_source);
+HEMP_OUTPUT_FUNC(hemp_element_postfix_source);
+HEMP_OUTPUT_FUNC(hemp_element_prepostfix_source);
+HEMP_OUTPUT_FUNC(hemp_element_infix_source);
 
 
 
@@ -363,16 +363,16 @@ HEMP_POSTFIX_FUNC(hemp_element_brackets_postfix);
 HEMP_SYMBOL_FUNC(hemp_element_parens_symbol);
 //HEMP_PREFIX_FUNC(hemp_element_parens_prefix);
 //HEMP_POSTFIX_FUNC(hemp_element_parens_postfix);
-HEMP_EVAL_FUNC(hemp_element_parens_value);
-HEMP_EVALS_FUNC(hemp_element_parens_values);
+HEMP_VALUE_FUNC(hemp_element_parens_value);
+HEMP_OUTPUT_FUNC(hemp_element_parens_values);
 HEMP_POSTFIX_FUNC(hemp_element_parens_postfix);
 HEMP_POSTFIX_FUNC(hemp_element_parens_parse_params);
 
 HEMP_SYMBOL_FUNC(hemp_element_list_symbol);
-HEMP_EVAL_FUNC(hemp_element_list_value);
+HEMP_VALUE_FUNC(hemp_element_list_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_hash_symbol);
-HEMP_EVAL_FUNC(hemp_element_hash_value);
+HEMP_VALUE_FUNC(hemp_element_hash_value);
 
 
 
@@ -380,18 +380,18 @@ HEMP_EVAL_FUNC(hemp_element_hash_value);
  * boolean operators
  *--------------------------------------------------------------------------*/
 
-HEMP_ETEXT_FUNC(hemp_element_boolean_text);
+HEMP_OUTPUT_FUNC(hemp_element_boolean_text);
 HEMP_SYMBOL_FUNC(hemp_element_boolean_symbol);
-HEMP_EVAL_FUNC(hemp_element_boolean_value);
+HEMP_VALUE_FUNC(hemp_element_boolean_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_boolean_not_symbol);
-HEMP_EVAL_FUNC(hemp_element_boolean_not_value);
+HEMP_VALUE_FUNC(hemp_element_boolean_not_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_boolean_and_symbol);
-HEMP_EVAL_FUNC(hemp_element_boolean_and_value);
+HEMP_VALUE_FUNC(hemp_element_boolean_and_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_boolean_or_symbol);
-HEMP_EVAL_FUNC(hemp_element_boolean_or_value);
+HEMP_VALUE_FUNC(hemp_element_boolean_or_value);
 
 
 
@@ -400,9 +400,9 @@ HEMP_EVAL_FUNC(hemp_element_boolean_or_value);
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_compare_symbol);
-HEMP_ETEXT_FUNC(hemp_element_compare_text);
-HEMP_EVAL_FUNC(hemp_element_compare_integer);
-HEMP_EVAL_FUNC(hemp_element_compare_value);
+HEMP_OUTPUT_FUNC(hemp_element_compare_text);
+HEMP_VALUE_FUNC(hemp_element_compare_integer);
+HEMP_VALUE_FUNC(hemp_element_compare_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_compare_equal_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_compare_not_equal_symbol);
@@ -411,12 +411,12 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_not_before_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_compare_after_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_compare_not_after_symbol);
 
-HEMP_EVAL_FUNC(hemp_element_compare_equal_value);
-HEMP_EVAL_FUNC(hemp_element_compare_not_equal_value);
-HEMP_EVAL_FUNC(hemp_element_compare_before_value);
-HEMP_EVAL_FUNC(hemp_element_compare_not_before_value);
-HEMP_EVAL_FUNC(hemp_element_compare_after_value);
-HEMP_EVAL_FUNC(hemp_element_compare_not_after_value);
+HEMP_VALUE_FUNC(hemp_element_compare_equal_value);
+HEMP_VALUE_FUNC(hemp_element_compare_not_equal_value);
+HEMP_VALUE_FUNC(hemp_element_compare_before_value);
+HEMP_VALUE_FUNC(hemp_element_compare_not_before_value);
+HEMP_VALUE_FUNC(hemp_element_compare_after_value);
+HEMP_VALUE_FUNC(hemp_element_compare_not_after_value);
 
 
 /*--------------------------------------------------------------------------
@@ -424,10 +424,10 @@ HEMP_EVAL_FUNC(hemp_element_compare_not_after_value);
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_numop_symbol);
-HEMP_ETEXT_FUNC(hemp_element_numop_text);
-HEMP_EVAL_FUNC(hemp_element_numop_value);
-HEMP_EVAL_FUNC(hemp_element_numop_integer);
-HEMP_EVAL_FUNC(hemp_element_numop_boolean);
+HEMP_OUTPUT_FUNC(hemp_element_numop_text);
+HEMP_VALUE_FUNC(hemp_element_numop_value);
+HEMP_VALUE_FUNC(hemp_element_numop_integer);
+HEMP_VALUE_FUNC(hemp_element_numop_boolean);
 
 HEMP_SYMBOL_FUNC(hemp_element_number_autoinc_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_number_autodec_symbol);
@@ -446,16 +446,16 @@ HEMP_SYMBOL_FUNC(hemp_element_number_not_before_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_number_not_after_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_number_after_symbol);
 
-HEMP_EVAL_FUNC(hemp_element_number_autoinc_value);
-HEMP_EVAL_FUNC(hemp_element_number_autodec_value);
-HEMP_EVAL_FUNC(hemp_element_number_plus_value);
-HEMP_EVAL_FUNC(hemp_element_number_minus_value);
-HEMP_EVAL_FUNC(hemp_element_number_power_value);
-HEMP_EVAL_FUNC(hemp_element_number_multiply_value);
-HEMP_EVAL_FUNC(hemp_element_number_divide_value);
-HEMP_EVAL_FUNC(hemp_element_number_divint_value);
-HEMP_EVAL_FUNC(hemp_element_number_modulus_value);
-HEMP_EVAL_FUNC(hemp_element_number_compare_value);
+HEMP_VALUE_FUNC(hemp_element_number_autoinc_value);
+HEMP_VALUE_FUNC(hemp_element_number_autodec_value);
+HEMP_VALUE_FUNC(hemp_element_number_plus_value);
+HEMP_VALUE_FUNC(hemp_element_number_minus_value);
+HEMP_VALUE_FUNC(hemp_element_number_power_value);
+HEMP_VALUE_FUNC(hemp_element_number_multiply_value);
+HEMP_VALUE_FUNC(hemp_element_number_divide_value);
+HEMP_VALUE_FUNC(hemp_element_number_divint_value);
+HEMP_VALUE_FUNC(hemp_element_number_modulus_value);
+HEMP_VALUE_FUNC(hemp_element_number_compare_value);
 
 
 /*--------------------------------------------------------------------------
@@ -463,9 +463,9 @@ HEMP_EVAL_FUNC(hemp_element_number_compare_value);
  *--------------------------------------------------------------------------*/
 
 //HEMP_SYMBOL_FUNC(hemp_element_textop_symbol);
-//HEMP_EVAL_FUNC(hemp_element_textop_number);
-//HEMP_EVAL_FUNC(hemp_element_textop_integer);
-//HEMP_EVAL_FUNC(hemp_element_textop_boolean);
+//HEMP_VALUE_FUNC(hemp_element_textop_number);
+//HEMP_VALUE_FUNC(hemp_element_textop_integer);
+//HEMP_VALUE_FUNC(hemp_element_textop_boolean);
 
 HEMP_SYMBOL_FUNC(hemp_element_text_concat_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_text_compare_symbol);
@@ -476,9 +476,9 @@ HEMP_SYMBOL_FUNC(hemp_element_text_not_before_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_text_after_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_text_not_after_symbol);
 
-HEMP_ETEXT_FUNC(hemp_element_text_concat_value);
-HEMP_EVAL_FUNC(hemp_element_text_compare_value);
-HEMP_EVAL_FUNC(hemp_element_text_value);
+HEMP_OUTPUT_FUNC(hemp_element_text_concat_value);
+HEMP_VALUE_FUNC(hemp_element_text_compare_value);
+HEMP_VALUE_FUNC(hemp_element_text_value);
 
 
 /*--------------------------------------------------------------------------
@@ -486,8 +486,8 @@ HEMP_EVAL_FUNC(hemp_element_text_value);
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_assign_symbol);
-HEMP_ETEXT_FUNC(hemp_element_assign_text);
-HEMP_EVAL_FUNC(hemp_element_assign_value);
+HEMP_OUTPUT_FUNC(hemp_element_assign_text);
+HEMP_VALUE_FUNC(hemp_element_assign_value);
 
 
 /*--------------------------------------------------------------------------
@@ -496,7 +496,7 @@ HEMP_EVAL_FUNC(hemp_element_assign_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol);
 HEMP_POSTFIX_FUNC(hemp_element_dotop_postfix);
-HEMP_EVAL_FUNC(hemp_element_dotop_value);
+HEMP_VALUE_FUNC(hemp_element_dotop_value);
 HEMP_OPERATE_FUNC(hemp_element_dotop_assign);
 void hemp_element_dotop_clean(hemp_element_p);
 
@@ -507,22 +507,22 @@ void hemp_element_dotop_clean(hemp_element_p);
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_block_symbol);
-HEMP_ETEXT_FUNC(hemp_element_block_token);
-HEMP_ETEXT_FUNC(hemp_element_block_source);
-HEMP_ETEXT_FUNC(hemp_element_block_text);
-HEMP_EVAL_FUNC(hemp_element_block_value);
-HEMP_EVALS_FUNC(hemp_element_block_values);
+HEMP_OUTPUT_FUNC(hemp_element_block_token);
+HEMP_OUTPUT_FUNC(hemp_element_block_source);
+HEMP_OUTPUT_FUNC(hemp_element_block_text);
+HEMP_VALUE_FUNC(hemp_element_block_value);
+HEMP_OUTPUT_FUNC(hemp_element_block_values);
 
 
 /*--------------------------------------------------------------------------
  * basic values
  *--------------------------------------------------------------------------*/
-HEMP_ETEXT_FUNC(hemp_element_value_text);
-HEMP_EVAL_FUNC(hemp_element_value_number);
-HEMP_EVAL_FUNC(hemp_element_value_integer);
-HEMP_EVAL_FUNC(hemp_element_value_boolean);
-HEMP_EVAL_FUNC(hemp_element_value_compare);
-HEMP_EVALS_FUNC(hemp_element_value_values);
+HEMP_OUTPUT_FUNC(hemp_element_value_text);
+HEMP_VALUE_FUNC(hemp_element_value_number);
+HEMP_VALUE_FUNC(hemp_element_value_integer);
+HEMP_VALUE_FUNC(hemp_element_value_boolean);
+HEMP_VALUE_FUNC(hemp_element_value_compare);
+HEMP_OUTPUT_FUNC(hemp_element_value_values);
 
 
 

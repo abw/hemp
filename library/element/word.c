@@ -47,11 +47,13 @@ HEMP_PREFIX_FUNC(hemp_element_word_prefix) {
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_word_value) {
+HEMP_VALUE_FUNC(hemp_element_word_value) {
     hemp_debug_call("hemp_element_word_value()\n");
 
+    hemp_element_p element = hemp_val_elem(value);
+
     if (hemp_has_flag(element, HEMP_BE_FIXED)) {
-        return element->type->token(element, context, HempNothing);
+        return element->type->token(value, context, HempNothing);
     }
     else {
         return hemp_hash_fetch_keylen(
@@ -63,6 +65,7 @@ HEMP_EVAL_FUNC(hemp_element_word_value) {
 
 HEMP_OPERATE_FUNC(hemp_element_word_assign) {
     hemp_todo("hemp_element_word_assign()");
+    hemp_element_p  element = hemp_val_elem(value);
     hemp_hash_store_keylen(
         context->vars, element->token, operand, element->length
     );

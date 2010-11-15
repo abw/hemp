@@ -99,6 +99,12 @@ hemp_bool_val(hemp_bool_t b) {
 
 
 HEMP_INLINE hemp_value_t
+hemp_elem_val(hemp_element_p e) {
+    return hemp_obj_val((hemp_object_p) e);
+}
+
+
+HEMP_INLINE hemp_value_t
 hemp_type_val(
     hemp_type_p type, 
     hemp_mem_p  ptr
@@ -107,6 +113,8 @@ hemp_type_val(
     v.bits = HEMP_TAG_MAKE(type->id) | ((hemp_u64_t) ptr & HEMP_POINTER_MASK);
     return v;
 }
+
+extern HEMP_INLINE hemp_value_t     hemp_elem_val(hemp_element_p e);
 
 
 /*--------------------------------------------------------------------------
@@ -158,6 +166,11 @@ hemp_val_hash(hemp_value_t v) {
 HEMP_INLINE hemp_object_p
 hemp_val_obj(hemp_value_t v) {
     return (hemp_object_p) HEMP_POINTER(v);
+}
+
+HEMP_INLINE hemp_element_p
+hemp_val_elem(hemp_value_t v) {
+    return (hemp_element_p) HEMP_POINTER(v);
 }
 
 

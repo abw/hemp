@@ -125,7 +125,7 @@ hemp_template_render(
 //    hemp_debug("root type: %s\n", root->type->name);
 
 //    HEMP_TRY;
-        v = root->type->text(root, context, HempNothing);
+        v = root->type->text(hemp_elem_val(root), context, HempNothing);
 //    HEMP_CATCH_ALL;
 //       hemp_fatal("Error processing template: %s", hemp->error->message);
 //    HEMP_END;

@@ -13,20 +13,24 @@ HEMP_SYMBOL_FUNC(hemp_element_assign_symbol) {
     return symbol;
 }
 
-HEMP_ETEXT_FUNC(hemp_element_assign_text) {
+
+HEMP_OUTPUT_FUNC(hemp_element_assign_text) {
     hemp_debug("hemp_element_assign_text()\n");
-    hemp_element_assign_value(element, context);
+    hemp_element_assign_value(value, context);
     hemp_text_p text;
     hemp_prepare_text(context, output, text);
     return output;
 }
 
-HEMP_EVAL_FUNC(hemp_element_assign_value) {
+HEMP_VALUE_FUNC(hemp_element_assign_value) {
     hemp_debug("hemp_element_assign_value()\n");
+    hemp_element_p  element = hemp_val_elem(value);
+//    hemp_element_p  lhs     = hemp_lhs_element(element);
+//    hemp_element_p  rhs     = hemp_rhs_element(element);
+    hemp_value_t  lhs     = hemp_lhs(element);
+    hemp_value_t  rhs     = hemp_rhs(element);
 
-    hemp_element_p lhs = hemp_lhs_element(element);
-    hemp_element_p rhs = hemp_rhs_element(element);
-    hemp_value_t rval  = rhs->type->value(rhs, context);
-    return lhs->type->assign(lhs, context, rval);
+    hemp_value_t    rval    = hemp_val_elem(rhs)->type->value(rhs, context);
+    return hemp_val_elem(lhs)->type->assign(lhs, context, rval);
 }
 

@@ -160,7 +160,7 @@ HEMP_PREFIX_FUNC(hemp_element_test_test_prefix) {
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_test_test_value) {
+HEMP_VALUE_FUNC(hemp_element_test_test_value) {
     hemp_text_p text = hemp_context_tmp_text(context);
     hemp_todo("hemp_element_test_test_value()\n");
 }

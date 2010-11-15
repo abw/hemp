@@ -364,86 +364,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * like operators, expressions, keywords, etc., do other stuff and then return
  * some value.
  *
- * HEMP_EVAL_FUNC() can be used to declare and define value functions.
  *--------------------------------------------------------------------------*/
-
-
-/* TODO: these will all become value method, e.g. HEMP_VALUE_FUNC() instead
- * of HEMP_EVAL_FUNC() as soon as we change the elements to be represented
- * as object values.
- */
-
-
-#define HEMP_EVAL_ARGS                      \
-        hemp_element_p  element,            \
-        hemp_context_p  context
-
-#define HEMP_EVAL_ARG_NAMES                 \
-        element, context
-
-#define HEMP_EVAL_FUNC(f)                   \
-    HEMP_INLINE hemp_value_t f(             \
-        HEMP_EVAL_ARGS                      \
-    )
-
-#define HEMP_EVALS_ARGS                     \
-        hemp_element_p  element,            \
-        hemp_context_p  context,            \
-        hemp_value_t    output
-
-#define HEMP_EVALS_ARG_NAMES                \
-        element, context, output
-
-#define HEMP_EVALS_FUNC(f)                  \
-    HEMP_INLINE hemp_value_t f(             \
-        HEMP_EVALS_ARGS                     \
-    )
-
-#define HEMP_OPERATE_ARGS                   \
-        hemp_element_p  element,            \
-        hemp_context_p  context,            \
-        hemp_value_t    operand
-
-#define HEMP_OPERATE_ARG_NAMES              \
-        element, context, operand
-
-#define HEMP_OPERATE_FUNC(f)                \
-    HEMP_INLINE hemp_value_t f(             \
-        HEMP_OPERATE_ARGS                   \
-    )
-
-
-/*--------------------------------------------------------------------------
- * Element Text Output
- *
- * To render a parsed template we simply render each expression in the 
- * template and concatenate the output text generated.  As an optimisation
- * we can pass a text value (see include/text.h and include/value.h) as the 
- * optional third argument.  The element will then append its output text to
- * this (automatically growing) buffer rather creating a new text value of
- * of its own that we then have to worry about freeing up afterwards.  If 
- * you don't pass an output buffer (e.g. by passing the special HempNothing
- * value instead) then it *will* return a text object which needs to be 
- * freed via hemp_text_free(hemp_val_str(output)).
- *
- * HEMP_ETEXT_FUNC() can be used, yes, you guessed it, to declare and define
- * output functions that work this way.
- *--------------------------------------------------------------------------*/
-
-#define HEMP_ETEXT_ARGS                     \
-    hemp_element_p  element,                \
-    hemp_context_p  context,                \
-    hemp_value_t    output
-
-#define HEMP_ETEXT_ARG_NAMES                \
-    element, context, output
-
-#define HEMP_ETEXT_FUNC(f)                  \
-    HEMP_INLINE hemp_value_t f(             \
-        HEMP_ETEXT_ARGS                     \
-    )
-
-
 
 /*--------------------------------------------------------------------------
  * Views: comment TODO
@@ -488,6 +409,11 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * the function to append the value onto.
  *--------------------------------------------------------------------------*/
 
+//#define HEMP_VALUE_ARGS                     \
+//
+//#define HEMP_VALUE_ARG_NAMES                \
+//    value, context
+
 #define HEMP_VALUE_FUNC(f)                  \
     HEMP_INLINE hemp_value_t f(             \
         hemp_value_t    value,              \
@@ -514,6 +440,13 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         hemp_context_p  context,            \
         hemp_value_t    key,                \
         hemp_value_t    value               \
+    )
+
+#define HEMP_OPERATE_FUNC(f)                \
+    HEMP_INLINE hemp_value_t f(             \
+        hemp_value_t    value,              \
+        hemp_context_p  context,            \
+        hemp_value_t    operand             \
     )
 
 

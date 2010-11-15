@@ -44,7 +44,7 @@ HEMP_POSTFIX_FUNC(hemp_element_dotop_postfix) {
          * returns the token text (which is always a text copy...)
          */
         rhs->type->value(
-            rhs, scope->context
+            hemp_elem_val(rhs), scope->context
         )
     );
 
@@ -57,13 +57,14 @@ HEMP_POSTFIX_FUNC(hemp_element_dotop_postfix) {
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_dotop_value) {
+HEMP_VALUE_FUNC(hemp_element_dotop_value) {
     hemp_debug("hemp_element_dotop_value()\n");
 
     /* Note the temporary hack: rhs is always a pre-evaluated value */
-    hemp_element_p  lhs  = hemp_lhs_element(element);
-    hemp_value_t    lval = lhs->type->value(lhs, context);
-    hemp_value_t    rval = hemp_rhs(element);
+    hemp_element_p  element = hemp_val_elem(value);
+    hemp_value_t    lhs     = hemp_lhs(element);
+    hemp_value_t    lval    = hemp_val_elem(lhs)->type->value(lhs, context);
+    hemp_value_t    rval    = hemp_rhs(element);
 
     if (hemp_is_undefined(lval)) {
         hemp_fatal("TODO: cannot call dotop on undefined value");
@@ -81,9 +82,10 @@ HEMP_OPERATE_FUNC(hemp_element_dotop_assign) {
     hemp_todo("hemp_element_dotop_assign()");
 
     /* Note the temporary hack: rhs is always a pre-evaluated value */
-    hemp_element_p  lhs  = hemp_lhs_element(element);
-    hemp_value_t    lval = lhs->type->value(lhs, context);
-    hemp_value_t    rval = hemp_rhs(element);
+    hemp_element_p  element = hemp_val_elem(value);
+    hemp_value_t    lhs     = hemp_lhs(element);
+    hemp_value_t    lval    = hemp_val_elem(lhs)->type->value(lhs, context);
+    hemp_value_t    rval    = hemp_rhs(element);
 
     return hemp_store(
         lval, context, rval, operand

@@ -72,32 +72,32 @@ HEMP_SYMBOL_FUNC(hemp_element_infix_right_symbol) {
 }
 
 
-HEMP_ETEXT_FUNC(hemp_element_prefix_source) {
+HEMP_OUTPUT_FUNC(hemp_element_prefix_source) {
     hemp_todo("hemp_element_prefix_source()\n");
 }
 
 
-HEMP_ETEXT_FUNC(hemp_element_postfix_source) {
+HEMP_OUTPUT_FUNC(hemp_element_postfix_source) {
     hemp_todo("hemp_element_postfix_source()\n");
 }
 
 
-HEMP_ETEXT_FUNC(hemp_element_prepostfix_source) {
+HEMP_OUTPUT_FUNC(hemp_element_prepostfix_source) {
     hemp_todo("hemp_element_prepostfix_source()\n");
 
-    return hemp_has_flag(element, HEMP_BE_PREFIX)
-        ? hemp_element_prefix_source(HEMP_ETEXT_ARG_NAMES)
-        : hemp_element_postfix_source(HEMP_ETEXT_ARG_NAMES);
+    return hemp_has_flag(hemp_val_elem(value), HEMP_BE_PREFIX)
+        ? hemp_element_prefix_source(value, context, output)
+        : hemp_element_postfix_source(value, context, output);
 }
 
 
-HEMP_ETEXT_FUNC(hemp_element_infix_source) {
+HEMP_OUTPUT_FUNC(hemp_element_infix_source) {
     hemp_todo("hemp_element_infix_source()\n");
 
     /* ARSE!  I forgot, I'm using the source "method" to display token
      * list as part of the parser debug... will have to disable this for
      * now
      */
-    return hemp_element_literal_source(HEMP_ETEXT_ARG_NAMES);
+    return hemp_element_literal_source(value, context, output);
 }
 

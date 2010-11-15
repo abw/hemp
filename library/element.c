@@ -190,62 +190,90 @@ HEMP_PREFIX_FUNC(hemp_element_not_word) {
 }
 
 
-HEMP_ETEXT_FUNC(hemp_element_not_token) {
-    hemp_fatal("%s element does not yield token\n", element->type->name);
+HEMP_OUTPUT_FUNC(hemp_element_not_token) {
+    hemp_fatal(
+        "%s element does not yield token\n", 
+        hemp_val_elem(value)->type->name
+    );
     return output;
 }
 
 
-HEMP_ETEXT_FUNC(hemp_element_not_source) {
-    hemp_fatal("%s element does not yield source\n", element->type->name);
+HEMP_OUTPUT_FUNC(hemp_element_not_source) {
+    hemp_fatal(
+        "%s element does not yield source\n", 
+        hemp_val_elem(value)->type->name);
     return output;
 }
 
 
-HEMP_ETEXT_FUNC(hemp_element_not_text) {
-    hemp_fatal("%s element does not yield text\n", element->type->name);
+HEMP_OUTPUT_FUNC(hemp_element_not_text) {
+    hemp_fatal(
+        "%s element does not yield text\n", 
+        hemp_val_elem(value)->type->name);
     return output;
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_not_value) {
-    hemp_fatal("%s element does not yield value\n", element->type->name);
+HEMP_OUTPUT_FUNC(hemp_element_not_values) {
+    hemp_fatal(
+        "%s element does not yield values\n", 
+        hemp_val_elem(value)->type->name
+    );
     return HempNothing;
 }
 
 
-HEMP_EVALS_FUNC(hemp_element_not_values) {
-    hemp_fatal("%s element does not yield values\n", element->type->name);
+HEMP_VALUE_FUNC(hemp_element_not_value) {
+    hemp_fatal(
+        "%s element does not yield value\n", 
+        hemp_val_elem(value)->type->name
+    );
     return HempNothing;
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_not_number) {
-    hemp_fatal("%s element does not yield number\n", element->type->name);
+HEMP_VALUE_FUNC(hemp_element_not_number) {
+    hemp_fatal(
+        "%s element does not yield number\n", 
+        hemp_val_elem(value)->type->name
+    );
     return HempNothing;
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_not_integer) {
-    hemp_fatal("%s element does not yield integer\n", element->type->name);
+HEMP_VALUE_FUNC(hemp_element_not_integer) {
+    hemp_fatal(
+        "%s element does not yield integer\n", 
+        hemp_val_elem(value)->type->name
+    );
     return HempNothing;
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_not_boolean) {
-    hemp_fatal("%s element does not yield boolean\n", element->type->name);
+HEMP_VALUE_FUNC(hemp_element_not_boolean) {
+    hemp_fatal(
+        "%s element does not yield boolean\n", 
+        hemp_val_elem(value)->type->name
+    );
     return HempNothing;
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_not_compare) {
-    hemp_fatal("%s element does not yield comparison\n", element->type->name);
+HEMP_VALUE_FUNC(hemp_element_not_compare) {
+    hemp_fatal(
+        "%s element does not yield comparison\n", 
+        hemp_val_elem(value)->type->name
+    );
     return HempNothing;
 }
 
 
 HEMP_OPERATE_FUNC(hemp_element_not_assign) {
-    hemp_fatal("%s element cannot be assigned to\n", element->type->name);
+    hemp_fatal(
+        "%s element cannot be assigned to\n", 
+        hemp_val_elem(value)->type->name
+    );
     return HempNothing;
 }
 
@@ -415,49 +443,49 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right) {
  * evaluated multiple times.
  *--------------------------------------------------------------------------*/
 
-HEMP_ETEXT_FUNC(hemp_element_value_text) {
+HEMP_OUTPUT_FUNC(hemp_element_value_text) {
     hemp_debug_call("hemp_element_value_text()\n");
-    hemp_value_t value = element->type->value(element, context);
-    return hemp_onto_text(value, context, output);
+    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    return hemp_onto_text(result, context, output);
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_value_number) {
+HEMP_VALUE_FUNC(hemp_element_value_number) {
     hemp_debug_call("hemp_element_value_number()\n");
-    hemp_value_t value = element->type->value(element, context);
-    return hemp_is_numeric(value)
-        ? value
-        : hemp_call(value, number, context);
+    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    return hemp_is_numeric(result)
+        ? result
+        : hemp_call(result, number, context);
 
 // forced coersion is not the way forward
 //    return hemp_to_num(v);
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_value_integer) {
+HEMP_VALUE_FUNC(hemp_element_value_integer) {
     hemp_debug_call("hemp_element_value_integer()\n");
-    hemp_value_t value = element->type->value(element, context);
-    return hemp_to_integer(value, context);
+    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    return hemp_to_integer(result, context);
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_value_boolean) {
+HEMP_VALUE_FUNC(hemp_element_value_boolean) {
     hemp_debug_call("hemp_element_value_boolean()\n");
-    hemp_value_t value = element->type->value(element, context);
-    return hemp_to_boolean(value, context);
+    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    return hemp_to_boolean(result, context);
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_value_compare) {
+HEMP_VALUE_FUNC(hemp_element_value_compare) {
     hemp_debug_call("hemp_element_value_compare()\n");
-    hemp_value_t value = element->type->value(element, context);
-    return hemp_to_compare(value, context);
+    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    return hemp_to_compare(result, context);
 }
 
-HEMP_EVALS_FUNC(hemp_element_value_values) {
+HEMP_OUTPUT_FUNC(hemp_element_value_values) {
     hemp_debug_call("hemp_element_value_values()\n");
-    hemp_value_t value = element->type->value(element, context);
-    return hemp_values(value, context, output);
+    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    return hemp_values(result, context, output);
 }
 
 
@@ -477,8 +505,9 @@ hemp_element_dump(
         hemp_fatal("%s type does not define a text() method", e->type->name);
 
     hemp_value_t output = e->type->token
-        ? e->type->token(e, context, HempNothing)
-        : e->type->text(e, context, HempNothing);
+        ? e->type->token(hemp_elem_val(e), context, HempNothing)
+        : e->type->text(hemp_elem_val(e), context, HempNothing);
+
 
     hemp_text_p text  = hemp_val_text(output);
     hemp_str_p string = text ? text->string : "-- NO OUTPUT --";

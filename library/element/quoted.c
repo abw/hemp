@@ -191,9 +191,10 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
  * generic text output function for quoted strings
  *--------------------------------------------------------------------------*/
 
-HEMP_ETEXT_FUNC(hemp_element_quoted_text) {
+HEMP_OUTPUT_FUNC(hemp_element_quoted_text) {
     hemp_debug_call("hemp_element_quoted_text(%p) [%s]\n", element, element->type->name);
 
+    hemp_element_p element = hemp_val_elem(value);
     hemp_text_p text;
     hemp_prepare_text_size(context, output, text, element->length);
 
@@ -219,7 +220,7 @@ HEMP_ETEXT_FUNC(hemp_element_quoted_text) {
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_quoted_value) {
-    return hemp_element_quoted_text(HEMP_EVAL_ARG_NAMES, HempNothing);
+HEMP_VALUE_FUNC(hemp_element_quoted_value) {
+    return hemp_element_quoted_text(value, context, HempNothing);
 }
 

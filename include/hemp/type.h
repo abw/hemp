@@ -22,7 +22,8 @@
     hemp_value_f        apply;      \
     hemp_store_f        store;      \
     hemp_fetch_f        fetch;      \
-    hemp_fetch_f        dot;
+    hemp_fetch_f        dot;        \
+    hemp_operate_f      assign;
 
 //    + assign
 

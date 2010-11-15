@@ -80,20 +80,21 @@ HEMP_SYMBOL_FUNC(hemp_element_text_concat_symbol) {
     return symbol;
 }
 
-HEMP_EVAL_FUNC(hemp_element_text_value) {
-    return element->type->text(HEMP_EVAL_ARG_NAMES, HempNothing);
+HEMP_VALUE_FUNC(hemp_element_text_value) {
+    return hemp_val_elem(value)->type->text(value, context, HempNothing);
 }
 
 
-HEMP_ETEXT_FUNC(hemp_element_text_concat_value) {
+HEMP_OUTPUT_FUNC(hemp_element_text_concat_value) {
     hemp_debug_call("hemp_element_text_concat_value()\n");
+    hemp_element_p element = hemp_val_elem(value);
 
     hemp_text_p text;
     hemp_prepare_text(context, output, text);
-    hemp_element_p lhs = hemp_lhs_element(element);
-    hemp_element_p rhs = hemp_rhs_element(element);
-    lhs->type->text(lhs, context, output);
-    rhs->type->text(rhs, context, output);
+    hemp_value_t lhs = hemp_lhs(element);
+    hemp_value_t rhs = hemp_rhs(element);
+    hemp_val_elem(lhs)->type->text(lhs, context, output);
+    hemp_val_elem(rhs)->type->text(rhs, context, output);
 
     return output;
 }
@@ -110,14 +111,15 @@ HEMP_SYMBOL_FUNC(hemp_element_text_compare_symbol) {
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_text_compare_value) {
+HEMP_VALUE_FUNC(hemp_element_text_compare_value) {
     hemp_debug_call("hemp_element_text_compare_value()\n");
 
-    hemp_element_p lhs = hemp_lhs_element(element);
-    hemp_element_p rhs = hemp_rhs_element(element);
-    hemp_value_t lval  = lhs->type->text(lhs, context, HempNothing);
-    hemp_value_t rval  = rhs->type->text(rhs, context, HempNothing);
-    hemp_int_t compare = strcmp( 
+    hemp_element_p  element = hemp_val_elem(value);
+    hemp_value_t    lhs     = hemp_lhs(element);
+    hemp_value_t    rhs     = hemp_rhs(element);
+    hemp_value_t    lval    = hemp_val_elem(lhs)->type->text(lhs, context, HempNothing);
+    hemp_value_t    rval    = hemp_val_elem(rhs)->type->text(rhs, context, HempNothing);
+    hemp_int_t      compare = strcmp( 
         hemp_val_text(lval)->string,
         hemp_val_text(rval)->string
     );

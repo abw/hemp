@@ -120,12 +120,15 @@ HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_parens_value) {
+HEMP_VALUE_FUNC(hemp_element_parens_value) {
     hemp_debug_call("hemp_element_parens_value()\n");
-    hemp_element_p block  = hemp_expr_element(element);
-    hemp_value_t   values = block->type->values(block, context, HempNothing);
-    hemp_list_p    list   = hemp_val_list(values);
+    hemp_element_p element  = hemp_val_elem(value);
+    hemp_value_t   block    = hemp_expr(element);
+    hemp_value_t   values   = hemp_val_elem(block)->type->values(block, context, HempNothing);
+    hemp_list_p    list     = hemp_val_list(values);
+
     hemp_debug("got %d values returned by parens\n", list->length);
+
     if (list->length > 1) {
 //      hemp_debug("squishing list of %d items to text\n", list->length);
         return hemp_text(values, context, HempNothing);
@@ -141,10 +144,11 @@ HEMP_EVAL_FUNC(hemp_element_parens_value) {
 }
 
 
-HEMP_EVALS_FUNC(hemp_element_parens_values) {
+HEMP_OUTPUT_FUNC(hemp_element_parens_values) {
     hemp_debug_call("hemp_element_parens_values()\n");
-    hemp_element_p block = hemp_expr_element(element);
-    return block->type->values(block, context, output);
+    hemp_element_p element  = hemp_val_elem(value);
+    hemp_value_t   block    = hemp_expr(element);
+    return hemp_val_elem(block)->type->values(block, context, output);
 }
 
 
@@ -161,10 +165,11 @@ HEMP_SYMBOL_FUNC(hemp_element_list_symbol) {
 
 
 
-HEMP_EVAL_FUNC(hemp_element_list_value) {
+HEMP_VALUE_FUNC(hemp_element_list_value) {
     hemp_debug("hemp_element_list_value()\n");
-    hemp_element_p block  = hemp_expr_element(element);
-    return block->type->values(block, context, HempNothing);
+    hemp_element_p element  = hemp_val_elem(value);
+    hemp_value_t   block    = hemp_expr(element);
+    return hemp_val_elem(block)->type->values(block, context, HempNothing);
 }
 
 
@@ -179,9 +184,10 @@ HEMP_SYMBOL_FUNC(hemp_element_hash_symbol) {
 }
 
 
-HEMP_EVAL_FUNC(hemp_element_hash_value) {
+HEMP_VALUE_FUNC(hemp_element_hash_value) {
     hemp_debug("hemp_element_hash_value()\n");
-    hemp_element_p block  = hemp_expr_element(element);
+    hemp_element_p element  = hemp_val_elem(value);
+    hemp_element_p block    = hemp_expr_element(element);
     // pairs/slots = block->type->pairs(block, context, HempNothing);
     // add pairs/slots to a hash, return.
     // or better still, pass hash to pairs()... but what if we want a list
