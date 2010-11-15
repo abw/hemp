@@ -10,6 +10,10 @@ HEMP_SYMBOLS_FUNC(hemp_element_tt3_command_symbols);
 HEMP_SYMBOL_FUNC(hemp_element_tt3_if_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_tt3_TODO_symbol);
 
+HEMP_SYMBOL_FUNC(hemp_element_tt3_sub_symbol);
+HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix);
+HEMP_EVAL_FUNC(hemp_element_tt3_sub_value);
+
 /* see comment in language/hemp.c */
 #define DONT_OPTIMISE_ME_AWAY  asm("");
 
@@ -18,7 +22,9 @@ void hemp_dialect_tt3_cleanup(hemp_template_p tmpl);
 
 
 static struct hemp_symbols_s hemp_symbols_tt3_command[] = {
-    { "tt3.if",  &hemp_element_tt3_if_symbol },
+    { "tt3.command.if",   &hemp_element_tt3_if_symbol  },
+    { "tt3.command.sub",  &hemp_element_tt3_sub_symbol },
+    { NULL, NULL },
 };
 
 
@@ -144,6 +150,7 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core) {
     hemp_grammar_p grammar = hemp_grammar_hemp_charlie(hemp, name);
 //    HEMP_SYMBOL("hemp.comment", "#", 0, 0);
     HEMP_SYMBOL2("hemp.squote", "q<<", ">>");
+    HEMP_OPERATOR1("hemp.terminator", "end", 0, 0);
 
     return grammar;
 }
@@ -152,6 +159,8 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core) {
 HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_command) {
     hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = hemp_grammar_tt3_core(hemp, name);
+    HEMP_OPERATOR1("tt3.command.if", "if", 100, 100);
+    HEMP_OPERATOR2("tt3.command.sub", "sub", "end", 100, 100);
     return grammar;
 }
 
@@ -205,3 +214,104 @@ hemp_element_tt3_if_symbol(
 }
 
 
+hemp_symbol_p
+hemp_element_tt3_sub_symbol(
+    hemp_p        hemp,
+    hemp_symbol_p symbol
+) {
+    hemp_debug("hemp_element_tt3_sub_symbol()\n");
+    symbol->token   = &hemp_element_literal_token;
+    symbol->source  = &hemp_element_literal_source;
+    symbol->prefix  = &hemp_element_tt3_sub_prefix;
+    symbol->value   = &hemp_element_tt3_sub_value;
+    symbol->text    = &hemp_element_value_text;
+    symbol->number  = &hemp_element_value_number;
+    symbol->integer = &hemp_element_value_integer;
+    symbol->boolean = &hemp_element_value_boolean;
+    symbol->compare = &hemp_element_value_compare;
+    symbol->flags   = HEMP_BE_SOURCE;
+    return symbol;
+}
+
+
+HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix) {
+    hemp_debug("hemp_element_tt3_sub_prefix()\n");
+
+    hemp_element_p self = *elemptr;
+    hemp_symbol_p  type = self->type;
+    hemp_element_p name = NULL;
+    hemp_element_p args = NULL;
+
+    /* skip past the 'block' keyword */
+    hemp_go_next(elemptr);
+
+    /* next token might be the opening parenthesis of an argument list */
+    args = hemp_parse_params(elemptr, scope, 0, 1, self);
+    
+    if (args) {
+        /* NOTE: quick string comparison hack until we've got something better in place */
+        // if (hemp_string_eq((*elemptr)->type->name, "hemp.bracket.parens")) {
+        hemp_debug("found parens after sub\n");
+    }
+    else {
+        hemp_skip_whitespace(elemptr);
+        name = hemp_parse_fixed(elemptr, scope, type->lprec, 1);
+
+        if (name) {
+            hemp_debug("found name for sub\n");
+            hemp_set_flag(self, HEMP_BE_NAMED);
+            args = hemp_parse_params(elemptr, scope, 0, 1, self);
+            if (args) {
+                // if (hemp_string_eq((*elemptr)->type->name, "hemp.bracket.parens")) {
+                hemp_debug("found parens after sub name\n");
+            }
+        }
+    }
+
+    hemp_skip_whitespace(elemptr);
+
+    // TODO: this should call a dedicated block/body method so that elements
+    // like '{' can define the appropriate behaviour to capture a block 
+    // instead of building a hash...
+
+   hemp_element_p block = hemp_element_parse_block(elemptr, scope, 0, 1);
+
+    if (! block)
+        hemp_fatal("missing block for %s\n", type->start);
+
+    hemp_debug("parsed block for sub\n");
+    hemp_set_lhs_element(self, name);
+    hemp_set_rhs_element(self, block);
+    hemp_set_block_args(block, args);
+
+    if (hemp_element_terminator_matches(*elemptr, type->end)) {
+        hemp_debug("found matching terminator for %s => %s\n", type->start, type->end);
+        hemp_go_next(elemptr);
+    }
+    else {
+        hemp_fatal("missing terminator to match %s => %s\n", type->start, type->end);
+    }
+
+    return self;
+}
+
+
+HEMP_EVAL_FUNC(hemp_element_tt3_sub_value) {
+    hemp_debug("hemp_element_sub_value()\n");
+    hemp_element_p name  = hemp_lhs_element(element);
+    hemp_element_p block = hemp_rhs_element(element);
+    hemp_element_p args  = hemp_block_args(block);
+
+    if (name) {
+        hemp_text_p text  = hemp_text_new();
+        name->type->text(name, context, hemp_text_val(text));
+        hemp_debug("sub is named: %s\n", text->string);
+        hemp_text_free(text);
+    }
+    
+    if (args) {
+        hemp_debug("sub has params\n");
+    }
+
+    return hemp_str_val("TODO: hemp_element_sub_value()");
+}

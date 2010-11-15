@@ -353,10 +353,10 @@ HEMP_VALUE_FUNC(hemp_value_true);
 HEMP_VALUE_FUNC(hemp_value_false);
 HEMP_FETCH_FUNC(hemp_value_dot);
 
-HEMP_VALUES_FUNC(hemp_value_values);
+HEMP_OUTPUT_FUNC(hemp_value_values);
 
 /* default "cannot convert to X" function */
-HEMP_VTEXT_FUNC(hemp_value_not_text);
+HEMP_OUTPUT_FUNC(hemp_value_not_text);
 HEMP_VALUE_FUNC(hemp_value_not_number);
 HEMP_VALUE_FUNC(hemp_value_not_integer);
 HEMP_VALUE_FUNC(hemp_value_not_boolean);
@@ -367,19 +367,19 @@ HEMP_STORE_FUNC(hemp_value_not_store);
 HEMP_FETCH_FUNC(hemp_value_not_dot);
 
 /* number -> xxx conversion */
-HEMP_VTEXT_FUNC(hemp_value_number_text);
+HEMP_OUTPUT_FUNC(hemp_value_number_text);
 HEMP_VALUE_FUNC(hemp_value_number_integer);
 HEMP_VALUE_FUNC(hemp_value_number_boolean);
 HEMP_VALUE_FUNC(hemp_value_number_compare);
 
 /* integer -> xxx conversion */
-HEMP_VTEXT_FUNC(hemp_value_integer_text);
+HEMP_OUTPUT_FUNC(hemp_value_integer_text);
 HEMP_VALUE_FUNC(hemp_value_integer_number);
 HEMP_VALUE_FUNC(hemp_value_integer_boolean);
 HEMP_VALUE_FUNC(hemp_value_integer_compare);
 
 /* identity -> xxx conversions */
-HEMP_VTEXT_FUNC(hemp_value_identity_text);
+HEMP_OUTPUT_FUNC(hemp_value_identity_text);
 HEMP_VALUE_FUNC(hemp_value_identity_number);
 HEMP_VALUE_FUNC(hemp_value_identity_integer);
 HEMP_VALUE_FUNC(hemp_value_identity_defined);

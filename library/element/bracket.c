@@ -74,13 +74,49 @@ HEMP_SYMBOL_FUNC(hemp_element_parens_symbol) {
     hemp_element_brackets_symbol(hemp, symbol);
     symbol->value   = &hemp_element_parens_value;
     symbol->values  = &hemp_element_parens_values;
+    symbol->parse_params = &hemp_element_parens_parse_params;
     return symbol;
+}
+
+
+HEMP_POSTFIX_FUNC(hemp_element_parens_parse_params) {
+    hemp_debug("hemp_element_parens_parse_params()\n");
+    
+    hemp_element_p self = *elemptr;
+    hemp_symbol_p  type = self->type;
+    hemp_element_p block;
+
+    /* skip opening parenthesis */
+    hemp_go_next(elemptr);
+
+    block = hemp_element_parse_block(elemptr, scope, type->rprec, 1);
+
+    if (! block)
+        hemp_fatal("missing block for %s\n", type->start);
+
+    /* skip any whitespace before closing parenthesis */
+    hemp_skip_whitespace(elemptr);
+
+    if (! hemp_element_terminator_matches(*elemptr, type->end))
+        hemp_fatal("missing terminator to match %s => %s\n", type->start, type->end);
+
+    /* skip closing parenthesis */
+    hemp_go_next(elemptr);
+
+    /* IMPORTANT: must set parens expr to NULL so that destructor doesn't
+     * get confused and segfault.  This is because we're returning the block
+     * we just parsed.... maybe we should return this parens element
+     * instead?
+     */
+    hemp_set_expr_element(self, block);
+
+    return self;
 }
 
 
 HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
     hemp_debug("TODO: hemp_element_parens_postfix()\n");
-    return NULL;
+    return lhs;
 }
 
 
@@ -137,9 +173,18 @@ HEMP_EVAL_FUNC(hemp_element_list_value) {
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_hash_symbol) {
-    hemp_element_literal_symbol(hemp, symbol);
-/*
-    TODO
-*/
+    hemp_element_brackets_symbol(hemp, symbol);
+    symbol->value = &hemp_element_hash_value;
     return symbol;
+}
+
+
+HEMP_EVAL_FUNC(hemp_element_hash_value) {
+    hemp_debug("hemp_element_hash_value()\n");
+    hemp_element_p block  = hemp_expr_element(element);
+    // pairs/slots = block->type->pairs(block, context, HempNothing);
+    // add pairs/slots to a hash, return.
+    // or better still, pass hash to pairs()... but what if we want a list
+    // of pairs/slots instead?
+    // maybe call ->pairs to return a list of pairs and then hashify them
 }

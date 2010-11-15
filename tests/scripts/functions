@@ -1,0 +1,22 @@
+-- test simple function with no args --
+[% sub msg; "Hello World!"; end; #msg() %]
+-- expect --
+Hello World
+
+-- start --
+-- test simple function with some args --
+[% sub msg(x); "Hello World!"; end; #msg() %]
+-- expect --
+Hello World
+
+-- stop --
+
+-- test simple function with some args --
+[% a = sub(foo); "Hello World!"; end; #msg() %]
+-- expect --
+Hello World
+
+-- test simple function with explicit call --
+[% sub msg; "Hello World!"; end; msg %]
+-- expect --
+Hello World

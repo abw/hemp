@@ -14,7 +14,7 @@ HEMP_TYPE_FUNC(hemp_type_integer) {
 };
 
 
-HEMP_VTEXT_FUNC(hemp_value_integer_text) {
+HEMP_OUTPUT_FUNC(hemp_value_integer_text) {
     static hemp_char_t buffer[HEMP_BUFFER_SIZE];
     hemp_text_p text;
 

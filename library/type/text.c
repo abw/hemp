@@ -230,7 +230,7 @@ hemp_text_replace_string(
  * Runtime text evaluation methods
  *--------------------------------------------------------------------------*/
 
-HEMP_VTEXT_FUNC(hemp_value_text_text) {
+HEMP_OUTPUT_FUNC(hemp_value_text_text) {
      hemp_debug_call("hemp_value_text_text\n");
 
     /* FIXME: can we safely return value?  Should we return a copy?  What 

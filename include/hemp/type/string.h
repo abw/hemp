@@ -107,7 +107,7 @@ hemp_list_p
 
 
 HEMP_TYPE_FUNC(hemp_type_string);
-HEMP_VTEXT_FUNC(hemp_value_string_text);
+HEMP_OUTPUT_FUNC(hemp_value_string_text);
 HEMP_VALUE_FUNC(hemp_value_string_number);
 HEMP_VALUE_FUNC(hemp_value_string_integer);
 HEMP_VALUE_FUNC(hemp_value_string_boolean);

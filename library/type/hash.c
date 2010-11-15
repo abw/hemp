@@ -547,7 +547,7 @@ hemp_hash_function_jenkins32(
  * Runtime hash evaluation methods
  *--------------------------------------------------------------------------*/
 
-HEMP_VTEXT_FUNC(hemp_type_hash_text) {
+HEMP_OUTPUT_FUNC(hemp_type_hash_text) {
     hemp_text_p text;
     hemp_prepare_text(context, output, text);
     hemp_text_append_string(text, "TODO: hash.text");

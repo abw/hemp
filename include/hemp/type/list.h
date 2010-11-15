@@ -38,7 +38,7 @@ hemp_str_p  hemp_list_dump(hemp_list_p);
 HEMP_TYPE_FUNC(hemp_type_list);
 HEMP_FETCH_FUNC(hemp_type_list_fetch);
 HEMP_STORE_FUNC(hemp_type_list_store);
-HEMP_VTEXT_FUNC(hemp_type_list_text);
+HEMP_OUTPUT_FUNC(hemp_type_list_text);
 HEMP_VALUE_FUNC(hemp_method_list_length);
 HEMP_VALUE_FUNC(hemp_method_list_text);
 

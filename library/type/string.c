@@ -366,7 +366,7 @@ hemp_string_nwords(
  *--------------------------------------------------------------------------*/
 
 
-HEMP_VTEXT_FUNC(hemp_value_string_text) {
+HEMP_OUTPUT_FUNC(hemp_value_string_text) {
     hemp_str_p  str = hemp_val_str(value);
     hemp_text_p text;
 

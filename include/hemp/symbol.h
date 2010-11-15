@@ -30,6 +30,8 @@ struct hemp_symbol_s {
     /* parsing methods */
     hemp_prefix_f   prefix;
     hemp_postfix_f  postfix;
+    hemp_prefix_f   fixed;
+    hemp_postfix_f  parse_params;
 
     /* value methods */
     hemp_text_f     token;
@@ -42,8 +44,6 @@ struct hemp_symbol_s {
     hemp_eval_f     compare;
     hemp_operate_f  assign;
     hemp_evals_f    values;
-
-    hemp_prefix_f   fixed;
 };
 
 /* symbols collection */

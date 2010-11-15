@@ -162,7 +162,7 @@ void
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_hash);
-HEMP_VTEXT_FUNC(hemp_type_hash_text);
+HEMP_OUTPUT_FUNC(hemp_type_hash_text);
 HEMP_FETCH_FUNC(hemp_type_hash_fetch);
 HEMP_FETCH_FUNC(hemp_type_hash_dot);
 HEMP_VALUE_FUNC(hemp_method_hash_length);

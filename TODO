@@ -44,13 +44,6 @@ An incomplete list of things TODO, in no particular order.
   and hemp_error_init() functions.  Now need to be able to add things like
   source position / scope for parse errors.
 
-* Decide what to do about HempElementTagStart, HempElementComment, etc.
-  Ideally they should be encapsulated in a grammar definition, but we also
-  want the commonly used elements to be readily available.  We don't want to
-  be doing a hash lookup for known elements, only for dynamically assigned
-  keywords, operators, etc.  UPDATE: we now have a few core elements defined
-  statically and the rest are defined dynamically as grammar symbols.
- 
 * Add a fallback mechanism to the various factories.  e.g. if a tt3 dialect
   is requested and not found then the fallback should call hemp_language("tt3")
   to give it a chance to load it.  Just got to be careful we don't end up in
@@ -84,11 +77,6 @@ An incomplete list of things TODO, in no particular order.
 
 * Have static symbols created at global startup time in the same way that 
   value type now are. (now done?)
-
-* Change text to allocate header in front of text buffer (no wait... can't
-  then resize buffer, scratch that... But do change capacity to grow as a 
-  power of 2 to avoid many re-allocations.  Same for list which currently 
-  grows +1 each time.
 
 * Change elements to be values so that we can have a single value() and 
   text() interface instead of the similar (but not quite identical) 
@@ -124,3 +112,11 @@ An incomplete list of things TODO, in no particular order.
 
 * Should OPERATOR2 register terminator token?  e.g. in:
     HEMP_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);
+
+* change fixed() parse function to name()... on second thoughts, keep it 
+  because it fits nicely with prefix/postfix, but consider changing them all
+  to parse_infix(), etc., because we've got more parsing methods to add and 
+  there's a danger they will clash or be confused with evaluation methods.
+
+* add signature() parse function, or perhaps a flag in parens to indicate 
+  that it can provide a formal parameter list.

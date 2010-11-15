@@ -4,6 +4,34 @@
 #include <hemp/core.h>
 
 
+#define HEMP_TYPE_BASE              \
+    hemp_type_p         type;       \
+    hemp_type_p         base;       \
+    hemp_int_t          id;         \
+    hemp_str_p          name;       \
+    hemp_namespace_p    namespace;  \
+    hemp_hash_p         methods;    \
+    hemp_output_f       text;       \
+    hemp_output_f       values;     \
+    hemp_value_f        value;      \
+    hemp_value_f        number;     \
+    hemp_value_f        integer;    \
+    hemp_value_f        boolean;    \
+    hemp_value_f        compare;    \
+    hemp_value_f        defined;    \
+    hemp_value_f        apply;      \
+    hemp_store_f        store;      \
+    hemp_fetch_f        fetch;      \
+    hemp_fetch_f        dot;
+
+//    + assign
+
+//    hemp_output_f       list;       \       / superfluous?
+//    hemp_method_f   method;     /* TODO: method auto-generator */
+
+
+
+
 /*--------------------------------------------------------------------------
  * Data structures
  *
@@ -13,25 +41,8 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_type_s {
-    hemp_type_p     type;       /* allows types to be treated like objects  */
-    hemp_int_t      id;
-    hemp_str_p      name;
-    hemp_type_p     base;
-    hemp_hash_p     methods;
+    HEMP_TYPE_BASE
 //    hemp_method_f   method;     /* TODO: method auto-generator */
-    hemp_vtext_f    text;
-    hemp_vlist_f    list;
-//    hemp_value_f    value;
-    hemp_value_f    number;
-    hemp_value_f    integer;
-    hemp_value_f    boolean;
-    hemp_value_f    compare;
-    hemp_value_f    defined;
-    hemp_value_f    apply;
-    hemp_values_f   values;
-    hemp_fetch_f    fetch;
-    hemp_store_f    store;
-    hemp_fetch_f    dot;
 };
 
 struct hemp_object_s {
@@ -127,7 +138,7 @@ HEMP_VALUE_FUNC(hemp_method_value_boolean);
 HEMP_VALUE_FUNC(hemp_method_value_defined);
 HEMP_VALUE_FUNC(hemp_method_value_type);
 
-HEMP_VTEXT_FUNC(hemp_value_type_text);
+HEMP_OUTPUT_FUNC(hemp_value_type_text);
 HEMP_VALUE_FUNC(hemp_method_type_name);
 HEMP_VALUE_FUNC(hemp_method_type_id);
 

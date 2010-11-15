@@ -264,6 +264,24 @@ typedef hemp_element_p
         hemp_symbol_p symbol
     );
 
+/*--------------------------------------------------------------------------
+ * value functions
+ *--------------------------------------------------------------------------*/
+
+typedef hemp_value_t
+    (* hemp_value_f)(
+        hemp_value_t    value,
+        hemp_context_p  context
+    );
+
+typedef hemp_value_t 
+    (* hemp_output_f)(
+        hemp_value_t    value,
+        hemp_context_p  context,
+        hemp_value_t    output
+    );
+
+
 typedef hemp_element_p
     (* hemp_skip_f )( 
         hemp_element_p *current     /* pointer to current element pointer   */
@@ -321,18 +339,12 @@ typedef hemp_value_t
         hemp_value_t    output      /* optional output buffer               */
     );
 
-typedef hemp_value_t
-    (* hemp_value_f)(
-        hemp_value_t    value,      /* value to operate on                  */
-        hemp_context_p  context     /* runtime context                      */
-    );
-
-typedef hemp_value_t
-    (* hemp_values_f)(
-        hemp_value_t    value,      /* value to operate on                  */
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    output      /* optional output buffer               */
-    );
+//typedef hemp_value_t
+//    (* hemp_values_f)(
+//        hemp_value_t    value,      /* value to operate on                  */
+//        hemp_context_p  context,    /* runtime context                      */
+//        hemp_value_t    output      /* optional output buffer               */
+//    );
 
 typedef hemp_value_t
     (* hemp_fetch_f)(
@@ -349,19 +361,19 @@ typedef hemp_value_t
         hemp_value_t    value       /* value to store                       */
     );
 
-typedef hemp_value_t
-    (* hemp_vtext_f)(
-        hemp_value_t    value,      /* value to operate on                  */
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    output      /* output to append onto                */
-    );
-
-typedef hemp_value_t
-    (* hemp_vlist_f)(
-        hemp_value_t    value,      /* value to operate on                  */
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    output      /* output to append onto                */
-    );
+//typedef hemp_value_t
+//    (* hemp_vtext_f)(
+//        hemp_value_t    value,      /* value to operate on                  */
+//        hemp_context_p  context,    /* runtime context                      */
+//        hemp_value_t    output      /* output to append onto                */
+//    );
+//
+//typedef hemp_value_t
+//    (* hemp_vlist_f)(
+//        hemp_value_t    value,      /* value to operate on                  */
+//        hemp_context_p  context,    /* runtime context                      */
+//        hemp_value_t    output      /* output to append onto                */
+//    );
 
 typedef hemp_value_t
     (* hemp_unop_f)(
@@ -396,38 +408,6 @@ typedef hemp_value_t    (* hemp_ternary_fn)(hemp_value_t, hemp_value_t, hemp_val
 typedef hemp_str_p      (* hemp_source_namer_f   )( hemp_source_p );
 typedef hemp_bool_t     (* hemp_source_checker_f )( hemp_source_p );
 typedef hemp_str_p      (* hemp_source_reader_f  )( hemp_source_p );
-
-
-/*
-typedef hemp_bool_t     (* hemp_scan_fn)(hemp_template_t);
-typedef hemp_string_t     (* hemp_source_text_fn)(hemp_source_t);
-typedef hemp_bool_t     (* hemp_source_bool_fn)(hemp_source_t);
-typedef hemp_bool_t     (* hemp_build_fn)(hemp_t);
-typedef hemp_bool_t     (* hemp_onload_fn)(hemp_t);
-*/
-
-//typedef hemp_value_t    (* hemp_init_fn)();
-/*
-typedef void            (* hemp_free_fn)(hemp_value_t);
-typedef hemp_bool_t     (* hemp_truth_fn)(hemp_value_t);
-
-typedef hemp_text_t     (* hemp_text_fn)(hemp_element_t, hemp_text_t);
-*/
-
-/* old object type methods, being replace by those below... */
-/*
-typedef hemp_ptr_t      (* hemp_init_fn)(hemp_type_t, va_list *args);
-typedef void            (* hemp_wipe_fn)(hemp_ptr_t);
-*/
-
-/* new object type methods, maybe not being replaced after all... */
-/*
-typedef hemp_item_t     (* hemp_acquire_fn)(hemp_type_t type);
-typedef hemp_bool_t     (* hemp_prepare_fn)(hemp_item_t item, va_list *args);
-typedef hemp_bool_t     (* hemp_cleanup_fn)(hemp_item_t item);
-typedef void            (* hemp_release_fn)(hemp_item_t item);
-*/
-
 
 
 #endif /* HEMP_TYPES_H */

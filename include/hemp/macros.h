@@ -367,6 +367,13 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * HEMP_EVAL_FUNC() can be used to declare and define value functions.
  *--------------------------------------------------------------------------*/
 
+
+/* TODO: these will all become value method, e.g. HEMP_VALUE_FUNC() instead
+ * of HEMP_EVAL_FUNC() as soon as we change the elements to be represented
+ * as object values.
+ */
+
+
 #define HEMP_EVAL_ARGS                      \
         hemp_element_p  element,            \
         hemp_context_p  context
@@ -476,9 +483,9 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * to text) and other methods that can be called on values, e.g. text.length
  *
  * HEMP_VALUE_FUNC() can be used to declare and define value functions.
- * HEMP_VTEXT_FUNC() is a special case for text yielding functions where we 
- * allow an existing text object to be passed as an extra argument for the 
- * function to append the next onto.
+ * HEMP_OUTPUT_FUNC() is a special case for text yielding functions where we 
+ * allow an existing text/list object to be passed as an extra argument for 
+ * the function to append the value onto.
  *--------------------------------------------------------------------------*/
 
 #define HEMP_VALUE_FUNC(f)                  \
@@ -487,14 +494,7 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         hemp_context_p  context             \
     )
 
-#define HEMP_VALUES_FUNC(f)                 \
-    HEMP_INLINE hemp_value_t f(             \
-        hemp_value_t    value,              \
-        hemp_context_p  context,            \
-        hemp_value_t    output              \
-    )
-
-#define HEMP_VTEXT_FUNC(f)                  \
+#define HEMP_OUTPUT_FUNC(f)                 \
     HEMP_INLINE hemp_value_t f(             \
         hemp_value_t    value,              \
         hemp_context_p  context,            \

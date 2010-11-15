@@ -197,7 +197,7 @@ HEMP_VALUE_FUNC(hemp_value_false) {
 }
 
 
-HEMP_VALUES_FUNC(hemp_value_values) {
+HEMP_OUTPUT_FUNC(hemp_value_values) {
     hemp_debug_call("hemp_value_values()\n");
     hemp_list_p values;
     hemp_prepare_values(context, output, values);
@@ -243,7 +243,7 @@ HEMP_FETCH_FUNC(hemp_value_dot) {
  * Default "I'm sorry Dave, I'm afraid I can't do that" functions
  *--------------------------------------------------------------------------*/
 
-HEMP_VTEXT_FUNC(hemp_value_not_text) {
+HEMP_OUTPUT_FUNC(hemp_value_not_text) {
     HEMP_CONVERT_ERROR(
         context, 
         hemp_type_name(value),

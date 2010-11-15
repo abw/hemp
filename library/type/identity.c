@@ -35,7 +35,7 @@ hemp_identity_name(
 
 
 
-HEMP_VTEXT_FUNC(hemp_value_identity_text) {
+HEMP_OUTPUT_FUNC(hemp_value_identity_text) {
     if (hemp_is_undefined(value)) {
         hemp_debug("throwing undefined entity error\n");
         HEMP_UNDEF_ERROR(

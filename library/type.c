@@ -35,23 +35,24 @@ hemp_type_init(
     if (! type)
         hemp_mem_fail("type");
 
-    type->type    = HempType;   /* allows types to be treated like objects  */
-    type->id      = id;
-    type->name    = hemp_string_clone(name, "type name");
-    type->base    = NULL;
-    type->methods = hemp_hash_init();
-//  type->value   = &hemp_value_self;
-    type->values  = &hemp_value_values;
-    type->apply   = &hemp_value_self;
-    type->text    = &hemp_value_not_text; 
-    type->number  = &hemp_value_not_number;
-    type->integer = &hemp_value_not_integer;
-    type->boolean = &hemp_value_not_boolean;
-    type->compare = &hemp_value_not_compare;
-    type->defined = &hemp_value_not_defined;
-    type->fetch   = &hemp_value_not_fetch;
-    type->store   = &hemp_value_not_store;
-    type->dot     = &hemp_value_dot;
+    type->type      = HempType;   /* allows types to be treated like objects  */
+    type->id        = id;
+    type->name      = hemp_string_clone(name, "type name");
+    type->namespace = NULL;
+    type->base      = NULL;
+    type->methods   = hemp_hash_init();
+    type->value     = &hemp_value_self;
+    type->values    = &hemp_value_values;
+    type->apply     = &hemp_value_self;
+    type->text      = &hemp_value_not_text; 
+    type->number    = &hemp_value_not_number;
+    type->integer   = &hemp_value_not_integer;
+    type->boolean   = &hemp_value_not_boolean;
+    type->compare   = &hemp_value_not_compare;
+    type->defined   = &hemp_value_not_defined;
+    type->fetch     = &hemp_value_not_fetch;
+    type->store     = &hemp_value_not_store;
+    type->dot       = &hemp_value_dot;
 
     return type;
 }
@@ -234,7 +235,7 @@ HEMP_TYPE_FUNC(hemp_type_type) {
 };
 
 
-HEMP_VTEXT_FUNC(hemp_value_type_text) {
+HEMP_OUTPUT_FUNC(hemp_value_type_text) {
     hemp_type_p type = (hemp_type_p) hemp_val_ptr(value);
     hemp_text_p text;
     

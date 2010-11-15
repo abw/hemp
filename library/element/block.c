@@ -46,7 +46,7 @@ HEMP_ETEXT_FUNC(hemp_element_block_source) {
 
 HEMP_ETEXT_FUNC(hemp_element_block_text) {
     hemp_debug_call("hemp_element_block_text()\n");
-    hemp_list_p     exprs = element->args.block.exprs;
+    hemp_list_p     exprs = hemp_block_exprs(element);
     hemp_element_p  expr;
     hemp_size_t     n;
 
@@ -95,7 +95,7 @@ hemp_element_block_clean(
 ) {
     hemp_debug_call("hemp_element_block_clean(%p)\n", element);
 
-    hemp_list_p exprs = element->args.block.exprs;
+    hemp_list_p exprs = hemp_block_exprs(element);
 
     if (exprs)
         hemp_list_free(exprs);

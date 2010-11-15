@@ -309,15 +309,15 @@ hemp_grammar_add_hemp_bravo(
 //    # grouping constructs...
     HEMP_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);
     HEMP_OPERATOR2("hemp.bracket.list",         "[", "]",     0,    0);
+    HEMP_OPERATOR2("hemp.bracket.hash",         "{", "}",     0,    0);
     HEMP_OPERATOR1("hemp.terminator",           ")",          0,    0);
     HEMP_OPERATOR1("hemp.terminator",           "]",          0,    0);
+    HEMP_OPERATOR1("hemp.terminator",           "}",          0,    0);
 
     HEMP_OPERATOR1("hemp.delimiter",            ",",          0,    0);
     HEMP_OPERATOR1("hemp.separator",            ";",          0,    0);
 
 //    # Other punctuation marks
-//    [ ','       => separator        =>   0,   0 ],
-//    [ ';'       => delimiter        =>   0,   0 ],
 //    [ ':'       => terminator       =>   0,   0 ],
 //    [ 'in'      => terminator       =>   0,   0 ],
 //    [ '#'       => fragment         =>   0,   0 ],

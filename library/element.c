@@ -89,7 +89,7 @@ HEMP_PREFIX_FUNC(hemp_element_parse_block) {
             element->position,
             element->length
         );
-        block->args.block.exprs = list;
+        hemp_set_block_exprs(block, list);
     }
 
     return block;
@@ -115,22 +115,15 @@ hemp_element_parse_exprs(
         /* skip whitespace, delimiters (commas) and separators (semi-colons) */
         hemp_skip_separator(elemptr);
 
-        /* tmp hack to catch TODO stuff while developing */
-//        if (! (*elemptr)->type->prefix) {
-//            hemp_symbol_dump((*elemptr)->type);
-//            hemp_fatal(
-//                "%s does not define a parse_expr() method",
-//                (*elemptr)->type->name
-//            );
-//        }
-
+        /* ask the next token to return an expression */
         expr = hemp_parse_prefix(elemptr, scope, precedence, HEMP_FALSE);
 
+        /* if it's not an expression (e.g. a terminator) then we're done */
         if (! expr)
             break;
 
-//      hemp_debug_parse("parsed %s expression:\n", expr->type->name);
 #if HEMP_DEBUG & HEMP_DEBUG_PARSE
+        hemp_debug_parse("parsed %s expression:\n", expr->type->name);
         hemp_element_dump(expr);
 #endif
         hemp_list_push(exprs, hemp_ptr_val(expr));

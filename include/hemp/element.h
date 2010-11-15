@@ -27,6 +27,7 @@ struct hemp_binary_s {
 };
 
 struct hemp_block_s {
+    hemp_element_p  args;
     hemp_list_p     exprs;
 };
 
@@ -99,6 +100,15 @@ struct hemp_element_s {
 #define hemp_rhs(elem)                                          \
     (elem->args.binary.rhs)
 
+#define hemp_block_name(elem)                                   \
+    (elem->args.block.name)
+
+#define hemp_block_args(elem)                                   \
+    (elem->args.block.args)
+
+#define hemp_block_exprs(elem)                                  \
+    (elem->args.block.exprs)
+
 #define hemp_expr_element(elem)                                 \
     ((hemp_element_p) hemp_val_obj( hemp_expr(elem) ))
 
@@ -116,6 +126,15 @@ struct hemp_element_s {
 
 #define hemp_set_rhs(elem, ex)                                  \
     (elem->args.binary.rhs = ex)
+
+#define hemp_set_block_name(elem, ex)                           \
+    (elem->args.block.name = ex)
+
+#define hemp_set_block_args(elem, ex)                           \
+    (elem->args.block.args = ex)
+
+#define hemp_set_block_exprs(elem, ex)                          \
+    (elem->args.block.exprs = ex)
 
 #define hemp_set_expr_element(elem, ex)                         \
     (hemp_set_expr( elem, hemp_obj_val((hemp_object_p) ex) ))
@@ -142,6 +161,12 @@ struct hemp_element_s {
     ((*ep)->type->fixed                                 \
         ? (*ep)->type->fixed(ep, sc, pr, fr)            \
         : NULL                                          \
+    )
+
+#define hemp_parse_params(ep, sc, pr, fr, lhs)              \
+    ((*ep)->type->parse_params                              \
+        ? (*ep)->type->parse_params(ep, sc, pr, fr, lhs)    \
+        : NULL                                              \
     )
 
 //#define hemp_parse_infix_rhs(self, ep, sc, pr, fr)      \
@@ -340,11 +365,14 @@ HEMP_SYMBOL_FUNC(hemp_element_parens_symbol);
 //HEMP_POSTFIX_FUNC(hemp_element_parens_postfix);
 HEMP_EVAL_FUNC(hemp_element_parens_value);
 HEMP_EVALS_FUNC(hemp_element_parens_values);
+HEMP_POSTFIX_FUNC(hemp_element_parens_postfix);
+HEMP_POSTFIX_FUNC(hemp_element_parens_parse_params);
 
 HEMP_SYMBOL_FUNC(hemp_element_list_symbol);
 HEMP_EVAL_FUNC(hemp_element_list_value);
 
 HEMP_SYMBOL_FUNC(hemp_element_hash_symbol);
+HEMP_EVAL_FUNC(hemp_element_hash_value);
 
 
 

@@ -199,7 +199,7 @@ hemp_list_each_free(
  *--------------------------------------------------------------------------*/
 
 
-HEMP_VTEXT_FUNC(hemp_type_list_text) {
+HEMP_OUTPUT_FUNC(hemp_type_list_text) {
     hemp_list_p  list = hemp_val_list(value);
     hemp_value_t item;
     hemp_text_p  text;
