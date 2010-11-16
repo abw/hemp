@@ -445,14 +445,14 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right) {
 
 HEMP_OUTPUT_FUNC(hemp_element_value_text) {
     hemp_debug_call("hemp_element_value_text()\n");
-    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    hemp_value_t result = hemp_obcall(value, value, context);
     return hemp_onto_text(result, context, output);
 }
 
 
 HEMP_VALUE_FUNC(hemp_element_value_number) {
     hemp_debug_call("hemp_element_value_number()\n");
-    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    hemp_value_t result = hemp_obcall(value, value, context);
     return hemp_is_numeric(result)
         ? result
         : hemp_call(result, number, context);
@@ -464,27 +464,27 @@ HEMP_VALUE_FUNC(hemp_element_value_number) {
 
 HEMP_VALUE_FUNC(hemp_element_value_integer) {
     hemp_debug_call("hemp_element_value_integer()\n");
-    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    hemp_value_t result = hemp_obcall(value, value, context);
     return hemp_to_integer(result, context);
 }
 
 
 HEMP_VALUE_FUNC(hemp_element_value_boolean) {
     hemp_debug_call("hemp_element_value_boolean()\n");
-    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    hemp_value_t result = hemp_obcall(value, value, context);
     return hemp_to_boolean(result, context);
 }
 
 
 HEMP_VALUE_FUNC(hemp_element_value_compare) {
     hemp_debug_call("hemp_element_value_compare()\n");
-    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    hemp_value_t result = hemp_obcall(value, value, context);
     return hemp_to_compare(result, context);
 }
 
 HEMP_OUTPUT_FUNC(hemp_element_value_values) {
     hemp_debug_call("hemp_element_value_values()\n");
-    hemp_value_t result = hemp_val_elem(value)->type->value(value, context);
+    hemp_value_t result = hemp_obcall(value, value, context);
     return hemp_values(result, context, output);
 }
 

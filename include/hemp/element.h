@@ -525,7 +525,6 @@ HEMP_VALUE_FUNC(hemp_element_value_compare);
 HEMP_OUTPUT_FUNC(hemp_element_value_values);
 
 
-
 void
     hemp_element_text_clean(
         hemp_element_p element

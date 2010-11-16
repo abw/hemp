@@ -148,7 +148,6 @@ hemp_dialect_tt3_cleanup(
 HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core) {
     hemp_debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
     hemp_grammar_p grammar = hemp_grammar_hemp_charlie(hemp, name);
-//    HEMP_SYMBOL("hemp.comment", "#", 0, 0);
     HEMP_SYMBOL2("hemp.squote", "q<<", ">>");
     HEMP_OPERATOR1("hemp.terminator", "end", 0, 0);
 
@@ -213,6 +212,10 @@ hemp_element_tt3_if_symbol(
     return hemp_element_tt3_TODO_symbol(hemp, symbol);
 }
 
+
+/*--------------------------------------------------------------------------
+ * sub
+ *--------------------------------------------------------------------------*/
 
 hemp_symbol_p
 hemp_element_tt3_sub_symbol(
@@ -302,13 +305,11 @@ HEMP_VALUE_FUNC(hemp_element_tt3_sub_value) {
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    name    = hemp_lhs(element);
     hemp_value_t    block   = hemp_rhs(element);
-
     hemp_value_t    args    = hemp_block_args( hemp_val_elem(block) );
-
 
     if (hemp_val_elem(name)) {
         hemp_text_p text  = hemp_text_new();
-        hemp_val_elem(name)->type->text(name, context, hemp_text_val(text));
+        hemp_obcall(name, text, context, hemp_text_val(text));
         hemp_debug("sub is named: %s\n", text->string);
         hemp_text_free(text);
 

@@ -57,7 +57,7 @@ HEMP_OUTPUT_FUNC(hemp_element_block_text) {
     
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
-        hemp_val_elem(item)->type->text(item, context, output);
+        hemp_obcall(item, text, context, output);
     }
 
 //  hemp_debug("returning block text (%d bytes): %s\n", text->length, text->string);
@@ -86,7 +86,7 @@ HEMP_OUTPUT_FUNC(hemp_element_block_values) {
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
 //      hemp_debug("calling values() on %s\n", expr->type->name);
-        hemp_val_elem(item)->type->values(item, context, output);
+        hemp_obcall(item, values, context, output);
     }
 
 //    hemp_debug("returning block values (%d items)\n", values->length);

@@ -24,7 +24,7 @@ HEMP_SYMBOL_FUNC(hemp_element_boolean_symbol) {
 
 HEMP_VALUE_FUNC(hemp_element_boolean_value) {
     hemp_debug_call("hemp_element_boolean_value()\n");
-    return hemp_val_elem(value)->type->boolean(value, context);
+    return hemp_obcall(value, boolean, context);
 }
 
 
@@ -52,7 +52,7 @@ HEMP_VALUE_FUNC(hemp_element_boolean_not_value) {
 
     hemp_element_p element  = hemp_val_elem(value);
     hemp_value_t   expr     = hemp_expr(element);
-    hemp_value_t   result   = hemp_val_elem(expr)->type->boolean(expr, context);
+    hemp_value_t   result   = hemp_obcall(expr, boolean, context);
 
     return hemp_is_true(result)
         ? HempFalse
@@ -81,11 +81,11 @@ HEMP_VALUE_FUNC(hemp_element_boolean_and_value) {
     hemp_value_t   lhs      = hemp_lhs(element);
     hemp_value_t   rhs      = hemp_rhs(element);
 //  hemp_debug("[and] evaluating LHS (%s) as boolean\n", lhs->type->name);
-    hemp_value_t lval       = hemp_val_elem(lhs)->type->boolean(lhs, context);
+    hemp_value_t lval       = hemp_obcall(lhs, boolean, context);
     
     /* TODO: short-circuit if false */
 //  hemp_debug("[and] evaluating RHS (%s) as boolean\n", rhs->type->name);
-    hemp_value_t rval       = hemp_val_elem(rhs)->type->boolean(rhs, context);
+    hemp_value_t rval       = hemp_obcall(rhs, boolean, context);
 
     return (hemp_is_true(lval) && hemp_is_true(rval))
         ? HempTrue
@@ -112,8 +112,8 @@ HEMP_VALUE_FUNC(hemp_element_boolean_or_value) {
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    lhs     = hemp_lhs(element);
     hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_val_elem(lhs)->type->boolean(lhs, context);
-    hemp_value_t    rval    = hemp_val_elem(rhs)->type->boolean(rhs, context);
+    hemp_value_t    lval    = hemp_obcall(lhs, boolean, context);
+    hemp_value_t    rval    = hemp_obcall(rhs, boolean, context);
 
     return (hemp_is_true(lval) || hemp_is_true(rval))
         ? HempTrue

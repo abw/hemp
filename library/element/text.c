@@ -81,7 +81,7 @@ HEMP_SYMBOL_FUNC(hemp_element_text_concat_symbol) {
 }
 
 HEMP_VALUE_FUNC(hemp_element_text_value) {
-    return hemp_val_elem(value)->type->text(value, context, HempNothing);
+    return hemp_obcall(value, text, context, HempNothing);
 }
 
 
@@ -93,8 +93,8 @@ HEMP_OUTPUT_FUNC(hemp_element_text_concat_value) {
     hemp_prepare_text(context, output, text);
     hemp_value_t lhs = hemp_lhs(element);
     hemp_value_t rhs = hemp_rhs(element);
-    hemp_val_elem(lhs)->type->text(lhs, context, output);
-    hemp_val_elem(rhs)->type->text(rhs, context, output);
+    hemp_obcall(lhs, text, context, output);
+    hemp_obcall(rhs, text, context, output);
 
     return output;
 }
@@ -117,8 +117,8 @@ HEMP_VALUE_FUNC(hemp_element_text_compare_value) {
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    lhs     = hemp_lhs(element);
     hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_val_elem(lhs)->type->text(lhs, context, HempNothing);
-    hemp_value_t    rval    = hemp_val_elem(rhs)->type->text(rhs, context, HempNothing);
+    hemp_value_t    lval    = hemp_obcall(lhs, text, context, HempNothing);
+    hemp_value_t    rval    = hemp_obcall(rhs, text, context, HempNothing);
     hemp_int_t      compare = strcmp( 
         hemp_val_text(lval)->string,
         hemp_val_text(rval)->string

@@ -146,24 +146,24 @@ HEMP_VALUE_FUNC(hemp_element_number_plus_value) {
     /* prefix unary '+' coerces value to a number */
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
         hemp_value_t expr = hemp_expr(element);
-        return hemp_val_elem(expr)->type->number(expr, context);
+        return hemp_obcall(expr, number, context);
     }
 
     /* otherwise it's an infix addition operator */
     hemp_value_t lhs  = hemp_lhs(element);
     hemp_value_t rhs  = hemp_rhs(element);
-    hemp_value_t lval = hemp_val_elem(lhs)->type->number(lhs, context);
+    hemp_value_t lval = hemp_obcall(lhs, number, context);
     hemp_value_t rval, result;
     
     if (hemp_is_integer(lval)) {
-        rval   = hemp_val_elem(rhs)->type->integer(rhs, context);
+        rval   = hemp_obcall(rhs, integer, context);
         result = hemp_int_val(
             hemp_val_int(lval) 
           + hemp_val_int(rval)
         );
     }
     else {
-        rval   = hemp_val_elem(rhs)->type->number(rhs, context);
+        rval   = hemp_obcall(rhs, number, context);
         result = hemp_num_val(
             hemp_val_num(lval) 
           + HEMP_NUMOP_CAST_NUM(rval)
@@ -196,7 +196,7 @@ HEMP_VALUE_FUNC(hemp_element_number_minus_value) {
     /* prefix unary '-' coerces value to a number and negates it */
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
         hemp_value_t expr = hemp_expr(element);
-        hemp_value_t val  = hemp_val_elem(expr)->type->number(expr, context);
+        hemp_value_t val  = hemp_obcall(expr, number, context);
 
         return hemp_is_integer(val)
             ? hemp_int_val(- hemp_val_int(val) )
@@ -206,7 +206,7 @@ HEMP_VALUE_FUNC(hemp_element_number_minus_value) {
     /* otherwise it's an infix subtraction operator */
     hemp_value_t lhs  = hemp_lhs(element);
     hemp_value_t rhs  = hemp_rhs(element);
-    hemp_value_t lval = hemp_val_elem(lhs)->type->number(lhs, context);
+    hemp_value_t lval = hemp_obcall(lhs, number, context);
     hemp_value_t rval, result;
 
     if (hemp_is_integer(lval)) {
@@ -216,7 +216,7 @@ HEMP_VALUE_FUNC(hemp_element_number_minus_value) {
         );
     }
     else {
-        rval   = hemp_val_elem(rhs)->type->number(rhs, context);
+        rval   = hemp_obcall(rhs, number, context);
         result = hemp_num_val(
             hemp_val_num(lval) 
           - HEMP_NUMOP_CAST_NUM(rval)
@@ -245,8 +245,8 @@ HEMP_VALUE_FUNC(hemp_element_number_power_value) {
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    lhs     = hemp_lhs(element);
     hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_val_elem(lhs)->type->number(lhs, context);
-    hemp_value_t    rval    = hemp_val_elem(rhs)->type->number(rhs, context);
+    hemp_value_t    lval    = hemp_obcall(lhs, number, context);
+    hemp_value_t    rval    = hemp_obcall(rhs, number, context);
     hemp_value_t    result;
 
     if (hemp_is_integer(lval)) {
@@ -289,7 +289,7 @@ HEMP_VALUE_FUNC(hemp_element_number_multiply_value) {
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    lhs     = hemp_lhs(element);
     hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_val_elem(lhs)->type->number(lhs, context);
+    hemp_value_t    lval    = hemp_obcall(lhs, number, context);
     hemp_value_t    rval, result;
 
     if (hemp_is_integer(lval)) {
@@ -299,7 +299,7 @@ HEMP_VALUE_FUNC(hemp_element_number_multiply_value) {
         );
     }
     else {
-        rval   = hemp_val_elem(rhs)->type->number(rhs, context);
+        rval   = hemp_obcall(rhs, number, context);
         result = hemp_num_val(
             hemp_val_num(lval) 
           * HEMP_NUMOP_CAST_NUM(rval)
@@ -328,7 +328,7 @@ HEMP_VALUE_FUNC(hemp_element_number_divide_value) {
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    lhs     = hemp_lhs(element);
     hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_val_elem(lhs)->type->number(lhs, context);
+    hemp_value_t    lval    = hemp_obcall(lhs, number, context);
     hemp_value_t    rval, result;
 
     if (hemp_is_integer(lval)) {
@@ -340,7 +340,7 @@ HEMP_VALUE_FUNC(hemp_element_number_divide_value) {
     }
     else {
 //      hemp_debug("number is real\n");
-        rval   = hemp_val_elem(rhs)->type->number(rhs, context);
+        rval   = hemp_obcall(rhs, number, context);
         result = hemp_num_val(
             hemp_val_num(lval) 
           / HEMP_NUMOP_CAST_NUM(rval)
@@ -373,8 +373,8 @@ HEMP_VALUE_FUNC(hemp_element_number_divint_value) {
     
     return hemp_int_val(
         (hemp_int_t)
-        hemp_val_int( hemp_val_elem(lhs)->type->integer(lhs, context) )
-      / hemp_val_int( hemp_val_elem(rhs)->type->integer(rhs, context) )
+        hemp_val_int( hemp_obcall(lhs, integer, context) )
+      / hemp_val_int( hemp_obcall(rhs, integer, context) )
     );
 }
 
@@ -401,8 +401,8 @@ HEMP_VALUE_FUNC(hemp_element_number_modulus_value) {
     
     return hemp_int_val(
         (hemp_int_t)
-        hemp_val_int( hemp_val_elem(lhs)->type->integer(lhs, context) )
-      % hemp_val_int( hemp_val_elem(rhs)->type->integer(rhs, context) )
+        hemp_val_int( hemp_obcall(lhs, integer, context) )
+      % hemp_val_int( hemp_obcall(rhs, integer, context) )
     );
 }
 
@@ -425,8 +425,8 @@ HEMP_VALUE_FUNC(hemp_element_number_compare_value) {
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    lhs     = hemp_lhs(element);
     hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_val_elem(lhs)->type->number(lhs, context);
-    hemp_value_t    rval    = hemp_val_elem(rhs)->type->number(rhs, context);
+    hemp_value_t    lval    = hemp_obcall(lhs, number, context);
+    hemp_value_t    rval    = hemp_obcall(rhs, number, context);
     hemp_num_t      lnum    = HEMP_NUMOP_CAST_NUM(lval);
     hemp_num_t      rnum    = HEMP_NUMOP_CAST_NUM(rval);
 

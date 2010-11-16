@@ -409,11 +409,6 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  * the function to append the value onto.
  *--------------------------------------------------------------------------*/
 
-//#define HEMP_VALUE_ARGS                     \
-//
-//#define HEMP_VALUE_ARG_NAMES                \
-//    value, context
-
 #define HEMP_VALUE_FUNC(f)                  \
     HEMP_INLINE hemp_value_t f(             \
         hemp_value_t    value,              \
@@ -510,12 +505,6 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
         hemp_int_t id,                      \
         hemp_str_p name                     \
     )
-
-//#define HEMP_TYPE_METHOD(m)                 \
-//    hemp_value_t m(                         \
-//        hemp_value_t object,                \
-//        ...                                 \
-//    )
 
 
 /*--------------------------------------------------------------------------

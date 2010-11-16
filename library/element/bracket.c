@@ -124,7 +124,7 @@ HEMP_VALUE_FUNC(hemp_element_parens_value) {
     hemp_debug_call("hemp_element_parens_value()\n");
     hemp_element_p element  = hemp_val_elem(value);
     hemp_value_t   block    = hemp_expr(element);
-    hemp_value_t   values   = hemp_val_elem(block)->type->values(block, context, HempNothing);
+    hemp_value_t   values   = hemp_obcall(block, values, context, HempNothing);
     hemp_list_p    list     = hemp_val_list(values);
 
     hemp_debug("got %d values returned by parens\n", list->length);
@@ -148,7 +148,7 @@ HEMP_OUTPUT_FUNC(hemp_element_parens_values) {
     hemp_debug_call("hemp_element_parens_values()\n");
     hemp_element_p element  = hemp_val_elem(value);
     hemp_value_t   block    = hemp_expr(element);
-    return hemp_val_elem(block)->type->values(block, context, output);
+    return hemp_obcall(block, values, context, output);
 }
 
 
@@ -169,7 +169,7 @@ HEMP_VALUE_FUNC(hemp_element_list_value) {
     hemp_debug("hemp_element_list_value()\n");
     hemp_element_p element  = hemp_val_elem(value);
     hemp_value_t   block    = hemp_expr(element);
-    return hemp_val_elem(block)->type->values(block, context, HempNothing);
+    return hemp_obcall(block, values, context, HempNothing);
 }
 
 

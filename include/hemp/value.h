@@ -233,7 +233,6 @@ extern const hemp_value_t HempAfter;
  * public-facing macros for general use
  *--------------------------------------------------------------------------*/
 
-//#define hemp_identity_id(v)     HEMP_IDENT_ID(c)
 #define hemp_is_tagged(v)       HEMP_TAG_VALID(v)
 #define hemp_is_number(v)       ((hemp_u64_t) v.bits < HEMP_INFINITY)
 #define hemp_is_numeric(v)      HEMP_TYPE_MAX(v, HEMP_INTEGER_ID)
@@ -246,7 +245,6 @@ extern const hemp_value_t HempAfter;
 #define hemp_is_object(v)       HEMP_TYPE_IS(v, HEMP_OBJECT_ID)
 #define hemp_is_identity(v)     HEMP_TYPE_IS(v, HEMP_IDENTITY_ID)
 #define hemp_is_missing(v)      HEMP_IDENT_NOT(v, HEMP_FOUND_BIT)
-//#define hemp_is_found(v)      HEMP_IDENT_ANY(v, HEMP_FOUND_BIT)
 #define hemp_is_found(v)        (! hemp_is_missing(v))
 #define hemp_is_nothing(v)      HEMP_IDENT_IS(v, HEMP_IDENT_NOTHING)
 #define hemp_is_undefined(v)    HEMP_IDENT_NOT(v, HEMP_DEFINED_BIT)
@@ -263,10 +261,9 @@ extern const hemp_value_t HempAfter;
 #define hemp_is_equal(v)        HEMP_IDENT_IS(v, HEMP_IDENT_EQUAL)
 
 
-//#define hemp_type(v)            (hemp_global_types[HEMP_TYPE_ID(v)])
-#define hemp_htype(v)           (hemp_global_types[HEMP_TYPE_ID(v)])
-#define hemp_otype(v)           (((hemp_object_p) HEMP_POINTER(v))->type)
-#define hemp_type(v)            (hemp_is_object(v) ? hemp_otype(v) : hemp_htype(v))
+#define hemp_hgtype(v)          (hemp_global_types[HEMP_TYPE_ID(v)])
+#define hemp_obtype(v)          (((hemp_object_p) HEMP_POINTER(v))->type)
+#define hemp_type(v)            (hemp_is_object(v) ? hemp_obtype(v) : hemp_hgtype(v))
 #define hemp_tfunc(v,n)         (hemp_type(v)->n)
 #define hemp_call(v,n,c)        (hemp_tfunc(v,n)(v,c))
 #define hemp_dot(v,c,k)         (hemp_tfunc(v,dot)(v,c,k))
@@ -274,6 +271,7 @@ extern const hemp_value_t HempAfter;
 #define hemp_values(v,c,o)      (hemp_tfunc(v,values)(v,c,o))
 #define hemp_fetch(v,c,k)       (hemp_tfunc(v,fetch)(v,c,k))
 #define hemp_store(v,c,k,i)     (hemp_tfunc(v,store)(v,c,k,i))
+#define hemp_obcall(v,n,...)    (hemp_obtype(v)->n(v,__VA_ARGS__))
 #define hemp_type_name(v)       (hemp_type(v)->name)
 #define hemp_type_method(t,m)   ((hemp_value_f) hemp_hash_fetch_pointer(t->methods, m))
 #define hemp_type_extend(t,m,f) hemp_hash_store_pointer(t->methods, m, f)

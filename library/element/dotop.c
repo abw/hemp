@@ -63,7 +63,7 @@ HEMP_VALUE_FUNC(hemp_element_dotop_value) {
     /* Note the temporary hack: rhs is always a pre-evaluated value */
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    lhs     = hemp_lhs(element);
-    hemp_value_t    lval    = hemp_val_elem(lhs)->type->value(lhs, context);
+    hemp_value_t    lval    = hemp_obcall(lhs, value, context);
     hemp_value_t    rval    = hemp_rhs(element);
 
     if (hemp_is_undefined(lval)) {
@@ -84,7 +84,7 @@ HEMP_OPERATE_FUNC(hemp_element_dotop_assign) {
     /* Note the temporary hack: rhs is always a pre-evaluated value */
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    lhs     = hemp_lhs(element);
-    hemp_value_t    lval    = hemp_val_elem(lhs)->type->value(lhs, context);
+    hemp_value_t    lval    = hemp_obcall(lhs, value, context);
     hemp_value_t    rval    = hemp_rhs(element);
 
     return hemp_store(
