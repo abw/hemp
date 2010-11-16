@@ -15,15 +15,16 @@ HEMP_SYMBOL_FUNC(hemp_element_assign_symbol) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_assign_text) {
-    hemp_debug("hemp_element_assign_text()\n");
+    hemp_debug_call("hemp_element_assign_text()\n");
     hemp_element_assign_value(value, context);
     hemp_text_p text;
     hemp_prepare_text(context, output, text);
     return output;
 }
 
+
 HEMP_VALUE_FUNC(hemp_element_assign_value) {
-    hemp_debug("hemp_element_assign_value()\n");
+    hemp_debug_call("hemp_element_assign_value()\n");
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    lhs     = hemp_lhs(element);
     hemp_value_t    rhs     = hemp_rhs(element);

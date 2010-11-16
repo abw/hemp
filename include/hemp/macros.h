@@ -300,6 +300,12 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 #define HEMP_INFIX_FUNC(f)                  \
     HEMP_POSTFIX_FUNC(f)
 
+#define HEMP_COMPILE_FUNC(f)                \
+    HEMP_INLINE void f(                     \
+        hemp_element_p  element,            \
+        hemp_scope_p    scope,              \
+        hemp_value_t    compiler            \
+    )
 
 /* operator precedence */
 

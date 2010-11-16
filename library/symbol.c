@@ -19,16 +19,18 @@ hemp_symbol_init(
     if (! symbol)
         hemp_mem_fail("symbol");
 
-    symbol->name      = name;    // should be const?
-    symbol->namespace = hemp_namespace(name);
-    symbol->flags   = 0;
-    symbol->lprec   = 0;
-    symbol->rprec   = 0;
-    symbol->scanner = NULL;
-    symbol->cleanup = NULL;
-    symbol->prefix  = NULL;
-    symbol->postfix = NULL;
-    symbol->parse_params = NULL;
+    symbol->name            = name;    // should be const?
+    symbol->namespace       = hemp_namespace(name);
+    symbol->flags           = 0;
+    symbol->lprec           = 0;
+    symbol->rprec           = 0;
+    symbol->grammar         = NULL;
+    symbol->scanner         = NULL;
+    symbol->cleanup         = NULL;
+    symbol->prefix          = NULL;
+    symbol->postfix         = NULL;
+    symbol->parse_params    = NULL;
+    symbol->lvalue_param    = NULL;
     symbol->token   = &hemp_element_not_token;
     symbol->source  = &hemp_element_not_source;
     symbol->text    = &hemp_element_not_text;

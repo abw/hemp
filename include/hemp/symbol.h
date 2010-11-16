@@ -13,41 +13,35 @@
 /* symbol vtable */
 
 struct hemp_symbol_s {
+    /* a symbol is a kind of object value type so we start with those members */
     HEMP_TYPE_BASE
 
+    /* a symbol is bound to a grammar */
+    hemp_grammar_p      grammar;
+
     /* symbol metadata */
-    hemp_str_p      start;
-    hemp_str_p      end;
-    hemp_flags_t    flags;
-    hemp_prec_t     lprec;
-    hemp_prec_t     rprec;
+    hemp_str_p          start;
+    hemp_str_p          end;
+    hemp_flags_t        flags;
+    hemp_prec_t         lprec;
+    hemp_prec_t         rprec;
 
     /* intialisation (on scan) and cleanup methods */
-    hemp_sym_scan_f scanner;
-    hemp_eclean_f   cleanup;
+    hemp_sym_scan_f     scanner;
+    hemp_eclean_f       cleanup;
 
     /* parsing methods */
-    hemp_prefix_f   prefix;
-    hemp_postfix_f  postfix;
-    hemp_prefix_f   fixed;
-    hemp_postfix_f  parse_params;
+    hemp_prefix_f       prefix;             // TODO: add 'parse_' prefix
+    hemp_postfix_f      postfix;
+    hemp_prefix_f       fixed;
+    hemp_postfix_f      parse_params;
+    hemp_compile_f      lvalue_param;
 
     /* value methods */
-    hemp_output_f     token;
-    hemp_output_f     source;
-
-//    hemp_text_f     text;
-//    hemp_eval_f     value;
-//    hemp_eval_f     number;
-//    hemp_eval_f     integer;
-//    hemp_eval_f     boolean;
-//    hemp_eval_f     compare;
-//    hemp_operate_f  assign;
-//    hemp_evals_f    values;
+    hemp_output_f       token;
+    hemp_output_f       source;
 };
 
-
-//    + assign
 
 /* symbols collection */
 

@@ -78,8 +78,9 @@ hemp_grammar_add_symbol(
 
     hemp_symbol_p symbol = hemp_grammar_new_symbol(grammar, etype, start, end);
 
-    symbol->lprec = lprec;
-    symbol->rprec = rprec;
+    symbol->lprec   = lprec;
+    symbol->rprec   = rprec;
+    symbol->grammar = grammar;
 
     /* all symbols get put in the hash table mapping token to symbol */
     hemp_hash_store_pointer(grammar->symbols, start, symbol);

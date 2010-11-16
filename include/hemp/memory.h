@@ -17,6 +17,18 @@ void hemp_mem_fail(hemp_str_p);
         sizeof(type), name, label                       \
     );
 
+#define hemp_allocate_type_name(type, name) ({                      \
+    if (! name) {                                                   \
+        name = (hemp_##type##_p) hemp_mem_alloc(                    \
+            sizeof(struct hemp_##type##_s)                          \
+        );                                                          \
+        if (! name)                                                 \
+            hemp_mem_fail(#type);                                   \
+    }                                                               \
+})
+
+
+
 
 
 

@@ -16,6 +16,7 @@ extern "C" {
 #include <hemp/grammar.h>
 #include <hemp/language.h>
 #include <hemp/namespace.h>
+#include <hemp/params.h>
 #include <hemp/pool.h>
 #include <hemp/ptree.h>
 #include <hemp/scanner.h>

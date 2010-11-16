@@ -13,6 +13,7 @@ HEMP_SYMBOL_FUNC(hemp_element_tt3_TODO_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_tt3_sub_symbol);
 HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix);
 HEMP_VALUE_FUNC(hemp_element_tt3_sub_value);
+HEMP_OUTPUT_FUNC(hemp_element_tt3_sub_text);
 
 /* see comment in language/hemp.c */
 #define DONT_OPTIMISE_ME_AWAY  asm("");
@@ -181,7 +182,7 @@ hemp_element_tt3_command_symbols(
     hemp_p     hemp,
     hemp_str_p name
 ) {
-    hemp_debug_yellow("** Initialising tt3 command symbols (%s requested)\n", name);
+    hemp_debug_init("** Initialising tt3 command symbols (%s requested)\n", name);
 
     /* we should detect if we've done this already and skip it */
     HEMP_ELEMENTS(hemp_symbols_tt3_command);
@@ -222,12 +223,12 @@ hemp_element_tt3_sub_symbol(
     hemp_p        hemp,
     hemp_symbol_p symbol
 ) {
-    hemp_debug("hemp_element_tt3_sub_symbol()\n");
+    hemp_debug_call("hemp_element_tt3_sub_symbol()\n");
     symbol->token   = &hemp_element_literal_token;
     symbol->source  = &hemp_element_literal_source;
     symbol->prefix  = &hemp_element_tt3_sub_prefix;
     symbol->value   = &hemp_element_tt3_sub_value;
-    symbol->text    = &hemp_element_value_text;
+    symbol->text    = &hemp_element_tt3_sub_text;
     symbol->number  = &hemp_element_value_number;
     symbol->integer = &hemp_element_value_integer;
     symbol->boolean = &hemp_element_value_boolean;
@@ -251,24 +252,16 @@ HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix) {
     /* next token might be the opening parenthesis of an argument list */
     args = hemp_parse_params(elemptr, scope, 0, 1, self);
     
-    if (args) {
-        /* NOTE: quick string comparison hack until we've got something better in place */
-        // if (hemp_string_eq((*elemptr)->type->name, "hemp.bracket.parens")) {
-        hemp_debug("found parens after sub\n");
-    }
-    else {
+    /* otherwise it could be a subroutine name... */
+    if (! args) {
         hemp_skip_whitespace(elemptr);
         name = hemp_parse_fixed(elemptr, scope, type->lprec, 1);
+    }
 
-        if (name) {
-            hemp_debug("found name for sub\n");
-            hemp_set_flag(self, HEMP_BE_NAMED);
-            args = hemp_parse_params(elemptr, scope, 0, 1, self);
-            if (args) {
-                // if (hemp_string_eq((*elemptr)->type->name, "hemp.bracket.parens")) {
-                hemp_debug("found parens after sub name\n");
-            }
-        }
+    /* ...which can be followed by args */
+    if (name) {
+        hemp_set_flag(self, HEMP_BE_NAMED);
+        args = hemp_parse_params(elemptr, scope, 0, 1, self);
     }
 
     hemp_skip_whitespace(elemptr);
@@ -277,15 +270,18 @@ HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix) {
     // like '{' can define the appropriate behaviour to capture a block 
     // instead of building a hash...
 
-   hemp_element_p block = hemp_element_parse_block(elemptr, scope, 0, 1);
+    hemp_element_p block = hemp_element_parse_block(elemptr, scope, 0, 1);
 
     if (! block)
         hemp_fatal("missing block for %s\n", type->start);
 
-    hemp_debug("parsed block for sub\n");
     hemp_set_lhs_element(self, name);
     hemp_set_rhs_element(self, block);
-    hemp_set_block_args(block, hemp_elem_val(args));
+
+    if (args) {
+        hemp_set_flag(block, HEMP_BE_ARGS);
+        hemp_set_block_args(block, hemp_elem_val(args));
+    }
 
     if (hemp_element_terminator_matches(*elemptr, type->end)) {
         hemp_debug("found matching terminator for %s => %s\n", type->start, type->end);
@@ -305,19 +301,28 @@ HEMP_VALUE_FUNC(hemp_element_tt3_sub_value) {
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    name    = hemp_lhs(element);
     hemp_value_t    block   = hemp_rhs(element);
-    hemp_value_t    args    = hemp_block_args( hemp_val_elem(block) );
 
     if (hemp_val_elem(name)) {
+        /* if the subroutine is named then we define it as a variable */
         hemp_text_p text  = hemp_text_new();
         hemp_obcall(name, text, context, hemp_text_val(text));
-        hemp_debug("sub is named: %s\n", text->string);
+        hemp_hash_store_keylen(
+            context->vars, text->string, block, text->length
+        );
         hemp_text_free(text);
-
-    }
-    
-    if (hemp_val_elem(args)) {
-        hemp_debug("sub has params\n");
     }
 
-    return hemp_str_val("TODO: hemp_element_sub_value()");
+    return block;
+}
+
+
+HEMP_OUTPUT_FUNC(hemp_element_tt3_sub_text) {
+    hemp_debug("hemp_element_tt3_sub_text()\n");
+
+    /* call the value() function to define the sub, but generate no output */
+    hemp_element_tt3_sub_value(value, context);
+
+    hemp_text_p text;
+    hemp_prepare_text(context, output, text);
+    return output;
 }

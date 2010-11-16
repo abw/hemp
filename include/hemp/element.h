@@ -169,6 +169,12 @@ struct hemp_element_s {
         : NULL                                              \
     )
 
+//#define hemp_lvalue_param(e, sc, p)                         \
+//    (e->type->lvalue_param                                  \
+//        ? e->type->lvalue_param(e, sc, p)                   \
+//        : hemp_element_not_lvalue_param(e, sc, p)           \
+//    )
+//
 //#define hemp_parse_infix_rhs(self, ep, sc, pr, fr)      \
 //    hemp_go_next(ep);                                   \
 //    self->args.binary.rhs = hemp_parse_prefix(            \
@@ -239,6 +245,7 @@ HEMP_VALUE_FUNC(hemp_element_not_boolean);
 HEMP_VALUE_FUNC(hemp_element_not_compare);
 HEMP_OUTPUT_FUNC(hemp_element_not_values);
 HEMP_OPERATE_FUNC(hemp_element_not_assign);
+HEMP_COMPILE_FUNC(hemp_element_not_lvalue_param);
 
 
 /*--------------------------------------------------------------------------
@@ -265,6 +272,7 @@ HEMP_PREFIX_FUNC(hemp_element_word_prefix);
 HEMP_PREFIX_FUNC(hemp_element_word_word);
 HEMP_VALUE_FUNC(hemp_element_word_value);
 HEMP_OPERATE_FUNC(hemp_element_word_assign);
+HEMP_COMPILE_FUNC(hemp_element_word_lvalue_param);
 
 
 /*--------------------------------------------------------------------------

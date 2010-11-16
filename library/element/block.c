@@ -54,13 +54,18 @@ HEMP_OUTPUT_FUNC(hemp_element_block_text) {
 
     hemp_text_p text;
     hemp_prepare_text(context, output, text);
+
+    if (hemp_has_flag(element, HEMP_BE_ARGS)) {
+        hemp_debug("TODO: handle block arguments\n");
+        // hemp_value_t args = hemp_block_args(element);
+    }
     
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
         hemp_obcall(item, text, context, output);
     }
 
-//  hemp_debug("returning block text (%d bytes): %s\n", text->length, text->string);
+//    hemp_debug("returning block text (%d bytes): %s\n", text->length, text->string);
 
     return output;
 }

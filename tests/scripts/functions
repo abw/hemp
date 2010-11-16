@@ -1,22 +1,71 @@
--- test simple function with no args --
-[% sub msg; "Hello World!"; end; #msg() %]
+-- test argless function with explicit call --
+[%  sub msg; 
+        "Hello World!"; 
+    end; 
+    
+    msg()       # note the parens
+%]
 -- expect --
-Hello World
+Hello World!
+
+-- test argless named function with implicit call --
+[%  sub msg; 
+        "Hello World!"; 
+    end; 
+    
+    msg         # note the lack of parens
+%]
+-- expect --
+Hello World!
+
 
 -- start --
--- test simple function with some args --
-[% sub msg(x); "Hello World!"; end; #msg() %]
+-- test named function with an arg --
+[%  name = 'Nobody';    # until we get this working properly
+
+    sub msg(name); 
+        'Hello ' name '!';
+    end;
+
+    msg; #('World') 
+%]
 -- expect --
-Hello World
+Hello World!
+
+-- stop
+
+-- test anonymous argless function --
+[%  msg = sub; 
+        "Hello World!";
+    end;
+
+    msg 
+%]
+-- expect --
+Hello World!
+
+
+-- test anonymous function with an arg --
+[%  msg = sub(name); 
+        'Hello ' name '!';
+    end;
+
+    msg('World') 
+%]
+-- expect --
+Hello World!
+
 
 -- stop --
 
--- test simple function with some args --
-[% a = sub(foo); "Hello World!"; end; #msg() %]
+-- test function reference --
+[%  sub msg(name); 
+        'Hello ' name '!';
+    end; 
+    
+    m2 = msg    # note the lack of parens - remains a function ref
+    m2('World');
+%]
 -- expect --
-Hello World
+Hello World!
 
--- test simple function with explicit call --
-[% sub msg; "Hello World!"; end; msg %]
--- expect --
-Hello World

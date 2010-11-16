@@ -24,6 +24,7 @@ HEMP_SYMBOL_FUNC(hemp_element_word_symbol) {
     symbol->integer  = &hemp_element_value_integer;
     symbol->boolean  = &hemp_element_value_boolean;
     symbol->assign   = &hemp_element_word_assign;
+    symbol->lvalue_param = &hemp_element_word_lvalue_param;
 //    symbol->flags    = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }
@@ -64,7 +65,7 @@ HEMP_VALUE_FUNC(hemp_element_word_value) {
 
 
 HEMP_OPERATE_FUNC(hemp_element_word_assign) {
-    hemp_todo("hemp_element_word_assign()");
+    hemp_debug_call("hemp_element_word_assign()");
     hemp_element_p  element = hemp_val_elem(value);
     hemp_hash_store_keylen(
         context->vars, element->token, operand, element->length
@@ -72,4 +73,9 @@ HEMP_OPERATE_FUNC(hemp_element_word_assign) {
     return operand;
 }
 
+
+HEMP_COMPILE_FUNC(hemp_element_word_lvalue_param) {
+    hemp_debug("hemp_element_word_lvalue_param()");
+    hemp_params_p params = (hemp_params_p) hemp_val_ptr(compiler);
+}
 

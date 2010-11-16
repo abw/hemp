@@ -278,6 +278,16 @@ HEMP_OPERATE_FUNC(hemp_element_not_assign) {
 }
 
 
+HEMP_COMPILE_FUNC(hemp_element_not_lvalue_param) {
+    hemp_fatal(
+        "%s element cannot be a parameter\n", 
+        element->type->name
+    );
+}
+
+
+
+
 
 
 /*--------------------------------------------------------------------------

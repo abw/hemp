@@ -67,6 +67,7 @@ typedef struct hemp_language_s  * hemp_language_p;
 typedef struct hemp_list_s      * hemp_list_p;
 typedef struct hemp_namespace_s * hemp_namespace_p;
 typedef struct hemp_object_s    * hemp_object_p;
+typedef struct hemp_params_s    * hemp_params_p;
 typedef struct hemp_pnode_s     * hemp_pnode_p;
 typedef struct hemp_pool_s      * hemp_pool_p;
 typedef struct hemp_ptree_s     * hemp_ptree_p;
@@ -310,6 +311,14 @@ typedef hemp_element_p
         hemp_bool_t     force,      /* yes, really parse something          */
         hemp_element_p  element     /* preceding element                    */
     );
+
+typedef void
+    (* hemp_compile_f )( 
+        hemp_element_p  element,
+        hemp_scope_p    scope,
+        hemp_value_t    compiler
+    );
+
 
 typedef hemp_value_t 
     (* hemp_view_f)(
