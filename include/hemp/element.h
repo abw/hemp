@@ -8,6 +8,7 @@
 #include <hemp/context.h>
 #include <hemp/value.h>
 #include <hemp/macros.h>
+#include <hemp/params.h>
 #include <hemp/type/text.h>
 
 

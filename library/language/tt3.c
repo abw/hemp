@@ -14,6 +14,7 @@ HEMP_SYMBOL_FUNC(hemp_element_tt3_sub_symbol);
 HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix);
 HEMP_VALUE_FUNC(hemp_element_tt3_sub_value);
 HEMP_OUTPUT_FUNC(hemp_element_tt3_sub_text);
+void hemp_element_tt3_sub_clean(hemp_element_p);
 
 /* see comment in language/hemp.c */
 #define DONT_OPTIMISE_ME_AWAY  asm("");
@@ -224,6 +225,7 @@ hemp_element_tt3_sub_symbol(
     hemp_symbol_p symbol
 ) {
     hemp_debug_call("hemp_element_tt3_sub_symbol()\n");
+    symbol->cleanup = &hemp_element_tt3_sub_clean;
     symbol->token   = &hemp_element_literal_token;
     symbol->source  = &hemp_element_literal_source;
     symbol->prefix  = &hemp_element_tt3_sub_prefix;
@@ -326,3 +328,16 @@ HEMP_OUTPUT_FUNC(hemp_element_tt3_sub_text) {
     hemp_prepare_text(context, output, text);
     return output;
 }
+
+
+void
+hemp_element_tt3_sub_clean(
+    hemp_element_p element
+) {
+    hemp_debug("hemp_element_tt3_sub_clean(%p)\n", element);
+
+    hemp_element_block_clean(
+        hemp_rhs_element(element)
+    );
+}
+

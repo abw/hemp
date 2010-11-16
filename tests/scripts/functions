@@ -23,7 +23,7 @@ Hello World!
 -- test named function with an arg --
 [%  name = 'Nobody';    # until we get this working properly
 
-    sub msg(name); 
+    sub msg(name, age, height); 
         'Hello ' name '!';
     end;
 

@@ -185,7 +185,7 @@ hemp_list_each_free(
     hemp_pos_t      pos, 
     hemp_value_t    item
 ) {
-/*  hemp_debug_mem("freeing list item at %p\n", item); */
+//  hemp_debug_mem("freeing list item %d at %p\n", pos, hemp_val_ptr(item));
     /* this assume that each element is a pointer */
     hemp_mem_free( hemp_val_ptr(item) );
     return HEMP_TRUE;

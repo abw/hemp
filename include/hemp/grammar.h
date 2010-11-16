@@ -54,6 +54,12 @@ hemp_symbol_p
         hemp_prec_t     rprec
     );
 
+//hemp_symbol_p
+//    hemp_grammar_symbol(
+//        hemp_grammar_p  grammar,
+//        hemp_str_p      
+//
+
 void
     hemp_grammar_free(
         hemp_grammar_p  grammar

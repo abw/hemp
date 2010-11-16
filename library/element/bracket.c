@@ -3,7 +3,7 @@
 
 // TODO: move this
 void 
-hemp_element_parens_params(
+hemp_element_parens_compile_params(
     hemp_element_p  element,
     hemp_scope_p    scope
 );
@@ -120,17 +120,17 @@ HEMP_POSTFIX_FUNC(hemp_element_parens_parse_params) {
      * we just parsed.... maybe we should return this parens element
      * instead?
      */
-    hemp_set_expr(self, hemp_list_val(exprs));
-    hemp_set_flag(self, HEMP_BE_POSTFIX);
+    hemp_set_rhs(self, hemp_list_val(exprs));
+    hemp_set_flag(self, HEMP_BE_POSTFIX);               // TODO: quick hack
 
-//    hemp_element_parens_params(self, scope);
+    hemp_element_parens_compile_params(self, scope);
 
     return self;
 }
 
 
 void 
-hemp_element_parens_params(
+hemp_element_parens_compile_params(
     hemp_element_p  element,
     hemp_scope_p    scope
 ) {
@@ -155,7 +155,8 @@ hemp_element_parens_params(
             hemp_element_not_lvalue_param(expr, scope, hemp_ptr_val(params));
         }
     }
-
+    hemp_debug("new params at %p\n", params);
+    hemp_set_lhs(element, hemp_ptr_val(params));
 }
 
 
@@ -204,12 +205,25 @@ hemp_element_parens_clean(
 ) {
     hemp_debug_call("hemp_element_parens_clean(%p)\n", element);
 
-    if (hemp_not_flag(element, HEMP_BE_POSTFIX)) {
+    if (hemp_has_flag(element, HEMP_BE_POSTFIX)) {
+// YIKES!  We've already added the args to the block which will free it...
+//        hemp_params_p params = (hemp_params_p) hemp_val_ptr(
+//            hemp_lhs(element)
+//        );
+//        if (params)
+//            hemp_params_free(params);
+
+        hemp_list_p exprs = hemp_val_list( hemp_rhs(element) );
+        hemp_list_free(exprs);
+    }
+    else {
         hemp_debug("cleaning parens block\n");
         hemp_element_block_clean(
             hemp_expr_element(element)
         );
-}
+    }
+    hemp_debug_call("END hemp_element_parens_clean(%p)\n", element);
+
 }
 
 
