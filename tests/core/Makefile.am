@@ -1,4 +1,4 @@
-check_PROGRAMS  =   params
+check_PROGRAMS  =   params grammar
 
 #check_PROGRAMS  =   action      \
 #                    context     \

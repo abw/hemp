@@ -156,6 +156,9 @@
 //#define HEMP_SYMBOL0(name)                                      \
 //    hemp_grammar_add_symbol(grammar, name, NULL, NULL, 0, 0);
 
+#define HEMP_SYMBOL0(name)                                       \
+    hemp_grammar_add_symbol(grammar, name, NULL, NULL, 0, 0);
+
 #define HEMP_SYMBOL1(name, start)                               \
     hemp_grammar_add_symbol(grammar, name, start, NULL, 0, 0);
 

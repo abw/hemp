@@ -8,7 +8,7 @@ void test_hemp_grammar_hemp();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(11);
+    plan(12);
 
     test_grammar();
     test_hemp_grammar();
@@ -36,6 +36,8 @@ void test_grammar() {
         hemp_grammar_p grammar = hemp_grammar(hemp, "tt3.core");
         ok( grammar, "got grammar" );
         is( grammar->name, "tt3.core", "grammar name is tt3.core" );
+        hemp_symbol_p space = hemp_grammar_symbol(grammar, "hemp.space");
+        ok( space, "got space symbol" );
     HEMP_CATCH_ALL;
         fail("eek! caught error: %s", hemp->error->message);
     HEMP_END;

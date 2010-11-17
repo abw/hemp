@@ -61,42 +61,53 @@ hemp_grammar_new_symbol(
 
 hemp_symbol_p
 hemp_grammar_add_symbol(
-    hemp_grammar_p grammar,
-    hemp_str_p     etype,
-    hemp_str_p     start,
-    hemp_str_p     end,
-    hemp_prec_t    lprec,
-    hemp_prec_t    rprec
+    hemp_grammar_p  grammar,
+    hemp_str_p      etype,
+    hemp_str_p      start,
+    hemp_str_p      end,
+    hemp_prec_t     lprec,
+    hemp_prec_t     rprec
 ) {
 //  hemp_debug_call(
 //      "adding [%s => %s] symbol to %s grammar [%d|%d]\n", 
 //      token, etype, grammar->name, lprec, rprec
 //  );
 
-    if (hemp_hash_fetch_pointer(grammar->symbols, start))
-        hemp_throw(grammar->hemp, HEMP_ERROR_DUPLICATE, "symbol", start);
+    /* Any symbol with a start token goes into the operator prefix tree 
+     * (a modified ternary search tree) which allows the scanner to easily 
+     * and efficiently match longest tokens, e.g. so that '++' is 
+     * recognised as one single token, not two instances of '+'
+     *
+     * Symbols without start tokens can't be matched directly by a parser,
+     * but may be synthesised into an element tree by other elements as 
+     * part of the parsing process (e.g. elements that create a hemp.block
+     * to store their body content).  We use the fully-qualified element type
+     * name (e.g. hemp.block) as a hash index for retrieving the symbol table
+     * entry.
+     *
+     * Either way, the symbol or element type name must be unique for a 
+     * grammar.
+     */
+    hemp_str_p name = start ? start : etype;
 
-    hemp_symbol_p symbol = hemp_grammar_new_symbol(grammar, etype, start, end);
+    if (hemp_hash_fetch_pointer(grammar->symbols, name))
+        hemp_throw(grammar->hemp, HEMP_ERROR_DUPLICATE, "symbol", name);
+
+    hemp_symbol_p symbol = hemp_grammar_new_symbol(
+        grammar, etype, start, end
+    );
 
     symbol->lprec   = lprec;
     symbol->rprec   = rprec;
     symbol->grammar = grammar;
 
-    /* all symbols get put in the hash table mapping token to symbol */
-    hemp_hash_store_pointer(grammar->symbols, start, symbol);
-
-    /* non-alphanumeric (starting) symbols go in the operator ptree which
-     * allows us to easily match longest tokens so that '++' is interpreted
-     * as one single token, not two instances of '+'
-     */
-
-//  if (! hemp_string_wordlike(start)) {
-    
-    /* No, on second thoughts they can all go in */
+    if (start) {
         hemp_ptree_store(
             grammar->operators, start, (hemp_mem_p) symbol
         );
-//  }
+    }
+
+    hemp_hash_store_pointer(grammar->symbols, name, symbol);
 
     return symbol;
 }

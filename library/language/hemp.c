@@ -235,8 +235,8 @@ hemp_grammar_add_hemp_alpha(
     hemp_grammar_p grammar
 ) {
     hemp_debug_call("hemp_grammar_add_hemp_alpha(%p)\n", grammar);
-    HEMP_SYMBOL1("hemp.text",    "_TEXT"    );
-    HEMP_SYMBOL1("hemp.space",   "_SPACE"   );
+    HEMP_SYMBOL0("hemp.text");
+    HEMP_SYMBOL0("hemp.space");
     HEMP_SYMBOL1("hemp.comment", "#"        );
     HEMP_SYMBOL2("hemp.squote",  "'",  "'"  );
     HEMP_SYMBOL2("hemp.dquote",  "\"", "\"" );
