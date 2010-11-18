@@ -39,6 +39,7 @@ static struct hemp_symbols_s hemp_symbols_hemp[] = {
     { "hemp.squote",            &hemp_element_squote_symbol             },
     { "hemp.dquote",            &hemp_element_dquote_symbol             },
     { "hemp.block",             &hemp_element_block_symbol              },
+    { "hemp.params",            &hemp_element_params_symbol             },
     { "hemp.dotop",             &hemp_element_dotop_symbol              },
     { "hemp.eof",               &hemp_element_eof_symbol                },
     { NULL, NULL },
@@ -307,6 +308,7 @@ hemp_grammar_add_hemp_bravo(
 //  HEMP_OPERATOR1("hemp.boolean.nor",          "nor",      110,    0);
 
 //    # grouping constructs...
+    HEMP_SYMBOL0("hemp.params");
     HEMP_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);
     HEMP_OPERATOR2("hemp.bracket.list",         "[", "]",     0,    0);
     HEMP_OPERATOR2("hemp.bracket.hash",         "{", "}",     0,    0);

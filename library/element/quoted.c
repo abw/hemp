@@ -14,6 +14,7 @@ HEMP_SYMBOL_FUNC(hemp_element_squote_symbol) {
     symbol->source     = &hemp_element_literal_source;
     symbol->text       = &hemp_element_quoted_text;
     symbol->value      = &hemp_element_quoted_value;
+    symbol->values     = &hemp_element_value_values;
     return symbol;
 }
 
@@ -93,6 +94,7 @@ HEMP_SYMBOL_FUNC(hemp_element_dquote_symbol) {
     symbol->source     = &hemp_element_literal_source;
     symbol->text       = &hemp_element_quoted_text;
     symbol->value      = &hemp_element_quoted_value;
+    symbol->values     = &hemp_element_value_values;
     return symbol;
 }
 

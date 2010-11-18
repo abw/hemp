@@ -1,3 +1,11 @@
+-- test function call
+%% msg = 'Hello World'
+msg: [% msg('Badger') %]
+-- expect
+msg: Hello World
+
+-- stop
+
 -- test argless function with explicit call --
 [%  sub msg; 
         "Hello World!"; 
@@ -19,7 +27,6 @@ Hello World!
 Hello World!
 
 
--- start --
 -- test named function with an arg --
 [%  name = 'Nobody';    # until we get this working properly
 
@@ -31,8 +38,6 @@ Hello World!
 %]
 -- expect --
 Hello World!
-
--- stop
 
 -- test anonymous argless function --
 [%  msg = sub; 
@@ -54,9 +59,6 @@ Hello World!
 %]
 -- expect --
 Hello World!
-
-
--- stop --
 
 -- test function reference --
 [%  sub msg(name); 

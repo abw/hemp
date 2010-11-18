@@ -1,9 +1,9 @@
 #include <hemp/element.h>
 #include <hemp/params.h>
 
-// TODO: move this
+// TODO: move these
 void 
-hemp_element_parens_compile_params(
+hemp_element_params_compile(
     hemp_element_p  element,
     hemp_scope_p    scope
 );
@@ -13,58 +13,76 @@ hemp_element_parens_clean(
     hemp_element_p element
 );
 
+void
+hemp_element_params_clean(
+    hemp_element_p element
+);
+
 
 /*--------------------------------------------------------------------------
  * generic functions for all bracketed constructs
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_brackets_symbol) {
-    hemp_element_literal_symbol(hemp, symbol);
-    symbol->cleanup = &hemp_element_brackets_clean;
+    hemp_element_block_symbol(hemp, symbol);
+    symbol->token   = &hemp_element_literal_token;
     symbol->prefix  = &hemp_element_brackets_prefix;
-//    symbol->postfix = &hemp_element_brackets_postfix;
+    /* each subtype must define its own value() method */
+    symbol->values  = &hemp_element_value_values;
     symbol->text    = &hemp_element_value_text;
     symbol->number  = &hemp_element_value_number;
     symbol->integer = &hemp_element_value_integer;
     symbol->boolean = &hemp_element_value_boolean;
     symbol->compare = &hemp_element_value_compare;
+    symbol->cleanup = &hemp_element_brackets_clean;
     return symbol;
 }
 
 
+HEMP_PREFIX_FUNC(hemp_element_brackets_parse) {
+    hemp_debug("hemp_element_brackets_parse()\n");
+    hemp_element_p  self = *elemptr;
+    hemp_symbol_p   type = self->type;
+    hemp_list_p     exprs;
 
-HEMP_PREFIX_FUNC(hemp_element_brackets_prefix) {
-    hemp_debug_call("hemp_element_brackets_prefix()\n");
-    hemp_element_p self = *elemptr;
-    hemp_symbol_p  type = self->type;
-    hemp_element_p block;
-
-//    HEMP_PREFIX_PRECEDENCE;
+    /* skip opening bracket */
     hemp_go_next(elemptr);
 
-    block = hemp_element_parse_block(elemptr, scope, type->rprec, 1);
+    /* parse a list of none or more expressions - first number (0) indicates
+     * no forwarded precedence level, second number (1) forces an empty list 
+     * to be returned if no expressions are found
+     */
+    exprs = hemp_element_parse_exprs(elemptr, scope, 0, 1);
 
-    if (! block)
-        hemp_fatal("missing block for %s\n", type->start);
-
-    hemp_set_expr_element(self, block);
+    /* skip any whitespace then check for closing parenthesis */
     hemp_skip_whitespace(elemptr);
 
-    if (hemp_element_terminator_matches(*elemptr, type->end)) {
-//      hemp_debug("found matching terminator for %s => %s\n", type->start, type->end);
-        hemp_go_next(elemptr);
-    }
-    else {
+    if (! hemp_element_terminator_matches(*elemptr, type->end))
         hemp_fatal("missing terminator to match %s => %s\n", type->start, type->end);
-    }
 
-    return hemp_parse_postfix(elemptr, scope, precedence, force, self);
+    /* skip closing bracket */
+    hemp_go_next(elemptr);
+
+    /* stash the list of expressions in the element */
+    hemp_set_block_exprs(self, exprs);
+
+    return self;
 }
 
 
-HEMP_POSTFIX_FUNC(hemp_element_brackets_postfix) {
-    hemp_debug("TODO: hemp_element_brackets_postfix(), skipping for now\n");
-    return lhs;
+HEMP_PREFIX_FUNC(hemp_element_brackets_prefix) {
+    hemp_debug("hemp_element_brackets_prefix()\n");
+
+    /* parse the bracketed expressions */
+    hemp_element_p self = hemp_element_brackets_parse(
+        elemptr, scope, precedence, force
+    );
+
+    /* parse onwards in case there's a postfix operator following */
+    /* TODO: should we mute the force flag? */
+    return hemp_parse_postfix(
+        elemptr, scope, precedence, force, self
+    );
 }
 
 
@@ -72,10 +90,9 @@ void
 hemp_element_brackets_clean(
     hemp_element_p element
 ) {
-    hemp_debug_call("hemp_element_brackets_clean(%p)\n", element);
-
-    hemp_element_block_clean(
-        hemp_expr_element(element)
+    hemp_debug("hemp_element_brackets_clean(%p)\n", element);
+    hemp_list_free(
+        hemp_block_exprs(element)
     );
 }
 
@@ -86,56 +103,113 @@ hemp_element_brackets_clean(
 
 HEMP_SYMBOL_FUNC(hemp_element_parens_symbol) {
     hemp_element_brackets_symbol(hemp, symbol);
-    symbol->cleanup = &hemp_element_parens_clean;
+    symbol->postfix = &hemp_element_parens_postfix;
     symbol->value   = &hemp_element_parens_value;
-    symbol->values  = &hemp_element_parens_values;
-    symbol->parse_params = &hemp_element_parens_parse_params;
+    symbol->values  = &hemp_element_block_values;
+    symbol->parse_params = &hemp_element_parens_postfix;
     return symbol;
 }
 
 
-HEMP_POSTFIX_FUNC(hemp_element_parens_parse_params) {
-    hemp_debug("hemp_element_parens_parse_params()\n");
+HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
+    hemp_debug("hemp_element_parens_postfix()\n");
     
     hemp_element_p  self = *elemptr;
     hemp_symbol_p   type = self->type;
-    hemp_list_p     exprs;
 
-    /* skip opening parenthesis */
-    hemp_go_next(elemptr);
+    HEMP_INFIX_LEFT_PRECEDENCE;
 
-    exprs = hemp_element_parse_exprs(elemptr, scope, 0, 1);
+    /* parse the bracketed expressions */
+    self = hemp_element_brackets_parse(
+        elemptr, scope, precedence, force
+    );
 
-    /* skip any whitespace before closing parenthesis */
-    hemp_skip_whitespace(elemptr);
+    hemp_set_flag(self, HEMP_BE_INFIX);
 
-    if (! hemp_element_terminator_matches(*elemptr, type->end))
-        hemp_fatal("missing terminator to match %s => %s\n", type->start, type->end);
+    hemp_debug("*** creating params ***\n");
 
-    /* skip closing parenthesis */
-    hemp_go_next(elemptr);
+    hemp_element_p params = hemp_element_create(
+        self, "hemp.params"
+    );
 
-    /* IMPORTANT: must set parens expr to NULL so that destructor doesn't
-     * get confused and segfault.  This is because we're returning the block
-     * we just parsed.... maybe we should return this parens element
-     * instead?
-     */
-    hemp_set_rhs(self, hemp_list_val(exprs));
-    hemp_set_flag(self, HEMP_BE_POSTFIX);               // TODO: quick hack
+    hemp_set_lhs_element(params, lhs);
+    hemp_set_rhs_element(params, self);
+    hemp_debug("*** created params %p : %s ***\n", params, params->type->name);
 
-    hemp_element_parens_compile_params(self, scope);
+    // TODO: more postfix
 
-    return self;
+    return params;
 }
 
 
+HEMP_VALUE_FUNC(hemp_element_parens_value) {
+    hemp_debug_call("hemp_element_parens_value()\n");
+    hemp_value_t    values  = hemp_obcall(value, values, context, HempNothing);
+    hemp_list_p     list    = hemp_val_list(values);
+
+    hemp_debug("got %d values returned by parens\n", list->length);
+
+    if (list->length > 1) {
+//      hemp_debug("squishing list of %d items to text\n", list->length);
+        return hemp_text(values, context, HempNothing);
+    }
+    else if (list->length == 1) {
+//      hemp_debug("got one value returned by parens\n");
+        return hemp_list_item(list, 0);
+    }
+    else {
+        hemp_debug("nothing in list\n");
+        return HempEmpty;
+    }
+}
+
+
+
+/*--------------------------------------------------------------------------
+ * parameters, a special case of parenthesis following a function name or 
+ * expression yielding a function, e.g. foo(), foo(10, 20)
+ * NOTE: was a temp hack... not in use at the moment.
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_params_symbol) {
+    hemp_element_parens_symbol(hemp, symbol);
+    symbol->value   = &hemp_element_params_value;
+//    symbol->values  = &hemp_element_params_values;
+    symbol->values  = &hemp_element_value_values;
+    symbol->cleanup = &hemp_element_params_clean;
+    return symbol;
+}
+
+HEMP_VALUE_FUNC(hemp_element_params_value) {
+    hemp_debug("hemp_element_params_value()\n");
+    
+    hemp_element_p element  = hemp_val_elem(value);
+//    hemp_value_t   lhs      = hemp_lhs_element(element);
+    hemp_value_t   parens   = hemp_rhs(element);
+    hemp_value_t   values   = hemp_obcall(parens, values, context, HempNothing);
+    hemp_list_p    list     = hemp_val_list(values);
+
+    hemp_debug("got %d parameters in parens\n", list->length);
+
+}
+
+
+//HEMP_OUTPUT_FUNC(hemp_element_params_values) {
+//    hemp_debug("hemp_element_params_values()\n");
+//    hemp_element_p element  = hemp_val_elem(value);
+//    hemp_value_t   parens   = hemp_rhs(element);
+//    return hemp_obcall(parens, values, context, output);
+//}
+
+
+
 void 
-hemp_element_parens_compile_params(
+hemp_element_params_compile(
     hemp_element_p  element,
     hemp_scope_p    scope
 ) {
     hemp_debug("hemp_element_parens_params()\n");
-    hemp_list_p     exprs  = hemp_val_list( hemp_rhs(element) );
+    hemp_list_p     exprs  = hemp_val_list( hemp_expr(element) );
     hemp_params_p   params = hemp_params_new();
     hemp_element_p  expr;
     hemp_value_t    item;
@@ -160,52 +234,14 @@ hemp_element_parens_compile_params(
 }
 
 
-HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
-    hemp_debug("TODO: hemp_element_parens_postfix()\n");
-    return lhs;
-}
-
-
-HEMP_VALUE_FUNC(hemp_element_parens_value) {
-    hemp_debug_call("hemp_element_parens_value()\n");
-    hemp_element_p element  = hemp_val_elem(value);
-    hemp_value_t   block    = hemp_expr(element);
-    hemp_value_t   values   = hemp_obcall(block, values, context, HempNothing);
-    hemp_list_p    list     = hemp_val_list(values);
-
-    hemp_debug("got %d values returned by parens\n", list->length);
-
-    if (list->length > 1) {
-//      hemp_debug("squishing list of %d items to text\n", list->length);
-        return hemp_text(values, context, HempNothing);
-    }
-    else if (list->length == 1) {
-//      hemp_debug("got one value returned by parens\n");
-        return hemp_list_item(list, 0);
-    }
-    else {
-        hemp_debug("nothing in list\n");
-        return HempEmpty;
-    }
-}
-
-
-HEMP_OUTPUT_FUNC(hemp_element_parens_values) {
-    hemp_debug_call("hemp_element_parens_values()\n");
-    hemp_element_p element  = hemp_val_elem(value);
-    hemp_value_t   block    = hemp_expr(element);
-    return hemp_obcall(block, values, context, output);
-}
-
 
 
 void
-hemp_element_parens_clean(
+hemp_element_params_clean(
     hemp_element_p element
 ) {
-    hemp_debug_call("hemp_element_parens_clean(%p)\n", element);
+    hemp_debug("*** hemp_element_params_clean(%p)\n", element);
 
-    if (hemp_has_flag(element, HEMP_BE_POSTFIX)) {
 // YIKES!  We've already added the args to the block which will free it...
 //        hemp_params_p params = (hemp_params_p) hemp_val_ptr(
 //            hemp_lhs(element)
@@ -213,18 +249,11 @@ hemp_element_parens_clean(
 //        if (params)
 //            hemp_params_free(params);
 
-        hemp_list_p exprs = hemp_val_list( hemp_rhs(element) );
-        hemp_list_free(exprs);
-    }
-    else {
-        hemp_debug("cleaning parens block\n");
-        hemp_element_block_clean(
-            hemp_expr_element(element)
-        );
-    }
-    hemp_debug_call("END hemp_element_parens_clean(%p)\n", element);
-
+//    hemp_list_p exprs = hemp_val_list( hemp_expr(element) );
+//    hemp_list_free(exprs);
+//    hemp_debug_call("END hemp_element_params_clean(%p)\n", element);
 }
+
 
 
 /*--------------------------------------------------------------------------
