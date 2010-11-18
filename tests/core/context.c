@@ -5,7 +5,7 @@ void test_context();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(9);
+    plan(10);
     test_context();
     return done();
 }

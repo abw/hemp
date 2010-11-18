@@ -5,7 +5,7 @@ HEMP_INLINE hemp_frame_p
 hemp_frame_init(
     hemp_frame_p frame
 ) {
-    hemp_debug("hemp_frame_init(%p)\n", frame);
+    hemp_debug_call("hemp_frame_init(%p)\n", frame);
     hemp_frame_allocate(frame);
 
     frame->context = NULL;
@@ -14,7 +14,6 @@ hemp_frame_init(
     frame->args    = hemp_list_new();
     frame->vars    = hemp_hash_new();
 
-    hemp_debug("created frame: %p\n", frame);
     return frame;
 }
 
