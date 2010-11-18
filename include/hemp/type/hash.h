@@ -41,23 +41,28 @@ struct hemp_hash_s {
 hemp_hash_p
     hemp_hash_init();
 
+HEMP_INLINE void
+    hemp_hash_release(
+        hemp_hash_p hash
+    );
+
 void
     hemp_hash_free(
         hemp_hash_p     hash
     );
 
-void
+HEMP_INLINE void
     hemp_hash_attach(
         hemp_hash_p     child, 
         hemp_hash_p     parent
     );
 
-void
+HEMP_INLINE void
     hemp_hash_detach(
         hemp_hash_p     child
     );
 
-hemp_size_t
+HEMP_INLINE hemp_size_t
     hemp_hash_resize(
         hemp_hash_p     hash
     );

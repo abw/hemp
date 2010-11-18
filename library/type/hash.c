@@ -103,14 +103,14 @@ hemp_hash_init() {
 }
 
 
-void
-hemp_hash_free(
+HEMP_INLINE void
+hemp_hash_release(
     hemp_hash_p hash
 ) {
     hemp_slot_p slot, next;
     int i;
 
-    /* hemp_debug_mem("Releasing hash at %p\n", table); */
+//  hemp_debug_mem("Releasing hash at %p\n", hash);
 
     for(i = 0; i < hash->width; i++) {
         slot = hash->slots[i];
@@ -122,11 +122,19 @@ hemp_hash_free(
         }
     }
     hemp_mem_free(hash->slots);
+}
+
+
+void
+hemp_hash_free(
+    hemp_hash_p hash
+) {
+    hemp_hash_release(hash);
     hemp_mem_free(hash);
 }
 
 
-hemp_size_t
+HEMP_INLINE hemp_size_t
 hemp_hash_resize(
     hemp_hash_p hash
 ) {
@@ -370,7 +378,7 @@ hemp_hash_fetch_text(
 
 
 
-void 
+HEMP_INLINE void 
 hemp_hash_attach(
     hemp_hash_p child, 
     hemp_hash_p parent
@@ -379,7 +387,7 @@ hemp_hash_attach(
 }
 
 
-void 
+HEMP_INLINE void 
 hemp_hash_detach(
     hemp_hash_p child
 ) {
