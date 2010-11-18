@@ -1,4 +1,5 @@
-check_PROGRAMS  =   params grammar
+check_PROGRAMS  =   context 
+#params grammar
 
 #check_PROGRAMS  =   action      \
 #                    context     \
@@ -11,6 +12,7 @@ check_PROGRAMS  =   params grammar
 #                    grammar     \
 #                    memory      \
 #                    namespace   \
+#                    params      \
 #                    pool        \
 #                    ptree       \
 #                    slab        \

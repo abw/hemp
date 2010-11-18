@@ -26,6 +26,7 @@ hemp_grammar_init(
     return grammar;
 }
 
+
 hemp_symbol_p
 hemp_grammar_new_symbol(
     hemp_grammar_p grammar,
@@ -108,6 +109,26 @@ hemp_grammar_add_symbol(
     }
 
     hemp_hash_store_pointer(grammar->symbols, name, symbol);
+
+    return symbol;
+}
+
+
+HEMP_INLINE hemp_symbol_p
+hemp_grammar_symbol(
+    hemp_grammar_p  grammar,
+    hemp_str_p      name
+) {
+    hemp_symbol_p symbol = (hemp_symbol_p) hemp_hash_fetch_pointer(
+        grammar->symbols, name
+    );
+
+    if (! symbol) {
+        hemp_fatal(
+            "Invalid element type specified.  %s symbol not found in %s grammar",
+            name, grammar->name
+        );
+}
 
     return symbol;
 }

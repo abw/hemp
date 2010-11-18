@@ -5,7 +5,7 @@
  * initialisation and cleanup functions
  *--------------------------------------------------------------------------*/
 
-hemp_element_p
+HEMP_INLINE hemp_element_p
 hemp_element_new() {
     hemp_element_p element = (hemp_element_p) hemp_mem_alloc(
         sizeof(struct hemp_element_s)
@@ -29,12 +29,14 @@ hemp_element_init(
     if (! element)
         element = hemp_element_new();
         
+    element->elements = NULL;
+    element->next     = NULL;
     element->type     = type;
     element->token    = token;
     element->position = position;
     element->length   = length;
     element->flags    = type->flags;
-    element->next     = NULL;
+// TODO: should we zero this memory?
 //  element->value    = NULL;
 
     return element;
@@ -46,6 +48,88 @@ hemp_element_free(
     hemp_element_p element
 ) {
     hemp_mem_free(element);
+}
+
+
+HEMP_INLINE hemp_grammar_p
+hemp_element_grammar(
+    hemp_element_p  element
+) {
+    if (! element->type->grammar)
+        hemp_fatal(
+            "No grammar defined for %s element", 
+            element->type->name
+        );
+
+    return element->type->grammar;
+}
+
+
+HEMP_INLINE hemp_elements_p
+hemp_element_elements(
+    hemp_element_p  element
+) {
+    if (! element->elements)
+        hemp_fatal(
+            "No elements defined for %s element", 
+            element->type->name
+    );
+
+    return element->elements;
+}
+
+
+HEMP_INLINE hemp_symbol_p
+hemp_element_grammar_symbol(
+    hemp_element_p element,
+    hemp_str_p     name
+) {
+    return hemp_grammar_symbol(
+        hemp_element_grammar(element),
+        name
+    );
+}
+
+
+HEMP_INLINE hemp_element_p
+hemp_element_create(
+    hemp_element_p  element,
+    hemp_str_p      typename
+) {
+    return hemp_elements_append(
+        hemp_element_elements(element),
+        hemp_element_grammar_symbol(element, typename),
+        element->token, element->position, element->length
+    );
+}
+
+
+hemp_symbol_p 
+hemp_element_retype(
+    hemp_element_p element,
+    hemp_str_p     typename
+) {
+    hemp_symbol_p  type    = element->type;
+    hemp_grammar_p grammar = type->grammar;
+
+    if (grammar) {
+        hemp_debug("found element grammar\n");
+    }
+    else {
+        hemp_fatal("No grammar defined for element type: %s", type->name);
+    }
+
+    type = hemp_grammar_symbol(grammar, typename);
+
+    if (! type)
+        hemp_fatal(
+            "Invalid element type specified (symbol not found in %s grammar): %s",
+            grammar->name, typename
+        );
+
+    element->type = type;
+
+    return type;
 }
 
 

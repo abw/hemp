@@ -54,6 +54,12 @@ hemp_symbol_p
         hemp_prec_t     rprec
     );
 
+HEMP_INLINE hemp_symbol_p
+    hemp_grammar_symbol(
+        hemp_grammar_p  grammar,
+        hemp_str_p      name
+    );
+
 void
     hemp_grammar_free(
         hemp_grammar_p  grammar
@@ -66,13 +72,6 @@ hemp_bool_t
         hemp_slot_p     item
     );
 
-
-/*--------------------------------------------------------------------------
- * macros
- *--------------------------------------------------------------------------*/
-
-#define hemp_grammar_symbol(g, s)       \
-    ((hemp_symbol_p) hemp_hash_fetch_pointer(g->symbols, s))
 
 
 #endif /* HEMP_GRAMMAR_H */

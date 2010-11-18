@@ -33,7 +33,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = params$(EXEEXT) grammar$(EXEEXT)
+check_PROGRAMS = context$(EXEEXT)
 subdir = tests/core
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -51,14 +51,10 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/hemp/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-grammar_SOURCES = grammar.c
-grammar_OBJECTS = grammar.$(OBJEXT)
-grammar_LDADD = $(LDADD)
-grammar_DEPENDENCIES = ../../library/libhemp.la
-params_SOURCES = params.c
-params_OBJECTS = params.$(OBJEXT)
-params_LDADD = $(LDADD)
-params_DEPENDENCIES = ../../library/libhemp.la
+context_SOURCES = context.c
+context_OBJECTS = context.$(OBJEXT)
+context_LDADD = $(LDADD)
+context_DEPENDENCIES = ../../library/libhemp.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/hemp
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -72,8 +68,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = grammar.c params.c
-DIST_SOURCES = grammar.c params.c
+SOURCES = context.c
+DIST_SOURCES = context.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -222,6 +218,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+#params grammar
 
 #check_PROGRAMS  =   action      \
 #                    context     \
@@ -234,6 +231,7 @@ top_srcdir = @top_srcdir@
 #                    grammar     \
 #                    memory      \
 #                    namespace   \
+#                    params      \
 #                    pool        \
 #                    ptree       \
 #                    slab        \
@@ -291,12 +289,9 @@ clean-checkPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-grammar$(EXEEXT): $(grammar_OBJECTS) $(grammar_DEPENDENCIES) 
-	@rm -f grammar$(EXEEXT)
-	$(LINK) $(grammar_OBJECTS) $(grammar_LDADD) $(LIBS)
-params$(EXEEXT): $(params_OBJECTS) $(params_DEPENDENCIES) 
-	@rm -f params$(EXEEXT)
-	$(LINK) $(params_OBJECTS) $(params_LDADD) $(LIBS)
+context$(EXEEXT): $(context_OBJECTS) $(context_DEPENDENCIES) 
+	@rm -f context$(EXEEXT)
+	$(LINK) $(context_OBJECTS) $(context_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -304,8 +299,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/grammar.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/params.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/context.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

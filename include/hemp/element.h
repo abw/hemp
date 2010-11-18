@@ -9,6 +9,7 @@
 #include <hemp/value.h>
 #include <hemp/macros.h>
 #include <hemp/params.h>
+// #include <hemp/grammar.h>
 #include <hemp/type/text.h>
 
 
@@ -41,6 +42,7 @@ typedef union hemp_eargs_u {
 
 struct hemp_element_s {
     hemp_symbol_p   type;
+    hemp_elements_p elements;
     hemp_element_p  next;
     hemp_str_p      token;
     hemp_pos_t      position;
@@ -170,6 +172,7 @@ struct hemp_element_s {
         : NULL                                              \
     )
 
+
 //#define hemp_lvalue_param(e, sc, p)                         \
 //    (e->type->lvalue_param                                  \
 //        ? e->type->lvalue_param(e, sc, p)                   \
@@ -208,6 +211,20 @@ void
     hemp_element_free(
         hemp_element_p element
     );
+
+HEMP_INLINE hemp_element_p
+    hemp_element_create(
+        hemp_element_p  element,
+        hemp_str_p      typename
+    );
+
+hemp_symbol_p 
+    hemp_element_retype(
+        hemp_element_p  element,
+        hemp_str_p      typename
+    );
+
+
 
 
 /*--------------------------------------------------------------------------
@@ -367,15 +384,18 @@ HEMP_OUTPUT_FUNC(hemp_element_infix_source);
 
 HEMP_SYMBOL_FUNC(hemp_element_brackets_symbol);
 HEMP_PREFIX_FUNC(hemp_element_brackets_prefix);
-HEMP_POSTFIX_FUNC(hemp_element_brackets_postfix);
 
 HEMP_SYMBOL_FUNC(hemp_element_parens_symbol);
-//HEMP_PREFIX_FUNC(hemp_element_parens_prefix);
-//HEMP_POSTFIX_FUNC(hemp_element_parens_postfix);
 HEMP_VALUE_FUNC(hemp_element_parens_value);
 HEMP_OUTPUT_FUNC(hemp_element_parens_values);
 HEMP_POSTFIX_FUNC(hemp_element_parens_postfix);
 HEMP_POSTFIX_FUNC(hemp_element_parens_parse_params);
+
+HEMP_SYMBOL_FUNC(hemp_element_params_symbol);
+HEMP_VALUE_FUNC(hemp_element_params_value);
+HEMP_OUTPUT_FUNC(hemp_element_params_values);
+//HEMP_POSTFIX_FUNC(hemp_element_parens_parse_params);
+
 
 HEMP_SYMBOL_FUNC(hemp_element_list_symbol);
 HEMP_VALUE_FUNC(hemp_element_list_value);
@@ -521,6 +541,7 @@ HEMP_OUTPUT_FUNC(hemp_element_block_source);
 HEMP_OUTPUT_FUNC(hemp_element_block_text);
 HEMP_VALUE_FUNC(hemp_element_block_value);
 HEMP_OUTPUT_FUNC(hemp_element_block_values);
+
 
 
 /*--------------------------------------------------------------------------

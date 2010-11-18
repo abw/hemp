@@ -61,6 +61,7 @@ hemp_elements_create(
     );
     
     element->type       = type;
+    element->elements   = elements;
     element->token      = token;
     element->position   = position;
     element->length     = length;
