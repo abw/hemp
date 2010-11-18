@@ -3,6 +3,8 @@
 
 #include <hemp/core.h>
 #include <hemp/pool.h>
+#include <hemp/element.h>
+#include <hemp/frame.h>
 #include <hemp/type/hash.h>
 
 
@@ -13,6 +15,7 @@
 struct hemp_context_s {
     hemp_p          hemp;
     hemp_hash_p     vars;
+    hemp_frame_p    frame;
 /*  hemp_value_t    variables; */
     hemp_pool_p     list_pool;          /* tmp hack */
     hemp_pool_p     text_pool;          /* tmp hack */
@@ -30,6 +33,24 @@ hemp_text_p     hemp_context_tmp_text(hemp_context_p);
 hemp_text_p     hemp_context_tmp_text_size(hemp_context_p, hemp_size_t);
 hemp_bool_t     hemp_context_list_pool_cleaner(hemp_mem_p item);
 hemp_bool_t     hemp_context_text_pool_cleaner(hemp_mem_p item);
+
+HEMP_INLINE 
+hemp_frame_p
+    hemp_context_frame(
+        hemp_context_p context
+    );
+
+HEMP_INLINE 
+hemp_frame_p
+    hemp_context_enter(
+        hemp_context_p context,
+        hemp_element_p element
+    );
+
+HEMP_INLINE hemp_element_p
+    hemp_context_leave(
+        hemp_context_p context
+    );
 
 
 /*--------------------------------------------------------------------------

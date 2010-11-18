@@ -7,8 +7,6 @@ int main(
 ) {
     plan(9);
     test_context();
-
-//  fail("TMP: bailing out early for development purposes");
     return done();
 }
 
@@ -36,7 +34,10 @@ void test_context() {
         hemp_text_p text = hemp_context_tmp_text(context);
         hemp_text_append_string(text, "hello world!");
     }
-        
+
+    hemp_frame_p frame = hemp_context_enter(context, NULL);
+    ok( frame, "got frame" );
+
     hemp_context_free(context);
     hemp_free(hemp);
 }

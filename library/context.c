@@ -13,6 +13,7 @@ hemp_context_init(
         hemp_mem_fail("context");
 
     context->hemp      = hemp;
+    context->frame     = NULL;
     context->vars      = hemp_hash_init();
     context->list_pool = hemp_pool_init(
         sizeof(struct hemp_list_s), 8                 // TODO: soft-code this value
@@ -29,8 +30,11 @@ void
 hemp_context_free(
     hemp_context_p context
 ) {
-    // TODO: worry about cleanup
-//    hemp_debug("cleaning context at %p\n", context);
+//  hemp_debug("cleaning context at %p\n", context);
+
+    while (context->frame) {
+        hemp_context_leave(context);
+    }
 
     hemp_pool_each(context->text_pool, &hemp_context_text_pool_cleaner);
     hemp_pool_free(context->text_pool);
@@ -43,6 +47,63 @@ hemp_context_free(
 }
 
 
+HEMP_INLINE hemp_frame_p
+hemp_context_enter(
+    hemp_context_p context,
+    hemp_element_p element
+) {
+    hemp_debug_call("hemp_context_enter(%p, %p)\n", context, element);
+
+    /* Frame points at master context, parent frame and current element.
+     * Also has local vars hash which are chained to current context vars
+     * and then installed in the context as the new master set
+     */
+    hemp_frame_p frame  = hemp_frame_new();
+    frame->element      = element;
+    frame->context      = context;
+    frame->parent       = context->frame;
+    frame->vars->parent = context->vars;
+    context->frame      = frame;
+    context->vars       = frame->vars;
+
+    hemp_debug(
+        "entered new frame for %s: %p\n", 
+        element ? element->type->name : "NULL element", 
+        frame
+    );
+
+    return frame;
+}
+
+
+HEMP_INLINE hemp_frame_p
+hemp_context_frame(
+    hemp_context_p context
+) {
+    if (! context->frame)
+        hemp_fatal("No current frame in context");
+
+    return context->frame;
+}
+
+
+HEMP_INLINE hemp_element_p
+hemp_context_leave(
+    hemp_context_p context
+) {
+    hemp_debug_call("hemp_context_leave(%p, %p)\n", context, context->frame);
+    hemp_frame_p    frame   = hemp_context_frame(context);
+    hemp_element_p  element = frame->element;
+
+    /* restore pointer to parent frame and parent frame's vars */
+    context->frame = frame->parent;
+    context->vars  = frame->vars->parent;
+    hemp_frame_free(frame);
+    
+    return element;
+}
+
+
 hemp_text_p
 hemp_context_tmp_text(
     hemp_context_p context
@@ -52,6 +113,7 @@ hemp_context_tmp_text(
     hemp_text_init(text);
     return text;
 }
+
 
 hemp_text_p
 hemp_context_tmp_text_size(

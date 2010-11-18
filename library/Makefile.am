@@ -23,6 +23,7 @@ libhemp_la_SOURCES  =   action.c            \
                         error.c             \
                         factory.c           \
                         filesystem.c        \
+                        frame.c             \
                         grammar.c           \
                         hemp.c              \
                         language.c          \

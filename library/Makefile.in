@@ -87,23 +87,24 @@ am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-context.lo \
 	element/libhemp_la-quoted.lo element/libhemp_la-space.lo \
 	element/libhemp_la-text.lo element/libhemp_la-word.lo \
 	libhemp_la-error.lo libhemp_la-factory.lo \
-	libhemp_la-filesystem.lo libhemp_la-grammar.lo \
-	libhemp_la-hemp.lo libhemp_la-language.lo \
-	language/libhemp_la-hemp.lo language/libhemp_la-test.lo \
-	language/libhemp_la-tt3.lo libhemp_la-memory.lo \
-	libhemp_la-namespace.lo libhemp_la-params.lo \
-	libhemp_la-pool.lo libhemp_la-ptree.lo libhemp_la-scanner.lo \
-	libhemp_la-scheme.lo libhemp_la-scope.lo libhemp_la-slab.lo \
-	libhemp_la-slot.lo libhemp_la-source.lo libhemp_la-symbol.lo \
-	libhemp_la-tag.lo tag/libhemp_la-comment.lo \
-	tag/libhemp_la-control.lo tag/libhemp_la-inline.lo \
-	tag/libhemp_la-outline.lo libhemp_la-tagset.lo \
-	libhemp_la-template.lo libhemp_la-test.lo libhemp_la-type.lo \
-	type/libhemp_la-identity.lo type/libhemp_la-integer.lo \
-	type/libhemp_la-hash.lo type/libhemp_la-list.lo \
-	type/libhemp_la-number.lo type/libhemp_la-object.lo \
-	type/libhemp_la-string.lo type/libhemp_la-text.lo \
-	libhemp_la-utils.lo libhemp_la-value.lo libhemp_la-viewer.lo \
+	libhemp_la-filesystem.lo libhemp_la-frame.lo \
+	libhemp_la-grammar.lo libhemp_la-hemp.lo \
+	libhemp_la-language.lo language/libhemp_la-hemp.lo \
+	language/libhemp_la-test.lo language/libhemp_la-tt3.lo \
+	libhemp_la-memory.lo libhemp_la-namespace.lo \
+	libhemp_la-params.lo libhemp_la-pool.lo libhemp_la-ptree.lo \
+	libhemp_la-scanner.lo libhemp_la-scheme.lo libhemp_la-scope.lo \
+	libhemp_la-slab.lo libhemp_la-slot.lo libhemp_la-source.lo \
+	libhemp_la-symbol.lo libhemp_la-tag.lo \
+	tag/libhemp_la-comment.lo tag/libhemp_la-control.lo \
+	tag/libhemp_la-inline.lo tag/libhemp_la-outline.lo \
+	libhemp_la-tagset.lo libhemp_la-template.lo libhemp_la-test.lo \
+	libhemp_la-type.lo type/libhemp_la-identity.lo \
+	type/libhemp_la-integer.lo type/libhemp_la-hash.lo \
+	type/libhemp_la-list.lo type/libhemp_la-number.lo \
+	type/libhemp_la-object.lo type/libhemp_la-string.lo \
+	type/libhemp_la-text.lo libhemp_la-utils.lo \
+	libhemp_la-value.lo libhemp_la-viewer.lo \
 	viewer/libhemp_la-text.lo
 libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
 libhemp_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -279,6 +280,7 @@ libhemp_la_SOURCES = action.c            \
                         error.c             \
                         factory.c           \
                         filesystem.c        \
+                        frame.c             \
                         grammar.c           \
                         hemp.c              \
                         language.c          \
@@ -552,6 +554,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-error.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-factory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-filesystem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-frame.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-grammar.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-hemp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-language.Plo@am__quote@
@@ -790,6 +793,13 @@ libhemp_la-filesystem.lo: filesystem.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='filesystem.c' object='libhemp_la-filesystem.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-filesystem.lo `test -f 'filesystem.c' || echo '$(srcdir)/'`filesystem.c
+
+libhemp_la-frame.lo: frame.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-frame.lo -MD -MP -MF $(DEPDIR)/libhemp_la-frame.Tpo -c -o libhemp_la-frame.lo `test -f 'frame.c' || echo '$(srcdir)/'`frame.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-frame.Tpo $(DEPDIR)/libhemp_la-frame.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='frame.c' object='libhemp_la-frame.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-frame.lo `test -f 'frame.c' || echo '$(srcdir)/'`frame.c
 
 libhemp_la-grammar.lo: grammar.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-grammar.lo -MD -MP -MF $(DEPDIR)/libhemp_la-grammar.Tpo -c -o libhemp_la-grammar.lo `test -f 'grammar.c' || echo '$(srcdir)/'`grammar.c
