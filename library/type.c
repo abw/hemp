@@ -43,6 +43,7 @@ hemp_type_init(
     type->methods   = hemp_hash_init();
     type->value     = &hemp_value_self;
     type->values    = &hemp_value_values;
+    type->params    = &hemp_value_values;
     type->apply     = &hemp_value_self;
     type->text      = &hemp_value_not_text; 
     type->number    = &hemp_value_not_number;

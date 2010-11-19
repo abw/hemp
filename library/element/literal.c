@@ -8,6 +8,7 @@ HEMP_SYMBOL_FUNC(hemp_element_literal_symbol) {
     symbol->value   = &hemp_element_literal_value;
     symbol->values  = &hemp_element_value_values;
     symbol->fixed   = &hemp_element_fixed;
+    symbol->cleanup = &hemp_element_literal_clean;
     return symbol;
 }
 
@@ -71,4 +72,24 @@ HEMP_VALUE_FUNC(hemp_element_literal_value) {
     return hemp_element_literal_text(value, context, HempNothing);
 }
 
+
+void
+hemp_element_literal_clean(
+    hemp_element_p element
+) {
+    hemp_debug_call("hemp_element_literal_clean(%p)\n", element);
+
+    /* literal elements may be used as fixed values in which case they
+     * have memory allocated (via hemp_element_fixed()) which we must 
+     * clean up.
+     */
+
+    if (hemp_has_flag(element, HEMP_BE_ALLOCATED)) {
+        hemp_mem_free(
+            hemp_val_str( 
+                hemp_expr(element)
+            )
+        );
+    }
+}
 

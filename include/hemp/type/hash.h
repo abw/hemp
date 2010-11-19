@@ -156,10 +156,11 @@ void
     );
 
 // for testing
-void 
-    hemp_hash_print(
-        hemp_hash_p hash
-    );
+
+hemp_text_p
+hemp_hash_dump(
+    hemp_hash_p hash
+);
 
 
 /*--------------------------------------------------------------------------

@@ -66,11 +66,11 @@ hemp_context_enter(
     context->frame      = frame;
     context->vars       = frame->vars;
 
-    hemp_debug(
-        "entered new frame for %s: %p\n", 
-        element ? element->type->name : "NULL element", 
-        frame
-    );
+//  hemp_debug_msg(
+//      "entered new frame for %s: %p  vars: %p\n", 
+//      element ? element->type->name : "NULL element", 
+//      frame, context->vars
+//  );
 
     return frame;
 }
@@ -98,6 +98,13 @@ hemp_context_leave(
     /* restore pointer to parent frame and parent frame's vars */
     context->frame = frame->parent;
     context->vars  = frame->vars->parent;
+
+//  hemp_debug_msg(
+//      "left frame for %s: %p  vars: %p\n", 
+//      element ? element->type->name : "NULL element", 
+//      frame, context->vars
+//  );
+
     hemp_frame_free(frame);
     
     return element;

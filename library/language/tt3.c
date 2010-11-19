@@ -241,7 +241,7 @@ hemp_element_tt3_sub_symbol(
 
 
 HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix) {
-    hemp_debug("hemp_element_tt3_sub_prefix()\n");
+    hemp_debug_call("hemp_element_tt3_sub_prefix()\n");
 
     hemp_element_p self = *elemptr;
     hemp_symbol_p  type = self->type;
@@ -286,7 +286,7 @@ HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix) {
     }
 
     if (hemp_element_terminator_matches(*elemptr, type->end)) {
-        hemp_debug("found matching terminator for %s => %s\n", type->start, type->end);
+//      hemp_debug_msg("found matching terminator for %s => %s\n", type->start, type->end);
         hemp_go_next(elemptr);
     }
     else {
@@ -298,20 +298,35 @@ HEMP_PREFIX_FUNC(hemp_element_tt3_sub_prefix) {
 
 
 HEMP_VALUE_FUNC(hemp_element_tt3_sub_value) {
-    hemp_debug("hemp_element_sub_value()\n");
+    hemp_debug_call("hemp_element_tt3_sub_value()\n");
 
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    name    = hemp_lhs(element);
     hemp_value_t    block   = hemp_rhs(element);
+    hemp_size_t     length;
 
     if (hemp_val_elem(name)) {
         /* if the subroutine is named then we define it as a variable */
-        hemp_text_p text  = hemp_text_new();
-        hemp_obcall(name, text, context, hemp_text_val(text));
+        hemp_value_t    value   = hemp_call(name, value, context);
+        hemp_str_p      string;
+
+        if (hemp_is_string(value)) {
+            string = hemp_val_str(value);
+            length = strlen(string);
+        }
+        else {
+            // FIXME - this code isn't used at present, but may be as and 
+            // when we support subroutines with non-static names... but 
+            // on second thoughts, perhaps we don't need that anyway.
+            hemp_debug_msg("WARNING!  Memory leak!\n");
+            hemp_text_p text  = hemp_text_new();
+            hemp_obcall(name, text, context, hemp_text_val(text));
+            string = hemp_string_clone(text->string, "sub name");
+            length = text->length;
+        }
         hemp_hash_store_keylen(
-            context->vars, text->string, block, text->length
+            context->vars, string, block, length
         );
-        hemp_text_free(text);
     }
 
     return block;
@@ -319,7 +334,7 @@ HEMP_VALUE_FUNC(hemp_element_tt3_sub_value) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_tt3_sub_text) {
-    hemp_debug("hemp_element_tt3_sub_text()\n");
+    hemp_debug_call("hemp_element_tt3_sub_text()\n");
 
     /* call the value() function to define the sub, but generate no output */
     hemp_element_tt3_sub_value(value, context);
@@ -334,7 +349,7 @@ void
 hemp_element_tt3_sub_clean(
     hemp_element_p element
 ) {
-    hemp_debug("hemp_element_tt3_sub_clean(%p)\n", element);
+    hemp_debug_call("hemp_element_tt3_sub_clean(%p)\n", element);
 
     hemp_element_block_clean(
         hemp_rhs_element(element)

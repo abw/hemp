@@ -1,10 +1,21 @@
 -- test function call
 %% msg = 'Hello World'
-msg: [% msg('Badger') %]
+msg: [% msg('Badger', x=20, y=30) %]
 -- expect
 msg: Hello World
 
--- stop
+-- test quick hack
+[%  name = 'Nobody';    # until we get this working properly
+
+    sub msg; 
+        "Hello " name "!"; 
+    end; 
+    
+    msg( name = 'World' )
+%]
+-- expect --
+Hello World!
+
 
 -- test argless function with explicit call --
 [%  sub msg; 
@@ -16,25 +27,13 @@ msg: Hello World
 -- expect --
 Hello World!
 
+
 -- test argless named function with implicit call --
 [%  sub msg; 
         "Hello World!"; 
     end; 
     
     msg         # note the lack of parens
-%]
--- expect --
-Hello World!
-
-
--- test named function with an arg --
-[%  name = 'Nobody';    # until we get this working properly
-
-    sub msg(name, age, height); 
-        'Hello ' name '!';
-    end;
-
-    msg; #('World') 
 %]
 -- expect --
 Hello World!
@@ -48,6 +47,20 @@ Hello World!
 %]
 -- expect --
 Hello World!
+
+-- stop --
+-- test named function with an arg --
+[%  name = 'Nobody';    # until we get this working properly
+
+    sub msg(name, age, height); 
+        'Hello ' name '!';
+    end;
+
+    msg; #('World') 
+%]
+-- expect --
+Hello World!
+
 
 
 -- test anonymous function with an arg --

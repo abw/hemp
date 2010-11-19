@@ -239,6 +239,8 @@ hemp_hash_store_keylen(
         hash->size++;
     }
 
+//    hemp_debug("*** HASH STORE: %s\n", name);
+
     return slot;
 }
 
@@ -416,45 +418,6 @@ hemp_hash_each(
     }
 }
 
-
-/*
-hemp_string_t
-hemp_hash_as_text(hemp_hash_t table) {
-    hemp_size_t i, s = table->size;
-    hemp_hash_entry_t entry;
-    HEMP_VALUE  value;
-    HEMP_TEXT   text = hemp_text_new_size(4 + table->size * 32);
-    
-    hemp_text_append_string(text, "{ ");
-
-    for (i = 0; i < table->width; i++) {
-        entry = table->columns[i];
-        while (entry) {
-            value = entry->value;
-            hemp_text_append_string(text, entry->key);
-            hemp_text_append_string(text, ":");
-            hemp_text_append_text(text, (HEMP_TEXT) value->type->text(value));
-            entry = entry->next;
-            if (--s)
-                hemp_text_append_string(text, ", ");
-        }
-    }
-
-    hemp_text_append_string(text, " }");
-    return text;
-}
-
-void 
-hemp_hash_entry_print(hemp_hash_entry_t entry) {
-    printf("%s => %s\n", entry->key, HEMP_AS_STRING(entry->value));
-}
-    
-void 
-hemp_hash_print(hemp_hash_t table) {
-    hemp_hash_each(table, &hemp_hash_entry_print);
-}
-
-*/
 
 
 /*---------------------------------------------------------------------
@@ -660,4 +623,66 @@ HEMP_VALUE_FUNC(hemp_method_hash_length) {
 
 
 
+/*--------------------------------------------------------------------------
+ * debugging methods
+ *--------------------------------------------------------------------------*/
+
+hemp_text_p hemp_hash_dump_buffer = NULL;
+ 
+hemp_bool_t 
+hemp_hash_dump_item(
+    hemp_hash_p     hash,
+    hemp_pos_t      index,
+    hemp_slot_p     item
+) {
+//  hemp_debug("dump hash item #%d: %s\n", index, item->name);
+    hemp_text_append_string(hemp_hash_dump_buffer, "    ");
+    hemp_text_append_string(hemp_hash_dump_buffer, item->name);
+    hemp_text_append_string(hemp_hash_dump_buffer, " => ");
+    hemp_text_append_string(hemp_hash_dump_buffer, hemp_type_name(item->value));
+    hemp_text_append_string(hemp_hash_dump_buffer, ":");
+    
+    if (hemp_is_text(item->value)) {
+        hemp_text_append_text(hemp_hash_dump_buffer, hemp_val_text(item->value));
+    }
+    else if (hemp_is_string(item->value)) {
+        hemp_text_append_string(hemp_hash_dump_buffer, hemp_val_str(item->value));
+    }
+    else {
+        hemp_text_append_string(hemp_hash_dump_buffer, "???");
+    }
+    hemp_text_append_string(hemp_hash_dump_buffer, "\n");
+
+    // ARSE!  We can't call the text method without a context
+    // hemp_text(item->value, " => ");
+    
+    return HEMP_TRUE;
+}
+
+
+void 
+hemp_hash_dump_hash(
+    hemp_hash_p hash
+) {
+    char buffer[100];
+    sprintf(buffer, "[%p] ", hash);
+//  hemp_debug("dump hash: %p (%d items)\n", hash, hash->size);
+    hemp_text_append_string(hemp_hash_dump_buffer, buffer);
+    hemp_text_append_string(hemp_hash_dump_buffer, "{\n");
+    hemp_hash_each(hash, &hemp_hash_dump_item);
+    hemp_text_append_string(hemp_hash_dump_buffer, "}\n");
+    if (hash->parent) {
+        hemp_text_append_string(hemp_hash_dump_buffer, "\nPARENT => ");
+        hemp_hash_dump_hash(hash->parent);
+    }
+}
+
+hemp_text_p
+hemp_hash_dump(
+    hemp_hash_p hash
+) {
+    hemp_hash_dump_buffer = hemp_text_new();
+    hemp_hash_dump_hash(hash);
+    return hemp_hash_dump_buffer;
+}
 

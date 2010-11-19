@@ -107,8 +107,10 @@
 #define HEMP_BE_PREFIX      0x0100  /* element is a prefix operator         */
 #define HEMP_BE_INFIX       0x0200  /* element is an infix operator         */
 #define HEMP_BE_POSTFIX     0x0400  /* element is a postfix operator        */
+#define HEMP_BE_POSTBOUND   0x0800  /* no space before postfix operator     */
 #define HEMP_BE_NAMED       0x1000  /* anonymous vs named functions         */
 #define HEMP_BE_ARGS        0x2000  /* functions with arguments             */
+#define HEMP_BE_ALLOCATED   0x4000  /* element has memory allocated         */
 #define HEMP_BE_EOF         0x8000  /* special marker for end of file/text  */
 
 

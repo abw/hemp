@@ -34,7 +34,6 @@ int main(
         context
     );
 
-hemp_debug("MSG: %p\n", message);
     hemp_text_free(message);
     hemp_list_free(list);
     hemp_hash_free(hash);

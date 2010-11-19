@@ -14,7 +14,7 @@ hemp_value_t    hemp_perl_value(SV *);
 
 
 HEMP_TYPE_FUNC(hemp_type_perl_scalar);
-HEMP_VTEXT_FUNC(hemp_perl_scalar_text);
+HEMP_OUTPUT_FUNC(hemp_perl_scalar_text);
 HEMP_VALUE_FUNC(hemp_perl_scalar_number);
 HEMP_VALUE_FUNC(hemp_perl_scalar_integer);
 HEMP_VALUE_FUNC(hemp_perl_scalar_boolean);
@@ -32,7 +32,7 @@ HEMP_VALUE_FUNC(hemp_perl_hash_length);
 HEMP_FETCH_FUNC(hemp_perl_hash_fetch);
 
 HEMP_TYPE_FUNC(hemp_type_perl_code);
-HEMP_VTEXT_FUNC(hemp_perl_code_text);
+HEMP_OUTPUT_FUNC(hemp_perl_code_text);
 HEMP_VALUE_FUNC(hemp_perl_code_apply);
 
 HEMP_TYPE_FUNC(hemp_type_perl_object);

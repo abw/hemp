@@ -259,12 +259,12 @@ HEMP_STORE_FUNC(hemp_type_list_store) {
     }
 
     if (index >= list->capacity) {
-        hemp_debug("list index (%d) is larger than current capacity (%d)\n", index, list->capacity);
+//      hemp_debug_msg("list index (%d) is larger than current capacity (%d)\n", index, list->capacity);
         hemp_list_resize(list, index + 1);
     }
 
     while (index > list->length) {
-        hemp_debug("list index (%d) is larger than current size (%d)\n", index, list->length);
+//      hemp_debug_msg("list index (%d) is larger than current size (%d)\n", index, list->length);
         list->items[list->length++] = HempNothing;
     }
     list->items[index] = value;
@@ -272,7 +272,7 @@ HEMP_STORE_FUNC(hemp_type_list_store) {
     if (index >= list->length)
         list->length = index + 1;
     
-//  hemp_debug("new length is %d, capacity is %d\n", list->length, list->capacity);
+//  hemp_debug_msg("new length is %d, capacity is %d\n", list->length, list->capacity);
     return value;
 }
 

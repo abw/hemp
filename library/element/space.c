@@ -134,10 +134,44 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_space) {
 HEMP_SYMBOL_FUNC(hemp_element_space_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->prefix  = &hemp_element_next_prefix;
-    symbol->postfix = &hemp_element_next_postfix;
+    symbol->postfix = &hemp_element_space_postfix;
     symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
                     | HEMP_BE_HIDDEN;
     return symbol;
+}
+
+HEMP_POSTFIX_FUNC(hemp_element_space_postfix) {
+    hemp_debug_call("hemp_element_space_postfix()\n");
+
+    /* Some elements can appear in a postfix position, but must not have 
+     * any intervening space between them and the preceeding element.  e.g.
+     * the postfix parens in a function call must be touch the function name,
+     * "foo(10)" is OK, but "foo (10)" isn't.  These elements set the 
+     * HEMP_BE_POSTBOUND flag.  
+     * 
+     * This function is invoked when whitespace appears after an element 
+     * which accepts postfix operators.  In the usual case, the whitespace
+     * can be skipped and the postfix operator called on the next 
+     * non-whitespace element.  However, if that element is HEMP_BE_POSTBOUND
+     * then we rewind the element pointer back to the start and return the 
+     * lhs element, effectively declining the postfix parsing opportunity.
+     */
+    hemp_element_p head = *elemptr;
+    
+    /* skip the first (current) whitespace element */
+    hemp_go_next(elemptr);
+
+    /* skip any further whitespace elements */
+    hemp_skip_whitespace(elemptr);
+
+    if ((*elemptr)->type->postfix 
+    &&  hemp_not_flag((*elemptr)->type, HEMP_BE_POSTBOUND)) {
+//      hemp_debug_msg("%s element has a postfix operator\n", (*elemptr)->type->name);
+        return (*elemptr)->type->postfix(elemptr, scope, precedence, force, lhs);
+    }
+
+    *elemptr = head;
+    return lhs;
 }
 
 

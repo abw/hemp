@@ -196,6 +196,7 @@ HEMP_VALUE_FUNC(hemp_value_no_op) {
 
 
 HEMP_VALUE_FUNC(hemp_value_self) {
+    hemp_debug_call("hemp_value_self()\n");
     return value;
 }
 
@@ -352,6 +353,13 @@ void hemp_dump_value(
     hemp_value_t value
 ) {
     hemp_dump_u64(value.bits);
+    printf("TYPE: %s\n", hemp_type_name(value));
+    if (hemp_is_text(value)) {
+        printf("TEXT: %s\n", hemp_val_text(value)->string);
+    }
+    else if (hemp_is_string(value)) {
+        printf("TEXT: %s\n", hemp_val_str(value));
+    }
 }
 
 
@@ -363,7 +371,6 @@ void hemp_dump_u64(
     hemp_int_t n = 1;
     hemp_str_p col;
     printf("0x%016llx : ", value);
-    printf("DUMPING....\n");
 
     while (mask) {
         bit = value & mask;

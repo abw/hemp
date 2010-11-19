@@ -76,6 +76,7 @@ foo: 69
 -- expect
 hoo!: 4
 
+-- start --
 -- test list.n
 [% items.length %] list items: [% items.0 %] / [% items.1 %] / [% items.2 %]
 -- expect

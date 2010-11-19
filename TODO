@@ -120,3 +120,30 @@ An incomplete list of things TODO, in no particular order.
 
 * add signature() parse function, or perhaps a flag in parens to indicate 
   that it can provide a formal parameter list.
+  
+* element->next pointers could be broken by recent change to add 
+  synthesised elements on the end, after EOF.  But there are places that 
+  skip down the next chain and could possibly bypass EOF.
+
+* Add support for literal elements (other than word and number) being used
+  as fixed tokens (merge/refactor token, source, etc., at the same time).
+ 
+
+HOT STACK
+---------
+
+* Add context frames with args, vars, element, etc
+
+* Add context_enter(), context_leave() functions.
+
+* Have apply create new frame, evaluate params in frame.
+  Hmmm... can we just create a new frame and then evaluate the params as
+  values()?
+  
+  foo(10, 20, x=10, y=20)  
+  
+  (10, 20, x=10, y=20) -> values
+  10->values => 10
+  20->values => 20
+  (x=10)->values => ah... yields 10 because we're asking for a value not a 
+  param... oh well, 

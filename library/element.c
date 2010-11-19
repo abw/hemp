@@ -240,8 +240,15 @@ hemp_element_parse_exprs(
 HEMP_PREFIX_FUNC(hemp_element_fixed) {
     hemp_debug_call("hemp_element_fixed()\n");
     hemp_element_p element = *elemptr;
+    hemp_str_p     string  = hemp_string_extract(
+        element->token,
+        element->token + element->length
+    );
+
+//    hemp_debug("extracted word token string: %s\n", string);
+    hemp_set_flag(element, HEMP_BE_FIXED | HEMP_BE_ALLOCATED);
+    hemp_set_expr(element, hemp_str_val(string));
     hemp_go_next(elemptr);
-    hemp_set_flag(element, HEMP_BE_FIXED);
     return element;
 }
 
@@ -302,6 +309,15 @@ HEMP_OUTPUT_FUNC(hemp_element_not_text) {
 HEMP_OUTPUT_FUNC(hemp_element_not_values) {
     hemp_fatal(
         "%s element does not yield values\n", 
+        hemp_val_elem(value)->type->name
+    );
+    return HempNothing;
+}
+
+
+HEMP_OUTPUT_FUNC(hemp_element_not_params) {
+    hemp_fatal(
+        "%s element does not yield params\n", 
         hemp_val_elem(value)->type->name
     );
     return HempNothing;
@@ -390,6 +406,7 @@ HEMP_PREFIX_FUNC(hemp_element_next_prefix) {
 }
 
 
+/* this has been replaced by hemp_element_space_postfix */
 HEMP_POSTFIX_FUNC(hemp_element_next_postfix) {
     hemp_debug_call("hemp_element_next_postfix()\n");
 
@@ -537,6 +554,12 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right) {
  * evaluated multiple times.
  *--------------------------------------------------------------------------*/
 
+HEMP_VALUE_FUNC(hemp_element_value) {
+    hemp_debug_call("hemp_element_value()\n");
+    return hemp_obcall(value, value, context);
+}
+
+
 HEMP_OUTPUT_FUNC(hemp_element_value_text) {
     hemp_debug_call("hemp_element_value_text()\n");
     hemp_value_t result = hemp_obcall(value, value, context);
@@ -575,6 +598,7 @@ HEMP_VALUE_FUNC(hemp_element_value_compare) {
     hemp_value_t result = hemp_obcall(value, value, context);
     return hemp_to_compare(result, context);
 }
+
 
 HEMP_OUTPUT_FUNC(hemp_element_value_values) {
     hemp_debug_call("hemp_element_value_values()\n");

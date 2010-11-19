@@ -8,6 +8,7 @@
 #include <hemp/types.h>
 
 void hemp_debug(char *format, ...);
+void hemp_debug_at(hemp_str_p file, hemp_pos_t line, hemp_str_p format, ...);
 void hemp_debug_col(char *col, char *format, ...);
 void hemp_debug_on();
 void hemp_debug_off();
@@ -40,6 +41,8 @@ void hemp_debug_token(hemp_str_p type, hemp_str_p str, hemp_pos_t len);
 #if HEMP_DEBUG
     #define hemp_assert                       \
             assert
+    #define hemp_debug_msg(format, ...)       \
+            hemp_debug_at(__FILE__, __LINE__, format, ##__VA_ARGS__)
     #define hemp_debug_red(format, ...)       \
             hemp_debug_col(HEMP_ANSI_RED,     format, ##__VA_ARGS__)
     #define hemp_debug_green(format, ...)     \

@@ -9,7 +9,7 @@
 420
 
 -- test list with expressions
-[% [(2 + 2) (8 / 4) 0].text %]
+[% [ (2 + 2) (8 / 4) ((3 + 3 + 3) / 3 - 3) ].text %]
 -- expect
 420
 

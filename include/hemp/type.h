@@ -13,6 +13,7 @@
     hemp_hash_p         methods;    \
     hemp_output_f       text;       \
     hemp_output_f       values;     \
+    hemp_output_f       params;     \
     hemp_value_f        value;      \
     hemp_value_f        number;     \
     hemp_value_f        integer;    \

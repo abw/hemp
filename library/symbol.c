@@ -35,7 +35,8 @@ hemp_symbol_init(
     symbol->source  = &hemp_element_not_source;
     symbol->text    = &hemp_element_not_text;
     symbol->value   = &hemp_element_not_value;
-    symbol->values  = &hemp_element_not_values;
+//  symbol->values  = &hemp_element_not_values;
+//  symbol->params  = &hemp_element_not_params;
     symbol->number  = &hemp_element_not_number;
     symbol->integer = &hemp_element_not_integer;
     symbol->boolean = &hemp_element_not_boolean;
@@ -43,6 +44,14 @@ hemp_symbol_init(
     symbol->assign  = &hemp_element_not_assign;
     symbol->fixed   = &hemp_element_decline;
     symbol->text    = &hemp_element_literal_text;       // tmp
+    
+    // hmmm... can we set the same defaults as we do for value types?
+    symbol->values  = &hemp_value_values;
+    symbol->params  = &hemp_value_values;
+//  symbol->apply   = &hemp_value_self;
+//  symbol->apply   = &hemp_element_value_apply;
+    symbol->apply   = &hemp_element_value;
+
 
     /* clone the start token if there is one, and the end token if there 
      * is one and it's not the same as the start token

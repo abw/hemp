@@ -62,3 +62,23 @@ hemp_debug_token(
     hemp_debug_scan("[%s:%s]\n", type, buffer);
 } 
 
+
+void hemp_debug_at(
+    hemp_str_p file, 
+    hemp_pos_t line,
+    hemp_str_p format, 
+    ...
+) {
+#ifdef HEMP_DEBUG
+    if (hemp_debugging) {
+        va_list args;
+        va_start(args, format);
+        fprintf(
+            stderr, "%s%5ld %-20s %s", 
+            HEMP_ANSI_YELLOW, line, file, HEMP_ANSI_RESET
+        );
+        vfprintf(stderr, format, args);
+        va_end(args);
+    }
+#endif
+}

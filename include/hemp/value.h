@@ -260,18 +260,23 @@ extern const hemp_value_t HempAfter;
 #define hemp_is_after(v)        HEMP_IDENT_IS(v, HEMP_IDENT_AFTER)
 #define hemp_is_equal(v)        HEMP_IDENT_IS(v, HEMP_IDENT_EQUAL)
 
-
+/* hgtype:  hemp global type, 
+ * obtype: value object type (value contains pointer to object with ->type)
+ * pobtype: pointer to object type (ditto)
+ */
 #define hemp_hgtype(v)          (hemp_global_types[HEMP_TYPE_ID(v)])
 #define hemp_obtype(v)          (((hemp_object_p) HEMP_POINTER(v))->type)
+#define hemp_pobtype(p)         (p->type)
 #define hemp_type(v)            (hemp_is_object(v) ? hemp_obtype(v) : hemp_hgtype(v))
+#define hemp_obcall(v,n,...)    (hemp_obtype(v)->n(v,__VA_ARGS__))
+#define hemp_pobcall(v,n,...)   (hemp_pobtype(v)->n(v,__VA_ARGS__))
 #define hemp_tfunc(v,n)         (hemp_type(v)->n)
-#define hemp_call(v,n,c)        (hemp_tfunc(v,n)(v,c))
+#define hemp_call(v,n,...)      (hemp_tfunc(v,n)(v,__VA_ARGS__))
 #define hemp_dot(v,c,k)         (hemp_tfunc(v,dot)(v,c,k))
 #define hemp_text(v,c,o)        (hemp_tfunc(v,text)(v,c,o))
 #define hemp_values(v,c,o)      (hemp_tfunc(v,values)(v,c,o))
 #define hemp_fetch(v,c,k)       (hemp_tfunc(v,fetch)(v,c,k))
 #define hemp_store(v,c,k,i)     (hemp_tfunc(v,store)(v,c,k,i))
-#define hemp_obcall(v,n,...)    (hemp_obtype(v)->n(v,__VA_ARGS__))
 #define hemp_type_name(v)       (hemp_type(v)->name)
 #define hemp_type_method(t,m)   ((hemp_value_f) hemp_hash_fetch_pointer(t->methods, m))
 #define hemp_type_extend(t,m,f) hemp_hash_store_pointer(t->methods, m, f)
