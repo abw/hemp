@@ -39,13 +39,13 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_number) {
 
 HEMP_SYMBOL_FUNC(hemp_element_number_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
-    symbol->prefix  = &hemp_element_literal_prefix;
-    symbol->value   = &hemp_element_number_value;
-    symbol->number  = &hemp_element_number_value;
-    symbol->integer = &hemp_element_value_integer;
-    symbol->boolean = &hemp_element_value_boolean;
-    symbol->compare = &hemp_element_value_compare;
-    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED;
+    symbol->parse_prefix    = &hemp_element_literal_prefix;
+    symbol->value           = &hemp_element_number_value;
+    symbol->number          = &hemp_element_number_value;
+    symbol->integer         = &hemp_element_value_integer;
+    symbol->boolean         = &hemp_element_value_boolean;
+    symbol->compare         = &hemp_element_value_compare;
+    symbol->flags           = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }
 
@@ -131,9 +131,9 @@ HEMP_VALUE_FUNC(hemp_element_number_autodec_value) {
 HEMP_SYMBOL_FUNC(hemp_element_number_plus_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     /* also works as prefix operator */
-    symbol->prefix = &hemp_element_parse_prefix;
-    symbol->value  =
-    symbol->number = &hemp_element_number_plus_value;
+    symbol->parse_prefix    = &hemp_element_parse_prefix;
+    symbol->value           =
+    symbol->number          = &hemp_element_number_plus_value;
     return symbol;
 }
 
@@ -181,9 +181,9 @@ HEMP_VALUE_FUNC(hemp_element_number_plus_value) {
 HEMP_SYMBOL_FUNC(hemp_element_number_minus_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     /* also works as prefix operator */
-    symbol->prefix = &hemp_element_parse_prefix;
-    symbol->value  =
-    symbol->number = &hemp_element_number_minus_value;
+    symbol->parse_prefix    = &hemp_element_parse_prefix;
+    symbol->value           =
+    symbol->number          = &hemp_element_number_minus_value;
     return symbol;
 }
 

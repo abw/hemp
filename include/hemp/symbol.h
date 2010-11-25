@@ -31,9 +31,9 @@ struct hemp_symbol_s {
     hemp_eclean_f       cleanup;
 
     /* parsing methods */
-    hemp_prefix_f       prefix;             // TODO: add 'parse_' prefix
-    hemp_postfix_f      postfix;
-    hemp_prefix_f       fixed;
+    hemp_prefix_f       parse_prefix;             // TODO: add 'parse_' prefix
+    hemp_postfix_f      parse_postfix;
+    hemp_prefix_f       parse_fixed;
     hemp_postfix_f      parse_params;
     hemp_compile_f      lvalue_param;
 

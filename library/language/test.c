@@ -96,14 +96,14 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_test) {
 
 HEMP_SYMBOL_FUNC(hemp_element_test_test_symbol) {
     hemp_debug("test.test symbol: %s\n", symbol->name);
-    symbol->scanner    = &hemp_element_test_test_scanner;
-    symbol->cleanup    = &hemp_element_test_test_clean,
-    symbol->value      = &hemp_element_test_test_value,
-    symbol->text       = &hemp_element_value_text,
-    symbol->token      = &hemp_element_literal_token;
-    symbol->source     = &hemp_element_literal_source;
-    symbol->prefix     = &hemp_element_test_test_prefix;
-    symbol->flags      = HEMP_BE_SOURCE | HEMP_BE_FIXED;
+    symbol->scanner         = &hemp_element_test_test_scanner;
+    symbol->cleanup         = &hemp_element_test_test_clean,
+    symbol->value           = &hemp_element_test_test_value,
+    symbol->text            = &hemp_element_value_text,
+    symbol->token           = &hemp_element_literal_token;
+    symbol->source          = &hemp_element_literal_source;
+    symbol->parse_prefix    = &hemp_element_test_test_prefix;
+    symbol->flags           = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }
 
@@ -187,12 +187,12 @@ hemp_element_test_expect_symbol(
     hemp_symbol_p symbol
 ) {
     hemp_debug("test.test symbol: %s\n", symbol->name);
-    symbol->scanner    = &hemp_element_test_expect_scanner;
-    symbol->cleanup    = &hemp_element_test_expect_clean,
-    symbol->token      = &hemp_element_literal_token;
-    symbol->source     = &hemp_element_literal_source;
-    symbol->prefix     = &hemp_element_test_expect_prefix;
-    symbol->flags      = HEMP_BE_SOURCE | HEMP_BE_FIXED;
+    symbol->scanner         = &hemp_element_test_expect_scanner;
+    symbol->cleanup         = &hemp_element_test_expect_clean,
+    symbol->token           = &hemp_element_literal_token;
+    symbol->source          = &hemp_element_literal_source;
+    symbol->parse_prefix    = &hemp_element_test_expect_prefix;
+    symbol->flags           = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }
 

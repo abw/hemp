@@ -1,5 +1,19 @@
 #include <hemp/context.h>
 
+// local syntactic sugar macros for lazy programmers
+
+//#define hemp_context_init_pool(type)            \
+//    context->##type##_pool = hemp_pool_init(      \
+//        sizeof(struct hemp_##type##_s),         \
+//        HEMP_TMP_POOL_SIZE                      \
+//    );                                          \
+//    context->##type##_pool->cleaner = &hemp_context_##type##_pool_cleaner;
+    
+
+/*--------------------------------------------------------------------------
+ * 
+ *--------------------------------------------------------------------------*/
+
 
 hemp_context_p
 hemp_context_init(
@@ -15,11 +29,20 @@ hemp_context_init(
     context->hemp      = hemp;
     context->frame     = NULL;
     context->vars      = hemp_hash_init();
-    context->list_pool = hemp_pool_init(
-        sizeof(struct hemp_list_s), 8                 // TODO: soft-code this value
+    context->text_pool = hemp_pool_new(
+        sizeof(struct hemp_text_s),
+        HEMP_TMP_POOL_SIZE,
+        &hemp_context_text_pool_cleaner
     );
-    context->text_pool = hemp_pool_init(
-        sizeof(struct hemp_text_s), 8                 // TODO: soft-code this value
+    context->list_pool = hemp_pool_new(
+        sizeof(struct hemp_list_s), 
+        HEMP_TMP_POOL_SIZE,
+        &hemp_context_list_pool_cleaner
+    );
+    context->code_pool = hemp_pool_new(
+        sizeof(struct hemp_code_s),
+        HEMP_TMP_POOL_SIZE,
+        &hemp_context_code_pool_cleaner
     );
 
     return context;
@@ -36,11 +59,9 @@ hemp_context_free(
         hemp_context_leave(context);
     }
 
-    hemp_pool_each(context->text_pool, &hemp_context_text_pool_cleaner);
     hemp_pool_free(context->text_pool);
-
-    hemp_pool_each(context->list_pool, &hemp_context_list_pool_cleaner);
     hemp_pool_free(context->list_pool);
+    hemp_pool_free(context->code_pool);
 
     hemp_hash_free(context->vars);
     hemp_mem_free(context);
@@ -128,8 +149,7 @@ hemp_context_tmp_text_size(
     hemp_size_t    size
 ) {
     hemp_text_p text = (hemp_text_p) hemp_pool_take(context->text_pool);
-    hemp_text_init_size(text, size);
-    return text;
+    return hemp_text_init_size(text, size);
 }
 
 hemp_list_p
@@ -138,8 +158,16 @@ hemp_context_tmp_list(
 ) {
     hemp_list_p list = (hemp_list_p) hemp_pool_take(context->list_pool);
 //  hemp_debug("*** got new list pointer at %p\n", list);
-    hemp_list_init(list);
-    return list;
+    return hemp_list_init(list);
+}
+
+hemp_code_p
+hemp_context_tmp_code(
+    hemp_context_p context
+) {
+    hemp_code_p code = (hemp_code_p) hemp_pool_take(context->code_pool);
+    hemp_debug_msg("*** got new code pointer at %p\n", code);
+    return hemp_code_init(code);
 }
 
 
@@ -158,6 +186,16 @@ hemp_context_list_pool_cleaner(
 ) {
 //    hemp_debug_call("hemp_context_list_pool_cleaner(%p)\n", item);
     hemp_list_release((hemp_list_p) item);
+    return HEMP_TRUE;
+}
+
+
+hemp_bool_t
+hemp_context_code_pool_cleaner(
+    hemp_mem_p item
+) {
+    hemp_debug_msg("hemp_context_code_pool_cleaner(%p)\n", item);
+    hemp_code_release((hemp_code_p) item);
     return HEMP_TRUE;
 }
 

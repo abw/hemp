@@ -16,7 +16,7 @@ hemp_symbol_p HempSymbolEOF       = NULL;
 
 HEMP_SYMBOL_FUNC(hemp_element_punctuation_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
-    symbol->fixed = hemp_element_decline;
+    symbol->parse_fixed = NULL; // hemp_element_decline;
     symbol->flags = HEMP_BE_SOURCE | HEMP_BE_FIXED | HEMP_BE_HIDDEN;
     return symbol;
 }
@@ -133,10 +133,10 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_space) {
 
 HEMP_SYMBOL_FUNC(hemp_element_space_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
-    symbol->prefix  = &hemp_element_next_prefix;
-    symbol->postfix = &hemp_element_space_postfix;
-    symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
-                    | HEMP_BE_HIDDEN;
+    symbol->parse_prefix    = &hemp_element_next_prefix;
+    symbol->parse_postfix   = &hemp_element_space_postfix;
+    symbol->flags           = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
+                              | HEMP_BE_HIDDEN;
     return symbol;
 }
 
@@ -164,10 +164,10 @@ HEMP_POSTFIX_FUNC(hemp_element_space_postfix) {
     /* skip any further whitespace elements */
     hemp_skip_whitespace(elemptr);
 
-    if ((*elemptr)->type->postfix 
+    if ((*elemptr)->type->parse_postfix 
     &&  hemp_not_flag((*elemptr)->type, HEMP_BE_POSTBOUND)) {
 //      hemp_debug_msg("%s element has a postfix operator\n", (*elemptr)->type->name);
-        return (*elemptr)->type->postfix(elemptr, scope, precedence, force, lhs);
+        return (*elemptr)->type->parse_postfix(elemptr, scope, precedence, force, lhs);
     }
 
     *elemptr = head;
@@ -190,9 +190,9 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_start) {
 
 HEMP_SYMBOL_FUNC(hemp_element_tag_start_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
-    symbol->prefix  = &hemp_element_next_prefix;
-    symbol->flags   = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
-                    | HEMP_BE_HIDDEN | HEMP_BE_DELIMITER;
+    symbol->parse_prefix = &hemp_element_next_prefix;
+    symbol->flags        = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
+                         | HEMP_BE_HIDDEN | HEMP_BE_DELIMITER;
     return symbol;
 }
 

@@ -3,7 +3,6 @@
 
 hemp_symbol_p HempSymbolBlock = NULL;
 
-
 hemp_symbol_p
 hemp_symbol_block() {
     hemp_debug_call("hemp_symbol_block()\n");
@@ -13,6 +12,10 @@ hemp_symbol_block() {
     );
 }
 
+
+/*--------------------------------------------------------------------------
+ * block
+ *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_block_symbol) {
     symbol->source     = &hemp_element_block_source;
@@ -49,7 +52,7 @@ HEMP_OUTPUT_FUNC(hemp_element_block_source) {
 HEMP_OUTPUT_FUNC(hemp_element_block_text) {
     hemp_debug_call("hemp_element_block_text()\n");
     hemp_element_p  element = hemp_val_elem(value);
-    hemp_list_p     exprs   = hemp_block_exprs(element);
+    hemp_list_p     exprs   = hemp_block_exprs_list(element);
     hemp_value_t    item;
     hemp_size_t     n;
 
@@ -90,7 +93,7 @@ HEMP_VALUE_FUNC(hemp_element_block_value) {
 HEMP_OUTPUT_FUNC(hemp_element_block_values) {
     hemp_debug_call("hemp_element_block_values()\n");
     hemp_element_p  element = hemp_val_elem(value);
-    hemp_list_p     exprs   = element->args.block.exprs;
+    hemp_list_p     exprs   = hemp_block_exprs_list(element);
     hemp_value_t    item;
     hemp_size_t     n;
     hemp_list_p     values;
@@ -111,7 +114,7 @@ HEMP_OUTPUT_FUNC(hemp_element_block_values) {
 HEMP_OUTPUT_FUNC(hemp_element_block_params) {
     hemp_debug_call("hemp_element_block_params()\n");
     hemp_element_p  element = hemp_val_elem(value);
-    hemp_list_p     exprs   = element->args.block.exprs;
+    hemp_list_p     exprs   = hemp_block_exprs_list(element);
     hemp_value_t    item;
     hemp_size_t     n;
     hemp_list_p     values;
@@ -133,7 +136,7 @@ hemp_element_block_clean(
 ) {
     hemp_debug_call("hemp_element_block_clean(%p)\n", element);
 
-    hemp_list_p exprs = hemp_block_exprs(element);
+    hemp_list_p exprs = hemp_block_exprs_list(element);
 
     if (exprs)
         hemp_list_free(exprs);
@@ -149,5 +152,23 @@ hemp_element_block_clean(
     // TODO: allocate block elements via the elements object so that it 
     // can memory manage them en masse.
     hemp_element_free(element);
+}
+
+
+
+/*--------------------------------------------------------------------------
+ * function
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL_FUNC(hemp_element_function_symbol) {
+    hemp_debug_call("hemp_element_function_symbol()\n");
+//  symbol->source      = &hemp_element_function_source;
+    symbol->value       = &hemp_value_self;
+//    symbol->text        = &hemp_element_function_text;
+//    symbol->apply       = &hemp_element_function_apply;
+//    symbol->values      = &hemp_element_value_values;
+//    symbol->cleanup     = &hemp_element_function_clean;
+//  symbol->flags       = HEMP_BE_SYNTHETIC;
+    return symbol;
 }
 

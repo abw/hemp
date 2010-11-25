@@ -9,29 +9,30 @@
 
 hemp_pool_p
 hemp_pool_init(
-    hemp_size_t size, 
-    hemp_size_t capacity
+    hemp_pool_p      pool, 
+    hemp_size_t      size, 
+    hemp_size_t      capacity,
+    hemp_pool_each_f cleaner
 ) {
-    hemp_pool_p pool = (hemp_pool_p) hemp_mem_alloc(
-        sizeof(struct hemp_pool_s)
-    );
-
-    if (! pool)
-        hemp_mem_fail("pool");
+    hemp_pool_allocate(pool);
 
     pool->slab     = hemp_slab_init(size * capacity);
     pool->next     = pool->slab->data;
     pool->size     = size;
     pool->capacity = capacity;
     pool->used     = 0;
+    pool->cleaner  = cleaner;
 
-//  hemp_debug_mem("pool slab data is from %p to %p\n", pool->next, pool->next + size * capacity);
-    /*
+/*
     hemp_debug_mem(
         "Allocated pool buffer of %d x %d = %d bytes\n", 
         size, capacity, size * capacity
-    );]
-    */
+    );
+    hemp_debug_mem(
+        "pool slab data is from %p to %p\n", 
+        pool->next, pool->next + size * capacity
+    );
+*/
     
     return pool;
 }
@@ -48,7 +49,7 @@ hemp_pool_take(
     if (pool->used == pool->capacity)
         hemp_pool_grow(pool);
 
-    // debug_cyan("Returning pool item %d at %p\n", pool->used, pool->next);
+//  hemp_debug_mem("Returning pool item %d at %p\n", pool->used, pool->next);
 
     value = pool->next;
     pool->next += pool->size;
@@ -61,9 +62,10 @@ void
 hemp_pool_grow(
     hemp_pool_p pool
 ) {
-    // create a new slab as large as our current capacity (so the pool size
-    // doubles on each growth) and insert it at the head of the slab list
-//    hemp_debug_mem("growing pool at %p with slab at %p\n", pool, pool->slab);
+//  hemp_debug_mem("growing pool at %p with slab at %p\n", pool, pool->slab);
+    /* create a new slab as large as our current capacity (so the pool size
+     * doubles on each growth) and insert it at the head of the slab list
+     */
     hemp_slab_p slab = hemp_slab_init(pool->size * pool->capacity);
     slab->next = pool->slab;
     pool->slab = slab;
@@ -77,13 +79,17 @@ void
 hemp_pool_free(
     hemp_pool_p pool
 ) {
-//    hemp_debug_mem("Releasing pool at %p with slab at %p\n", pool, pool->slab);
+//  hemp_debug_mem("Releasing pool at %p with slab at %p\n", pool, pool->slab);
+
+    if (pool->cleaner)
+        hemp_pool_each(pool, pool->cleaner);
 
     if (pool->slab)
         hemp_slab_free(pool->slab);
 
     hemp_mem_free(pool);
 }
+
 
 void
 hemp_pool_each(
@@ -97,9 +103,8 @@ hemp_pool_each(
     while (slab) {
         item = slab->data;
         size = slab->size / pool->size;
-//        hemp_debug("visiting slab (size: %d) at %p\n", size, slab); 
         while (size-- && item != pool->next) {
-//            hemp_debug("visiting item at %p\n", item);
+            /* call function, if it returns true then continue */
             if (! func(item)) {
                 return;
             }

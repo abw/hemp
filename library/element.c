@@ -173,7 +173,7 @@ HEMP_PREFIX_FUNC(hemp_element_parse_block) {
             element->position,
             element->length
         );
-        hemp_set_block_exprs(block, list);
+        hemp_set_block_exprs_list(block, list);
     }
 
     return block;
@@ -370,6 +370,7 @@ HEMP_VALUE_FUNC(hemp_element_not_compare) {
 
 
 HEMP_OPERATE_FUNC(hemp_element_not_assign) {
+    hemp_debug_msg("Throwing not_assign error....\n");
     hemp_fatal(
         "%s element cannot be assigned to\n", 
         hemp_val_elem(value)->type->name

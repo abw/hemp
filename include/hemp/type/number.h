@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include "hemp/type.h"
 
+/* don't think this is being used... let's see
+
 struct hemp_type_number {
     HEMP_TYPE_BASE
     hemp_truth_fn   truth;
@@ -21,6 +23,8 @@ struct hemp_type_number {
     hemp_binary_fn  divmod;
     hemp_ternary_fn power;
 };
+
+*/
 
 #endif /* HEMP_TYPE_NUMBER_H */
 

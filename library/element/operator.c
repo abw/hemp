@@ -27,7 +27,7 @@ HEMP_SYMBOL_FUNC(hemp_element_operator_symbol) {
 
 HEMP_SYMBOL_FUNC(hemp_element_prefix_symbol) {
     hemp_element_operator_symbol(hemp, symbol);
-    symbol->prefix  = &hemp_element_parse_prefix;
+    symbol->parse_prefix  = &hemp_element_parse_prefix;
     symbol->source  = &hemp_element_prefix_source;
     return symbol;
 }
@@ -35,39 +35,39 @@ HEMP_SYMBOL_FUNC(hemp_element_prefix_symbol) {
 
 HEMP_SYMBOL_FUNC(hemp_element_postfix_symbol) {
     hemp_element_operator_symbol(hemp, symbol);
-    symbol->postfix = &hemp_element_parse_postfix;
-    symbol->source  = &hemp_element_postfix_source;
+    symbol->parse_postfix   = &hemp_element_parse_postfix;
+    symbol->source          = &hemp_element_postfix_source;
     return symbol;
 }
 
 
 HEMP_SYMBOL_FUNC(hemp_element_prepostfix_symbol) {
     hemp_element_operator_symbol(hemp, symbol);
-    symbol->prefix  = &hemp_element_parse_prefix;
-    symbol->postfix = &hemp_element_parse_postfix;
-    symbol->source  = &hemp_element_prepostfix_source;
+    symbol->parse_prefix  = &hemp_element_parse_prefix;
+    symbol->parse_postfix = &hemp_element_parse_postfix;
+    symbol->source        = &hemp_element_prepostfix_source;
     return symbol;
 }
 
 
 HEMP_SYMBOL_FUNC(hemp_element_infix_symbol) {
     hemp_element_operator_symbol(hemp, symbol);
-    symbol->postfix = &hemp_element_parse_infix_left;   /* hmmm.... should be non-assoc */
-    symbol->source  = &hemp_element_infix_source;
-    symbol->flags  |= HEMP_BE_INFIX;
+    symbol->parse_postfix = &hemp_element_parse_infix_left;   /* hmmm.... should be non-assoc */
+    symbol->source        = &hemp_element_infix_source;
+    symbol->flags        |= HEMP_BE_INFIX;
     return symbol;
 }
 
 
 HEMP_SYMBOL_FUNC(hemp_element_infix_left_symbol) {
     hemp_element_infix_symbol(hemp, symbol);
-    symbol->postfix = &hemp_element_parse_infix_left;
+    symbol->parse_postfix = &hemp_element_parse_infix_left;
     return symbol;
 }
 
 HEMP_SYMBOL_FUNC(hemp_element_infix_right_symbol) {
     hemp_element_infix_symbol(hemp, symbol);
-    symbol->postfix = &hemp_element_parse_infix_right;
+    symbol->parse_postfix = &hemp_element_parse_infix_right;
     return symbol;
 }
 

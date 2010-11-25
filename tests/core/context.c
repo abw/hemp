@@ -30,8 +30,12 @@ void test_context() {
 
     int n;
     for (n = 0; n < 10; n++) {
+        /* create a bunch of temporary items - the context should 
+         * automagically clean these up when it is free.
+         */
         hemp_list_p list = hemp_context_tmp_list(context);
         hemp_text_p text = hemp_context_tmp_text(context);
+        hemp_code_p code = hemp_context_tmp_code(context);
         hemp_text_append_string(text, "hello world!");
     }
 

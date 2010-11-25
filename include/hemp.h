@@ -33,6 +33,7 @@ extern "C" {
 #include <hemp/type/text.h>
 #include <hemp/type/list.h>
 #include <hemp/type/hash.h>
+#include <hemp/type/code.h>
 #include <hemp/language/test.h>
 
     

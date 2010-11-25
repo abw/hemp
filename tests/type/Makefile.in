@@ -33,7 +33,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = text$(EXEEXT) list$(EXEEXT) hash$(EXEEXT)
+check_PROGRAMS = code$(EXEEXT) text$(EXEEXT) list$(EXEEXT) \
+	hash$(EXEEXT)
 subdir = tests/type
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -51,6 +52,10 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/include/hemp/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
+code_SOURCES = code.c
+code_OBJECTS = code.$(OBJEXT)
+code_LDADD = $(LDADD)
+code_DEPENDENCIES = ../../library/libhemp.la
 hash_SOURCES = hash.c
 hash_OBJECTS = hash.$(OBJEXT)
 hash_LDADD = $(LDADD)
@@ -76,8 +81,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = hash.c list.c text.c
-DIST_SOURCES = hash.c list.c text.c
+SOURCES = code.c hash.c list.c text.c
+DIST_SOURCES = code.c hash.c list.c text.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -271,6 +276,9 @@ clean-checkPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
+code$(EXEEXT): $(code_OBJECTS) $(code_DEPENDENCIES) 
+	@rm -f code$(EXEEXT)
+	$(LINK) $(code_OBJECTS) $(code_LDADD) $(LIBS)
 hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES) 
 	@rm -f hash$(EXEEXT)
 	$(LINK) $(hash_OBJECTS) $(hash_LDADD) $(LIBS)
@@ -287,6 +295,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/code.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Po@am__quote@

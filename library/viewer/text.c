@@ -22,7 +22,7 @@ HEMP_VIEWER_FUNC(hemp_viewer_text_init) {
 
 HEMP_VIEW_FUNC(hemp_viewer_text_view_hemp_block) {
     hemp_debug_call("hemp_viewer_text_view_hemp_block()\n");
-    hemp_list_p     exprs = element->args.block.exprs;
+    hemp_list_p     exprs = hemp_block_exprs_list(element);
     hemp_element_p  expr;
     hemp_size_t     n;
 

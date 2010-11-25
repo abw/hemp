@@ -6,15 +6,15 @@
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_squote_symbol) {
-    symbol->flags      = HEMP_BE_FIXED;
-    symbol->scanner    = &hemp_element_squote_scanner;
-    symbol->cleanup    = &hemp_element_text_clean;
-    symbol->prefix     = &hemp_element_literal_prefix;
-    symbol->token      = &hemp_element_literal_token;
-    symbol->source     = &hemp_element_literal_source;
-    symbol->text       = &hemp_element_quoted_text;
-    symbol->value      = &hemp_element_quoted_value;
-    symbol->values     = &hemp_element_value_values;
+    symbol->flags           = HEMP_BE_FIXED;
+    symbol->scanner         = &hemp_element_squote_scanner;
+    symbol->cleanup         = &hemp_element_text_clean;
+    symbol->parse_prefix    = &hemp_element_literal_prefix;
+    symbol->token           = &hemp_element_literal_token;
+    symbol->source          = &hemp_element_literal_source;
+    symbol->text            = &hemp_element_quoted_text;
+    symbol->value           = &hemp_element_quoted_value;
+    symbol->values          = &hemp_element_value_values;
     return symbol;
 }
 
@@ -87,14 +87,14 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_dquote_symbol) {
-    symbol->scanner    = &hemp_element_dquote_scanner;
-    symbol->cleanup    = &hemp_element_text_clean;
-    symbol->prefix     = &hemp_element_literal_prefix;
-    symbol->token      = &hemp_element_literal_token;
-    symbol->source     = &hemp_element_literal_source;
-    symbol->text       = &hemp_element_quoted_text;
-    symbol->value      = &hemp_element_quoted_value;
-    symbol->values     = &hemp_element_value_values;
+    symbol->scanner         = &hemp_element_dquote_scanner;
+    symbol->cleanup         = &hemp_element_text_clean;
+    symbol->parse_prefix    = &hemp_element_literal_prefix;
+    symbol->token           = &hemp_element_literal_token;
+    symbol->source          = &hemp_element_literal_source;
+    symbol->text            = &hemp_element_quoted_text;
+    symbol->value           = &hemp_element_quoted_value;
+    symbol->values          = &hemp_element_value_values;
     return symbol;
 }
 

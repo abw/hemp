@@ -51,6 +51,7 @@ libhemp_la_SOURCES  =   action.c            \
                         template.c          \
                         test.c              \
                         type.c              \
+                        type/code.c         \
                         type/identity.c     \
                         type/integer.c      \
                         type/hash.c         \

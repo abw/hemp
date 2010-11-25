@@ -16,9 +16,9 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_word) {
 HEMP_SYMBOL_FUNC(hemp_element_word_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     /* these aren't right, but they'll do for now, for testing purposes */
-    symbol->prefix   = &hemp_element_word_prefix;
-    symbol->fixed    = &hemp_element_fixed;
-//    symbol->fixed    = &hemp_element_word_fixed;
+    symbol->parse_prefix    = &hemp_element_word_prefix;
+    symbol->parse_fixed     = &hemp_element_fixed;
+//    symbol->parse_fixed    = &hemp_element_word_fixed;
     symbol->value    = &hemp_element_word_value;
     symbol->text     = &hemp_element_value_text;
     symbol->number   = &hemp_element_value_number;
@@ -76,8 +76,17 @@ HEMP_OPERATE_FUNC(hemp_element_word_assign) {
     hemp_debug_call("hemp_element_word_assign()\n");
     hemp_element_p  element = hemp_val_elem(value);
     hemp_value_t    word    = hemp_expr(element);
+
+    /* The value we're passed as an operand is an element that should be
+     * evaluated to yield a value.  Not sure if this is the best approach,
+     * but it allows LHS expressions that are "lazy" (i.e. have parens on
+     * the end) to delay evaluation and instead store a reference to the 
+     * RHS element that can be evaluated later.
+     */
+
     hemp_hash_store(
-        context->vars, hemp_val_str(word), operand
+        context->vars, hemp_val_str(word), 
+        hemp_call(operand, value, context)
     );
     return operand;
 }

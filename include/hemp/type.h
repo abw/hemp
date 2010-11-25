@@ -26,8 +26,6 @@
     hemp_fetch_f        dot;        \
     hemp_operate_f      assign;
 
-//    + assign
-
 //    hemp_output_f       list;       \       / superfluous?
 //    hemp_method_f   method;     /* TODO: method auto-generator */
 

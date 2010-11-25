@@ -2,13 +2,13 @@
 
 
 HEMP_SYMBOL_FUNC(hemp_element_literal_symbol) {
-    symbol->token   = &hemp_element_literal_token;
-    symbol->source  = &hemp_element_literal_source;
-    symbol->text    = &hemp_element_literal_text;
-    symbol->value   = &hemp_element_literal_value;
-    symbol->values  = &hemp_element_value_values;
-    symbol->fixed   = &hemp_element_fixed;
-    symbol->cleanup = &hemp_element_literal_clean;
+    symbol->token       = &hemp_element_literal_token;
+    symbol->source      = &hemp_element_literal_source;
+    symbol->text        = &hemp_element_literal_text;
+    symbol->value       = &hemp_element_literal_value;
+    symbol->values      = &hemp_element_value_values;
+    symbol->parse_fixed = &hemp_element_fixed;
+    symbol->cleanup     = &hemp_element_literal_clean;
     return symbol;
 }
 

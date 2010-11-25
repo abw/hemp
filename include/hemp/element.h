@@ -30,7 +30,7 @@ struct hemp_binary_s {
 
 struct hemp_block_s {
     hemp_value_t    args;
-    hemp_list_p     exprs;
+    hemp_value_t    exprs;
 };
 
 typedef union hemp_eargs_u {
@@ -112,6 +112,9 @@ struct hemp_element_s {
 #define hemp_block_exprs(elem)                                  \
     (elem->args.block.exprs)
 
+#define hemp_block_exprs_list(elem)                             \
+    (hemp_val_list(elem->args.block.exprs))
+
 #define hemp_expr_element(elem)                                 \
     ((hemp_element_p) hemp_val_obj( hemp_expr(elem) ))
 
@@ -139,6 +142,9 @@ struct hemp_element_s {
 #define hemp_set_block_exprs(elem, ex)                          \
     (elem->args.block.exprs = ex)
 
+#define hemp_set_block_exprs_list(elem, li)                     \
+    (elem->args.block.exprs = hemp_list_val(li))
+
 #define hemp_set_expr_element(elem, ex)                         \
     (hemp_set_expr( elem, hemp_obj_val((hemp_object_p) ex) ))
 
@@ -148,22 +154,22 @@ struct hemp_element_s {
 #define hemp_set_rhs_element(elem, ex)                          \
     (hemp_set_rhs( elem, hemp_obj_val((hemp_object_p) ex) ))
 
-#define hemp_parse_prefix(ep, sc, pr, fr)               \
-    ((*ep)->type->prefix                                \
-        ? (*ep)->type->prefix(ep, sc, pr, fr)           \
-        : NULL                                          \
+#define hemp_parse_prefix(ep, sc, pr, fr)                       \
+    ((*ep)->type->parse_prefix                                  \
+        ? (*ep)->type->parse_prefix(ep, sc, pr, fr)             \
+        : NULL                                                  \
     )
 
-#define hemp_parse_postfix(ep, sc, pr, fr, lhs)         \
-    ((*ep)->type->postfix                               \
-        ? (*ep)->type->postfix(ep, sc, pr, fr, lhs)     \
-        : lhs                                           \
+#define hemp_parse_postfix(ep, sc, pr, fr, lhs)                 \
+    ((*ep)->type->parse_postfix                                 \
+        ? (*ep)->type->parse_postfix(ep, sc, pr, fr, lhs)       \
+        : lhs                                                   \
     )
 
-#define hemp_parse_fixed(ep, sc, pr, fr)                \
-    ((*ep)->type->fixed                                 \
-        ? (*ep)->type->fixed(ep, sc, pr, fr)            \
-        : NULL                                          \
+#define hemp_parse_fixed(ep, sc, pr, fr)                        \
+    ((*ep)->type->parse_fixed                                   \
+        ? (*ep)->type->parse_fixed(ep, sc, pr, fr)              \
+        : NULL                                                  \
     )
 
 #define hemp_parse_params(ep, sc, pr, fr, lhs)              \
@@ -398,6 +404,7 @@ HEMP_POSTFIX_FUNC(hemp_element_parens_parse_params);
 HEMP_SYMBOL_FUNC(hemp_element_params_symbol);
 HEMP_VALUE_FUNC(hemp_element_params_value);
 HEMP_OUTPUT_FUNC(hemp_element_params_values);
+HEMP_OPERATE_FUNC(hemp_element_params_assign);
 //HEMP_POSTFIX_FUNC(hemp_element_parens_parse_params);
 
 

@@ -25,16 +25,16 @@ hemp_element_params_clean(
 
 HEMP_SYMBOL_FUNC(hemp_element_brackets_symbol) {
     hemp_element_block_symbol(hemp, symbol);
-    symbol->token   = &hemp_element_literal_token;
-    symbol->prefix  = &hemp_element_brackets_prefix;
+    symbol->token           = &hemp_element_literal_token;
+    symbol->parse_prefix    = &hemp_element_brackets_prefix;
     /* each subtype must define its own value() method */
-    symbol->values  = &hemp_element_value_values;
-    symbol->text    = &hemp_element_value_text;
-    symbol->number  = &hemp_element_value_number;
-    symbol->integer = &hemp_element_value_integer;
-    symbol->boolean = &hemp_element_value_boolean;
-    symbol->compare = &hemp_element_value_compare;
-    symbol->cleanup = &hemp_element_brackets_clean;
+    symbol->values          = &hemp_element_value_values;
+    symbol->text            = &hemp_element_value_text;
+    symbol->number          = &hemp_element_value_number;
+    symbol->integer         = &hemp_element_value_integer;
+    symbol->boolean         = &hemp_element_value_boolean;
+    symbol->compare         = &hemp_element_value_compare;
+    symbol->cleanup         = &hemp_element_brackets_clean;
     return symbol;
 }
 
@@ -64,7 +64,8 @@ HEMP_PREFIX_FUNC(hemp_element_brackets_parse) {
     hemp_go_next(elemptr);
 
     /* stash the list of expressions in the element */
-    hemp_set_block_exprs(self, exprs);
+    hemp_set_block_exprs_list(self, exprs);
+    hemp_set_flag(self, HEMP_BE_ALLOCATED);
 
     return self;
 }
@@ -91,9 +92,12 @@ hemp_element_brackets_clean(
     hemp_element_p element
 ) {
     hemp_debug_call("hemp_element_brackets_clean(%p)\n", element);
-    hemp_list_free(
-        hemp_block_exprs(element)
-    );
+
+    if (hemp_has_flag(element, HEMP_BE_ALLOCATED)) {
+        hemp_list_free(
+            hemp_block_exprs_list(element)
+        );
+    }
 }
 
 
@@ -103,18 +107,18 @@ hemp_element_brackets_clean(
 
 HEMP_SYMBOL_FUNC(hemp_element_parens_symbol) {
     hemp_element_brackets_symbol(hemp, symbol);
-    symbol->postfix = &hemp_element_parens_postfix;
-    symbol->value   = &hemp_element_parens_value;
-    symbol->values  = &hemp_element_block_values;
-    symbol->params  = &hemp_element_block_params;
-    symbol->parse_params = &hemp_element_parens_postfix;
+    symbol->parse_postfix   = &hemp_element_parens_postfix;
+    symbol->value           = &hemp_element_parens_value;
+    symbol->values          = &hemp_element_block_values;
+    symbol->params          = &hemp_element_block_params;
+    symbol->parse_params    = &hemp_element_parens_postfix;
     symbol->flags  |= HEMP_BE_POSTBOUND;
     return symbol;
 }
 
 
 HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
-    hemp_debug_call("hemp_element_parens_postfix()\n");
+    hemp_debug_msg("hemp_element_parens_postfix()\n");
     
     hemp_element_p  self = *elemptr;
     hemp_symbol_p   type = self->type;
@@ -128,6 +132,7 @@ HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
 
     hemp_set_flag(self, HEMP_BE_INFIX);
 
+    hemp_debug_msg("building params...\n");
     hemp_element_p params = hemp_element_create(
         self, "hemp.params"
     );
@@ -136,8 +141,11 @@ HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
     hemp_set_rhs_element(params, self);
 
     // TODO: more postfix
-
-    return params;
+    return hemp_parse_postfix(
+        elemptr, scope, precedence, 0,
+        params
+    );
+//    return params;
 }
 
 
@@ -179,9 +187,10 @@ HEMP_VALUE_FUNC(hemp_element_parens_value) {
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL_FUNC(hemp_element_params_symbol) {
-    hemp_element_parens_symbol(hemp, symbol);
+    hemp_element_parens_symbol(hemp, symbol);           // FIXME: don't do this
     symbol->value   = &hemp_element_params_value;
     symbol->values  = &hemp_element_value_values;
+    symbol->assign  = &hemp_element_params_assign;
     symbol->cleanup = &hemp_element_params_clean;
     return symbol;
 }
@@ -218,6 +227,27 @@ HEMP_VALUE_FUNC(hemp_element_params_value) {
 
     return result;
 }
+
+
+HEMP_OPERATE_FUNC(hemp_element_params_assign) {
+    hemp_debug_msg("hemp_element_params_assign()\n");
+    hemp_element_p  element = hemp_val_elem(value);
+    hemp_value_t    word    = hemp_expr(element);
+
+    /* Unlike assigning directly to a word, which causes the RHS to be 
+     * evaluated immediately, assigning to a parenthesised expression creates
+     * a "lazy" expression (aka lambda, function, etc) that stores the RHS
+     * expression which can be evaluated later.
+     */
+    
+    /* TODO: we need to forward the whole lot onto the LHS */
+    hemp_hash_store(
+        context->vars, hemp_val_str(word), 
+        operand
+    );
+    return operand;
+}
+
 
 
 void

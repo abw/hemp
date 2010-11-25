@@ -222,7 +222,6 @@ HEMP_OUTPUT_FUNC(hemp_value_values) {
 
 
 HEMP_FETCH_FUNC(hemp_value_dot) {
-    hemp_debug_call("hemp_value_dot(%s)\n", hemp_type_name(container));
     hemp_debug("hemp_value_dot(%s)\n", hemp_type_name(container));
     hemp_value_t result = HempMissing;
 

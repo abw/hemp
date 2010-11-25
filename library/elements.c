@@ -16,9 +16,10 @@ hemp_elements_init(
     if (! capacity)
         capacity = HEMP_ELEMENTS_SIZE;
     
-    elements->pool = hemp_pool_init(
+    elements->pool = hemp_pool_new(
         sizeof(struct hemp_element_s), 
-        capacity
+        capacity,
+        NULL
     );
 
     elements->hemp = hemp;
@@ -33,13 +34,21 @@ void
 hemp_elements_free(
     hemp_elements_p elements
 ) {
+    // TODO: would it be better to start at first element and walk straight
+    // down the memory chain?  That way we don't miss any synthetic elements
+    // that might have been created but not bound to the NEXT pointer of an
+    // existing element.  Also would avoid problems introduced by adding
+    // synthetic elements to EOF->NEXT.
+
     /* call destructor on all elements that define one */
     hemp_element_p e = elements->head;
     hemp_element_p n = e->next;
 
     while (e) {
-        if (e->type->cleanup)
+        if (e->type->cleanup) {
+//          hemp_debug("calling cleanup for %s\n", e->type->name);
             e->type->cleanup(e);
+        }
         e = e->next;
     }
 

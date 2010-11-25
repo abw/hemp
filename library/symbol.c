@@ -27,8 +27,9 @@ hemp_symbol_init(
     symbol->grammar         = NULL;
     symbol->scanner         = NULL;
     symbol->cleanup         = NULL;
-    symbol->prefix          = NULL;
-    symbol->postfix         = NULL;
+    symbol->parse_prefix    = NULL;
+    symbol->parse_postfix   = NULL;
+    symbol->parse_fixed     = NULL;
     symbol->parse_params    = NULL;
     symbol->lvalue_param    = NULL;
     symbol->token   = &hemp_element_not_token;
@@ -42,7 +43,7 @@ hemp_symbol_init(
     symbol->boolean = &hemp_element_not_boolean;
     symbol->compare = &hemp_element_not_compare;
     symbol->assign  = &hemp_element_not_assign;
-    symbol->fixed   = &hemp_element_decline;
+//    symbol->parse_fixed   = &hemp_element_decline;
     symbol->text    = &hemp_element_literal_text;       // tmp
     
     // hmmm... can we set the same defaults as we do for value types?
@@ -160,8 +161,8 @@ hemp_symbol_dump(
     hemp_debug("      rprec: %d\n", symbol->rprec);
     hemp_debug("    scanner: %p\n", symbol->scanner);
     hemp_debug("    cleanup: %p\n", symbol->cleanup);
-    hemp_debug("     prefix: %p\n", symbol->prefix);
-    hemp_debug("    postfix: %p\n", symbol->postfix);
+    hemp_debug("     prefix: %p\n", symbol->parse_prefix);
+    hemp_debug("    postfix: %p\n", symbol->parse_postfix);
     hemp_debug("      token: %p\n", symbol->token);
     hemp_debug("     source: %p\n", symbol->source);
     hemp_debug("       text: %p\n", symbol->text);

@@ -19,7 +19,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_text) {
 
 HEMP_SYMBOL_FUNC(hemp_element_text_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
-    symbol->prefix  = &hemp_element_literal_prefix;
+    symbol->parse_prefix  = &hemp_element_literal_prefix;
     symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }

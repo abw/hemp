@@ -5,10 +5,10 @@
 
 HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
-    symbol->postfix = &hemp_element_dotop_postfix;
-    symbol->value   = &hemp_element_dotop_value;
-    symbol->assign  = &hemp_element_dotop_assign;
-    symbol->cleanup = &hemp_element_dotop_clean;
+    symbol->parse_postfix = &hemp_element_dotop_postfix;
+    symbol->value         = &hemp_element_dotop_value;
+    symbol->assign        = &hemp_element_dotop_assign;
+    symbol->cleanup       = &hemp_element_dotop_clean;
 
     return symbol;
 }
@@ -88,7 +88,9 @@ HEMP_OPERATE_FUNC(hemp_element_dotop_assign) {
     hemp_value_t    rval    = hemp_rhs(element);
 
     return hemp_store(
-        lval, context, rval, operand
+        lval, context, rval, 
+        /* evaluate operand element tree to yield an immediate value */
+        hemp_call(operand, value, context)
     );
 }
 

@@ -86,6 +86,7 @@
 #define HEMP_VTYPES_SIZE    8
 #define HEMP_TAGSET_SIZE    8
 #define HEMP_VIEW_SIZE      32
+#define HEMP_TMP_POOL_SIZE  8       /* # of temporary data items to pool    */
 
 /* 
  * Arrrr!  These be the element flags, m'hearties.  They be the bits what'll

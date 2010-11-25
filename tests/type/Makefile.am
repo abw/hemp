@@ -1,4 +1,5 @@
-check_PROGRAMS  =   text     \
+check_PROGRAMS  =   code     \
+                    text     \
                     list     \
                     hash     
  

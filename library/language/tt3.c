@@ -228,7 +228,7 @@ hemp_element_tt3_sub_symbol(
     symbol->cleanup = &hemp_element_tt3_sub_clean;
     symbol->token   = &hemp_element_literal_token;
     symbol->source  = &hemp_element_literal_source;
-    symbol->prefix  = &hemp_element_tt3_sub_prefix;
+    symbol->parse_prefix  = &hemp_element_tt3_sub_prefix;
     symbol->value   = &hemp_element_tt3_sub_value;
     symbol->text    = &hemp_element_tt3_sub_text;
     symbol->number  = &hemp_element_value_number;

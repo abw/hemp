@@ -99,12 +99,12 @@ am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-context.lo \
 	tag/libhemp_la-comment.lo tag/libhemp_la-control.lo \
 	tag/libhemp_la-inline.lo tag/libhemp_la-outline.lo \
 	libhemp_la-tagset.lo libhemp_la-template.lo libhemp_la-test.lo \
-	libhemp_la-type.lo type/libhemp_la-identity.lo \
-	type/libhemp_la-integer.lo type/libhemp_la-hash.lo \
-	type/libhemp_la-list.lo type/libhemp_la-number.lo \
-	type/libhemp_la-object.lo type/libhemp_la-string.lo \
-	type/libhemp_la-text.lo libhemp_la-utils.lo \
-	libhemp_la-value.lo libhemp_la-viewer.lo \
+	libhemp_la-type.lo type/libhemp_la-code.lo \
+	type/libhemp_la-identity.lo type/libhemp_la-integer.lo \
+	type/libhemp_la-hash.lo type/libhemp_la-list.lo \
+	type/libhemp_la-number.lo type/libhemp_la-object.lo \
+	type/libhemp_la-string.lo type/libhemp_la-text.lo \
+	libhemp_la-utils.lo libhemp_la-value.lo libhemp_la-viewer.lo \
 	viewer/libhemp_la-text.lo
 libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
 libhemp_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -308,6 +308,7 @@ libhemp_la_SOURCES = action.c            \
                         template.c          \
                         test.c              \
                         type.c              \
+                        type/code.c         \
                         type/identity.c     \
                         type/integer.c      \
                         type/hash.c         \
@@ -452,6 +453,8 @@ type/$(am__dirstamp):
 type/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) type/$(DEPDIR)
 	@: > type/$(DEPDIR)/$(am__dirstamp)
+type/libhemp_la-code.lo: type/$(am__dirstamp) \
+	type/$(DEPDIR)/$(am__dirstamp)
 type/libhemp_la-identity.lo: type/$(am__dirstamp) \
 	type/$(DEPDIR)/$(am__dirstamp)
 type/libhemp_la-integer.lo: type/$(am__dirstamp) \
@@ -523,6 +526,8 @@ mostlyclean-compile:
 	-rm -f tag/libhemp_la-inline.lo
 	-rm -f tag/libhemp_la-outline.$(OBJEXT)
 	-rm -f tag/libhemp_la-outline.lo
+	-rm -f type/libhemp_la-code.$(OBJEXT)
+	-rm -f type/libhemp_la-code.lo
 	-rm -f type/libhemp_la-hash.$(OBJEXT)
 	-rm -f type/libhemp_la-hash.lo
 	-rm -f type/libhemp_la-identity.$(OBJEXT)
@@ -599,6 +604,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/libhemp_la-control.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/libhemp_la-inline.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/libhemp_la-outline.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-code.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-hash.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-identity.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-integer.Plo@am__quote@
@@ -989,6 +995,13 @@ libhemp_la-type.lo: type.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='type.c' object='libhemp_la-type.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-type.lo `test -f 'type.c' || echo '$(srcdir)/'`type.c
+
+type/libhemp_la-code.lo: type/code.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT type/libhemp_la-code.lo -MD -MP -MF type/$(DEPDIR)/libhemp_la-code.Tpo -c -o type/libhemp_la-code.lo `test -f 'type/code.c' || echo '$(srcdir)/'`type/code.c
+@am__fastdepCC_TRUE@	$(am__mv) type/$(DEPDIR)/libhemp_la-code.Tpo type/$(DEPDIR)/libhemp_la-code.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='type/code.c' object='type/libhemp_la-code.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o type/libhemp_la-code.lo `test -f 'type/code.c' || echo '$(srcdir)/'`type/code.c
 
 type/libhemp_la-identity.lo: type/identity.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT type/libhemp_la-identity.lo -MD -MP -MF type/$(DEPDIR)/libhemp_la-identity.Tpo -c -o type/libhemp_la-identity.lo `test -f 'type/identity.c' || echo '$(srcdir)/'`type/identity.c

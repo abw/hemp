@@ -234,6 +234,7 @@ nobase_include_HEADERS = hemp/config.h         \
                           hemp/tagset.h         \
                           hemp/template.h       \
                           hemp/type.h           \
+                          hemp/type/code.h      \
                           hemp/type/hash.h      \
                           hemp/type/list.h      \
                           hemp/type/number.h    \

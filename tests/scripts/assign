@@ -22,3 +22,16 @@ a is 420
 [% a = []; a.3 = 420 %]a is [% a.3 %]
 -- expect
 a is 420
+
+-- start --
+-- test lazy assignment 
+[% name = 'Nobody';
+
+   msg() = name;
+
+   "A: " msg() "\n"
+   "B: " msg(name="Somebody") "\n"
+%]
+-- expect 
+A: Nobody
+B: Somebody

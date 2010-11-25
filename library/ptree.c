@@ -33,8 +33,10 @@ hemp_ptree_init(
     if (! ptree)
         hemp_mem_fail("ptree");
 
-    ptree->pool = hemp_pool_init(
-        sizeof(struct hemp_pnode_s), capacity
+    ptree->pool = hemp_pool_new(
+        sizeof(struct hemp_pnode_s), 
+        capacity,
+        NULL
     );
 
     for (i = 0; i < HEMP_PTREE_SIZE; i++) {
