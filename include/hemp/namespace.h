@@ -6,10 +6,10 @@
 
 
 struct hemp_namespace_s {
-    hemp_u16_t          id;
-    hemp_str_p          name;
+    hemp_u16            id;
+    hemp_string         name;
     hemp_namespace_p    parent;
-    hemp_hash_p         children;
+    hemp_hash         children;
 };
 
 
@@ -19,30 +19,30 @@ struct hemp_namespace_s {
 
 void 
     hemp_global_namespace_init(
-        hemp_global_p   global
+        hemp_global     global
     );
 
 void 
     hemp_global_namespace_free(
-        hemp_global_p   global
+        hemp_global     global
     );
 
 hemp_namespace_p
     hemp_namespace_init(
-        hemp_u16_t      id,
-        hemp_str_p      name
+        hemp_u16        id,
+        hemp_string     name
     );
 
 hemp_namespace_p
     hemp_namespace_instance(
-        hemp_hash_p      hash,
-        hemp_str_p       name,
+        hemp_hash      hash,
+        hemp_string      name,
         hemp_namespace_p parent
     );
 
 hemp_namespace_p
     hemp_resolve_namespace(
-        hemp_str_p       fullname
+        hemp_string       fullname
     );
 
 void
@@ -50,11 +50,11 @@ void
         hemp_namespace_p namespace
     );
 
-hemp_bool_t
+hemp_bool
     hemp_namespace_free_child(
-        hemp_hash_p     namespaces,
-        hemp_pos_t      position,
-        hemp_slot_p     item
+        hemp_hash     namespaces,
+        hemp_pos      position,
+        hemp_slot     item
     );
 
 
@@ -64,12 +64,12 @@ hemp_bool_t
  *--------------------------------------------------------------------------*/
 
 #define hemp_namespace_next_id()                                \
-    (++hemp_global.namespace_id)
+    (++HempGlobal.namespace_id)
 
 
 #define hemp_namespace_root(name)                               \
     hemp_namespace_instance(                                    \
-        hemp_global.namespaces, name, NULL                      \
+        HempGlobal.namespaces, name, NULL                       \
     )
 
 #define hemp_namespace(name) (                                  \

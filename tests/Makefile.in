@@ -258,7 +258,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 TESTS = $(check_PROGRAMS)
 SUBDIRS = core type language .
-#SUBDIRS         = type
+#SUBDIRS         = core
 LDADD = ../library/libhemp.la tap.o
 all: all-recursive
 

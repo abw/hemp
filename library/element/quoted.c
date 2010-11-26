@@ -20,11 +20,11 @@ HEMP_SYMBOL_FUNC(hemp_element_squote_symbol) {
 
 
 HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
-    hemp_str_p      src       = *srcptr;
-    hemp_bool_t     is_source = HEMP_TRUE;
-    hemp_str_p      end       = symbol->end;
-    hemp_size_t     endlen    = strlen(end);
-    hemp_element_p  element;
+    hemp_string      src       = *srcptr;
+    hemp_bool     is_source = HEMP_TRUE;
+    hemp_string      end       = symbol->end;
+    hemp_size     endlen    = strlen(end);
+    hemp_element  element;
 
     hemp_debug_call("hemp_element_squote_scanner()\n");
 
@@ -61,8 +61,8 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
     }
     else {
         /* we need to create a new string with escapes resolved */
-        hemp_str_p sqfrom   = *srcptr;
-        hemp_str_p squote   = (hemp_str_p) hemp_mem_alloc(end - sqfrom + 1);
+        hemp_string sqfrom   = *srcptr;
+        hemp_string squote   = (hemp_string) hemp_mem_alloc(end - sqfrom + 1);
         element->args.value = hemp_str_val(squote);
                     
         while (sqfrom < end) {
@@ -100,11 +100,11 @@ HEMP_SYMBOL_FUNC(hemp_element_dquote_symbol) {
 
 
 HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
-    hemp_str_p     src       = *srcptr;
-    hemp_bool_t    is_source = HEMP_TRUE;
-    hemp_str_p     end       = symbol->end;
-    hemp_size_t    endlen    = strlen(end);
-    hemp_element_p element;
+    hemp_string     src       = *srcptr;
+    hemp_bool    is_source = HEMP_TRUE;
+    hemp_string     end       = symbol->end;
+    hemp_size    endlen    = strlen(end);
+    hemp_element element;
 
     hemp_debug_call("hemp_element_dquote_scanner()\n");
 
@@ -143,8 +143,8 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
     }
     else {
         /* we need to create a new string with escapes resolved */
-        hemp_str_p dqfrom   = *srcptr;
-        hemp_str_p dquote   = (hemp_str_p) hemp_mem_alloc(end - dqfrom + 1);        // CHECK ME
+        hemp_string dqfrom   = *srcptr;
+        hemp_string dquote   = (hemp_string) hemp_mem_alloc(end - dqfrom + 1);        // CHECK ME
         element->args.value = hemp_str_val(dquote);
                     
         while (dqfrom < end) {
@@ -196,15 +196,15 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
 HEMP_OUTPUT_FUNC(hemp_element_quoted_text) {
     hemp_debug_call("hemp_element_quoted_text(%p) [%s]\n", element, element->type->name);
 
-    hemp_element_p element = hemp_val_elem(value);
-    hemp_text_p text;
+    hemp_element element = hemp_val_elem(value);
+    hemp_text text;
     hemp_prepare_text_size(context, output, text, element->length);
 
     if (hemp_has_flag(element, HEMP_BE_SOURCE)) {
         /* quoted string can be regenerated from source */
-        hemp_symbol_p symbol = element->type;
-        hemp_size_t slen     = symbol->start ? strlen(symbol->start) : 0;
-        hemp_size_t elen     = symbol->end   ? strlen(symbol->end)   : 0;
+        hemp_symbol symbol = element->type;
+        hemp_size slen     = symbol->start ? strlen(symbol->start) : 0;
+        hemp_size elen     = symbol->end   ? strlen(symbol->end)   : 0;
 
         /* "pinch" in the ends of the token range to avoid the quotes */
         hemp_text_append_stringn(

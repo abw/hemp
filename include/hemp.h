@@ -48,118 +48,108 @@ extern "C" {
 
 
 /* hemp initialisation and cleanup functions */
-hemp_p          hemp_init();
-void            hemp_init_schemes(hemp_p);
-void            hemp_init_errors(hemp_p);
-
-void            hemp_free(hemp_p);
-hemp_bool_t     hemp_free_scheme(   hemp_hash_p, hemp_pos_t, hemp_slot_p);
-hemp_bool_t     hemp_free_language( hemp_hash_p, hemp_pos_t, hemp_slot_p);
-hemp_bool_t     hemp_free_dialect(  hemp_hash_p, hemp_pos_t, hemp_slot_p);
-hemp_bool_t     hemp_free_grammar(  hemp_hash_p, hemp_pos_t, hemp_slot_p);
-hemp_bool_t     hemp_free_element(  hemp_hash_p, hemp_pos_t, hemp_slot_p);
-hemp_bool_t     hemp_free_template( hemp_hash_p, hemp_pos_t, hemp_slot_p);
-hemp_bool_t     hemp_free_viewer(   hemp_hash_p, hemp_pos_t, hemp_slot_p);
+hemp_hemp   hemp_init();
+void        hemp_init_schemes(hemp_hemp);
+void        hemp_init_errors(hemp_hemp);
+void        hemp_free(hemp_hemp);
+hemp_bool   hemp_free_scheme(   hemp_hash, hemp_pos, hemp_slot);
+hemp_bool   hemp_free_language( hemp_hash, hemp_pos, hemp_slot);
+hemp_bool   hemp_free_dialect(  hemp_hash, hemp_pos, hemp_slot);
+hemp_bool   hemp_free_grammar(  hemp_hash, hemp_pos, hemp_slot);
+hemp_bool   hemp_free_element(  hemp_hash, hemp_pos, hemp_slot);
+hemp_bool   hemp_free_template( hemp_hash, hemp_pos, hemp_slot);
+hemp_bool   hemp_free_viewer(   hemp_hash, hemp_pos, hemp_slot);
 
 /* scheme functions */
-void            hemp_add_scheme(hemp_p, hemp_scheme_p);
-#define         hemp_scheme(hemp, name) \
-                    (hemp_scheme_p) hemp_hash_fetch_pointer(hemp->schemes, name)
+void            hemp_add_scheme(hemp_hemp, hemp_scheme);
+#define         hemp_scheme_instance(hemp, name) \
+                    (hemp_scheme) hemp_hash_fetch_pointer(hemp->schemes, name)
 
 /* source functions */
-hemp_source_p   hemp_source(hemp_p, hemp_str_p, hemp_str_p);
+hemp_source   hemp_source_instance(hemp_hemp, hemp_string, hemp_string);
 
 /* template functions */
-void            hemp_init_templates(hemp_p);
-hemp_template_p hemp_template(hemp_p, hemp_str_p, hemp_str_p, hemp_str_p);
+void            hemp_init_templates(hemp_hemp);
+hemp_template hemp_template_instance(hemp_hemp, hemp_string, hemp_string, hemp_string);
 
 /* runtime functions */
-hemp_context_p  hemp_context(hemp_p);
+hemp_context  hemp_context_instance(hemp_hemp);
 
-//void            hemp_throw(hemp_p, hemp_errno_e, ...);
-hemp_str_p      hemp_error_format(hemp_p, hemp_errno_e);
-hemp_error_p    hemp_error_message(hemp_p, hemp_errno_e, ...);
-hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
-void            hemp_error_throw(hemp_p, hemp_error_p);
-void            hemp_scan_error(hemp_p, HEMP_SCAN_ARGS, hemp_errno_e, ...);
+//void            hemp_throw(hemp_hemp, hemp_errno_e, ...);
+hemp_string      hemp_error_format(hemp_hemp, hemp_errno);
+hemp_error    hemp_error_message(hemp_hemp, hemp_errno, ...);
+hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
+void            hemp_error_throw(hemp_hemp, hemp_error);
+void            hemp_scan_error(hemp_hemp, HEMP_SCAN_ARGS, hemp_errno, ...);
 
 
 /* tag functions */
-//void            hemp_init_tags(hemp_p);
-//void            hemp_add_tag(hemp_p, hemp_tag_p);
+//void            hemp_init_tags(hemp_hemp);
+//void            hemp_add_tag(hemp_hemp, hemp_tag);
 //
 //#define         hemp_tag(hemp, name) \
-//                    (hemp_tag_p) hemp_hash_fetch(hemp->tags, name)
+//                    (hemp_tag) hemp_hash_fetch(hemp->tags, name)
 
-hemp_str_p hemp_version();
-
-
+hemp_string hemp_version();
 
 
-void hemp_register_elements(hemp_p, hemp_symbols_p);
+
+
+void hemp_register_elements(hemp_hemp, hemp_symbols);
 
 /* language macros */
 
-#define hemp_register_language(hemp,name,constructor)       \
-    hemp_factory_register(                                  \
-        hemp->languages,                                    \
-        name,                                               \
-        constructor,                                        \
-        hemp                                                \
+#define hemp_register_language(hemp,name,constructor)                       \
+    hemp_factory_register(                                                  \
+        hemp->languages,                                                    \
+        name,                                                               \
+        constructor,                                                        \
+        hemp                                                                \
     )
 
-#define hemp_language(hemp,name) ({                                          \
-        hemp_language_p _lang = (hemp_language_p) hemp_factory_instance(     \
-            hemp->languages, name                                            \
-        );                                                                   \
-        if (! _lang) hemp_throw(hemp, HEMP_ERROR_INVALID, "language", name); \
-        _lang;                                                               \
-    })
+#define hemp_language(hemp,name) ({                                         \
+    hemp_language_p _lang = (hemp_language_p) hemp_factory_instance(        \
+        hemp->languages, name                                               \
+    );                                                                      \
+    if (! _lang) hemp_throw(hemp, HEMP_ERROR_INVALID, "language", name);    \
+    _lang;                                                                  \
+})
 
 
 /* element macros */
 
-#define hemp_register_element(hemp,name,constructor)        \
-    hemp_factory_register(                                  \
-        hemp->elements,                                     \
-        name,                                               \
-        constructor,                                        \
-        hemp                                                \
+#define hemp_register_element(hemp,name,constructor)                        \
+    hemp_factory_register(                                                  \
+        hemp->elements,                                                     \
+        name,                                                               \
+        constructor,                                                        \
+        hemp                                                                \
     )
 
-/* this is wrongly named */
-//#define hemp_element(hemp,name) ({                                          \
-//        hemp_element_p _cons = (hemp_element_p) hemp_factory_instance(      \
-//            hemp->elements, name                                            \
-//        );                                                                  \
-//        if (! _cons) hemp_throw(hemp, HEMP_ERROR_INVALID, "element", name); \
-//        _cons;                                                              \
-//    })
-
-#define hemp_symbol(hemp,type,start,end) ({                                 \
-        hemp_action_p _cons = (hemp_action_p) hemp_factory_constructor(     \
+#define hemp_symbol_instance(hemp,type,start,end) ({                        \
+        hemp_action _cons = (hemp_action) hemp_factory_constructor(         \
             hemp->elements, type                                            \
         );                                                                  \
         if (! _cons)                                                        \
             hemp_throw(hemp, HEMP_ERROR_INVALID, "element", type);          \
-        (hemp_symbol_p) hemp_action_run(                                    \
-            _cons, hemp_symbol_init(type, start, end)                       \
+        (hemp_symbol) hemp_action_run(                                      \
+            _cons, hemp_symbol_new(type, start, end)                        \
         );                                                                  \
     })
 
 
 /* grammar macros */
 
-#define hemp_register_grammar(hemp,name,constructor)        \
-    hemp_factory_register(                                  \
-        hemp->grammars,                                     \
-        name,                                               \
-        constructor,                                        \
-        hemp                                                \
+#define hemp_register_grammar(hemp,name,constructor)                        \
+    hemp_factory_register(                                                  \
+        hemp->grammars,                                                     \
+        name,                                                               \
+        constructor,                                                        \
+        hemp                                                                \
     )
 
 #define hemp_grammar(hemp,name) ({                                          \
-        hemp_grammar_p _gram = (hemp_grammar_p) hemp_factory_instance(      \
+        hemp_grammar _gram = (hemp_grammar) hemp_factory_instance(          \
             hemp->grammars, name                                            \
         );                                                                  \
         if (! _gram) hemp_throw(hemp, HEMP_ERROR_INVALID, "grammar", name); \
@@ -169,16 +159,16 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
 
 /* dialect macros */
 
-#define hemp_register_dialect(hemp,name,constructor)        \
-    hemp_factory_register(                                  \
-        hemp->dialects,                                     \
-        name,                                               \
-        constructor,                                        \
-        hemp                                                \
+#define hemp_register_dialect(hemp,name,constructor)                        \
+    hemp_factory_register(                                                  \
+        hemp->dialects,                                                     \
+        name,                                                               \
+        constructor,                                                        \
+        hemp                                                                \
     )
 
-#define hemp_dialect(hemp,name) ({                                          \
-        hemp_dialect_p _dial = (hemp_dialect_p) hemp_factory_instance(      \
+#define hemp_dialect_instance(hemp,name) ({                                 \
+        hemp_dialect _dial = (hemp_dialect) hemp_factory_instance(          \
             hemp->dialects, name                                            \
         );                                                                  \
         if (! _dial) hemp_throw(hemp, HEMP_ERROR_INVALID, "dialect", name); \
@@ -188,26 +178,21 @@ void hemp_register_elements(hemp_p, hemp_symbols_p);
 
 /* view macros */
 
-#define hemp_register_viewer(hemp,name,constructor)         \
-    hemp_factory_register(                                  \
-        hemp->viewers,                                      \
-        name,                                               \
-        constructor,                                        \
-        hemp                                                \
+#define hemp_register_viewer(hemp,name,constructor)                         \
+    hemp_factory_register(                                                  \
+        hemp->viewers,                                                      \
+        name,                                                               \
+        constructor,                                                        \
+        hemp                                                                \
     )
 
-#define hemp_viewer(hemp,name) ({                                           \
+#define hemp_viewer_instance(hemp,name) ({                                  \
         hemp_viewer_p _viewer = (hemp_viewer_p) hemp_factory_instance(      \
             hemp->viewers, name                                             \
         );                                                                  \
         if (! _viewer) hemp_throw(hemp, HEMP_ERROR_INVALID, "viewer", name);\
         _viewer;                                                            \
     })
-
-
-//hemp_bool_t hemp_register_dialect(hemp_t, hemp_string_t, hemp_build_fn);
-//void        hemp_hello();
-//hemp_string_t hemp_render(hemp_string_t scheme, hemp_string_t source);
 
 
 #if defined(__cplusplus)

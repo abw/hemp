@@ -5,23 +5,15 @@
  * source initialisation and cleanup functions 
  *-------------------------------------------------------------------------*/
 
-hemp_source_p
+hemp_source
 hemp_source_init(
-    hemp_scheme_p scheme,
-    hemp_str_p    name
+    hemp_scheme scheme,
+    hemp_string name
 ) {
-    hemp_source_p source = (hemp_source_p) hemp_mem_alloc(
-        sizeof(struct hemp_source_s)
-    );
+    hemp_source source;
+    HEMP_ALLOCATE(source);
 
-    if (! source)
-        hemp_mem_fail("source");
-
-    source->name = hemp_string_copy(name);
-
-    if (! source->name)
-        hemp_mem_fail("source name");
-
+    source->name   = hemp_string_clone(name, "source name");
     source->scheme = scheme;
     source->md5    = 
     source->text   = NULL;
@@ -39,22 +31,19 @@ hemp_source_init(
 
 void
 hemp_source_set_md5(
-    hemp_source_p source,
-    hemp_str_p    md5
+    hemp_source source,
+    hemp_string md5
 ) {
     if (source->md5)
         hem_mem_free(source->md5);
     
-    source->md5 = hemp_string_copy(md5);
-    
-    if (! source->md5)
-        hemp_mem_fail("source MD5 digest");
+    source->md5 = hemp_string_clone(md5, "source MD5 digest");
 }
 
 
 void
 hemp_source_free(
-    hemp_source_p source
+    hemp_source source
 ) {
     /* hemp_debug_mem("Releasing %s source at %p\n", source->scheme->name, source); */
 

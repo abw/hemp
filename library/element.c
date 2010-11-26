@@ -5,29 +5,15 @@
  * initialisation and cleanup functions
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_element_p
-hemp_element_new() {
-    hemp_element_p element = (hemp_element_p) hemp_mem_alloc(
-        sizeof(struct hemp_element_s)
-    );
-
-    if (! element)
-        hemp_mem_fail("element");
-
-    return element;
-}
-
-
-hemp_element_p
+hemp_element
 hemp_element_init(
-    hemp_element_p  element,
-    hemp_symbol_p   type, 
-    hemp_str_p      token, 
-    hemp_pos_t      position, 
-    hemp_size_t     length
+    hemp_element    element,
+    hemp_symbol     type, 
+    hemp_string     token, 
+    hemp_pos        position, 
+    hemp_size       length
 ) {
-    if (! element)
-        element = hemp_element_new();
+    HEMP_INSTANCE(element);
         
     element->elements = NULL;
     element->next     = NULL;
@@ -45,15 +31,15 @@ hemp_element_init(
 
 void
 hemp_element_free(
-    hemp_element_p element
+    hemp_element element
 ) {
     hemp_mem_free(element);
 }
 
 
-HEMP_INLINE hemp_grammar_p
+HEMP_INLINE hemp_grammar
 hemp_element_grammar(
-    hemp_element_p  element
+    hemp_element  element
 ) {
     if (! element->type->grammar)
         hemp_fatal(
@@ -65,9 +51,9 @@ hemp_element_grammar(
 }
 
 
-HEMP_INLINE hemp_elements_p
+HEMP_INLINE hemp_elements
 hemp_element_elements(
-    hemp_element_p  element
+    hemp_element  element
 ) {
     if (! element->elements)
         hemp_fatal(
@@ -79,10 +65,10 @@ hemp_element_elements(
 }
 
 
-HEMP_INLINE hemp_symbol_p
+HEMP_INLINE hemp_symbol
 hemp_element_grammar_symbol(
-    hemp_element_p element,
-    hemp_str_p     name
+    hemp_element element,
+    hemp_string     name
 ) {
     return hemp_grammar_symbol(
         hemp_element_grammar(element),
@@ -91,10 +77,10 @@ hemp_element_grammar_symbol(
 }
 
 
-HEMP_INLINE hemp_element_p
+HEMP_INLINE hemp_element
 hemp_element_create(
-    hemp_element_p  element,
-    hemp_str_p      typename
+    hemp_element  element,
+    hemp_string      typename
 ) {
     return hemp_elements_append(
         hemp_element_elements(element),
@@ -104,13 +90,13 @@ hemp_element_create(
 }
 
 
-hemp_symbol_p 
+hemp_symbol 
 hemp_element_retype(
-    hemp_element_p element,
-    hemp_str_p     typename
+    hemp_element    element,
+    hemp_string     typename
 ) {
-    hemp_symbol_p  type    = element->type;
-    hemp_grammar_p grammar = type->grammar;
+    hemp_symbol  type    = element->type;
+    hemp_grammar grammar = type->grammar;
 
     if (grammar) {
         hemp_debug("found element grammar\n");
@@ -137,14 +123,14 @@ hemp_element_retype(
  * front-end parsing pseudo-method
  *--------------------------------------------------------------------------*/
 
-hemp_element_p
+hemp_element
 hemp_element_parse(
-    hemp_element_p element,
-    hemp_scope_p   scope
+    hemp_element element,
+    hemp_scope   scope
 ) {
     hemp_debug_call("hemp_element_parse()\n");
 
-    hemp_element_p block = hemp_element_parse_block(
+    hemp_element block = hemp_element_parse_block(
         &element,
         scope,
         0, 
@@ -160,9 +146,9 @@ hemp_element_parse(
  *--------------------------------------------------------------------------*/
 
 HEMP_PREFIX_FUNC(hemp_element_parse_block) {
-    hemp_element_p element = *elemptr;
-    hemp_list_p list       = hemp_element_parse_exprs(HEMP_PREFIX_ARG_NAMES);
-    hemp_element_p block   = NULL;
+    hemp_element element = *elemptr;
+    hemp_list list       = hemp_element_parse_exprs(HEMP_PREFIX_ARG_NAMES);
+    hemp_element block   = NULL;
 
     if (list) {
         // hemp_debug("got list of %d exprs\n", list->length);
@@ -180,7 +166,7 @@ HEMP_PREFIX_FUNC(hemp_element_parse_block) {
 }
 
 
-hemp_list_p
+hemp_list
 hemp_element_parse_exprs(
     HEMP_PREFIX_ARGS
 ) {
@@ -188,8 +174,8 @@ hemp_element_parse_exprs(
     hemp_debug_parse("hemp_element_parse_exprs( precedence => %d )\n", precedence);
 //    hemp_debug("hemp_element_parse_exprs(%p, %p, %d, %d)\n", elemptr, scope, precedence, force);
 
-    hemp_element_p expr;
-    hemp_list_p    exprs = hemp_list_new();
+    hemp_element expr;
+    hemp_list    exprs = hemp_list_new();
 
 #if HEMP_DEBUG & HEMP_DEBUG_PARSE
     hemp_debug("\n-- EXPRS --\n");
@@ -239,8 +225,8 @@ hemp_element_parse_exprs(
 
 HEMP_PREFIX_FUNC(hemp_element_fixed) {
     hemp_debug_call("hemp_element_fixed()\n");
-    hemp_element_p element = *elemptr;
-    hemp_str_p     string  = hemp_string_extract(
+    hemp_element element = *elemptr;
+    hemp_string     string  = hemp_string_extract(
         element->token,
         element->token + element->length
     );
@@ -433,9 +419,9 @@ HEMP_POSTFIX_FUNC(hemp_element_next_postfix) {
  *--------------------------------------------------------------------------*/
 
 HEMP_PREFIX_FUNC(hemp_element_parse_prefix) {
-    hemp_element_p self = *elemptr;
-    hemp_symbol_p  type = self->type;
-    hemp_element_p expr;
+    hemp_element self = *elemptr;
+    hemp_symbol  type = self->type;
+    hemp_element expr;
 
     hemp_debug_call("hemp_element_parse_prefix()\n");
 
@@ -458,8 +444,8 @@ HEMP_PREFIX_FUNC(hemp_element_parse_prefix) {
 
 
 HEMP_POSTFIX_FUNC(hemp_element_parse_postfix) {
-    hemp_element_p self = *elemptr;
-    hemp_symbol_p  type = self->type;
+    hemp_element self = *elemptr;
+    hemp_symbol  type = self->type;
 
     hemp_debug_call("hemp_element_parse_postfix()\n");
 
@@ -478,9 +464,9 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_postfix) {
 
 
 HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left) {
-    hemp_element_p self = *elemptr;
-    hemp_symbol_p  type = self->type;
-    hemp_element_p rhs;
+    hemp_element self = *elemptr;
+    hemp_symbol  type = self->type;
+    hemp_element rhs;
 
     hemp_debug_call("hemp_element_parse_infix_left()\n");
 
@@ -511,9 +497,9 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left) {
 
 
 HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right) {
-    hemp_element_p self = *elemptr;
-    hemp_symbol_p  type = self->type;
-    hemp_element_p rhs;
+    hemp_element self = *elemptr;
+    hemp_symbol  type = self->type;
+    hemp_element rhs;
 
     hemp_debug_call("hemp_element_parse_infix_right()\n");
 
@@ -563,14 +549,14 @@ HEMP_VALUE_FUNC(hemp_element_value) {
 
 HEMP_OUTPUT_FUNC(hemp_element_value_text) {
     hemp_debug_call("hemp_element_value_text()\n");
-    hemp_value_t result = hemp_obcall(value, value, context);
+    hemp_value result = hemp_obcall(value, value, context);
     return hemp_onto_text(result, context, output);
 }
 
 
 HEMP_VALUE_FUNC(hemp_element_value_number) {
     hemp_debug_call("hemp_element_value_number()\n");
-    hemp_value_t result = hemp_obcall(value, value, context);
+    hemp_value result = hemp_obcall(value, value, context);
     return hemp_is_numeric(result)
         ? result
         : hemp_call(result, number, context);
@@ -582,28 +568,28 @@ HEMP_VALUE_FUNC(hemp_element_value_number) {
 
 HEMP_VALUE_FUNC(hemp_element_value_integer) {
     hemp_debug_call("hemp_element_value_integer()\n");
-    hemp_value_t result = hemp_obcall(value, value, context);
+    hemp_value result = hemp_obcall(value, value, context);
     return hemp_to_integer(result, context);
 }
 
 
 HEMP_VALUE_FUNC(hemp_element_value_boolean) {
     hemp_debug_call("hemp_element_value_boolean()\n");
-    hemp_value_t result = hemp_obcall(value, value, context);
+    hemp_value result = hemp_obcall(value, value, context);
     return hemp_to_boolean(result, context);
 }
 
 
 HEMP_VALUE_FUNC(hemp_element_value_compare) {
     hemp_debug_call("hemp_element_value_compare()\n");
-    hemp_value_t result = hemp_obcall(value, value, context);
+    hemp_value result = hemp_obcall(value, value, context);
     return hemp_to_compare(result, context);
 }
 
 
 HEMP_OUTPUT_FUNC(hemp_element_value_values) {
     hemp_debug_call("hemp_element_value_values()\n");
-    hemp_value_t result = hemp_obcall(value, value, context);
+    hemp_value result = hemp_obcall(value, value, context);
     return hemp_values(result, context, output);
 }
 
@@ -614,22 +600,22 @@ HEMP_OUTPUT_FUNC(hemp_element_value_values) {
  * debugging functions
  *--------------------------------------------------------------------------*/
 
-hemp_bool_t
+hemp_bool
 hemp_element_dump(
-    hemp_element_p e
+    hemp_element e
 ) {
-    hemp_context_p context = hemp_context_init(NULL);       // tmp ugly hack
+    hemp_context context = hemp_context_init(NULL);       // tmp ugly hack
 
     if (! e->type->text)
         hemp_fatal("%s type does not define a text() method", e->type->name);
 
-    hemp_value_t output = e->type->token
+    hemp_value output = e->type->token
         ? e->type->token(hemp_elem_val(e), context, HempNothing)
         : e->type->text(hemp_elem_val(e), context, HempNothing);
 
 
-    hemp_text_p text  = hemp_val_text(output);
-    hemp_str_p string = text ? text->string : "-- NO OUTPUT --";
+    hemp_text text  = hemp_val_text(output);
+    hemp_string string = text ? text->string : "-- NO OUTPUT --";
     
     hemp_debug(
         "%p %03d:%02d %-20s %s[%s%s%s]%s\n", e,

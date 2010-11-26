@@ -2,9 +2,9 @@
 
 hemp_language_p
 hemp_language_init(
-    hemp_p     hemp,
-    hemp_str_p name,
-    hemp_num_t version
+    hemp_hemp     hemp,
+    hemp_string name,
+    hemp_num version
 ) {
     hemp_language_p language = (hemp_language_p) hemp_mem_alloc(
         sizeof(struct hemp_language_s)

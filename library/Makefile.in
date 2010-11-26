@@ -88,7 +88,7 @@ am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-context.lo \
 	element/libhemp_la-text.lo element/libhemp_la-word.lo \
 	libhemp_la-error.lo libhemp_la-factory.lo \
 	libhemp_la-filesystem.lo libhemp_la-frame.lo \
-	libhemp_la-grammar.lo libhemp_la-hemp.lo \
+	libhemp_la-global.lo libhemp_la-grammar.lo libhemp_la-hemp.lo \
 	libhemp_la-language.lo language/libhemp_la-hemp.lo \
 	language/libhemp_la-test.lo language/libhemp_la-tt3.lo \
 	libhemp_la-memory.lo libhemp_la-namespace.lo \
@@ -281,6 +281,7 @@ libhemp_la_SOURCES = action.c            \
                         factory.c           \
                         filesystem.c        \
                         frame.c             \
+                        global.c            \
                         grammar.c           \
                         hemp.c              \
                         language.c          \
@@ -560,6 +561,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-factory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-filesystem.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-frame.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-global.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-grammar.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-hemp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-language.Plo@am__quote@
@@ -806,6 +808,13 @@ libhemp_la-frame.lo: frame.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='frame.c' object='libhemp_la-frame.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-frame.lo `test -f 'frame.c' || echo '$(srcdir)/'`frame.c
+
+libhemp_la-global.lo: global.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-global.lo -MD -MP -MF $(DEPDIR)/libhemp_la-global.Tpo -c -o libhemp_la-global.lo `test -f 'global.c' || echo '$(srcdir)/'`global.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-global.Tpo $(DEPDIR)/libhemp_la-global.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='global.c' object='libhemp_la-global.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-global.lo `test -f 'global.c' || echo '$(srcdir)/'`global.c
 
 libhemp_la-grammar.lo: grammar.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-grammar.lo -MD -MP -MF $(DEPDIR)/libhemp_la-grammar.Tpo -c -o libhemp_la-grammar.lo `test -f 'grammar.c' || echo '$(srcdir)/'`grammar.c

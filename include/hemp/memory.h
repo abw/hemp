@@ -4,48 +4,27 @@
 #include <hemp/core.h>
 
 
-void hemp_mem_fail(hemp_str_p);
+/*--------------------------------------------------------------------------
+ * Function prototypes - more below in "Memory Debugging"
+ *--------------------------------------------------------------------------*/
 
-
-#define hemp_struct_alloc(type, name, label)            \
-    type *name = (type *) hemp_mem_alloc(               \
-        sizeof(type)                                    \
-    );                                                  \
-    if (! name) hemp_mem_fail(label);                   \
-    hemp_debug_mem(                                     \
-        "Allocated %d bytes at %p for new %s type\n",   \
-        sizeof(type), name, label                       \
-    );
-
-#define hemp_allocate_type_name(type, name) ({                      \
-    if (! name) {                                                   \
-        name = (hemp_##type##_p) hemp_mem_alloc(                    \
-            sizeof(struct hemp_##type##_s)                          \
-        );                                                          \
-        if (! name)                                                 \
-            hemp_mem_fail(#type);                                   \
-    }                                                               \
-})
-
-
-
-
+void hemp_mem_fail(hemp_string);
 
 
 /*--------------------------------------------------------------------------
- * patch in memmove(), bcopy() or a hand-rolled memory copy function
+ * Macro to patch in memmove(), bcopy() or a hand-rolled memory copy function
  *--------------------------------------------------------------------------*/
 
-#if  HAVE_MEMMOVE
+#if   HAVE_MEMMOVE
 #   define hemp_mem_copy(src, dest, len) memmove(dest, src, len)
 #elif HAVE_BCOPY
 #   define hemp_mem_copy(src, dest, len) bcopy(src, dest, len)
 #else
 #   define HEMP_ADD_MEM_COPY 1
-    hemp_mem_p hemp_mem_copy(
-        hemp_mem_p  src,
-        hemp_mem_p  dest,
-        hemp_size_t len
+    hemp_memory hemp_mem_copy(
+        hemp_memory src,
+        hemp_memory dest,
+        hemp_size   len
     );
 #endif
 
@@ -54,6 +33,8 @@ void hemp_mem_fail(hemp_str_p);
  * memory debugging
  *--------------------------------------------------------------------------*/
 
+#define HEMP_MEM_DASHES \
+    "-----------------------------------------------------------------\n"
 
 #if HEMP_DEBUG & HEMP_DEBUG_MEM
     #define HEMP_MEM_WILD     0    /* uninitialised (wild)                  */
@@ -66,27 +47,27 @@ void hemp_mem_fail(hemp_str_p);
     #define HEMP_MEM_BLKSIZ   8    /* # of mrec's to malloc at once         */
     #define HEMP_MEM_PEEKLEN  32   /* # of bytes to peek into memory        */
 
-    struct hemp_mem_trace_s {
-        int          id;
-        int          status;
-        hemp_str_p   file;
-        hemp_pos_t   line;
-        hemp_mem_p   ptr;
-        hemp_size_t  size;
+    struct hemp_mem_trace {
+        hemp_int        id;
+        hemp_int        status;
+        hemp_string     file;
+        hemp_pos        line;
+        hemp_memory     ptr;
+        hemp_size       size;
     };
-    typedef struct hemp_mem_trace_s *hemp_mem_trace_p;
+    typedef struct hemp_mem_trace *hemp_mem_trace;
 
-    hemp_mem_trace_p hemp_mem_new_trace();
-    hemp_mem_trace_p hemp_mem_get_trace(hemp_mem_p, hemp_str_p, hemp_pos_t);
-    hemp_size_t      hemp_mem_trace_report(hemp_bool_t);
-    void             hemp_mem_trace_reset();
+    hemp_mem_trace  hemp_mem_new_trace();
+    hemp_mem_trace  hemp_mem_get_trace(hemp_memory, hemp_string, hemp_pos);
+    hemp_size       hemp_mem_trace_report(hemp_bool);
+    void            hemp_mem_trace_reset();
 
-    hemp_mem_p       hemp_mem_trace_malloc(hemp_size_t, hemp_str_p, hemp_pos_t);
-    hemp_mem_p       hemp_mem_trace_realloc(hemp_mem_p, hemp_size_t, hemp_str_p, hemp_pos_t);
-    hemp_str_p       hemp_mem_trace_strdup(hemp_str_p, hemp_str_p, hemp_pos_t);
-    hemp_mem_p       hemp_mem_trace_external(hemp_mem_p, hemp_size_t, hemp_str_p, hemp_pos_t);
+    hemp_memory     hemp_mem_trace_malloc(hemp_size, hemp_string, hemp_pos);
+    hemp_memory     hemp_mem_trace_realloc(hemp_memory, hemp_size, hemp_string, hemp_pos);
+    hemp_string     hemp_mem_trace_strdup(hemp_string, hemp_string, hemp_pos);
+    hemp_memory     hemp_mem_trace_external(hemp_memory, hemp_size, hemp_string, hemp_pos);
 
-    void             hemp_mem_trace_free(hemp_mem_p, hemp_str_p, hemp_pos_t);
+    void            hemp_mem_trace_free(hemp_memory, hemp_string, hemp_pos);
 
     #define hemp_mem_alloc(size)            hemp_mem_trace_malloc(size, __FILE__, __LINE__)
     #define hemp_mem_resize(memory, size)   hemp_mem_trace_realloc(memory, size, __FILE__, __LINE__)

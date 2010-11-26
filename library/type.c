@@ -25,8 +25,8 @@ hemp_type_p  hemp_global_types[HEMP_TYPES_SIZE];
 
 hemp_type_p 
 hemp_type_init(
-    hemp_int_t  id,
-    hemp_str_p  name
+    hemp_int  id,
+    hemp_string  name
 ) {
     hemp_type_p type = (hemp_type_p) hemp_mem_alloc(
         sizeof(struct hemp_type_s)
@@ -62,8 +62,8 @@ hemp_type_init(
 hemp_type_p 
 hemp_type_subtype(
     hemp_type_p base,
-    hemp_int_t  id,
-    hemp_str_p  name
+    hemp_int  id,
+    hemp_string  name
 ) {
     hemp_type_p type = hemp_type_init(id, name);
     type->base = base;
@@ -88,10 +88,10 @@ hemp_type_free(
 
 void
 hemp_global_types_init(
-    hemp_global_p   global
+    hemp_global   global
 ) {
     hemp_debug_call("hemp_global_types_init()\n");
-    hemp_int_t n;
+    hemp_int n;
 
     /* return silently if it looks like we've already done this step */
     if (HempValue)
@@ -149,10 +149,10 @@ hemp_global_types_init(
 
 void
 hemp_global_types_free(
-    hemp_global_p   global
+    hemp_global   global
 ) {
     hemp_debug_call("hemp_global_types_free()\n");
-    hemp_int_t  n;
+    hemp_int  n;
     hemp_type_p t;
 
     /* clear out all the reserved type up to and including IDENTITY @ 16 */
@@ -188,11 +188,11 @@ hemp_global_types_free(
 
 hemp_type_p
 hemp_use_type(
-    hemp_str_p  name,
+    hemp_string  name,
     hemp_type_f constructor
 ) {
-    hemp_int_t  n;
-    hemp_int_t  empty = 0;
+    hemp_int  n;
+    hemp_int  empty = 0;
     hemp_type_p type;
     
     for (n = HEMP_TYPES_RESERVED + 1; n < HEMP_TYPES_SIZE; n++) {
@@ -226,7 +226,7 @@ HEMP_TYPE_FUNC(hemp_type_type) {
     hemp_type_p type = hemp_type_init(id, name);
 
     /* add text method to display the type name, e.g. foo.type */
-    type->text = &hemp_value_type_text;
+    type->text = &hemp_valueype_text;
 
     /* add methods to lookup the type name or id, e.g. foo.type.name  */
     hemp_type_extend(type, "name", &hemp_method_type_name);
@@ -236,9 +236,9 @@ HEMP_TYPE_FUNC(hemp_type_type) {
 };
 
 
-HEMP_OUTPUT_FUNC(hemp_value_type_text) {
+HEMP_OUTPUT_FUNC(hemp_valueype_text) {
     hemp_type_p type = (hemp_type_p) hemp_val_ptr(value);
-    hemp_text_p text;
+    hemp_text text;
     
 //    hemp_prepare_text_size(context, output, text, strlen(type->name));
 

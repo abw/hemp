@@ -34,7 +34,7 @@ hemp_tagset_free(
 hemp_pnode_p
 hemp_tagset_add_tag(
     hemp_tagset_p   tagset, 
-    hemp_tag_p      tag
+    hemp_tag      tag
 ) {
     hemp_ptree_p ptree;
 
@@ -56,19 +56,19 @@ hemp_tagset_add_tag(
 
     hemp_hash_store_pointer(tagset->tags, tag->name, tag);
 
-    return hemp_ptree_store(ptree, tag->start, (hemp_mem_p) tag);
+    return hemp_ptree_store(ptree, tag->start, (hemp_memory) tag);
 }
 
 
 hemp_pnode_p
 hemp_tagset_new_tag(
     hemp_tagset_p    tagset, 
-    hemp_str_p       name,
+    hemp_string       name,
     hemp_tag_style_t style,
-    hemp_str_p       start,
-    hemp_str_p       end,
+    hemp_string       start,
+    hemp_string       end,
     hemp_tag_scan_f  scan,
-    hemp_grammar_p   grammar
+    hemp_grammar   grammar
 ) {
     return hemp_tagset_add_tag(
         tagset,
@@ -77,13 +77,13 @@ hemp_tagset_new_tag(
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_tagset_free_tag(
-    hemp_hash_p tags,
-    hemp_pos_t  index,
-    hemp_slot_p item
+    hemp_hash tags,
+    hemp_pos  index,
+    hemp_slot item
 ) {
-    hemp_tag_free((hemp_tag_p) hemp_val_ptr(item->value));
+    hemp_tag_free((hemp_tag) hemp_val_ptr(item->value));
     return HEMP_TRUE;
 }
 

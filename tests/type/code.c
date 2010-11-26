@@ -14,8 +14,8 @@ main(
 
 
 void test_code() {
-    hemp_p      hemp = hemp_init();
-    hemp_code_p code = hemp_code_new();
+    hemp_hemp      hemp = hemp_init();
+    hemp_code code = hemp_code_new();
     
     ok(code, "created code");
 

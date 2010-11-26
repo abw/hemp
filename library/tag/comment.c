@@ -6,7 +6,7 @@ void
 hemp_scan_comment_tag(
     HEMP_TAG_SCAN_ARGS
 ) {
-    hemp_str_p to = strstr(*srcptr, tag->end);
+    hemp_string to = strstr(*srcptr, tag->end);
     
     if (! to)
         hemp_fatal("missing end of comment tag");

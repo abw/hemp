@@ -5,10 +5,10 @@
 #include <hemp.h>
 #include "types.h"
 
-typedef hemp_p          Hemp;
-typedef hemp_template_p Hemp__Template;
-typedef hemp_context_p  Hemp__Context;
-typedef hemp_text_p     Hemp__Text;
+typedef hemp_hemp          Hemp;
+typedef hemp_template Hemp__Template;
+typedef hemp_context  Hemp__Context;
+typedef hemp_text     Hemp__Text;
 
 /*
 #--------------------------------------------------------------------------
@@ -59,7 +59,7 @@ template(hemp, dialect, scheme, source)
     INIT:
         fprintf(stderr, "Hemp->template('%s', '%s', '%s')\n", dialect, scheme, source);
     CODE:
-        RETVAL = hemp_template(hemp, dialect, scheme, source);
+        RETVAL = hemp_template_instance(hemp, dialect, scheme, source);
     OUTPUT:
         RETVAL
 
@@ -70,7 +70,7 @@ context(hemp)
     INIT:
         fprintf(stderr, "Hemp->context()\n");
     CODE:
-        RETVAL = hemp_context(hemp);
+        RETVAL = hemp_context_instance(hemp);
     OUTPUT:
         RETVAL
 
@@ -100,7 +100,7 @@ render(template, context)
     INIT:
         fprintf(stderr, "Hemp::Template->render()\n");
     CODE:
-        hemp_p hemp = context->hemp;
+        hemp_hemp hemp = context->hemp;
         HEMP_TRY;
             RETVAL = hemp_template_render(template, context);
         HEMP_CATCH_ALL;

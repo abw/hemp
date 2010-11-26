@@ -7,8 +7,8 @@
 
 hemp_viewer_p
 hemp_viewer_init(
-    hemp_p      hemp,
-    hemp_str_p  name
+    hemp_hemp      hemp,
+    hemp_string  name
 ) {
     hemp_viewer_p viewer = (hemp_viewer_p) hemp_mem_alloc(
         sizeof(struct hemp_viewer_s)
@@ -42,13 +42,13 @@ hemp_viewer_free(
 void
 hemp_viewer_resize(
     hemp_viewer_p viewer,
-    hemp_u16_t    min_size
+    hemp_u16    min_size
 ) {
     hemp_debug_call("hemp_viewer_resize(%s, %d)\n", viewer->name, min_size);
-    hemp_u16_t    old_size = viewer->size;
-    hemp_u16_t    new_size = old_size;
-    hemp_mem_p    buffer;
-    hemp_u16_t    size;
+    hemp_u16    old_size = viewer->size;
+    hemp_u16    new_size = old_size;
+    hemp_memory    buffer;
+    hemp_u16    size;
 
     if (! new_size)
         new_size = HEMP_VIEW_SIZE;
@@ -78,14 +78,14 @@ hemp_viewer_resize(
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_viewer_add_view(
     hemp_viewer_p viewer,
-    hemp_str_p    name,
+    hemp_string    name,
     hemp_view_f   view
 ) {
     hemp_debug_call("hemp_viewer_add_view(%s:%s => %p)\n", viewer->name, name, view);
-    hemp_u16_t id = hemp_namespace_id(name);
+    hemp_u16 id = hemp_namespace_id(name);
     hemp_debug("%s ID: %d\n", name, id);
     
     if (id >= viewer->size)

@@ -10,7 +10,7 @@ HEMP_TYPE_FUNC(hemp_type_code) {
 //    type->integer    = &hemp_type_code_integer;     /* text -> integer      */
 //    type->boolean    = &hemp_type_code_boolean;     /* text -> boolean      */
 //    type->compare    = &hemp_value_not_compare;     /* can't compare        */
-//    type->defined    = &hemp_value_true;            /* always defined       */
+//    type->defined    = &hemp_valuerue;            /* always defined       */
 
 //    hemp_type_extend(type, "length", &hemp_method_text_length);
 
@@ -23,19 +23,19 @@ HEMP_TYPE_FUNC(hemp_type_code) {
  * constructor/destructor functions.
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_code_p
+HEMP_INLINE hemp_code
 hemp_code_init(
-    hemp_code_p code
+    hemp_code code
 ) {
     hemp_debug_msg("hemp_code_init()\n");
-    hemp_code_allocate(code);
+    HEMP_INSTANCE(code);
     return code;
 }
 
 
 HEMP_INLINE void
 hemp_code_release(
-    hemp_code_p code
+    hemp_code code
 ) {
     hemp_debug_msg("hemp_code_release()\n");
 }
@@ -43,7 +43,7 @@ hemp_code_release(
 
 HEMP_INLINE void
 hemp_code_free(
-    hemp_code_p code
+    hemp_code code
 ) {
     hemp_debug_msg("hemp_code_free(%p)\n", code);
     hemp_code_release(code);

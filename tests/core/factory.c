@@ -18,10 +18,10 @@ int main(
 }
 
 
-hemp_mem_p
+hemp_memory
 constructor(
-    hemp_mem_p msg,
-    hemp_mem_p name
+    hemp_memory msg,
+    hemp_memory name
 ) {
     sprintf(result, "[%s] constructor for %s", (char *) msg, (char *) name);
     n++;
@@ -29,26 +29,26 @@ constructor(
 }
 
 
-hemp_action_p
+hemp_action
 wildcard(
-    hemp_mem_p msg,
-    hemp_str_p name
+    hemp_memory msg,
+    hemp_string name
 ) {
     hemp_debug_cyan("wildcard action for %s\n", name);
-    return hemp_action_init(
-        (hemp_actor_f) constructor, msg
+    return hemp_action_new(
+        (hemp_actor) constructor, msg
     );
 }
 
 
 void test_factory() {
-    hemp_factory_p factory = hemp_factory_init();
+    hemp_factory factory = hemp_factory_new();
     ok( factory, "created factory" );
 
     hemp_factory_register(
-        factory, "foo", (hemp_actor_f) &constructor, "FOO"
+        factory, "foo", (hemp_actor) &constructor, "FOO"
     );
-    hemp_mem_p instance = hemp_factory_instance(
+    hemp_memory instance = hemp_factory_instance(
         factory, "foo"
     );
     ok( instance, "got a foo instance" );
@@ -67,20 +67,20 @@ void test_factory() {
 
 
 void test_factory_wildcard() {
-    hemp_factory_p factory = hemp_factory_init();
+    hemp_factory factory = hemp_factory_new();
     ok( factory, "created wildcard factory" );
 
     hemp_factory_register(
-        factory, "foo.*", (hemp_actor_f) &wildcard, "FOO"
+        factory, "foo.*", (hemp_actor) &wildcard, "FOO"
     );
     hemp_factory_register(
-        factory, "bar.*", (hemp_actor_f) &wildcard, "BAR"
+        factory, "bar.*", (hemp_actor) &wildcard, "BAR"
     );
     hemp_factory_register(
-        factory, "foo.bar.*", (hemp_actor_f) &wildcard, "FOO.BAR"
+        factory, "foo.bar.*", (hemp_actor) &wildcard, "FOO.BAR"
     );
 
-    hemp_mem_p instance = hemp_factory_instance(factory, "foo.splat");
+    hemp_memory instance = hemp_factory_instance(factory, "foo.splat");
     ok( instance, "got foo.splat instance" );
     is( instance, "[FOO] constructor for foo.splat", "constructed foo.splat" );
     ok( n == 2, "made two constructor calls" );

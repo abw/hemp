@@ -51,7 +51,7 @@ void hemp_fatal(char *format, ...) {
  **********************************************************************
  */
 
-static hemp_char_t HEMP_MD5_PADDING[64] = {
+static hemp_char HEMP_MD5_PADDING[64] = {
   0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -74,22 +74,22 @@ static hemp_char_t HEMP_MD5_PADDING[64] = {
 /* FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4 */
 /* Rotation is separate from addition to prevent recomputation */
 #define FF(a, b, c, d, x, s, ac) \
-  {(a) += F ((b), (c), (d)) + (x) + (hemp_uint_t)(ac); \
+  {(a) += F ((b), (c), (d)) + (x) + (hemp_uint)(ac); \
    (a) = ROTATE_LEFT ((a), (s)); \
    (a) += (b); \
   }
 #define GG(a, b, c, d, x, s, ac) \
-  {(a) += G ((b), (c), (d)) + (x) + (hemp_uint_t)(ac); \
+  {(a) += G ((b), (c), (d)) + (x) + (hemp_uint)(ac); \
    (a) = ROTATE_LEFT ((a), (s)); \
    (a) += (b); \
   }
 #define HH(a, b, c, d, x, s, ac) \
-  {(a) += H ((b), (c), (d)) + (x) + (hemp_uint_t)(ac); \
+  {(a) += H ((b), (c), (d)) + (x) + (hemp_uint)(ac); \
    (a) = ROTATE_LEFT ((a), (s)); \
    (a) += (b); \
   }
 #define II(a, b, c, d, x, s, ac) \
-  {(a) += I ((b), (c), (d)) + (x) + (hemp_uint_t)(ac); \
+  {(a) += I ((b), (c), (d)) + (x) + (hemp_uint)(ac); \
    (a) = ROTATE_LEFT ((a), (s)); \
    (a) += (b); \
   }
@@ -109,13 +109,13 @@ hemp_md5_init(
             hemp_mem_fail("MD5");
     }
     
-    md5->i[0] = md5->i[1] = (hemp_uint_t) 0;
+    md5->i[0] = md5->i[1] = (hemp_uint) 0;
 
     /* Load magic initialization constants */
-    md5->buffer[0] = (hemp_uint_t) 0x67452301;
-    md5->buffer[1] = (hemp_uint_t) 0xefcdab89;
-    md5->buffer[2] = (hemp_uint_t) 0x98badcfe;
-    md5->buffer[3] = (hemp_uint_t) 0x10325476;
+    md5->buffer[0] = (hemp_uint) 0x67452301;
+    md5->buffer[1] = (hemp_uint) 0xefcdab89;
+    md5->buffer[2] = (hemp_uint) 0x98badcfe;
+    md5->buffer[3] = (hemp_uint) 0x10325476;
     
     return md5;
 }
@@ -126,10 +126,10 @@ hemp_md5_init(
 void 
 hemp_md5_update(
     hemp_md5_p  md5,
-    hemp_str_p  input,
-    hemp_size_t length
+    hemp_string  input,
+    hemp_size length
 ) {
-    hemp_uint_t in[16];
+    hemp_uint in[16];
     int mdi;
     unsigned int i, ii;
 
@@ -137,11 +137,11 @@ hemp_md5_update(
     mdi = (int)((md5->i[0] >> 3) & 0x3F);
 
     /* update number of bits */
-    if ((md5->i[0] + ((hemp_uint_t) length << 3)) < md5->i[0])
+    if ((md5->i[0] + ((hemp_uint) length << 3)) < md5->i[0])
         md5->i[1]++;
 
-    md5->i[0] += ((hemp_uint_t) length << 3);
-    md5->i[1] += ((hemp_uint_t) length >> 29);
+    md5->i[0] += ((hemp_uint) length << 3);
+    md5->i[1] += ((hemp_uint) length >> 29);
 
     while (length--) {
         /* add new character to buffer, increment mdi */
@@ -150,10 +150,10 @@ hemp_md5_update(
         /* transform if necessary */
         if (mdi == 0x40) {
             for (i = 0, ii = 0; i < 16; i++, ii += 4)
-                in[i] = (((hemp_uint_t) md5->input[ii+3]) << 24) |
-                        (((hemp_uint_t) md5->input[ii+2]) << 16) |
-                        (((hemp_uint_t) md5->input[ii+1]) << 8 ) |
-                         ((hemp_uint_t) md5->input[ii]);
+                in[i] = (((hemp_uint) md5->input[ii+3]) << 24) |
+                        (((hemp_uint) md5->input[ii+2]) << 16) |
+                        (((hemp_uint) md5->input[ii+1]) << 8 ) |
+                         ((hemp_uint) md5->input[ii]);
 
             hemp_md5_transform(md5->buffer, in);
             mdi = 0;
@@ -168,8 +168,8 @@ void
 hemp_md5_final(
     hemp_md5_p md5
 ) {
-    hemp_uint_t in[16];
-    hemp_str_p str = md5->output;
+    hemp_uint in[16];
+    hemp_string str = md5->output;
     int mdi;
     unsigned int i, ii;
     unsigned int padlen;
@@ -187,18 +187,18 @@ hemp_md5_final(
 
     /* append length in bits and transform */
     for (i = 0, ii = 0; i < 14; i++, ii += 4)
-        in[i] = (((hemp_uint_t) md5->input[ii+3]) << 24) |
-                (((hemp_uint_t) md5->input[ii+2]) << 16) |
-                (((hemp_uint_t) md5->input[ii+1]) << 8 ) |
-                 ((hemp_uint_t) md5->input[ii]);
+        in[i] = (((hemp_uint) md5->input[ii+3]) << 24) |
+                (((hemp_uint) md5->input[ii+2]) << 16) |
+                (((hemp_uint) md5->input[ii+1]) << 8 ) |
+                 ((hemp_uint) md5->input[ii]);
         hemp_md5_transform(md5->buffer, in);
 
     /* store buffer in digest */
     for (i = 0, ii = 0; i < 4; i++, ii += 4) {
-        md5->digest[ii  ] = (hemp_char_t) ( md5->buffer[i]        & 0xFF);
-        md5->digest[ii+1] = (hemp_char_t) ((md5->buffer[i] >> 8 ) & 0xFF);
-        md5->digest[ii+2] = (hemp_char_t) ((md5->buffer[i] >> 16) & 0xFF);
-        md5->digest[ii+3] = (hemp_char_t) ((md5->buffer[i] >> 24) & 0xFF);
+        md5->digest[ii  ] = (hemp_char) ( md5->buffer[i]        & 0xFF);
+        md5->digest[ii+1] = (hemp_char) ((md5->buffer[i] >> 8 ) & 0xFF);
+        md5->digest[ii+2] = (hemp_char) ((md5->buffer[i] >> 16) & 0xFF);
+        md5->digest[ii+3] = (hemp_char) ((md5->buffer[i] >> 24) & 0xFF);
     }
 
     for (i = 0; i < 16; i++) {
@@ -213,10 +213,10 @@ hemp_md5_final(
 
 static void 
 hemp_md5_transform(
-    hemp_uint_t *buffer,
-    hemp_uint_t *input
+    hemp_uint *buffer,
+    hemp_uint *input
 ) {
-    hemp_uint_t a = buffer[0], 
+    hemp_uint a = buffer[0], 
                 b = buffer[1], 
                 c = buffer[2], 
                 d = buffer[3];

@@ -75,7 +75,7 @@ hemp_test_global_cleanup() {
 
 hemp_test_plan_p 
 hemp_test_global_plan(
-    hemp_uint_t planned
+    hemp_uint planned
 ) {
     HEMP_MUTEX_LOCK;
 
@@ -97,7 +97,7 @@ hemp_test_global_plan(
 
 hemp_test_plan_p 
 hemp_test_plan_setup(
-    hemp_uint_t planned
+    hemp_uint planned
 ) {
     hemp_test_global_setup();
 
@@ -152,11 +152,11 @@ hemp_test_plan_summary(
 
 
 
-hemp_uint_t
+hemp_uint
 hemp_test_plan_result(
     hemp_test_plan_p plan
 ) {
-    hemp_uint_t r;
+    hemp_uint r;
 
     /* Ran too many tests?  Return the number of tests that were run
        that shouldn't have been */
@@ -190,19 +190,19 @@ hemp_test_plan_cleanup(
  * Generate a test result.
  *--------------------------------------------------------------------------*/
 
-hemp_uint_t
+hemp_uint
 hemp_test_result(
     hemp_test_plan_p    plan,
-    hemp_bool_t         ok,         /* true=pass false=fail */
-    hemp_name_p         func,        
-    hemp_name_p         file,       /* source file          */
-    hemp_uint_t         line,       /* line number          */
-    hemp_name_p         name,       /* test name            */
+    hemp_bool         ok,         /* true=pass false=fail */
+    hemp_name         func,        
+    hemp_name         file,       /* source file          */
+    hemp_uint         line,       /* line number          */
+    hemp_name         name,       /* test name            */
     ...
 ) {
     va_list ap;
-    hemp_str_p  fullname = NULL;
-    hemp_bool_t badname  = HEMP_TRUE;   /* assume the worst */
+    hemp_string  fullname = NULL;
+    hemp_bool badname  = HEMP_TRUE;   /* assume the worst */
     char *c;
     int name_is_digits;
 
@@ -314,7 +314,7 @@ hemp_test_result(
 
 hemp_test_plan_p
 hemp_test_plan(
-    hemp_uint_t planned
+    hemp_uint planned
 ) {
     return hemp_test_global_plan(planned);
 }
@@ -365,7 +365,7 @@ void
 hemp_mem_trace_ok(void)
 {
     char *debug = getenv("HEMP_MEMORY_TRACE");
-    hemp_size_t size = hemp_mem_trace_report(
+    hemp_size size = hemp_mem_trace_report(
         debug && hemp_string_eq(debug, "1")
     );
 
@@ -389,20 +389,20 @@ hemp_mem_trace_ok(void)
  * e.g. hemp_test_expect_text("tt3", "tt3", "...test script text...")
  *--------------------------------------------------------------------------*/
 
-hemp_uint_t
+hemp_uint
 hemp_test_expect_text(
-    hemp_str_p      language,
-    hemp_str_p      dialect,
-    hemp_str_p      text,
-    hemp_str_p      alias,
-    hemp_context_p  context
+    hemp_string      language,
+    hemp_string      dialect,
+    hemp_string      text,
+    hemp_string      alias,
+    hemp_context  context
 ) {
-    hemp_p          hemp = hemp_init();
-    hemp_str_p      test, name, expect, error, end;
-    hemp_list_p     list;
-    hemp_template_p tmpl;
-    hemp_text_p     output;
-    hemp_size_t     n;
+    hemp_hemp          hemp = hemp_init();
+    hemp_string      test, name, expect, error, end;
+    hemp_list     list;
+    hemp_template tmpl;
+    hemp_text     output;
+    hemp_size     n;
 
     HEMP_TRY;
         hemp_language(hemp, language);
@@ -474,7 +474,7 @@ hemp_test_expect_text(
 
         HEMP_TRY;
 
-            tmpl = hemp_template(
+            tmpl = hemp_template_instance(
                 hemp,
                 HEMP_TT3,
                 HEMP_TEXT, 
@@ -517,15 +517,15 @@ hemp_test_expect_text(
  * e.g. hemp_test_expect_text("tt3", "tt3", "/path/to/test/script")
  *--------------------------------------------------------------------------*/
 
-hemp_uint_t
+hemp_uint
 hemp_test_expect_file(
-    hemp_str_p     language,
-    hemp_str_p     dialect,
-    hemp_str_p     file,
-    hemp_context_p context
+    hemp_string     language,
+    hemp_string     dialect,
+    hemp_string     file,
+    hemp_context context
 ) {
-    hemp_str_p  text   = hemp_filesystem_read_file(file);
-    hemp_uint_t result = hemp_test_expect_text(language, dialect, text, file, context);
+    hemp_string  text   = hemp_filesystem_read_file(file);
+    hemp_uint result = hemp_test_expect_text(language, dialect, text, file, context);
     hemp_mem_free(text);
     return result;
 }
@@ -538,19 +538,19 @@ hemp_test_expect_file(
  * e.g. hemp_test_expect_text("tt3", "tt3", HEMP_TESTDIR, "numops")
  *--------------------------------------------------------------------------*/
 
-hemp_uint_t
+hemp_uint
 hemp_test_expect_script(
-    hemp_str_p     language,
-    hemp_str_p     dialect,
-    hemp_str_p     testdir,
-    hemp_str_p     name,
-    hemp_context_p context
+    hemp_string     language,
+    hemp_string     dialect,
+    hemp_string     testdir,
+    hemp_string     name,
+    hemp_context context
 ) {
 //    hemp_mem_trace_reset();
-    hemp_str_p  dir    = hemp_filesystem_join_path(testdir, "scripts");
-    hemp_str_p  file   = hemp_filesystem_join_path(dir, name);
-    hemp_str_p  text   = hemp_filesystem_read_file(file);
-    hemp_uint_t result = hemp_test_expect_text(language, dialect, text, name, context);
+    hemp_string  dir    = hemp_filesystem_join_path(testdir, "scripts");
+    hemp_string  file   = hemp_filesystem_join_path(dir, name);
+    hemp_string  text   = hemp_filesystem_read_file(file);
+    hemp_uint result = hemp_test_expect_text(language, dialect, text, name, context);
     hemp_mem_free(text);
     hemp_mem_free(file);
     hemp_mem_free(dir);
@@ -561,9 +561,9 @@ hemp_test_expect_script(
 
 void 
 hemp_test_output(
-    hemp_str_p  name,
-    hemp_text_p output,
-    hemp_str_p  expect
+    hemp_string  name,
+    hemp_text output,
+    hemp_string  expect
 ) {
     hemp_string_chomp(output->string);
     hemp_string_chomp(expect);
@@ -583,9 +583,9 @@ hemp_test_output(
 
 void 
 hemp_test_error(
-    hemp_str_p name,
-    hemp_str_p error,
-    hemp_str_p expect
+    hemp_string name,
+    hemp_string error,
+    hemp_string expect
 ) {
     hemp_string_chomp(error);
     hemp_string_chomp(expect);

@@ -3,8 +3,8 @@
 
 hemp_filesystem_p
 hemp_filesystem_init(
-    hemp_p     hemp,
-    hemp_str_p path
+    hemp_hemp     hemp,
+    hemp_string path
 ) {
     hemp_filesystem_p filesystem = (hemp_filesystem_p) hemp_mem_alloc( 
         sizeof(struct hemp_filesystem_s)
@@ -49,7 +49,7 @@ hemp_filesystem_free(
 void
 hemp_filesystem_set_path(
     hemp_filesystem_p filesystem,
-    hemp_str_p        path
+    hemp_string        path
 ) {
     hemp_filesystem_clear_path(filesystem);             // TODO: free strings
     hemp_debug_file("setting filesystem path to %s\n", path);
@@ -58,32 +58,32 @@ hemp_filesystem_set_path(
 }
 
 
-hemp_str_p
+hemp_string
 hemp_filesystem_cwd(
     hemp_filesystem_p filesystem
 ) {
     // HMM... not sure about this - see comments on cwd in 
     // Badger::Filesystem::Virtual... it doesn't really make sense in the 
     // context of a virtual filesystem
-    hemp_str_p cwd = getcwd(NULL, 0);
+    hemp_string cwd = getcwd(NULL, 0);
     if (! cwd)
         hemp_fatal("Can't read current working directory");     // TODO: proper error
     return cwd;
 }
 
 
-hemp_str_p
+hemp_string
 hemp_filesystem_join_path(
-    hemp_str_p base,
-    hemp_str_p path
+    hemp_string base,
+    hemp_string path
 ) {
     // quick hack to get something working - this needs doing properly to
     // clean up the generated path to make it canonical (e.g. collapse 
     // multiple slashes, resolve /./ and /../ elements, and so on)
-    hemp_size_t baselen = strlen(base);
-    hemp_bool_t slashb  = baselen && base[baselen - 1] == *HEMP_DIR_SEPARATOR;
-    hemp_bool_t slashp  = *path == *HEMP_DIR_SEPARATOR;
-    hemp_str_p  joined  = hemp_mem_alloc(
+    hemp_size baselen = strlen(base);
+    hemp_bool slashb  = baselen && base[baselen - 1] == *HEMP_DIR_SEPARATOR;
+    hemp_bool slashp  = *path == *HEMP_DIR_SEPARATOR;
+    hemp_string  joined  = hemp_mem_alloc(
         baselen + strlen(path) + 3              /* terminating NUL and extra slashes */
     );
     if (! joined)
@@ -114,10 +114,10 @@ hemp_filesystem_join_path(
 }
 
 
-hemp_str_p
+hemp_string
 hemp_filesystem_absolute_path(
     hemp_filesystem_p filesystem,
-    hemp_str_p        path
+    hemp_string        path
 ) {
     return hemp_filesystem_is_path_absolute(filesystem, path)
         ? path                              // bugger!  can't do this - don't know what we can free
@@ -128,13 +128,13 @@ hemp_filesystem_absolute_path(
 }
 
 
-hemp_str_p
+hemp_string
 hemp_filesystem_readable_path(
     hemp_filesystem_p filesystem,
-    hemp_str_p        path
+    hemp_string        path
 ) {
     int n;
-    hemp_str_p root, full;
+    hemp_string root, full;
     
     for (n = 0; n < filesystem->path->length; n++) {
         root = hemp_val_str( hemp_list_item(filesystem->path, n) );
@@ -148,12 +148,12 @@ hemp_filesystem_readable_path(
         
 
 
-hemp_str_p
+hemp_string
 hemp_filesystem_read_file(
-    hemp_str_p path
+    hemp_string path
 ) {
-    hemp_str_p  text = NULL;
-    hemp_size_t size = 0;
+    hemp_string  text = NULL;
+    hemp_size size = 0;
     FILE *fp = fopen(path,"r");
     struct stat stat_buf;
 

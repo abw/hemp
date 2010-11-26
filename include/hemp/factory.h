@@ -9,10 +9,10 @@
  * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_factory_s {
-    hemp_hash_p      instances;
-    hemp_hash_p      constructors;
-    hemp_hash_each_f cleaner;
+struct hemp_factory {
+    hemp_hash           instances;
+    hemp_hash           constructors;
+    hemp_hash_iter    cleaner;
 }; 
 
 
@@ -20,41 +20,40 @@ struct hemp_factory_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_factory_p 
-    hemp_factory_init();
+hemp_factory 
+    hemp_factory_new();
 
 void
     hemp_factory_free(
-        hemp_factory_p
+        hemp_factory    factory
     );
 
-hemp_bool_t
+hemp_bool
     hemp_factory_free_constructor(
-        hemp_hash_p     dialects,
-        hemp_pos_t      position,
-        hemp_slot_p     slot
+        hemp_hash       dialects,
+        hemp_pos        position,
+        hemp_slot       slot
     );
 
-hemp_action_p
-    hemp_factory_register(      /* register a constructor action            */
-        hemp_factory_p  factory,
-        hemp_str_p      name,
-        hemp_actor_f    actor,
-        hemp_mem_p      script
+hemp_action
+    hemp_factory_register(
+        hemp_factory    factory,
+        hemp_string     name,
+        hemp_actor      actor,
+        hemp_memory     script
     );
 
-hemp_action_p
-    hemp_factory_constructor(   /* fetch a constructor action               */
-        hemp_factory_p  factory,
-        hemp_str_p      name
+hemp_action
+    hemp_factory_constructor(
+        hemp_factory    factory,
+        hemp_string     name
     );
 
-hemp_mem_p
-    hemp_factory_instance(      /* fetch/construct a singleton instance     */
-        hemp_factory_p  factory,
-        hemp_str_p      name
+hemp_memory
+    hemp_factory_instance(
+        hemp_factory    factory,
+        hemp_string     name
     );
-
 
 
 #endif /* HEMP_FACTORY_H */

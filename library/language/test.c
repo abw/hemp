@@ -1,7 +1,7 @@
 #include <hemp/language/test.h>
 
 
-static struct hemp_symbols_s hemp_symbols_test[] = {
+static struct hemp_symbols hemp_symbols_test[] = {
     { "test.test",   &hemp_element_test_test_symbol     },
     { "test.expect", &hemp_element_test_expect_symbol   },
     { NULL, NULL },
@@ -33,7 +33,7 @@ HEMP_LANGUAGE_FUNC(hemp_language_test) {
  *--------------------------------------------------------------------------*/
 
 HEMP_DIALECT_FUNC(hemp_dialect_test) {
-    hemp_dialect_p dialect = hemp_dialect_init(hemp, name);
+    hemp_dialect dialect = hemp_dialect_new(hemp, name);
     
     dialect->prepare = &hemp_dialect_test_prepare;
     dialect->scanner = &hemp_scan_text;
@@ -43,15 +43,15 @@ HEMP_DIALECT_FUNC(hemp_dialect_test) {
 }
 
 
-hemp_template_p
+hemp_template
 hemp_dialect_test_prepare(
-    hemp_template_p tmpl
+    hemp_template tmpl
 ) {
     hemp_debug("hemp_dialect_test_prepare(%p)\n", tmpl);
 
-    hemp_p         hemp    = tmpl->dialect->hemp;
+    hemp_hemp         hemp    = tmpl->dialect->hemp;
     hemp_tagset_p  tagset  = tmpl->tagset;
-    hemp_grammar_p grammar = hemp_grammar(hemp, HEMP_TEST);
+    hemp_grammar grammar = hemp_grammar(hemp, HEMP_TEST);
 
     hemp_tagset_add_tag(
         tagset, 
@@ -70,7 +70,7 @@ hemp_dialect_test_prepare(
 
 void
 hemp_dialect_test_cleanup(
-    hemp_template_p tmpl
+    hemp_template tmpl
 ) {
     hemp_debug_call("hemp_dialect_test_cleanup(%p)\n", tmpl);
 }
@@ -83,7 +83,7 @@ hemp_dialect_test_cleanup(
 
 HEMP_GRAMMAR_FUNC(hemp_grammar_test) {
     hemp_debug("hemp_grammar_test(%p, %s)\n", hemp, name);
-    hemp_grammar_p grammar = hemp_grammar_hemp_alpha(hemp, name);
+    hemp_grammar grammar = hemp_grammar_hemp_alpha(hemp, name);
     HEMP_BLOCKOP("test.test",   "test",   11);
     HEMP_BLOCKOP("test.expect", "expect", 11);
     return grammar;
@@ -109,9 +109,9 @@ HEMP_SYMBOL_FUNC(hemp_element_test_test_symbol) {
 
 
 HEMP_SCAN_FUNC(hemp_element_test_test_scanner) {
-    hemp_str_p  src     = *srcptr;
-    hemp_str_p  tag_end = tag->end;
-    hemp_size_t tag_len = strlen(tag->end);
+    hemp_string  src     = *srcptr;
+    hemp_string  tag_end = tag->end;
+    hemp_size tag_len = strlen(tag->end);
 
     hemp_debug_call("hemp_element_test_test_scanner()\n");
 
@@ -136,9 +136,9 @@ HEMP_SCAN_FUNC(hemp_element_test_test_scanner) {
 
 
 HEMP_PREFIX_FUNC(hemp_element_test_test_prefix) {
-    hemp_element_p self = *elemptr;
-    hemp_symbol_p  type = self->type;
-    hemp_element_p block;
+    hemp_element self = *elemptr;
+    hemp_symbol  type = self->type;
+    hemp_element block;
 
     hemp_debug("hemp_element_test_test_prefix()\n");
     hemp_debug("my precedence: %d   request precedence: %d\n", type->rprec, precedence);
@@ -161,14 +161,14 @@ HEMP_PREFIX_FUNC(hemp_element_test_test_prefix) {
 
 
 HEMP_VALUE_FUNC(hemp_element_test_test_value) {
-    hemp_text_p text = hemp_context_tmp_text(context);
+    hemp_text text = hemp_context_tmp_text(context);
     hemp_todo("hemp_element_test_test_value()\n");
 }
 
 
 void
 hemp_element_test_test_clean(
-    hemp_element_p element
+    hemp_element element
 ) {
     hemp_debug_call("hemp_element_test_test_clean()\n");
     hemp_element_block_clean(
@@ -181,10 +181,10 @@ hemp_element_test_test_clean(
  * expect
  *--------------------------------------------------------------------------*/
 
-hemp_symbol_p
+hemp_symbol
 hemp_element_test_expect_symbol(
-    hemp_p        hemp,
-    hemp_symbol_p symbol
+    hemp_hemp        hemp,
+    hemp_symbol symbol
 ) {
     hemp_debug("test.test symbol: %s\n", symbol->name);
     symbol->scanner         = &hemp_element_test_expect_scanner;
@@ -198,9 +198,9 @@ hemp_element_test_expect_symbol(
 
 
 HEMP_SCAN_FUNC(hemp_element_test_expect_scanner) {
-    hemp_str_p  src     = *srcptr;
-    hemp_str_p  tag_end = tag->end;
-    hemp_size_t tag_len = strlen(tag->end);
+    hemp_string  src     = *srcptr;
+    hemp_string  tag_end = tag->end;
+    hemp_size tag_len = strlen(tag->end);
 
     hemp_debug_call("hemp_element_test_expect_scanner()\n");
 
@@ -226,9 +226,9 @@ HEMP_SCAN_FUNC(hemp_element_test_expect_scanner) {
 
 
 HEMP_PREFIX_FUNC(hemp_element_test_expect_prefix) {
-    hemp_element_p self = *elemptr;
-    hemp_symbol_p  type = self->type;
-    hemp_element_p block;
+    hemp_element self = *elemptr;
+    hemp_symbol  type = self->type;
+    hemp_element block;
 
     hemp_debug("hemp_element_test_expect_prefix()\n");
     hemp_debug("my precedence: %d   request precedence: %d\n", type->rprec, precedence);
@@ -251,7 +251,7 @@ HEMP_PREFIX_FUNC(hemp_element_test_expect_prefix) {
 
 void
 hemp_element_test_expect_clean(
-    hemp_element_p element
+    hemp_element element
 ) {
     hemp_debug_call("hemp_element_test_expect_clean()\n");
     hemp_element_block_clean(

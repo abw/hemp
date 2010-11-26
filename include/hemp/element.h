@@ -18,55 +18,90 @@
  * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_unary_s {
-    hemp_value_t    expr;
-    // TODO: args
+typedef struct {
+    hemp_value    expr;
+    hemp_value    args;
+}   hemp_eunary;
+
+typedef struct {
+    hemp_value    lhs;
+    hemp_value    rhs;
+}   hemp_ebinary;
+
+typedef struct {
+    hemp_value    args;
+    hemp_value    exprs;
+}   hemp_eblock;
+
+typedef union {
+    hemp_value    value;
+    hemp_eunary     unary;
+    hemp_ebinary    binary;
+    hemp_eblock     block;
+} hemp_eargs;
+
+struct hemp_element {
+    hemp_symbol     type;
+    hemp_elements   elements;
+    hemp_element    next;
+    hemp_string     token;
+    hemp_pos        position;
+    hemp_size       length;
+    hemp_flags      flags;
+    hemp_eargs      args;
 };
 
-struct hemp_binary_s {
-    hemp_value_t    lhs;
-    hemp_value_t    rhs;
-};
 
-struct hemp_block_s {
-    hemp_value_t    args;
-    hemp_value_t    exprs;
-};
+/*--------------------------------------------------------------------------
+ * function prototypes
+ *--------------------------------------------------------------------------*/
 
-typedef union hemp_eargs_u {
-    hemp_value_t    value;
-    hemp_block_t    block;
-    hemp_unary_t    unary;
-    hemp_binary_t   binary;
-} hemp_eargs_t;
+//hemp_element
+//    hemp_element_new();
 
-struct hemp_element_s {
-    hemp_symbol_p   type;
-    hemp_elements_p elements;
-    hemp_element_p  next;
-    hemp_str_p      token;
-    hemp_pos_t      position;
-    hemp_size_t     length;
-    hemp_flags_t    flags;
-    hemp_eargs_t    args;
-};
+hemp_element
+    hemp_element_init(
+        hemp_element    element,
+        hemp_symbol     symbol,
+        hemp_string     token,
+        hemp_pos        position,
+        hemp_size       length
+    );
+
+void
+    hemp_element_free(
+        hemp_element    element
+    );
+
+HEMP_INLINE hemp_element
+    hemp_element_create(
+        hemp_element    element,
+        hemp_string     typename
+    );
+
+hemp_symbol 
+    hemp_element_retype(
+        hemp_element    element,
+        hemp_string     typename
+    );
+
+hemp_element
+    hemp_element_parse(
+        hemp_element    element, 
+        hemp_scope      scope
+    );
+
+hemp_list
+    hemp_element_parse_exprs(HEMP_PREFIX_ARGS);
+
 
 
 /*--------------------------------------------------------------------------
  * macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_set_flag(item, flag) \
-    item->flags |= (flag)
-
-#define hemp_clear_flag(item, flag) \
-    item->flags &= ~(flag)
-
-#define hemp_has_flag(item, flag) \
-    item->flags & (flag)
-
-#define hemp_not_flag(item, flag) \
-    ! (hemp_has_flag(item, flag))
+#define hemp_element_new(symbol, token, position, length)       \
+    hemp_element_init(NULL, symbol, token, position, length)
 
 #define hemp_has_next(ep) \
     (*ep)->next
@@ -74,24 +109,24 @@ struct hemp_element_s {
 #define hemp_go_next(ep) \
     (*ep = (*ep)->next)
 
-#define hemp_skip_while(ep, flag)                       \
-    while( hemp_has_next(ep)                            \
-        && hemp_has_flag((*ep)->type, flag) )           \
+#define hemp_skip_while(ep, flag)                               \
+    while( hemp_has_next(ep)                                    \
+        && hemp_has_flag((*ep)->type, flag) )                   \
             hemp_go_next(ep);
 
-#define hemp_skip_whitespace(ep)                        \
+#define hemp_skip_whitespace(ep)                                \
     hemp_skip_while(ep, HEMP_BE_WHITESPACE)
 
-#define hemp_skip_delimiter(ep)                         \
+#define hemp_skip_delimiter(ep)                                 \
     hemp_skip_while(ep, HEMP_BE_DELIMITER|HEMP_BE_WHITESPACE)
 
-#define hemp_skip_separator(ep)                         \
+#define hemp_skip_separator(ep)                                 \
     hemp_skip_while(ep, HEMP_BE_SEPARATOR|HEMP_BE_DELIMITER|HEMP_BE_WHITESPACE)
 
-#define hemp_skip_terminator(ep)                        \
+#define hemp_skip_terminator(ep)                                \
     hemp_skip_while(ep, HEMP_BE_TERMINATOR|HEMP_BE_SEPARATOR|HEMP_BE_DELIMITER|HEMP_BE_WHITESPACE)
 
-#define hemp_at_eof(ep) \
+#define hemp_at_eof(ep)                                         \
     (*ep)->type == HempSymbolEOF
 
 #define hemp_expr(elem)                                         \
@@ -116,13 +151,13 @@ struct hemp_element_s {
     (hemp_val_list(elem->args.block.exprs))
 
 #define hemp_expr_element(elem)                                 \
-    ((hemp_element_p) hemp_val_obj( hemp_expr(elem) ))
+    ((hemp_element) hemp_val_obj( hemp_expr(elem) ))
 
 #define hemp_lhs_element(elem)                                  \
-    ((hemp_element_p) hemp_val_obj( hemp_lhs(elem) ))
+    ((hemp_element) hemp_val_obj( hemp_lhs(elem) ))
 
 #define hemp_rhs_element(elem)                                  \
-    ((hemp_element_p) hemp_val_obj( hemp_rhs(elem) ))
+    ((hemp_element) hemp_val_obj( hemp_rhs(elem) ))
 
 #define hemp_set_expr(elem, ex)                                 \
     (elem->args.unary.expr = ex)
@@ -172,10 +207,10 @@ struct hemp_element_s {
         : NULL                                                  \
     )
 
-#define hemp_parse_params(ep, sc, pr, fr, lhs)              \
-    ((*ep)->type->parse_params                              \
-        ? (*ep)->type->parse_params(ep, sc, pr, fr, lhs)    \
-        : NULL                                              \
+#define hemp_parse_params(ep, sc, pr, fr, lhs)                  \
+    ((*ep)->type->parse_params                                  \
+        ? (*ep)->type->parse_params(ep, sc, pr, fr, lhs)        \
+        : NULL                                                  \
     )
 
 
@@ -198,47 +233,8 @@ struct hemp_element_s {
 //
 
 /*--------------------------------------------------------------------------
- * function prototypes
- *--------------------------------------------------------------------------*/
-
-hemp_element_p
-    hemp_element_new();
-
-hemp_element_p
-    hemp_element_init(
-        hemp_element_p,
-        hemp_symbol_p, 
-        hemp_str_p, 
-        hemp_pos_t, 
-        hemp_size_t
-    );
-
-void
-    hemp_element_free(
-        hemp_element_p element
-    );
-
-HEMP_INLINE hemp_element_p
-    hemp_element_create(
-        hemp_element_p  element,
-        hemp_str_p      typename
-    );
-
-hemp_symbol_p 
-    hemp_element_retype(
-        hemp_element_p  element,
-        hemp_str_p      typename
-    );
-
-
-
-
-/*--------------------------------------------------------------------------
  * general parsing functions
  *--------------------------------------------------------------------------*/
-
-hemp_element_p  hemp_element_parse(hemp_element_p, hemp_scope_p);
-hemp_list_p     hemp_element_parse_exprs(HEMP_PREFIX_ARGS);
 
 HEMP_PREFIX_FUNC(hemp_element_parse_block);
 //HEMP_PREFIX_FUNC(hemp_element_parse_expr);
@@ -291,7 +287,7 @@ HEMP_OUTPUT_FUNC(hemp_element_literal_token);
 HEMP_OUTPUT_FUNC(hemp_element_literal_source);
 HEMP_OUTPUT_FUNC(hemp_element_literal_text);
 HEMP_VALUE_FUNC(hemp_element_literal_value);
-void hemp_element_literal_clean(hemp_element_p);
+void hemp_element_literal_clean(hemp_element);
 
 HEMP_SYMBOL_FUNC(hemp_element_word_symbol);
 HEMP_PREFIX_FUNC(hemp_element_word_prefix);
@@ -299,7 +295,7 @@ HEMP_PREFIX_FUNC(hemp_element_word_word);
 HEMP_VALUE_FUNC(hemp_element_word_value);
 HEMP_OPERATE_FUNC(hemp_element_word_assign);
 HEMP_COMPILE_FUNC(hemp_element_word_lvalue_param);
-void hemp_element_word_clean(hemp_element_p);
+void hemp_element_word_clean(hemp_element);
 
 
 /*--------------------------------------------------------------------------
@@ -339,7 +335,7 @@ HEMP_SYMBOL_FUNC(hemp_element_delimiter_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_separator_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_terminator_symbol);
 
-hemp_bool_t hemp_element_terminator_matches(hemp_element_p, hemp_str_p);
+hemp_bool hemp_element_terminator_matches(hemp_element, hemp_string);
 
 
 HEMP_SCAN_FUNC(hemp_element_comment_scanner);
@@ -539,7 +535,7 @@ HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol);
 HEMP_POSTFIX_FUNC(hemp_element_dotop_postfix);
 HEMP_VALUE_FUNC(hemp_element_dotop_value);
 HEMP_OPERATE_FUNC(hemp_element_dotop_assign);
-void hemp_element_dotop_clean(hemp_element_p);
+void hemp_element_dotop_clean(hemp_element);
 
 
 
@@ -572,22 +568,22 @@ HEMP_OUTPUT_FUNC(hemp_element_value_values);
 
 void
     hemp_element_text_clean(
-        hemp_element_p element
+        hemp_element element
     );
 
 void
     hemp_element_block_clean(
-        hemp_element_p element
+        hemp_element element
     );
 
 void
     hemp_element_brackets_clean(
-        hemp_element_p element
+        hemp_element element
     );
 
-hemp_bool_t
+hemp_bool
     hemp_element_dump(
-        hemp_element_p element
+        hemp_element element
     );
 
 

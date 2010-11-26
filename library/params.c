@@ -1,11 +1,11 @@
 #include <hemp/params.h>
 
 
-hemp_params_p
+hemp_params
 hemp_params_init(
-    hemp_params_p params
+    hemp_params params
 ) {
-    hemp_params_allocate(params);
+    HEMP_ALLOCATE(params);
 
     params->name = hemp_hash_new();
     params->item = hemp_list_new();
@@ -18,7 +18,7 @@ hemp_params_init(
 
 void
 hemp_params_free(
-    hemp_params_p params
+    hemp_params params
 ) {
     hemp_list_each(params->item, &hemp_list_each_free);
 
@@ -34,10 +34,10 @@ hemp_params_free(
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_params_add_item(
-    hemp_params_p   params,
-    hemp_str_p      name
+    hemp_params   params,
+    hemp_string      name
 ) {
     hemp_debug_call("hemp_params_add_item(%s)\n", name);
 
@@ -60,10 +60,10 @@ hemp_params_add_item(
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_params_add_list(
-    hemp_params_p   params,
-    hemp_str_p      name
+    hemp_params   params,
+    hemp_string      name
 ) {
     hemp_debug_call("hemp_params_add_list(%s)\n", name);
 
@@ -91,10 +91,10 @@ hemp_params_add_list(
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_params_add_hash(
-    hemp_params_p   params,
-    hemp_str_p      name
+    hemp_params   params,
+    hemp_string      name
 ) {
     hemp_debug_call("hemp_params_add_hash(%s)\n", name);
 

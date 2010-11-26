@@ -1,13 +1,13 @@
 #include <hemp/template.h>
 
 
-hemp_template_p
+hemp_template
 hemp_template_init(
-    hemp_dialect_p dialect,
-    hemp_source_p  source
+    hemp_dialect dialect,
+    hemp_source  source
 ) {
-    hemp_template_p tmpl = (hemp_template_p) hemp_mem_alloc(
-        sizeof(struct hemp_template_s)
+    hemp_template tmpl = (hemp_template) hemp_mem_alloc(
+        sizeof(struct hemp_template)
     );
 
     if (! tmpl)
@@ -16,8 +16,8 @@ hemp_template_init(
     tmpl->dialect  = dialect;
     tmpl->source   = source;
     tmpl->tagset   = hemp_tagset_init();
-    tmpl->scope    = hemp_scope_init(dialect->hemp);
-    tmpl->elements = hemp_elements_init(dialect->hemp, 0);
+    tmpl->scope    = hemp_scope_new(dialect->hemp);
+    tmpl->elements = hemp_elements_new(dialect->hemp, 0);
     tmpl->tree     = NULL;
         
     return tmpl;
@@ -26,7 +26,7 @@ hemp_template_init(
 
 void
 hemp_template_free(
-    hemp_template_p tmpl
+    hemp_template tmpl
 ) {
     /* First call any custom cleanup code for the dialect */
     if (tmpl->dialect->cleanup)
@@ -47,9 +47,9 @@ hemp_template_free(
 }
 
 
-hemp_element_p
+hemp_element
 hemp_template_tokens(
-    hemp_template_p tmpl
+    hemp_template tmpl
 ) {
     hemp_debug_call("hemp_template_tokens(%p)\n", tmpl);
 
@@ -60,21 +60,21 @@ hemp_template_tokens(
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_template_scan(
-    hemp_template_p tmpl
+    hemp_template tmpl
 ) {
     hemp_debug_call("hemp_template_scan(%p)\n", tmpl);
     
-    hemp_bool_t result = tmpl->dialect->scanner(tmpl);
+    hemp_bool result = tmpl->dialect->scanner(tmpl);
     
     return result;
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_template_compile(
-    hemp_template_p tmpl
+    hemp_template tmpl
 ) {
     hemp_debug_call("hemp_template_compile(%p)\n", tmpl);
     
@@ -88,9 +88,9 @@ hemp_template_compile(
 }
 
 
-hemp_element_p
+hemp_element
 hemp_template_tree(
-    hemp_template_p tmpl
+    hemp_template tmpl
 ) {
     hemp_debug_call("hemp_template_tree(%p)\n", tmpl);
 
@@ -101,18 +101,18 @@ hemp_template_tree(
 }
 
 
-hemp_text_p
+hemp_text
 hemp_template_render(
-    hemp_template_p tmpl,
-    hemp_context_p  context
+    hemp_template tmpl,
+    hemp_context  context
 ) {
     hemp_debug_call("hemp_template_render(%p)\n", tmpl);
-    hemp_p hemp = tmpl->dialect->hemp;
-    hemp_bool_t my_context = HEMP_FALSE;
-    hemp_value_t v;
-    hemp_text_p output;
+    hemp_hemp hemp = tmpl->dialect->hemp;
+    hemp_bool my_context = HEMP_FALSE;
+    hemp_value v;
+    hemp_text output;
 
-    hemp_element_p root = hemp_template_tree(tmpl);
+    hemp_element root = hemp_template_tree(tmpl);
 
     if (! context) {
         my_context = HEMP_TRUE;

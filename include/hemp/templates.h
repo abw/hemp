@@ -12,9 +12,9 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_templates_s {
-    hemp_p          hemp;
-    hemp_hash_p     templates;
-    hemp_dialect_p  dialect;
+    hemp_hemp          hemp;
+    hemp_hash     templates;
+    hemp_dialect  dialect;
 
     // TODO: cache
     // TODO: provider path
@@ -29,7 +29,7 @@ struct hemp_templates_s {
 
 hemp_templates_p
     hemp_templates_init(
-        hemp_p hemp
+        hemp_hemp hemp
     );
 
 void

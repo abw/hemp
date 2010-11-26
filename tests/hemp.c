@@ -11,10 +11,10 @@ main(int argc, char **argv, char **env)
 }
 
 void test_hemp() {
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object" );
 
-    hemp_str_p version = hemp_version();
+    hemp_string version = hemp_version();
     ok( version, "got hemp version: %s", version );
     
     hemp_free(hemp);

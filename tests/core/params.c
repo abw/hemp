@@ -12,7 +12,7 @@ int main(
 
 
 void test_params() {
-    hemp_params_p params = hemp_params_new();
+    hemp_params params = hemp_params_new();
     ok( params, "got params" );
 
     hemp_params_add_item(params, hemp_string_copy("foo"));
@@ -20,7 +20,7 @@ void test_params() {
     hemp_params_add_list(params, hemp_string_copy("baz"));
     hemp_params_add_hash(params, hemp_string_copy("bop"));
 
-    hemp_str_p i = hemp_params_item(params, "foo");
+    hemp_string i = hemp_params_item(params, "foo");
 
     is( hemp_params_item(params, "foo"), "item", "foo is an item" );
     is( hemp_params_item(params, "bar"), "item", "bar is an item" );

@@ -11,11 +11,11 @@
  * and input text.
  *-------------------------------------------------------------------------*/
 
-struct hemp_source_s {
-    hemp_scheme_p scheme;           /* e.g. text, file, etc                 */
-    hemp_str_p    md5;              /* MD5 hex digest of template uri       */
-    hemp_str_p    name;             /* path to file or source text          */
-    hemp_str_p    text;             /* file contents or source text         */
+struct hemp_source {
+    hemp_scheme scheme;           /* e.g. text, file, etc                 */
+    hemp_string    md5;              /* MD5 hex digest of template uri       */
+    hemp_string    name;             /* path to file or source text          */
+    hemp_string    text;             /* file contents or source text         */
 };
 
 
@@ -24,8 +24,8 @@ struct hemp_source_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_source_p   hemp_source_init( hemp_scheme_p, hemp_str_p );
-void            hemp_source_free( hemp_source_p );
+hemp_source   hemp_source_init( hemp_scheme, hemp_string );
+void            hemp_source_free( hemp_source );
 
 
 
@@ -40,7 +40,7 @@ void            hemp_source_free( hemp_source_p );
 )                                           
 
 #define hemp_source_name(source)            \
-    ((hemp_str_p) source->scheme->namer(source))
+    ((hemp_string) source->scheme->namer(source))
 
 
 #endif /* HEMP_SOURCE_H */

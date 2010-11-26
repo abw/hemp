@@ -18,13 +18,13 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_bravo);
 HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_charlie);
 
 /* grammar mixins */
-void hemp_grammar_add_hemp_alpha(hemp_grammar_p);
-void hemp_grammar_add_hemp_bravo(hemp_grammar_p);
-void hemp_grammar_add_hemp_charlie(hemp_grammar_p);
+void hemp_grammar_add_hemp_alpha(hemp_grammar);
+void hemp_grammar_add_hemp_bravo(hemp_grammar);
+void hemp_grammar_add_hemp_charlie(hemp_grammar);
 
 
 /* static tables defining symbol collections */
-static struct hemp_symbols_s hemp_symbols_hemp[] = {
+static struct hemp_symbols hemp_symbols_hemp[] = {
     { "hemp.text",              &hemp_element_text_symbol               },
     { "hemp.space",             &hemp_element_space_symbol              },
     { "hemp.comment",           &hemp_element_comment_symbol            },
@@ -45,7 +45,7 @@ static struct hemp_symbols_s hemp_symbols_hemp[] = {
     { NULL, NULL },
 };
 
-static struct hemp_symbols_s hemp_symbols_hemp_bracket[] = {
+static struct hemp_symbols hemp_symbols_hemp_bracket[] = {
 //    { "hemp.bracket.parens",    &hemp_element_parens_symbol             },
 //    { "hemp.bracket.end_parens",&hemp_element_terminator_symbol         },
     { "hemp.bracket.parens",    &hemp_element_parens_symbol             },
@@ -54,14 +54,14 @@ static struct hemp_symbols_s hemp_symbols_hemp_bracket[] = {
     { NULL, NULL },
 };
 
-static struct hemp_symbols_s hemp_symbols_hemp_boolean[] = {
+static struct hemp_symbols hemp_symbols_hemp_boolean[] = {
     { "hemp.boolean.not",       &hemp_element_boolean_not_symbol        },
     { "hemp.boolean.and",       &hemp_element_boolean_and_symbol        },
     { "hemp.boolean.or",        &hemp_element_boolean_or_symbol         },
     { NULL, NULL },
 };
 
-static struct hemp_symbols_s hemp_symbols_hemp_number[] = {
+static struct hemp_symbols hemp_symbols_hemp_number[] = {
     { "hemp.number.autoinc",    &hemp_element_number_autoinc_symbol     },
     { "hemp.number.autodec",    &hemp_element_number_autodec_symbol     },
     { "hemp.number.plus",       &hemp_element_number_plus_symbol        },
@@ -81,7 +81,7 @@ static struct hemp_symbols_s hemp_symbols_hemp_number[] = {
     { NULL, NULL },
 };
 
-static struct hemp_symbols_s hemp_symbols_hemp_text[] = {
+static struct hemp_symbols hemp_symbols_hemp_text[] = {
     { "hemp.text.concat",       &hemp_element_text_concat_symbol        },
     { "hemp.text.compare",      &hemp_element_text_compare_symbol       },
     { "hemp.text.equal",        &hemp_element_text_equal_symbol         },
@@ -93,7 +93,7 @@ static struct hemp_symbols_s hemp_symbols_hemp_text[] = {
     { NULL, NULL },
 };
 
-static struct hemp_symbols_s hemp_symbols_hemp_assign[] = {
+static struct hemp_symbols hemp_symbols_hemp_assign[] = {
     { "hemp.operator.assign.equals", &hemp_element_assign_symbol        },
     { NULL, NULL },
 };
@@ -137,7 +137,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_bracket_symbols) {
     HEMP_ELEMENTS(hemp_symbols_hemp_bracket);
 
     /* now try again */
-    return (hemp_action_p) hemp_hash_fetch_pointer(
+    return (hemp_action) hemp_hash_fetch_pointer(
         hemp->elements->constructors, name
     );
 }
@@ -152,7 +152,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_boolean_symbols) {
     HEMP_ELEMENTS(hemp_symbols_hemp_boolean);
 
     /* now try again */
-    return (hemp_action_p) hemp_hash_fetch_pointer(
+    return (hemp_action) hemp_hash_fetch_pointer(
         hemp->elements->constructors, name
     );
 }
@@ -167,7 +167,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_number_symbols) {
     HEMP_ELEMENTS(hemp_symbols_hemp_number);
 
     /* now try again */
-    return (hemp_action_p) hemp_hash_fetch_pointer(
+    return (hemp_action) hemp_hash_fetch_pointer(
         hemp->elements->constructors, name
     );
 }
@@ -182,7 +182,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_text_symbols) {
     HEMP_ELEMENTS(hemp_symbols_hemp_text);
 
     /* now try again */
-    return (hemp_action_p) hemp_hash_fetch_pointer(
+    return (hemp_action) hemp_hash_fetch_pointer(
         hemp->elements->constructors, name
     );
 }
@@ -198,7 +198,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_assign_symbols) {
      */
     HEMP_ELEMENTS(hemp_symbols_hemp_assign);
 
-    return (hemp_action_p) hemp_hash_fetch_pointer(
+    return (hemp_action) hemp_hash_fetch_pointer(
         hemp->elements->constructors, name
     );
 }
@@ -210,7 +210,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_assign_symbols) {
 
 HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_alpha) {
     hemp_debug_call("hemp_grammar_hemp_alpha(%p, %s)\n", hemp, name);
-    hemp_grammar_p grammar = (hemp_grammar_p) hemp_grammar_init(hemp, name);
+    hemp_grammar grammar = (hemp_grammar) hemp_grammar_new(hemp, name);
     hemp_grammar_add_hemp_alpha(grammar);
     return grammar;
 }
@@ -218,14 +218,14 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_alpha) {
 
 HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_bravo) {
     hemp_debug_call("hemp_grammar_hemp_bravo(%p, %s)\n", hemp, name);
-    hemp_grammar_p grammar = hemp_grammar_hemp_alpha(hemp, name);
+    hemp_grammar grammar = hemp_grammar_hemp_alpha(hemp, name);
     hemp_grammar_add_hemp_bravo(grammar);
     return grammar;
 }
 
 HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_charlie) {
     hemp_debug_call("hemp_grammar_hemp_charlie(%p, %s)\n", hemp, name);
-    hemp_grammar_p grammar = hemp_grammar_hemp_bravo(hemp, name);
+    hemp_grammar grammar = hemp_grammar_hemp_bravo(hemp, name);
     hemp_grammar_add_hemp_charlie(grammar);
     return grammar;
 }
@@ -233,7 +233,7 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_charlie) {
 
 void
 hemp_grammar_add_hemp_alpha(
-    hemp_grammar_p grammar
+    hemp_grammar grammar
 ) {
     hemp_debug_call("hemp_grammar_add_hemp_alpha(%p)\n", grammar);
     HEMP_SYMBOL0("hemp.text");
@@ -246,7 +246,7 @@ hemp_grammar_add_hemp_alpha(
 
 void
 hemp_grammar_add_hemp_bravo(
-    hemp_grammar_p grammar
+    hemp_grammar grammar
 ) {
     hemp_debug_call("hemp_grammar_add_hemp_bravo(%p)\n", grammar);
 
@@ -331,7 +331,7 @@ hemp_grammar_add_hemp_bravo(
 
 void
 hemp_grammar_add_hemp_charlie(
-    hemp_grammar_p grammar
+    hemp_grammar grammar
 ) {
     hemp_debug_call("hemp_grammar_add_hemp_charlie(%p)\n", grammar);
 

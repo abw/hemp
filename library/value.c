@@ -4,178 +4,178 @@
 #include <hemp/type/hash.h>
 
 
-const hemp_value_t  HempMissing = HEMP_IDENT_MAKE(HEMP_IDENT_MISSING);
-const hemp_value_t  HempNothing = HEMP_IDENT_MAKE(HEMP_IDENT_NOTHING);
-const hemp_value_t  HempEmpty   = HEMP_IDENT_MAKE(HEMP_IDENT_EMPTY);
-const hemp_value_t  HempFalse   = HEMP_IDENT_MAKE(HEMP_IDENT_FALSE);
-const hemp_value_t  HempTrue    = HEMP_IDENT_MAKE(HEMP_IDENT_TRUE);
-const hemp_value_t  HempBefore  = HEMP_IDENT_MAKE(HEMP_IDENT_BEFORE);
-const hemp_value_t  HempAfter   = HEMP_IDENT_MAKE(HEMP_IDENT_AFTER);
-const hemp_value_t  HempEqual   = HEMP_IDENT_MAKE(HEMP_IDENT_EQUAL);
+const hemp_value  HempMissing = HEMP_IDENT_MAKE(HEMP_IDENT_MISSING);
+const hemp_value  HempNothing = HEMP_IDENT_MAKE(HEMP_IDENT_NOTHING);
+const hemp_value  HempEmpty   = HEMP_IDENT_MAKE(HEMP_IDENT_EMPTY);
+const hemp_value  HempFalse   = HEMP_IDENT_MAKE(HEMP_IDENT_FALSE);
+const hemp_value  HempTrue    = HEMP_IDENT_MAKE(HEMP_IDENT_TRUE);
+const hemp_value  HempBefore  = HEMP_IDENT_MAKE(HEMP_IDENT_BEFORE);
+const hemp_value  HempAfter   = HEMP_IDENT_MAKE(HEMP_IDENT_AFTER);
+const hemp_value  HempEqual   = HEMP_IDENT_MAKE(HEMP_IDENT_EQUAL);
 
 
 /*--------------------------------------------------------------------------
  * inline functions to encode native values as tagged values
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_value_t
-hemp_num_val(hemp_num_t n) {
-    hemp_value_t v;
+HEMP_INLINE hemp_value
+hemp_num_val(hemp_num n) {
+    hemp_value v;
     v.number = n;
     return v;
 }
 
 
-HEMP_INLINE hemp_value_t
-hemp_int_val(hemp_int_t i) {
-    hemp_value_t v;
-    v.bits = HEMP_INTEGER_TAG | ((hemp_u64_t) i & HEMP_INTEGER_MASK);
+HEMP_INLINE hemp_value
+hemp_int_val(hemp_int i) {
+    hemp_value v;
+    v.bits = HEMP_INTEGER_TAG | ((hemp_u64) i & HEMP_INTEGER_MASK);
     return v;
 }
 
 
-HEMP_INLINE hemp_value_t
-hemp_ptr_val(hemp_mem_p p) {
-    hemp_value_t v;
-    v.bits = HEMP_POINTER_TAG | ((hemp_u64_t) p & HEMP_POINTER_MASK);
+HEMP_INLINE hemp_value
+hemp_ptr_val(hemp_memory p) {
+    hemp_value v;
+    v.bits = HEMP_POINTER_TAG | ((hemp_u64) p & HEMP_POINTER_MASK);
     return v;
 }
 
 
-HEMP_INLINE hemp_value_t
-hemp_str_val(hemp_str_p s) {
-    hemp_value_t v;
-    v.bits = HEMP_STRING_TAG | ((hemp_u64_t) s & HEMP_POINTER_MASK);
+HEMP_INLINE hemp_value
+hemp_str_val(hemp_string s) {
+    hemp_value v;
+    v.bits = HEMP_STRING_TAG | ((hemp_u64) s & HEMP_POINTER_MASK);
     return v;
 }
 
 
-HEMP_INLINE hemp_value_t
-hemp_text_val(hemp_text_p t) {
-    hemp_value_t v;
-    v.bits = HEMP_TEXT_TAG | ((hemp_u64_t) t & HEMP_POINTER_MASK);
+HEMP_INLINE hemp_value
+hemp_text_val(hemp_text t) {
+    hemp_value v;
+    v.bits = HEMP_TEXT_TAG | ((hemp_u64) t & HEMP_POINTER_MASK);
     return v;
 }
 
 
-HEMP_INLINE hemp_value_t
-hemp_list_val(hemp_list_p t) {
-    hemp_value_t v;
-    v.bits = HEMP_LIST_TAG | ((hemp_u64_t) t & HEMP_POINTER_MASK);
+HEMP_INLINE hemp_value
+hemp_list_val(hemp_list t) {
+    hemp_value v;
+    v.bits = HEMP_LIST_TAG | ((hemp_u64) t & HEMP_POINTER_MASK);
     return v;
 }
 
 
-HEMP_INLINE hemp_value_t
-hemp_hash_val(hemp_hash_p t) {
-    hemp_value_t v;
-    v.bits = HEMP_HASH_TAG | ((hemp_u64_t) t & HEMP_POINTER_MASK);
+HEMP_INLINE hemp_value
+hemp_hash_val(hemp_hash t) {
+    hemp_value v;
+    v.bits = HEMP_HASH_TAG | ((hemp_u64) t & HEMP_POINTER_MASK);
     return v;
 }
 
 
-HEMP_INLINE hemp_value_t
+HEMP_INLINE hemp_value
 hemp_obj_val(hemp_object_p t) {
-    hemp_value_t v;
-    v.bits = HEMP_OBJECT_TAG | ((hemp_u64_t) t & HEMP_POINTER_MASK);
+    hemp_value v;
+    v.bits = HEMP_OBJECT_TAG | ((hemp_u64) t & HEMP_POINTER_MASK);
     return v;
 }
 
 
-HEMP_INLINE hemp_value_t
-hemp_ident_val(hemp_u8_t i) {
-    hemp_value_t v;
-    v.bits = HEMP_IDENTITY_TAG | ((hemp_u64_t) i & HEMP_IDENT_MASK);
+HEMP_INLINE hemp_value
+hemp_ident_val(hemp_u8 i) {
+    hemp_value v;
+    v.bits = HEMP_IDENTITY_TAG | ((hemp_u64) i & HEMP_IDENT_MASK);
     return v;
 }
 
 
-HEMP_INLINE hemp_value_t
-hemp_bool_val(hemp_bool_t b) {
+HEMP_INLINE hemp_value
+hemp_bool_val(hemp_bool b) {
     return b
         ? HempTrue
         : HempFalse;
 }
 
 
-HEMP_INLINE hemp_value_t
-hemp_elem_val(hemp_element_p e) {
+HEMP_INLINE hemp_value
+hemp_elem_val(hemp_element e) {
     return hemp_obj_val((hemp_object_p) e);
 }
 
 
-HEMP_INLINE hemp_value_t
+HEMP_INLINE hemp_value
 hemp_type_val(
     hemp_type_p type, 
-    hemp_mem_p  ptr
+    hemp_memory  ptr
 ) {
-    hemp_value_t v;
-    v.bits = HEMP_TAG_MAKE(type->id) | ((hemp_u64_t) ptr & HEMP_POINTER_MASK);
+    hemp_value v;
+    v.bits = HEMP_TAG_MAKE(type->id) | ((hemp_u64) ptr & HEMP_POINTER_MASK);
     return v;
 }
 
-extern HEMP_INLINE hemp_value_t     hemp_elem_val(hemp_element_p e);
+extern HEMP_INLINE hemp_value     hemp_elem_val(hemp_element e);
 
 
 /*--------------------------------------------------------------------------
  * inline functions to decode tagged values to native values
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_num_t
-hemp_val_num(hemp_value_t v) {
+HEMP_INLINE hemp_num
+hemp_val_num(hemp_value v) {
     return v.number;
 }
 
 
-HEMP_INLINE hemp_int_t
-hemp_val_int(hemp_value_t v) {
-    return (hemp_int_t)(v.bits & HEMP_INTEGER_MASK);
+HEMP_INLINE hemp_int
+hemp_val_int(hemp_value v) {
+    return (hemp_int)(v.bits & HEMP_INTEGER_MASK);
 }
 
 
-HEMP_INLINE hemp_mem_p
-hemp_val_ptr(hemp_value_t v) {
-    return (hemp_mem_p) HEMP_POINTER(v);
+HEMP_INLINE hemp_memory
+hemp_val_ptr(hemp_value v) {
+    return (hemp_memory) HEMP_POINTER(v);
 }
 
 
-HEMP_INLINE hemp_str_p
-hemp_val_str(hemp_value_t v) {
-    return (hemp_str_p) HEMP_POINTER(v);
+HEMP_INLINE hemp_string
+hemp_val_str(hemp_value v) {
+    return (hemp_string) HEMP_POINTER(v);
 }
 
 
-HEMP_INLINE hemp_text_p
-hemp_val_text(hemp_value_t v) {
-    return (hemp_text_p) HEMP_POINTER(v);
+HEMP_INLINE hemp_text
+hemp_val_text(hemp_value v) {
+    return (hemp_text) HEMP_POINTER(v);
 }
 
 
-HEMP_INLINE hemp_list_p
-hemp_val_list(hemp_value_t v) {
-    return (hemp_list_p) HEMP_POINTER(v);
+HEMP_INLINE hemp_list
+hemp_val_list(hemp_value v) {
+    return (hemp_list) HEMP_POINTER(v);
 }
 
 
-HEMP_INLINE hemp_hash_p
-hemp_val_hash(hemp_value_t v) {
-    return (hemp_hash_p) HEMP_POINTER(v);
+HEMP_INLINE hemp_hash
+hemp_val_hash(hemp_value v) {
+    return (hemp_hash) HEMP_POINTER(v);
 }
 
 
 HEMP_INLINE hemp_object_p
-hemp_val_obj(hemp_value_t v) {
+hemp_val_obj(hemp_value v) {
     return (hemp_object_p) HEMP_POINTER(v);
 }
 
-HEMP_INLINE hemp_element_p
-hemp_val_elem(hemp_value_t v) {
-    return (hemp_element_p) HEMP_POINTER(v);
+HEMP_INLINE hemp_element
+hemp_val_elem(hemp_value v) {
+    return (hemp_element) HEMP_POINTER(v);
 }
 
 
-HEMP_INLINE hemp_bool_t
-hemp_val_bool(hemp_value_t v) {
+HEMP_INLINE hemp_bool
+hemp_val_bool(hemp_value v) {
     return hemp_is_true(v)
         ? HEMP_TRUE
         : HEMP_FALSE;
@@ -201,7 +201,7 @@ HEMP_VALUE_FUNC(hemp_value_self) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_true) {
+HEMP_VALUE_FUNC(hemp_valuerue) {
     return HempTrue;
 }
 
@@ -213,7 +213,7 @@ HEMP_VALUE_FUNC(hemp_value_false) {
 
 HEMP_OUTPUT_FUNC(hemp_value_values) {
     hemp_debug_call("hemp_value_values()\n");
-    hemp_list_p values;
+    hemp_list values;
     hemp_prepare_values(context, output, values);
     hemp_list_push(values, value);
 //    hemp_debug("hemp_value_values() added value to list, now has %d items\n", values->length);
@@ -223,7 +223,7 @@ HEMP_OUTPUT_FUNC(hemp_value_values) {
 
 HEMP_FETCH_FUNC(hemp_value_dot) {
     hemp_debug("hemp_value_dot(%s)\n", hemp_type_name(container));
-    hemp_value_t result = HempMissing;
+    hemp_value result = HempMissing;
 
     /* call the value's fetch method, if it has one */
     hemp_type_p type = hemp_type(container);
@@ -241,7 +241,7 @@ HEMP_FETCH_FUNC(hemp_value_dot) {
     }
     else {
         /* otherwise we have to convert the key to text */
-        hemp_text_p ktext = hemp_text_new_size(16);
+        hemp_text ktext = hemp_text_new_size(16);
         hemp_onto_text(key, context, hemp_text_val(ktext));
         result = hemp_send(container, ktext->string, context);
         hemp_text_free(ktext);
@@ -349,7 +349,7 @@ HEMP_FETCH_FUNC(hemp_value_not_dot) {
  *--------------------------------------------------------------------------*/
 
 void hemp_dump_value(
-    hemp_value_t value
+    hemp_value value
 ) {
     hemp_dump_u64(value.bits);
     printf("TYPE: %s\n", hemp_type_name(value));
@@ -363,12 +363,12 @@ void hemp_dump_value(
 
 
 void hemp_dump_u64(
-    hemp_u64_t  value
+    hemp_u64  value
 ) {
-    hemp_u64_t mask = (hemp_u64_t) 1 << 63;
-    hemp_u64_t bit;
-    hemp_int_t n = 1;
-    hemp_str_p col;
+    hemp_u64 mask = (hemp_u64) 1 << 63;
+    hemp_u64 bit;
+    hemp_int n = 1;
+    hemp_string col;
     printf("0x%016llx : ", value);
 
     while (mask) {
@@ -395,27 +395,27 @@ void hemp_dump_u64(
         n++;
     }
     printf(HEMP_ANSI_RESET "\n");
-//    hemp_dump_32((hemp_u32_t)(value >> 32));
-//    hemp_dump_32((hemp_u32_t)(hemp_u64_t) value & 0xFFFFFFFFL);
+//    hemp_dump_32((hemp_u32)(value >> 32));
+//    hemp_dump_32((hemp_u32)(hemp_u64) value & 0xFFFFFFFFL);
 }
 
 void hemp_dump_64(
-    hemp_u64_t value
+    hemp_u64 value
 ) {
-    hemp_u32_t top = value >> 32;
-    hemp_u32_t bot = value & 0xffffffffL;
+    hemp_u32 top = value >> 32;
+    hemp_u32 bot = value & 0xffffffffL;
     printf("0x%016llx\n", value);
 //    printf("TOP: 0x%016llx\n", top);
-    hemp_dump_32((hemp_u32_t) top);
-    hemp_dump_32((hemp_u32_t) bot);
+    hemp_dump_32((hemp_u32) top);
+    hemp_dump_32((hemp_u32) bot);
     printf("\n");
 }
 
 void hemp_dump_32(
-    hemp_u32_t value
+    hemp_u32 value
 ) {
-    hemp_u32_t  mask  = (hemp_u32_t) 1 << 31;
-    hemp_u32_t bit;
+    hemp_u32  mask  = (hemp_u32) 1 << 31;
+    hemp_u32 bit;
     printf("0x%08x : ", value);
 
     while (mask) {

@@ -10,11 +10,11 @@
  * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_params_s {
-    hemp_hash_p     name;
-    hemp_list_p     item;
-    hemp_str_p      list;
-    hemp_str_p      hash;
+struct hemp_params {
+    hemp_hash           name;
+    hemp_list           item;
+    hemp_string         list;
+    hemp_string         hash;
 };
 
 
@@ -22,32 +22,32 @@ struct hemp_params_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_params_p
+hemp_params
     hemp_params_init(
-        hemp_params_p
+        hemp_params     params
     );
 
 void
     hemp_params_free(
-        hemp_params_p
+        hemp_params     params
     );
 
-hemp_bool_t
+hemp_bool
     hemp_params_add_item(
-        hemp_params_p   params,
-        hemp_str_p      name
+        hemp_params     params,
+        hemp_string     name
     );
 
-hemp_bool_t
+hemp_bool
     hemp_params_add_list(
-        hemp_params_p   params,
-        hemp_str_p      name
+        hemp_params     params,
+        hemp_string     name
     );
 
-hemp_bool_t
+hemp_bool
     hemp_params_add_hash(
-        hemp_params_p   params,
-        hemp_str_p      name
+        hemp_params     params,
+        hemp_string     name
     );
 
 
@@ -57,9 +57,6 @@ hemp_bool_t
 
 #define hemp_params_new()                       \
     hemp_params_init(NULL)
-
-#define hemp_params_allocate(name)              \
-    hemp_allocate_type_name(params, name)
 
 #define hemp_params_item(params, n)             \
     hemp_hash_fetch_string(params->name, n)

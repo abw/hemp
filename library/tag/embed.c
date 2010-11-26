@@ -15,11 +15,11 @@ hemp_tag_t HempTagEmbed = &hemp_embed_tag;
 
 void 
 hemp_scan_embed_tag(
-    hemp_template_p tmpl,
-    hemp_tag_p      tag,
-    hemp_str_p      tagtok,
-    hemp_pos_t      pos,
-    hemp_str_p     *srcptr
+    hemp_template tmpl,
+    hemp_tag      tag,
+    hemp_string      tagtok,
+    hemp_pos      pos,
+    hemp_string     *srcptr
 ) {
     hemp_todo("embed tag");
 }

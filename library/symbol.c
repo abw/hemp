@@ -7,17 +7,14 @@
  * symbol functions
  *--------------------------------------------------------------------------*/
 
-hemp_symbol_p
-hemp_symbol_init(
-    hemp_str_p name,
-    hemp_str_p start,
-    hemp_str_p end
+hemp_symbol
+hemp_symbol_new(
+    hemp_string name,
+    hemp_string start,
+    hemp_string end
 ) {
-    hemp_symbol_p symbol = (hemp_symbol_p) hemp_mem_alloc(
-        sizeof(struct hemp_symbol_s)
-    );
-    if (! symbol)
-        hemp_mem_fail("symbol");
+    hemp_symbol symbol;
+    HEMP_ALLOCATE(symbol);
 
     symbol->name            = name;    // should be const?
     symbol->namespace       = hemp_namespace(name);
@@ -75,7 +72,7 @@ hemp_symbol_init(
 
 void
 hemp_symbol_free(
-    hemp_symbol_p symbol
+    hemp_symbol symbol
 ) {
 // No you fuckwit!  The cleanup is for cleaning up element instances, not
 // the symbol entries themselves
@@ -103,10 +100,10 @@ hemp_symbol_free(
 
 void
 hemp_global_symbols_init(
-    hemp_global_p   global
+    hemp_global   global
 ) {
     hemp_debug_call("hemp_global_symbols_init()\n");
-    hemp_int_t n;
+    hemp_int n;
 
     /* return silently if it looks like we've already done this step */
     if (HempSymbolSpace)
@@ -128,7 +125,7 @@ hemp_global_symbols_init(
 
 void
 hemp_global_symbols_free(
-    hemp_global_p   global
+    hemp_global global
 ) {
     hemp_debug_call("hemp_global_symbols_free()\n");
     hemp_symbol_free(HempSymbolSpace);      HempSymbolSpace     = NULL;
@@ -150,7 +147,7 @@ hemp_global_symbols_free(
 
 void 
 hemp_symbol_dump(
-    hemp_symbol_p symbol
+    hemp_symbol symbol
 ) {
     hemp_debug("symbol at %p\n", symbol->name, symbol);
     hemp_debug("       name: %s\n", symbol->name);

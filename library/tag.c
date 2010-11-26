@@ -1,17 +1,17 @@
 #include <hemp/tag.h>
 
 
-hemp_tag_p
+hemp_tag
 hemp_tag_init(
-    hemp_str_p       name,
+    hemp_string       name,
     hemp_tag_style_t style,
-    hemp_str_p       start,
-    hemp_str_p       end,
+    hemp_string       start,
+    hemp_string       end,
     hemp_tag_scan_f  scan,
-    hemp_grammar_p   grammar
+    hemp_grammar   grammar
 ) {
-    hemp_tag_p tag = (hemp_tag_p) hemp_mem_alloc(
-        sizeof(struct hemp_tag_s)
+    hemp_tag tag = (hemp_tag) hemp_mem_alloc(
+        sizeof(struct hemp_tag)
     );
 
     if (! tag)
@@ -44,9 +44,9 @@ hemp_tag_init(
 }
 
 
-hemp_tag_p
+hemp_tag
 hemp_tag_copy(
-    hemp_tag_p tag
+    hemp_tag tag
 ) {
     return hemp_tag_init(
         tag->name,
@@ -61,8 +61,8 @@ hemp_tag_copy(
 
 void
 hemp_tag_set_name(
-    hemp_tag_p tag,
-    hemp_str_p name
+    hemp_tag tag,
+    hemp_string name
 ) {
     hemp_mem_free(tag->name);
 
@@ -75,8 +75,8 @@ hemp_tag_set_name(
 
 void
 hemp_tag_set_start(
-    hemp_tag_p tag,
-    hemp_str_p start
+    hemp_tag tag,
+    hemp_string start
 ) {
     hemp_mem_free(tag->start);
 
@@ -89,8 +89,8 @@ hemp_tag_set_start(
 
 void
 hemp_tag_set_end(
-    hemp_tag_p tag,
-    hemp_str_p end
+    hemp_tag tag,
+    hemp_string end
 ) {
     if (tag->end)
         hemp_mem_free(tag->end);
@@ -110,9 +110,9 @@ hemp_tag_set_end(
 
 void
 hemp_tag_set_start_end(
-    hemp_tag_p tag,
-    hemp_str_p start,
-    hemp_str_p end
+    hemp_tag tag,
+    hemp_string start,
+    hemp_string end
 ) {
     hemp_tag_set_start(tag, start);
     hemp_tag_set_end(tag, end);
@@ -121,7 +121,7 @@ hemp_tag_set_start_end(
 
 void
 hemp_tag_free(
-    hemp_tag_p tag
+    hemp_tag tag
 ) {
     hemp_mem_free(tag->name);
     hemp_mem_free(tag->start);

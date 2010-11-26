@@ -10,29 +10,29 @@
 
 
 #define HEMP_IN_PTREE(head,src) \
-    head[(hemp_char_t) *src % HEMP_PTREE_SIZE]
+    head[(hemp_char) *src % HEMP_PTREE_SIZE]
 
 
 void 
 hemp_inline_tag_scanner(
-    hemp_template_p tmpl,
-    hemp_tag_p      tag,
-    hemp_str_p      tagtok,
-    hemp_pos_t      pos,
-    hemp_str_p     *srcptr
+    hemp_template tmpl,
+    hemp_tag      tag,
+    hemp_string      tagtok,
+    hemp_pos      pos,
+    hemp_string     *srcptr
 ) {
-    hemp_str_p      src    = *srcptr,
+    hemp_string      src    = *srcptr,
                     from   = src,
                     point;
-    hemp_str_p      tagend = tag->end;
-    hemp_size_t     endlen = strlen(tagend);
-    hemp_element_p  element;
-    hemp_num_t      num_val;
-    hemp_int_t      int_val;
-    hemp_bool_t     is_int, is_word;
+    hemp_string      tagend = tag->end;
+    hemp_size     endlen = strlen(tagend);
+    hemp_element  element;
+    hemp_num      num_val;
+    hemp_int      int_val;
+    hemp_bool     is_int, is_word;
     hemp_pnode_p    pnode;
     hemp_pnode_p    *ophead  = tag->grammar->operators->head;
-    hemp_symbol_p   symbol;
+    hemp_symbol   symbol;
 
     hemp_debug_call("hemp_scan_inline_tag()\n");
 
@@ -115,7 +115,7 @@ hemp_inline_tag_scanner(
         }
         else if (
             (pnode  = HEMP_IN_PTREE(ophead, src))
-        &&  (symbol = (hemp_symbol_p) hemp_pnode_match_more(pnode, &src))
+        &&  (symbol = (hemp_symbol) hemp_pnode_match_more(pnode, &src))
         ) {
             hemp_debug_token("OPERATOR", from, src-from);
 
@@ -169,13 +169,13 @@ bareword:
 }
 
 
-hemp_str_p
+hemp_string
 hemp_inline_tag_to_end_of_line(
     HEMP_TAG_SKIP_ARGS
 ) {
     hemp_debug_call("hemp_inline_tag_to_end_of_line()\n");
-    hemp_str_p  tag_end = tag->end;
-    hemp_size_t tag_len = strlen(tag->end);
+    hemp_string  tag_end = tag->end;
+    hemp_size tag_len = strlen(tag->end);
 
     /* walk to the end of line or end of tag */
     while ( *src

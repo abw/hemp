@@ -1,7 +1,7 @@
 #include <hemp/test.h>
 
 void test_list();
-hemp_str_p list_as_text(hemp_list_p);
+hemp_string list_as_text(hemp_list);
 
 
 int
@@ -13,8 +13,8 @@ main(int argc, char **argv, char **env) {
 
 
 void test_list() {
-    hemp_p      hemp = hemp_init();
-    hemp_list_p list = hemp_list_new();
+    hemp_hemp      hemp = hemp_init();
+    hemp_list list = hemp_list_new();
     
     pass("created list");
 
@@ -38,11 +38,11 @@ void test_list() {
     );
 
     /* test methods */
-    hemp_context_p context = hemp_context(hemp);
-    hemp_value_t   value   = hemp_list_val(list);
+    hemp_context context = hemp_context_instance(hemp);
+    hemp_value   value   = hemp_list_val(list);
     ok( hemp_is_list(value), "value is a list" );
     
-    hemp_value_t   length  = hemp_send(value, "length", context);
+    hemp_value   length  = hemp_send(value, "length", context);
     ok( hemp_is_defined(length), "got define length" );
     ok( hemp_is_integer(length), "got an integer length" );
     eq( hemp_val_int(length), 2, "list length is 2" );
@@ -56,11 +56,11 @@ void test_list() {
 
 char buffer[255];
 
-hemp_bool_t 
+hemp_bool 
 hemp_text_append(
-    hemp_list_p  list, 
-    hemp_pos_t   pos, 
-    hemp_value_t value
+    hemp_list  list, 
+    hemp_pos   pos, 
+    hemp_value value
 ) {
     if (buffer[0])
         strcat(buffer, ", ");
@@ -69,9 +69,9 @@ hemp_text_append(
 }
 
 
-hemp_str_p
+hemp_string
 list_as_text(
-    hemp_list_p list
+    hemp_list list
 ) {
     buffer[0] = '\0';
     hemp_list_each(list, &hemp_text_append);

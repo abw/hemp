@@ -13,15 +13,15 @@ int main(
 
 
 void test_source() {
-    hemp_p hemp = hemp_init();
-    hemp_scheme_p scheme;
-    hemp_source_p source;
-    hemp_str_p    text;
+    hemp_hemp hemp = hemp_init();
+    hemp_scheme scheme;
+    hemp_source source;
+    hemp_string    text;
 
     ok( hemp, "created hemp object" );
 
     ok(
-        (source = hemp_source(hemp, HEMP_TEXT, "source/text.html")),
+        (source = hemp_source_instance(hemp, HEMP_TEXT, "source/text.html")),
         "created text source"
     );
     ok( 
@@ -37,7 +37,7 @@ void test_source() {
     hemp_source_free(source);
 
     ok(
-        (source = hemp_source(hemp, HEMP_FILE, "source/file.html")),
+        (source = hemp_source_instance(hemp, HEMP_FILE, "source/file.html")),
         "created file source"
     );
     ok( 

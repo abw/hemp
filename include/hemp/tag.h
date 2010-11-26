@@ -19,21 +19,21 @@
  * data structures
  *--------------------------------------------------------------------------*/
 
-enum hemp_tag_style_e {
+enum hemp_tag_style {
     HEMP_INLINE_TAG  = 1,
     HEMP_OUTLINE_TAG = 2
 };
 
 
 
-struct hemp_tag_s {
-   hemp_str_p       name;
+struct hemp_tag {
+   hemp_string       name;
    hemp_tag_style_t style;
-   hemp_str_p       start;
-   hemp_str_p       end;
+   hemp_string       start;
+   hemp_string       end;
    hemp_tag_scan_f  scan;
    hemp_tag_skip_f  to_end_of_line;
-   hemp_grammar_p   grammar;
+   hemp_grammar   grammar;
 };
 
 
@@ -41,49 +41,49 @@ struct hemp_tag_s {
  * function prototypes for generic tags
  *--------------------------------------------------------------------------*/
 
-hemp_tag_p
+hemp_tag
     hemp_tag_init(
-        hemp_str_p       name,
+        hemp_string       name,
         hemp_tag_style_t style,
-        hemp_str_p       start,
-        hemp_str_p       end,
+        hemp_string       start,
+        hemp_string       end,
         hemp_tag_scan_f  scan,
-        hemp_grammar_p   grammar
+        hemp_grammar   grammar
     );
 
-hemp_tag_p
+hemp_tag
     hemp_tag_copy(
-        hemp_tag_p tag
+        hemp_tag tag
     );
 
 void
     hemp_tag_set_name(
-        hemp_tag_p tag,
-        hemp_str_p name
+        hemp_tag tag,
+        hemp_string name
     );
 
 void
     hemp_tag_set_start(
-        hemp_tag_p tag,
-        hemp_str_p start
+        hemp_tag tag,
+        hemp_string start
     );
 
 void
     hemp_tag_set_end(
-        hemp_tag_p tag,
-        hemp_str_p end
+        hemp_tag tag,
+        hemp_string end
     );
 
 void
     hemp_tag_set_start_end(
-        hemp_tag_p tag,
-        hemp_str_p start,
-        hemp_str_p end
+        hemp_tag tag,
+        hemp_string start,
+        hemp_string end
     );
 
 void
     hemp_tag_free(
-        hemp_tag_p tag
+        hemp_tag tag
     );
 
 
@@ -92,10 +92,10 @@ void
  *--------------------------------------------------------------------------*/
 
 void        hemp_outline_tag_scanner( HEMP_TAG_SCAN_ARGS );
-hemp_str_p  hemp_outline_tag_to_end_of_line( HEMP_TAG_SKIP_ARGS );
+hemp_string  hemp_outline_tag_to_end_of_line( HEMP_TAG_SKIP_ARGS );
 
 void        hemp_inline_tag_scanner( HEMP_TAG_SCAN_ARGS );
-hemp_str_p  hemp_inline_tag_to_end_of_line( HEMP_TAG_SKIP_ARGS );
+hemp_string  hemp_inline_tag_to_end_of_line( HEMP_TAG_SKIP_ARGS );
 
 
 /* These are TODO (change name/implement/cleanup) */

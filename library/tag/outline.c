@@ -10,17 +10,17 @@ void
 hemp_outline_tag_scanner(
     HEMP_TAG_SCAN_ARGS
 ) {
-    hemp_str_p      src    = *srcptr,
+    hemp_string      src    = *srcptr,
                     from   = src,
                     point;
 
-    hemp_element_p  element;
-    hemp_num_t      num_val;
-    hemp_int_t      int_val;
-    hemp_bool_t     is_int, is_word;
+    hemp_element  element;
+    hemp_num      num_val;
+    hemp_int      int_val;
+    hemp_bool     is_int, is_word;
     hemp_pnode_p    pnode;
     hemp_pnode_p    *ophead  = tag->grammar->operators->head;
-    hemp_symbol_p   symbol;
+    hemp_symbol   symbol;
 
     hemp_debug("hemp_scan_outline_tag()\n");
 
@@ -110,7 +110,7 @@ hemp_outline_tag_scanner(
         }
         else if (
             (pnode  = HEMP_IN_PTREE(ophead, src))
-        &&  (symbol = (hemp_symbol_p) hemp_pnode_match_more(pnode, &src))
+        &&  (symbol = (hemp_symbol) hemp_pnode_match_more(pnode, &src))
         ) {
             hemp_debug_token("OPERATOR", from, src-from);
 
@@ -171,7 +171,7 @@ bareword:
 
 
 
-hemp_str_p
+hemp_string
 hemp_outline_tag_to_end_of_line(
     HEMP_TAG_SKIP_ARGS
 ) {

@@ -15,15 +15,15 @@ HEMP_SYMBOL_FUNC(hemp_element_test_expect_symbol);
 HEMP_SCAN_FUNC(hemp_element_test_test_scanner);
 HEMP_PREFIX_FUNC(hemp_element_test_test_prefix);
 HEMP_VALUE_FUNC(hemp_element_test_test_value);
-void hemp_element_test_test_clean(hemp_element_p);
+void hemp_element_test_test_clean(hemp_element);
 
 HEMP_SCAN_FUNC(hemp_element_test_expect_scanner);
 HEMP_PREFIX_FUNC(hemp_element_test_expect_prefix);
 HEMP_VALUE_FUNC(hemp_element_test_expect_value);
-void hemp_element_test_expect_clean(hemp_element_p);
+void hemp_element_test_expect_clean(hemp_element);
 
 
-hemp_template_p hemp_dialect_test_prepare(hemp_template_p tmpl);
-void hemp_dialect_test_cleanup(hemp_template_p tmpl);
+hemp_template hemp_dialect_test_prepare(hemp_template tmpl);
+void hemp_dialect_test_cleanup(hemp_template tmpl);
 
 #endif /* HEMP_LANGUAGE_TEST_H */

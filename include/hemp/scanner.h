@@ -8,13 +8,13 @@
  * generic so we can store parse-time scan and/or runtime error position.
  */
 
-struct hemp_scan_pos_s {
-    hemp_template_p tmpl;
-    hemp_tag_p      tag;
-    hemp_str_p      start;
-    hemp_pos_t      pos;
-    hemp_str_p      current;
-    hemp_symbol_p   symbol;
+struct hemp_scan_pos {
+    hemp_template tmpl;
+    hemp_tag      tag;
+    hemp_string      start;
+    hemp_pos      pos;
+    hemp_string      current;
+    hemp_symbol   symbol;
 };
 
 
@@ -39,25 +39,25 @@ struct hemp_scan_pos_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_scan_pos_p
+hemp_scan_pos
     hemp_scan_pos_init(
         HEMP_SCAN_ARGS
     );
 
 void 
     hemp_scan_pos_free(
-        hemp_scan_pos_p scan_pos
+        hemp_scan_pos scan_pos
     );
 
-hemp_bool_t
+hemp_bool
     hemp_scan_text(
-        hemp_template_p
+        hemp_template
     );
 
-//hemp_tag_p
+//hemp_tag
 //    hemp_scan_tag_start(
 //        hemp_pnode_p, 
-//        hemp_str_p *
+//        hemp_string *
 //    );
 
 

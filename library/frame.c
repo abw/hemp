@@ -1,12 +1,12 @@
 #include <hemp/frame.h>
 
 
-HEMP_INLINE hemp_frame_p
+HEMP_INLINE hemp_frame
 hemp_frame_init(
-    hemp_frame_p frame
+    hemp_frame frame
 ) {
     hemp_debug_call("hemp_frame_init(%p)\n", frame);
-    hemp_frame_allocate(frame);
+    HEMP_ALLOCATE(frame);
 
     frame->context = NULL;
     frame->parent  = NULL;
@@ -20,7 +20,7 @@ hemp_frame_init(
 
 HEMP_INLINE void
 hemp_frame_release(
-    hemp_frame_p frame
+    hemp_frame frame
 ) {
     hemp_list_free(frame->args);
     hemp_hash_free(frame->vars);
@@ -29,7 +29,7 @@ hemp_frame_release(
 
 HEMP_INLINE void
 hemp_frame_free(
-    hemp_frame_p frame
+    hemp_frame frame
 ) {
     hemp_frame_release(frame);
     hemp_mem_free(frame);

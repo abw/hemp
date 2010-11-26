@@ -11,12 +11,12 @@
 
 struct hemp_ptree_s {
     hemp_pnode_p    head[HEMP_PTREE_SIZE];
-    hemp_pool_p     pool;
+    hemp_pool     pool;
 };
 
 struct hemp_pnode_s {
-   hemp_str_p       key;
-   hemp_mem_p       value;
+   hemp_string       key;
+   hemp_memory       value;
    hemp_pnode_p     before;
    hemp_pnode_p     equal;
    hemp_pnode_p     after;
@@ -30,7 +30,7 @@ struct hemp_pnode_s {
 
 hemp_ptree_p 
     hemp_ptree_init(
-        hemp_size_t capacity
+        hemp_size capacity
     );
 
 void
@@ -41,27 +41,27 @@ void
 hemp_pnode_p
     hemp_ptree_node(
         hemp_ptree_p ptree, 
-        hemp_str_p   key, 
-        hemp_mem_p   value
+        hemp_string   key, 
+        hemp_memory   value
     );
 
 hemp_pnode_p
     hemp_ptree_store(
         hemp_ptree_p ptree, 
-        hemp_str_p   key, 
-        hemp_mem_p   value
+        hemp_string   key, 
+        hemp_memory   value
     );
 
-hemp_mem_p
+hemp_memory
     hemp_ptree_fetch(
         hemp_ptree_p ptree,
-        hemp_str_p   key
+        hemp_string   key
     );
 
-hemp_mem_p
+hemp_memory
     hemp_pnode_match_more(
         hemp_pnode_p    pnode, 
-        hemp_str_p     *srcptr
+        hemp_string     *srcptr
     );
 
 void 
@@ -85,7 +85,7 @@ int
  *--------------------------------------------------------------------------*/
 
 #define HEMP_IN_PTREE(head,src) \
-    head[(hemp_char_t) *src % HEMP_PTREE_SIZE]
+    head[(hemp_char) *src % HEMP_PTREE_SIZE]
 
 
 #endif /* HEMP_PTREE_H */

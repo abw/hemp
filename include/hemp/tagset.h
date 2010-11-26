@@ -19,8 +19,8 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_tagset_s {
-   hemp_symbol_p    text_symbol;
-   hemp_hash_p      tags;
+   hemp_symbol    text_symbol;
+   hemp_hash      tags;
    hemp_ptree_p     inline_tags;
    hemp_ptree_p     outline_tags;
 };
@@ -39,25 +39,25 @@ void
 hemp_pnode_p
     hemp_tagset_add_tag(
         hemp_tagset_p   tagset, 
-        hemp_tag_p      tag
+        hemp_tag      tag
     );
 
 hemp_pnode_p
     hemp_tagset_new_tag(
         hemp_tagset_p    tagset, 
-        hemp_str_p       name,
+        hemp_string       name,
         hemp_tag_style_t style,
-        hemp_str_p       start,
-        hemp_str_p       end,
+        hemp_string       start,
+        hemp_string       end,
         hemp_tag_scan_f  scan,
-        hemp_grammar_p   grammar
+        hemp_grammar   grammar
     );
 
-hemp_bool_t
+hemp_bool
     hemp_tagset_free_tag(
-        hemp_hash_p     tags,
-        hemp_pos_t      index,
-        hemp_slot_p     item
+        hemp_hash     tags,
+        hemp_pos      index,
+        hemp_slot     item
     );
 
 

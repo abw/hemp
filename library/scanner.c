@@ -5,10 +5,10 @@
  * scan_pos is a temporary hack to store scan position in an exception
  *--------------------------------------------------------------------------*/
 
-hemp_scan_pos_p
+hemp_scan_pos
 hemp_scan_pos_init(HEMP_SCAN_ARGS) {
-    hemp_scan_pos_p scan_pos = (hemp_scan_pos_p) hemp_mem_alloc(
-        sizeof(struct hemp_scan_pos_s)
+    hemp_scan_pos scan_pos = (hemp_scan_pos) hemp_mem_alloc(
+        sizeof(struct hemp_scan_pos)
     );
 
     if (! scan_pos)
@@ -27,7 +27,7 @@ hemp_scan_pos_init(HEMP_SCAN_ARGS) {
 
 void
 hemp_scan_pos_free(
-    hemp_scan_pos_p scan_pos
+    hemp_scan_pos scan_pos
 ) {
     hemp_mem_free(scan_pos);
 }
@@ -38,22 +38,22 @@ hemp_scan_pos_free(
  * text and embedded tags.
  *--------------------------------------------------------------------------*/
 
-hemp_bool_t
+hemp_bool
 hemp_scan_text(
-    hemp_template_p tmpl
+    hemp_template tmpl
 ) {
-    hemp_elements_p elements = tmpl->elements;
+    hemp_elements elements = tmpl->elements;
     hemp_tagset_p   tagset   = tmpl->tagset;
     hemp_pnode_p    *inhead  = tagset->inline_tags->head,
                     *outhead = tagset->outline_tags->head,
                     pnode;
-    hemp_str_p      text     = hemp_source_read(tmpl->source),
+    hemp_string      text     = hemp_source_read(tmpl->source),
                     src      = text,
                     from     = text,
                     cmptr, tagstr;
-    hemp_pos_t      pos      = 0,
+    hemp_pos      pos      = 0,
                     line     = 0;
-    hemp_tag_p      tag;
+    hemp_tag      tag;
 
 #if HEMP_DEBUG & HEMP_DEBUG_SCAN
     hemp_debug_magenta("-- source ---\n%s\n-------------\n", text);
@@ -64,10 +64,10 @@ hemp_scan_text(
         line++;
         hemp_debug_scan("\n%d (%02d) : ", line, src - text);
 
-        if ((pnode = outhead[(hemp_char_t) *src % HEMP_PTREE_SIZE])) {
+        if ((pnode = outhead[(hemp_char) *src % HEMP_PTREE_SIZE])) {
             tagstr = src;
             
-            if ((tag = (hemp_tag_p) hemp_pnode_match_more(pnode, &src))) {
+            if ((tag = (hemp_tag) hemp_pnode_match_more(pnode, &src))) {
                 hemp_debug_scan("[OUTLINE:%c]", *tagstr);
 
                 if (tagstr > from) {
@@ -95,10 +95,10 @@ hemp_scan_text(
                     src++;
                 break;
             }
-            else if ((pnode = inhead[(hemp_char_t) *src % HEMP_PTREE_SIZE])) {
+            else if ((pnode = inhead[(hemp_char) *src % HEMP_PTREE_SIZE])) {
                 tagstr = src;
 
-                if ((tag = (hemp_tag_p) hemp_pnode_match_more(pnode, &src))) {
+                if ((tag = (hemp_tag) hemp_pnode_match_more(pnode, &src))) {
                     hemp_debug_scan("[INLINE:%c]", *tagstr);
 
                     if (tagstr > from) {

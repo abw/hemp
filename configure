@@ -2804,7 +2804,6 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 
 ac_config_headers="$ac_config_headers include/hemp/config.h"
 
-
 ac_config_files="$ac_config_files Makefile include/Makefile library/Makefile programs/Makefile tests/Makefile tests/core/Makefile tests/type/Makefile tests/language/Makefile tests/language/hemp/Makefile tests/language/test/Makefile build/libltdl/Makefile"
 
 

@@ -18,6 +18,31 @@
 #endif
 
 
+/*--------------------------------------------------------------------------
+ * Memory allocation
+ *--------------------------------------------------------------------------*/
+
+#define HEMP_TYPE_ALLOCATE(type, name) ({                       \
+    name = (hemp_##type) hemp_mem_alloc(                        \
+        sizeof(struct hemp_##type)                              \
+    );                                                          \
+    if (! name)                                                 \
+        hemp_mem_fail(#type);                                   \
+})
+
+#define HEMP_TYPE_INSTANCE(type, name) ({                       \
+    if (! name) {                                               \
+        HEMP_TYPE_ALLOCATE(type, name);                         \
+    }                                                           \
+})
+
+#define HEMP_ALLOCATE(name)                                     \
+    HEMP_TYPE_ALLOCATE(name, name)
+
+#define HEMP_INSTANCE(name)                                     \
+    HEMP_TYPE_INSTANCE(name, name)
+
+
 
 /*--------------------------------------------------------------------------
  * Languages
@@ -36,12 +61,15 @@
  *--------------------------------------------------------------------------*/
 
 #define HEMP_LANGUAGE(name, constructor)    \
-    hemp_register_language(hemp, name, (hemp_actor_f) constructor);
+    hemp_register_language(                 \
+        hemp, name,                         \
+        (hemp_actor) constructor            \
+    );
 
 #define HEMP_LANGUAGE_FUNC(f)               \
     hemp_language_p f(                      \
-        hemp_p     hemp,                    \
-        hemp_str_p name                     \
+        hemp_hemp   hemp,                   \
+        hemp_string name                    \
     )
 
 
@@ -60,12 +88,15 @@
  *--------------------------------------------------------------------------*/
 
 #define HEMP_DIALECT(name, constructor)     \
-    hemp_register_dialect(hemp, name, (hemp_actor_f) constructor);
+    hemp_register_dialect(                  \
+        hemp, name,                         \
+        (hemp_actor) constructor            \
+    );
 
 #define HEMP_DIALECT_FUNC(f)                \
-    hemp_dialect_p f(                       \
-        hemp_p     hemp,                    \
-        hemp_str_p name                     \
+    hemp_dialect f(                         \
+        hemp_hemp   hemp,                   \
+        hemp_string name                    \
     )
 
 
@@ -79,12 +110,15 @@
  *--------------------------------------------------------------------------*/
 
 #define HEMP_GRAMMAR(name, constructor)     \
-    hemp_register_grammar(hemp, name, (hemp_actor_f) constructor);
+    hemp_register_grammar(                  \
+        hemp, name,                         \
+        (hemp_actor) constructor            \
+    );
 
 #define HEMP_GRAMMAR_FUNC(f)                \
-    hemp_grammar_p f(                       \
-        hemp_p     hemp,                    \
-        hemp_str_p name                     \
+    hemp_grammar f(                         \
+        hemp_hemp   hemp,                   \
+        hemp_string name                    \
     )
 
 
@@ -126,30 +160,30 @@
  *--------------------------------------------------------------------------*/
 
 #define HEMP_GLOBAL_SYMBOL(f)               \
-    hemp_symbol_p f()
+    hemp_symbol f()
 
 #define HEMP_SYMBOLS_ARGS                   \
-    hemp_p          hemp,                   \
-    hemp_str_p      name
+    hemp_hemp        hemp,                  \
+    hemp_string      name
 
 #define HEMP_SYMBOLS_ARG_NAMES              \
     hemp, name
 
 #define HEMP_SYMBOLS_FUNC(f)                \
-    hemp_action_p f(                        \
-        hemp_p      hemp,                   \
-        hemp_str_p  name                    \
+    hemp_action f(                          \
+        hemp_hemp    hemp,                  \
+        hemp_string  name                   \
     )
 
 #define HEMP_SYMBOL_ARGS                    \
-    hemp_p          hemp,                   \
-    hemp_symbol_p   symbol
+    hemp_hemp       hemp,                   \
+    hemp_symbol     symbol
 
 #define HEMP_SYMBOL_ARG_NAMES               \
     hemp, symbol
 
 #define HEMP_SYMBOL_FUNC(f)                 \
-    hemp_symbol_p f(                        \
+    hemp_symbol f(                          \
         HEMP_SYMBOL_ARGS                    \
     )
 
@@ -195,7 +229,10 @@
     hemp_register_elements(hemp, symbols);
 
 #define HEMP_ELEMENT(name, constructor)     \
-    hemp_register_element(hemp, name, (hemp_actor_f) constructor);
+    hemp_register_element(                  \
+        hemp, name,                         \
+        (hemp_actor) constructor            \
+    );
 
 
 /*--------------------------------------------------------------------------
@@ -213,23 +250,24 @@
  *--------------------------------------------------------------------------*/
 
 #define HEMP_SCAN_ARGS                      \
-    hemp_template_p tmpl,                   \
-    hemp_tag_p      tag,                    \
-    hemp_str_p      start,                  \
-    hemp_pos_t      pos,                    \
-    hemp_str_p     *srcptr,                 \
-    hemp_symbol_p   symbol
+    hemp_template   tmpl,                   \
+    hemp_tag        tag,                    \
+    hemp_string     start,                  \
+    hemp_pos        pos,                    \
+    hemp_string    *srcptr,                 \
+    hemp_symbol     symbol
 
 #define HEMP_SCAN_ARG_NAMES                 \
     tmpl, tag, start, pos, srcptr, symbol
 
 #define HEMP_SCAN_FUNC(f)                   \
-    hemp_element_p f(                       \
+    hemp_element f(                         \
         HEMP_SCAN_ARGS                      \
     )
 
-hemp_scan_pos_p hemp_scan_pos_init(HEMP_SCAN_ARGS);
-hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
+/* TODO: move this into scanner.h */
+hemp_scan_pos hemp_scan_pos_init(HEMP_SCAN_ARGS);
+hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
 
 #define HEMP_SCAN_ERROR(type,...)           \
     hemp_error_throw(                       \
@@ -267,28 +305,28 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  *--------------------------------------------------------------------------*/
 
 #define HEMP_PREFIX_ARGS                    \
-    hemp_element_p *elemptr,                \
-    hemp_scope_p    scope,                  \
-    hemp_prec_t     precedence,             \
-    hemp_bool_t     force
+    hemp_element   *elemptr,                \
+    hemp_scope      scope,                  \
+    hemp_oprec      precedence,             \
+    hemp_bool       force
 
 #define HEMP_PREFIX_ARG_NAMES               \
     elemptr, scope, precedence, force
 
 #define HEMP_PREFIX_FUNC(f)                 \
-    HEMP_DO_INLINE hemp_element_p f(        \
+    HEMP_INLINE hemp_element f(             \
         HEMP_PREFIX_ARGS                    \
     )
 
 #define HEMP_POSTFIX_ARGS                   \
     HEMP_PREFIX_ARGS,                       \
-    hemp_element_p  lhs 
+    hemp_element  lhs 
 
 #define HEMP_POSTFIX_ARG_NAMES              \
     elemptr, scope, precedence, force, lhs
 
 #define HEMP_POSTFIX_FUNC(f)                \
-    HEMP_DO_INLINE hemp_element_p f(        \
+    HEMP_INLINE hemp_element f(             \
         HEMP_POSTFIX_ARGS                   \
     )
 
@@ -305,9 +343,9 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 
 #define HEMP_COMPILE_FUNC(f)                \
     HEMP_INLINE void f(                     \
-        hemp_element_p  element,            \
-        hemp_scope_p    scope,              \
-        hemp_value_t    compiler            \
+        hemp_element    element,            \
+        hemp_scope      scope,              \
+        hemp_value    compiler            \
     )
 
 /* operator precedence */
@@ -381,26 +419,29 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 
 #define HEMP_VIEW_ARGS                      \
     hemp_viewer_p   viewer,                 \
-    hemp_element_p  element,                \
-    hemp_context_p  context,                \
-    hemp_value_t    output
+    hemp_element  element,                  \
+    hemp_context  context,                  \
+    hemp_value    output
 
 #define HEMP_VIEW_ARG_NAMES                 \
     viewer, element, context, output
 
 #define HEMP_VIEW_FUNC(f)                   \
-    HEMP_INLINE hemp_value_t f(             \
+    HEMP_INLINE hemp_value f(             \
         HEMP_VIEW_ARGS                      \
     )
 
 #define HEMP_VIEWER_FUNC(f)                 \
     hemp_viewer_p f(                        \
-        hemp_p     hemp,                    \
-        hemp_str_p name                     \
+        hemp_hemp   hemp,                   \
+        hemp_string name                    \
     )
 
 #define HEMP_VIEWER(name, constructor)      \
-    hemp_register_viewer(hemp, name, (hemp_actor_f) constructor);
+    hemp_register_viewer(                   \
+        hemp, name,                         \
+        (hemp_actor) constructor            \
+    );
 
 #define HEMP_VIEW(name, view)               \
     hemp_viewer_add_view(viewer, name, view);
@@ -419,40 +460,44 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
  *--------------------------------------------------------------------------*/
 
 #define HEMP_VALUE_FUNC(f)                  \
-    HEMP_INLINE hemp_value_t f(             \
-        hemp_value_t    value,              \
-        hemp_context_p  context             \
+    HEMP_INLINE hemp_value f(             \
+        hemp_value    value,              \
+        hemp_context    context             \
     )
 
 #define HEMP_OUTPUT_FUNC(f)                 \
-    HEMP_INLINE hemp_value_t f(             \
-        hemp_value_t    value,              \
-        hemp_context_p  context,            \
-        hemp_value_t    output              \
+    HEMP_INLINE hemp_value f(             \
+        hemp_value    value,              \
+        hemp_context    context,            \
+        hemp_value    output              \
     )
 
 #define HEMP_FETCH_FUNC(f)                  \
-    HEMP_INLINE hemp_value_t f(             \
-        hemp_value_t    container,          \
-        hemp_context_p  context,            \
-        hemp_value_t    key                 \
+    HEMP_INLINE hemp_value f(             \
+        hemp_value    container,          \
+        hemp_context    context,            \
+        hemp_value    key                 \
     )
 
 #define HEMP_STORE_FUNC(f)                  \
-    HEMP_INLINE hemp_value_t f(             \
-        hemp_value_t    container,          \
-        hemp_context_p  context,            \
-        hemp_value_t    key,                \
-        hemp_value_t    value               \
+    HEMP_INLINE hemp_value f(             \
+        hemp_value    container,          \
+        hemp_context    context,            \
+        hemp_value    key,                \
+        hemp_value    value               \
     )
 
 #define HEMP_OPERATE_FUNC(f)                \
-    HEMP_INLINE hemp_value_t f(             \
-        hemp_value_t    value,              \
-        hemp_context_p  context,            \
-        hemp_value_t    operand             \
+    HEMP_INLINE hemp_value f(             \
+        hemp_value    value,              \
+        hemp_context    context,            \
+        hemp_value    operand             \
     )
 
+
+/*--------------------------------------------------------------------------
+ * error handling
+ *--------------------------------------------------------------------------*/
 
 #define HEMP_UNDEF_ERROR(context,type)      \
     hemp_error_throw(                       \
@@ -511,9 +556,26 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
 
 #define HEMP_TYPE_FUNC(f)                   \
     hemp_type_p f(                          \
-        hemp_int_t id,                      \
-        hemp_str_p name                     \
+        hemp_int    id,                     \
+        hemp_string name                    \
     )
+
+
+/*--------------------------------------------------------------------------
+ * flag manipulation for elements, symbols or anything else with flags
+ *--------------------------------------------------------------------------*/
+
+#define hemp_set_flag(item, flag) \
+    item->flags |= (flag)
+
+#define hemp_clear_flag(item, flag) \
+    item->flags &= ~(flag)
+
+#define hemp_has_flag(item, flag) \
+    item->flags & (flag)
+
+#define hemp_not_flag(item, flag) \
+    ! (hemp_has_flag(item, flag))
 
 
 /*--------------------------------------------------------------------------
@@ -546,6 +608,8 @@ hemp_error_p    hemp_error_scan_pos(hemp_error_p, hemp_scan_pos_p);
     else {                                                          \
         list   = hemp_val_list(output);                             \
     }
+
+
 
 
 #endif /* HEMP_MACROS_H */

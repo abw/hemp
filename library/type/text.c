@@ -10,7 +10,7 @@ HEMP_TYPE_FUNC(hemp_type_text) {
     type->integer    = &hemp_type_text_integer;     /* text -> integer      */
     type->boolean    = &hemp_type_text_boolean;     /* text -> boolean      */
     type->compare    = &hemp_value_not_compare;     /* can't compare        */
-    type->defined    = &hemp_value_true;            /* always defined       */
+    type->defined    = &hemp_valuerue;            /* always defined       */
 
     hemp_type_extend(type, "length", &hemp_method_text_length);
 
@@ -25,12 +25,12 @@ HEMP_TYPE_FUNC(hemp_type_text) {
 
 /* NOTE: 'size' really refers to capacity and is different from length */
 
-hemp_text_p
+hemp_text
 hemp_text_init_size(
-    hemp_text_p text,
-    hemp_size_t size
+    hemp_text text,
+    hemp_size size
 ) {
-    hemp_text_allocate(text);
+    HEMP_INSTANCE(text);
     
     if (size) {
         text->string = hemp_mem_alloc(size + 1);
@@ -51,14 +51,14 @@ hemp_text_init_size(
 }
 
 
-hemp_text_p
+hemp_text
 hemp_text_init_format(
-    hemp_text_p text,
-    const hemp_str_p format,
+    hemp_text text,
+    const hemp_string format,
     ...
 ) {
-    hemp_str_p  string;
-    hemp_text_allocate(text);
+    hemp_string  string;
+    HEMP_ALLOCATE(text);
 
     va_list args;
     va_start(args, format);
@@ -83,7 +83,7 @@ hemp_text_init_format(
 
 HEMP_INLINE void
 hemp_text_release(
-    hemp_text_p text
+    hemp_text text
 ) {
     if (text->string) {
 //      hemp_debug_mem("releasing text string at %p -> %p\n", text, text->string);
@@ -95,7 +95,7 @@ hemp_text_release(
 
 void
 hemp_text_free(
-    hemp_text_p text
+    hemp_text text
 ) {
     hemp_text_release(text);
 //  hemp_debug_mem("freeing text at %p\n", text);
@@ -103,10 +103,10 @@ hemp_text_free(
 }
 
 
-HEMP_INLINE hemp_text_p
+HEMP_INLINE hemp_text
 hemp_text_capacity(
-    hemp_text_p text, 
-    hemp_size_t length
+    hemp_text text, 
+    hemp_size length
 ) {
     /* increment string length by 1 to account for terminating '\0' */
     if (text->capacity < ++length) {
@@ -124,33 +124,33 @@ hemp_text_capacity(
 }
 
 
-hemp_text_p
+hemp_text
 hemp_text_from_text(
-    hemp_text_p source
+    hemp_text source
 ) {
-    hemp_text_p text = hemp_text_new_size(source->length);
+    hemp_text text = hemp_text_new_size(source->length);
     hemp_text_append_text(text, source);
     return text;
 }
 
 
-hemp_text_p
+hemp_text
 hemp_text_from_string(
-    hemp_str_p source
+    hemp_string source
 ) {
-    hemp_text_p text = hemp_text_new_size(strlen(source));
+    hemp_text text = hemp_text_new_size(strlen(source));
     hemp_text_append_string(text, source);
     return text;
 }
 
 
 
-hemp_text_p
+hemp_text
 hemp_text_append_text(
-    hemp_text_p text, 
-    hemp_text_p append
+    hemp_text text, 
+    hemp_text append
 ) {
-    hemp_size_t length = text->length + append->length;
+    hemp_size length = text->length + append->length;
     
     text = hemp_text_capacity(text, length);
     strncpy(text->string + text->length, append->string, append->length);
@@ -161,13 +161,13 @@ hemp_text_append_text(
 }
 
 
-hemp_text_p 
+hemp_text 
 hemp_text_append_stringn(
-    hemp_text_p text, 
-    hemp_str_p  append, 
-    hemp_size_t length
+    hemp_text text, 
+    hemp_string  append, 
+    hemp_size length
 ) {
-    hemp_size_t capacity = text->length + length;
+    hemp_size capacity = text->length + length;
     text = hemp_text_capacity(text, capacity);
     strncpy(text->string + text->length, append, length);
     text->string[capacity] = '\0';
@@ -176,14 +176,14 @@ hemp_text_append_stringn(
 }
 
 
-hemp_text_p
+hemp_text
 hemp_text_insert_string(
-    hemp_text_p     text, 
-    hemp_offset_t   offset, 
-    hemp_str_p      insert
+    hemp_text     text, 
+    hemp_offset   offset, 
+    hemp_string      insert
 ) {
-    hemp_size_t length = text->length;
-    hemp_size_t extra;
+    hemp_size length = text->length;
+    hemp_size extra;
 
     /* negative offset counts back from the end of the text */
     if (offset < 0) {
@@ -211,12 +211,12 @@ hemp_text_insert_string(
 }
 
 
-hemp_text_p
+hemp_text
 hemp_text_replace_string(
-    hemp_text_p     text, 
-    hemp_str_p      replace
+    hemp_text     text, 
+    hemp_string      replace
 ) {
-    hemp_size_t length = strlen(replace);
+    hemp_size length = strlen(replace);
     hemp_text_capacity(text, length);
     strcpy(text->string, replace);
     text->string[length + 1] = HEMP_NUL;
@@ -245,16 +245,16 @@ HEMP_OUTPUT_FUNC(hemp_type_text_text) {
     /* if we have been passed an output buffer then we append the value
      * text onto the end of it 
      */
-//    hemp_text_p text = hemp_val_text(output);
+//    hemp_text text = hemp_val_text(output);
     hemp_text_append_text(hemp_val_text(output), hemp_val_text(value));
     return output;
 }
 
 
 HEMP_VALUE_FUNC(hemp_type_text_number) {
-    hemp_text_p text = hemp_val_text(value);
-    hemp_str_p  end;
-    hemp_num_t  nval;
+    hemp_text text = hemp_val_text(value);
+    hemp_string  end;
+    hemp_num  nval;
     
     if (! text->length) {
         HEMP_CONVERT_ERROR(
@@ -291,8 +291,8 @@ HEMP_VALUE_FUNC(hemp_type_text_number) {
 
 
 HEMP_VALUE_FUNC(hemp_type_text_integer) {
-    hemp_value_t nval = hemp_type_text_number(value, context);
-    return hemp_int_val((hemp_int_t) hemp_val_num(nval));
+    hemp_value nval = hemp_type_text_number(value, context);
+    return hemp_int_val((hemp_int) hemp_val_num(nval));
 }
 
 

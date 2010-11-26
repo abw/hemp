@@ -12,7 +12,7 @@ int main(
 
 
 void test_slab() {
-    hemp_slab_p slab = hemp_slab_init(100);
+    hemp_slab slab = hemp_slab_new(100);
     ok( slab, "created slab of %d bytes", slab->size );
     hemp_slab_free(slab);
     pass("released slab");

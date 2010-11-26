@@ -19,7 +19,7 @@ HEMP_PREFIX_FUNC(hemp_element_literal_prefix) {
         (*elemptr)->type->lprec, precedence
     );
 
-    hemp_element_p element = *elemptr;
+    hemp_element element = *elemptr;
 
     if (hemp_has_next(elemptr)) {
         hemp_go_next(elemptr);
@@ -33,8 +33,8 @@ HEMP_PREFIX_FUNC(hemp_element_literal_prefix) {
 
 HEMP_OUTPUT_FUNC(hemp_element_literal_token) {
     hemp_debug_call("hemp_element_literal_token()\n");
-    hemp_text_p text;
-    hemp_element_p element = hemp_val_elem(value);
+    hemp_text text;
+    hemp_element element = hemp_val_elem(value);
     hemp_prepare_text_size(context, output, text, element->length);
     hemp_text_append_stringn(text, element->token, element->length);
     return output;
@@ -43,8 +43,8 @@ HEMP_OUTPUT_FUNC(hemp_element_literal_token) {
 
 HEMP_OUTPUT_FUNC(hemp_element_literal_source) {
     hemp_debug_call("hemp_element_literal_source()\n");
-    hemp_text_p text;
-    hemp_element_p element = hemp_val_elem(value);
+    hemp_text text;
+    hemp_element element = hemp_val_elem(value);
     hemp_prepare_text_size(context, output, text, element->length);
     hemp_text_append_stringn(text, element->token, element->length);
     return output;
@@ -60,8 +60,8 @@ HEMP_OUTPUT_FUNC(hemp_element_literal_text) {
     /* TODO: merge this with hemp_element_literal_source().  They were 
      * different but are now the same
      */
-    hemp_text_p text;
-    hemp_element_p element = hemp_val_elem(value);
+    hemp_text text;
+    hemp_element element = hemp_val_elem(value);
     hemp_prepare_text_size(context, output, text, element->length);
     hemp_text_append_stringn(text, element->token, element->length);
     return output;
@@ -75,7 +75,7 @@ HEMP_VALUE_FUNC(hemp_element_literal_value) {
 
 void
 hemp_element_literal_clean(
-    hemp_element_p element
+    hemp_element element
 ) {
     hemp_debug_call("hemp_element_literal_clean(%p)\n", element);
 

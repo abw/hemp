@@ -1,16 +1,12 @@
 #include <hemp/scope.h>
 
 
-hemp_scope_p
-hemp_scope_init(
-    hemp_p hemp
+hemp_scope
+hemp_scope_new(
+    hemp_hemp hemp
 ) {
-    hemp_scope_p scope = (hemp_scope_p) hemp_mem_alloc(
-        sizeof(struct hemp_scope_s)
-    );
-    
-    if (! scope)
-        hemp_mem_fail("scope");
+    hemp_scope scope;
+    HEMP_ALLOCATE(scope);
 
     scope->hemp    = hemp;
     scope->parent  = NULL;
@@ -22,7 +18,7 @@ hemp_scope_init(
 
 void
 hemp_scope_free(
-    hemp_scope_p scope
+    hemp_scope scope
 ) {
     // TODO: worry about cleanup
     hemp_context_free(scope->context);

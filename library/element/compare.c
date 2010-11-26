@@ -36,7 +36,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_equal_symbol) {
 
 HEMP_VALUE_FUNC(hemp_element_compare_equal_value) {
     hemp_debug_call("hemp_element_compare_equal_value()\n");
-    hemp_value_t result = hemp_obcall(value, compare, context);
+    hemp_value result = hemp_obcall(value, compare, context);
 
     return hemp_is_equal(result)
          ? HempTrue
@@ -57,7 +57,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_not_equal_symbol) {
 
 HEMP_VALUE_FUNC(hemp_element_compare_not_equal_value) {
     hemp_debug_call("hemp_element_compare_not_equal_value()\n");
-    hemp_value_t result = hemp_obcall(value, compare, context);
+    hemp_value result = hemp_obcall(value, compare, context);
 
     return hemp_is_equal(result)
          ? HempFalse
@@ -78,7 +78,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_before_symbol) {
 
 HEMP_VALUE_FUNC(hemp_element_compare_before_value) {
     hemp_debug_call("hemp_element_compare_before()\n");
-    hemp_value_t result = hemp_obcall(value, compare, context);
+    hemp_value result = hemp_obcall(value, compare, context);
 
     return hemp_is_before(result)
          ? HempTrue
@@ -99,7 +99,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_not_before_symbol) {
 
 HEMP_VALUE_FUNC(hemp_element_compare_not_before_value) {
     hemp_debug_call("hemp_element_compare_not_before_value()\n");
-    hemp_value_t result = hemp_obcall(value, compare, context);
+    hemp_value result = hemp_obcall(value, compare, context);
 
     return hemp_is_before(result)
          ? HempFalse
@@ -120,7 +120,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_after_symbol) {
 
 HEMP_VALUE_FUNC(hemp_element_compare_after_value) {
     hemp_debug_call("hemp_element_compare_after_value()\n");
-    hemp_value_t result = hemp_obcall(value, compare, context);
+    hemp_value result = hemp_obcall(value, compare, context);
 
     return hemp_is_after(result)
          ? HempTrue
@@ -141,7 +141,7 @@ HEMP_SYMBOL_FUNC(hemp_element_compare_not_after_symbol) {
 
 HEMP_VALUE_FUNC(hemp_element_compare_not_after_value) {
     hemp_debug_call("hemp_element_compare_not_after_value()\n");
-    hemp_value_t result = hemp_obcall(value, compare, context);
+    hemp_value result = hemp_obcall(value, compare, context);
 
     return hemp_is_after(result)
          ? HempFalse

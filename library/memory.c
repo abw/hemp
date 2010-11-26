@@ -1,40 +1,26 @@
 #include <hemp/memory.h>
 
 
-/* hemp_mem_fail(item) 
- *
- * Raises a fatal error to report a memory allocation error.  The argument
- * is a char * string indicating the item being allocated for insertion 
- * into the HEMP_ERRMSG_MALLOC message format, e.g. "Failed to allocate
- * memory for a new %s"
- */
-
 void hemp_mem_fail(
-    hemp_str_p type
+    hemp_string type
 ) {
     hemp_fatal(hemp_errmsg[HEMP_ERROR_MEMORY], type);
 }
 
 
-
-/* hemp_mem_copy_fn(src, dest, length) 
- *
- * Generic memory copy for systems (if there are any) that don't provide 
- * memmove() or bcopy().
- */
-
 #ifdef HEMP_ADD_MEM_COPY
 
-hemp_mem_p
+hemp_memory
 hemp_mem_copy(
-    hemp_mem_p  src,
-    hemp_mem_p  dest,
-    hemp_size_t len
+    hemp_memory src,
+    hemp_memory dest,
+    hemp_size   len
 ) {
-    hemp_size_t i;
-    hemp_str_p s = (hemp_str_p) src;
-    hemp_str_p d = (hemp_str_p) dest;
+    hemp_size   i;
+    hemp_string s = (hemp_string) src;
+    hemp_string d = (hemp_string) dest;
 
+//  hemp_debug("copying %d bytes of memory from %p to %p\n", len, src, dest);
     if (d > s) {
         d += len;
         s += len;
@@ -52,48 +38,53 @@ hemp_mem_copy(
 #endif
 
 
-
-
-
 /*--------------------------------------------------------------------------
  * Memory debugging functions
  *--------------------------------------------------------------------------*/
 
 #if HEMP_DEBUG & HEMP_DEBUG_MEM
 
-hemp_mem_trace_p hemp_mem_traces   = NULL;
-hemp_size_t      hemp_mem_used     = 0;
-hemp_size_t      hemp_mem_capacity = 0;
+hemp_mem_trace hemp_mem_traces   = NULL;
+hemp_size      hemp_mem_used     = 0;
+hemp_size      hemp_mem_capacity = 0;
 
 
-/*
- * hemp_mem_new_trace()
- *
- * Returns the next unused memory trace record.
- */
-
-hemp_mem_trace_p
-hemp_mem_new_trace() {
-    hemp_mem_trace_p hmt;
+hemp_mem_trace
+hemp_mem_trace_new() {
+    hemp_mem_trace hmt;
     int r;
-
-//  hemp_debug_yellow("%d/%d memory traces used\n", hemp_mem_used, hemp_mem_capacity);
 
     /* create more memory trace records if required */
     if (hemp_mem_used == hemp_mem_capacity) {
         hemp_mem_capacity += HEMP_MEM_BLKSIZ;
-        hmt = (hemp_mem_trace_p) malloc(
-            hemp_mem_capacity * sizeof(struct hemp_mem_trace_s)
+//      hemp_debug(
+//          "allocating %d bytes for %d records x %d bytes\n", 
+//          hemp_mem_capacity * sizeof(struct hemp_mem_trace),
+//          hemp_mem_capacity, sizeof(struct hemp_mem_trace)
+//      );
+        hmt = (hemp_mem_trace) malloc(
+            hemp_mem_capacity * sizeof(struct hemp_mem_trace)
         );
         if (! hmt)
             hemp_fatal("failed to allocate more hemp_mem_trace records");
 
+//      hemp_debug("expanded records\n");
+//      hemp_mem_trace_report(1);
+
         /* copy old records */
         if (hemp_mem_traces) {
-            memcpy(hmt, hemp_mem_traces, hemp_mem_used * sizeof(struct hemp_mem_trace_s));
+//          hemp_debug("copying %d old records = %d bytes\n", hemp_mem_used, hemp_mem_used * sizeof(struct hemp_mem_trace));
+            hemp_mem_copy(
+                hemp_mem_traces, hmt,
+                hemp_mem_used * sizeof(struct hemp_mem_trace)
+            );
             free(hemp_mem_traces);
         }
         hemp_mem_traces = hmt;
+
+//        hemp_debug("copied %d records\n", hemp_mem_used);
+//        hemp_mem_trace_report(1);
+//        hemp_debug("initialising new records %d to %d\n", hemp_mem_used, hemp_mem_capacity - 1);
 
         /* initialise new records */
         for (r = hemp_mem_used; r < hemp_mem_capacity; r++) {
@@ -105,39 +96,32 @@ hemp_mem_new_trace() {
             hmt->line   = 0;
             hmt->file   = NULL;
         }
-//      hemp_debug_yellow("increased number of memory traces to %d\n", hemp_mem_capacity);
+//        hemp_mem_trace_report(1);
     }
 
-    /* return address of next available memory record */
-//  hemp_debug_yellow("using memory trace %d/%d\n", hemp_mem_used, hemp_mem_capacity);
     return &(hemp_mem_traces[hemp_mem_used++]);
 }
 
 
-
-/*
- * hemp_mem_get_trace(ptr, file, line)
- *
- * Returns the memory trace record associated with a pointer.
- */
-
-hemp_mem_trace_p
-hemp_mem_get_trace(
-    hemp_mem_p ptr,
-    hemp_str_p file,
-    hemp_pos_t line
+hemp_mem_trace
+hemp_mem_trace_record(
+    hemp_memory ptr,
+    hemp_string file,
+    hemp_pos    line
 ) {
     int r = hemp_mem_used;
 
-//  for(r = 0; r < hemp_mem_used; r++) {
-    
+//    hemp_debug("looking for memory trace for %p\n", ptr);
+
     /* work backwards so we get latest memory record first */
     while (--r >= 0) {
+//        hemp_debug("%3d: %p\n", r, hemp_mem_traces[r].ptr);
         if (hemp_mem_traces[r].ptr == ptr) {
             return &(hemp_mem_traces[r]);
         }
     }
 
+//    hemp_mem_trace_report(1);
     hemp_fatal(
         "no trace record for memory at %p\n"
         "free() called from %s at line %d\n", 
@@ -147,19 +131,13 @@ hemp_mem_get_trace(
 
 
 
-/*
- * hemp_mem_trace_malloc(size)
- *
- * Replacement for malloc() which tracks memory allocations.
- */
-
-hemp_mem_p
+hemp_memory
 hemp_mem_trace_malloc(
-    hemp_size_t size,
-    hemp_str_p  file,
-    hemp_pos_t  line
+    hemp_size   size,
+    hemp_string file,
+    hemp_pos    line
 ) {
-    hemp_mem_trace_p hmt = hemp_mem_new_trace();
+    hemp_mem_trace hmt = hemp_mem_trace_new();
     hmt->ptr = malloc(size);
 
     if (! hmt->ptr)
@@ -170,46 +148,42 @@ hemp_mem_trace_malloc(
     hmt->file = file;
     hmt->line = line;
 
+//    hemp_debug("memory tracing %p via record at %p\n", hmt->ptr, hmt);
+    
     return hmt->ptr;
 }
 
 
-hemp_mem_p
+hemp_memory
 hemp_mem_trace_external(
-    hemp_mem_p  ptr,
-    hemp_size_t size,
-    hemp_str_p  file,
-    hemp_pos_t  line
+    hemp_memory ptr,
+    hemp_size   size,
+    hemp_string file,
+    hemp_pos    line
 ) {
-    hemp_mem_trace_p hmt = hemp_mem_new_trace();
-    hmt->ptr    = ptr;
-    hmt->status = HEMP_MEM_EXTERNAL;
-    hmt->size   = size;
-    hmt->file   = file;
-    hmt->line   = line;
+    hemp_mem_trace hmt  = hemp_mem_trace_new();
+    hmt->ptr            = ptr;
+    hmt->status         = HEMP_MEM_EXTERNAL;
+    hmt->size           = size;
+    hmt->file           = file;
+    hmt->line           = line;
     return hmt->ptr;
 }
 
 
-/*
- * hemp_mem_trace_realloc(ptr, size)
- *
- * Replacement for realloc() which tracks memory allocations.
- */
-
-hemp_mem_p
+hemp_memory
 hemp_mem_trace_realloc(
-    hemp_mem_p  ptr, 
-    hemp_size_t size,
-    hemp_str_p  file,
-    hemp_pos_t  line
+    hemp_memory ptr, 
+    hemp_size   size,
+    hemp_string file,
+    hemp_pos    line
 ) {
-    hemp_mem_trace_p hmt;
+    hemp_mem_trace hmt;
 
     if (! ptr)
         return hemp_mem_trace_malloc(size, file, line);
 
-    hmt = hemp_mem_get_trace(ptr, file, line);
+    hmt = hemp_mem_trace_record(ptr, file, line);
     ptr = realloc(ptr, size);
 
     if (! ptr)
@@ -225,7 +199,7 @@ hemp_mem_trace_realloc(
 //      hmt->size = 0;
         hmt->status = HEMP_MEM_MOVED;
 
-        hmt = hemp_mem_new_trace();
+        hmt         = hemp_mem_trace_new();
         hmt->ptr    = ptr;
         hmt->status = HEMP_MEM_MALLOC;
         hmt->size   = size;
@@ -237,39 +211,25 @@ hemp_mem_trace_realloc(
 }
 
 
-
-/*
- * hemp_mem_trace_strdup(str)
- *
- * Replacement for strdup() which tracks memory allocations.
- */
-
-hemp_str_p
+hemp_string
 hemp_mem_trace_strdup(
-    hemp_str_p str,
-    hemp_str_p file,
-    hemp_pos_t line
+    hemp_string str,
+    hemp_string file,
+    hemp_pos    line
 ) {
-    hemp_str_p dup = (hemp_str_p) hemp_mem_trace_malloc(strlen(str) + 1, file, line);
+    hemp_string dup = (hemp_string) hemp_mem_trace_malloc(strlen(str) + 1, file, line);
     strcpy(dup, str);
     return dup;
 }
 
 
-/*
- * hemp_mem_trace_free(ptr)
- *
- * Replacement for free() which tracks memory allocations.
- */
-
 void 
 hemp_mem_trace_free(
-    hemp_mem_p ptr,
-    hemp_str_p file,
-    hemp_pos_t line
+    hemp_memory ptr,
+    hemp_string file,
+    hemp_pos    line
 ) {
-//    printf("free(%s)\n");
-    hemp_mem_trace_p hmt = hemp_mem_get_trace(ptr, file, line);
+    hemp_mem_trace hmt = hemp_mem_trace_record(ptr, file, line);
     free(hmt->ptr);
     hmt->status = HEMP_MEM_FREE;
 //  hmt->size   = 0;
@@ -277,28 +237,19 @@ hemp_mem_trace_free(
 }
 
 
-/*
- * hemp_mem_trace_report(verbose)
- *
- * Generated debugging output showing status of memory allocations.
- */
-
-#define HEMP_DASHES \
-    "-----------------------------------------------------------------\n"
-
-hemp_size_t
+hemp_size
 hemp_mem_trace_report(
-    hemp_bool_t verbose
+    hemp_bool verbose
 ) {
-    hemp_mem_trace_p hmt;
+    hemp_mem_trace hmt;
     int r, i;
     char *status, *cptr, c;
     char buffer[HEMP_MEM_PEEKLEN + 1];
-    hemp_size_t count = 0, total = 0;
+    hemp_size count = 0, total = 0;
 
     if (verbose) {
         hemp_debug_cyan("\nID   STATUS      SIZE       LOCATION\n");
-        hemp_debug_cyan(HEMP_DASHES);
+        hemp_debug_cyan(HEMP_MEM_DASHES);
     }
 
     for(r = 0; r < hemp_mem_used; r++) {
@@ -347,7 +298,7 @@ hemp_mem_trace_report(
     }
 
     if (verbose) {
-        hemp_debug_cyan(HEMP_DASHES);
+        hemp_debug_cyan(HEMP_MEM_DASHES);
         hemp_debug_yellow("Memory used: %8lu\n", total);
         hemp_debug_red("Memory wild: %8lu\n", count);
     }
@@ -358,6 +309,7 @@ hemp_mem_trace_report(
 
 void
 hemp_mem_trace_reset() {
+    hemp_debug("memory trace reset!\n");
     if (hemp_mem_traces)
         free(hemp_mem_traces);
 
@@ -368,15 +320,11 @@ hemp_mem_trace_reset() {
 
 #else  /* HEMP_DEBUG & HEMP_DEBUG_MEM */
 
-hemp_size_t
+hemp_size
 hemp_mem_trace_report(
-    hemp_bool_t verbose
+    hemp_bool verbose
 ) {
     return -1;
 }
 
 #endif  /* HEMP_DEBUG & HEMP_DEBUG_MEM */
-
-/*--------------------------------------------------------------------------
- * End of memory debugging functions
- *--------------------------------------------------------------------------*/

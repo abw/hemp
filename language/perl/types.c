@@ -27,7 +27,7 @@ hemp_perl_init() {
 }
 
 
-HEMP_INLINE hemp_value_t
+HEMP_INLINE hemp_value
 hemp_perl_value(
     SV * sv
 ) {
@@ -90,9 +90,9 @@ HEMP_TYPE_FUNC(hemp_type_perl_scalar) {
 HEMP_OUTPUT_FUNC(hemp_perl_scalar_text) {
     hemp_debug_call("hemp_perl_scalar_text()\n");
 
-    hemp_str_p  string;
-    hemp_size_t length;
-    hemp_text_p text;
+    hemp_string  string;
+    hemp_size length;
+    hemp_text text;
 
     string = SvPV( hemp_perl_val_sv(value), length );
     hemp_prepare_text_size(context, output, text, length);
@@ -184,8 +184,8 @@ HEMP_VALUE_FUNC(hemp_perl_array_length) {
 HEMP_FETCH_FUNC(hemp_perl_array_fetch) {
     hemp_debug_perl("hemp_perl_array_fetch()\n");
 
-    hemp_uint_t index;
-    hemp_bool_t found = HEMP_FALSE;
+    hemp_uint index;
+    hemp_bool found = HEMP_FALSE;
     SV **       result;
 
     if (hemp_is_integer(key)) {
@@ -194,8 +194,8 @@ HEMP_FETCH_FUNC(hemp_perl_array_fetch) {
         found = HEMP_TRUE;
     }
     else {
-        hemp_text_p ktext;
-        hemp_bool_t kmine  = HEMP_FALSE;
+        hemp_text ktext;
+        hemp_bool kmine  = HEMP_FALSE;
 
         /* TODO: this has been cut-n-pasted... needs moving out */
         if (hemp_is_text(key)) {
@@ -282,8 +282,8 @@ HEMP_VALUE_FUNC(hemp_perl_hash_length) {
 
 
 HEMP_FETCH_FUNC(hemp_perl_hash_fetch) {
-    hemp_bool_t kmine  = HEMP_FALSE;
-    hemp_text_p ktext;
+    hemp_bool kmine  = HEMP_FALSE;
+    hemp_text ktext;
     SV **       result;
 
     if (hemp_is_text(key)) {
@@ -339,9 +339,9 @@ HEMP_TYPE_FUNC(hemp_type_perl_code) {
 HEMP_OUTPUT_FUNC(hemp_perl_code_text) {
     hemp_debug_call("hemp_perl_code_text()\n");
     hemp_debug("hemp_perl_code_text() calling hemp_perl_code_apply()\n");
-    hemp_value_t result = hemp_perl_code_apply(value, context);
+    hemp_value result = hemp_perl_code_apply(value, context);
     hemp_debug("got %s result: \n", hemp_type_name(result)); hemp_dump_value(result);
-    return hemp_text(result, context, output);
+    return hemp_vtext(result, context, output);
 }
 
 

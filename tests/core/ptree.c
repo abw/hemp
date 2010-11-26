@@ -47,7 +47,7 @@ void test_tree() {
     tree_hasnt(tree, "forever");
     tree_hasnt(tree, "foreachs");
 
-    hemp_list_p list = hemp_string_split(
+    hemp_list list = hemp_string_split(
         "alpha bravo charlie delta echo foxtrot golf hotel india juliet "
         "kilo lima mike november oscar papa quebec romeo sierra tango "
         "umbrella victor whiskey x-ray yankee zulu "
@@ -88,7 +88,7 @@ void
 tree_has(
     hemp_ptree_p tree, char *key, char *expect
 ) {
-    hemp_mem_p value = hemp_ptree_fetch(tree, key);
+    hemp_memory value = hemp_ptree_fetch(tree, key);
     ok( 
         value && hemp_string_eq(value, expect),
         "found %s => %s", key, value
@@ -100,7 +100,7 @@ void
 tree_hasnt(
     hemp_ptree_p tree, char *key
 ) {
-    hemp_mem_p value = hemp_ptree_fetch(tree, key);
+    hemp_memory value = hemp_ptree_fetch(tree, key);
     ok( ! value, "no entry for %s", key);
 }
 

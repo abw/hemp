@@ -1,14 +1,14 @@
 #include <hemp/element.h>
 
 
-hemp_symbol_p HempSymbolWord = NULL;
+hemp_symbol HempSymbolWord = NULL;
 
 
 HEMP_GLOBAL_SYMBOL(hemp_symbol_word) {
     hemp_debug_call("hemp_symbol_word()\n");
     return hemp_element_word_symbol(
         NULL,
-        hemp_symbol_init("hemp.word", NULL, NULL)
+        hemp_symbol_new("hemp.word", NULL, NULL)
     );
 }
 
@@ -39,7 +39,7 @@ HEMP_PREFIX_FUNC(hemp_element_word_prefix) {
         (*elemptr)->type->lprec, precedence
     );
     
-    hemp_element_p element = hemp_element_fixed(
+    hemp_element element = hemp_element_fixed(
         elemptr, scope, precedence, force
     );
     hemp_clear_flag(element, HEMP_BE_FIXED);
@@ -50,8 +50,8 @@ HEMP_PREFIX_FUNC(hemp_element_word_prefix) {
 
 HEMP_VALUE_FUNC(hemp_element_word_value) {
     hemp_debug_call("hemp_element_word_value()\n");
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    word    = hemp_expr(element);
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    word    = hemp_expr(element);
 
     /* Words can be used in two different contexts.  When they appear at the
      * start of an expression (prefix) they represent a variable.  However,
@@ -74,8 +74,8 @@ HEMP_VALUE_FUNC(hemp_element_word_value) {
 
 HEMP_OPERATE_FUNC(hemp_element_word_assign) {
     hemp_debug_call("hemp_element_word_assign()\n");
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    word    = hemp_expr(element);
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    word    = hemp_expr(element);
 
     /* The value we're passed as an operand is an element that should be
      * evaluated to yield a value.  Not sure if this is the best approach,
@@ -94,8 +94,8 @@ HEMP_OPERATE_FUNC(hemp_element_word_assign) {
 
 HEMP_COMPILE_FUNC(hemp_element_word_lvalue_param) {
     hemp_debug_msg("hemp_element_word_lvalue_param()\n");
-    hemp_params_p params = (hemp_params_p) hemp_val_ptr(compiler);
-    hemp_str_p    name   = hemp_string_extract(
+    hemp_params params = (hemp_params) hemp_val_ptr(compiler);
+    hemp_string    name   = hemp_string_extract(
         element->token, 
         element->token + element->length
     );
@@ -106,7 +106,7 @@ HEMP_COMPILE_FUNC(hemp_element_word_lvalue_param) {
 
 void
 hemp_element_word_clean(
-    hemp_element_p element
+    hemp_element element
 ) {
     hemp_debug_call("hemp_element_word_clean(%p)\n", element);
 

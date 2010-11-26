@@ -6,7 +6,6 @@ AC_CONFIG_MACRO_DIR([build/m4])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects color-tests])
 
 AC_CONFIG_HEADERS([include/hemp/config.h])
-
 AC_CONFIG_FILES([
     Makefile 
     include/Makefile 

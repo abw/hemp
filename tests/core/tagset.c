@@ -20,7 +20,7 @@ void test1_scan(
 
 
 void test_tagset() {
-    hemp_tag_p    inline_tag, outline_tag;
+    hemp_tag    inline_tag, outline_tag;
     hemp_tagset_p tagset;
 
     inline_tag = hemp_tag_init(

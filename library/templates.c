@@ -5,7 +5,7 @@
 
 hemp_templates_p
 hemp_templates_init(
-    hemp_p hemp
+    hemp_hemp hemp
 ) {
     hemp_templates_p templates = (hemp_templates_p) hemp_mem_alloc(
         sizeof(struct hemp_templates_s)

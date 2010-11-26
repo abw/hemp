@@ -5,8 +5,8 @@
 #include <hemp/type/list.h>
 
 struct hemp_string_split_s {
-    hemp_str_p left;
-    hemp_str_p right;
+    hemp_string left;
+    hemp_string right;
 };
 
 typedef struct hemp_string_split_s * hemp_string_split_p;
@@ -21,88 +21,88 @@ typedef struct hemp_string_split_s * hemp_string_split_p;
 )
 
 #define hemp_string_clone(s,n) ({               \
-    hemp_str_p _clone = hemp_string_copy(s);    \
+    hemp_string _clone = hemp_string_copy(s);    \
     if (! _clone) hemp_mem_fail(n);             \
     _clone;                                     \
 })
 
-hemp_str_p
+hemp_string
     hemp_string_extract(
-        hemp_str_p from,
-        hemp_str_p to
+        hemp_string from,
+        hemp_string to
     );
 
-hemp_list_p
+hemp_list
     hemp_string_split(
-        hemp_str_p source,
-        hemp_str_p split
+        hemp_string source,
+        hemp_string split
     );
 
-hemp_list_p
+hemp_list
     hemp_string_splits(
-        hemp_str_p source,
-        hemp_str_p token
+        hemp_string source,
+        hemp_string token
     );
 
 void
     hemp_string_trim(
-        hemp_str_p string
+        hemp_string string
     );
 
 void
     hemp_string_chomp(
-        hemp_str_p src
+        hemp_string src
     );
 
-hemp_bool_t
+hemp_bool
     hemp_string_wordlike(
-        hemp_str_p str
+        hemp_string str
     );
 
-hemp_bool_t
+hemp_bool
     hemp_string_numlike(
-        hemp_str_p string
+        hemp_string string
     );
 
-HEMP_INLINE hemp_str_p
+HEMP_INLINE hemp_string
     hemp_string_next_space(
-        hemp_str_p string
+        hemp_string string
     );
 
-HEMP_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool
     hemp_string_to_next_space(
-        hemp_str_p *string
+        hemp_string *string
     );
 
-HEMP_INLINE hemp_str_p
+HEMP_INLINE hemp_string
     hemp_string_next_nonspace(
-        hemp_str_p string
+        hemp_string string
     );
 
-HEMP_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool
     hemp_string_to_next_nonspace(
-        hemp_str_p *string
+        hemp_string *string
     );
 
-HEMP_INLINE hemp_str_p
+HEMP_INLINE hemp_string
     hemp_string_next_line(
-        hemp_str_p string
+        hemp_string string
     );
 
-HEMP_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool
     hemp_string_to_next_line(
-        hemp_str_p *string
+        hemp_string *string
     );
 
-HEMP_INLINE hemp_list_p
+HEMP_INLINE hemp_list
     hemp_string_words(
-        hemp_str_p string
+        hemp_string string
     );
 
-hemp_list_p
+hemp_list
     hemp_string_nwords(
-        hemp_str_p  string,
-        hemp_size_t max
+        hemp_string  string,
+        hemp_size max
     );
 
 

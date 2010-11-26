@@ -16,24 +16,28 @@ int main(
 
 
 void test_element() {
-    hemp_element_p element = hemp_element_new();
+    hemp_hemp hemp = hemp_init();
+    hemp_element element = hemp_element_new(
+        HempSymbolSpace, NULL, 0, 0
+    );
     ok( element, "created element" );
     hemp_element_free(element);
+    hemp_free(hemp);
 }
 
 
 void test_element_factory() {
-    hemp_symbol_p symbol;
+    hemp_symbol symbol;
 
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp" );
 
     HEMP_TRY;
-        symbol = hemp_symbol(hemp, "hemp.number.plus", "+", NULL);
+        symbol = hemp_symbol_instance(hemp, "hemp.number.plus", "+", NULL);
         ok( symbol, "got %s symbol", symbol->name );
         hemp_symbol_free(symbol);
 
-        symbol = hemp_symbol(hemp, "hemp.number.plus", "+", NULL);
+        symbol = hemp_symbol_instance(hemp, "hemp.number.plus", "+", NULL);
         ok( symbol, "got it again" );
         hemp_symbol_free(symbol);
     HEMP_CATCH_ALL;
@@ -41,7 +45,7 @@ void test_element_factory() {
     HEMP_END;
 
     HEMP_TRY;
-        symbol = hemp_symbol(hemp, "blah.blah", "dud", NULL);
+        symbol = hemp_symbol_instance(hemp, "blah.blah", "dud", NULL);
     HEMP_CATCH(HEMP_ERROR_INVALID);
         pass("error as expected: %s", hemp->error->message);
     HEMP_CATCH_ALL;

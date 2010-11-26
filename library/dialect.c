@@ -1,52 +1,42 @@
 #include <hemp/dialect.h>
 
-//#include "hemp/template.h"
-//#include "hemp/scanner.h"
 
-
-hemp_dialect_p
-hemp_dialect_init(
-    hemp_p     hemp,
-    hemp_str_p name
+hemp_dialect
+hemp_dialect_new(
+    hemp_hemp   hemp,
+    hemp_string name
 ) {
-    hemp_dialect_p dialect = (hemp_dialect_p) hemp_mem_alloc(
-        sizeof(struct hemp_dialect_s)
-    );
-
-    if (! dialect)
-        hemp_mem_fail("dialect");
-
+    hemp_dialect dialect;
+    HEMP_ALLOCATE(dialect);
     dialect->prepare = NULL;
     dialect->scanner = NULL;
     dialect->cleanup = NULL;
     dialect->hemp    = hemp;
     dialect->name    = hemp_string_clone(name, "dialect name");
     dialect->tags    = hemp_hash_init();
-
-//    dialect->tagset  = hemp_tagset_init();
-//    dialect->scanner = &hemp_scan_text;
-
+//  dialect->tagset  = hemp_tagset_init();
+//  dialect->scanner = &hemp_scan_text;
     return dialect;
 }
 
 
 void
 hemp_dialect_free(
-    hemp_dialect_p dialect
+    hemp_dialect dialect
 ) {
     hemp_mem_free(dialect->name);
     hemp_hash_free(dialect->tags);
-//    hemp_tagset_free(dialect->tagset);
+//  hemp_tagset_free(dialect->tagset);
     hemp_mem_free(dialect);
 }
 
 
-hemp_template_p
+hemp_template
 hemp_dialect_template(
-    hemp_dialect_p dialect,
-    hemp_source_p  source
+    hemp_dialect    dialect,
+    hemp_source     source
 ) {
-    hemp_template_p tmpl = hemp_template_init(
+    hemp_template tmpl = hemp_template_init(
         dialect, source
     );
     

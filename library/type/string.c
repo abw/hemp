@@ -10,7 +10,7 @@ HEMP_TYPE_FUNC(hemp_type_string) {
     type->integer    = &hemp_type_string_integer;  /* string -> integer    */
     type->boolean    = &hemp_type_string_boolean;  /* string -> boolean    */
     type->compare    = &hemp_value_not_compare;     /* cannot compare       */
-    type->defined    = &hemp_value_true;            /* always defined       */
+    type->defined    = &hemp_valuerue;            /* always defined       */
 
     hemp_type_extend(type, "length", &hemp_method_string_length);
 
@@ -22,13 +22,13 @@ HEMP_TYPE_FUNC(hemp_type_string) {
  * String manipulation functions
  *--------------------------------------------------------------------------*/
 
-hemp_str_p
+hemp_string
 hemp_string_extract(
-    hemp_str_p from,
-    hemp_str_p to
+    hemp_string from,
+    hemp_string to
 ) {
-    hemp_size_t size = to - from;
-    hemp_str_p  str  = hemp_mem_alloc(size + 1);
+    hemp_size size = to - from;
+    hemp_string  str  = hemp_mem_alloc(size + 1);
     
     if (! str)
         hemp_mem_fail("string extract");
@@ -40,16 +40,16 @@ hemp_string_extract(
 }
 
 
-hemp_list_p
+hemp_list
 hemp_string_split(
-    hemp_str_p source,
-    hemp_str_p split
+    hemp_string source,
+    hemp_string split
 ) {
-    hemp_list_p list = hemp_list_new();
-    hemp_str_p  from = source, to;
-    hemp_size_t slen = strlen(split);
-    hemp_str_p  item;
-    hemp_size_t size;
+    hemp_list list = hemp_list_new();
+    hemp_string  from = source, to;
+    hemp_size slen = strlen(split);
+    hemp_string  item;
+    hemp_size size;
     
     /* we're dynamically allocating memory for each directory so we must
      * ensure that the list has a cleaner function associated with it that
@@ -73,16 +73,16 @@ hemp_string_split(
 };
 
 
-hemp_list_p
+hemp_list
 hemp_string_splits(
-    hemp_str_p source,
-    hemp_str_p token
+    hemp_string source,
+    hemp_string token
 ) {
-    hemp_list_p list = hemp_list_new();
-    hemp_size_t slen = strlen(source) + 1;
-    hemp_size_t tlen = strlen(token);
-    hemp_str_p  from  = source, to;
-    hemp_pos_t  pos  = 0;
+    hemp_list list = hemp_list_new();
+    hemp_size slen = strlen(source) + 1;
+    hemp_size tlen = strlen(token);
+    hemp_string  from  = source, to;
+    hemp_pos  pos  = 0;
     hemp_string_split_p split;
     
     /* we're dynamically allocating memory for each directory so we must
@@ -103,7 +103,7 @@ hemp_string_splits(
         split = (hemp_string_split_p) hemp_mem_alloc(
             sizeof(struct hemp_string_split_s) + slen
         );
-        split->left = (hemp_str_p) split + sizeof(struct hemp_string_split_s);
+        split->left = (hemp_string) split + sizeof(struct hemp_string_split_s);
         strcpy(split->left, source);
         hemp_list_push(list, hemp_ptr_val(split));
 
@@ -125,11 +125,11 @@ hemp_string_splits(
 
 void
 hemp_string_trim(
-    hemp_str_p string
+    hemp_string string
 ) {
-    hemp_str_p  s = string;
-    hemp_str_p  t;
-    hemp_size_t len;
+    hemp_string  s = string;
+    hemp_string  t;
+    hemp_size len;
 
     while (isspace(*s))
         s++;
@@ -148,9 +148,9 @@ hemp_string_trim(
 
 void
 hemp_string_chomp(
-    hemp_str_p string
+    hemp_string string
 ) {
-    hemp_str_p s = string;
+    hemp_string s = string;
     hemp_assert(s);
 
     /* go to the end of the string */
@@ -162,9 +162,9 @@ hemp_string_chomp(
         *s = HEMP_NUL;
 }
 
-hemp_bool_t
+hemp_bool
 hemp_string_wordlike(
-    hemp_str_p string
+    hemp_string string
 ) {
     while (isalnum(*string) || *string == HEMP_UNDERSCORE)
         string++;
@@ -176,9 +176,9 @@ hemp_string_wordlike(
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_string_numlike(
-    hemp_str_p string
+    hemp_string string
 ) {
     /* not strictly correct, but good enough for integer list indexes */
     while (isdigit(*string))
@@ -191,9 +191,9 @@ hemp_string_numlike(
 }
 
 
-HEMP_INLINE hemp_str_p
+HEMP_INLINE hemp_string
 hemp_string_next_space(
-    hemp_str_p string
+    hemp_string string
 ) {
     while (*string && ! isspace(*string))
         string++;
@@ -202,11 +202,11 @@ hemp_string_next_space(
 }
 
 
-HEMP_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool
 hemp_string_to_next_space(
-    hemp_str_p *string
+    hemp_string *string
 ) {
-    hemp_str_p space = hemp_string_next_space(*string);
+    hemp_string space = hemp_string_next_space(*string);
 
     if (space) {
         *string = space;
@@ -218,9 +218,9 @@ hemp_string_to_next_space(
 }
 
 
-HEMP_INLINE hemp_str_p
+HEMP_INLINE hemp_string
 hemp_string_next_nonspace(
-    hemp_str_p string
+    hemp_string string
 ) {
     while (*string && isspace(*string))
         string++;
@@ -229,11 +229,11 @@ hemp_string_next_nonspace(
 }
 
 
-HEMP_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool
 hemp_string_to_next_nonspace(
-    hemp_str_p *string
+    hemp_string *string
 ) {
-    hemp_str_p nonspace = hemp_string_next_nonspace(*string);
+    hemp_string nonspace = hemp_string_next_nonspace(*string);
 
     if (nonspace) {
         *string = nonspace;
@@ -245,9 +245,9 @@ hemp_string_to_next_nonspace(
 }
 
 
-HEMP_INLINE hemp_str_p
+HEMP_INLINE hemp_string
 hemp_string_next_line(
-    hemp_str_p string
+    hemp_string string
 ) {
     while (*string) {
         if (*string == HEMP_LF) {
@@ -266,11 +266,11 @@ hemp_string_next_line(
 }
 
 
-HEMP_INLINE hemp_bool_t
+HEMP_INLINE hemp_bool
 hemp_string_to_next_line(
-    hemp_str_p *string
+    hemp_string *string
 ) {
-    hemp_str_p line = hemp_string_next_line(*string);
+    hemp_string line = hemp_string_next_line(*string);
 
     if (line) {
         *string = line;
@@ -282,22 +282,22 @@ hemp_string_to_next_line(
 }
 
 
-HEMP_INLINE hemp_list_p
+HEMP_INLINE hemp_list
 hemp_string_words(
-    hemp_str_p string
+    hemp_string string
 ) {
     return hemp_string_nwords(string, 0);
 }
 
 
-hemp_list_p
+hemp_list
 hemp_string_nwords(
-    hemp_str_p  string,
-    hemp_size_t max
+    hemp_string  string,
+    hemp_size max
 ) {
-    hemp_list_p list = hemp_list_new();
-    hemp_str_p  from = string, to, item;
-    hemp_size_t size = 0;
+    hemp_list list = hemp_list_new();
+    hemp_string  from = string, to, item;
+    hemp_size size = 0;
 
     list->cleaner = &hemp_list_each_free;
 
@@ -338,11 +338,11 @@ hemp_string_nwords(
 };
 
 
-//HEMP_DO_INLINE hemp_bool_t
+//HEMP_DO_INLINE hemp_bool
 //hemp_string_to_next_line(
-//    hemp_str_p *string
+//    hemp_string *string
 //) {
-//    hemp_str_p s = *string;
+//    hemp_string s = *string;
 //
 //    while (*s) {
 //        if (*s == HEMP_LF) {
@@ -367,8 +367,8 @@ hemp_string_nwords(
 
 
 HEMP_OUTPUT_FUNC(hemp_type_string_text) {
-    hemp_str_p  str = hemp_val_str(value);
-    hemp_text_p text;
+    hemp_string  str = hemp_val_str(value);
+    hemp_text text;
 
     hemp_prepare_text_size(context, output, text, strlen(str));
 
@@ -378,9 +378,9 @@ HEMP_OUTPUT_FUNC(hemp_type_string_text) {
 
 
 HEMP_VALUE_FUNC(hemp_type_string_number) {
-    hemp_str_p str = hemp_val_str(value);
-    hemp_str_p end;
-    hemp_num_t nval;
+    hemp_string str = hemp_val_str(value);
+    hemp_string end;
+    hemp_num nval;
     
     if (! str || ! *str) {
         HEMP_CONVERT_ERROR(
@@ -417,13 +417,13 @@ HEMP_VALUE_FUNC(hemp_type_string_number) {
 
 
 HEMP_VALUE_FUNC(hemp_type_string_integer) {
-    hemp_value_t nval = hemp_type_string_number(value, context);
-    return hemp_int_val((hemp_int_t) hemp_val_num(nval));
+    hemp_value nval = hemp_type_string_number(value, context);
+    return hemp_int_val((hemp_int) hemp_val_num(nval));
 }
 
 
 HEMP_VALUE_FUNC(hemp_type_string_boolean) {
-    hemp_str_p str = hemp_val_str(value);
+    hemp_string str = hemp_val_str(value);
     /* TODO: check this is right: any non-zero length string is true.
      * What about "0" and "0.000" ?
      */

@@ -2,7 +2,7 @@
 #include <hemp/context.h>
 
 
-static hemp_size_t 
+static hemp_size 
 hemp_primes[] = {
     8 + 3,
     16 + 3,
@@ -44,8 +44,8 @@ HEMP_TYPE_FUNC(hemp_type_hash) {
     type->text       = &hemp_type_hash_text;
     type->fetch      = &hemp_type_hash_fetch;
     type->dot        = &hemp_type_hash_dot;
-    type->boolean    = &hemp_value_true;            /* hash is always true or use hash size? */
-    type->defined    = &hemp_value_true;
+    type->boolean    = &hemp_valuerue;            /* hash is always true or use hash size? */
+    type->defined    = &hemp_valuerue;
 
     hemp_type_extend(type, "length", &hemp_method_hash_length);
 
@@ -57,9 +57,9 @@ HEMP_TYPE_FUNC(hemp_type_hash) {
  * General purpose hash functions
  *--------------------------------------------------------------------------*/
 
-HEMP_DO_INLINE static hemp_size_t
+HEMP_DO_INLINE static hemp_size
 hemp_hash_wider(
-    hemp_size_t n
+    hemp_size n
 ) {
     int i, max = sizeof(hemp_primes) / sizeof(hemp_primes[0]);
     for (i = 0; i < max; i++) {
@@ -70,11 +70,11 @@ hemp_hash_wider(
 }
 
 
-hemp_hash_p
+hemp_hash
 hemp_hash_init() {
-    hemp_size_t w;
-    hemp_hash_p hash = (hemp_hash_p) hemp_mem_alloc(
-        sizeof(struct hemp_hash_s)
+    hemp_size w;
+    hemp_hash hash = (hemp_hash) hemp_mem_alloc(
+        sizeof(struct hemp_hash)
     );
     
     if (! hash)
@@ -85,8 +85,8 @@ hemp_hash_init() {
     hash->width  = hemp_hash_wider(0);
     hash->size   = 0;
     hash->parent = NULL;
-    hash->slots  = (hemp_slot_p *) hemp_mem_alloc(
-        hash->width * sizeof(hemp_slot_p)
+    hash->slots  = (hemp_slot *) hemp_mem_alloc(
+        hash->width * sizeof(hemp_slot)
     );
     if (! hash->slots)
         hemp_mem_fail("hash slots");
@@ -105,9 +105,9 @@ hemp_hash_init() {
 
 HEMP_INLINE void
 hemp_hash_release(
-    hemp_hash_p hash
+    hemp_hash hash
 ) {
-    hemp_slot_p slot, next;
+    hemp_slot slot, next;
     int i;
 
 //  hemp_debug_mem("Releasing hash at %p\n", hash);
@@ -127,19 +127,19 @@ hemp_hash_release(
 
 void
 hemp_hash_free(
-    hemp_hash_p hash
+    hemp_hash hash
 ) {
     hemp_hash_release(hash);
     hemp_mem_free(hash);
 }
 
 
-HEMP_INLINE hemp_size_t
+HEMP_INLINE hemp_size
 hemp_hash_resize(
-    hemp_hash_p hash
+    hemp_hash hash
 ) {
-    hemp_size_t width, wider, index, i;
-    hemp_slot_p *slots, slot, next;
+    hemp_size width, wider, index, i;
+    hemp_slot *slots, slot, next;
     
     width = hash->width;
     wider = hemp_hash_wider(width);
@@ -149,8 +149,8 @@ hemp_hash_resize(
 
     /* hemp_debug_mem("Resizing hash at %p from %d to %d\n", hash, width, wider); */
 
-    slots = (hemp_slot_p *) hemp_mem_alloc(
-        wider * sizeof(hemp_slot_p)
+    slots = (hemp_slot *) hemp_mem_alloc(
+        wider * sizeof(hemp_slot)
     );
 
     for (i = 0; i < hash->width; i++) {
@@ -172,11 +172,11 @@ hemp_hash_resize(
 }
 
 
-HEMP_INLINE hemp_bool_t 
+HEMP_INLINE hemp_bool 
 hemp_hash_key_match(
-    hemp_str_p  key1,
-    hemp_str_p  key2,
-    hemp_size_t length
+    hemp_string  key1,
+    hemp_string  key2,
+    hemp_size length
 ) {
     /* We allow hash keys to be looked up using an unterminated C string
      * (with length specified explicitly) so that we can use an element's
@@ -202,16 +202,16 @@ hemp_hash_key_match(
 }
 
 
-HEMP_INLINE hemp_slot_p
+HEMP_INLINE hemp_slot
 hemp_hash_store_keylen(
-    hemp_hash_p  hash,
-    hemp_str_p   name,
-    hemp_value_t value,
-    hemp_size_t  length
+    hemp_hash  hash,
+    hemp_string   name,
+    hemp_value value,
+    hemp_size  length
 ) {
-    hemp_size_t index  = hemp_hash_function(name, length);
-    hemp_size_t column;
-    hemp_slot_p slot;
+    hemp_size index  = hemp_hash_function(name, length);
+    hemp_size column;
+    hemp_slot slot;
 
     if (hash->size / hash->width > HEMP_HASH_DENSITY)
         hemp_hash_resize(hash);
@@ -245,11 +245,11 @@ hemp_hash_store_keylen(
 }
 
 
-hemp_slot_p
+hemp_slot
 hemp_hash_store(
-    hemp_hash_p  hash,
-    hemp_str_p   name,
-    hemp_value_t value
+    hemp_hash  hash,
+    hemp_string   name,
+    hemp_value value
 ) {
     return hemp_hash_store_keylen(
         hash, name, value, strlen(name)
@@ -257,16 +257,16 @@ hemp_hash_store(
 }
 
 
-HEMP_INLINE hemp_value_t
+HEMP_INLINE hemp_value
 hemp_hash_fetch_keylen(
-    hemp_hash_p hash, 
-    hemp_str_p  name,
-    hemp_size_t length
+    hemp_hash hash, 
+    hemp_string  name,
+    hemp_size length
 ) {
     hemp_debug_call("hemp_hash_fetch_keylen(%p, %s, %d)\n", hash, name, length);
-    hemp_slot_p slot  = NULL;
-    hemp_size_t index = hemp_hash_function(name, length);
-    hemp_size_t column;
+    hemp_slot slot  = NULL;
+    hemp_size index = hemp_hash_function(name, length);
+    hemp_size column;
     
 //  hemp_debug("looking up slot [%s][%d] => %ud\n", name, length, index);
     
@@ -297,10 +297,10 @@ hemp_hash_fetch_keylen(
 }
 
 
-HEMP_INLINE hemp_value_t
+HEMP_INLINE hemp_value
 hemp_hash_fetch(
-    hemp_hash_p hash, 
-    hemp_str_p  name
+    hemp_hash hash, 
+    hemp_string  name
 ) {
     return hemp_hash_fetch_keylen(
         hash, name, strlen(name)
@@ -308,12 +308,12 @@ hemp_hash_fetch(
 }
 
 
-hemp_num_t
+hemp_num
 hemp_hash_fetch_number(
-    hemp_hash_p hash, 
-    hemp_str_p  name
+    hemp_hash hash, 
+    hemp_string  name
 ) {
-    hemp_value_t value = hemp_hash_fetch(hash, name);
+    hemp_value value = hemp_hash_fetch(hash, name);
 
     /* this is of limited value because we have no way to indicate "not 
      * found" when using raw numeric values (NaN perhaps?)
@@ -324,12 +324,12 @@ hemp_hash_fetch_number(
 }
 
 
-hemp_int_t
+hemp_int
 hemp_hash_fetch_integer(
-    hemp_hash_p hash, 
-    hemp_str_p  name
+    hemp_hash hash, 
+    hemp_string  name
 ) {
-    hemp_value_t value = hemp_hash_fetch(hash, name);
+    hemp_value value = hemp_hash_fetch(hash, name);
 
     /* as above, only for testing, or when you know all your values are 
      * non-zero 
@@ -340,12 +340,12 @@ hemp_hash_fetch_integer(
 }
 
 
-hemp_mem_p
+hemp_memory
 hemp_hash_fetch_pointer(
-    hemp_hash_p hash, 
-    hemp_str_p  name
+    hemp_hash hash, 
+    hemp_string  name
 ) {
-    hemp_value_t value = hemp_hash_fetch(hash, name);
+    hemp_value value = hemp_hash_fetch(hash, name);
 
     return hemp_is_pointer(value)
         ? hemp_val_ptr(value)
@@ -353,12 +353,12 @@ hemp_hash_fetch_pointer(
 }
 
 
-hemp_str_p
+hemp_string
 hemp_hash_fetch_string(
-    hemp_hash_p hash, 
-    hemp_str_p  name
+    hemp_hash hash, 
+    hemp_string  name
 ) {
-    hemp_value_t value = hemp_hash_fetch(hash, name);
+    hemp_value value = hemp_hash_fetch(hash, name);
 
     return hemp_is_string(value)
         ? hemp_val_str(value)
@@ -366,12 +366,12 @@ hemp_hash_fetch_string(
 }
 
 
-hemp_text_p
+hemp_text
 hemp_hash_fetch_text(
-    hemp_hash_p hash, 
-    hemp_str_p  name
+    hemp_hash hash, 
+    hemp_string  name
 ) {
-    hemp_value_t value = hemp_hash_fetch(hash, name);
+    hemp_value value = hemp_hash_fetch(hash, name);
 
     return hemp_is_text(value)
         ? hemp_val_text(value)
@@ -382,8 +382,8 @@ hemp_hash_fetch_text(
 
 HEMP_INLINE void 
 hemp_hash_attach(
-    hemp_hash_p child, 
-    hemp_hash_p parent
+    hemp_hash child, 
+    hemp_hash parent
 ) {
     child->parent = parent;
 }
@@ -391,7 +391,7 @@ hemp_hash_attach(
 
 HEMP_INLINE void 
 hemp_hash_detach(
-    hemp_hash_p child
+    hemp_hash child
 ) {
     child->parent = NULL;
 }
@@ -399,12 +399,12 @@ hemp_hash_detach(
 
 void
 hemp_hash_each(
-    hemp_hash_p      hash,
-    hemp_hash_each_f func
+    hemp_hash      hash,
+    hemp_hash_iter func
 ) {
-    hemp_size_t i;
-    hemp_slot_p slot;
-    hemp_pos_t n = 0;
+    hemp_size i;
+    hemp_slot slot;
+    hemp_pos n = 0;
 
 
     for (i = 0; i < hash->width; i++) {
@@ -426,9 +426,9 @@ hemp_hash_each(
  * maybe Python's?
  *---------------------------------------------------------------------*/
 
-hemp_size_t
+hemp_size
 hemp_hash_function_default(
-    register hemp_str_p s
+    register hemp_string s
 ) {
     register int c;
     register unsigned int val = 0;
@@ -451,7 +451,7 @@ hemp_hash_function_default(
  *---------------------------------------------------------------------*/
 
 /* Define an initial seed value and some type aliases */
-static hemp_size_t hemp_hash_jenkins32_seed = 42;
+static hemp_size hemp_hash_jenkins32_seed = 42;
 typedef  unsigned long int  u4;   
 typedef  unsigned     char  u1;
 
@@ -468,13 +468,13 @@ typedef  unsigned     char  u1;
     c=c-a;  c=c-b;  c=c^(b>>15);            \
 }
 
-HEMP_INLINE hemp_size_t
+HEMP_INLINE hemp_size
 hemp_hash_function_jenkins32(
-    register hemp_str_p  key,
-    register hemp_size_t length
+    register hemp_string  key,
+    register hemp_size length
 ) {
     register u4 a, b, c;
-    register hemp_size_t remain = length;
+    register hemp_size remain = length;
 
    /* Set up the internal state */
     a = b = 0x9e3779b9;
@@ -519,7 +519,7 @@ hemp_hash_function_jenkins32(
  *--------------------------------------------------------------------------*/
 
 HEMP_OUTPUT_FUNC(hemp_type_hash_text) {
-    hemp_text_p text;
+    hemp_text text;
     hemp_prepare_text(context, output, text);
     hemp_text_append_string(text, "TODO: hash.text");
     return output;
@@ -527,8 +527,8 @@ HEMP_OUTPUT_FUNC(hemp_type_hash_text) {
 
 
 HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
-    hemp_bool_t kmine  = HEMP_FALSE;
-    hemp_text_p ktext;
+    hemp_bool kmine  = HEMP_FALSE;
+    hemp_text ktext;
 
     if (hemp_is_text(key)) {
         ktext = hemp_val_text(key);
@@ -546,7 +546,7 @@ HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
         ktext->string
     );
     /* fetch the value */
-    hemp_value_t result = hemp_hash_fetch_keylen( 
+    hemp_value result = hemp_hash_fetch_keylen( 
         hemp_val_hash(container),
         ktext->string,
         ktext->length
@@ -561,8 +561,8 @@ HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
 
 
 HEMP_FETCH_FUNC(hemp_type_hash_dot) {
-    hemp_bool_t kmine  = HEMP_FALSE;
-    hemp_text_p ktext;
+    hemp_bool kmine  = HEMP_FALSE;
+    hemp_text ktext;
 
     if (hemp_is_text(key)) {
         ktext = hemp_val_text(key);
@@ -581,7 +581,7 @@ HEMP_FETCH_FUNC(hemp_type_hash_dot) {
     );
 
     /* fetch the value */
-    hemp_value_t result = hemp_hash_fetch_keylen( 
+    hemp_value result = hemp_hash_fetch_keylen( 
         hemp_val_hash(container),
         ktext->string,
         ktext->length
@@ -627,13 +627,13 @@ HEMP_VALUE_FUNC(hemp_method_hash_length) {
  * debugging methods
  *--------------------------------------------------------------------------*/
 
-hemp_text_p hemp_hash_dump_buffer = NULL;
+hemp_text hemp_hash_dump_buffer = NULL;
  
-hemp_bool_t 
+hemp_bool 
 hemp_hash_dump_item(
-    hemp_hash_p     hash,
-    hemp_pos_t      index,
-    hemp_slot_p     item
+    hemp_hash     hash,
+    hemp_pos      index,
+    hemp_slot     item
 ) {
 //  hemp_debug("dump hash item #%d: %s\n", index, item->name);
     hemp_text_append_string(hemp_hash_dump_buffer, "    ");
@@ -654,7 +654,7 @@ hemp_hash_dump_item(
     hemp_text_append_string(hemp_hash_dump_buffer, "\n");
 
     // ARSE!  We can't call the text method without a context
-    // hemp_text(item->value, " => ");
+    // hemp_vtext(item->value, " => ");
     
     return HEMP_TRUE;
 }
@@ -662,7 +662,7 @@ hemp_hash_dump_item(
 
 void 
 hemp_hash_dump_hash(
-    hemp_hash_p hash
+    hemp_hash hash
 ) {
     char buffer[100];
     sprintf(buffer, "[%p] ", hash);
@@ -677,9 +677,9 @@ hemp_hash_dump_hash(
     }
 }
 
-hemp_text_p
+hemp_text
 hemp_hash_dump(
-    hemp_hash_p hash
+    hemp_hash hash
 ) {
     hemp_hash_dump_buffer = hemp_text_new();
     hemp_hash_dump_hash(hash);

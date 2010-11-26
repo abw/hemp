@@ -4,13 +4,13 @@
 int main(
     int argc, char **argv, char **env
 ) {
-    hemp_p      hemp    = hemp_init();
-    hemp_list_p list    = hemp_list_new();
-    hemp_hash_p hash    = hemp_hash_init();
-    hemp_cntx_p context = hemp_context(hemp);
+    hemp_hemp      hemp    = hemp_init();
+    hemp_list list    = hemp_list_new();
+    hemp_hash hash    = hemp_hash_init();
+    hemp_context context = hemp_context_instance(hemp);
     int         result;
 
-    hemp_text_p message = hemp_text_from_string("Hello World!");
+    hemp_text message = hemp_text_from_string("Hello World!");
     
     hemp_context_set_number(  context, "e",         2.718    );
     hemp_context_set_number(  context, "pi",        3.14159  );

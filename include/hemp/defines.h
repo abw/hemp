@@ -10,7 +10,7 @@
 #define HEMP_URL            PACKAGE_URL
 #define HEMP_PROMPT         HEMP_NAME
 
-/* aliases for commonly used values, characters, strings, etc */
+/* aliases for commonly used values, characters, etc */
 #define HEMP_TRUE           1
 #define HEMP_FALSE          0
 #define HEMP_TAB            9
@@ -25,7 +25,7 @@
 #define HEMP_BACKSLASH      '\\'
 #define HEMP_UNDERSCORE     '_'
 
-/* short strings */
+/* aliases for various short strings */
 #define HEMP_STR_UNKNOWN    "Unknown"
 #define HEMP_STR_INFINITY   "Infinity"
 #define HEMP_STR_MISSING    "Missing"
@@ -37,7 +37,6 @@
 #define HEMP_STR_BEFORE     "Before"
 #define HEMP_STR_AFTER      "After"
 #define HEMP_STR_EQUAL      "Equal"
-
 #define HEMP_STR_TYPE       "Type"
 #define HEMP_STR_VALUE      "Value"
 #define HEMP_STR_NUMBER     "Number"
@@ -50,7 +49,6 @@
 #define HEMP_STR_IDENTITY   "Identity"
 #define HEMP_STR_RESERVED   "Reserved"
 #define HEMP_STR_UNUSED     "Unused"
-
 #define HEMP_STR_QUOTED     "quoted string"
 #define HEMP_STR_NO_TEXT    "empty text"
 #define HEMP_STR_BOOLEAN    "truth"

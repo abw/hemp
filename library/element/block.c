@@ -1,14 +1,14 @@
 #include <hemp/element.h>
 
 
-hemp_symbol_p HempSymbolBlock = NULL;
+hemp_symbol HempSymbolBlock = NULL;
 
-hemp_symbol_p
+hemp_symbol
 hemp_symbol_block() {
     hemp_debug_call("hemp_symbol_block()\n");
     return hemp_element_block_symbol(
         NULL,
-        hemp_symbol_init("hemp.block", NULL, NULL)
+        hemp_symbol_new("hemp.block", NULL, NULL)
     );
 }
 
@@ -29,7 +29,7 @@ HEMP_SYMBOL_FUNC(hemp_element_block_symbol) {
 
 HEMP_OUTPUT_FUNC(hemp_element_block_token) {
     hemp_debug_call("hemp_element_block_token()\n");
-    hemp_text_p text;
+    hemp_text text;
     hemp_prepare_text(context, output, text);
     hemp_todo("hemp_element_block_token()");
     return output;
@@ -39,8 +39,8 @@ HEMP_OUTPUT_FUNC(hemp_element_block_token) {
 HEMP_OUTPUT_FUNC(hemp_element_block_source) {
     hemp_debug_call("hemp_element_block_source()\n");
 
-    hemp_element_p element = hemp_val_elem(value);
-    hemp_text_p text;
+    hemp_element element = hemp_val_elem(value);
+    hemp_text text;
     hemp_prepare_text_size(context, output, text, element->length);
 
     hemp_todo("hemp_element_block_source()");
@@ -51,24 +51,24 @@ HEMP_OUTPUT_FUNC(hemp_element_block_source) {
 
 HEMP_OUTPUT_FUNC(hemp_element_block_text) {
     hemp_debug_call("hemp_element_block_text()\n");
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_list_p     exprs   = hemp_block_exprs_list(element);
-    hemp_value_t    item;
-    hemp_size_t     n;
+    hemp_element  element = hemp_val_elem(value);
+    hemp_list     exprs   = hemp_block_exprs_list(element);
+    hemp_value    item;
+    hemp_size     n;
 
-    hemp_text_p text;
+    hemp_text text;
     hemp_prepare_text(context, output, text);
 
     if (hemp_has_flag(element, HEMP_BE_ARGS)) {
-        hemp_element_p  args    = hemp_val_elem(hemp_block_args(element));
-        hemp_params_p   params  = (hemp_params_p) hemp_val_ptr(hemp_lhs(args));
-        hemp_list_p     list    = params->item;
+        hemp_element  args    = hemp_val_elem(hemp_block_args(element));
+        hemp_params   params  = (hemp_params) hemp_val_ptr(hemp_lhs(args));
+        hemp_list     list    = params->item;
         hemp_debug("TODO: handle block arguments, params are at %p\n", params);
         for (n = 0; n < list->length; n++) {
-            hemp_str_p name = hemp_val_str( hemp_list_item(list, n) );
+            hemp_string name = hemp_val_str( hemp_list_item(list, n) );
             hemp_debug("- %s\n", name);
         }
-        // hemp_value_t args = hemp_block_args(element);
+        // hemp_value args = hemp_block_args(element);
     }
     
     for (n = 0; n < exprs->length; n++) {
@@ -92,11 +92,11 @@ HEMP_VALUE_FUNC(hemp_element_block_value) {
 
 HEMP_OUTPUT_FUNC(hemp_element_block_values) {
     hemp_debug_call("hemp_element_block_values()\n");
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_list_p     exprs   = hemp_block_exprs_list(element);
-    hemp_value_t    item;
-    hemp_size_t     n;
-    hemp_list_p     values;
+    hemp_element  element = hemp_val_elem(value);
+    hemp_list     exprs   = hemp_block_exprs_list(element);
+    hemp_value    item;
+    hemp_size     n;
+    hemp_list     values;
     hemp_prepare_values(context, output, values);
     
     for (n = 0; n < exprs->length; n++) {
@@ -113,11 +113,11 @@ HEMP_OUTPUT_FUNC(hemp_element_block_values) {
 
 HEMP_OUTPUT_FUNC(hemp_element_block_params) {
     hemp_debug_call("hemp_element_block_params()\n");
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_list_p     exprs   = hemp_block_exprs_list(element);
-    hemp_value_t    item;
-    hemp_size_t     n;
-    hemp_list_p     values;
+    hemp_element  element = hemp_val_elem(value);
+    hemp_list     exprs   = hemp_block_exprs_list(element);
+    hemp_value    item;
+    hemp_size     n;
+    hemp_list     values;
     hemp_prepare_values(context, output, values);
     
     for (n = 0; n < exprs->length; n++) {
@@ -132,18 +132,18 @@ HEMP_OUTPUT_FUNC(hemp_element_block_params) {
 
 void
 hemp_element_block_clean(
-    hemp_element_p element
+    hemp_element element
 ) {
     hemp_debug_call("hemp_element_block_clean(%p)\n", element);
 
-    hemp_list_p exprs = hemp_block_exprs_list(element);
+    hemp_list exprs = hemp_block_exprs_list(element);
 
     if (exprs)
         hemp_list_free(exprs);
 
     if (hemp_has_flag(element, HEMP_BE_ARGS)) {
-        hemp_element_p  args    = hemp_val_elem(hemp_block_args(element));
-        hemp_params_p   params  = (hemp_params_p) hemp_val_ptr(hemp_lhs(args));
+        hemp_element  args    = hemp_val_elem(hemp_block_args(element));
+        hemp_params   params  = (hemp_params) hemp_val_ptr(hemp_lhs(args));
 //      hemp_debug("cleaning block params at %p\n", params);
         hemp_params_free(params);
     }

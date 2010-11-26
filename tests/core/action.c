@@ -13,7 +13,7 @@ main(
     return done();
 }
 
-hemp_mem_p
+hemp_memory
 add_actor(
     int n1,
     int n2
@@ -22,7 +22,7 @@ add_actor(
 }
 
 
-hemp_mem_p
+hemp_memory
 printf_actor(
     char *format,
     char *string
@@ -32,8 +32,8 @@ printf_actor(
 
 
 void test_action() {
-    hemp_action_p action = hemp_action_init(
-        (hemp_actor_f) &printf_actor,
+    hemp_action action = hemp_action_new(
+        (hemp_actor) &printf_actor,
         "hello %s"
     );
     ok( action, "created 'hello world' action" );
@@ -41,9 +41,9 @@ void test_action() {
     hemp_action_run(action, "world\n");
     hemp_action_free(action);
 
-    action = hemp_action_init(
-        (hemp_actor_f) &add_actor,
-        (hemp_mem_p) 300            /* HACK: cast to avoid warnings */
+    action = hemp_action_new(
+        (hemp_actor) &add_actor,
+        (hemp_memory) 300            /* HACK: cast to avoid warnings */
     );
     ok( action, "created a + b action" );
 

@@ -12,19 +12,19 @@
 
 /* symbol vtable */
 
-struct hemp_symbol_s {
+struct hemp_symbol {
     /* a symbol is a kind of object value type so we start with those members */
     HEMP_TYPE_BASE
 
     /* a symbol is bound to a grammar */
-    hemp_grammar_p      grammar;
+    hemp_grammar        grammar;
 
     /* symbol metadata */
-    hemp_str_p          start;
-    hemp_str_p          end;
-    hemp_flags_t        flags;
-    hemp_prec_t         lprec;
-    hemp_prec_t         rprec;
+    hemp_string         start;
+    hemp_string         end;
+    hemp_flags          flags;
+    hemp_oprec          lprec;
+    hemp_oprec          rprec;
 
     /* intialisation (on scan) and cleanup methods */
     hemp_sym_scan_f     scanner;
@@ -45,31 +45,31 @@ struct hemp_symbol_s {
 
 /* symbols collection */
 
-struct hemp_symbols_s {
-    hemp_str_p      name;
-    hemp_symbol_f   constructor;
+struct hemp_symbols {
+    hemp_string         name;
+    hemp_symbol_f       constructor;
 };
 
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_symbol_p
-hemp_symbol_init(
-    hemp_str_p name,
-    hemp_str_p start,
-    hemp_str_p end
+hemp_symbol
+hemp_symbol_new(
+    hemp_string         name,
+    hemp_string         start,
+    hemp_string         end
 );
 
 
 void
 hemp_symbol_free(
-    hemp_symbol_p symbol
+    hemp_symbol         symbol
 );
 
 void 
 hemp_symbol_dump(
-    hemp_symbol_p symbol
+    hemp_symbol         symbol
 );
 
 
@@ -77,16 +77,16 @@ hemp_symbol_dump(
  * global symbols and symbol constructors
  *--------------------------------------------------------------------------*/
 
-extern hemp_symbol_p HempSymbolSpace;
-extern hemp_symbol_p HempSymbolComment;
-extern hemp_symbol_p HempSymbolTagStart;
-extern hemp_symbol_p HempSymbolTagEnd;
-extern hemp_symbol_p HempSymbolBlock;
-extern hemp_symbol_p HempSymbolText;
-extern hemp_symbol_p HempSymbolWord;
-extern hemp_symbol_p HempSymbolNumber;
-extern hemp_symbol_p HempSymbolInteger;
-extern hemp_symbol_p HempSymbolEOF;
+extern hemp_symbol HempSymbolSpace;
+extern hemp_symbol HempSymbolComment;
+extern hemp_symbol HempSymbolTagStart;
+extern hemp_symbol HempSymbolTagEnd;
+extern hemp_symbol HempSymbolBlock;
+extern hemp_symbol HempSymbolText;
+extern hemp_symbol HempSymbolWord;
+extern hemp_symbol HempSymbolNumber;
+extern hemp_symbol HempSymbolInteger;
+extern hemp_symbol HempSymbolEOF;
 
 
 HEMP_GLOBAL_SYMBOL(hemp_symbol_space);
@@ -99,13 +99,6 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_word);
 HEMP_GLOBAL_SYMBOL(hemp_symbol_number);
 HEMP_GLOBAL_SYMBOL(hemp_symbol_integer);
 HEMP_GLOBAL_SYMBOL(hemp_symbol_eof);
-
-
-/*--------------------------------------------------------------------------
- * externals
- *--------------------------------------------------------------------------*/
-
-//extern struct hemp_parse_s hemp_parse_binary_vtable;
 
 
 #endif /* HEMP_SYMBOL_H */

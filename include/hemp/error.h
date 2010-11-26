@@ -5,6 +5,10 @@
 #include <hemp/types.h>
 
 
+/*--------------------------------------------------------------------------
+ * error codes and corresponding message formats
+ *--------------------------------------------------------------------------*/
+
 typedef enum { 
     HEMP_ERROR_NONE = 0,
     HEMP_ERROR_UNKNOWN,
@@ -23,10 +27,10 @@ typedef enum {
     HEMP_ERROR_OPTION,
     HEMP_ERROR_HELP,
     HEMP_ERROR_MAX
-} hemp_errno_e;
+} hemp_errno;
 
 
-static hemp_str_p hemp_errmsg[] = {
+static hemp_string hemp_errmsg[] = {
     "No error",
     "Unknown error",
     "Memory allocation failed",
@@ -45,54 +49,72 @@ static hemp_str_p hemp_errmsg[] = {
     NULL
 };
 
-struct hemp_jump_s {
-    hemp_pos_t  depth;
-    hemp_jump_b buffer;
-    hemp_jump_p parent;
+
+/*--------------------------------------------------------------------------
+ * data structures
+ *--------------------------------------------------------------------------*/
+
+struct hemp_jump {
+    hemp_jump           parent;
+    hemp_jump_buf       buffer;
+    hemp_pos            depth;
 };
 
-struct hemp_error_s {
-    hemp_errno_e    number;
-    hemp_str_p      message;
-    hemp_scan_pos_p scan_pos;
-    hemp_error_p    parent;
+struct hemp_error {
+    hemp_errno          number;
+    hemp_string         message;
+    hemp_scan_pos       scan_pos;
+    hemp_error          parent;
 };
 
 
-hemp_error_p
+
+
+/*--------------------------------------------------------------------------
+ * function prototypes
+ *--------------------------------------------------------------------------*/
+
+hemp_error
     hemp_error_new(
-        hemp_errno_e number
+        hemp_errno      number
     );
 
 
-hemp_error_p
+hemp_error
     hemp_error_init(
-        hemp_errno_e number,
-        hemp_str_p   message
+        hemp_errno      number,
+        hemp_string     message
     );
 
-hemp_error_p
+hemp_error
     hemp_error_initf(
-        hemp_errno_e number,
-        hemp_str_p   format,
+        hemp_errno      number,
+        hemp_string     format,
         ...
     );
 
-hemp_error_p
+hemp_error
     hemp_error_initfv(
-        hemp_errno_e number,
-        hemp_str_p   format,
-        va_list      args
+        hemp_errno      number,
+        hemp_string     format,
+        va_list         args
     );
 
-hemp_text_p
+hemp_text
     hemp_error_text(
-        hemp_error_p error
+        hemp_error      error
+    );
+
+hemp_error    
+    hemp_error_message(
+        hemp_hemp, 
+        hemp_errno, 
+        ...
     );
 
 void
     hemp_error_free(
-        hemp_error_p error
+        hemp_error      error
     );
 
 
@@ -121,7 +143,7 @@ void
 
 #define HEMP_TRY                                    \
     do {                                            \
-        hemp_jump_t jump;                           \
+        struct hemp_jump jump;                      \
         jump.parent = hemp->jump;                   \
         jump.depth  = hemp->jump                    \
             ? hemp->jump->depth + 1                 \
@@ -151,8 +173,6 @@ void
         hemp->jump = hemp->jump->parent;            \
     } while (0);
 
-
-hemp_error_p    hemp_error_message(hemp_p, hemp_errno_e, ...);
 
 #define hemp_throw(h,...) \
     hemp_error_throw(h, hemp_error_message(h,__VA_ARGS__))

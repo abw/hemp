@@ -4,11 +4,11 @@
 #include <hemp/core.h>
 
 struct hemp_md5_s {
-  hemp_uint_t   i[2];           /* number of _bits_ handled mod 2^64        */
-  hemp_uint_t   buffer[4];      /* scratch buffer                           */
-  hemp_char_t   input[64];      /* input buffer                             */
-  hemp_char_t   digest[16];     /* actual digest after hemp_md5_final call  */
-  hemp_char_t   output[33];     /* output hex digest string                 */
+  hemp_uint   i[2];           /* number of _bits_ handled mod 2^64        */
+  hemp_uint   buffer[4];      /* scratch buffer                           */
+  hemp_char   input[64];      /* input buffer                             */
+  hemp_char   digest[16];     /* actual digest after hemp_md5_final call  */
+  hemp_char   output[33];     /* output hex digest string                 */
 };
 
 typedef struct hemp_md5_s   hemp_md5_t;
@@ -22,8 +22,8 @@ hemp_md5_p
 void 
     hemp_md5_update(
         hemp_md5_p  md5,
-        hemp_str_p  input,
-        hemp_size_t length
+        hemp_string  input,
+        hemp_size length
     );
 
 void 
@@ -33,8 +33,8 @@ void
 
 static void 
     hemp_md5_transform(
-        hemp_uint_t *buffer,
-        hemp_uint_t *input
+        hemp_uint *buffer,
+        hemp_uint *input
     );
 
 void 

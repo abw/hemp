@@ -4,14 +4,14 @@
 #define HEMP_ONLOAD "hemp_onload"
 
 
-hemp_bool_t
+hemp_bool
 hemp_module_load(
-    hemp_p      hemp,
-    hemp_str_p  name
+    hemp_hemp      hemp,
+    hemp_string  name
 ) {
     hemp_ptr_t      plugin = dlopen(name, RTLD_NOW);
     hemp_onload_fn  onload;
-    hemp_str_p      error;
+    hemp_string      error;
     
     if (plugin == NULL) {
         hemp_debug_load("failed to load plugin %s: \n", name, dlerror());

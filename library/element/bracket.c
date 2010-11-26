@@ -4,18 +4,18 @@
 // TODO: move these
 void 
 hemp_element_params_compile(
-    hemp_element_p  element,
-    hemp_scope_p    scope
+    hemp_element  element,
+    hemp_scope    scope
 );
 
 void
 hemp_element_parens_clean(
-    hemp_element_p element
+    hemp_element element
 );
 
 void
 hemp_element_params_clean(
-    hemp_element_p element
+    hemp_element element
 );
 
 
@@ -41,9 +41,9 @@ HEMP_SYMBOL_FUNC(hemp_element_brackets_symbol) {
 
 HEMP_PREFIX_FUNC(hemp_element_brackets_parse) {
     hemp_debug_call("hemp_element_brackets_parse()\n");
-    hemp_element_p  self = *elemptr;
-    hemp_symbol_p   type = self->type;
-    hemp_list_p     exprs;
+    hemp_element  self = *elemptr;
+    hemp_symbol   type = self->type;
+    hemp_list     exprs;
 
     /* skip opening bracket */
     hemp_go_next(elemptr);
@@ -75,7 +75,7 @@ HEMP_PREFIX_FUNC(hemp_element_brackets_prefix) {
     hemp_debug_call("hemp_element_brackets_prefix()\n");
 
     /* parse the bracketed expressions */
-    hemp_element_p self = hemp_element_brackets_parse(
+    hemp_element self = hemp_element_brackets_parse(
         elemptr, scope, precedence, force
     );
 
@@ -89,7 +89,7 @@ HEMP_PREFIX_FUNC(hemp_element_brackets_prefix) {
 
 void
 hemp_element_brackets_clean(
-    hemp_element_p element
+    hemp_element element
 ) {
     hemp_debug_call("hemp_element_brackets_clean(%p)\n", element);
 
@@ -120,8 +120,8 @@ HEMP_SYMBOL_FUNC(hemp_element_parens_symbol) {
 HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
     hemp_debug_msg("hemp_element_parens_postfix()\n");
     
-    hemp_element_p  self = *elemptr;
-    hemp_symbol_p   type = self->type;
+    hemp_element  self = *elemptr;
+    hemp_symbol   type = self->type;
 
     HEMP_INFIX_LEFT_PRECEDENCE;
 
@@ -133,7 +133,7 @@ HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
     hemp_set_flag(self, HEMP_BE_INFIX);
 
     hemp_debug_msg("building params...\n");
-    hemp_element_p params = hemp_element_create(
+    hemp_element params = hemp_element_create(
         self, "hemp.params"
     );
 
@@ -151,14 +151,14 @@ HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
 
 HEMP_VALUE_FUNC(hemp_element_parens_value) {
     hemp_debug_call("hemp_element_parens_value()\n");
-    hemp_value_t    values  = hemp_obcall(value, values, context, HempNothing);
-    hemp_list_p     list    = hemp_val_list(values);
+    hemp_value    values  = hemp_obcall(value, values, context, HempNothing);
+    hemp_list     list    = hemp_val_list(values);
 
 //  hemp_debug_msg("got %d values returned by parens\n", list->length);
 
     if (list->length > 1) {
 //      hemp_debug_msg("squishing list of %d items to text\n", list->length);
-        return hemp_text(values, context, HempNothing);
+        return hemp_vtext(values, context, HempNothing);
     }
     else if (list->length == 1) {
 //      hemp_debug_msg("got one value returned by parens\n"); 
@@ -199,11 +199,11 @@ HEMP_SYMBOL_FUNC(hemp_element_params_symbol) {
 HEMP_VALUE_FUNC(hemp_element_params_value) {
     hemp_debug_call("hemp_element_params_value()\n");
     
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    lhs     = hemp_lhs(element);
-    hemp_value_t    parens  = hemp_rhs(element);
-    hemp_frame_p    frame   = hemp_context_enter(context, element);
-    hemp_value_t    result;
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    lhs     = hemp_lhs(element);
+    hemp_value    parens  = hemp_rhs(element);
+    hemp_frame    frame   = hemp_context_enter(context, element);
+    hemp_value    result;
 
     /* Evaluate the parenthesised arguments in the new frame */
     hemp_obcall(parens, params, context, hemp_list_val(frame->args));
@@ -231,8 +231,8 @@ HEMP_VALUE_FUNC(hemp_element_params_value) {
 
 HEMP_OPERATE_FUNC(hemp_element_params_assign) {
     hemp_debug_msg("hemp_element_params_assign()\n");
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    word    = hemp_expr(element);
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    word    = hemp_expr(element);
 
     /* Unlike assigning directly to a word, which causes the RHS to be 
      * evaluated immediately, assigning to a parenthesised expression creates
@@ -252,7 +252,7 @@ HEMP_OPERATE_FUNC(hemp_element_params_assign) {
 
 void
 hemp_element_params_clean(
-    hemp_element_p element
+    hemp_element element
 ) {
     hemp_debug("hemp_element_params_clean(%p)\n", element);
 }
@@ -261,15 +261,15 @@ hemp_element_params_clean(
 /* tmp hack to compile function signatures */
 void 
 hemp_element_params_compile(
-    hemp_element_p  element,
-    hemp_scope_p    scope
+    hemp_element  element,
+    hemp_scope    scope
 ) {
     hemp_debug("hemp_element_parens_params()\n");
-    hemp_list_p     exprs  = hemp_val_list( hemp_expr(element) );
-    hemp_params_p   params = hemp_params_new();
-    hemp_element_p  expr;
-    hemp_value_t    item;
-    hemp_size_t     n;
+    hemp_list     exprs  = hemp_val_list( hemp_expr(element) );
+    hemp_params   params = hemp_params_new();
+    hemp_element  expr;
+    hemp_value    item;
+    hemp_size     n;
 
     hemp_debug("%d expressions in parens params\n", exprs->length);
     
@@ -324,8 +324,8 @@ HEMP_SYMBOL_FUNC(hemp_element_hash_symbol) {
 
 HEMP_VALUE_FUNC(hemp_element_hash_value) {
     hemp_debug_call("hemp_element_hash_value()\n");
-    hemp_element_p element  = hemp_val_elem(value);
-    hemp_element_p block    = hemp_expr_element(element);
+    hemp_element element  = hemp_val_elem(value);
+    hemp_element block    = hemp_expr_element(element);
     // pairs/slots = block->type->pairs(block, context, HempNothing);
     // add pairs/slots to a hash, return.
     // or better still, pass hash to pairs()... but what if we want a list

@@ -14,8 +14,8 @@ int main(
 
 
 void test_text() {
-    hemp_text_p message = hemp_text_new_size(25);
-    hemp_text_p badger, copycat;
+    hemp_text message = hemp_text_new_size(25);
+    hemp_text badger, copycat;
 
     ok( message, "created message" );
     ok( message->length   == 0, "length is %d", message->length );

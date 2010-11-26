@@ -9,14 +9,14 @@ HEMP_TYPE_FUNC(hemp_type_integer) {
     type->integer    = &hemp_value_self;            /* no-op returns int    */
     type->boolean    = &hemp_type_integer_boolean; /* number -> boolean    */
     type->compare    = &hemp_type_integer_compare; /* number -> comparison */
-    type->defined    = &hemp_value_true;            /* always defined       */
+    type->defined    = &hemp_valuerue;            /* always defined       */
     return type;
 };
 
 
 HEMP_OUTPUT_FUNC(hemp_type_integer_text) {
-    static hemp_char_t buffer[HEMP_BUFFER_SIZE];
-    hemp_text_p text;
+    static hemp_char buffer[HEMP_BUFFER_SIZE];
+    hemp_text text;
 
     snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_INT, hemp_val_int(value));
     hemp_prepare_text_size(context, output, text, strlen(buffer));
@@ -27,7 +27,7 @@ HEMP_OUTPUT_FUNC(hemp_type_integer_text) {
 
 
 HEMP_VALUE_FUNC(hemp_type_integer_number) {
-    return hemp_num_val((hemp_num_t) hemp_val_int(value));
+    return hemp_num_val((hemp_num) hemp_val_int(value));
 }
 
 
@@ -39,7 +39,7 @@ HEMP_VALUE_FUNC(hemp_type_integer_boolean) {
 
 
 HEMP_VALUE_FUNC(hemp_type_integer_compare) {
-    hemp_num_t cmp = hemp_val_int(value);
+    hemp_num cmp = hemp_val_int(value);
     return  cmp < 0 ? HempBefore
         :   cmp > 0 ? HempAfter
         :             HempEqual; 

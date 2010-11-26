@@ -14,27 +14,27 @@ int main(
 
 
 void test_punctuation() {
-    hemp_str_p text = "DUMMY TEXT";
+    hemp_string text = "DUMMY TEXT";
 
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp" );
 
-    hemp_elements_p elements = hemp_elements_init(hemp, 0);
+    hemp_elements elements = hemp_elements_new(hemp, 0);
     ok( elements, "created elements" );
 
-    hemp_symbol_p space, comma, semicolon, terminator;
+    hemp_symbol space, comma, semicolon, terminator;
     
     HEMP_TRY;
-        space = hemp_symbol(hemp, "hemp.space", " ", NULL);
+        space = hemp_symbol_instance(hemp, "hemp.space", " ", NULL);
         ok( space, "got %s symbol", space->name );
 
-        comma = hemp_symbol(hemp, "hemp.delimiter", ",", NULL);
+        comma = hemp_symbol_instance(hemp, "hemp.delimiter", ",", NULL);
         ok( comma, "got %s symbol", comma->name );
 
-        semicolon = hemp_symbol(hemp, "hemp.separator", ";", NULL);
+        semicolon = hemp_symbol_instance(hemp, "hemp.separator", ";", NULL);
         ok( semicolon, "got %s symbol", semicolon->name );
 
-        terminator = hemp_symbol(hemp, "hemp.terminator", ".", NULL);
+        terminator = hemp_symbol_instance(hemp, "hemp.terminator", ".", NULL);
         ok( terminator, "got %s symbol", terminator->name );
 
     HEMP_CATCH_ALL;
@@ -66,7 +66,7 @@ void test_punctuation() {
     hemp_elements_append(elements, HempSymbolText,       text, 0, 0);
     hemp_elements_eof(elements, 0);
 
-    hemp_element_p elem = elements->head;
+    hemp_element elem = elements->head;
     
     hemp_skip_delimiter(&elem);
     ok( elem->type == semicolon, "blocked at semicolon separator" );

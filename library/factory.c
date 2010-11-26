@@ -1,28 +1,22 @@
 #include <hemp/factory.h>
 
-hemp_char_t _hemp_factory_name_buffer[HEMP_BUFFER_SIZE];
+hemp_char _hemp_factory_name_buffer[HEMP_BUFFER_SIZE];
 
 
-hemp_factory_p
-hemp_factory_init() {
-    hemp_factory_p factory = (hemp_factory_p) hemp_mem_alloc(
-        sizeof(struct hemp_factory_s)
-    );
-
-    if (! factory)
-        hemp_mem_fail("factory");
-
+hemp_factory
+hemp_factory_new() {
+    hemp_factory factory;
+    HEMP_ALLOCATE(factory);
     factory->instances    = hemp_hash_init();
     factory->constructors = hemp_hash_init();
     factory->cleaner      = NULL;
-    
     return factory;
 }
 
 
 void
 hemp_factory_free(
-    hemp_factory_p factory
+    hemp_factory factory
 ) {
     /* run any custom instance cleaner */
     if (factory->cleaner)
@@ -36,21 +30,21 @@ hemp_factory_free(
 }
 
 
-hemp_action_p
+hemp_action
 hemp_factory_register(
-    hemp_factory_p  factory,
-    hemp_str_p      name,
-    hemp_actor_f    actor,
-    hemp_mem_p      script
+    hemp_factory    factory,
+    hemp_string     name,
+    hemp_actor      actor,
+    hemp_memory     script
 ) {
-    hemp_action_p action = (hemp_action_p) hemp_hash_fetch_pointer(
+    hemp_action action = (hemp_action) hemp_hash_fetch_pointer(
         factory->constructors, name
     );
 
     if (action)
         hemp_action_free(action);
 
-    action = hemp_action_init(
+    action = hemp_action_new(
         actor, script
     );
 
@@ -64,17 +58,17 @@ hemp_factory_register(
 }
 
 
-hemp_action_p
+hemp_action
 hemp_factory_constructor(
-    hemp_factory_p factory,
-    hemp_str_p     name
+    hemp_factory    factory,
+    hemp_string     name
 ) {
     hemp_debug_call("hemp_factory_constructor(F, %s)\n", name);
     
-    static hemp_char_t  wildname[HEMP_BUFFER_SIZE];
-    hemp_list_p splits;
+    static hemp_char  wildname[HEMP_BUFFER_SIZE];
+    hemp_list splits;
     
-    hemp_action_p constructor = (hemp_action_p) hemp_hash_fetch_pointer(
+    hemp_action constructor = (hemp_action) hemp_hash_fetch_pointer(
         factory->constructors, name
     );
 
@@ -89,14 +83,14 @@ hemp_factory_constructor(
     if ((splits = hemp_string_splits(name, HEMP_STR_DOT))) {
         int n;
         hemp_string_split_p split;
-        hemp_action_p wildcard;
+        hemp_action wildcard;
             
         for (n = splits->length - 1; n >= 0; n--) {
             split = (hemp_string_split_p) hemp_val_ptr( hemp_list_item(splits, n) );
             snprintf(wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
 
             /* look for a wildcard meta-constructor */
-            wildcard = (hemp_action_p) hemp_hash_fetch_pointer(
+            wildcard = (hemp_action) hemp_hash_fetch_pointer(
                 factory->constructors, wildname
             );
             if (! wildcard)
@@ -121,24 +115,24 @@ hemp_factory_constructor(
 }
 
 
-hemp_mem_p
+hemp_memory
 hemp_factory_instance(
-    hemp_factory_p factory,
-    hemp_str_p     name
+    hemp_factory factory,
+    hemp_string     name
 ) {
     hemp_debug_call("hemp_factory_instance(F, %s)\n", name);
     
-    static hemp_char_t  wildname[HEMP_BUFFER_SIZE];
-    hemp_list_p splits;
+    static hemp_char  wildname[HEMP_BUFFER_SIZE];
+    hemp_list splits;
     
-    hemp_mem_p instance = hemp_hash_fetch_pointer(
+    hemp_memory instance = hemp_hash_fetch_pointer(
         factory->instances, name
     );
 
     if (instance)
         return instance;
 
-    hemp_action_p constructor = hemp_factory_constructor(
+    hemp_action constructor = hemp_factory_constructor(
         factory, name
     );
 
@@ -157,13 +151,13 @@ hemp_factory_instance(
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_factory_free_constructor(
-    hemp_hash_p     dialects,
-    hemp_pos_t      position,
-    hemp_slot_p     item
+    hemp_hash     dialects,
+    hemp_pos      position,
+    hemp_slot     item
 ) {
-    hemp_action_free( (hemp_action_p) hemp_val_ptr(item->value) );
+    hemp_action_free( (hemp_action) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 

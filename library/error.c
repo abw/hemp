@@ -3,18 +3,16 @@
 //#include <hemp/source.h>
 
 
-hemp_error_p
+hemp_error
 hemp_error_new(
-    hemp_errno_e number
+    hemp_errno number
 ) {
-    hemp_error_p error = (hemp_error_p) hemp_mem_alloc(
-        sizeof(struct hemp_error_s)
-    );
-    if (! error)
-        hemp_mem_fail("error");
+    hemp_error error;
     
     if (number < 0 || number >= HEMP_ERROR_MAX) 
         hemp_fatal("Invalid error number: %d", number);
+
+    HEMP_ALLOCATE(error);
 
     error->number   = number;
     error->message  = NULL;
@@ -25,12 +23,12 @@ hemp_error_new(
 }
 
 
-hemp_error_p
+hemp_error
 hemp_error_init(
-    hemp_errno_e number,
-    hemp_str_p   message
+    hemp_errno  number,
+    hemp_string message
 ) {
-    hemp_error_p error = hemp_error_new(number);
+    hemp_error error = hemp_error_new(number);
 
     /* We use strdup() to deliberately avoid the memory trace that is wrapped 
      * around mem_string_copy() and friend when memory debugging is enabled.
@@ -47,13 +45,13 @@ hemp_error_init(
 }
 
 
-hemp_error_p
+hemp_error
 hemp_error_initf(
-    hemp_errno_e number,
-    hemp_str_p   format,
+    hemp_errno  number,
+    hemp_string format,
     ...
 ) {
-    hemp_error_p error = hemp_error_new(number);
+    hemp_error error = hemp_error_new(number);
 
     va_list args;
     va_start(args, format);
@@ -63,22 +61,22 @@ hemp_error_initf(
 }
 
 
-hemp_error_p
+hemp_error
 hemp_error_initfv(
-    hemp_errno_e number,
-    hemp_str_p   format,
-    va_list      args
+    hemp_errno  number,
+    hemp_string format,
+    va_list     args
 ) {
-    hemp_error_p error = hemp_error_new(number);
+    hemp_error error = hemp_error_new(number);
     vasprintf(&error->message, format, args);
     return error;
 }
 
 
-hemp_error_p
+hemp_error
 hemp_error_scan_pos(
-    hemp_error_p    error,
-    hemp_scan_pos_p scan_pos
+    hemp_error    error,
+    hemp_scan_pos scan_pos
 ) {
     error->scan_pos = scan_pos;
     return error;
@@ -87,7 +85,7 @@ hemp_error_scan_pos(
 
 void
 hemp_error_free(
-    hemp_error_p error
+    hemp_error error
 ) {
     /* memory allocated by vasprintf() so don't use hemp_mem_free() because 
      * we're not tracking it and it'll blow a fuse when debugging memory

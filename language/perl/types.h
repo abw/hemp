@@ -7,7 +7,7 @@ extern hemp_type_p HempPerlCode;
 extern hemp_type_p HempPerlObject;
 
 void            hemp_perl_init();
-hemp_value_t    hemp_perl_value(SV *);
+hemp_value    hemp_perl_value(SV *);
 
 #define hemp_debug_perl(format, ...)    \
         hemp_debug_col(HEMP_ANSI_CYAN, format, ##__VA_ARGS__)

@@ -5,10 +5,10 @@
 //#include <ltdl.h>
 #include <dlfcn.h>
 
-hemp_bool_t
+hemp_bool
     hemp_module_load(
         hemp_t     hemp,
-        hemp_str_p name
+        hemp_string name
     );
 
 

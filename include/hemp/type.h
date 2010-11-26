@@ -7,10 +7,10 @@
 #define HEMP_TYPE_BASE              \
     hemp_type_p         type;       \
     hemp_type_p         base;       \
-    hemp_int_t          id;         \
-    hemp_str_p          name;       \
+    hemp_int          id;         \
+    hemp_string          name;       \
     hemp_namespace_p    namespace;  \
-    hemp_hash_p         methods;    \
+    hemp_hash         methods;    \
     hemp_output_f       text;       \
     hemp_output_f       values;     \
     hemp_output_f       params;     \
@@ -87,15 +87,15 @@ extern hemp_type_p hemp_global_types[HEMP_TYPES_SIZE];
 
 hemp_type_p
     hemp_type_init(
-        hemp_int_t      id,
-        hemp_str_p      name
+        hemp_int      id,
+        hemp_string      name
     );
 
 hemp_type_p 
     hemp_type_subtype(
         hemp_type_p     base,
-        hemp_int_t      id,
-        hemp_str_p      name
+        hemp_int      id,
+        hemp_string      name
     );
 
 void
@@ -105,18 +105,18 @@ void
 
 hemp_type_p
     hemp_use_type(
-        hemp_str_p      name,
+        hemp_string      name,
         hemp_type_f     constructor
     );
 
 
 void 
     hemp_global_types_init(
-        hemp_global_p   global
+        hemp_global     global
     );
 
 void hemp_global_types_free(
-        hemp_global_p   global
+        hemp_global     global
     );
 
 
@@ -138,7 +138,7 @@ HEMP_VALUE_FUNC(hemp_method_value_boolean);
 HEMP_VALUE_FUNC(hemp_method_value_defined);
 HEMP_VALUE_FUNC(hemp_method_value_type);
 
-HEMP_OUTPUT_FUNC(hemp_value_type_text);
+HEMP_OUTPUT_FUNC(hemp_valueype_text);
 HEMP_VALUE_FUNC(hemp_method_type_name);
 HEMP_VALUE_FUNC(hemp_method_type_id);
 

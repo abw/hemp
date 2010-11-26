@@ -2,54 +2,47 @@
 #include <hemp/namespace.h>
 
 
-hemp_grammar_p
-hemp_grammar_init(
-    hemp_p     hemp,
-    hemp_str_p name
+hemp_grammar
+hemp_grammar_new(
+    hemp_hemp   hemp,
+    hemp_string name
 ) {
-    hemp_grammar_p grammar = (hemp_grammar_p) hemp_mem_alloc(
-        sizeof(struct hemp_grammar_s)
-    );
-
-    if (! grammar)
-        hemp_mem_fail("grammar");
+    hemp_grammar grammar;
+    HEMP_ALLOCATE(grammar);
 
     grammar->hemp      = hemp;
     grammar->symbols   = hemp_hash_init();
 //  grammar->keywords  = hemp_hash_init();
     grammar->operators = hemp_ptree_init(HEMP_OPERATORS_SIZE);
-    grammar->name      = hemp_string_copy(name);
-
-    if (! grammar->name)
-        hemp_mem_fail("grammar name");
+    grammar->name      = hemp_string_clone(name, "grammar name");
 
     return grammar;
 }
 
 
-hemp_symbol_p
+hemp_symbol
 hemp_grammar_new_symbol(
-    hemp_grammar_p grammar,
-    hemp_str_p     etype,
-    hemp_str_p     start,
-    hemp_str_p     end
+    hemp_grammar grammar,
+    hemp_string     etype,
+    hemp_string     start,
+    hemp_string     end
 ) {
 //  hemp_debug_call(
 //      "new [%s => %s] symbol\n", 
 //      token, etype
 //  );
 
-    hemp_action_p constructor = hemp_factory_constructor(
+    hemp_action constructor = hemp_factory_constructor(
         grammar->hemp->elements, etype
     );
     if (! constructor)
         hemp_throw(grammar->hemp, HEMP_ERROR_INVALID, "element", etype);
 
-    hemp_symbol_p symbol = hemp_symbol_init(
+    hemp_symbol symbol = hemp_symbol_new(
         etype, start, end
     );
 
-    symbol = (hemp_symbol_p) hemp_action_run(
+    symbol = (hemp_symbol) hemp_action_run(
         constructor, symbol 
     );
 
@@ -60,14 +53,14 @@ hemp_grammar_new_symbol(
 }
 
 
-hemp_symbol_p
+hemp_symbol
 hemp_grammar_add_symbol(
-    hemp_grammar_p  grammar,
-    hemp_str_p      etype,
-    hemp_str_p      start,
-    hemp_str_p      end,
-    hemp_prec_t     lprec,
-    hemp_prec_t     rprec
+    hemp_grammar  grammar,
+    hemp_string      etype,
+    hemp_string      start,
+    hemp_string      end,
+    hemp_oprec     lprec,
+    hemp_oprec     rprec
 ) {
 //  hemp_debug_call(
 //      "adding [%s => %s] symbol to %s grammar [%d|%d]\n", 
@@ -89,12 +82,12 @@ hemp_grammar_add_symbol(
      * Either way, the symbol or element type name must be unique for a 
      * grammar.
      */
-    hemp_str_p name = start ? start : etype;
+    hemp_string name = start ? start : etype;
 
     if (hemp_hash_fetch_pointer(grammar->symbols, name))
         hemp_throw(grammar->hemp, HEMP_ERROR_DUPLICATE, "symbol", name);
 
-    hemp_symbol_p symbol = hemp_grammar_new_symbol(
+    hemp_symbol symbol = hemp_grammar_new_symbol(
         grammar, etype, start, end
     );
 
@@ -104,7 +97,7 @@ hemp_grammar_add_symbol(
 
     if (start) {
         hemp_ptree_store(
-            grammar->operators, start, (hemp_mem_p) symbol
+            grammar->operators, start, (hemp_memory) symbol
         );
     }
 
@@ -114,12 +107,12 @@ hemp_grammar_add_symbol(
 }
 
 
-HEMP_INLINE hemp_symbol_p
+HEMP_INLINE hemp_symbol
 hemp_grammar_symbol(
-    hemp_grammar_p  grammar,
-    hemp_str_p      name
+    hemp_grammar  grammar,
+    hemp_string      name
 ) {
-    hemp_symbol_p symbol = (hemp_symbol_p) hemp_hash_fetch_pointer(
+    hemp_symbol symbol = (hemp_symbol) hemp_hash_fetch_pointer(
         grammar->symbols, name
     );
 
@@ -136,7 +129,7 @@ hemp_grammar_symbol(
 
 void
 hemp_grammar_free(
-    hemp_grammar_p grammar
+    hemp_grammar grammar
 ) {
     hemp_hash_each(grammar->symbols, &hemp_grammar_free_symbol);
     hemp_hash_free(grammar->symbols);
@@ -146,12 +139,12 @@ hemp_grammar_free(
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_grammar_free_symbol(
-    hemp_hash_p     grammars,
-    hemp_pos_t      position,
-    hemp_slot_p     item
+    hemp_hash     grammars,
+    hemp_pos      position,
+    hemp_slot     item
 ) {
-    hemp_symbol_free( (hemp_symbol_p) hemp_val_ptr(item->value) );
+    hemp_symbol_free( (hemp_symbol) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }

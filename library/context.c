@@ -15,12 +15,12 @@
  *--------------------------------------------------------------------------*/
 
 
-hemp_context_p
+hemp_context
 hemp_context_init(
-    hemp_p hemp
+    hemp_hemp hemp
 ) {
-    hemp_context_p context = (hemp_context_p) hemp_mem_alloc(
-        sizeof(struct hemp_context_s)
+    hemp_context context = (hemp_context) hemp_mem_alloc(
+        sizeof(struct hemp_context)
     );
     
     if (! context)
@@ -30,17 +30,17 @@ hemp_context_init(
     context->frame     = NULL;
     context->vars      = hemp_hash_init();
     context->text_pool = hemp_pool_new(
-        sizeof(struct hemp_text_s),
+        sizeof(struct hemp_text),
         HEMP_TMP_POOL_SIZE,
         &hemp_context_text_pool_cleaner
     );
     context->list_pool = hemp_pool_new(
-        sizeof(struct hemp_list_s), 
+        sizeof(struct hemp_list), 
         HEMP_TMP_POOL_SIZE,
         &hemp_context_list_pool_cleaner
     );
     context->code_pool = hemp_pool_new(
-        sizeof(struct hemp_code_s),
+        sizeof(struct hemp_code),
         HEMP_TMP_POOL_SIZE,
         &hemp_context_code_pool_cleaner
     );
@@ -51,7 +51,7 @@ hemp_context_init(
 
 void
 hemp_context_free(
-    hemp_context_p context
+    hemp_context context
 ) {
 //  hemp_debug("cleaning context at %p\n", context);
 
@@ -68,10 +68,10 @@ hemp_context_free(
 }
 
 
-HEMP_INLINE hemp_frame_p
+HEMP_INLINE hemp_frame
 hemp_context_enter(
-    hemp_context_p context,
-    hemp_element_p element
+    hemp_context context,
+    hemp_element element
 ) {
     hemp_debug_call("hemp_context_enter(%p, %p)\n", context, element);
 
@@ -79,7 +79,7 @@ hemp_context_enter(
      * Also has local vars hash which are chained to current context vars
      * and then installed in the context as the new master set
      */
-    hemp_frame_p frame  = hemp_frame_new();
+    hemp_frame frame  = hemp_frame_new();
     frame->element      = element;
     frame->context      = context;
     frame->parent       = context->frame;
@@ -97,9 +97,9 @@ hemp_context_enter(
 }
 
 
-HEMP_INLINE hemp_frame_p
+HEMP_INLINE hemp_frame
 hemp_context_frame(
-    hemp_context_p context
+    hemp_context context
 ) {
     if (! context->frame)
         hemp_fatal("No current frame in context");
@@ -108,13 +108,13 @@ hemp_context_frame(
 }
 
 
-HEMP_INLINE hemp_element_p
+HEMP_INLINE hemp_element
 hemp_context_leave(
-    hemp_context_p context
+    hemp_context context
 ) {
     hemp_debug_call("hemp_context_leave(%p, %p)\n", context, context->frame);
-    hemp_frame_p    frame   = hemp_context_frame(context);
-    hemp_element_p  element = frame->element;
+    hemp_frame    frame   = hemp_context_frame(context);
+    hemp_element  element = frame->element;
 
     /* restore pointer to parent frame and parent frame's vars */
     context->frame = frame->parent;
@@ -132,70 +132,70 @@ hemp_context_leave(
 }
 
 
-hemp_text_p
+hemp_text
 hemp_context_tmp_text(
-    hemp_context_p context
+    hemp_context context
 ) {
-    hemp_text_p text = (hemp_text_p) hemp_pool_take(context->text_pool);
+    hemp_text text = (hemp_text) hemp_pool_take(context->text_pool);
 //    hemp_debug("*** got new text pointer at %p\n", text);
     hemp_text_init(text);
     return text;
 }
 
 
-hemp_text_p
+hemp_text
 hemp_context_tmp_text_size(
-    hemp_context_p context,
-    hemp_size_t    size
+    hemp_context context,
+    hemp_size    size
 ) {
-    hemp_text_p text = (hemp_text_p) hemp_pool_take(context->text_pool);
+    hemp_text text = (hemp_text) hemp_pool_take(context->text_pool);
     return hemp_text_init_size(text, size);
 }
 
-hemp_list_p
+hemp_list
 hemp_context_tmp_list(
-    hemp_context_p context
+    hemp_context context
 ) {
-    hemp_list_p list = (hemp_list_p) hemp_pool_take(context->list_pool);
+    hemp_list list = (hemp_list) hemp_pool_take(context->list_pool);
 //  hemp_debug("*** got new list pointer at %p\n", list);
     return hemp_list_init(list);
 }
 
-hemp_code_p
+hemp_code
 hemp_context_tmp_code(
-    hemp_context_p context
+    hemp_context context
 ) {
-    hemp_code_p code = (hemp_code_p) hemp_pool_take(context->code_pool);
+    hemp_code code = (hemp_code) hemp_pool_take(context->code_pool);
     hemp_debug_msg("*** got new code pointer at %p\n", code);
     return hemp_code_init(code);
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_context_text_pool_cleaner(
-    hemp_mem_p item
+    hemp_memory item
 ) {
 //    hemp_debug("hemp_context_text_pool_cleaner(%p)\n", item);
-    hemp_text_release((hemp_text_p) item);
+    hemp_text_release((hemp_text) item);
     return HEMP_TRUE;
 }
 
-hemp_bool_t
+hemp_bool
 hemp_context_list_pool_cleaner(
-    hemp_mem_p item
+    hemp_memory item
 ) {
 //    hemp_debug_call("hemp_context_list_pool_cleaner(%p)\n", item);
-    hemp_list_release((hemp_list_p) item);
+    hemp_list_release((hemp_list) item);
     return HEMP_TRUE;
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_context_code_pool_cleaner(
-    hemp_mem_p item
+    hemp_memory item
 ) {
     hemp_debug_msg("hemp_context_code_pool_cleaner(%p)\n", item);
-    hemp_code_release((hemp_code_p) item);
+    hemp_code_release((hemp_code) item);
     return HEMP_TRUE;
 }
 

@@ -4,37 +4,39 @@
 #include <hemp/core.h>
 
 
-
 /*--------------------------------------------------------------------------
- * data structures and type definitions
+ * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_action_s {
-    hemp_actor_f actor;
-    hemp_mem_p   script;
+struct hemp_action {
+    hemp_actor   actor;
+    hemp_memory  script;
 }; 
-
 
 
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_action_p 
+hemp_action
     hemp_action_init(
-        hemp_actor_f actor,
-        hemp_mem_p   script
+        hemp_action     action,
+        hemp_actor      actor,
+        hemp_memory     script
     );
 
 void
     hemp_action_free(
-        hemp_action_p action
+        hemp_action     action
     );
 
 
 /*--------------------------------------------------------------------------
  * macro definitions
  *--------------------------------------------------------------------------*/
+
+#define hemp_action_new(actor, script) \
+    hemp_action_init(NULL, actor, script)
 
 #define hemp_action_run(action, ...) \
     action->actor(action->script, __VA_ARGS__)

@@ -8,8 +8,8 @@ HEMP_TYPE_FUNC(hemp_type_list) {
     type->fetch      = &hemp_type_list_fetch;
     type->store      = &hemp_type_list_store;
     type->text       = &hemp_type_list_text;       /* return/append text   */
-    type->boolean    = &hemp_value_true;            /* list is always true   */  /* or list size? */
-    type->defined    = &hemp_value_true;            /* and always defined   */
+    type->boolean    = &hemp_valuerue;            /* list is always true   */  /* or list size? */
+    type->defined    = &hemp_valuerue;            /* and always defined   */
 
     hemp_type_extend(type, "length", &hemp_method_list_length);
     hemp_type_extend(type, "text",   &hemp_method_list_text);
@@ -22,30 +22,22 @@ HEMP_TYPE_FUNC(hemp_type_list) {
  * General purpose list functions
  *--------------------------------------------------------------------------*/
 
-hemp_list_p
+hemp_list
 hemp_list_init(
-    hemp_list_p list
+    hemp_list list
 ) {
-    if (! list) {
-        list = (hemp_list_p) hemp_mem_alloc(
-            sizeof(struct hemp_list_s)
-        );
-        if (! list)
-            hemp_mem_fail("list");
-    }
-
+    HEMP_INSTANCE(list);
     list->items    = NULL;
     list->length   = 0;
     list->capacity = 0;
     list->cleaner  = NULL;
-    
     return list;
 }
 
 
 HEMP_INLINE void
 hemp_list_release(
-    hemp_list_p list
+    hemp_list list
 ) {
     if (list->items) {
         if (list->cleaner) {
@@ -59,21 +51,21 @@ hemp_list_release(
 
 void
 hemp_list_free(
-    hemp_list_p list
+    hemp_list list
 ) {
     hemp_list_release(list);
     hemp_mem_free(list);
 }
 
 
-hemp_size_t
+hemp_size
 hemp_list_resize(
-    hemp_list_p     list, 
-    hemp_size_t     min_size
+    hemp_list     list, 
+    hemp_size     min_size
 ) {
-    hemp_u16_t    old_size = list->capacity;
-    hemp_u16_t    new_size = old_size;
-    hemp_u16_t    size;
+    hemp_u16    old_size = list->capacity;
+    hemp_u16    new_size = old_size;
+    hemp_u16    size;
 
     if (! new_size)
         new_size = 1;
@@ -84,7 +76,7 @@ hemp_list_resize(
 
     list->items = hemp_mem_resize(
         list->items, 
-        new_size * sizeof(hemp_value_t)
+        new_size * sizeof(hemp_value)
     );
     if (! list->items)
         hemp_mem_fail("list item");
@@ -97,10 +89,10 @@ hemp_list_resize(
 
 
 
-hemp_list_p
+hemp_list
 hemp_list_push(
-    hemp_list_p     list, 
-    hemp_value_t    value
+    hemp_list     list, 
+    hemp_value    value
 ) {
     if (list->length == list->capacity) {
         hemp_list_resize(list, list->capacity + 1);
@@ -111,12 +103,12 @@ hemp_list_push(
 }
 
 
-hemp_pos_t
+hemp_pos
 hemp_list_each(
-    hemp_list_p         list, 
-    hemp_list_each_f    func
+    hemp_list         list, 
+    hemp_list_iter    func
 ) {
-    hemp_pos_t pos = 0;
+    hemp_pos pos = 0;
     
     for (pos = 0; pos < list->length; pos++) {
         if (! func(list, pos, list->items[pos]))
@@ -128,14 +120,14 @@ hemp_list_each(
 }
 
 
-HEMP_INLINE hemp_bool_t 
+HEMP_INLINE hemp_bool 
 hemp_list_index(
-    hemp_context_p  context,
-    hemp_value_t    key,
-    hemp_int_t     *index
+    hemp_context  context,
+    hemp_value    key,
+    hemp_int     *index
 ) {
     hemp_debug_call("hemp_list_index()\n");
-    hemp_bool_t found = HEMP_FALSE;
+    hemp_bool found = HEMP_FALSE;
 
     if (hemp_is_integer(key)) {
 //      hemp_debug("got integer key\n");
@@ -143,8 +135,8 @@ hemp_list_index(
         found = HEMP_TRUE;
     }
     else {
-        hemp_text_p ktext;
-        hemp_bool_t kmine  = HEMP_FALSE;
+        hemp_text ktext;
+        hemp_bool kmine  = HEMP_FALSE;
 
         if (hemp_is_text(key)) {
 //          hemp_debug("got text key\n");
@@ -179,11 +171,11 @@ hemp_list_index(
 }
 
 
-hemp_bool_t 
+hemp_bool 
 hemp_list_each_free(
-    hemp_list_p     list, 
-    hemp_pos_t      pos, 
-    hemp_value_t    item
+    hemp_list     list, 
+    hemp_pos      pos, 
+    hemp_value    item
 ) {
 //  hemp_debug_mem("freeing list item %d at %p\n", pos, hemp_val_ptr(item));
     /* this assume that each element is a pointer */
@@ -200,16 +192,16 @@ hemp_list_each_free(
 
 
 HEMP_OUTPUT_FUNC(hemp_type_list_text) {
-    hemp_list_p  list = hemp_val_list(value);
-    hemp_value_t item;
-    hemp_text_p  text;
-    hemp_size_t  pos;
+    hemp_list  list = hemp_val_list(value);
+    hemp_value item;
+    hemp_text  text;
+    hemp_size  pos;
 
     hemp_prepare_text(context, output, text);
 
     for (pos = 0; pos < list->length; pos++) {
         item = hemp_list_item(list, pos);
-        hemp_text(item, context, output);
+        hemp_vtext(item, context, output);
     }
 
     return output;
@@ -219,9 +211,9 @@ HEMP_OUTPUT_FUNC(hemp_type_list_text) {
 HEMP_FETCH_FUNC(hemp_type_list_fetch) {
     hemp_debug_call("hemp_type_list_fetch()\n");
 
-    hemp_int_t  index;
-    hemp_list_p list  = hemp_val_list(container);
-    hemp_bool_t found = hemp_list_index(context, key, &index);
+    hemp_int  index;
+    hemp_list list  = hemp_val_list(container);
+    hemp_bool found = hemp_list_index(context, key, &index);
 
     if (! found) {
 //      hemp_debug("no index key\n");
@@ -244,9 +236,9 @@ HEMP_FETCH_FUNC(hemp_type_list_fetch) {
 HEMP_STORE_FUNC(hemp_type_list_store) {
     hemp_debug_call("hemp_type_list_store()\n");
 
-    hemp_int_t  index;
-    hemp_bool_t found = hemp_list_index(context, key, &index);
-    hemp_list_p list  = hemp_val_list(container);
+    hemp_int  index;
+    hemp_bool found = hemp_list_index(context, key, &index);
+    hemp_list list  = hemp_val_list(container);
     
     if (! found) {
 //      hemp_debug("no index key\n");
@@ -299,13 +291,13 @@ HEMP_VALUE_FUNC(hemp_method_list_text) {
 
 char buffer[1024];                  // FIXME!
 
-hemp_bool_t 
+hemp_bool 
 hemp_list_dump_item(
-    hemp_list_p     list, 
-    hemp_pos_t      pos, 
-    hemp_value_t    item
+    hemp_list     list, 
+    hemp_pos      pos, 
+    hemp_value    item
 ) {
-    hemp_str_p str = hemp_val_str(item);
+    hemp_string str = hemp_val_str(item);
     if (buffer[0])
         strcat(buffer, ", ");
     strcat(buffer, str);
@@ -313,9 +305,9 @@ hemp_list_dump_item(
 }
 
 
-hemp_str_p
+hemp_string
 hemp_list_dump(
-    hemp_list_p list
+    hemp_list list
 ) {
     buffer[0] = '\0';
     hemp_list_each(list, &hemp_list_dump_item);

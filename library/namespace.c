@@ -1,7 +1,8 @@
 #include <hemp/namespace.h>
 
+
 void hemp_global_namespace_init(
-    hemp_global_p global
+    hemp_global global
 ) {
     /* return silently if we've already done this */
     if (global->namespaces)
@@ -13,7 +14,7 @@ void hemp_global_namespace_init(
 
 
 void hemp_global_namespace_free(
-    hemp_global_p global
+    hemp_global global
 ) {
     /* return silently if this has already been done */
     if (! global->namespaces)
@@ -28,8 +29,8 @@ void hemp_global_namespace_free(
     
 hemp_namespace_p
 hemp_namespace_init(
-    hemp_u16_t  id,
-    hemp_str_p  name
+    hemp_u16  id,
+    hemp_string  name
 ) {
     hemp_namespace_p namespace = (hemp_namespace_p) hemp_mem_alloc(
         sizeof(struct hemp_namespace_s)
@@ -49,13 +50,13 @@ hemp_namespace_init(
 
 hemp_namespace_p
 hemp_namespace_instance(
-    hemp_hash_p      hash,
-    hemp_str_p       name,
+    hemp_hash      hash,
+    hemp_string       name,
     hemp_namespace_p parent
 ) {
     hemp_namespace_p    child;
-    hemp_value_t        value;
-    hemp_u16_t          id;
+    hemp_value        value;
+    hemp_u16          id;
 
     value = hemp_hash_fetch(hash, name);
 
@@ -81,12 +82,12 @@ hemp_namespace_instance(
 
 hemp_namespace_p
 hemp_resolve_namespace(
-    hemp_str_p       fullname
+    hemp_string       fullname
 ) {
-    hemp_list_p      names = hemp_string_split(fullname, HEMP_STR_DOT);
-    hemp_str_p       name  = hemp_val_str( hemp_list_item(names, 0) );
+    hemp_list      names = hemp_string_split(fullname, HEMP_STR_DOT);
+    hemp_string       name  = hemp_val_str( hemp_list_item(names, 0) );
     hemp_namespace_p space = hemp_namespace_root(name);
-    hemp_size_t      n;
+    hemp_size      n;
     
     for (n = 1; n < names->length; n++) {
         name  = hemp_val_str( hemp_list_item(names, n) );
@@ -110,11 +111,11 @@ hemp_namespace_free(
 }
 
 
-hemp_bool_t
+hemp_bool
 hemp_namespace_free_child(
-    hemp_hash_p     namespaces,
-    hemp_pos_t      position,
-    hemp_slot_p     item
+    hemp_hash     namespaces,
+    hemp_pos      position,
+    hemp_slot     item
 ) {
     hemp_namespace_free( (hemp_namespace_p) hemp_val_ptr(item->value) );
     return HEMP_TRUE;

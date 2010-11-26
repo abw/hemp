@@ -1,383 +1,335 @@
 #ifndef HEMP_TYPES_H
 #define HEMP_TYPES_H
 
-/*--------------------------------------------------------------------------
- * Naming conventions (more to avoid namespace collision than to enforce
- * a Hungarian-like notation):
- *  - Basic data types have a '_t' suffix, e.g. hemp_bool_t
- *  - Pointers have a '_p' suffix, e.g. hemp_element_p
- *  - Structures have a '_s' suffix, e.g. hemp_element_s
- *  - Unions have a '_u' suffix, e.g. hemp_evalue_u
- *  - Enums have a '_e' suffix, e.g. hemp_tag_style_e
- *  - Function pointers have a '_f' suffix, e.g. hemp_scan_f
- *--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------
- * generic data types
+ * Generic data types.  We use hemp_XXX data types internally for the sake 
+ * of consistency, simplicity and to abstract away any differences between
+ * platforms.
  *--------------------------------------------------------------------------*/
 
-typedef u_int8_t                hemp_u8_t;      /* generic 8 bit integer    */
-typedef u_int16_t               hemp_u16_t;     /* generic 16 bit integer   */
-typedef u_int32_t               hemp_u32_t;     /* generic 32 bit integer   */
-typedef u_int64_t               hemp_u64_t;     /* generic 64 bit integer   */
-typedef unsigned char           hemp_bool_t;    /* boolean true/false       */
-typedef unsigned char           hemp_char_t;    /* single character         */
-typedef char                  * hemp_str_p;     /* C string                 */
-typedef u_int32_t               hemp_flags_t;   /* bitmask                  */
-typedef int32_t                 hemp_offset_t;  /* -ve/+ve offset           */
-typedef int32_t                 hemp_int_t;     /* generic integer          */
-typedef double                  hemp_num_t;     /* generic fp number        */
-typedef unsigned long           hemp_uint_t;    /* generic unsigned int     */
-typedef unsigned long           hemp_size_t;    /* +ve size of list         */
-typedef unsigned long           hemp_pos_t;     /* +ve posn. in string/list */
-typedef unsigned short int      hemp_prec_t;    /* operator precedence      */
-typedef jmp_buf                 hemp_jump_b;    /* longjmp buffer           */
-typedef struct hemp_jump_s      hemp_jump_t;    /* longjmp call chain       */ 
-typedef union  hemp_value_u     hemp_value_t;
-
-
-/*--------------------------------------------------------------------------
- * generic pointers
- *--------------------------------------------------------------------------*/
-
-typedef void                    * hemp_mem_p;     /* generic memory pointer   */
-typedef const char              * hemp_name_p;    /* immutable C string       */
+typedef u_int8_t                hemp_u8;        /* generic 8 bit integer    */
+typedef u_int16_t               hemp_u16;       /* generic 16 bit integer   */
+typedef u_int32_t               hemp_u32;       /* generic 32 bit integer   */
+typedef u_int64_t               hemp_u64;       /* generic 64 bit integer   */
+typedef u_int32_t               hemp_flags;     /* bitmask                  */
+typedef int32_t                 hemp_offset;    /* -ve/+ve offset           */
+typedef int32_t                 hemp_int;       /* generic integer          */
+typedef double                  hemp_num;       /* generic fp number        */
+typedef unsigned long           hemp_uint;      /* generic unsigned int     */
+typedef unsigned long           hemp_size;      /* +ve size of list         */
+typedef unsigned long           hemp_pos;       /* +ve posn. in string/list */
+typedef unsigned short int      hemp_oprec;     /* operator precedence      */
+typedef unsigned char           hemp_bool;      /* boolean true/false       */
+typedef unsigned char           hemp_char;      /* single character         */
+typedef void                  * hemp_memory;    /* generic memory pointer   */
+typedef const char            * hemp_name;      /* immutable C string       */
+typedef char                  * hemp_string;    /* C string                 */
+typedef jmp_buf                 hemp_jump_buf;  /* longjmp buffer           */
 
 
 /*--------------------------------------------------------------------------
  * hemp data structures
  *--------------------------------------------------------------------------*/
 
-typedef struct hemp_s           * hemp_p;
-typedef struct hemp_action_s    * hemp_action_p;
-typedef struct hemp_code_s      * hemp_code_p;
-typedef struct hemp_context_s   * hemp_context_p;
-typedef struct hemp_context_s   * hemp_cntx_p;      /* too much typing! */
-typedef struct hemp_dialect_s   * hemp_dialect_p;
-typedef struct hemp_element_s   * hemp_element_p;
-typedef struct hemp_elements_s  * hemp_elements_p;
+/* values */
+typedef enum  hemp_tag_style      hemp_tag_style;
+typedef union hemp_value          hemp_value;
+
+/* pointers */
+typedef struct hemp_hemp        * hemp_hemp;
+typedef struct hemp_action      * hemp_action;
+typedef struct hemp_code        * hemp_code;
+typedef struct hemp_context     * hemp_context;
+typedef struct hemp_dialect     * hemp_dialect;
+typedef struct hemp_element     * hemp_element;
+typedef struct hemp_elements    * hemp_elements;
+typedef struct hemp_error       * hemp_error;
+typedef struct hemp_factory     * hemp_factory;
+typedef struct hemp_frame       * hemp_frame;
+typedef struct hemp_global      * hemp_global;
+typedef struct hemp_grammar     * hemp_grammar;
+typedef struct hemp_hash        * hemp_hash;
+typedef struct hemp_jump        * hemp_jump;
+typedef struct hemp_list        * hemp_list;
+typedef struct hemp_params      * hemp_params;
+typedef struct hemp_pool        * hemp_pool;
+typedef struct hemp_scan_pos    * hemp_scan_pos;
+typedef struct hemp_scheme      * hemp_scheme;
+typedef struct hemp_scope       * hemp_scope;
+typedef struct hemp_slab        * hemp_slab;
+typedef struct hemp_slot        * hemp_slot;
+typedef struct hemp_source      * hemp_source;
+typedef struct hemp_symbol      * hemp_symbol;
+typedef struct hemp_symbols     * hemp_symbols;
+typedef struct hemp_template    * hemp_template;
+typedef struct hemp_tag         * hemp_tag;
+typedef struct hemp_text        * hemp_text;
+
+
+
+/* in the process of refactoring this lot */
 typedef struct hemp_etype_s     * hemp_etype_p;
-typedef struct hemp_error_s     * hemp_error_p;
-typedef struct hemp_factory_s   * hemp_factory_p;
 typedef struct hemp_filesystem_s *hemp_filesystem_p;
-typedef struct hemp_frame_s      *hemp_frame_p;
-typedef struct hemp_global_s    * hemp_global_p;
-typedef struct hemp_grammar_s   * hemp_grammar_p;
-typedef struct hemp_hash_s      * hemp_hash_p;
-typedef struct hemp_jump_s      * hemp_jump_p;
 typedef struct hemp_language_s  * hemp_language_p;
-typedef struct hemp_list_s      * hemp_list_p;
 typedef struct hemp_namespace_s * hemp_namespace_p;
 typedef struct hemp_object_s    * hemp_object_p;
-typedef struct hemp_params_s    * hemp_params_p;
 typedef struct hemp_pnode_s     * hemp_pnode_p;
-typedef struct hemp_pool_s      * hemp_pool_p;
 typedef struct hemp_ptree_s     * hemp_ptree_p;
-typedef struct hemp_scan_pos_s  * hemp_scan_pos_p;
-typedef struct hemp_scheme_s    * hemp_scheme_p;
-typedef struct hemp_scope_s     * hemp_scope_p;
-typedef struct hemp_slab_s      * hemp_slab_p;
-typedef struct hemp_slot_s      * hemp_slot_p;
-typedef struct hemp_source_s    * hemp_source_p;
-typedef struct hemp_symbol_s    * hemp_symbol_p;
-typedef struct hemp_symbols_s   * hemp_symbols_p;
-typedef struct hemp_tag_s       * hemp_tag_p;
 typedef struct hemp_tagset_s    * hemp_tagset_p;
-typedef struct hemp_template_s  * hemp_template_p;
-typedef struct hemp_text_s      * hemp_text_p;
 typedef struct hemp_type_s      * hemp_type_p;
 typedef struct hemp_variable_s  * hemp_variable_p;
 typedef struct hemp_viewer_s    * hemp_viewer_p;
-//typedef union  hemp_value_t     * hemp_value_p;
 
-
-/* may be some cruft in these below */
-
-typedef enum   hemp_tag_style_e   hemp_tag_style_t;
-typedef union  hemp_evalue_u      hemp_evalue_t;
-typedef struct hemp_unary_s       hemp_unary_t;
-typedef struct hemp_binary_s      hemp_binary_t;
-typedef struct hemp_block_s       hemp_block_t;
 
 
 /*--------------------------------------------------------------------------
  * main hemp data structure
  *--------------------------------------------------------------------------*/
 
-struct hemp_s {
-    hemp_factory_p   languages;
-    hemp_factory_p   elements;
-    hemp_factory_p   grammars;
-    hemp_factory_p   dialects;
-    hemp_factory_p   viewers;
+struct hemp_hemp {
+    hemp_factory        languages;
+    hemp_factory        elements;
+    hemp_factory        grammars;
+    hemp_factory        dialects;
+    hemp_factory        viewers;
 
-    hemp_hash_p      schemes;
-//  hemp_hash_p      tags;
-    hemp_hash_p      templates;
-    hemp_dialect_p   dialect;
+    hemp_hash           schemes;
+//  hemp_hash           tags;
+    hemp_hash           templates;
+    hemp_dialect        dialect;
 
-    hemp_bool_t      verbose;
-    hemp_bool_t      debug;
+    hemp_bool           verbose;
+    hemp_bool           debug;
 //  hemp_hash_t dialect_factory;
-    hemp_jump_p      jump;
-    hemp_error_p     error;
-    hemp_str_p      *errmsg;
+    hemp_jump           jump;
+    hemp_error          error;
+    hemp_string       * errmsg;
 };
+
 
 
 /*--------------------------------------------------------------------------
- * singleton global data structure
+ * Note that hemp_value is defined here and not in value.h or we end up in 
+ * circular header dependency hell.
  *--------------------------------------------------------------------------*/
 
-struct hemp_global_s {
-    hemp_size_t     n_hemps;
-    hemp_u16_t      namespace_id;
-    hemp_hash_p     namespaces;
+union hemp_value {
+    hemp_u64            bits;
+    hemp_num            number;
 };
-
-
-/*--------------------------------------------------------------------------
- * other data structures - I'm planning to start moving data structures out
- * of other include/hemp/*.h files into here... There are some header files 
- * getting locked in a deadly dependency embrace.
- *--------------------------------------------------------------------------*/
-
-typedef union {
-    hemp_int_t      integer;
-    hemp_bool_t     boolean;
-    hemp_char_t     chars[4];
-} hemp_payload_t;
-
-typedef struct {
-    hemp_payload_t  value;
-    hemp_u32_t      type;           /* FIXME: assumes little-endian */
-} hemp_tagged_t;
-
-union hemp_value_u {
-    hemp_u64_t      bits;
-    hemp_num_t      number;
-    hemp_tagged_t   tagged;
-};
-
-
 
 
 /*--------------------------------------------------------------------------
  * function pointers
  *--------------------------------------------------------------------------*/
 
-typedef hemp_bool_t     
-    (* hemp_list_each_f)(           /* function called against list items   */
-        hemp_list_p     list,       /* pointer to list                      */ 
-        hemp_pos_t      index,      /* 0-based index of item in list        */
-        hemp_value_t    item        /* item value                           */
+typedef hemp_memory     
+    (* hemp_actor)(
+        hemp_memory     argument, 
+        ...
     );
 
-typedef hemp_bool_t     
-    (* hemp_hash_each_f)(           /* function called against hash items   */
-        hemp_hash_p     hash,       /* pointer to hash                      */ 
-        hemp_pos_t      index,      /* 0-based index of item in hash        */
-        hemp_slot_p     item        /* pointer to hash item entry           */
+typedef hemp_bool     
+    (* hemp_hash_iter)(             /* iterator over hash items             */
+        hemp_hash       hash,       /* pointer to hash                      */
+        hemp_pos        index,      /* 0-based index of item in hash        */
+        hemp_slot       item        /* pointer to hash item entry           */
     );
 
-typedef hemp_bool_t     
-    (* hemp_pool_each_f)(           /* function called against pool items   */
-        hemp_mem_p      item
+typedef hemp_bool     
+    (* hemp_list_iter)(             /* iterator over list items             */
+        hemp_list       list,       /* pointer to list                      */
+        hemp_pos        index,      /* 0-based index of item in list        */
+        hemp_value      item        /* item value                           */
     );
 
-typedef hemp_symbol_p
+typedef hemp_bool     
+    (* hemp_pool_iter)(             /* iterate over pool items              */
+        hemp_memory      item       /* pointer to memory                    */
+    );
+
+
+/*--------------------------------------------------------------------------
+ * TODO: in the process of cleaning up everything below this line.
+ *--------------------------------------------------------------------------*/
+
+
+typedef hemp_symbol
     (* hemp_symbol_f)(
-        hemp_p          hemp,       /* pointer to current hemp context      */
-        hemp_symbol_p   symbol      /* pointer to new symbol to initialise  */
+        hemp_hemp       hemp,       /* pointer to current hemp context      */
+        hemp_symbol   symbol      /* pointer to new symbol to initialise  */
     );
 
-typedef hemp_dialect_p 
+typedef hemp_dialect 
     (* hemp_dialect_f)(
-        hemp_dialect_p  dialect      /* pointer to dialect to prepare       */
+        hemp_dialect  dialect      /* pointer to dialect to prepare       */
     );
 
 // TODO: rename this to hemp_template_f
-typedef hemp_template_p 
+typedef hemp_template 
     (* hemp_prep_f)(
-        hemp_template_p template    /* pointer to template to prepare       */
+        hemp_template template    /* pointer to template to prepare       */
     );
 
-typedef hemp_bool_t 
+typedef hemp_bool 
     (* hemp_scan_f)(
-        hemp_template_p template    /* pointer to template to scan          */
+        hemp_template template    /* pointer to template to scan          */
     );
 
 typedef void
     (* hemp_clean_f)(
-        hemp_template_p template    /* pointer to template to clean         */
+        hemp_template template    /* pointer to template to clean         */
     );
 
 typedef void
     (* hemp_eclean_f)(
-        hemp_element_p  element     /* pointer to element to clean          */
+        hemp_element  element     /* pointer to element to clean          */
     );
 
 typedef void
     (* hemp_dclean_f)(
-        hemp_dialect_p  dialect     /* pointer to dialect to clean          */
+        hemp_dialect  dialect     /* pointer to dialect to clean          */
     );
 
-typedef hemp_mem_p
-    (* hemp_actor_f)(
-        hemp_mem_p      argument, 
-        ...
-    );
 
-//typedef void
-//    (* hemp_eclean_f)(
-//        hemp_element_p element      /* pointer to element to clean          */
-//    );
-
-// HEMP_TAG_SCAN_ARGS                                                  \
-//    hemp_template_p template,   /* current template                     */  \
-//    hemp_tag_p      tag,        /* pointer to current tag               */  \
-//    hemp_str_p     tagtok,     /* pointer to tag start token in source */  \
-//    hemp_pos_t      pos,        /* byte position of tag in source       */  \
-//    hemp_str_p    *srcptr      /* pointer to source position pointer   */
 
 #define HEMP_TAG_SCAN_ARGS    \
-    hemp_template_p tmpl,     \
-    hemp_tag_p      tag,      \
-    hemp_str_p      tagtok,   \
-    hemp_pos_t      pos,      \
-    hemp_str_p     *srcptr
+    hemp_template tmpl,     \
+    hemp_tag      tag,      \
+    hemp_string      tagtok,   \
+    hemp_pos      pos,      \
+    hemp_string     *srcptr
 
 #define HEMP_TAG_SKIP_ARGS    \
-    hemp_tag_p      tag,      \
-    hemp_str_p      src
+    hemp_tag      tag,      \
+    hemp_string      src
 
 typedef void 
     (* hemp_tag_scan_f)(
         HEMP_TAG_SCAN_ARGS
     );
 
-typedef hemp_str_p
+typedef hemp_string
     (* hemp_tag_skip_f)(
         HEMP_TAG_SKIP_ARGS
     );
 
-typedef hemp_element_p
+typedef hemp_element
     (* hemp_sym_scan_f)(
         HEMP_TAG_SCAN_ARGS,
-        hemp_symbol_p symbol
+        hemp_symbol symbol
     );
 
 /*--------------------------------------------------------------------------
  * value functions
  *--------------------------------------------------------------------------*/
 
-typedef hemp_value_t
+typedef hemp_value
     (* hemp_value_f)(
-        hemp_value_t    value,
-        hemp_context_p  context
+        hemp_value    value,
+        hemp_context  context
     );
 
-typedef hemp_value_t 
+typedef hemp_value 
     (* hemp_output_f)(
-        hemp_value_t    value,
-        hemp_context_p  context,
-        hemp_value_t    output
+        hemp_value    value,
+        hemp_context  context,
+        hemp_value    output
     );
 
-typedef hemp_value_t 
+typedef hemp_value 
     (* hemp_operate_f)(
-        hemp_value_t    value,
-        hemp_context_p  context,
-        hemp_value_t    operand
+        hemp_value    value,
+        hemp_context  context,
+        hemp_value    operand
     );
 
 
-typedef hemp_element_p
+typedef hemp_element
     (* hemp_skip_f )( 
-        hemp_element_p *current     /* pointer to current element pointer   */
+        hemp_element *current     /* pointer to current element pointer   */
     );
 
-typedef hemp_element_p  
+typedef hemp_element  
     (* hemp_prefix_f )(
-        hemp_element_p *current,    /* pointer to current element pointer   */
-        hemp_scope_p    scope,      /* current lexical scope                */
-        hemp_prec_t     precedence, /* operator precedence level            */
-        hemp_bool_t     force       /* yes, really parse something          */
+        hemp_element *current,    /* pointer to current element pointer   */
+        hemp_scope    scope,      /* current lexical scope                */
+        hemp_oprec     precedence, /* operator precedence level            */
+        hemp_bool     force       /* yes, really parse something          */
     );
 
-typedef hemp_element_p  
+typedef hemp_element  
     (* hemp_postfix_f )(
-        hemp_element_p *current,    /* pointer to current element pointer   */
-        hemp_scope_p    scope,      /* current lexical scope                */
-        hemp_prec_t     precedence, /* operator precedence level            */
-        hemp_bool_t     force,      /* yes, really parse something          */
-        hemp_element_p  element     /* preceding element                    */
+        hemp_element *current,    /* pointer to current element pointer   */
+        hemp_scope    scope,      /* current lexical scope                */
+        hemp_oprec     precedence, /* operator precedence level            */
+        hemp_bool     force,      /* yes, really parse something          */
+        hemp_element  element     /* preceding element                    */
     );
+
+
 
 typedef void
     (* hemp_compile_f )( 
-        hemp_element_p  element,
-        hemp_scope_p    scope,
-        hemp_value_t    compiler
+        hemp_element  element,
+        hemp_scope    scope,
+        hemp_value    compiler
     );
 
 
-typedef hemp_value_t 
+typedef hemp_value 
     (* hemp_view_f)(
         hemp_viewer_p   view,       /* pointer to viewer                    */
-        hemp_element_p  element,    /* pointer to element                   */
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    output      /* optional output buffer               */
+        hemp_element  element,    /* pointer to element                   */
+        hemp_context  context,    /* runtime context                      */
+        hemp_value    output      /* optional output buffer               */
     );
 
-typedef hemp_value_t
+typedef hemp_value
     (* hemp_fetch_f)(
-        hemp_value_t    container,  /* value to operate on                  */
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    key         /* key of item to fetch                 */
+        hemp_value    container,  /* value to operate on                  */
+        hemp_context  context,    /* runtime context                      */
+        hemp_value    key         /* key of item to fetch                 */
     );
 
-typedef hemp_value_t
+typedef hemp_value
     (* hemp_store_f)(
-        hemp_value_t    container,  /* value to operate on                  */
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    key,        /* key to store item under              */
-        hemp_value_t    value       /* value to store                       */
+        hemp_value    container,  /* value to operate on                  */
+        hemp_context  context,    /* runtime context                      */
+        hemp_value    key,        /* key to store item under              */
+        hemp_value    value       /* value to store                       */
     );
 
-typedef hemp_value_t
+typedef hemp_value
     (* hemp_unop_f)(
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    expr        /* single value                         */
+        hemp_context  context,    /* runtime context                      */
+        hemp_value    expr        /* single value                         */
     );
 
-typedef hemp_value_t
+typedef hemp_value
     (* hemp_binop_f)(
-        hemp_context_p  context,    /* runtime context                      */
-        hemp_value_t    lhs,        /* expression on left hand side         */
-        hemp_value_t    rhs         /* expression on right hand side        */
+        hemp_context  context,    /* runtime context                      */
+        hemp_value    lhs,        /* expression on left hand side         */
+        hemp_value    rhs         /* expression on right hand side        */
     );
 
 typedef hemp_type_p 
     (* hemp_type_f)(
-        hemp_int_t      id,         /* numerical id                         */
-        hemp_str_p      name        /* unique type name                     */
+        hemp_int      id,         /* numerical id                         */
+        hemp_string      name        /* unique type name                     */
     );
 
-typedef hemp_mem_p 
+typedef hemp_memory 
     (* hemp_method_f)(
         hemp_type_p     type,       /* pointer to type                      */
-        hemp_str_p      name        /* method name                          */
+        hemp_string      name        /* method name                          */
     );
 
 
-typedef hemp_value_t    (* hemp_binary_fn)(hemp_value_t, hemp_value_t);
-typedef hemp_value_t    (* hemp_ternary_fn)(hemp_value_t, hemp_value_t, hemp_value_t);
-
-
-typedef hemp_str_p      (* hemp_source_namer_f   )( hemp_source_p );
-typedef hemp_bool_t     (* hemp_source_checker_f )( hemp_source_p );
-typedef hemp_str_p      (* hemp_source_reader_f  )( hemp_source_p );
+typedef hemp_string     (* hemp_source_namer_f   )( hemp_source );
+typedef hemp_bool       (* hemp_source_checker_f )( hemp_source );
+typedef hemp_string     (* hemp_source_reader_f  )( hemp_source );
 
 
 #endif /* HEMP_TYPES_H */

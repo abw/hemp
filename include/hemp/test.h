@@ -41,17 +41,17 @@
 
 
 struct hemp_test_plan_s {
-    hemp_uint_t     skip_all;
-    hemp_uint_t     skip_some;
-    hemp_uint_t     planned;
-    hemp_uint_t     expected;
-    hemp_uint_t     tested;
-    hemp_uint_t     passed;
-    hemp_uint_t     failed;
-    hemp_uint_t     skipped;
-    hemp_uint_t     verbose;
-    hemp_uint_t     todo;
-    hemp_str_p      todo_msg;
+    hemp_uint     skip_all;
+    hemp_uint     skip_some;
+    hemp_uint     planned;
+    hemp_uint     expected;
+    hemp_uint     tested;
+    hemp_uint     passed;
+    hemp_uint     failed;
+    hemp_uint     skipped;
+    hemp_uint     verbose;
+    hemp_uint     todo;
+    hemp_string      todo_msg;
 };
 
 typedef struct hemp_test_plan_s *hemp_test_plan_p;
@@ -64,12 +64,12 @@ void
 
 hemp_test_plan_p 
     hemp_test_global_plan(
-        hemp_uint_t planned
+        hemp_uint planned
     );
 
 hemp_test_plan_p 
     hemp_test_plan_setup(
-        hemp_uint_t planned
+        hemp_uint planned
     );
 
 void 
@@ -77,7 +77,7 @@ void
         hemp_test_plan_p plan
     );
 
-hemp_uint_t
+hemp_uint
     hemp_test_plan_result(
         hemp_test_plan_p plan
     );
@@ -89,33 +89,33 @@ void
 
 hemp_test_plan_p 
     hemp_test_plan(
-        hemp_uint_t planned
+        hemp_uint planned
     );
 
-hemp_uint_t
+hemp_uint
     hemp_test_result(
         hemp_test_plan_p    plan,
-        hemp_bool_t         ok,         /* true=pass false=fail */
-        hemp_name_p         func,        
-        hemp_name_p         file,       /* source file          */
-        hemp_uint_t         line,       /* line number          */
-        hemp_name_p         name,       /* test name            */
+        hemp_bool         ok,         /* true=pass false=fail */
+        hemp_name         func,        
+        hemp_name         file,       /* source file          */
+        hemp_uint         line,       /* line number          */
+        hemp_name         name,       /* test name            */
         ...
     );
 
 void 
     hemp_test_output(
-        hemp_str_p  name,
-        hemp_text_p output,
-        hemp_str_p  expect
+        hemp_string  name,
+        hemp_text output,
+        hemp_string  expect
     );
 
 
 void 
     hemp_test_error(
-        hemp_str_p name,
-        hemp_str_p error,
-        hemp_str_p expect
+        hemp_string name,
+        hemp_string error,
+        hemp_string expect
     );
 
 void
@@ -127,30 +127,30 @@ void
 
 void hemp_mem_trace_ok(void);
 
-hemp_uint_t
+hemp_uint
     hemp_test_expect_text(
-        hemp_str_p     language,
-        hemp_str_p     dialect,
-        hemp_str_p     text,
-        hemp_str_p     alias,
-        hemp_context_p context
+        hemp_string     language,
+        hemp_string     dialect,
+        hemp_string     text,
+        hemp_string     alias,
+        hemp_context context
     );
 
-hemp_uint_t
+hemp_uint
     hemp_test_expect_file(
-        hemp_str_p     language,
-        hemp_str_p     dialect,
-        hemp_str_p     file,
-        hemp_context_p context
+        hemp_string     language,
+        hemp_string     dialect,
+        hemp_string     file,
+        hemp_context context
     );
 
-hemp_uint_t
+hemp_uint
     hemp_test_expect_script(
-        hemp_str_p     language,
-        hemp_str_p     dialect,
-        hemp_str_p     testdir,
-        hemp_str_p     name,
-        hemp_context_p context
+        hemp_string     language,
+        hemp_string     dialect,
+        hemp_string     testdir,
+        hemp_string     name,
+        hemp_context context
     );
 
 
@@ -243,8 +243,8 @@ hemp_uint_t
         ? hemp_test_result(NULL, 1, FUNC_FILE_LINE, msg)                    \
         : hemp_test_result(NULL, 0, FUNC_FILE_LINE,                         \
             "%s\n%sEXPECT: [%s%g%s]\nOUTPUT: [%s%g%s]%s", msg,              \
-            HEMP_ANSI_CYAN, HEMP_ANSI_YELLOW, (hemp_num_t) b,               \
-            HEMP_ANSI_CYAN, HEMP_ANSI_RED, (hemp_num_t) a, HEMP_ANSI_CYAN,  \
+            HEMP_ANSI_CYAN, HEMP_ANSI_YELLOW, (hemp_num) b,               \
+            HEMP_ANSI_CYAN, HEMP_ANSI_RED, (hemp_num) a, HEMP_ANSI_CYAN,  \
             HEMP_ANSI_RESET)                                                \
 )
 

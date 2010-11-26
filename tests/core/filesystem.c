@@ -18,7 +18,7 @@ int main(
 
 
 void test_filesystem() {
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
 
     hemp_filesystem_p filesystem = hemp_filesystem_init(hemp, "/foo:/bar/:baz/blam:wam:bam/");
     ok( filesystem, "created filesystem with 5 directories in path" );
@@ -40,11 +40,11 @@ void test_filesystem() {
 
 
 void test_file1() {
-    hemp_p hemp      = hemp_init();
+    hemp_hemp hemp      = hemp_init();
     hemp_filesystem_p filesystem 
                      = hemp_filesystem_init(hemp, HEMP_TESTDIR);
-    hemp_str_p path  = hemp_filesystem_join_path(HEMP_TESTDIR, "data/file1");
-    hemp_str_p text  = hemp_filesystem_read_file(path);
+    hemp_string path  = hemp_filesystem_join_path(HEMP_TESTDIR, "data/file1");
+    hemp_string text  = hemp_filesystem_read_file(path);
     ok( text, "read text from foobar: %s", text );
     hemp_mem_free(text);
     hemp_mem_free(path);

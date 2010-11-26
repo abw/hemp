@@ -11,11 +11,11 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_viewer_s {
-    hemp_p          hemp;
-    hemp_str_p      name;
+    hemp_hemp          hemp;
+    hemp_string      name;
     hemp_viewer_p   parent;
     hemp_view_f    *view;
-    hemp_u16_t      size;
+    hemp_u16      size;
 };
 
 
@@ -26,8 +26,8 @@ struct hemp_viewer_s {
 
 hemp_viewer_p
     hemp_viewer_init(
-        hemp_p      hemp,
-        hemp_str_p  name
+        hemp_hemp      hemp,
+        hemp_string  name
     );
 
 void
@@ -35,17 +35,17 @@ void
         hemp_viewer_p view
     );
 
-hemp_bool_t
+hemp_bool
     hemp_viewer_add_view(
         hemp_viewer_p viewer,
-        hemp_str_p    name,
+        hemp_string    name,
         hemp_view_f   view
     );
 
 hemp_viewer_p 
     hemp_viewer_text_init(
-        hemp_p      hemp,
-        hemp_str_p  name
+        hemp_hemp      hemp,
+        hemp_string  name
     );
 
 HEMP_VIEW_FUNC(hemp_viewer_element);

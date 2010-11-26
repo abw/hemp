@@ -2,8 +2,8 @@
 #include <math.h>
 
 void test_values();
-void test_number(hemp_num_t);
-void test_integer(hemp_int_t);
+void test_number(hemp_num);
+void test_integer(hemp_int);
 void test_identity_values();
 void test_value_conversion();
 void test_number_conversion();
@@ -18,7 +18,7 @@ int main(
 ) {
     plan(263);
     
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
     
     test_values();
     test_identity_values();
@@ -31,9 +31,9 @@ int main(
 
 
 void type_check(
-    hemp_value_t value,
-    hemp_u8_t    id,
-    hemp_str_p   name
+    hemp_value value,
+    hemp_u8    id,
+    hemp_string   name
 ) {
     if (hemp_string_eq(hemp_type_name(value), name)) {
         pass("value type is %s", name);
@@ -46,12 +46,12 @@ void type_check(
 }
 
 
-void test_number(hemp_num_t expect) {
+void test_number(hemp_num expect) {
     printf("number value: %g\n", expect);
-    hemp_value_t value = hemp_num_val(expect);
+    hemp_value value = hemp_num_val(expect);
     hemp_dump_value(value);
 
-    hemp_num_t n = hemp_val_num(value);
+    hemp_num n = hemp_val_num(value);
     ok( ! hemp_is_tagged(value), "number is not a tagged value" );
     ok( hemp_is_number(value), "number is a number value" );
     ok( n == expect, "got num value back" );
@@ -67,14 +67,14 @@ void test_number(hemp_num_t expect) {
 }
 
 
-void test_integer(hemp_int_t expect) {
+void test_integer(hemp_int expect) {
     /* tagged int */
     printf("integer value: %d\n", expect);
-    hemp_value_t value = hemp_int_val(expect);
+    hemp_value value = hemp_int_val(expect);
     hemp_dump_value(value);
     type_check(value, HEMP_INTEGER_ID, "Integer");
 
-    hemp_u32_t i = hemp_val_int(value);
+    hemp_u32 i = hemp_val_int(value);
     ok( hemp_is_tagged(value), "integer is a tagged value" );
     ok( hemp_is_integer(value), "integer is an integer value" );
     ok( i == expect, "got int value back" );
@@ -91,7 +91,7 @@ void test_integer(hemp_int_t expect) {
 
 void test_values() {
     pass("testing values");
-    hemp_value_t value;
+    hemp_value value;
     hemp_type_p vtable;
 
     printf("HEMP_NAN:\n");
@@ -112,7 +112,7 @@ void test_values() {
     test_integer(-69);
 
     /* tagged string pointer */
-    hemp_str_p es = "Hello world!";
+    hemp_string es = "Hello world!";
     printf("string value: %s\n", es);
     value = hemp_str_val(es);
     hemp_dump_value(value);
@@ -125,7 +125,7 @@ void test_values() {
     ok( ! hemp_is_true(value),          "string is not true" );
     ok( ! hemp_is_false(value),         "string is not false" );
 
-    hemp_str_p s = hemp_val_str(value);
+    hemp_string s = hemp_val_str(value);
     ok( hemp_is_tagged(value), "string is a tagged value" );
     ok( hemp_is_string(value), "string is a string value" );
     ok( ! hemp_is_pointer(value), "string is not a pointer (well, not a raw pointer)" );
@@ -136,7 +136,7 @@ void test_values() {
     value = hemp_bool_val(HEMP_TRUE);
     hemp_dump_value(value);
     ok( value.bits == HempTrue.bits, "true identity" );
-    hemp_bool_t b = hemp_val_bool(value);
+    hemp_bool b = hemp_val_bool(value);
     ok( b == HEMP_TRUE, "unboxed back to true" );
 }
 
@@ -272,7 +272,7 @@ void test_identity_values() {
 
     /* reassure myself that 0.0 (all zero bits) doesn't trigger any weird behaviour */
     printf("Zero:\n");
-    hemp_value_t zero = hemp_num_val(0.0);
+    hemp_value zero = hemp_num_val(0.0);
     hemp_dump_value(zero);
     ok( ! hemp_is_undef(zero),          "zero is not undef" );
     ok( ! hemp_is_missing(zero),        "zero is not missing" );
@@ -287,7 +287,7 @@ void test_identity_values() {
 
     /* same for  Infinity */
     printf("Infinity:\n");
-    hemp_value_t infinity = hemp_num_val(INFINITY);
+    hemp_value infinity = hemp_num_val(INFINITY);
     hemp_dump_value(infinity);
     ok( ! hemp_is_undef(infinity),      "infinity is not undef" );
     ok( ! hemp_is_missing(infinity),    "infinity is not missing" );
@@ -302,7 +302,7 @@ void test_identity_values() {
 
     /* same for  Nan */
     printf("NaN:\n");
-    hemp_value_t nan = hemp_num_val(NAN);
+    hemp_value nan = hemp_num_val(NAN);
     hemp_dump_value(nan);
     ok( ! hemp_is_undef(nan),           "nan is not undef" );
     ok( ! hemp_is_missing(nan),         "nan is not missing" );
@@ -333,24 +333,24 @@ void test_value_conversion() {
 
 
 void test_number_conversion() {
-    hemp_p          hemp    = hemp_init();
-    hemp_context_p  context = hemp_context(hemp);
+    hemp_hemp          hemp    = hemp_init();
+    hemp_context  context = hemp_context_instance(hemp);
     
     pass("testing number -> xxx conversions");
-    hemp_value_t number = hemp_num_val(3.14159);
+    hemp_value number = hemp_num_val(3.14159);
 
     /* number -> integer */
-    hemp_value_t integer = hemp_type_number_integer(number, context);
+    hemp_value integer = hemp_type_number_integer(number, context);
     ok( hemp_is_integer(integer), "result is integer" );
     ok( hemp_val_int(integer) == 3, "integer value correct" );
 
     /* number -> boolean */
-    hemp_value_t truth = hemp_type_number_boolean(number, context);
+    hemp_value truth = hemp_type_number_boolean(number, context);
     ok( hemp_is_boolean(truth), "result is boolean" );
     ok( hemp_is_true(truth), "boolean value correct" );
 
     /* number -> text */
-    hemp_value_t text = hemp_type_number_text(number, context, HempNothing);
+    hemp_value text = hemp_type_number_text(number, context, HempNothing);
     ok( hemp_is_text(text), "result is text" );
     is( hemp_val_text(text)->string, "3.14159", "text string correct" );
 
@@ -363,26 +363,26 @@ void test_number_conversion() {
 
 
 void test_integer_conversion() {
-    hemp_p          hemp    = hemp_init();
-    hemp_context_p  context = hemp_context(hemp);
+    hemp_hemp          hemp    = hemp_init();
+    hemp_context  context = hemp_context_instance(hemp);
 
     pass("testing integer -> xxx conversions");
-    hemp_value_t integer = hemp_int_val(42);
+    hemp_value integer = hemp_int_val(42);
 
     /* integer -> number */
-    hemp_value_t number = hemp_type_integer_number(integer, context);
+    hemp_value number = hemp_type_integer_number(integer, context);
     ok( hemp_is_number(number), "result is number" );
     eq( hemp_val_num(number), 42.0, "number value correct" );
     eq( hemp_val_num( hemp_to_number(integer, context) ), 42.0, "hemp_to_number()" );
 
     /* integer -> boolean */
-    hemp_value_t truth = hemp_type_integer_boolean(integer, context);
+    hemp_value truth = hemp_type_integer_boolean(integer, context);
     ok( hemp_is_boolean(truth), "result is boolean" );
     ok( hemp_is_true(truth), "boolean value correct" );
     ok( hemp_is_true( hemp_to_boolean(integer, context) ), "hemp_to_boolean()" );
 
     /* integer -> text */
-    hemp_value_t text = hemp_type_integer_text(integer, context, HempNothing);
+    hemp_value text = hemp_type_integer_text(integer, context, HempNothing);
     ok( hemp_is_text(text), "result is text" );
     is( hemp_val_text(text)->string, "42", "text string correct" );
 
@@ -395,13 +395,13 @@ void test_integer_conversion() {
 
 
 //void test_boolean_conversion() {
-//    hemp_p          hemp    = hemp_init();
-//    hemp_context_p  context = hemp_context(hemp);
-//    hemp_value_t    truth   = HempTrue;;
+//    hemp_hemp          hemp    = hemp_init();
+//    hemp_context  context = hemp_context_instance(hemp);
+//    hemp_value    truth   = HempTrue;;
 //
 //    /* boolean -> number */
 //    HEMP_TRY;
-//        hemp_value_t number = hemp_value_boolean_number(truth, context);
+//        hemp_value number = hemp_value_boolean_number(truth, context);
 //        fail("boolean should not convert to number");
 //    HEMP_CATCH_ALL;
 //        ok( hemp->error, "caught error: %s", hemp->error->message );
@@ -409,14 +409,14 @@ void test_integer_conversion() {
 //    
 //    /* boolean -> integer */
 //    HEMP_TRY;
-//        hemp_value_t integer = hemp_value_boolean_integer(truth, context);
+//        hemp_value integer = hemp_value_boolean_integer(truth, context);
 //        fail("boolean should not convert to integer");
 //    HEMP_CATCH_ALL;
 //        ok( hemp->error, "caught error: %s", hemp->error->message );
 //    HEMP_END;
 //
 //    /* boolean -> text */
-//    hemp_value_t text = hemp_value_boolean_text(HempTrue, context, HempNothing);
+//    hemp_value text = hemp_value_boolean_text(HempTrue, context, HempNothing);
 //    ok( hemp_is_text(text), "true text" );
 //    is( hemp_val_text(text)->string, "True", "true string correct" );
 //    hemp_text_free( hemp_val_text(text) );
@@ -432,14 +432,14 @@ void test_integer_conversion() {
 
 
 void test_text_conversion_is_number(
-    hemp_str_p string,
-    hemp_num_t expect
+    hemp_string string,
+    hemp_num expect
 ) {
-    hemp_p          hemp    = hemp_init();
-    hemp_context_p  context = hemp_context(hemp);
-    hemp_text_p     text    = hemp_text_from_string(string);
-    hemp_value_t    tval    = hemp_text_val(text);
-    hemp_value_t    nval;
+    hemp_hemp          hemp    = hemp_init();
+    hemp_context  context = hemp_context_instance(hemp);
+    hemp_text     text    = hemp_text_from_string(string);
+    hemp_value    tval    = hemp_text_val(text);
+    hemp_value    nval;
     
     HEMP_TRY; 
         nval = hemp_type_text_number(tval, context);
@@ -459,13 +459,13 @@ void test_text_conversion_is_number(
 
 
 void test_text_conversion_not_number(
-    hemp_str_p string
+    hemp_string string
 ) {
-    hemp_p          hemp    = hemp_init();
-    hemp_context_p  context = hemp_context(hemp);
-    hemp_text_p     text    = hemp_text_from_string(string);
-    hemp_value_t    tval    = hemp_text_val(text);
-    hemp_value_t    nval;
+    hemp_hemp          hemp    = hemp_init();
+    hemp_context  context = hemp_context_instance(hemp);
+    hemp_text     text    = hemp_text_from_string(string);
+    hemp_value    tval    = hemp_text_val(text);
+    hemp_value    nval;
     
     HEMP_TRY; 
         nval = hemp_type_text_number(tval, context);
@@ -481,14 +481,14 @@ void test_text_conversion_not_number(
 
 
 void test_text_conversion_is_integer(
-    hemp_str_p string,
-    hemp_int_t expect
+    hemp_string string,
+    hemp_int expect
 ) {
-    hemp_p          hemp    = hemp_init();
-    hemp_context_p  context = hemp_context(hemp);
-    hemp_text_p     text    = hemp_text_from_string(string);
-    hemp_value_t    tval    = hemp_text_val(text);
-    hemp_value_t    ival;
+    hemp_hemp          hemp    = hemp_init();
+    hemp_context  context = hemp_context_instance(hemp);
+    hemp_text     text    = hemp_text_from_string(string);
+    hemp_value    tval    = hemp_text_val(text);
+    hemp_value    ival;
     
     HEMP_TRY; 
         ival = hemp_type_text_integer(tval, context);
@@ -508,13 +508,13 @@ void test_text_conversion_is_integer(
 
 
 void test_text_conversion_not_integer(
-    hemp_str_p string
+    hemp_string string
 ) {
-    hemp_p          hemp    = hemp_init();
-    hemp_context_p  context = hemp_context(hemp);
-    hemp_text_p     text    = hemp_text_from_string(string);
-    hemp_value_t    tval    = hemp_text_val(text);
-    hemp_value_t    ival;
+    hemp_hemp          hemp    = hemp_init();
+    hemp_context  context = hemp_context_instance(hemp);
+    hemp_text     text    = hemp_text_from_string(string);
+    hemp_value    tval    = hemp_text_val(text);
+    hemp_value    ival;
     
     HEMP_TRY; 
         ival = hemp_type_text_integer(tval, context);
@@ -532,10 +532,10 @@ void test_text_conversion_not_integer(
 
 void test_text_conversion() {
     pass("testing text -> xxx conversions");
-    hemp_p          hemp    = hemp_init();
-    hemp_context_p  context = hemp_context(hemp);
-    hemp_text_p     text    = hemp_text_from_string("123");
-    hemp_value_t    tval    = hemp_text_val(text);
+    hemp_hemp          hemp    = hemp_init();
+    hemp_context  context = hemp_context_instance(hemp);
+    hemp_text     text    = hemp_text_from_string("123");
+    hemp_value    tval    = hemp_text_val(text);
 
     /* text -> integer */
     test_text_conversion_is_integer("12", 12);
@@ -560,7 +560,7 @@ void test_text_conversion() {
     test_text_conversion_not_number("");
 
     /* text -> boolean */
-    hemp_value_t truth = hemp_type_text_boolean(tval, context);
+    hemp_value truth = hemp_type_text_boolean(tval, context);
     ok( hemp_is_boolean(truth), "result is boolean" );
     ok( hemp_is_true(truth), "boolean value correct" );
 
@@ -601,9 +601,9 @@ void test_text_conversion() {
 
 
 void test_identity_conversion() {
-    hemp_p          hemp    = hemp_init();
-    hemp_context_p  context = hemp_context(hemp);
-    hemp_value_t    number;
+    hemp_hemp          hemp    = hemp_init();
+    hemp_context  context = hemp_context_instance(hemp);
+    hemp_value    number;
     
     pass("testing identity -> xxx conversions");
 
@@ -616,13 +616,13 @@ void test_identity_conversion() {
     HEMP_END;
 
     /* identity -> boolean is sometimes allowed, depending on value */
-    hemp_value_t truth;
+    hemp_value truth;
     truth = hemp_type_identity_boolean(HempMissing, context);
     truth = hemp_type_identity_boolean(HempTrue, context);
     truth = hemp_type_identity_boolean(HempBefore, context);
 
     /* identity -> text is always allowed */
-    hemp_value_t text;
+    hemp_value text;
 
     text = hemp_type_identity_text(HempFalse, context, HempNothing);
     ok( hemp_is_text(text), "false converts to text" );

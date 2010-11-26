@@ -8,11 +8,11 @@
 #include <hemp/types.h>
 
 void hemp_debug(char *format, ...);
-void hemp_debug_at(hemp_str_p file, hemp_pos_t line, hemp_str_p format, ...);
+void hemp_debug_at(hemp_string file, hemp_pos line, hemp_string format, ...);
 void hemp_debug_col(char *col, char *format, ...);
 void hemp_debug_on();
 void hemp_debug_off();
-void hemp_debug_token(hemp_str_p type, hemp_str_p str, hemp_pos_t len);
+void hemp_debug_token(hemp_string type, hemp_string str, hemp_pos len);
 
 #define HEMP_DEBUG_INIT      0x0002
 #define HEMP_DEBUG_MEM       0x0004

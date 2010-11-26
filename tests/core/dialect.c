@@ -3,7 +3,7 @@
 
 void        test_dialect();
 void        test_dialect_registration();
-hemp_bool_t dummy_dialect_builder(hemp_p);
+hemp_bool dummy_dialect_builder(hemp_hemp);
 
 
 int main(
@@ -16,15 +16,15 @@ int main(
 
 
 void test_dialect() {
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object" );
 
     hemp_language(hemp, "tt3");
 
-    hemp_dialect_p dialect = hemp_dialect(hemp, "tt3");
+    hemp_dialect dialect = hemp_dialect_instance(hemp, "tt3");
     ok( dialect, "fetched %s dialect", dialect->name );
 
-    dialect = hemp_dialect(hemp, "tt3");
+    dialect = hemp_dialect_instance(hemp, "tt3");
     ok( dialect, "fetched %s dialect again", dialect->name );
 
     hemp_free(hemp);
@@ -32,7 +32,7 @@ void test_dialect() {
 
 
 void test_dialect_registration() {
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
 //    ok( 
 //        hemp_register_dialect(hemp, "test1", &dummy_dialect_builder),
 //        "registered test1 dialect"
@@ -40,9 +40,9 @@ void test_dialect_registration() {
     hemp_free(hemp);
 }
 
-hemp_bool_t 
+hemp_bool 
 dummy_dialect_builder(
-    hemp_p hemp
+    hemp_hemp hemp
 ) {
     hemp_debug_cyan("dummy dialect builder\n");
 }

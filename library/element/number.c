@@ -11,12 +11,12 @@
 #define HEMP_NUMOP_CAST_NUM(v)              \
     (hemp_is_number(v)                      \
         ? hemp_val_num(v)                   \
-        : ((hemp_num_t) hemp_val_int(v))    \
+        : ((hemp_num) hemp_val_int(v))    \
     )
 
 
-hemp_symbol_p HempSymbolNumber  = NULL;
-hemp_symbol_p HempSymbolInteger = NULL;
+hemp_symbol HempSymbolNumber  = NULL;
+hemp_symbol HempSymbolInteger = NULL;
 
 
 /*--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_number) {
     hemp_debug_call("hemp_symbol_number()\n");
     return hemp_element_number_symbol(
         NULL,
-        hemp_symbol_init("hemp.number", NULL, NULL)
+        hemp_symbol_new("hemp.number", NULL, NULL)
     );
 }
 
@@ -65,7 +65,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_integer) {
     hemp_debug_call("hemp_symbol_integer()\n");
     return hemp_element_integer_symbol(
         NULL,
-        hemp_symbol_init("hemp.integer", NULL, NULL)
+        hemp_symbol_new("hemp.integer", NULL, NULL)
     );
 }
 
@@ -141,19 +141,19 @@ HEMP_SYMBOL_FUNC(hemp_element_number_plus_symbol) {
 HEMP_VALUE_FUNC(hemp_element_number_plus_value) {
     hemp_debug_call("hemp_element_number_plus_value() [%p]\n", element);
 
-    hemp_element_p element = hemp_val_elem(value);
+    hemp_element element = hemp_val_elem(value);
 
     /* prefix unary '+' coerces value to a number */
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
-        hemp_value_t expr = hemp_expr(element);
+        hemp_value expr = hemp_expr(element);
         return hemp_obcall(expr, number, context);
     }
 
     /* otherwise it's an infix addition operator */
-    hemp_value_t lhs  = hemp_lhs(element);
-    hemp_value_t rhs  = hemp_rhs(element);
-    hemp_value_t lval = hemp_obcall(lhs, number, context);
-    hemp_value_t rval, result;
+    hemp_value lhs  = hemp_lhs(element);
+    hemp_value rhs  = hemp_rhs(element);
+    hemp_value lval = hemp_obcall(lhs, number, context);
+    hemp_value rval, result;
     
     if (hemp_is_integer(lval)) {
         rval   = hemp_obcall(rhs, integer, context);
@@ -191,12 +191,12 @@ HEMP_SYMBOL_FUNC(hemp_element_number_minus_symbol) {
 HEMP_VALUE_FUNC(hemp_element_number_minus_value) {
     hemp_debug_call("hemp_element_number_minus_value()\n");
 
-    hemp_element_p element = hemp_val_elem(value);
+    hemp_element element = hemp_val_elem(value);
 
     /* prefix unary '-' coerces value to a number and negates it */
     if (hemp_has_flag(element, HEMP_BE_PREFIX)) {
-        hemp_value_t expr = hemp_expr(element);
-        hemp_value_t val  = hemp_obcall(expr, number, context);
+        hemp_value expr = hemp_expr(element);
+        hemp_value val  = hemp_obcall(expr, number, context);
 
         return hemp_is_integer(val)
             ? hemp_int_val(- hemp_val_int(val) )
@@ -204,10 +204,10 @@ HEMP_VALUE_FUNC(hemp_element_number_minus_value) {
     }
 
     /* otherwise it's an infix subtraction operator */
-    hemp_value_t lhs  = hemp_lhs(element);
-    hemp_value_t rhs  = hemp_rhs(element);
-    hemp_value_t lval = hemp_obcall(lhs, number, context);
-    hemp_value_t rval, result;
+    hemp_value lhs  = hemp_lhs(element);
+    hemp_value rhs  = hemp_rhs(element);
+    hemp_value lval = hemp_obcall(lhs, number, context);
+    hemp_value rval, result;
 
     if (hemp_is_integer(lval)) {
         result = hemp_int_val(
@@ -242,18 +242,18 @@ HEMP_SYMBOL_FUNC(hemp_element_number_power_symbol) {
 HEMP_VALUE_FUNC(hemp_element_number_power_value) {
     hemp_debug_call("hemp_element_number_power_value()\n");
 
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    lhs     = hemp_lhs(element);
-    hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_obcall(lhs, number, context);
-    hemp_value_t    rval    = hemp_obcall(rhs, number, context);
-    hemp_value_t    result;
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    lhs     = hemp_lhs(element);
+    hemp_value    rhs     = hemp_rhs(element);
+    hemp_value    lval    = hemp_obcall(lhs, number, context);
+    hemp_value    rval    = hemp_obcall(rhs, number, context);
+    hemp_value    result;
 
     if (hemp_is_integer(lval)) {
         result = hemp_int_val(
-            (hemp_int_t)
+            (hemp_int)
             pow( 
-                (hemp_num_t) hemp_val_int(lval),
+                (hemp_num) hemp_val_int(lval),
                 HEMP_NUMOP_CAST_NUM(rval)
             )
         );
@@ -286,11 +286,11 @@ HEMP_SYMBOL_FUNC(hemp_element_number_multiply_symbol) {
 HEMP_VALUE_FUNC(hemp_element_number_multiply_value) {
     hemp_debug_call("hemp_element_number_multiply_value()\n");
 
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    lhs     = hemp_lhs(element);
-    hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_obcall(lhs, number, context);
-    hemp_value_t    rval, result;
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    lhs     = hemp_lhs(element);
+    hemp_value    rhs     = hemp_rhs(element);
+    hemp_value    lval    = hemp_obcall(lhs, number, context);
+    hemp_value    rval, result;
 
     if (hemp_is_integer(lval)) {
         result = hemp_int_val(
@@ -325,11 +325,11 @@ HEMP_SYMBOL_FUNC(hemp_element_number_divide_symbol) {
 HEMP_VALUE_FUNC(hemp_element_number_divide_value) {
     hemp_debug_call("hemp_element_number_divide_value()\n");
 
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    lhs     = hemp_lhs(element);
-    hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_obcall(lhs, number, context);
-    hemp_value_t    rval, result;
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    lhs     = hemp_lhs(element);
+    hemp_value    rhs     = hemp_rhs(element);
+    hemp_value    lval    = hemp_obcall(lhs, number, context);
+    hemp_value    rval, result;
 
     if (hemp_is_integer(lval)) {
 //      hemp_debug("number is integer\n");
@@ -367,12 +367,12 @@ HEMP_SYMBOL_FUNC(hemp_element_number_divint_symbol) {
 HEMP_VALUE_FUNC(hemp_element_number_divint_value) {
     hemp_debug_call("hemp_element_number_divint_value()\n");
 
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    lhs     = hemp_lhs(element);
-    hemp_value_t    rhs     = hemp_rhs(element);
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    lhs     = hemp_lhs(element);
+    hemp_value    rhs     = hemp_rhs(element);
     
     return hemp_int_val(
-        (hemp_int_t)
+        (hemp_int)
         hemp_val_int( hemp_obcall(lhs, integer, context) )
       / hemp_val_int( hemp_obcall(rhs, integer, context) )
     );
@@ -395,12 +395,12 @@ HEMP_SYMBOL_FUNC(hemp_element_number_modulus_symbol) {
 HEMP_VALUE_FUNC(hemp_element_number_modulus_value) {
     hemp_debug_call("hemp_element_number_modulus_value()\n");
 
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    lhs     = hemp_lhs(element);
-    hemp_value_t    rhs     = hemp_rhs(element);
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    lhs     = hemp_lhs(element);
+    hemp_value    rhs     = hemp_rhs(element);
     
     return hemp_int_val(
-        (hemp_int_t)
+        (hemp_int)
         hemp_val_int( hemp_obcall(lhs, integer, context) )
       % hemp_val_int( hemp_obcall(rhs, integer, context) )
     );
@@ -422,13 +422,13 @@ HEMP_SYMBOL_FUNC(hemp_element_number_compare_symbol) {
 HEMP_VALUE_FUNC(hemp_element_number_compare_value) {
     hemp_debug_call("hemp_element_number_compare_value()\n");
 
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    lhs     = hemp_lhs(element);
-    hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_obcall(lhs, number, context);
-    hemp_value_t    rval    = hemp_obcall(rhs, number, context);
-    hemp_num_t      lnum    = HEMP_NUMOP_CAST_NUM(lval);
-    hemp_num_t      rnum    = HEMP_NUMOP_CAST_NUM(rval);
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    lhs     = hemp_lhs(element);
+    hemp_value    rhs     = hemp_rhs(element);
+    hemp_value    lval    = hemp_obcall(lhs, number, context);
+    hemp_value    rval    = hemp_obcall(rhs, number, context);
+    hemp_num      lnum    = HEMP_NUMOP_CAST_NUM(lval);
+    hemp_num      rnum    = HEMP_NUMOP_CAST_NUM(rval);
 
     return  lnum < rnum ? HempBefore
         :   lnum > rnum ? HempAfter

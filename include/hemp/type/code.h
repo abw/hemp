@@ -9,10 +9,10 @@
  * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_code_s {
+struct hemp_code {
 //    hemp_scope_t    scope;
 //    hemp_element_t  source;
-    hemp_value_t    body;
+    hemp_value    body;
 }; 
 
 
@@ -21,17 +21,17 @@ struct hemp_code_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_code_p
+HEMP_INLINE hemp_code
     hemp_code_init();
 
 HEMP_INLINE void
     hemp_code_release(
-        hemp_code_p code
+        hemp_code code
     );
 
 HEMP_INLINE void
     hemp_code_free(
-        hemp_code_p code
+        hemp_code code
     );
 
 
@@ -50,9 +50,6 @@ HEMP_OUTPUT_FUNC(hemp_type_code_text);
 
 #define hemp_code_new()                         \
     hemp_code_init(NULL)
-
-#define hemp_code_allocate(name)                \
-    hemp_allocate_type_name(code, name)
 
 
 #endif /* HEMP_CODE_H */

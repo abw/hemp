@@ -4,10 +4,10 @@
  * global symbol types
  *--------------------------------------------------------------------------*/
 
-hemp_symbol_p HempSymbolSpace     = NULL;
-hemp_symbol_p HempSymbolTagStart  = NULL;
-hemp_symbol_p HempSymbolTagEnd    = NULL;
-hemp_symbol_p HempSymbolEOF       = NULL;
+hemp_symbol HempSymbolSpace     = NULL;
+hemp_symbol HempSymbolTagStart  = NULL;
+hemp_symbol HempSymbolTagEnd    = NULL;
+hemp_symbol HempSymbolEOF       = NULL;
 
 
 /*--------------------------------------------------------------------------
@@ -103,10 +103,10 @@ HEMP_SYMBOL_FUNC(hemp_element_terminator_symbol) {
 }
 
 
-hemp_bool_t 
+hemp_bool 
 hemp_element_terminator_matches(
-    hemp_element_p element,
-    hemp_str_p     match
+    hemp_element element,
+    hemp_string     match
 ) {
     return ( hemp_has_flag(element->type, HEMP_BE_TERMINATOR)
         &&   hemp_stringn_eq(element->token, match, strlen(match)) )
@@ -126,7 +126,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_space) {
     hemp_debug_call("hemp_symbol_space()\n");
     return hemp_element_space_symbol(
         NULL,
-        hemp_symbol_init("hemp.space", NULL, NULL)
+        hemp_symbol_new("hemp.space", NULL, NULL)
     );
 }
 
@@ -156,7 +156,7 @@ HEMP_POSTFIX_FUNC(hemp_element_space_postfix) {
      * then we rewind the element pointer back to the start and return the 
      * lhs element, effectively declining the postfix parsing opportunity.
      */
-    hemp_element_p head = *elemptr;
+    hemp_element head = *elemptr;
     
     /* skip the first (current) whitespace element */
     hemp_go_next(elemptr);
@@ -183,7 +183,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_start) {
     hemp_debug_call("hemp_symbol_tag_start()\n");
     return hemp_element_tag_start_symbol(
         NULL,
-        hemp_symbol_init("hemp.tag_start", NULL, NULL)
+        hemp_symbol_new("hemp.tag_start", NULL, NULL)
     );
 }
 
@@ -205,7 +205,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_end) {
     hemp_debug_call("hemp_symbol_tag_end()\n");
     return hemp_element_tag_end_symbol(
         NULL,
-        hemp_symbol_init("hemp.tag_end", NULL, NULL)
+        hemp_symbol_new("hemp.tag_end", NULL, NULL)
     );
 }
 
@@ -225,7 +225,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_eof) {
     hemp_debug_call("hemp_symbol_eof()\n");
     return hemp_element_eof_symbol(
         NULL,
-        hemp_symbol_init("hemp.eof", NULL, NULL)
+        hemp_symbol_new("hemp.eof", NULL, NULL)
     );
 }
 
@@ -240,7 +240,7 @@ HEMP_SYMBOL_FUNC(hemp_element_eof_symbol) {
 
 HEMP_OUTPUT_FUNC(hemp_element_eof_token) {
     hemp_debug_call("hemp_element_eof_token()\n");
-    hemp_text_p text;
+    hemp_text text;
     hemp_prepare_text_size(context, output, text, 6);
     hemp_text_append_string(text, "--EOF--");     // TMP
     return output;

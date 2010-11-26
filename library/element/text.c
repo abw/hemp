@@ -1,7 +1,7 @@
 #include <hemp/element.h>
 
 
-hemp_symbol_p HempSymbolText = NULL;
+hemp_symbol HempSymbolText = NULL;
 
 
 /*--------------------------------------------------------------------------
@@ -12,7 +12,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_text) {
     hemp_debug_call("hemp_symbol_text()\n");
     return hemp_element_text_symbol(
         NULL,
-        hemp_symbol_init("hemp.text", NULL, NULL)
+        hemp_symbol_new("hemp.text", NULL, NULL)
     );
 }
 
@@ -40,7 +40,7 @@ HEMP_PREFIX_FUNC(hemp_element_text_prefix) {
     /* Advance the pointer to the next element after this one and return the 
      * current element as the yielded expression.
      */
-    hemp_element_p element = *elemptr;
+    hemp_element element = *elemptr;
     
     if (hemp_has_next(elemptr))
         hemp_go_next(elemptr);
@@ -56,7 +56,7 @@ HEMP_PREFIX_FUNC(hemp_element_text_prefix) {
 
 void
 hemp_element_text_clean(
-    hemp_element_p element
+    hemp_element element
 ) {
     hemp_debug_call("hemp_element_text_clean(%p)\n", element);
 
@@ -64,7 +64,7 @@ hemp_element_text_clean(
      * translated escape sequences, e.g. \n \\, etc
      */
     if (hemp_not_flag(element, HEMP_BE_SOURCE)) {
-        hemp_mem_free((hemp_mem_p) hemp_val_str(element->args.value));
+        hemp_mem_free((hemp_memory) hemp_val_str(element->args.value));
     }
 }
 
@@ -87,12 +87,12 @@ HEMP_VALUE_FUNC(hemp_element_text_value) {
 
 HEMP_OUTPUT_FUNC(hemp_element_text_concat_value) {
     hemp_debug_call("hemp_element_text_concat_value()\n");
-    hemp_element_p element = hemp_val_elem(value);
+    hemp_element element = hemp_val_elem(value);
 
-    hemp_text_p text;
+    hemp_text text;
     hemp_prepare_text(context, output, text);
-    hemp_value_t lhs = hemp_lhs(element);
-    hemp_value_t rhs = hemp_rhs(element);
+    hemp_value lhs = hemp_lhs(element);
+    hemp_value rhs = hemp_rhs(element);
     hemp_obcall(lhs, text, context, output);
     hemp_obcall(rhs, text, context, output);
 
@@ -114,12 +114,12 @@ HEMP_SYMBOL_FUNC(hemp_element_text_compare_symbol) {
 HEMP_VALUE_FUNC(hemp_element_text_compare_value) {
     hemp_debug_call("hemp_element_text_compare_value()\n");
 
-    hemp_element_p  element = hemp_val_elem(value);
-    hemp_value_t    lhs     = hemp_lhs(element);
-    hemp_value_t    rhs     = hemp_rhs(element);
-    hemp_value_t    lval    = hemp_obcall(lhs, text, context, HempNothing);
-    hemp_value_t    rval    = hemp_obcall(rhs, text, context, HempNothing);
-    hemp_int_t      compare = strcmp( 
+    hemp_element  element = hemp_val_elem(value);
+    hemp_value    lhs     = hemp_lhs(element);
+    hemp_value    rhs     = hemp_rhs(element);
+    hemp_value    lval    = hemp_obcall(lhs, text, context, HempNothing);
+    hemp_value    rval    = hemp_obcall(rhs, text, context, HempNothing);
+    hemp_int      compare = strcmp( 
         hemp_val_text(lval)->string,
         hemp_val_text(rval)->string
     );

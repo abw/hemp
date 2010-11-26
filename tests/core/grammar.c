@@ -19,11 +19,11 @@ int main(
 
 
 void test_grammar() {
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object" );
     
     hemp_language_p language = hemp_language(hemp, HEMP_TT3);
-    hemp_grammar_p grammar;
+    hemp_grammar grammar;
 
     /* calling this multiple times has no effect */
     hemp_language(hemp, HEMP_TT3);
@@ -33,10 +33,10 @@ void test_grammar() {
     hemp_language(hemp, HEMP_TT3);
 
     HEMP_TRY;
-        hemp_grammar_p grammar = hemp_grammar(hemp, "tt3.core");
+        hemp_grammar grammar = hemp_grammar(hemp, "tt3.core");
         ok( grammar, "got grammar" );
         is( grammar->name, "tt3.core", "grammar name is tt3.core" );
-        hemp_symbol_p space = hemp_grammar_symbol(grammar, "hemp.space");
+        hemp_symbol space = hemp_grammar_symbol(grammar, "hemp.space");
         ok( space, "got space symbol" );
     HEMP_CATCH_ALL;
         fail("eek! caught error: %s", hemp->error->message);
@@ -58,13 +58,13 @@ void test_grammar() {
 
 
 
-hemp_grammar_p
+hemp_grammar
 hemp_grammar_test(
-    hemp_p     hemp,
-    hemp_str_p name
+    hemp_hemp     hemp,
+    hemp_string name
 ) {
     hemp_debug("constructing test grammar\n");
-    hemp_grammar_p grammar = (hemp_grammar_p) hemp_grammar_init(hemp, name);
+    hemp_grammar grammar = (hemp_grammar) hemp_grammar_new(hemp, name);
 
     HEMP_TRY;
         hemp_grammar_add_symbol(
@@ -99,29 +99,29 @@ hemp_grammar_test(
 
 
 void test_hemp_grammar() {
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object at %p", hemp );
 
 //    hemp_language(hemp, HEMP_TT3);
     hemp_register_grammar(
-        hemp, "test", (hemp_actor_f) &hemp_grammar_test
+        hemp, "test", (hemp_actor) &hemp_grammar_test
     );
     
-    hemp_grammar_p grammar = hemp_grammar(hemp, "test");
+    hemp_grammar grammar = hemp_grammar(hemp, "test");
     ok( grammar, "got grammar" );
 
     hemp_free(hemp);
 }
 
 void test_hemp_grammar_hemp() {
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object at %p", hemp );
 
     HEMP_TRY;
-        hemp_grammar_p grammar_a = hemp_grammar(hemp, "hemp.alpha");
+        hemp_grammar grammar_a = hemp_grammar(hemp, "hemp.alpha");
         ok( grammar_a, "got hemp.alpha grammar" );
 
-        hemp_grammar_p grammar_b = hemp_grammar(hemp, "hemp.bravo");
+        hemp_grammar grammar_b = hemp_grammar(hemp, "hemp.bravo");
         ok( grammar_b, "got hemp.bravo grammar" );
 
     HEMP_CATCH_ALL;

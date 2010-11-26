@@ -15,9 +15,9 @@ HEMP_TYPE_FUNC(hemp_type_identity) {
 
 
 
-HEMP_DO_INLINE hemp_str_p
+HEMP_DO_INLINE hemp_string
 hemp_identity_name(
-    hemp_value_t value
+    hemp_value value
 ) {
     switch (HEMP_IDENT_ID(value)) {
         case 0:                     return HEMP_STR_INFINITY;
@@ -43,8 +43,8 @@ HEMP_OUTPUT_FUNC(hemp_type_identity_text) {
             hemp_identity_name(value)
         );
     }
-    hemp_text_p text;
-    hemp_str_p name = hemp_identity_name(value);
+    hemp_text text;
+    hemp_string name = hemp_identity_name(value);
     hemp_prepare_text_size(context, output, text, strlen(name));
 
     /* HempEmpty silently bypassed generating any text output */

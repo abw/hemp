@@ -11,13 +11,13 @@
  * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_template_s {
-    hemp_dialect_p  dialect;
-    hemp_source_p   source;
+struct hemp_template {
+    hemp_dialect    dialect;
+    hemp_source     source;
     hemp_tagset_p   tagset;
-    hemp_scope_p    scope;
-    hemp_elements_p elements;
-    hemp_element_p  tree;
+    hemp_scope      scope;
+    hemp_elements   elements;
+    hemp_element    tree;
 };
 
 
@@ -25,42 +25,42 @@ struct hemp_template_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_template_p
+hemp_template
     hemp_template_init(
-        hemp_dialect_p  dialect,
-        hemp_source_p   source
+        hemp_dialect    dialect,
+        hemp_source   source
     );
 
 void    
     hemp_template_free(
-        hemp_template_p
+        hemp_template   template
     );
 
-hemp_element_p
+hemp_element
     hemp_template_tokens(
-        hemp_template_p tmpl
+        hemp_template   template
     );
 
-hemp_bool_t
+hemp_bool
     hemp_template_scan(
-        hemp_template_p tmpl
+        hemp_template   template
     );
 
-hemp_bool_t
+hemp_bool
     hemp_template_compile(
-        hemp_template_p tmpl
+        hemp_template   template
     );
     
-hemp_element_p
+hemp_element
     hemp_template_tree(
-        hemp_template_p tmpl
+        hemp_template   template
     );
 
 
-hemp_text_p
+hemp_text
     hemp_template_render(
-        hemp_template_p tmpl,
-        hemp_context_p  context
+        hemp_template   template,
+        hemp_context    context
     );
 
 

@@ -1,14 +1,14 @@
 #include <hemp/element.h>
 
 
-hemp_symbol_p HempSymbolComment = NULL;
+hemp_symbol HempSymbolComment = NULL;
 
 
 HEMP_GLOBAL_SYMBOL(hemp_symbol_comment) {
     hemp_debug_call("hemp_symbol_comment()\n");
     return hemp_element_comment_symbol(
         NULL,
-        hemp_symbol_init("hemp.comment", NULL, NULL)
+        hemp_symbol_new("hemp.comment", NULL, NULL)
     );
 }
 
@@ -24,8 +24,8 @@ HEMP_SYMBOL_FUNC(hemp_element_comment_symbol) {
 
 
 HEMP_SCAN_FUNC(hemp_element_comment_scanner) {
-    hemp_str_p  tag_end = tag->end;
-    hemp_size_t tag_len = strlen(tag->end);
+    hemp_string  tag_end = tag->end;
+    hemp_size tag_len = strlen(tag->end);
 
     hemp_debug_call("hemp_element_comment_scanner()\n");
 

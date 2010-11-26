@@ -12,10 +12,10 @@ int main(
 
 
 void test_context() {
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object" );
 
-    hemp_context_p context = hemp_context(hemp);
+    hemp_context context = hemp_context_instance(hemp);
     ok( context, "created hemp context" );
     ok( context->hemp == hemp, "context->hemp points at hemp" );
 
@@ -33,13 +33,13 @@ void test_context() {
         /* create a bunch of temporary items - the context should 
          * automagically clean these up when it is free.
          */
-        hemp_list_p list = hemp_context_tmp_list(context);
-        hemp_text_p text = hemp_context_tmp_text(context);
-        hemp_code_p code = hemp_context_tmp_code(context);
+        hemp_list list = hemp_context_tmp_list(context);
+        hemp_text text = hemp_context_tmp_text(context);
+        hemp_code code = hemp_context_tmp_code(context);
         hemp_text_append_string(text, "hello world!");
     }
 
-    hemp_frame_p frame = hemp_context_enter(context, NULL);
+    hemp_frame frame = hemp_context_enter(context, NULL);
     ok( frame, "got frame" );
 
     hemp_context_free(context);

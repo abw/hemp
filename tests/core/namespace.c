@@ -14,7 +14,7 @@ int main(
 
 
 void test_namespace() {
-    hemp_p hemp = hemp_init();
+    hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object" );
 
     hemp_namespace_p foo = hemp_namespace("foo");
