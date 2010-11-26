@@ -47,7 +47,7 @@ language(hemp, language)
     INIT:
         fprintf(stderr, "Hemp->language('%s')\n", language); 
     PPCODE:
-        hemp_language(hemp, language);
+        hemp_language_instance(hemp, language);
 
 
 Hemp::Template

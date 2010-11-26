@@ -1,10 +1,10 @@
 #include <hemp.h>
 
-extern hemp_type_p HempPerlScalar;
-extern hemp_type_p HempPerlArray;
-extern hemp_type_p HempPerlHash;
-extern hemp_type_p HempPerlCode;
-extern hemp_type_p HempPerlObject;
+extern hemp_type HempPerlScalar;
+extern hemp_type HempPerlArray;
+extern hemp_type HempPerlHash;
+extern hemp_type HempPerlCode;
+extern hemp_type HempPerlObject;
 
 void            hemp_perl_init();
 hemp_value    hemp_perl_value(SV *);

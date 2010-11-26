@@ -87,7 +87,7 @@ int main(
     hemp_template template;
     hemp_text     input, output;
     
-    hemp_language(hemp, "tt3");
+    hemp_language_instance(hemp, "tt3");
     hemp_prompt_init();
     hemp_getopt(hemp, argc, argv);
 
