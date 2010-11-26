@@ -27,13 +27,13 @@ enum hemp_tag_style {
 
 
 struct hemp_tag {
-   hemp_string       name;
-   hemp_tag_style_t style;
-   hemp_string       start;
-   hemp_string       end;
-   hemp_tag_scan_f  scan;
-   hemp_tag_skip_f  to_end_of_line;
-   hemp_grammar   grammar;
+   hemp_string          name;
+   hemp_tag_style       style;
+   hemp_string          start;
+   hemp_string          end;
+   hemp_tag_scan_f      scan;
+   hemp_tag_skip_f      to_end_of_line;
+   hemp_grammar         grammar;
 };
 
 
@@ -43,17 +43,17 @@ struct hemp_tag {
 
 hemp_tag
     hemp_tag_init(
-        hemp_string       name,
-        hemp_tag_style_t style,
-        hemp_string       start,
-        hemp_string       end,
-        hemp_tag_scan_f  scan,
-        hemp_grammar   grammar
+        hemp_string     name,
+        hemp_tag_style  style,
+        hemp_string     start,
+        hemp_string     end,
+        hemp_tag_scan_f scan,
+        hemp_grammar    grammar
     );
 
 hemp_tag
     hemp_tag_copy(
-        hemp_tag tag
+        hemp_tag        tag
     );
 
 void

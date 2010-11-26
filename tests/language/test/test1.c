@@ -24,7 +24,7 @@ int test_test_language() {
     hemp_string  text   = hemp_filesystem_read_file(file);
 
     hemp_debug("text: %s\n", text);
-    hemp_language(hemp, HEMP_TEST);
+    hemp_language_instance(hemp, HEMP_TEST);
 
     hemp_test_plan_p plan = hemp_test_plan(5);
 

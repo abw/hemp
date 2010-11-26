@@ -23,7 +23,7 @@ void test_tt3() {
     ok( hemp, "created hemp object" );
 
     HEMP_TRY;
-        hemp_language_p lang = hemp_language(hemp, "tt3");
+        hemp_language lang = hemp_language_instance(hemp, "tt3");
         ok( lang, "using %s version %0.2f", lang->name, lang->version);
 
         hemp_dialect dial = hemp_dialect_instance(hemp, "tt3");

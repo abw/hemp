@@ -9,30 +9,26 @@
 #include <hemp/grammar.h>
 
 
-#define HEMP_IN_PTREE(head,src) \
-    head[(hemp_char) *src % HEMP_PTREE_SIZE]
-
 
 void 
 hemp_inline_tag_scanner(
-    hemp_template tmpl,
-    hemp_tag      tag,
-    hemp_string      tagtok,
-    hemp_pos      pos,
+    hemp_template   tmpl,
+    hemp_tag        tag,
+    hemp_string     tagtok,
+    hemp_pos        pos,
     hemp_string     *srcptr
 ) {
-    hemp_string      src    = *srcptr,
+    hemp_string     src    = *srcptr,
                     from   = src,
                     point;
-    hemp_string      tagend = tag->end;
-    hemp_size     endlen = strlen(tagend);
-    hemp_element  element;
-    hemp_num      num_val;
-    hemp_int      int_val;
-    hemp_bool     is_int, is_word;
-    hemp_pnode_p    pnode;
-    hemp_pnode_p    *ophead  = tag->grammar->operators->head;
-    hemp_symbol   symbol;
+    hemp_string     tagend = tag->end;
+    hemp_size       endlen = strlen(tagend);
+    hemp_element    element;
+    hemp_num        num_val;
+    hemp_int        int_val;
+    hemp_bool       is_int, is_word;
+    hemp_pnode      pnode;
+    hemp_symbol     symbol;
 
     hemp_debug_call("hemp_scan_inline_tag()\n");
 
@@ -114,7 +110,7 @@ hemp_inline_tag_scanner(
             }
         }
         else if (
-            (pnode  = HEMP_IN_PTREE(ophead, src))
+            (pnode  = hemp_ptree_root(tag->grammar->operators, src))
         &&  (symbol = (hemp_symbol) hemp_pnode_match_more(pnode, &src))
         ) {
             hemp_debug_token("OPERATOR", from, src-from);

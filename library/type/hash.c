@@ -40,12 +40,12 @@ hemp_primes[] = {
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_hash) {
-    hemp_type_p type = hemp_type_subtype(HempValue, id, name);
+    hemp_type type = hemp_type_subtype(HempValue, id, name);
     type->text       = &hemp_type_hash_text;
     type->fetch      = &hemp_type_hash_fetch;
     type->dot        = &hemp_type_hash_dot;
-    type->boolean    = &hemp_valuerue;            /* hash is always true or use hash size? */
-    type->defined    = &hemp_valuerue;
+    type->boolean    = &hemp_value_true;            /* hash is always true or use hash size? */
+    type->defined    = &hemp_value_true;
 
     hemp_type_extend(type, "length", &hemp_method_hash_length);
 
@@ -593,7 +593,7 @@ HEMP_FETCH_FUNC(hemp_type_hash_dot) {
         /* result = hemp_send(container, ktext->string, context); */
 
         result = hemp_hash_fetch_keylen(
-            hemp_type(container)->methods,
+            hemp_vtype(container)->methods,
             ktext->string,
             ktext->length
         );

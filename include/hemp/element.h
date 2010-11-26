@@ -181,13 +181,13 @@ hemp_list
     (elem->args.block.exprs = hemp_list_val(li))
 
 #define hemp_set_expr_element(elem, ex)                         \
-    (hemp_set_expr( elem, hemp_obj_val((hemp_object_p) ex) ))
+    (hemp_set_expr( elem, hemp_obj_val((hemp_object) ex) ))
 
 #define hemp_set_lhs_element(elem, ex)                          \
-    (hemp_set_lhs( elem, hemp_obj_val((hemp_object_p) ex) ))
+    (hemp_set_lhs( elem, hemp_obj_val((hemp_object) ex) ))
 
 #define hemp_set_rhs_element(elem, ex)                          \
-    (hemp_set_rhs( elem, hemp_obj_val((hemp_object_p) ex) ))
+    (hemp_set_rhs( elem, hemp_obj_val((hemp_object) ex) ))
 
 #define hemp_parse_prefix(ep, sc, pr, fr)                       \
     ((*ep)->type->parse_prefix                                  \

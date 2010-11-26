@@ -106,7 +106,7 @@ static struct hemp_symbols hemp_symbols_hemp_assign[] = {
 HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
     hemp_debug_call("hemp_language_hemp_init(%p, %s)\n", hemp, name);
 
-    hemp_language_p language = hemp_language_init(
+    hemp_language language = hemp_language_new(
         hemp, name, HEMP_LANGUAGE_VERSION
     );
 

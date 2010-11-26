@@ -19,7 +19,7 @@ struct hemp_grammar {
     hemp_string         name;
     hemp_hash           symbols;
     hemp_hash           keywords;
-    hemp_ptree_p        operators;
+    hemp_ptree        operators;
 };
 
 

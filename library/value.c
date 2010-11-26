@@ -75,7 +75,7 @@ hemp_hash_val(hemp_hash t) {
 
 
 HEMP_INLINE hemp_value
-hemp_obj_val(hemp_object_p t) {
+hemp_obj_val(hemp_object t) {
     hemp_value v;
     v.bits = HEMP_OBJECT_TAG | ((hemp_u64) t & HEMP_POINTER_MASK);
     return v;
@@ -100,13 +100,13 @@ hemp_bool_val(hemp_bool b) {
 
 HEMP_INLINE hemp_value
 hemp_elem_val(hemp_element e) {
-    return hemp_obj_val((hemp_object_p) e);
+    return hemp_obj_val((hemp_object) e);
 }
 
 
 HEMP_INLINE hemp_value
 hemp_type_val(
-    hemp_type_p type, 
+    hemp_type type, 
     hemp_memory  ptr
 ) {
     hemp_value v;
@@ -163,9 +163,9 @@ hemp_val_hash(hemp_value v) {
 }
 
 
-HEMP_INLINE hemp_object_p
+HEMP_INLINE hemp_object
 hemp_val_obj(hemp_value v) {
-    return (hemp_object_p) HEMP_POINTER(v);
+    return (hemp_object) HEMP_POINTER(v);
 }
 
 HEMP_INLINE hemp_element
@@ -201,7 +201,7 @@ HEMP_VALUE_FUNC(hemp_value_self) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_valuerue) {
+HEMP_VALUE_FUNC(hemp_value_true) {
     return HempTrue;
 }
 
@@ -226,7 +226,7 @@ HEMP_FETCH_FUNC(hemp_value_dot) {
     hemp_value result = HempMissing;
 
     /* call the value's fetch method, if it has one */
-    hemp_type_p type = hemp_type(container);
+    hemp_type type = hemp_vtype(container);
 
     if (type->fetch && type->fetch != &hemp_value_not_fetch) {
         result = type->fetch(container, context, key);

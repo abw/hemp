@@ -56,7 +56,7 @@ hemp_bool
 
 //hemp_tag
 //    hemp_scan_tag_start(
-//        hemp_pnode_p, 
+//        hemp_pnode, 
 //        hemp_string *
 //    );
 

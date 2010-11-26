@@ -4,13 +4,13 @@
 
 
 HEMP_TYPE_FUNC(hemp_type_string) {
-    hemp_type_p type = hemp_type_subtype(HempValue, id, name);
+    hemp_type type = hemp_type_subtype(HempValue, id, name);
     type->text       = &hemp_type_string_text;     /* string -> text       */
     type->number     = &hemp_type_string_number;   /* string -> number     */
     type->integer    = &hemp_type_string_integer;  /* string -> integer    */
     type->boolean    = &hemp_type_string_boolean;  /* string -> boolean    */
     type->compare    = &hemp_value_not_compare;     /* cannot compare       */
-    type->defined    = &hemp_valuerue;            /* always defined       */
+    type->defined    = &hemp_value_true;            /* always defined       */
 
     hemp_type_extend(type, "length", &hemp_method_string_length);
 

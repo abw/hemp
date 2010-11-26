@@ -95,7 +95,7 @@ void hash_store() {
 
 
 void tree_store() {
-    hemp_ptree_t tree = hemp_ptree_init(32);
+    hemp_ptree_t tree = hemp_ptree_new(32);
     test_store(tree, &hemp_ptree_store, ITERATIONS);
     hemp_ptree_free(tree);
 }
@@ -155,7 +155,7 @@ void hash_fetch() {
 
 
 void tree_fetch() {
-    hemp_ptree_t tree = hemp_ptree_init(32);
+    hemp_ptree_t tree = hemp_ptree_new(32);
     test_fetch_prep(tree, &hemp_ptree_store, 20);
     test_fetch(tree, &hemp_ptree_fetch, ITERATIONS);
     hemp_ptree_free(tree);

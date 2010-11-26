@@ -39,7 +39,7 @@ hemp_init() {
     HEMP_LANGUAGE("tt3",  &hemp_language_tt3_init);
     HEMP_LANGUAGE("test", &hemp_language_test);
 
-    hemp_language_p language = hemp_language(hemp, "hemp");
+    hemp_language language = hemp_language_instance(hemp, "hemp");
 //  debug_magenta("LANGUAGE: %s v%0.2f\n", language->name, language->version);
 
     HEMP_VIEWER("text", &hemp_viewer_text_init);
@@ -194,7 +194,7 @@ hemp_free_language(
     hemp_pos  position,
     hemp_slot item
 ) {
-    hemp_language_free( (hemp_language_p) hemp_val_ptr(item->value) );
+    hemp_language_free( (hemp_language) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
@@ -241,7 +241,7 @@ hemp_free_viewer(
     hemp_pos  position,
     hemp_slot item
 ) {
-    hemp_viewer_free( (hemp_viewer_p) hemp_val_ptr(item->value) );
+    hemp_viewer_free( (hemp_viewer) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 

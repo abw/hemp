@@ -1,10 +1,10 @@
 #include <hemp/test.h>
 
 void test_tree();
-void tree_get(hemp_ptree_p, char *);
-void tree_set(hemp_ptree_p tree, char *key, char *value);
-void tree_has(hemp_ptree_p tree, char *key, char *expect);
-void tree_hasnt(hemp_ptree_p tree, char *key);
+void tree_get(hemp_ptree, char *);
+void tree_set(hemp_ptree tree, char *key, char *value);
+void tree_has(hemp_ptree tree, char *key, char *expect);
+void tree_hasnt(hemp_ptree tree, char *key);
 
 
 int main(
@@ -16,7 +16,7 @@ int main(
 }
 
 void test_tree() {
-    hemp_ptree_p tree = hemp_ptree_init(32);
+    hemp_ptree tree = hemp_ptree_new(32);
 
     tree_set(tree, "msg", "hello world");
     tree_has(tree, "msg", "hello world");
@@ -86,7 +86,7 @@ void test_tree() {
 
 void 
 tree_has(
-    hemp_ptree_p tree, char *key, char *expect
+    hemp_ptree tree, char *key, char *expect
 ) {
     hemp_memory value = hemp_ptree_fetch(tree, key);
     ok( 
@@ -98,7 +98,7 @@ tree_has(
 
 void 
 tree_hasnt(
-    hemp_ptree_p tree, char *key
+    hemp_ptree tree, char *key
 ) {
     hemp_memory value = hemp_ptree_fetch(tree, key);
     ok( ! value, "no entry for %s", key);
@@ -107,7 +107,7 @@ tree_hasnt(
 
 void 
 tree_set(
-    hemp_ptree_p tree, char *key, char *value
+    hemp_ptree tree, char *key, char *value
 ) {
     ok(
         hemp_ptree_store(tree, key, value),

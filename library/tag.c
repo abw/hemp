@@ -4,7 +4,7 @@
 hemp_tag
 hemp_tag_init(
     hemp_string       name,
-    hemp_tag_style_t style,
+    hemp_tag_style style,
     hemp_string       start,
     hemp_string       end,
     hemp_tag_scan_f  scan,

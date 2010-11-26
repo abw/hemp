@@ -107,8 +107,8 @@ void hemp_register_elements(hemp_hemp, hemp_symbols);
         hemp                                                                \
     )
 
-#define hemp_language(hemp,name) ({                                         \
-    hemp_language_p _lang = (hemp_language_p) hemp_factory_instance(        \
+#define hemp_language_instance(hemp,name) ({                                \
+    hemp_language _lang = (hemp_language) hemp_factory_instance(            \
         hemp->languages, name                                               \
     );                                                                      \
     if (! _lang) hemp_throw(hemp, HEMP_ERROR_INVALID, "language", name);    \
@@ -187,7 +187,7 @@ void hemp_register_elements(hemp_hemp, hemp_symbols);
     )
 
 #define hemp_viewer_instance(hemp,name) ({                                  \
-        hemp_viewer_p _viewer = (hemp_viewer_p) hemp_factory_instance(      \
+        hemp_viewer _viewer = (hemp_viewer) hemp_factory_instance(          \
             hemp->viewers, name                                             \
         );                                                                  \
         if (! _viewer) hemp_throw(hemp, HEMP_ERROR_INVALID, "viewer", name);\

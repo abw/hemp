@@ -1,17 +1,13 @@
 #include <hemp/language.h>
 
-hemp_language_p
-hemp_language_init(
-    hemp_hemp     hemp,
+hemp_language
+hemp_language_new(
+    hemp_hemp   hemp,
     hemp_string name,
-    hemp_num version
+    hemp_num    version
 ) {
-    hemp_language_p language = (hemp_language_p) hemp_mem_alloc(
-        sizeof(struct hemp_language_s)
-    );
-
-    if (! language)
-        hemp_mem_fail("language");
+    hemp_language language;
+    HEMP_ALLOCATE(language);
 
     language->hemp    = hemp;
     language->name    = hemp_string_clone(name, "language name");
@@ -23,7 +19,7 @@ hemp_language_init(
 
 void
 hemp_language_free(
-    hemp_language_p language
+    hemp_language language
 ) {
     hemp_mem_free(language->name);
     hemp_mem_free(language);

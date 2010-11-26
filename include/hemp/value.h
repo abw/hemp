@@ -126,7 +126,7 @@ extern const hemp_value HempAfter;
 #define HEMP_LIST_ID            0x05        /* hemp_list pointer          */
 #define HEMP_HASH_ID            0x06        /* hemp_hash pointer          */
 #define HEMP_CODE_ID            0x07        /* hemp_code pointer          */
-#define HEMP_OBJECT_ID          0x0F        /* hemp_object_p pointer        */
+#define HEMP_OBJECT_ID          0x0F        /* hemp_object pointer        */
 #define HEMP_IDENTITY_ID        0x10        /* identity values (NaN + n)    */
 
 /* out-of-band values used to mark unused/reserved type slots */
@@ -259,22 +259,22 @@ extern const hemp_value HempAfter;
  * pobtype: pointer to object type (ditto)
  */
 #define hemp_hgtype(v)          (hemp_global_types[HEMP_TYPE_ID(v)])
-#define hemp_obtype(v)          (((hemp_object_p) HEMP_POINTER(v))->type)
+#define hemp_obtype(v)          (((hemp_object) HEMP_POINTER(v))->type)
 #define hemp_pobtype(p)         (p->type)
-#define hemp_type(v)            (hemp_is_object(v) ? hemp_obtype(v) : hemp_hgtype(v))
+#define hemp_vtype(v)            (hemp_is_object(v) ? hemp_obtype(v) : hemp_hgtype(v))
 #define hemp_obcall(v,n,...)    (hemp_obtype(v)->n(v,__VA_ARGS__))
 #define hemp_pobcall(v,n,...)   (hemp_pobtype(v)->n(v,__VA_ARGS__))
-#define hemp_tfunc(v,n)         (hemp_type(v)->n)
+#define hemp_tfunc(v,n)         (hemp_vtype(v)->n)
 #define hemp_call(v,n,...)      (hemp_tfunc(v,n)(v,__VA_ARGS__))
 #define hemp_dot(v,c,k)         (hemp_tfunc(v,dot)(v,c,k))
 #define hemp_vtext(v,c,o)        (hemp_tfunc(v,text)(v,c,o))
 #define hemp_values(v,c,o)      (hemp_tfunc(v,values)(v,c,o))
 #define hemp_fetch(v,c,k)       (hemp_tfunc(v,fetch)(v,c,k))
 #define hemp_store(v,c,k,i)     (hemp_tfunc(v,store)(v,c,k,i))
-#define hemp_type_name(v)       (hemp_type(v)->name)
+#define hemp_type_name(v)       (hemp_vtype(v)->name)
 #define hemp_type_method(t,m)   ((hemp_value_f) hemp_hash_fetch_pointer(t->methods, m))
 #define hemp_type_extend(t,m,f) hemp_hash_store_pointer(t->methods, m, f)
-#define hemp_object_method(o,m) hemp_type_method(hemp_type(o), m)
+#define hemp_object_method(o,m) hemp_type_method(hemp_vtype(o), m)
 #define hemp_send(o,m,c) ({                             \
     hemp_value_f method = hemp_object_method(o, m);     \
     method                                              \
@@ -284,7 +284,7 @@ extern const hemp_value HempAfter;
 
 
 //#define hemp_ident_name(v)      (hemp_identity_name(HEMP_IDENT_ID(v)))
-//#define hemp_type_class(v)      (hemp_type(v).name)
+//#define hemp_type_class(v)      (hemp_vtype(v).name)
 
 #define hemp_to_number(v,c)     (hemp_is_number(v)  ? v : hemp_call(v,number,c))
 #define hemp_to_integer(v,c)    (hemp_is_integer(v) ? v : hemp_call(v,integer,c))
@@ -319,10 +319,10 @@ extern HEMP_INLINE hemp_value     hemp_text_val(hemp_text t);
 extern HEMP_INLINE hemp_value     hemp_list_val(hemp_list l);
 extern HEMP_INLINE hemp_value     hemp_hash_val(hemp_hash l);
 extern HEMP_INLINE hemp_value     hemp_code_val(hemp_code c);
-extern HEMP_INLINE hemp_value     hemp_obj_val(hemp_object_p o);
+extern HEMP_INLINE hemp_value     hemp_obj_val(hemp_object o);
 extern HEMP_INLINE hemp_value     hemp_bool_val(hemp_bool b);
 extern HEMP_INLINE hemp_value     hemp_ident_val(hemp_u8 i);
-extern HEMP_INLINE hemp_value     hemp_type_val(hemp_type_p t, hemp_memory p);
+extern HEMP_INLINE hemp_value     hemp_type_val(hemp_type t, hemp_memory p);
 extern HEMP_INLINE hemp_value     hemp_elem_val(hemp_element e);
 
 
@@ -338,7 +338,7 @@ extern HEMP_INLINE hemp_text      hemp_val_text(hemp_value v);
 extern HEMP_INLINE hemp_list      hemp_val_list(hemp_value v);
 extern HEMP_INLINE hemp_hash      hemp_val_hash(hemp_value v);
 extern HEMP_INLINE hemp_code      hemp_val_code(hemp_value v);
-extern HEMP_INLINE hemp_object_p    hemp_val_obj(hemp_value v);
+extern HEMP_INLINE hemp_object    hemp_val_obj(hemp_value v);
 extern HEMP_INLINE hemp_bool      hemp_val_bool(hemp_value v);
 extern HEMP_INLINE hemp_element   hemp_val_elem(hemp_value v);
 
@@ -353,7 +353,7 @@ HEMP_DO_INLINE hemp_string hemp_identity_name(hemp_value value);
 /* generic value evalaution */
 HEMP_VALUE_FUNC(hemp_value_no_op);
 HEMP_VALUE_FUNC(hemp_value_self);
-HEMP_VALUE_FUNC(hemp_valuerue);
+HEMP_VALUE_FUNC(hemp_value_true);
 HEMP_VALUE_FUNC(hemp_value_false);
 HEMP_FETCH_FUNC(hemp_value_dot);
 

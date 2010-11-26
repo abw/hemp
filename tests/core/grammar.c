@@ -22,15 +22,15 @@ void test_grammar() {
     hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object" );
     
-    hemp_language_p language = hemp_language(hemp, HEMP_TT3);
+    hemp_language language = hemp_language_instance(hemp, HEMP_TT3);
     hemp_grammar grammar;
 
     /* calling this multiple times has no effect */
-    hemp_language(hemp, HEMP_TT3);
-    hemp_language(hemp, HEMP_TT3);
-    hemp_language(hemp, HEMP_TT3);
-    hemp_language(hemp, HEMP_TT3);
-    hemp_language(hemp, HEMP_TT3);
+    hemp_language_instance(hemp, HEMP_TT3);
+    hemp_language_instance(hemp, HEMP_TT3);
+    hemp_language_instance(hemp, HEMP_TT3);
+    hemp_language_instance(hemp, HEMP_TT3);
+    hemp_language_instance(hemp, HEMP_TT3);
 
     HEMP_TRY;
         hemp_grammar grammar = hemp_grammar(hemp, "tt3.core");
@@ -102,7 +102,7 @@ void test_hemp_grammar() {
     hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object at %p", hemp );
 
-//    hemp_language(hemp, HEMP_TT3);
+//    hemp_language_instance(hemp, HEMP_TT3);
     hemp_register_grammar(
         hemp, "test", (hemp_actor) &hemp_grammar_test
     );

@@ -17,7 +17,7 @@ hemp_symbol_new(
     HEMP_ALLOCATE(symbol);
 
     symbol->name            = name;    // should be const?
-    symbol->namespace       = hemp_namespace(name);
+    symbol->namespace       = hemp_namespace_instance(name);
     symbol->flags           = 0;
     symbol->lprec           = 0;
     symbol->rprec           = 0;

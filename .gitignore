@@ -20,6 +20,9 @@ tests/scanner
 tests/tests
 tests/tt3
 
+tests/core/Makefile.one
+tests/core/Makefile.all
+
 tests/core/action
 tests/core/context
 tests/core/dialect

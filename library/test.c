@@ -405,7 +405,7 @@ hemp_test_expect_text(
     hemp_size     n;
 
     HEMP_TRY;
-        hemp_language(hemp, language);
+        hemp_language_instance(hemp, language);
     HEMP_CATCH_ALL;
         hemp_fatal("Failed to load hemp language '%s': %s", language, hemp->error->message);
     HEMP_END;

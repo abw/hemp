@@ -20,7 +20,7 @@ void test_template() {
     hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object" );
 
-    hemp_language(hemp, "tt3");
+    hemp_language_instance(hemp, "tt3");
 
     hemp_template tmpl = hemp_template_instance(
         hemp, HEMP_TT3, HEMP_TEXT, "Hello World!"

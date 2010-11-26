@@ -17,7 +17,7 @@ void test_viewer() {
     hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object" );
 
-    hemp_language(hemp, "tt3");
+    hemp_language_instance(hemp, "tt3");
 
     hemp_template tmpl = hemp_template_instance(
         hemp, HEMP_TT3, HEMP_TEXT, "Hello [% name %]!"
@@ -28,7 +28,7 @@ void test_viewer() {
     ok( context, "created hemp context" );
     ok( hemp_context_set_string(context, "name", "World"), "set name" );
 
-    hemp_viewer_p text = hemp_viewer_instance(hemp, "text");
+    hemp_viewer text = hemp_viewer_instance(hemp, "text");
     ok( text, "created text view" );
     is( text->name, "text", "name is set: text" );
 

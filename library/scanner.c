@@ -42,18 +42,18 @@ hemp_bool
 hemp_scan_text(
     hemp_template tmpl
 ) {
-    hemp_elements elements = tmpl->elements;
-    hemp_tagset_p   tagset   = tmpl->tagset;
-    hemp_pnode_p    *inhead  = tagset->inline_tags->head,
-                    *outhead = tagset->outline_tags->head,
+    hemp_elements   elements = tmpl->elements;
+    hemp_tagset     tagset   = tmpl->tagset;
+    hemp_pnode     *inroots  = tagset->inline_tags->roots,
+                   *outroots = tagset->outline_tags->roots,
                     pnode;
-    hemp_string      text     = hemp_source_read(tmpl->source),
+    hemp_string     text     = hemp_source_read(tmpl->source),
                     src      = text,
                     from     = text,
                     cmptr, tagstr;
-    hemp_pos      pos      = 0,
+    hemp_pos        pos      = 0,
                     line     = 0;
-    hemp_tag      tag;
+    hemp_tag        tag;
 
 #if HEMP_DEBUG & HEMP_DEBUG_SCAN
     hemp_debug_magenta("-- source ---\n%s\n-------------\n", text);
@@ -64,7 +64,8 @@ hemp_scan_text(
         line++;
         hemp_debug_scan("\n%d (%02d) : ", line, src - text);
 
-        if ((pnode = outhead[(hemp_char) *src % HEMP_PTREE_SIZE])) {
+        //if ((pnode = outroots[(hemp_char) *src % HEMP_PTREE_SIZE])) {
+        if ((pnode = hemp_ptree_root(tagset->outline_tags, src))) {
             tagstr = src;
             
             if ((tag = (hemp_tag) hemp_pnode_match_more(pnode, &src))) {
@@ -95,7 +96,8 @@ hemp_scan_text(
                     src++;
                 break;
             }
-            else if ((pnode = inhead[(hemp_char) *src % HEMP_PTREE_SIZE])) {
+//          else if ((pnode = inroots[(hemp_char) *src % HEMP_PTREE_SIZE])) {
+            else if ((pnode = hemp_ptree_root(tagset->inline_tags, src))) {
                 tagstr = src;
 
                 if ((tag = (hemp_tag) hemp_pnode_match_more(pnode, &src))) {

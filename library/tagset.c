@@ -1,19 +1,15 @@
 #include <hemp/tagset.h>
 
 
-hemp_tagset_p
-hemp_tagset_init() {
-    hemp_tagset_p tagset = (hemp_tagset_p) hemp_mem_alloc(
-        sizeof(struct hemp_tagset_s)
-    );
-
-    if (! tagset)
-        hemp_mem_fail("tagset");
+hemp_tagset
+hemp_tagset_new() {
+    hemp_tagset tagset;
+    HEMP_ALLOCATE(tagset);
 
     tagset->text_symbol  = HempSymbolText;
     tagset->tags         = hemp_hash_init();
-    tagset->inline_tags  = hemp_ptree_init(HEMP_TAGSET_SIZE);
-    tagset->outline_tags = hemp_ptree_init(HEMP_TAGSET_SIZE);
+    tagset->inline_tags  = hemp_ptree_new(HEMP_TAGSET_SIZE);
+    tagset->outline_tags = hemp_ptree_new(HEMP_TAGSET_SIZE);
 
     return tagset;
 }
@@ -21,7 +17,7 @@ hemp_tagset_init() {
 
 void
 hemp_tagset_free(
-    hemp_tagset_p tagset
+    hemp_tagset tagset
 ) {
     hemp_hash_each(tagset->tags, &hemp_tagset_free_tag);
     hemp_hash_free(tagset->tags);
@@ -31,12 +27,12 @@ hemp_tagset_free(
 }
 
 
-hemp_pnode_p
+hemp_pnode
 hemp_tagset_add_tag(
-    hemp_tagset_p   tagset, 
+    hemp_tagset   tagset, 
     hemp_tag      tag
 ) {
-    hemp_ptree_p ptree;
+    hemp_ptree ptree;
 
     if (hemp_hash_fetch_pointer(tagset->tags, tag->name))
         hemp_fatal("Duplicate tag in tagset: %s", tag->name);
@@ -60,15 +56,15 @@ hemp_tagset_add_tag(
 }
 
 
-hemp_pnode_p
+hemp_pnode
 hemp_tagset_new_tag(
-    hemp_tagset_p    tagset, 
-    hemp_string       name,
-    hemp_tag_style_t style,
-    hemp_string       start,
-    hemp_string       end,
-    hemp_tag_scan_f  scan,
-    hemp_grammar   grammar
+    hemp_tagset     tagset, 
+    hemp_string     name,
+    hemp_tag_style  style,
+    hemp_string     start,
+    hemp_string     end,
+    hemp_tag_scan_f scan,
+    hemp_grammar    grammar
 ) {
     return hemp_tagset_add_tag(
         tagset,
@@ -91,7 +87,7 @@ hemp_tagset_free_tag(
 
 void
 hemp_tagset_dump(
-    hemp_tagset_p tagset
+    hemp_tagset tagset
 ) {
     hemp_ptree_dump(tagset->inline_tags);
     hemp_ptree_dump(tagset->outline_tags);

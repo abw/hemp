@@ -19,7 +19,7 @@ void test_dialect() {
     hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object" );
 
-    hemp_language(hemp, "tt3");
+    hemp_language_instance(hemp, "tt3");
 
     hemp_dialect dialect = hemp_dialect_instance(hemp, "tt3");
     ok( dialect, "fetched %s dialect", dialect->name );

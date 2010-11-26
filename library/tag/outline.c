@@ -18,8 +18,7 @@ hemp_outline_tag_scanner(
     hemp_num      num_val;
     hemp_int      int_val;
     hemp_bool     is_int, is_word;
-    hemp_pnode_p    pnode;
-    hemp_pnode_p    *ophead  = tag->grammar->operators->head;
+    hemp_pnode    pnode;
     hemp_symbol   symbol;
 
     hemp_debug("hemp_scan_outline_tag()\n");
@@ -109,7 +108,7 @@ hemp_outline_tag_scanner(
             }
         }
         else if (
-            (pnode  = HEMP_IN_PTREE(ophead, src))
+            (pnode  = hemp_ptree_root(tag->grammar->operators, src))
         &&  (symbol = (hemp_symbol) hemp_pnode_match_more(pnode, &src))
         ) {
             hemp_debug_token("OPERATOR", from, src-from);

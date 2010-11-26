@@ -33,7 +33,7 @@ static struct hemp_symbols hemp_symbols_tt3_command[] = {
 HEMP_LANGUAGE_FUNC(hemp_language_tt3_init) {
     hemp_debug_call("hemp_language_tt3_init(%p, %s)\n", hemp, name);
 
-    hemp_language_p language = hemp_language_init(
+    hemp_language language = hemp_language_new(
         hemp, name, HEMP_TT3_LANGUAGE_VERSION
     );
     
@@ -79,7 +79,7 @@ hemp_dialect_tt3_prepare(
     hemp_debug_call("hemp_dialect_tt3_prepare(%p)\n", tmpl);
 
     hemp_hemp         hemp    = tmpl->dialect->hemp;
-    hemp_tagset_p  tagset  = tmpl->tagset;
+    hemp_tagset  tagset  = tmpl->tagset;
     hemp_grammar command = hemp_grammar(hemp, "tt3.command");
     hemp_grammar control = hemp_grammar(hemp, "tt3.control");
 

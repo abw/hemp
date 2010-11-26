@@ -13,7 +13,7 @@ hemp_grammar_new(
     grammar->hemp      = hemp;
     grammar->symbols   = hemp_hash_init();
 //  grammar->keywords  = hemp_hash_init();
-    grammar->operators = hemp_ptree_init(HEMP_OPERATORS_SIZE);
+    grammar->operators = hemp_ptree_new(HEMP_OPERATORS_SIZE);
     grammar->name      = hemp_string_clone(name, "grammar name");
 
     return grammar;

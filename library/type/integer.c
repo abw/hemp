@@ -3,13 +3,13 @@
 
 
 HEMP_TYPE_FUNC(hemp_type_integer) {
-    hemp_type_p type = hemp_type_subtype(HempValue, id, name);
+    hemp_type type = hemp_type_subtype(HempValue, id, name);
     type->text       = &hemp_type_integer_text;    /* integer to text      */
     type->number     = &hemp_type_integer_number;  /* integer to number    */
     type->integer    = &hemp_value_self;            /* no-op returns int    */
     type->boolean    = &hemp_type_integer_boolean; /* number -> boolean    */
     type->compare    = &hemp_type_integer_compare; /* number -> comparison */
-    type->defined    = &hemp_valuerue;            /* always defined       */
+    type->defined    = &hemp_value_true;            /* always defined       */
     return type;
 };
 

@@ -11,7 +11,7 @@ static struct hemp_symbols hemp_symbols_test[] = {
 HEMP_LANGUAGE_FUNC(hemp_language_test) {
     hemp_debug("hemp_language_test(%p, %s)\n", hemp, name);
 
-    hemp_language_p language = hemp_language_init(
+    hemp_language language = hemp_language_new(
         hemp, name, HEMP_TEST_VERSION
     );
     
@@ -50,7 +50,7 @@ hemp_dialect_test_prepare(
     hemp_debug("hemp_dialect_test_prepare(%p)\n", tmpl);
 
     hemp_hemp         hemp    = tmpl->dialect->hemp;
-    hemp_tagset_p  tagset  = tmpl->tagset;
+    hemp_tagset  tagset  = tmpl->tagset;
     hemp_grammar grammar = hemp_grammar(hemp, HEMP_TEST);
 
     hemp_tagset_add_tag(

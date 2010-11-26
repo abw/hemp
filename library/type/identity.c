@@ -3,7 +3,7 @@
 
 
 HEMP_TYPE_FUNC(hemp_type_identity) {
-    hemp_type_p type = hemp_type_subtype(HempValue, id, name);
+    hemp_type type = hemp_type_subtype(HempValue, id, name);
     type->text       = &hemp_type_identity_text;    /* identity -> text    */
     type->number     = &hemp_type_identity_number;  /* identity -> number  */
     type->integer    = &hemp_type_identity_integer; /* identity -> integer */

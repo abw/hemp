@@ -4,12 +4,12 @@
 
 
 HEMP_TYPE_FUNC(hemp_type_list) {
-    hemp_type_p type = hemp_type_subtype(HempValue, id, name);
+    hemp_type type = hemp_type_subtype(HempValue, id, name);
     type->fetch      = &hemp_type_list_fetch;
     type->store      = &hemp_type_list_store;
     type->text       = &hemp_type_list_text;       /* return/append text   */
-    type->boolean    = &hemp_valuerue;            /* list is always true   */  /* or list size? */
-    type->defined    = &hemp_valuerue;            /* and always defined   */
+    type->boolean    = &hemp_value_true;            /* list is always true   */  /* or list size? */
+    type->defined    = &hemp_value_true;            /* and always defined   */
 
     hemp_type_extend(type, "length", &hemp_method_list_length);
     hemp_type_extend(type, "text",   &hemp_method_list_text);

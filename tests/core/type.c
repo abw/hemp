@@ -56,11 +56,11 @@ void test_types() {
 }
 
 
-hemp_type_p type1_constructor(
+hemp_type type1_constructor(
     hemp_int id,
     hemp_string name
 ) {
-    return hemp_type_init(id, name);
+    return hemp_type_new(id, name);
 }
     
 
@@ -68,10 +68,10 @@ void test_type_registration() {
     hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp" );
 
-    hemp_type_p type1 = hemp_use_type("Type1", &type1_constructor);
+    hemp_type type1 = hemp_use_type("Type1", &type1_constructor);
     ok( type1, "created custom type 1" );
 
-    hemp_type_p type2 = hemp_use_type("Type1", &type1_constructor);
+    hemp_type type2 = hemp_use_type("Type1", &type1_constructor);
     ok( type2, "created custom type 2" );
     ok( type1 == type2, "both the same type" );
 

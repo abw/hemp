@@ -5,17 +5,13 @@
  * viewer initialisation and cleanup functions 
  *-------------------------------------------------------------------------*/
 
-hemp_viewer_p
-hemp_viewer_init(
-    hemp_hemp      hemp,
-    hemp_string  name
+hemp_viewer
+hemp_viewer_new(
+    hemp_hemp   hemp,
+    hemp_string name
 ) {
-    hemp_viewer_p viewer = (hemp_viewer_p) hemp_mem_alloc(
-        sizeof(struct hemp_viewer_s)
-    );
-
-    if (! viewer)
-        hemp_mem_fail("viewer");
+    hemp_viewer viewer;
+    HEMP_ALLOCATE(viewer);
 
     viewer->hemp   = hemp;
     viewer->name   = hemp_string_clone(name, "viewer name");
@@ -29,7 +25,7 @@ hemp_viewer_init(
 
 void
 hemp_viewer_free(
-    hemp_viewer_p viewer
+    hemp_viewer viewer
 ) {
     if (viewer->view)
         hemp_mem_free(viewer->view);
@@ -41,7 +37,7 @@ hemp_viewer_free(
 
 void
 hemp_viewer_resize(
-    hemp_viewer_p viewer,
+    hemp_viewer viewer,
     hemp_u16    min_size
 ) {
     hemp_debug_call("hemp_viewer_resize(%s, %d)\n", viewer->name, min_size);
@@ -80,7 +76,7 @@ hemp_viewer_resize(
 
 hemp_bool
 hemp_viewer_add_view(
-    hemp_viewer_p viewer,
+    hemp_viewer viewer,
     hemp_string    name,
     hemp_view_f   view
 ) {
@@ -105,7 +101,7 @@ hemp_viewer_add_view(
 
 HEMP_VIEW_FUNC(hemp_viewer_element) {
     hemp_debug("hemp_viewer_element(%s, %s)\n", viewer->name, element->type->name);
-    hemp_namespace_p namespace = element->type->namespace;
+    hemp_namespace namespace = element->type->namespace;
     hemp_view_f view;
     
     while (namespace) {

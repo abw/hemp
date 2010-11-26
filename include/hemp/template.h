@@ -14,7 +14,7 @@
 struct hemp_template {
     hemp_dialect    dialect;
     hemp_source     source;
-    hemp_tagset_p   tagset;
+    hemp_tagset   tagset;
     hemp_scope      scope;
     hemp_elements   elements;
     hemp_element    tree;

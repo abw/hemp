@@ -27,17 +27,13 @@ void hemp_global_namespace_free(
 }
 
     
-hemp_namespace_p
+hemp_namespace
 hemp_namespace_init(
-    hemp_u16  id,
-    hemp_string  name
+    hemp_u16    id,
+    hemp_string name
 ) {
-    hemp_namespace_p namespace = (hemp_namespace_p) hemp_mem_alloc(
-        sizeof(struct hemp_namespace_s)
-    );
-
-    if (! namespace)
-        hemp_mem_fail("namespace");
+    hemp_namespace namespace;
+    HEMP_ALLOCATE(namespace);
 
     namespace->id       = id;
     namespace->name     = hemp_string_clone(name, "namespace name");
@@ -48,15 +44,15 @@ hemp_namespace_init(
 }
 
 
-hemp_namespace_p
-hemp_namespace_instance(
-    hemp_hash      hash,
-    hemp_string       name,
-    hemp_namespace_p parent
+hemp_namespace
+hemp_namespace_subspace(
+    hemp_hash       hash,
+    hemp_string     name,
+    hemp_namespace  parent
 ) {
-    hemp_namespace_p    child;
-    hemp_value        value;
-    hemp_u16          id;
+    hemp_namespace  child;
+    hemp_value      value;
+    hemp_u16        id;
 
     value = hemp_hash_fetch(hash, name);
 
@@ -73,20 +69,20 @@ hemp_namespace_instance(
         );
     }
     else {
-        child = (hemp_namespace_p) hemp_val_ptr(value);
+        child = (hemp_namespace) hemp_val_ptr(value);
     }
 
     return child;
 }
 
 
-hemp_namespace_p
+hemp_namespace
 hemp_resolve_namespace(
     hemp_string       fullname
 ) {
     hemp_list      names = hemp_string_split(fullname, HEMP_STR_DOT);
-    hemp_string       name  = hemp_val_str( hemp_list_item(names, 0) );
-    hemp_namespace_p space = hemp_namespace_root(name);
+    hemp_string    name  = hemp_val_str( hemp_list_item(names, 0) );
+    hemp_namespace space = hemp_namespace_root(name);
     hemp_size      n;
     
     for (n = 1; n < names->length; n++) {
@@ -102,7 +98,7 @@ hemp_resolve_namespace(
 
 void
 hemp_namespace_free(
-    hemp_namespace_p namespace
+    hemp_namespace namespace
 ) {
     hemp_mem_free(namespace->name);
     hemp_hash_each(namespace->children, &hemp_namespace_free_child);
@@ -117,6 +113,6 @@ hemp_namespace_free_child(
     hemp_pos      position,
     hemp_slot     item
 ) {
-    hemp_namespace_free( (hemp_namespace_p) hemp_val_ptr(item->value) );
+    hemp_namespace_free( (hemp_namespace) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }

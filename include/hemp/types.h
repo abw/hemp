@@ -51,9 +51,14 @@ typedef struct hemp_global      * hemp_global;
 typedef struct hemp_grammar     * hemp_grammar;
 typedef struct hemp_hash        * hemp_hash;
 typedef struct hemp_jump        * hemp_jump;
+typedef struct hemp_language    * hemp_language;
 typedef struct hemp_list        * hemp_list;
+typedef struct hemp_namespace   * hemp_namespace;
+typedef struct hemp_object      * hemp_object;
 typedef struct hemp_params      * hemp_params;
+typedef struct hemp_pnode       * hemp_pnode;
 typedef struct hemp_pool        * hemp_pool;
+typedef struct hemp_ptree       * hemp_ptree;
 typedef struct hemp_scan_pos    * hemp_scan_pos;
 typedef struct hemp_scheme      * hemp_scheme;
 typedef struct hemp_scope       * hemp_scope;
@@ -64,22 +69,16 @@ typedef struct hemp_symbol      * hemp_symbol;
 typedef struct hemp_symbols     * hemp_symbols;
 typedef struct hemp_template    * hemp_template;
 typedef struct hemp_tag         * hemp_tag;
+typedef struct hemp_tagset      * hemp_tagset;
 typedef struct hemp_text        * hemp_text;
+typedef struct hemp_type        * hemp_type;
+typedef struct hemp_viewer      * hemp_viewer;
 
 
 
 /* in the process of refactoring this lot */
-typedef struct hemp_etype_s     * hemp_etype_p;
 typedef struct hemp_filesystem_s *hemp_filesystem_p;
-typedef struct hemp_language_s  * hemp_language_p;
-typedef struct hemp_namespace_s * hemp_namespace_p;
-typedef struct hemp_object_s    * hemp_object_p;
-typedef struct hemp_pnode_s     * hemp_pnode_p;
-typedef struct hemp_ptree_s     * hemp_ptree_p;
-typedef struct hemp_tagset_s    * hemp_tagset_p;
-typedef struct hemp_type_s      * hemp_type_p;
-typedef struct hemp_variable_s  * hemp_variable_p;
-typedef struct hemp_viewer_s    * hemp_viewer_p;
+//typedef struct hemp_variable_s  * hemp_variable_p;
 
 
 
@@ -280,7 +279,7 @@ typedef void
 
 typedef hemp_value 
     (* hemp_view_f)(
-        hemp_viewer_p   view,       /* pointer to viewer                    */
+        hemp_viewer   view,       /* pointer to viewer                    */
         hemp_element  element,    /* pointer to element                   */
         hemp_context  context,    /* runtime context                      */
         hemp_value    output      /* optional output buffer               */
@@ -314,7 +313,7 @@ typedef hemp_value
         hemp_value    rhs         /* expression on right hand side        */
     );
 
-typedef hemp_type_p 
+typedef hemp_type 
     (* hemp_type_f)(
         hemp_int      id,         /* numerical id                         */
         hemp_string      name        /* unique type name                     */
@@ -322,7 +321,7 @@ typedef hemp_type_p
 
 typedef hemp_memory 
     (* hemp_method_f)(
-        hemp_type_p     type,       /* pointer to type                      */
+        hemp_type     type,       /* pointer to type                      */
         hemp_string      name        /* method name                          */
     );
 

@@ -21,7 +21,7 @@ void test1_scan(
 
 void test_tagset() {
     hemp_tag    inline_tag, outline_tag;
-    hemp_tagset_p tagset;
+    hemp_tagset tagset;
 
     inline_tag = hemp_tag_init(
         "inline", 
@@ -39,7 +39,7 @@ void test_tagset() {
     );
     ok( outline_tag, "created outline tag object" );
 
-    tagset = hemp_tagset_init();
+    tagset = hemp_tagset_new();
     ok( tagset, "created tagset object" );
 
     ok( hemp_tagset_add_tag(tagset, inline_tag),  "added inline tag" );

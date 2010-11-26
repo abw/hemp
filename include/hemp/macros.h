@@ -67,7 +67,7 @@
     );
 
 #define HEMP_LANGUAGE_FUNC(f)               \
-    hemp_language_p f(                      \
+    hemp_language f(                      \
         hemp_hemp   hemp,                   \
         hemp_string name                    \
     )
@@ -418,7 +418,7 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
  *--------------------------------------------------------------------------*/
 
 #define HEMP_VIEW_ARGS                      \
-    hemp_viewer_p   viewer,                 \
+    hemp_viewer   viewer,                 \
     hemp_element  element,                  \
     hemp_context  context,                  \
     hemp_value    output
@@ -432,7 +432,7 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
     )
 
 #define HEMP_VIEWER_FUNC(f)                 \
-    hemp_viewer_p f(                        \
+    hemp_viewer f(                        \
         hemp_hemp   hemp,                   \
         hemp_string name                    \
     )
@@ -555,7 +555,7 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
  *--------------------------------------------------------------------------*/
 
 #define HEMP_TYPE_FUNC(f)                   \
-    hemp_type_p f(                          \
+    hemp_type f(                          \
         hemp_int    id,                     \
         hemp_string name                    \
     )
