@@ -1,17 +1,13 @@
 #include <hemp/filesystem.h>
 
 
-hemp_filesystem_p
-hemp_filesystem_init(
-    hemp_hemp     hemp,
+hemp_filesystem
+hemp_filesystem_new(
+    hemp_hemp   hemp,
     hemp_string path
 ) {
-    hemp_filesystem_p filesystem = (hemp_filesystem_p) hemp_mem_alloc( 
-        sizeof(struct hemp_filesystem_s)
-    );
-
-    if (! filesystem)
-        hemp_mem_fail("filesystem");
+    hemp_filesystem filesystem; 
+    HEMP_ALLOCATE(filesystem);
 
     filesystem->hemp = hemp;
     filesystem->path = NULL;
@@ -25,7 +21,7 @@ hemp_filesystem_init(
 
 void
 hemp_filesystem_free(
-    hemp_filesystem_p filesystem
+    hemp_filesystem filesystem
 ) {
     hemp_filesystem_clear_path(filesystem);
     hemp_mem_free(filesystem);
@@ -48,8 +44,8 @@ hemp_filesystem_free(
 
 void
 hemp_filesystem_set_path(
-    hemp_filesystem_p filesystem,
-    hemp_string        path
+    hemp_filesystem filesystem,
+    hemp_string     path
 ) {
     hemp_filesystem_clear_path(filesystem);             // TODO: free strings
     hemp_debug_file("setting filesystem path to %s\n", path);
@@ -60,7 +56,7 @@ hemp_filesystem_set_path(
 
 hemp_string
 hemp_filesystem_cwd(
-    hemp_filesystem_p filesystem
+    hemp_filesystem filesystem
 ) {
     // HMM... not sure about this - see comments on cwd in 
     // Badger::Filesystem::Virtual... it doesn't really make sense in the 
@@ -116,8 +112,8 @@ hemp_filesystem_join_path(
 
 hemp_string
 hemp_filesystem_absolute_path(
-    hemp_filesystem_p filesystem,
-    hemp_string        path
+    hemp_filesystem filesystem,
+    hemp_string     path
 ) {
     return hemp_filesystem_is_path_absolute(filesystem, path)
         ? path                              // bugger!  can't do this - don't know what we can free
@@ -130,8 +126,8 @@ hemp_filesystem_absolute_path(
 
 hemp_string
 hemp_filesystem_readable_path(
-    hemp_filesystem_p filesystem,
-    hemp_string        path
+    hemp_filesystem filesystem,
+    hemp_string     path
 ) {
     int n;
     hemp_string root, full;

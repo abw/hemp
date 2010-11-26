@@ -46,6 +46,7 @@ typedef struct hemp_element     * hemp_element;
 typedef struct hemp_elements    * hemp_elements;
 typedef struct hemp_error       * hemp_error;
 typedef struct hemp_factory     * hemp_factory;
+typedef struct hemp_filesystem  * hemp_filesystem;
 typedef struct hemp_frame       * hemp_frame;
 typedef struct hemp_global      * hemp_global;
 typedef struct hemp_grammar     * hemp_grammar;
@@ -73,12 +74,6 @@ typedef struct hemp_tagset      * hemp_tagset;
 typedef struct hemp_text        * hemp_text;
 typedef struct hemp_type        * hemp_type;
 typedef struct hemp_viewer      * hemp_viewer;
-
-
-
-/* in the process of refactoring this lot */
-typedef struct hemp_filesystem_s *hemp_filesystem_p;
-//typedef struct hemp_variable_s  * hemp_variable_p;
 
 
 

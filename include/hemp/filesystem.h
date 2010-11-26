@@ -18,9 +18,9 @@
  * data structures
  *--------------------------------------------------------------------------*/
 
-struct hemp_filesystem_s {
-    hemp_hemp      hemp;
-    hemp_list path;
+struct hemp_filesystem {
+    hemp_hemp           hemp;
+    hemp_list           path;
 }; 
 
 
@@ -28,41 +28,39 @@ struct hemp_filesystem_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_filesystem_p
-    hemp_filesystem_init(
-        hemp_hemp      hemp,
-        hemp_string  path
+hemp_filesystem
+    hemp_filesystem_new(
+        hemp_hemp       hemp,
+        hemp_string     path
     );
 
 void
     hemp_filesystem_free(
-        hemp_filesystem_p filesystem
+        hemp_filesystem filesystem
     );
 
 void
     hemp_filesystem_set_path(
-        hemp_filesystem_p filesystem, 
-        hemp_string        path
+        hemp_filesystem filesystem, 
+        hemp_string     path
     );
 
 hemp_string
     hemp_filesystem_join_path(
-        hemp_string base,
-        hemp_string path
+        hemp_string     base,
+        hemp_string     path
     );
 
 
 hemp_string
     hemp_filesystem_readable_path(
-        hemp_filesystem_p   filesystem,
-        hemp_string          path
+        hemp_filesystem filesystem,
+        hemp_string     path
     );
     
-//hemp_string_t hemp_filesystem_read_file(hemp_filesystem_t filesystem, hemp_string_t path);
-
 hemp_string 
     hemp_filesystem_read_file(
-        hemp_string path
+        hemp_string     path
     );
 
 
