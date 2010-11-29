@@ -10,8 +10,26 @@
 
 
 
+HEMP_TAG(hemp_tag_inline) {
+//  hemp_debug_msg(
+//      "hemp_tag_inline(%p, %s, %s, %s, %s, %s)\n",
+//      hemp, type, name, start, end ? end : "", 
+//      grammar ? grammar->name : "no grammar"
+//  );
+
+    hemp_tag tag = hemp_tag_new(
+        type, name, start, end, grammar
+    );
+    tag->style  = HEMP_INLINE_TAG;
+    tag->scan   = &hemp_tag_inline_scan;
+    tag->to_eol = &hemp_tag_inline_to_eol;
+
+    return tag;
+}
+
+
 void 
-hemp_inline_tag_scanner(
+hemp_tag_inline_scan(
     hemp_template   tmpl,
     hemp_tag        tag,
     hemp_string     tagtok,
@@ -166,10 +184,10 @@ bareword:
 
 
 hemp_string
-hemp_inline_tag_to_end_of_line(
+hemp_tag_inline_to_eol(
     HEMP_TAG_SKIP_ARGS
 ) {
-    hemp_debug_call("hemp_inline_tag_to_end_of_line()\n");
+    hemp_debug_call("hemp_tag_inline_to_eol()\n");
     hemp_string  tag_end = tag->end;
     hemp_size tag_len = strlen(tag->end);
 

@@ -59,16 +59,17 @@ hemp_dialect_test_prepare(
     hemp_tagset  tagset  = tmpl->tagset;
     hemp_grammar grammar = hemp_grammar_instance(hemp, HEMP_TEST);
 
-    hemp_tagset_add_tag(
-        tagset, 
-        hemp_tag_init(
-            HEMP_TEST,
-            HEMP_OUTLINE_TAG,
-            "--", "NULL",
-            &hemp_outline_tag_scanner,
-            grammar
-        )
-    );
+// broke while reworking tags
+//    hemp_tagset_add_tag(
+//        tagset, 
+//        hemp_tag_init(
+//            HEMP_TEST,
+//            HEMP_OUTLINE_TAG,
+//            "--", "NULL",
+//            &hemp_outline_tag_scanner,
+//            grammar
+//        )
+//    );
 
     return tmpl;
 }
@@ -126,7 +127,7 @@ HEMP_SCAN_FUNC(hemp_element_test_test_scanner) {
      */
 
     /* walk to the end of line or end of tag */
-    src = tag->to_end_of_line(tag, src);
+    src = tag->to_eol(tag, src);
 
     hemp_debug_token("TEST", *srcptr, src - *srcptr);
 

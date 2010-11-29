@@ -2,6 +2,103 @@
 #define HEMP_MACROS_H
 
 
+/*--------------------------------------------------------------------------
+ * Macros for registering component constructors and instantiating components
+ *--------------------------------------------------------------------------*/
+
+#define hemp_register(hemp, type, name, constructor)                        \
+    hemp_factory_register(                                                  \
+        hemp->type,                                                         \
+        name,                                                               \
+        (hemp_actor) constructor,                                           \
+        hemp                                                                \
+    )
+
+#define hemp_constructor(hemp, type, name) ({                               \
+    hemp_action _cons = hemp_factory_constructor(                           \
+        hemp->type,                                                         \
+        name                                                                \
+    );                                                                      \
+    if (! _cons)                                                            \
+        hemp_throw(hemp, HEMP_ERROR_INVALID, #type, name);                  \
+    _cons;                                                                  \
+})
+
+#define hemp_construct(hemp, type, name, ...) ({                            \
+    hemp_action _cons = hemp_constructor(hemp, type, name);                 \
+    hemp_action_run(_cons, name, __VA_ARGS__);                              \
+})
+
+#define hemp_instance(hemp, type, name) ({                                  \
+    hemp_memory _item = hemp_factory_instance(                              \
+        hemp->type,                                                         \
+        name                                                                \
+    );                                                                      \
+    if (! _item)                                                            \
+        hemp_throw(hemp, HEMP_ERROR_INVALID, #type, name);                  \
+    _item;                                                                  \
+})    
+
+
+#define hemp_register_dialect(hemp, name, constructor)                      \
+    hemp_register(hemp, dialect, name, constructor)
+
+#define hemp_register_element(hemp, name, constructor)                      \
+    hemp_register(hemp, element, name, constructor)
+
+#define hemp_register_grammar(hemp, name, constructor)                      \
+    hemp_register(hemp, grammar, name, constructor)
+
+#define hemp_register_language(hemp, name, constructor)                     \
+    hemp_register(hemp, language, name, constructor)
+
+#define hemp_register_scheme(hemp, name, constructor)                       \
+    hemp_register(hemp, scheme, name, constructor)
+
+#define hemp_register_tag(hemp, name, constructor)                          \
+    hemp_register(hemp, tag, name, constructor)
+
+#define hemp_register_viewer(hemp, name, constructor)                       \
+    hemp_register(hemp, viewer, name, constructor)
+
+
+#define hemp_dialect_instance(hemp, name)                                   \
+    hemp_instance(hemp, dialect, name)
+
+#define hemp_grammar_instance(hemp, name)                                   \
+    hemp_instance(hemp, grammar, name)
+
+#define hemp_language_instance(hemp, name)                                  \
+    hemp_instance(hemp, language, name)
+
+#define hemp_scheme_instance(hemp, name)                                    \
+    hemp_instance(hemp, scheme, name)
+
+#define hemp_viewer_instance(hemp, name)                                    \
+    hemp_instance(hemp, viewer, name)
+
+
+#define hemp_symbol_instance(hemp,type,start,end) ({                        \
+        hemp_action _cons = (hemp_action) hemp_factory_constructor(         \
+            hemp->element, type                                             \
+        );                                                                  \
+        if (! _cons)                                                        \
+            hemp_throw(hemp, HEMP_ERROR_INVALID, "element", type);          \
+        (hemp_symbol) hemp_action_run(                                      \
+            _cons, hemp_symbol_new(type, start, end)                        \
+        );                                                                  \
+    })
+
+#define hemp_source_instance(hemp, scheme, source)                          \
+    hemp_source_new(                                                        \
+        hemp_scheme_instance(hemp, scheme),                                 \
+        source                                                              \
+    )
+
+#define hemp_tag_construct(hemp, type, name, start, end, grammar) (         \
+    (hemp_tag) hemp_construct(hemp, tag, type, name, start, end, grammar)   \
+)
+
 
 /*--------------------------------------------------------------------------
  * Thread locking.  Encapsulates a block of code with a locked mutex.
@@ -44,7 +141,7 @@
 
 
 /*--------------------------------------------------------------------------
- * Macros for declaring language, dialect and grammar constructors.
+ * Macros for declaring language, dialect, tag and grammar constructors.
  *
  * A language (or "language pack", more accurately) defines one or more 
  * dialects.  Each dialect is a configuration of tags that can appear in a 
@@ -62,6 +159,16 @@
     hemp_dialect f(                             \
         hemp_hemp   hemp,                       \
         hemp_string name                        \
+    )
+
+#define HEMP_TAG(f)                             \
+    hemp_tag f(                                 \
+        hemp_hemp       hemp,                   \
+        hemp_string     type,                   \
+        hemp_string     name,                   \
+        hemp_string     start,                  \
+        hemp_string     end,                    \
+        hemp_grammar    grammar                 \
     )
 
 #define HEMP_GRAMMAR(f)                         \

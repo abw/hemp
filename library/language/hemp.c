@@ -111,6 +111,11 @@ HEMP_LANGUAGE(hemp_language_hemp_new) {
         hemp, "hemp.bravo", &hemp_grammar_hemp_bravo
     );
 
+    /* register tag styles */
+    hemp_register_tag(hemp, "hemp.inline",   &hemp_tag_inline);
+    hemp_register_tag(hemp, "hemp.outline",  &hemp_tag_outline);
+    hemp_register_tag(hemp, "hemp.comment",  &hemp_tag_comment);
+
     return language;
 }
 

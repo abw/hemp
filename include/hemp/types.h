@@ -87,6 +87,7 @@ struct hemp_hemp {
     hemp_factory        grammar;
     hemp_factory        language;
     hemp_factory        scheme;
+    hemp_factory        tag;
     hemp_factory        viewer;
 
 //  hemp_hash           tags;

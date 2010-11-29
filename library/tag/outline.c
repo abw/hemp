@@ -1,25 +1,40 @@
 #include <hemp/tag.h>
 
 
+HEMP_TAG(hemp_tag_outline) {
+//  hemp_debug_msg(
+//      "hemp_tag_outline(%p, %s, %s, %s, %s, %s)\n",
+//      hemp, type, name, start, end ? end : "", 
+//      grammar ? grammar->name : "no grammar"
+//  );
+    hemp_tag tag = hemp_tag_new(
+        type, name, start, end, grammar
+    );
+    tag->style  = HEMP_OUTLINE_TAG;
+    tag->scan   = &hemp_tag_outline_scan;
+    tag->to_eol = &hemp_tag_outline_to_eol;
+    return tag;
+}
+
+
 /* NOTE: this has been pasted in from inline.c and tweaked a little.
  * Both could do with some refactoring, cleaning up, and if possible, 
  * either a unification of the two, or abstraction of common functionality.
  */
 
 void 
-hemp_outline_tag_scanner(
+hemp_tag_outline_scan(
     HEMP_TAG_SCAN_ARGS
 ) {
-    hemp_string      src    = *srcptr,
+    hemp_string     src    = *srcptr,
                     from   = src,
                     point;
-
-    hemp_element  element;
-    hemp_num      num_val;
-    hemp_int      int_val;
-    hemp_bool     is_int, is_word;
-    hemp_pnode    pnode;
-    hemp_symbol   symbol;
+    hemp_element    element;
+    hemp_num        num_val;
+    hemp_int        int_val;
+    hemp_bool       is_int, is_word;
+    hemp_pnode      pnode;
+    hemp_symbol     symbol;
 
     hemp_debug("hemp_scan_outline_tag()\n");
 
@@ -171,7 +186,7 @@ bareword:
 
 
 hemp_string
-hemp_outline_tag_to_end_of_line(
+hemp_tag_outline_to_eol(
     HEMP_TAG_SKIP_ARGS
 ) {
     while ( *src

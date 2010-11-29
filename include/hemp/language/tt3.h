@@ -5,7 +5,7 @@
 
 #define HEMP_LANGUAGE_TT3_VERSION 0.2
 
-HEMP_LANGUAGE(hemp_language_tt3_new);
+HEMP_LANGUAGE(hemp_language_tt3);
 
 HEMP_DIALECT(hemp_dialect_tt3);
 

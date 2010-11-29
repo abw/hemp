@@ -26,7 +26,7 @@ struct hemp_template {
  *--------------------------------------------------------------------------*/
 
 hemp_template
-hemp_template_init(
+hemp_template_new(
     hemp_dialect    dialect,
     hemp_source     source
 );

@@ -63,6 +63,7 @@ hemp_bool       hemp_free_element ( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_grammar ( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_language( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_scheme  ( hemp_hash, hemp_pos, hemp_slot );
+hemp_bool       hemp_free_tag     ( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_template( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_viewer  ( hemp_hash, hemp_pos, hemp_slot );
 
@@ -78,82 +79,6 @@ void            hemp_scan_error(hemp_hemp, HEMP_SCAN_ARGS, hemp_errno, ...);
 hemp_string     hemp_version();
 
 void hemp_register_elements(hemp_hemp, hemp_symbols);
-
-
-/*--------------------------------------------------------------------------
- * Macros for registering component constructors and instantiating components
- *--------------------------------------------------------------------------*/
-
-#define hemp_register(hemp, type, name, constructor)                        \
-    hemp_factory_register(                                                  \
-        hemp->type,                                                         \
-        name,                                                               \
-        (hemp_actor) constructor,                                           \
-        hemp                                                                \
-    )
-
-#define hemp_instance(hemp, type, name) ({                                  \
-    hemp_memory _item = hemp_factory_instance(                              \
-        hemp->type,                                                         \
-        name                                                                \
-    );                                                                      \
-    if (! _item)                                                            \
-        hemp_throw(hemp, HEMP_ERROR_INVALID, #type, name);                  \
-    _item;                                                                  \
-})    
-
-
-#define hemp_register_dialect(hemp, name, constructor)                      \
-    hemp_register(hemp, dialect, name, constructor)
-
-#define hemp_register_element(hemp, name, constructor)                      \
-    hemp_register(hemp, element, name, constructor)
-
-#define hemp_register_grammar(hemp, name, constructor)                      \
-    hemp_register(hemp, grammar, name, constructor)
-
-#define hemp_register_language(hemp, name, constructor)                     \
-    hemp_register(hemp, language, name, constructor)
-
-#define hemp_register_scheme(hemp, name, constructor)                       \
-    hemp_register(hemp, scheme, name, constructor)
-
-#define hemp_register_viewer(hemp, name, constructor)                       \
-    hemp_register(hemp, viewer, name, constructor)
-
-
-#define hemp_dialect_instance(hemp, name)                                   \
-    hemp_instance(hemp, dialect, name)
-
-#define hemp_grammar_instance(hemp, name)                                   \
-    hemp_instance(hemp, grammar, name)
-
-#define hemp_language_instance(hemp, name)                                  \
-    hemp_instance(hemp, language, name)
-
-#define hemp_scheme_instance(hemp, name)                                    \
-    hemp_instance(hemp, scheme, name)
-
-#define hemp_viewer_instance(hemp, name)                                    \
-    hemp_instance(hemp, viewer, name)
-
-
-#define hemp_symbol_instance(hemp,type,start,end) ({                        \
-        hemp_action _cons = (hemp_action) hemp_factory_constructor(         \
-            hemp->element, type                                             \
-        );                                                                  \
-        if (! _cons)                                                        \
-            hemp_throw(hemp, HEMP_ERROR_INVALID, "element", type);          \
-        (hemp_symbol) hemp_action_run(                                      \
-            _cons, hemp_symbol_new(type, start, end)                        \
-        );                                                                  \
-    })
-
-#define hemp_source_instance(hemp, scheme, source)                          \
-    hemp_source_new(                                                        \
-        hemp_scheme_instance(hemp, scheme),                                 \
-        source                                                              \
-    )
 
 
 #if defined(__cplusplus)

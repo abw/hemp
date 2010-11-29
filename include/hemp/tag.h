@@ -27,13 +27,15 @@ enum hemp_tag_style {
 
 
 struct hemp_tag {
+   hemp_tagset      tagset;
+   hemp_string      type;
    hemp_string      name;
    hemp_tag_style   style;
    hemp_string      start;
    hemp_string      end;
-   hemp_tag_scan_f  scan;
-   hemp_tag_skip_f  to_end_of_line;
    hemp_grammar     grammar;
+   hemp_tag_scan_f  scan;
+   hemp_tag_skip_f  to_eol;
 };
 
 
@@ -42,14 +44,16 @@ struct hemp_tag {
  *--------------------------------------------------------------------------*/
 
 hemp_tag
-hemp_tag_init(
+hemp_tag_new(
+    hemp_string     type,
     hemp_string     name,
-    hemp_tag_style  style,
     hemp_string     start,
     hemp_string     end,
-    hemp_tag_scan_f scan,
     hemp_grammar    grammar
 );
+
+//    hemp_tag_style  style,
+//    hemp_tag_scan_f scan,
 
 hemp_tag
 hemp_tag_copy(
@@ -91,18 +95,18 @@ hemp_tag_free(
  * function protoypes for builtin tag types
  *--------------------------------------------------------------------------*/
 
-void        hemp_outline_tag_scanner( HEMP_TAG_SCAN_ARGS );
-hemp_string  hemp_outline_tag_to_end_of_line( HEMP_TAG_SKIP_ARGS );
+void        hemp_tag_inline_scan(HEMP_TAG_SCAN_ARGS);
+void        hemp_tag_outline_scan(HEMP_TAG_SCAN_ARGS);
+void        hemp_tag_comment_scan(HEMP_TAG_SCAN_ARGS);
+void        hemp_tag_control_scan(HEMP_TAG_SCAN_ARGS);
 
-void        hemp_inline_tag_scanner( HEMP_TAG_SCAN_ARGS );
-hemp_string  hemp_inline_tag_to_end_of_line( HEMP_TAG_SKIP_ARGS );
+hemp_string hemp_tag_outline_to_eol(HEMP_TAG_SKIP_ARGS);
+hemp_string hemp_tag_inline_to_eol(HEMP_TAG_SKIP_ARGS);
 
-
-/* These are TODO (change name/implement/cleanup) */
-void hemp_scan_comment_tag  ( HEMP_TAG_SCAN_ARGS );
-void hemp_scan_control_tag  ( HEMP_TAG_SCAN_ARGS );
-void hemp_scan_variable_tag ( HEMP_TAG_SCAN_ARGS );
-void hemp_scan_embed_tag    ( HEMP_TAG_SCAN_ARGS );
+HEMP_TAG(hemp_tag_inline);
+HEMP_TAG(hemp_tag_outline);
+HEMP_TAG(hemp_tag_comment);
+HEMP_TAG(hemp_tag_control);
 
 
 /*--------------------------------------------------------------------------

@@ -36,7 +36,7 @@ hemp_dialect_template(
     hemp_dialect    dialect,
     hemp_source     source
 ) {
-    hemp_template tmpl = hemp_template_init(
+    hemp_template tmpl = hemp_template_new(
         dialect, source
     );
     

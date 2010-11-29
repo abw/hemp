@@ -66,6 +66,7 @@ hemp_init_factories(
     hemp->grammar           = hemp_factory_new();
     hemp->language          = hemp_factory_new();
     hemp->scheme            = hemp_factory_new();
+    hemp->tag               = hemp_factory_new();
     hemp->viewer            = hemp_factory_new();
 
     /* install the cleaners to automatically tidy up */
@@ -74,6 +75,7 @@ hemp_init_factories(
     hemp->grammar->cleaner  = &hemp_free_grammar;
     hemp->language->cleaner = &hemp_free_language;
     hemp->scheme->cleaner   = &hemp_free_scheme;
+    hemp->tag->cleaner      = &hemp_free_tag;
     hemp->viewer->cleaner   = &hemp_free_viewer;
 }
 
@@ -99,7 +101,7 @@ hemp_init_languages(
         hemp, HEMP_HEMP, &hemp_language_hemp_new
     );
     hemp_register_language(
-        hemp, HEMP_TT3, &hemp_language_tt3_new
+        hemp, HEMP_TT3, &hemp_language_tt3
     );
     hemp_register_language(
         hemp, "test", &hemp_language_test
@@ -169,6 +171,7 @@ hemp_free_factories(
     hemp_factory_free(hemp->viewer);
     hemp_factory_free(hemp->element);
     hemp_factory_free(hemp->grammar);
+    hemp_factory_free(hemp->tag);
     hemp_factory_free(hemp->dialect);
     hemp_factory_free(hemp->language);
     hemp_factory_free(hemp->scheme);
@@ -236,6 +239,18 @@ hemp_free_dialect(
 ) {
     hemp_debug_init("cleaning %s dialect\n", ((hemp_dialect) item->value)->name);
     hemp_dialect_free( (hemp_dialect) hemp_val_ptr(item->value) );
+    return HEMP_TRUE;
+}
+
+
+hemp_bool
+hemp_free_tag(
+    hemp_hash tags,
+    hemp_pos  position,
+    hemp_slot item
+) {
+    hemp_debug_init("cleaning %s tag\n", ((hemp_tag) item->value)->name);
+//    hemp_tag_free( (hemp_tag) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 

@@ -26,9 +26,8 @@ void test1_scan(
 void test_tag() {
     hemp_tag tag, copy;
 
-    tag = hemp_tag_init(
-        "test1", HEMP_INLINE_TAG, "[%", "%]", 
-        NULL, NULL
+    tag = hemp_tag_new(
+        "test1", "test1", "[%", "%]", NULL
     );
 
     ok( tag, "created tag object" );

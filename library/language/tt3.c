@@ -19,7 +19,7 @@ static struct hemp_symbols hemp_symbols_tt3_command[] = {
 };
 
 
-HEMP_LANGUAGE(hemp_language_tt3_new) {
+HEMP_LANGUAGE(hemp_language_tt3) {
     hemp_debug_call("hemp_language_tt3_new(%p, %s)\n", hemp, name);
 
     hemp_language language = hemp_language_new(
@@ -30,20 +30,19 @@ HEMP_LANGUAGE(hemp_language_tt3_new) {
     HEMP_ELEMENT("tt3.command.*", &hemp_element_tt3_command_symbols);
 
     /* register grammars */
-    hemp_register_grammar(
-        hemp, "tt3.core",    &hemp_grammar_tt3_core
-    );
-    hemp_register_grammar(
-        hemp, "tt3.command", &hemp_grammar_tt3_command
-    );
-    hemp_register_grammar(
-        hemp, "tt3.control", &hemp_grammar_tt3_control
-    );
+    hemp_register_grammar(hemp, "tt3.core",     &hemp_grammar_tt3_core);
+    hemp_register_grammar(hemp, "tt3.command",  &hemp_grammar_tt3_command);
+    hemp_register_grammar(hemp, "tt3.control",  &hemp_grammar_tt3_control);
+
+    /* register tags */
+    hemp_register_tag(hemp, "tt3.inline",   &hemp_tag_inline);
+    hemp_register_tag(hemp, "tt3.outline",  &hemp_tag_outline);
+    hemp_register_tag(hemp, "tt3.control",  &hemp_tag_control);
+    hemp_register_tag(hemp, "tt3.comment",  &hemp_tag_comment);
 
     /* register dialects */
-    hemp_register_dialect(
-        hemp, HEMP_TT3, &hemp_dialect_tt3
-    );
+    hemp_register_dialect(hemp, HEMP_TT3, &hemp_dialect_tt3);
+
 
 //    hemp_register_grammar(
 //        hemp, HEMP_TT3, (hemp_actor) &hemp_grammar_tt3
@@ -75,54 +74,70 @@ hemp_dialect_tt3_prepare(
 ) {
     hemp_debug_call("hemp_dialect_tt3_prepare(%p)\n", tmpl);
 
-    hemp_hemp         hemp    = tmpl->dialect->hemp;
+    hemp_hemp    hemp    = tmpl->dialect->hemp;
     hemp_tagset  tagset  = tmpl->tagset;
     hemp_grammar command = hemp_grammar_instance(hemp, "tt3.command");
     hemp_grammar control = hemp_grammar_instance(hemp, "tt3.control");
 
-    hemp_tagset_add_tag(
-        tagset, 
-        hemp_tag_init(
-            "comment",
-            HEMP_INLINE_TAG,
-            "[#", "#]",
-            &hemp_scan_comment_tag,
-            NULL
-        )
+    hemp_tagset_new_tag(
+        tagset, "tt3.comment", "comment", "[#", "#]", NULL
     );
 
-    hemp_tagset_add_tag(
-        tagset, 
-        hemp_tag_init(
-            "control",
-            HEMP_INLINE_TAG,
-            "[?", "?]",
-            &hemp_scan_control_tag,
-            control
-        )
+    hemp_tagset_new_tag(
+        tagset, "tt3.control", "control", "[?", "?]", control
     );
 
-    hemp_tagset_add_tag(
-        tagset, 
-        hemp_tag_init(
-            "outline", 
-            HEMP_OUTLINE_TAG,
-            "%%", NULL,
-            &hemp_outline_tag_scanner,
-            command
-        )
+    hemp_tagset_new_tag(
+        tagset, "tt3.outline", "outline", "%%", NULL, command
     );
 
-    hemp_tagset_add_tag(
-        tagset, 
-        hemp_tag_init(
-            "inline", 
-            HEMP_INLINE_TAG,
-            "[%", "%]",
-            &hemp_inline_tag_scanner,
-            command
-        )
+    hemp_tagset_new_tag(
+        tagset, "tt3.inline", "inline", "[%", "%]",command
     );
+
+//    hemp_tagset_add_tag(
+//        tagset, 
+//        hemp_tag_init(
+//            "comment",
+//            HEMP_INLINE_TAG,
+//            "[#", "#]",
+//            &hemp_scan_comment_tag,
+//            NULL
+//        )
+//    );
+
+//    hemp_tagset_add_tag(
+//        tagset, 
+//        hemp_tag_init(
+//            "control",
+//            HEMP_INLINE_TAG,
+//            "[?", "?]",
+//            &hemp_scan_control_tag,
+//            control
+//        )
+//    );
+//
+//    hemp_tagset_add_tag(
+//        tagset, 
+//        hemp_tag_init(
+//            "outline", 
+//            HEMP_OUTLINE_TAG,
+//            "%%", NULL,
+//            &hemp_outline_tag_scanner,
+//            command
+//        )
+//    );
+
+//    hemp_tagset_add_tag(
+//        tagset, 
+//        hemp_tag_init(
+//            "inline", 
+//            HEMP_INLINE_TAG,
+//            "[%", "%]",
+//            &hemp_inline_tag_scanner,
+//            command
+//        )
+//    );
 
 //    hemp_tagset_add_inline_tag(tagset, HempTagVariable);
 //    hemp_tagset_add_inline_tag(tagset, HempTagEmbed);
@@ -137,6 +152,12 @@ hemp_dialect_tt3_cleanup(
 ) {
     hemp_debug_call("hemp_dialect_tt3_cleanup(%p)\n", tmpl);
 }
+
+
+
+/*--------------------------------------------------------------------------
+ * tags
+ *--------------------------------------------------------------------------*/
 
 
 

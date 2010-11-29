@@ -13,6 +13,7 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_tagset {
+   hemp_template    template;
    hemp_symbol      text_symbol;
    hemp_hash        tags;
    hemp_ptree       inline_tags;
@@ -25,7 +26,9 @@ struct hemp_tagset {
  *--------------------------------------------------------------------------*/
 
 hemp_tagset
-hemp_tagset_new();
+hemp_tagset_new(
+    hemp_template   template
+);
     
 void
 hemp_tagset_free();
@@ -39,11 +42,10 @@ hemp_tagset_add_tag(
 hemp_pnode
 hemp_tagset_new_tag(
     hemp_tagset     tagset, 
+    hemp_string     type,
     hemp_string     name,
-    hemp_tag_style  style,
     hemp_string     start,
     hemp_string     end,
-    hemp_tag_scan_f scan,
     hemp_grammar    grammar
 );
 

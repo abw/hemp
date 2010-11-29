@@ -30,7 +30,7 @@ HEMP_SCAN_FUNC(hemp_element_comment_scanner) {
     hemp_debug_call("hemp_element_comment_scanner()\n");
 
     /* update the source pointer past the text we've consumed */
-    *srcptr = tag->to_end_of_line(tag, *srcptr);
+    *srcptr = tag->to_eol(tag, *srcptr);
 
     /* add a comment element to the list of scanned tokens */
     return hemp_elements_append(
