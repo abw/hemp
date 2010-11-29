@@ -22,103 +22,48 @@
  * Memory allocation
  *--------------------------------------------------------------------------*/
 
-#define HEMP_TYPE_ALLOCATE(type, name) ({                       \
-    name = (hemp_##type) hemp_mem_alloc(                        \
-        sizeof(struct hemp_##type)                              \
-    );                                                          \
-    if (! name)                                                 \
-        hemp_mem_fail(#type);                                   \
+#define HEMP_TYPE_ALLOCATE(type, name) ({       \
+    name = (hemp_##type) hemp_mem_alloc(        \
+        sizeof(struct hemp_##type)              \
+    );                                          \
+    if (! name)                                 \
+        hemp_mem_fail(#type);                   \
 })
 
-#define HEMP_TYPE_INSTANCE(type, name) ({                       \
-    if (! name) {                                               \
-        HEMP_TYPE_ALLOCATE(type, name);                         \
-    }                                                           \
+#define HEMP_TYPE_INSTANCE(type, name) ({       \
+    if (! name) {                               \
+        HEMP_TYPE_ALLOCATE(type, name);         \
+    }                                           \
 })
 
-#define HEMP_ALLOCATE(name)                                     \
+#define HEMP_ALLOCATE(name)                     \
     HEMP_TYPE_ALLOCATE(name, name)
 
-#define HEMP_INSTANCE(name)                                     \
+#define HEMP_INSTANCE(name)                     \
     HEMP_TYPE_INSTANCE(name, name)
 
 
 
 /*--------------------------------------------------------------------------
- * Languages
- *
- * In this context a language is a template language, or more precisely a 
- * language "pack". The builtin core language is, rather unsurprisingly,
- * called "hemp". It defines all the core elements required for basic 
- * template processing. The other builtin language is called "tt3" and is
- * (or will be) an implementation of v3 of the Perl Template Toolkit 
- * (see http://template-toolkit.org/). This builds on the basic language 
- * features provided by "hemp" and adds a number of high-level keywords and
- * commands.
- * 
- * The HEMP_LANGUAGE(...) macro can be used as a shortcut for registering
- * a language with a hemp instance.  See library/language/*.c for examples.
+ * Macros for declaring language, dialect and grammar constructors.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_LANGUAGE(name, constructor)    \
-    hemp_register_language(                 \
-        hemp, name,                         \
-        (hemp_actor) constructor            \
-    );
-
-#define HEMP_LANGUAGE_FUNC(f)               \
-    hemp_language f(                      \
-        hemp_hemp   hemp,                   \
-        hemp_string name                    \
+#define HEMP_LANGUAGE(f)                        \
+    hemp_language f(                            \
+        hemp_hemp   hemp,                       \
+        hemp_string name                        \
     )
 
-
-/*--------------------------------------------------------------------------
- * Dialects
- *
- * A language can have one or more different dialects that are variations of 
- * the same basic language.  Each dialect specifies the language grammar(s) 
- * that can be embedded inside template documents and the tag tokens used to 
- * embed them (e.g. [% ... %]).  
- *
- * The HEMP_DIALECT(...) macro is a shortcut for registering a language 
- * dialect with a hemp instance.  HEMP_DIALECT_FUNC(...) is a shortcut for
- * defining the dialect callback function that initialises the dialect on 
- * demand.
- *--------------------------------------------------------------------------*/
-
-#define HEMP_DIALECT(name, constructor)     \
-    hemp_register_dialect(                  \
-        hemp, name,                         \
-        (hemp_actor) constructor            \
-    );
-
-#define HEMP_DIALECT_FUNC(f)                \
-    hemp_dialect f(                         \
-        hemp_hemp   hemp,                   \
-        hemp_string name                    \
+#define HEMP_DIALECT(f)                         \
+    hemp_dialect f(                             \
+        hemp_hemp   hemp,                       \
+        hemp_string name                        \
     )
 
-
-/*--------------------------------------------------------------------------
- * Grammars
- *
- * Within an embedded tag a grammar defines the mapping of tokens to symbols
- * 
- * The HEMP_GRAMMAR(...) macro is a shortcut for registering a grammar with
- * a hemp instance.
- *--------------------------------------------------------------------------*/
-
-#define HEMP_GRAMMAR(name, constructor)     \
-    hemp_register_grammar(                  \
-        hemp, name,                         \
-        (hemp_actor) constructor            \
-    );
-
-#define HEMP_GRAMMAR_FUNC(f)                \
-    hemp_grammar f(                         \
-        hemp_hemp   hemp,                   \
-        hemp_string name                    \
+#define HEMP_GRAMMAR(f)                         \
+    hemp_grammar f(                             \
+        hemp_hemp   hemp,                       \
+        hemp_string name                        \
     )
 
 
@@ -216,7 +161,7 @@
  * data structures representing a parsed template.  Each element has a pointer
  * the grammar symbol that defines what kind of element it is.
  *
- * HEMP_ELEMENTS(...) is a macro for registering a set of element types
+ * hemp_register_elements(hemp, ...) is a macro for registering a set of element types
  * (e.g. hemp.numop.*).  Hemp will automatically call the registered callback
  * when any matching elements are requested for adding to a grammar as a 
  * symbol (e.g. a grammar using hemp.numop.multiply will trigger a call to 
@@ -224,9 +169,6 @@
  * register a callback to construct an individual element type (e.g. 
  * hemp.numop.multiply).
  *--------------------------------------------------------------------------*/
-
-#define HEMP_ELEMENTS(symbols)              \
-    hemp_register_elements(hemp, symbols);
 
 #define HEMP_ELEMENT(name, constructor)     \
     hemp_register_element(                  \

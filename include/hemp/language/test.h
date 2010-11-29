@@ -6,9 +6,9 @@
 #define HEMP_TEST          "test"
 #define HEMP_TEST_VERSION   0.1
 
-HEMP_LANGUAGE_FUNC(hemp_language_test);
-HEMP_DIALECT_FUNC(hemp_dialect_test);
-HEMP_GRAMMAR_FUNC(hemp_grammar_test);
+HEMP_LANGUAGE(hemp_language_test);
+HEMP_DIALECT(hemp_dialect_test);
+HEMP_GRAMMAR(hemp_grammar_test);
 HEMP_SYMBOLS_FUNC(hemp_element_test_symbols);
 HEMP_SYMBOL_FUNC(hemp_element_test_test_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_test_expect_symbol);

@@ -2,10 +2,10 @@
 
 #define HEMP_TT3_LANGUAGE_VERSION 0.2
 
-HEMP_DIALECT_FUNC(hemp_dialect_tt3);
-HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core);
-HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_command);
-HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_control);
+HEMP_DIALECT(hemp_dialect_tt3);
+HEMP_GRAMMAR(hemp_grammar_tt3_core);
+HEMP_GRAMMAR(hemp_grammar_tt3_command);
+HEMP_GRAMMAR(hemp_grammar_tt3_control);
 HEMP_SYMBOLS_FUNC(hemp_element_tt3_command_symbols);
 HEMP_SYMBOL_FUNC(hemp_element_tt3_if_symbol);
 HEMP_SYMBOL_FUNC(hemp_element_tt3_TODO_symbol);
@@ -30,7 +30,7 @@ static struct hemp_symbols hemp_symbols_tt3_command[] = {
 };
 
 
-HEMP_LANGUAGE_FUNC(hemp_language_tt3_init) {
+HEMP_LANGUAGE(hemp_language_tt3_init) {
     hemp_debug_call("hemp_language_tt3_init(%p, %s)\n", hemp, name);
 
     hemp_language language = hemp_language_new(
@@ -41,12 +41,20 @@ HEMP_LANGUAGE_FUNC(hemp_language_tt3_init) {
     HEMP_ELEMENT("tt3.command.*", &hemp_element_tt3_command_symbols);
 
     /* register grammars */
-    HEMP_GRAMMAR("tt3.core",    &hemp_grammar_tt3_core);
-    HEMP_GRAMMAR("tt3.command", &hemp_grammar_tt3_command);
-    HEMP_GRAMMAR("tt3.control", &hemp_grammar_tt3_control);
+    hemp_register_grammar(
+        hemp, "tt3.core",    &hemp_grammar_tt3_core
+    );
+    hemp_register_grammar(
+        hemp, "tt3.command", &hemp_grammar_tt3_command
+    );
+    hemp_register_grammar(
+        hemp, "tt3.control", &hemp_grammar_tt3_control
+    );
 
     /* register dialects */
-    HEMP_DIALECT(HEMP_TT3, &hemp_dialect_tt3);
+    hemp_register_dialect(
+        hemp, HEMP_TT3, &hemp_dialect_tt3
+    );
 
 //    hemp_register_grammar(
 //        hemp, HEMP_TT3, (hemp_actor) &hemp_grammar_tt3
@@ -60,7 +68,7 @@ HEMP_LANGUAGE_FUNC(hemp_language_tt3_init) {
  * dialects
  *--------------------------------------------------------------------------*/
 
-HEMP_DIALECT_FUNC(hemp_dialect_tt3) {
+HEMP_DIALECT(hemp_dialect_tt3) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
     
     dialect->prepare = &hemp_dialect_tt3_prepare;
@@ -147,7 +155,7 @@ hemp_dialect_tt3_cleanup(
  * grammars
  *--------------------------------------------------------------------------*/
 
-HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core) {
+HEMP_GRAMMAR(hemp_grammar_tt3_core) {
     hemp_debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_hemp_charlie(hemp, name);
     HEMP_SYMBOL2("hemp.squote", "q<<", ">>");
@@ -157,7 +165,7 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_core) {
 }
 
 
-HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_command) {
+HEMP_GRAMMAR(hemp_grammar_tt3_command) {
     hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_tt3_core(hemp, name);
     HEMP_OPERATOR1("tt3.command.if", "if", 100, 100);
@@ -166,7 +174,7 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_command) {
 }
 
 
-HEMP_GRAMMAR_FUNC(hemp_grammar_tt3_control) {
+HEMP_GRAMMAR(hemp_grammar_tt3_control) {
     hemp_debug_call("hemp_grammar_tt3_control(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_tt3_core(hemp, name);
     return grammar;
@@ -186,7 +194,9 @@ hemp_element_tt3_command_symbols(
     hemp_debug_init("** Initialising tt3 command symbols (%s requested)\n", name);
 
     /* we should detect if we've done this already and skip it */
-    HEMP_ELEMENTS(hemp_symbols_tt3_command);
+    hemp_register_elements(
+        hemp, hemp_symbols_tt3_command
+    );
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(

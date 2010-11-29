@@ -19,6 +19,8 @@ hemp_init() {
     hemp_init_errors(hemp);
 
 
+    // YUK.  We have to do this to force all the hemp stuff to be loaded.
+    // Needs work to make this more auto-load on demand.
     hemp_language language = hemp_language_instance(hemp, "hemp");
 //  hemp_debug_msg("LANGUAGE: %s v%0.2f\n", language->name, language->version);
 

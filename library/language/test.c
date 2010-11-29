@@ -8,7 +8,7 @@ static struct hemp_symbols hemp_symbols_test[] = {
 };
 
 
-HEMP_LANGUAGE_FUNC(hemp_language_test) {
+HEMP_LANGUAGE(hemp_language_test) {
     hemp_debug("hemp_language_test(%p, %s)\n", hemp, name);
 
     hemp_language language = hemp_language_new(
@@ -16,13 +16,19 @@ HEMP_LANGUAGE_FUNC(hemp_language_test) {
     );
     
     /* register handlers for symbols */
-    HEMP_ELEMENTS(hemp_symbols_test);
+    hemp_register_elements(
+        hemp, hemp_symbols_test
+    );
 
     /* register grammars */
-    HEMP_GRAMMAR(HEMP_TEST, &hemp_grammar_test);
+    hemp_register_grammar(
+        hemp, HEMP_TEST, &hemp_grammar_test
+    );
 
     /* register dialects */
-    HEMP_DIALECT(HEMP_TEST, &hemp_dialect_test);
+    hemp_register_dialect(
+        hemp, HEMP_TEST, &hemp_dialect_test
+    );
 
     return language;
 }
@@ -32,7 +38,7 @@ HEMP_LANGUAGE_FUNC(hemp_language_test) {
  * dialect
  *--------------------------------------------------------------------------*/
 
-HEMP_DIALECT_FUNC(hemp_dialect_test) {
+HEMP_DIALECT(hemp_dialect_test) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
     
     dialect->prepare = &hemp_dialect_test_prepare;
@@ -81,7 +87,7 @@ hemp_dialect_test_cleanup(
  * grammar
  *--------------------------------------------------------------------------*/
 
-HEMP_GRAMMAR_FUNC(hemp_grammar_test) {
+HEMP_GRAMMAR(hemp_grammar_test) {
     hemp_debug("hemp_grammar_test(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_hemp_alpha(hemp, name);
     HEMP_BLOCKOP("test.test",   "test",   11);

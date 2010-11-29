@@ -3,7 +3,7 @@
 #define HEMP_LANGUAGE_VERSION 0.01
 
 /* language initialiser */
-HEMP_LANGUAGE_FUNC(hemp_language_hemp_init);
+HEMP_LANGUAGE(hemp_language_hemp_init);
 
 /* symbol collections */
 HEMP_SYMBOLS_FUNC(hemp_element_assign_symbols);
@@ -13,9 +13,9 @@ HEMP_SYMBOLS_FUNC(hemp_element_number_symbols);
 HEMP_SYMBOLS_FUNC(hemp_element_text_symbols);
 
 /* grammar initialisers */
-HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_alpha);
-HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_bravo);
-HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_charlie);
+HEMP_GRAMMAR(hemp_grammar_hemp_alpha);
+HEMP_GRAMMAR(hemp_grammar_hemp_bravo);
+HEMP_GRAMMAR(hemp_grammar_hemp_charlie);
 
 /* grammar mixins */
 void hemp_grammar_add_hemp_alpha(hemp_grammar);
@@ -103,7 +103,7 @@ static struct hemp_symbols hemp_symbols_hemp_assign[] = {
  * hemp language initialisation
  *--------------------------------------------------------------------------*/
 
-HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
+HEMP_LANGUAGE(hemp_language_hemp_init) {
     hemp_debug_call("hemp_language_hemp_init(%p, %s)\n", hemp, name);
 
     hemp_language language = hemp_language_new(
@@ -111,7 +111,9 @@ HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
     );
 
     /* register all the basic symbols */
-    HEMP_ELEMENTS(hemp_symbols_hemp);
+    hemp_register_elements(
+        hemp, hemp_symbols_hemp
+    );
 
     /* register factories for bracket, boolean, number and text operator symbols */
     HEMP_ELEMENT("hemp.operator.assign.*",  &hemp_element_assign_symbols);
@@ -121,8 +123,12 @@ HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
     HEMP_ELEMENT("hemp.text.*",             &hemp_element_text_symbols);
 
     /* register grammars */
-    HEMP_GRAMMAR("hemp.alpha", &hemp_grammar_hemp_alpha);
-    HEMP_GRAMMAR("hemp.bravo", &hemp_grammar_hemp_bravo);
+    hemp_register_grammar(
+        hemp, "hemp.alpha", &hemp_grammar_hemp_alpha
+    );
+    hemp_register_grammar(
+        hemp, "hemp.bravo", &hemp_grammar_hemp_bravo
+    );
 
     return language;
 }
@@ -134,7 +140,9 @@ HEMP_LANGUAGE_FUNC(hemp_language_hemp_init) {
 
 HEMP_SYMBOLS_FUNC(hemp_element_bracket_symbols) {
     /* we should detect if we've done this already and skip it */
-    HEMP_ELEMENTS(hemp_symbols_hemp_bracket);
+    hemp_register_elements(
+        hemp, hemp_symbols_hemp_bracket
+    );
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(
@@ -149,7 +157,9 @@ HEMP_SYMBOLS_FUNC(hemp_element_bracket_symbols) {
 
 HEMP_SYMBOLS_FUNC(hemp_element_boolean_symbols) {
     /* we should detect if we've done this already and skip it */
-    HEMP_ELEMENTS(hemp_symbols_hemp_boolean);
+    hemp_register_elements(
+        hemp, hemp_symbols_hemp_boolean
+    );
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(
@@ -164,7 +174,9 @@ HEMP_SYMBOLS_FUNC(hemp_element_boolean_symbols) {
 
 HEMP_SYMBOLS_FUNC(hemp_element_number_symbols) {
     /* we should detect if we've done this already and skip it */
-    HEMP_ELEMENTS(hemp_symbols_hemp_number);
+    hemp_register_elements(
+        hemp, hemp_symbols_hemp_number
+    );
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(
@@ -179,7 +191,9 @@ HEMP_SYMBOLS_FUNC(hemp_element_number_symbols) {
 
 HEMP_SYMBOLS_FUNC(hemp_element_text_symbols) {
     /* we should detect if we've done this already and skip it */
-    HEMP_ELEMENTS(hemp_symbols_hemp_text);
+    hemp_register_elements(
+        hemp, hemp_symbols_hemp_text
+    );
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(
@@ -196,7 +210,9 @@ HEMP_SYMBOLS_FUNC(hemp_element_assign_symbols) {
     /* I'm getting tired of this... should have some way to specify the 
      * symbol set instead of a function... oh well it'll do for now...
      */
-    HEMP_ELEMENTS(hemp_symbols_hemp_assign);
+    hemp_register_elements(
+        hemp, hemp_symbols_hemp_assign
+    );
 
     return (hemp_action) hemp_hash_fetch_pointer(
         hemp->element->constructors, name
@@ -208,7 +224,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_assign_symbols) {
  * grammars
  *--------------------------------------------------------------------------*/
 
-HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_alpha) {
+HEMP_GRAMMAR(hemp_grammar_hemp_alpha) {
     hemp_debug_call("hemp_grammar_hemp_alpha(%p, %s)\n", hemp, name);
     hemp_grammar grammar = (hemp_grammar) hemp_grammar_new(hemp, name);
     hemp_grammar_add_hemp_alpha(grammar);
@@ -216,14 +232,14 @@ HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_alpha) {
 }
 
 
-HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_bravo) {
+HEMP_GRAMMAR(hemp_grammar_hemp_bravo) {
     hemp_debug_call("hemp_grammar_hemp_bravo(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_hemp_alpha(hemp, name);
     hemp_grammar_add_hemp_bravo(grammar);
     return grammar;
 }
 
-HEMP_GRAMMAR_FUNC(hemp_grammar_hemp_charlie) {
+HEMP_GRAMMAR(hemp_grammar_hemp_charlie) {
     hemp_debug_call("hemp_grammar_hemp_charlie(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_hemp_bravo(hemp, name);
     hemp_grammar_add_hemp_charlie(grammar);
