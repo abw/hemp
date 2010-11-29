@@ -6,10 +6,10 @@
 #include <dlfcn.h>
 
 hemp_bool
-    hemp_module_load(
-        hemp_t     hemp,
-        hemp_string name
-    );
+hemp_module_load(
+    hemp_hemp       hemp,
+    hemp_string     name
+);
 
 
 #endif /* HEMP_MODULE_H */

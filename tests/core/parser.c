@@ -16,7 +16,7 @@ int main(
 void test_punctuation() {
     hemp_string text = "DUMMY TEXT";
 
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp" );
 
     hemp_elements elements = hemp_elements_new(hemp, 0);

@@ -19,7 +19,7 @@ int main(
 
 
 void test_grammar() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
     
     hemp_language language = hemp_language_instance(hemp, HEMP_TT3);
@@ -99,7 +99,7 @@ hemp_grammar_test(
 
 
 void test_hemp_grammar_instance() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp object at %p", hemp );
 
 //    hemp_language_instance(hemp, HEMP_TT3);
@@ -114,7 +114,7 @@ void test_hemp_grammar_instance() {
 }
 
 void test_hemp_grammar_hemp() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp object at %p", hemp );
 
     HEMP_TRY;

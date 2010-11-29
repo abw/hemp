@@ -5,26 +5,26 @@
 
 
 #define HEMP_TYPE_BASE              \
-    hemp_type           type;       \
-    hemp_type           base;       \
-    hemp_int            id;         \
-    hemp_string         name;       \
-    hemp_namespace    namespace;  \
-    hemp_hash           methods;    \
-    hemp_output_f       text;       \
-    hemp_output_f       values;     \
-    hemp_output_f       params;     \
-    hemp_value_f        value;      \
-    hemp_value_f        number;     \
-    hemp_value_f        integer;    \
-    hemp_value_f        boolean;    \
-    hemp_value_f        compare;    \
-    hemp_value_f        defined;    \
-    hemp_value_f        apply;      \
-    hemp_store_f        store;      \
-    hemp_fetch_f        fetch;      \
-    hemp_fetch_f        dot;        \
-    hemp_operate_f      assign;
+    hemp_type       type;           \
+    hemp_type       base;           \
+    hemp_int        id;             \
+    hemp_string     name;           \
+    hemp_namespace  namespace;      \
+    hemp_hash       methods;        \
+    hemp_output_f   text;           \
+    hemp_output_f   values;         \
+    hemp_output_f   params;         \
+    hemp_value_f    value;          \
+    hemp_value_f    number;         \
+    hemp_value_f    integer;        \
+    hemp_value_f    boolean;        \
+    hemp_value_f    compare;        \
+    hemp_value_f    defined;        \
+    hemp_value_f    apply;          \
+    hemp_store_f    store;          \
+    hemp_fetch_f    fetch;          \
+    hemp_fetch_f    dot;            \
+    hemp_operate_f  assign;
 
 //  hemp_output_f       list;       \   /* superfluous? */
 //  hemp_method_f       method;         /* TODO: method auto-generator */
@@ -45,7 +45,7 @@ struct hemp_type {
 };
 
 struct hemp_object {
-    hemp_type           type;
+    hemp_type       type;
 };
 
 /* other stuff to think about adding:
@@ -85,47 +85,44 @@ extern hemp_type hemp_global_types[HEMP_TYPES_SIZE];
  *--------------------------------------------------------------------------*/
 
 hemp_type
-    hemp_type_new(
-        hemp_int        id,
-        hemp_string     name
-    );
+hemp_type_new(
+    hemp_int        id,
+    hemp_string     name
+);
 
 hemp_type 
-    hemp_type_subtype(
-        hemp_type       base,
-        hemp_int        id,
-        hemp_string     name
-    );
+hemp_type_subtype(
+    hemp_type       base,
+    hemp_int        id,
+    hemp_string     name
+);
 
 void
-    hemp_type_free(
-        hemp_type       type
-    );
+hemp_type_free(
+    hemp_type       type
+);
 
 hemp_type
-    hemp_use_type(
-        hemp_string     name,
-        hemp_type_f     constructor
-    );
+hemp_use_type(
+    hemp_string     name,
+    hemp_type_f     constructor
+);
 
 
 void 
-    hemp_global_types_init(
-        hemp_global     global
-    );
+hemp_global_types_init(
+    hemp_global     global
+);
 
-void hemp_global_types_free(
-        hemp_global     global
-    );
+void 
+hemp_global_types_free(
+    hemp_global     global
+);
 
 
 HEMP_TYPE_FUNC(hemp_type_type);
 HEMP_TYPE_FUNC(hemp_type_number);
 HEMP_TYPE_FUNC(hemp_type_integer);
-//HEMP_TYPE_FUNC(hemp_type_string);
-//HEMP_TYPE_FUNC(hemp_type_text);
-//HEMP_TYPE_FUNC(hemp_type_list);
-//HEMP_TYPE_FUNC(hemp_type_hash);
 HEMP_TYPE_FUNC(hemp_type_identity);
 HEMP_TYPE_FUNC(hemp_type_object);
 

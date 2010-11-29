@@ -10,10 +10,10 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_list {
-    hemp_value       *items;
-    hemp_size           capacity;
-    hemp_size           length;
-    hemp_list_iter    cleaner;
+    hemp_value    * items;
+    hemp_size       capacity;
+    hemp_size       length;
+    hemp_list_iter  cleaner;
 }; 
 
 
@@ -21,14 +21,40 @@ struct hemp_list {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_list hemp_list_init(hemp_list);
-void      hemp_list_free(hemp_list);
-hemp_list hemp_list_push(hemp_list, hemp_value);
-hemp_pos  hemp_list_each(hemp_list, hemp_list_iter);
-hemp_bool hemp_list_each_free(hemp_list, hemp_pos, hemp_value);
+hemp_list 
+hemp_list_init(
+    hemp_list       list
+);
+
+void
+hemp_list_free(
+    hemp_list       list
+);
+
+hemp_list 
+hemp_list_push(
+    hemp_list       list, 
+    hemp_value      item
+);
+
+hemp_pos 
+hemp_list_each(
+    hemp_list       list,
+    hemp_list_iter  func
+);
+
+hemp_bool
+hemp_list_each_free(
+    hemp_list       list, 
+    hemp_pos        index,
+    hemp_value      value
+);
 
 // tmp hack for debugging
-hemp_string  hemp_list_dump(hemp_list);
+hemp_string 
+hemp_list_dump(
+    hemp_list       list
+);
 
 
 /*--------------------------------------------------------------------------

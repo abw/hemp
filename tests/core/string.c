@@ -61,7 +61,7 @@ void test_tag() {
 
 
 //void test_hemp_tags() {
-//    hemp_hemp hemp = hemp_init();
+//    hemp_hemp hemp = hemp_new();
 //    ok( hemp, "got hemp object" );
 //
 //    hemp_tag comment_tag = hemp_tag(hemp, "comment");

@@ -66,7 +66,7 @@ void test_error2() {
 
 
 void test_error3() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
 
     /* better version with error stack local to hemp interpreter, 
      * but depends on 'hemp' local symbol being visible
@@ -100,7 +100,7 @@ void test_error3() {
 
 
 void test_error4() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
 
     HEMP_THROW(HEMP_ERROR_INVALID);
     fail("after throw - this should not happen");
@@ -135,7 +135,7 @@ void test_error_object() {
 
 
 void test_hemp_throw() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
 
     HEMP_TRY;
         hemp_throw(

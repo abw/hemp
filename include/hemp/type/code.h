@@ -10,9 +10,9 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_code {
-//    hemp_scope_t    scope;
-//    hemp_element_t  source;
-    hemp_value    body;
+    hemp_value      body;
+//  hemp_scope_t    scope;
+//  hemp_element_t  source;
 }; 
 
 
@@ -22,17 +22,17 @@ struct hemp_code {
  *--------------------------------------------------------------------------*/
 
 HEMP_INLINE hemp_code
-    hemp_code_init();
+hemp_code_init();
 
 HEMP_INLINE void
-    hemp_code_release(
-        hemp_code code
-    );
+hemp_code_release(
+    hemp_code       code
+);
 
 HEMP_INLINE void
-    hemp_code_free(
-        hemp_code code
-    );
+hemp_code_free(
+    hemp_code       code
+);
 
 
 /*--------------------------------------------------------------------------

@@ -1,29 +1,10 @@
-#include <hemp.h>
-
-#define HEMP_LANGUAGE_VERSION 0.01
-
-/* language initialiser */
-HEMP_LANGUAGE(hemp_language_hemp_init);
-
-/* symbol collections */
-HEMP_SYMBOLS(hemp_element_assign_symbols);
-HEMP_SYMBOLS(hemp_element_bracket_symbols);
-HEMP_SYMBOLS(hemp_element_boolean_symbols);
-HEMP_SYMBOLS(hemp_element_number_symbols);
-HEMP_SYMBOLS(hemp_element_text_symbols);
-
-/* grammar initialisers */
-HEMP_GRAMMAR(hemp_grammar_hemp_alpha);
-HEMP_GRAMMAR(hemp_grammar_hemp_bravo);
-HEMP_GRAMMAR(hemp_grammar_hemp_charlie);
-
-/* grammar mixins */
-void hemp_grammar_add_hemp_alpha(hemp_grammar);
-void hemp_grammar_add_hemp_bravo(hemp_grammar);
-void hemp_grammar_add_hemp_charlie(hemp_grammar);
+#include <hemp/language/hemp.h>
 
 
-/* static tables defining symbol collections */
+/*--------------------------------------------------------------------------
+ * static tables defining symbol collections
+ *--------------------------------------------------------------------------*/
+
 static struct hemp_symbols hemp_symbols_hemp[] = {
     { "hemp.text",              &hemp_element_text_symbol               },
     { "hemp.space",             &hemp_element_space_symbol              },
@@ -103,11 +84,11 @@ static struct hemp_symbols hemp_symbols_hemp_assign[] = {
  * hemp language initialisation
  *--------------------------------------------------------------------------*/
 
-HEMP_LANGUAGE(hemp_language_hemp_init) {
-    hemp_debug_call("hemp_language_hemp_init(%p, %s)\n", hemp, name);
+HEMP_LANGUAGE(hemp_language_hemp_new) {
+    hemp_debug_call("hemp_language_hemp_new(%p, %s)\n", hemp, name);
 
     hemp_language language = hemp_language_new(
-        hemp, name, HEMP_LANGUAGE_VERSION
+        hemp, name, HEMP_LANGUAGE_HEMP_VERSION
     );
 
     /* register all the basic symbols */

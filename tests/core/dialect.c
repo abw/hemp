@@ -16,7 +16,7 @@ int main(
 
 
 void test_dialect() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
     hemp_language_instance(hemp, "tt3");
@@ -32,7 +32,7 @@ void test_dialect() {
 
 
 void test_dialect_registration() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
 //    ok( 
 //        hemp_register_dialect(hemp, "test1", &dummy_dialect_builder),
 //        "registered test1 dialect"

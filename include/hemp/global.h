@@ -4,7 +4,7 @@
 struct hemp_global {
     hemp_size       n_hemps;
     hemp_u16        namespace_id;
-    hemp_hash     namespaces;
+    hemp_hash       namespaces;
 };
 
 extern struct hemp_global HempGlobal;

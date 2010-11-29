@@ -4,7 +4,7 @@
 int main(
     int argc, char **argv, char **env
 ) {
-    hemp_hemp      hemp    = hemp_init();
+    hemp_hemp      hemp    = hemp_new();
     hemp_list list    = hemp_list_new();
     hemp_hash hash    = hemp_hash_init();
     hemp_context context = hemp_context_instance(hemp);

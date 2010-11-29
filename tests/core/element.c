@@ -16,7 +16,7 @@ int main(
 
 
 void test_element() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     hemp_element element = hemp_element_new(
         HempSymbolSpace, NULL, 0, 0
     );
@@ -29,7 +29,7 @@ void test_element() {
 void test_element_factory() {
     hemp_symbol symbol;
 
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp" );
 
     HEMP_TRY;

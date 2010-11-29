@@ -82,7 +82,7 @@ int main(
     char **argv, 
     char **env
 ) {
-    hemp_hemp          hemp = hemp_init();
+    hemp_hemp          hemp = hemp_new();
     hemp_string      filename;
     hemp_template template;
     hemp_text     input, output;

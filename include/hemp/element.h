@@ -19,22 +19,22 @@
  *--------------------------------------------------------------------------*/
 
 typedef struct {
-    hemp_value    expr;
-    hemp_value    args;
+    hemp_value      expr;
+    hemp_value      args;
 }   hemp_eunary;
 
 typedef struct {
-    hemp_value    lhs;
-    hemp_value    rhs;
+    hemp_value      lhs;
+    hemp_value      rhs;
 }   hemp_ebinary;
 
 typedef struct {
-    hemp_value    args;
-    hemp_value    exprs;
+    hemp_value      args;
+    hemp_value      exprs;
 }   hemp_eblock;
 
 typedef union {
-    hemp_value    value;
+    hemp_value      value;
     hemp_eunary     unary;
     hemp_ebinary    binary;
     hemp_eblock     block;
@@ -60,39 +60,41 @@ struct hemp_element {
 //    hemp_element_new();
 
 hemp_element
-    hemp_element_init(
-        hemp_element    element,
-        hemp_symbol     symbol,
-        hemp_string     token,
-        hemp_pos        position,
-        hemp_size       length
-    );
+hemp_element_init(
+    hemp_element    element,
+    hemp_symbol     symbol,
+    hemp_string     token,
+    hemp_pos        position,
+    hemp_size       length
+);
 
 void
-    hemp_element_free(
-        hemp_element    element
-    );
+hemp_element_free(
+    hemp_element    element
+);
 
 HEMP_INLINE hemp_element
-    hemp_element_create(
-        hemp_element    element,
-        hemp_string     typename
-    );
+hemp_element_create(
+    hemp_element    element,
+    hemp_string     typename
+);
 
 hemp_symbol 
-    hemp_element_retype(
-        hemp_element    element,
-        hemp_string     typename
-    );
+hemp_element_retype(
+    hemp_element    element,
+    hemp_string     typename
+);
 
 hemp_element
-    hemp_element_parse(
-        hemp_element    element, 
-        hemp_scope      scope
-    );
+hemp_element_parse(
+    hemp_element    element, 
+    hemp_scope      scope
+);
 
 hemp_list
-    hemp_element_parse_exprs(HEMP_PREFIX_ARGS);
+hemp_element_parse_exprs(
+    HEMP_PREFIX_ARGS
+);
 
 
 
@@ -567,24 +569,24 @@ HEMP_OUTPUT_FUNC(hemp_element_value_values);
 
 
 void
-    hemp_element_text_clean(
-        hemp_element element
-    );
+hemp_element_text_clean(
+    hemp_element    element
+);
 
 void
-    hemp_element_block_clean(
-        hemp_element element
-    );
+hemp_element_block_clean(
+    hemp_element    element
+);
 
 void
-    hemp_element_brackets_clean(
-        hemp_element element
-    );
+hemp_element_brackets_clean(
+    hemp_element    element
+);
 
 hemp_bool
-    hemp_element_dump(
-        hemp_element element
-    );
+hemp_element_dump(
+    hemp_element    element
+);
 
 
 #endif /* HEMP_ELEMENT_H */

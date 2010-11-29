@@ -14,7 +14,7 @@
 struct hemp_template {
     hemp_dialect    dialect;
     hemp_source     source;
-    hemp_tagset   tagset;
+    hemp_tagset     tagset;
     hemp_scope      scope;
     hemp_elements   elements;
     hemp_element    tree;
@@ -26,42 +26,42 @@ struct hemp_template {
  *--------------------------------------------------------------------------*/
 
 hemp_template
-    hemp_template_init(
-        hemp_dialect    dialect,
-        hemp_source   source
-    );
+hemp_template_init(
+    hemp_dialect    dialect,
+    hemp_source     source
+);
 
 void    
-    hemp_template_free(
-        hemp_template   template
-    );
+hemp_template_free(
+    hemp_template   template
+);
 
 hemp_element
-    hemp_template_tokens(
-        hemp_template   template
-    );
+hemp_template_tokens(
+    hemp_template   template
+);
 
 hemp_bool
-    hemp_template_scan(
-        hemp_template   template
-    );
+hemp_template_scan(
+    hemp_template   template
+);
 
 hemp_bool
-    hemp_template_compile(
-        hemp_template   template
-    );
+hemp_template_compile(
+    hemp_template   template
+);
     
 hemp_element
-    hemp_template_tree(
-        hemp_template   template
-    );
+hemp_template_tree(
+    hemp_template   template
+);
 
 
 hemp_text
-    hemp_template_render(
-        hemp_template   template,
-        hemp_context    context
-    );
+hemp_template_render(
+    hemp_template   template,
+    hemp_context    context
+);
 
 
 /*--------------------------------------------------------------------------

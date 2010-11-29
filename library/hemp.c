@@ -6,27 +6,53 @@
  *--------------------------------------------------------------------------*/
 
 hemp_hemp
-hemp_init() {
+hemp_new() {
     hemp_hemp hemp;         /* So good they named it thrice! */
 
     hemp_global_init();
     HEMP_ALLOCATE(hemp);
 
+    hemp_init_errors(hemp);
     hemp_init_factories(hemp);
     hemp_init_schemes(hemp);
     hemp_init_languages(hemp);
     hemp_init_templates(hemp);
-    hemp_init_errors(hemp);
-
+    hemp_init_viewers(hemp);
 
     // YUK.  We have to do this to force all the hemp stuff to be loaded.
     // Needs work to make this more auto-load on demand.
     hemp_language language = hemp_language_instance(hemp, "hemp");
 //  hemp_debug_msg("LANGUAGE: %s v%0.2f\n", language->name, language->version);
 
-    HEMP_VIEWER("text", &hemp_viewer_text_init);
-
     return hemp;
+}
+
+
+void
+hemp_init_errors(
+    hemp_hemp hemp
+) {
+    /* install error messages - may want to localise these one day */
+    hemp->errmsg = hemp_errmsg;
+    hemp->error  = NULL;
+
+    /* define parent longjmp buffer for error handling */
+    hemp->jump = (hemp_jump) hemp_mem_alloc(
+        sizeof(struct hemp_jump)
+    );
+    if (! hemp->jump)
+        hemp_mem_fail("jump buffer");
+    
+    hemp->jump->parent = NULL;
+    hemp->jump->depth  = 0;
+
+    hemp_errno e = setjmp(hemp->jump->buffer);
+
+    if (e) {
+        // TODO: proper handling... but if memory serves this is iffy 
+        // because we've lost the hemp reference.
+        hemp_fatal("uncaught error code: %d", e);
+    }
 }
 
 
@@ -64,15 +90,16 @@ hemp_init_schemes(
     );
 }
 
+
 void
 hemp_init_languages(
     hemp_hemp hemp
 ) {
     hemp_register_language(
-        hemp, HEMP_HEMP, &hemp_language_hemp_init
+        hemp, HEMP_HEMP, &hemp_language_hemp_new
     );
     hemp_register_language(
-        hemp, HEMP_TT3, &hemp_language_tt3_init
+        hemp, HEMP_TT3, &hemp_language_tt3_new
     );
     hemp_register_language(
         hemp, "test", &hemp_language_test
@@ -81,43 +108,22 @@ hemp_init_languages(
 
 
 void
-hemp_init_errors(
+hemp_init_templates(
     hemp_hemp hemp
 ) {
-    /* install error messages - may want to localise these one day */
-    hemp->errmsg = hemp_errmsg;
-    hemp->error  = NULL;
-
-    /* define parent longjmp buffer for error handling */
-    hemp->jump = (hemp_jump) hemp_mem_alloc(
-        sizeof(struct hemp_jump)
-    );
-    if (! hemp->jump)
-        hemp_mem_fail("jump buffer");
-    
-    hemp->jump->parent = NULL;
-    hemp->jump->depth  = 0;
-
-//  hemp_debug("setting error handling jump point in hemp at %p\n", hemp);
-
-    hemp_errno e = setjmp(hemp->jump->buffer);
-
-    if (e) {
-//        hemp_debug("uncaught error in hemp at %p\n", hemp);
-////        if (hemp && hemp->error && hemp->error->message) {
-//        printf("error message at %p\n", hemp->error); //->message);
-//            printf("error message: %s\n", hemp); //, hemp->error->message);
-//            hemp_fatal(hemp->error->message);
-////        }
-//////        else if (e > 0 && e < HEMP_ERROR_MAX) {
-//////            hemp_fatal("%s", hemp_errmsg[e], HEMP_WTFS);
-//////        }
-////        else {
-//        
-        hemp_fatal("uncaught error code: %d", e);
-//        }
-    }
+    hemp->templates = hemp_hash_init();
 }
+
+
+void
+hemp_init_viewers(
+    hemp_hemp hemp
+) {
+    hemp_register_viewer(
+        hemp, HEMP_TEXT, &hemp_viewer_text_init
+    );
+}
+
 
 
 /*--------------------------------------------------------------------------
@@ -130,23 +136,49 @@ hemp_free(
 ) {
     hemp_debug_call("hemp_free()\n");
 
-    /* templates */
-//  hemp_debug("freeing templates\n");
-    hemp_hash_each(hemp->templates, &hemp_free_template);
-    hemp_hash_free(hemp->templates);
+    /* free all the components */
+    hemp_free_templates(hemp);
+    hemp_free_factories(hemp);
+    hemp_free_errors(hemp);
 
     /* tags */
     //  hemp_hash_each(hemp->tags, &hemp_tagset_free_tag);
     //  hemp_hash_free(hemp->tags);
 
-    /* free factories */
+    /* hemp */
+    hemp_mem_free(hemp);
+
+    /* release global data if we're the last hemp object */
+    hemp_global_free();
+}
+
+
+void
+hemp_free_templates(
+    hemp_hemp hemp
+) {
+    hemp_hash_each(hemp->templates, &hemp_free_template);
+    hemp_hash_free(hemp->templates);
+}
+
+
+void
+hemp_free_factories(
+    hemp_hemp hemp
+) {
     hemp_factory_free(hemp->viewer);
     hemp_factory_free(hemp->element);
     hemp_factory_free(hemp->grammar);
     hemp_factory_free(hemp->dialect);
     hemp_factory_free(hemp->language);
     hemp_factory_free(hemp->scheme);
+}
 
+
+void
+hemp_free_errors(
+    hemp_hemp hemp
+) {
     /* free parent jump buffer, discard all others (statically allocated) */
     hemp_jump j = hemp->jump;
     while (j->parent && j->parent != j) {
@@ -163,15 +195,13 @@ hemp_free(
         hemp_error_free(error);
         error = next;
     }
-
-    /* hemp */
-    hemp_mem_free(hemp);
-
-    /* release global data if we're the last hemp object */
-    hemp_global_free();
 }
 
 
+
+/*--------------------------------------------------------------------------
+ * Cleanup functions for individual component instances
+ *--------------------------------------------------------------------------*/
 
 hemp_bool
 hemp_free_scheme(
@@ -235,6 +265,18 @@ hemp_free_grammar(
 
 
 hemp_bool
+hemp_free_template(
+    hemp_hash templates,
+    hemp_pos  position,
+    hemp_slot item
+) {
+    hemp_debug_init("cleaning template\n");
+    hemp_template_free( (hemp_template) hemp_val_ptr(item->value) );
+    return HEMP_TRUE;
+}
+
+
+hemp_bool
 hemp_free_viewer(
     hemp_hash viewers,
     hemp_pos  position,
@@ -244,7 +286,6 @@ hemp_free_viewer(
     hemp_viewer_free( (hemp_viewer) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
-
 
 
 
@@ -267,30 +308,9 @@ hemp_register_elements(
 
 
 
-
 /*--------------------------------------------------------------------------
  * template functions
  *--------------------------------------------------------------------------*/
-
-
-void
-hemp_init_templates(
-    hemp_hemp hemp
-) {
-    hemp->templates = hemp_hash_init();
-}
-
-
-hemp_bool
-hemp_free_template(
-    hemp_hash templates,
-    hemp_pos  position,
-    hemp_slot item
-) {
-    hemp_template_free( (hemp_template) hemp_val_ptr(item->value) );
-    return HEMP_TRUE;
-}
-
 
 hemp_template
 hemp_template_instance(
@@ -332,7 +352,7 @@ hemp_template_instance(
 //  hemp_debug("caching new template\n");
 
     /* let the source allocate memory for storing md5 permanently */
-    hemp_source_set_md5(tmpl->source, md5.output);
+    hemp_source_md5(tmpl->source, md5.output);
     hemp_hash_store_pointer(hemp->templates, tmpl->source->md5, tmpl);
     
     return tmpl;

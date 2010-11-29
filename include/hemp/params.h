@@ -11,10 +11,10 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_params {
-    hemp_hash           name;
-    hemp_list           item;
-    hemp_string         list;
-    hemp_string         hash;
+    hemp_hash       name;
+    hemp_list       item;
+    hemp_string     list;
+    hemp_string     hash;
 };
 
 
@@ -23,32 +23,32 @@ struct hemp_params {
  *--------------------------------------------------------------------------*/
 
 hemp_params
-    hemp_params_init(
-        hemp_params     params
-    );
+hemp_params_init(
+    hemp_params     params
+);
 
 void
-    hemp_params_free(
-        hemp_params     params
-    );
+hemp_params_free(
+    hemp_params     params
+);
 
 hemp_bool
-    hemp_params_add_item(
-        hemp_params     params,
-        hemp_string     name
-    );
+hemp_params_add_item(
+    hemp_params     params,
+    hemp_string     name
+);
 
 hemp_bool
-    hemp_params_add_list(
-        hemp_params     params,
-        hemp_string     name
-    );
+hemp_params_add_list(
+    hemp_params     params,
+    hemp_string     name
+);
 
 hemp_bool
-    hemp_params_add_hash(
-        hemp_params     params,
-        hemp_string     name
-    );
+hemp_params_add_hash(
+    hemp_params     params,
+    hemp_string     name
+);
 
 
 /*--------------------------------------------------------------------------

@@ -146,7 +146,7 @@ hemp_string_trim(
 }
 
 
-void
+HEMP_INLINE void
 hemp_string_chomp(
     hemp_string string
 ) {
@@ -162,7 +162,7 @@ hemp_string_chomp(
         *s = HEMP_NUL;
 }
 
-hemp_bool
+HEMP_INLINE hemp_bool
 hemp_string_wordlike(
     hemp_string string
 ) {
@@ -176,7 +176,7 @@ hemp_string_wordlike(
 }
 
 
-hemp_bool
+HEMP_INLINE hemp_bool
 hemp_string_numlike(
     hemp_string string
 ) {

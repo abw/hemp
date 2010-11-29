@@ -14,7 +14,7 @@ int main(
 
 
 void test_viewer() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
     hemp_language_instance(hemp, "tt3");

@@ -18,7 +18,7 @@ int main(
 ) {
     plan(263);
     
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     
     test_values();
     test_identity_values();
@@ -333,7 +333,7 @@ void test_value_conversion() {
 
 
 void test_number_conversion() {
-    hemp_hemp          hemp    = hemp_init();
+    hemp_hemp          hemp    = hemp_new();
     hemp_context  context = hemp_context_instance(hemp);
     
     pass("testing number -> xxx conversions");
@@ -363,7 +363,7 @@ void test_number_conversion() {
 
 
 void test_integer_conversion() {
-    hemp_hemp          hemp    = hemp_init();
+    hemp_hemp          hemp    = hemp_new();
     hemp_context  context = hemp_context_instance(hemp);
 
     pass("testing integer -> xxx conversions");
@@ -395,7 +395,7 @@ void test_integer_conversion() {
 
 
 //void test_boolean_conversion() {
-//    hemp_hemp          hemp    = hemp_init();
+//    hemp_hemp          hemp    = hemp_new();
 //    hemp_context  context = hemp_context_instance(hemp);
 //    hemp_value    truth   = HempTrue;;
 //
@@ -435,7 +435,7 @@ void test_text_conversion_is_number(
     hemp_string string,
     hemp_num expect
 ) {
-    hemp_hemp          hemp    = hemp_init();
+    hemp_hemp          hemp    = hemp_new();
     hemp_context  context = hemp_context_instance(hemp);
     hemp_text     text    = hemp_text_from_string(string);
     hemp_value    tval    = hemp_text_val(text);
@@ -461,7 +461,7 @@ void test_text_conversion_is_number(
 void test_text_conversion_not_number(
     hemp_string string
 ) {
-    hemp_hemp          hemp    = hemp_init();
+    hemp_hemp          hemp    = hemp_new();
     hemp_context  context = hemp_context_instance(hemp);
     hemp_text     text    = hemp_text_from_string(string);
     hemp_value    tval    = hemp_text_val(text);
@@ -484,7 +484,7 @@ void test_text_conversion_is_integer(
     hemp_string string,
     hemp_int expect
 ) {
-    hemp_hemp          hemp    = hemp_init();
+    hemp_hemp          hemp    = hemp_new();
     hemp_context  context = hemp_context_instance(hemp);
     hemp_text     text    = hemp_text_from_string(string);
     hemp_value    tval    = hemp_text_val(text);
@@ -510,7 +510,7 @@ void test_text_conversion_is_integer(
 void test_text_conversion_not_integer(
     hemp_string string
 ) {
-    hemp_hemp          hemp    = hemp_init();
+    hemp_hemp          hemp    = hemp_new();
     hemp_context  context = hemp_context_instance(hemp);
     hemp_text     text    = hemp_text_from_string(string);
     hemp_value    tval    = hemp_text_val(text);
@@ -532,7 +532,7 @@ void test_text_conversion_not_integer(
 
 void test_text_conversion() {
     pass("testing text -> xxx conversions");
-    hemp_hemp          hemp    = hemp_init();
+    hemp_hemp          hemp    = hemp_new();
     hemp_context  context = hemp_context_instance(hemp);
     hemp_text     text    = hemp_text_from_string("123");
     hemp_value    tval    = hemp_text_val(text);
@@ -601,7 +601,7 @@ void test_text_conversion() {
 
 
 void test_identity_conversion() {
-    hemp_hemp          hemp    = hemp_init();
+    hemp_hemp          hemp    = hemp_new();
     hemp_context  context = hemp_context_instance(hemp);
     hemp_value    number;
     

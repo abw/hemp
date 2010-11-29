@@ -19,8 +19,8 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_filesystem {
-    hemp_hemp           hemp;
-    hemp_list           path;
+    hemp_hemp       hemp;
+    hemp_list       path;
 }; 
 
 
@@ -29,39 +29,38 @@ struct hemp_filesystem {
  *--------------------------------------------------------------------------*/
 
 hemp_filesystem
-    hemp_filesystem_new(
-        hemp_hemp       hemp,
-        hemp_string     path
-    );
+hemp_filesystem_new(
+    hemp_hemp       hemp,
+    hemp_string     path
+);
 
 void
-    hemp_filesystem_free(
-        hemp_filesystem filesystem
-    );
+hemp_filesystem_free(
+    hemp_filesystem filesystem
+);
 
 void
-    hemp_filesystem_set_path(
-        hemp_filesystem filesystem, 
-        hemp_string     path
-    );
+hemp_filesystem_set_path(
+    hemp_filesystem filesystem, 
+    hemp_string     path
+);
 
 hemp_string
-    hemp_filesystem_join_path(
-        hemp_string     base,
-        hemp_string     path
-    );
-
+hemp_filesystem_join_path(
+    hemp_string     base,
+    hemp_string     path
+);
 
 hemp_string
-    hemp_filesystem_readable_path(
-        hemp_filesystem filesystem,
-        hemp_string     path
-    );
+hemp_filesystem_readable_path(
+    hemp_filesystem filesystem,
+    hemp_string     path
+);
     
 hemp_string 
-    hemp_filesystem_read_file(
-        hemp_string     path
-    );
+hemp_filesystem_read_file(
+    hemp_string     path
+);
 
 
 /*--------------------------------------------------------------------------

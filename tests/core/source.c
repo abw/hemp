@@ -13,7 +13,7 @@ int main(
 
 
 void test_source() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     hemp_scheme scheme;
     hemp_source source;
     hemp_string    text;

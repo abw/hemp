@@ -16,7 +16,7 @@ int main(
 
 
 void test_types() {
-    hemp_hemp hemp            = hemp_init();
+    hemp_hemp hemp            = hemp_new();
     hemp_context context = hemp_context_instance(hemp);
 
     hemp_value number = hemp_num_val(3.14159);
@@ -65,7 +65,7 @@ hemp_type type1_constructor(
     
 
 void test_type_registration() {
-    hemp_hemp hemp = hemp_init();
+    hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp" );
 
     hemp_type type1 = hemp_use_type("Type1", &type1_constructor);

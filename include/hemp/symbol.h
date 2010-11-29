@@ -17,37 +17,37 @@ struct hemp_symbol {
     HEMP_TYPE_BASE
 
     /* a symbol is bound to a grammar */
-    hemp_grammar        grammar;
+    hemp_grammar    grammar;
 
     /* symbol metadata */
-    hemp_string         start;
-    hemp_string         end;
-    hemp_flags          flags;
-    hemp_oprec          lprec;
-    hemp_oprec          rprec;
+    hemp_string     start;
+    hemp_string     end;
+    hemp_flags      flags;
+    hemp_oprec      lprec;
+    hemp_oprec      rprec;
 
     /* intialisation (on scan) and cleanup methods */
-    hemp_sym_scan_f     scanner;
-    hemp_eclean_f       cleanup;
+    hemp_sym_scan_f scanner;
+    hemp_eclean_f   cleanup;
 
     /* parsing methods */
-    hemp_prefix_f       parse_prefix;             // TODO: add 'parse_' prefix
-    hemp_postfix_f      parse_postfix;
-    hemp_prefix_f       parse_fixed;
-    hemp_postfix_f      parse_params;
-    hemp_compile_f      lvalue_param;
+    hemp_prefix_f   parse_prefix;             // TODO: add 'parse_' prefix
+    hemp_postfix_f  parse_postfix;
+    hemp_prefix_f   parse_fixed;
+    hemp_postfix_f  parse_params;
+    hemp_compile_f  lvalue_param;
 
     /* value methods */
-    hemp_output_f       token;
-    hemp_output_f       source;
+    hemp_output_f   token;
+    hemp_output_f   source;
 };
 
 
 /* symbols collection */
 
 struct hemp_symbols {
-    hemp_string         name;
-    hemp_symbol_f       constructor;
+    hemp_string     name;
+    hemp_symbol_f   constructor;
 };
 
 /*--------------------------------------------------------------------------
@@ -56,20 +56,20 @@ struct hemp_symbols {
 
 hemp_symbol
 hemp_symbol_new(
-    hemp_string         name,
-    hemp_string         start,
-    hemp_string         end
+    hemp_string     name,
+    hemp_string     start,
+    hemp_string     end
 );
 
 
 void
 hemp_symbol_free(
-    hemp_symbol         symbol
+    hemp_symbol     symbol
 );
 
 void 
 hemp_symbol_dump(
-    hemp_symbol         symbol
+    hemp_symbol     symbol
 );
 
 

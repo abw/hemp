@@ -211,7 +211,7 @@ hash_set(
 
 
 void test_hash_methods() {
-    hemp_hemp       hemp    = hemp_init();
+    hemp_hemp       hemp    = hemp_new();
     hemp_hash  hash    = hemp_hash_init();
 //  hemp_text  text    = hemp_text_from_string("Hello World!");
     hemp_value value   = hemp_hash_val(hash);

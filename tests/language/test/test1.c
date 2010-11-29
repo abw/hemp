@@ -13,7 +13,7 @@ int main(
 
 
 int test_test_language() {
-    hemp_hemp          hemp    = hemp_init();
+    hemp_hemp          hemp    = hemp_new();
     hemp_context     context = hemp_context_instance(hemp);
     hemp_string      name    = "test1";
     hemp_template tmpl;

@@ -14,13 +14,12 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_context {
-    hemp_hemp           hemp;
-    hemp_hash           vars;
-    hemp_frame          frame;
-/*  hemp_value        variables; */
-    hemp_pool           text_pool;          /* tmp hack */
-    hemp_pool           list_pool;          /* tmp hack */
-    hemp_pool           code_pool;          /* tmp hack */
+    hemp_hemp       hemp;
+    hemp_hash       vars;
+    hemp_frame      frame;
+    hemp_pool       text_pool;          /* tmp hack */
+    hemp_pool       list_pool;          /* tmp hack */
+    hemp_pool       code_pool;          /* tmp hack */
 };
 
 
@@ -29,68 +28,66 @@ struct hemp_context {
  *--------------------------------------------------------------------------*/
 
 hemp_context
-    hemp_context_init(
-        hemp_hemp       hemp
-    );
+hemp_context_init(
+    hemp_hemp       hemp
+);
 
 void
-    hemp_context_free(
-        hemp_context    context
-    );
+hemp_context_free(
+    hemp_context    context
+);
 
 hemp_text
-    hemp_context_tmp_text(
-        hemp_context    context
-    );
+hemp_context_tmp_text(
+    hemp_context    context
+);
 
 hemp_text
-    hemp_context_tmp_text_size(
-        hemp_context    context,
-        hemp_size       size
-    );
+hemp_context_tmp_text_size(
+    hemp_context    context,
+    hemp_size       size
+);
 
 hemp_list       
-    hemp_context_tmp_list(
-        hemp_context    context
-    );
+hemp_context_tmp_list(
+    hemp_context    context
+);
 
 hemp_code
-    hemp_context_tmp_code(
-        hemp_context    context
-    );
+hemp_context_tmp_code(
+    hemp_context    context
+);
 
 hemp_bool
-    hemp_context_list_pool_cleaner(
-        hemp_memory     item
-    );
+hemp_context_list_pool_cleaner(
+    hemp_memory     item
+);
 
 hemp_bool
-    hemp_context_text_pool_cleaner(
-        hemp_memory     item
-    );
+hemp_context_text_pool_cleaner(
+    hemp_memory     item
+);
 
 hemp_bool
-    hemp_context_code_pool_cleaner(
-        hemp_memory     item
-    );
+hemp_context_code_pool_cleaner(
+    hemp_memory     item
+);
 
-HEMP_INLINE 
-hemp_frame
-    hemp_context_frame(
-        hemp_context    context
-    );
+HEMP_INLINE hemp_frame
+hemp_context_frame(
+    hemp_context    context
+);
 
-HEMP_INLINE 
-hemp_frame
-    hemp_context_enter(
-        hemp_context    context,
-        hemp_element    element
-    );
+HEMP_INLINE hemp_frame
+hemp_context_enter(
+    hemp_context    context,
+    hemp_element    element
+);
 
 HEMP_INLINE hemp_element
-    hemp_context_leave(
-        hemp_context    context
-    );
+hemp_context_leave(
+    hemp_context    context
+);
 
 
 /*--------------------------------------------------------------------------

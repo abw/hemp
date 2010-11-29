@@ -34,7 +34,7 @@ new(package)
     INIT:
         fprintf(stderr, "Hemp->new()\n");
     CODE:
-        RETVAL = hemp_init();
+        RETVAL = hemp_new();
         hemp_perl_init();
     OUTPUT:
         RETVAL

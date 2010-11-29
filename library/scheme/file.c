@@ -55,7 +55,7 @@ hemp_scheme_file_cleaner(
     hemp_source source 
 ) {
     if (source->text) {
-        hemp_debug_msg("cleaning file source: %s\n", source->name);
-        hemp_free(source->text);
+        hemp_debug_msg("cleaning file source: %s\n%s\n", source->name, source->text);
+        hemp_mem_free(source->text);
     }
 }

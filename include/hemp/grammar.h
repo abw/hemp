@@ -15,55 +15,55 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_grammar {
-    hemp_hemp           hemp;
-    hemp_string         name;
-    hemp_hash           symbols;
-    hemp_hash           keywords;
-    hemp_ptree        operators;
+    hemp_hemp       hemp;
+    hemp_string     name;
+    hemp_hash       symbols;
+    hemp_hash       keywords;
+    hemp_ptree      operators;
 };
 
 
 hemp_grammar
-    hemp_grammar_new(
-        hemp_hemp       hemp,
-        hemp_string     name
-    );
+hemp_grammar_new(
+    hemp_hemp       hemp,
+    hemp_string     name
+);
 
 hemp_symbol
-    hemp_grammar_new_symbol(
-        hemp_grammar    grammar,
-        hemp_string     element,
-        hemp_string     start,
-        hemp_string     end
-    );
+hemp_grammar_new_symbol(
+    hemp_grammar    grammar,
+    hemp_string     element,
+    hemp_string     start,
+    hemp_string     end
+);
 
 hemp_symbol
-    hemp_grammar_add_symbol(
-        hemp_grammar    grammar,
-        hemp_string     element,
-        hemp_string     start,
-        hemp_string     end,
-        hemp_oprec      lprec,
-        hemp_oprec      rprec
-    );
+hemp_grammar_add_symbol(
+    hemp_grammar    grammar,
+    hemp_string     element,
+    hemp_string     start,
+    hemp_string     end,
+    hemp_oprec      lprec,
+    hemp_oprec      rprec
+);
 
 HEMP_INLINE hemp_symbol
-    hemp_grammar_symbol(
-        hemp_grammar    grammar,
-        hemp_string     name
-    );
+hemp_grammar_symbol(
+    hemp_grammar    grammar,
+    hemp_string     name
+);
 
 void
-    hemp_grammar_free(
-        hemp_grammar    grammar
-    );
+hemp_grammar_free(
+    hemp_grammar    grammar
+);
 
 hemp_bool
-    hemp_grammar_free_symbol(
-        hemp_hash       grammars,
-        hemp_pos        position,
-        hemp_slot       item
-    );
+hemp_grammar_free_symbol(
+    hemp_hash       grammars,
+    hemp_pos        position,
+    hemp_slot       item
+);
 
 
 #endif /* HEMP_GRAMMAR_H */

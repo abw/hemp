@@ -9,8 +9,8 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_action {
-    hemp_actor   actor;
-    hemp_memory  script;
+    hemp_actor      actor;
+    hemp_memory     script;
 }; 
 
 
@@ -19,16 +19,16 @@ struct hemp_action {
  *--------------------------------------------------------------------------*/
 
 hemp_action
-    hemp_action_init(
-        hemp_action     action,
-        hemp_actor      actor,
-        hemp_memory     script
-    );
+hemp_action_init(
+    hemp_action     action,
+    hemp_actor      actor,
+    hemp_memory     script
+);
 
 void
-    hemp_action_free(
-        hemp_action     action
-    );
+hemp_action_free(
+    hemp_action     action
+);
 
 
 /*--------------------------------------------------------------------------

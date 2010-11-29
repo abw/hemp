@@ -16,7 +16,7 @@ main(int argc, char **argv, char **env)
 
 
 void test_module() {
-    hemp_t hemp = hemp_init();
+    hemp_t hemp = hemp_new();
     ok( hemp, "created hemp object" );
     
     skip_start(1, 1, "module loading doesn't work yet");

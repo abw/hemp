@@ -11,11 +11,11 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_frame {
-    hemp_context        context;
-    hemp_frame          parent;
-    hemp_element        element;
-    hemp_list           args;
-    hemp_hash           vars;
+    hemp_context    context;
+    hemp_frame      parent;
+    hemp_element    element;
+    hemp_list       args;
+    hemp_hash       vars;
 };
 
 
@@ -24,14 +24,14 @@ struct hemp_frame {
  *--------------------------------------------------------------------------*/
 
 hemp_frame
-    hemp_frame_init(
-        hemp_frame      frame
-    );
+hemp_frame_init(
+    hemp_frame      frame
+);
 
 void
-    hemp_frame_free(
-        hemp_frame      frame
-    );
+hemp_frame_free(
+    hemp_frame      frame
+);
 
 
 /*--------------------------------------------------------------------------

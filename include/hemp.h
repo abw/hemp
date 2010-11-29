@@ -36,6 +36,8 @@ extern "C" {
 #include <hemp/type/list.h>
 #include <hemp/type/hash.h>
 #include <hemp/type/code.h>
+#include <hemp/language/hemp.h>
+#include <hemp/language/tt3.h>
 #include <hemp/language/test.h>
 
 //#include <hemp/module.h>
@@ -43,53 +45,37 @@ extern "C" {
 
 
 /* hemp initialisation and cleanup functions */
-hemp_hemp   hemp_init();
-void        hemp_init_factories(hemp_hemp);
-void        hemp_init_schemes(hemp_hemp);
-void        hemp_init_languages(hemp_hemp);
-void        hemp_init_errors(hemp_hemp);
-
-void        hemp_free(hemp_hemp);
-void        hemp_free_factories(hemp_hemp);
-hemp_bool   hemp_free_dialect ( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool   hemp_free_element ( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool   hemp_free_grammar ( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool   hemp_free_language( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool   hemp_free_scheme  ( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool   hemp_free_template( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool   hemp_free_viewer  ( hemp_hash, hemp_pos, hemp_slot );
-
-/* scheme functions */
-
-/* source functions */
-hemp_source   hemp_source_instance(hemp_hemp, hemp_string, hemp_string);
-
-/* template functions */
+hemp_hemp       hemp_new();
+void            hemp_init_errors(hemp_hemp);
+void            hemp_init_factories(hemp_hemp);
+void            hemp_init_schemes(hemp_hemp);
+void            hemp_init_languages(hemp_hemp);
 void            hemp_init_templates(hemp_hemp);
-hemp_template hemp_template_instance(hemp_hemp, hemp_string, hemp_string, hemp_string);
+void            hemp_init_viewers(hemp_hemp);
 
-/* runtime functions */
-hemp_context  hemp_context_instance(hemp_hemp);
+void            hemp_free(hemp_hemp);
+void            hemp_free_templates(hemp_hemp);
+void            hemp_free_factories(hemp_hemp);
+void            hemp_free_errors(hemp_hemp);
 
-//void            hemp_throw(hemp_hemp, hemp_errno_e, ...);
-hemp_string      hemp_error_format(hemp_hemp, hemp_errno);
-hemp_error    hemp_error_message(hemp_hemp, hemp_errno, ...);
-hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
+hemp_bool       hemp_free_dialect ( hemp_hash, hemp_pos, hemp_slot );
+hemp_bool       hemp_free_element ( hemp_hash, hemp_pos, hemp_slot );
+hemp_bool       hemp_free_grammar ( hemp_hash, hemp_pos, hemp_slot );
+hemp_bool       hemp_free_language( hemp_hash, hemp_pos, hemp_slot );
+hemp_bool       hemp_free_scheme  ( hemp_hash, hemp_pos, hemp_slot );
+hemp_bool       hemp_free_template( hemp_hash, hemp_pos, hemp_slot );
+hemp_bool       hemp_free_viewer  ( hemp_hash, hemp_pos, hemp_slot );
+
+hemp_context    hemp_context_instance(hemp_hemp);
+hemp_template   hemp_template_instance(hemp_hemp, hemp_string, hemp_string, hemp_string);
+
+hemp_string     hemp_error_format(hemp_hemp, hemp_errno);
+hemp_error      hemp_error_message(hemp_hemp, hemp_errno, ...);
+hemp_error      hemp_error_scan_pos(hemp_error, hemp_scan_pos);
 void            hemp_error_throw(hemp_hemp, hemp_error);
 void            hemp_scan_error(hemp_hemp, HEMP_SCAN_ARGS, hemp_errno, ...);
 
-
-/* tag functions */
-//void            hemp_init_tags(hemp_hemp);
-//void            hemp_add_tag(hemp_hemp, hemp_tag);
-//
-//#define         hemp_tag(hemp, name) \
-//                    (hemp_tag) hemp_hash_fetch(hemp->tags, name)
-
-hemp_string hemp_version();
-
-
-
+hemp_string     hemp_version();
 
 void hemp_register_elements(hemp_hemp, hemp_symbols);
 

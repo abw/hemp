@@ -261,13 +261,13 @@ extern const hemp_value HempAfter;
 #define hemp_hgtype(v)          (hemp_global_types[HEMP_TYPE_ID(v)])
 #define hemp_obtype(v)          (((hemp_object) HEMP_POINTER(v))->type)
 #define hemp_pobtype(p)         (p->type)
-#define hemp_vtype(v)            (hemp_is_object(v) ? hemp_obtype(v) : hemp_hgtype(v))
+#define hemp_vtype(v)           (hemp_is_object(v) ? hemp_obtype(v) : hemp_hgtype(v))
 #define hemp_obcall(v,n,...)    (hemp_obtype(v)->n(v,__VA_ARGS__))
 #define hemp_pobcall(v,n,...)   (hemp_pobtype(v)->n(v,__VA_ARGS__))
 #define hemp_tfunc(v,n)         (hemp_vtype(v)->n)
 #define hemp_call(v,n,...)      (hemp_tfunc(v,n)(v,__VA_ARGS__))
 #define hemp_dot(v,c,k)         (hemp_tfunc(v,dot)(v,c,k))
-#define hemp_vtext(v,c,o)        (hemp_tfunc(v,text)(v,c,o))
+#define hemp_vtext(v,c,o)       (hemp_tfunc(v,text)(v,c,o))
 #define hemp_values(v,c,o)      (hemp_tfunc(v,values)(v,c,o))
 #define hemp_fetch(v,c,k)       (hemp_tfunc(v,fetch)(v,c,k))
 #define hemp_store(v,c,k,i)     (hemp_tfunc(v,store)(v,c,k,i))
@@ -300,8 +300,8 @@ extern const hemp_value HempAfter;
  * 
  *--------------------------------------------------------------------------*/
 
-typedef hemp_text     (* hemp_text_vfn)(hemp_value, hemp_context, hemp_text);
-typedef hemp_value    (* hemp_dot_vfn)(hemp_value, hemp_context, hemp_string);
+typedef hemp_text       (* hemp_text_vfn)(hemp_value, hemp_context, hemp_text);
+typedef hemp_value      (* hemp_dot_vfn)(hemp_value, hemp_context, hemp_string);
 typedef void            (* hemp_init_vfn)(hemp_value);
 typedef void            (* hemp_wipe_vfn)(hemp_value);
 
@@ -332,8 +332,8 @@ extern HEMP_INLINE hemp_value     hemp_elem_val(hemp_element e);
 
 extern HEMP_INLINE hemp_num       hemp_val_num(hemp_value v);
 extern HEMP_INLINE hemp_int       hemp_val_int(hemp_value v);
-extern HEMP_INLINE hemp_memory       hemp_val_ptr(hemp_value v);
-extern HEMP_INLINE hemp_string       hemp_val_str(hemp_value v);
+extern HEMP_INLINE hemp_memory    hemp_val_ptr(hemp_value v);
+extern HEMP_INLINE hemp_string    hemp_val_str(hemp_value v);
 extern HEMP_INLINE hemp_text      hemp_val_text(hemp_value v);
 extern HEMP_INLINE hemp_list      hemp_val_list(hemp_value v);
 extern HEMP_INLINE hemp_hash      hemp_val_hash(hemp_value v);

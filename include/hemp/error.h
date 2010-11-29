@@ -55,16 +55,16 @@ static hemp_string hemp_errmsg[] = {
  *--------------------------------------------------------------------------*/
 
 struct hemp_jump {
-    hemp_jump           parent;
-    hemp_jump_buf       buffer;
-    hemp_pos            depth;
+    hemp_jump       parent;
+    hemp_jump_buf   buffer;
+    hemp_pos        depth;
 };
 
 struct hemp_error {
-    hemp_errno          number;
-    hemp_string         message;
-    hemp_scan_pos       scan_pos;
-    hemp_error          parent;
+    hemp_errno      number;
+    hemp_string     message;
+    hemp_scan_pos   scan_pos;
+    hemp_error      parent;
 };
 
 
@@ -75,47 +75,47 @@ struct hemp_error {
  *--------------------------------------------------------------------------*/
 
 hemp_error
-    hemp_error_new(
-        hemp_errno      number
-    );
+hemp_error_new(
+    hemp_errno      number
+);
 
 
 hemp_error
-    hemp_error_init(
-        hemp_errno      number,
-        hemp_string     message
-    );
+hemp_error_init(
+    hemp_errno      number,
+    hemp_string     message
+);
 
 hemp_error
-    hemp_error_initf(
-        hemp_errno      number,
-        hemp_string     format,
-        ...
-    );
+hemp_error_initf(
+    hemp_errno      number,
+    hemp_string     format,
+    ...
+);
 
 hemp_error
-    hemp_error_initfv(
-        hemp_errno      number,
-        hemp_string     format,
-        va_list         args
-    );
+hemp_error_initfv(
+    hemp_errno      number,
+    hemp_string     format,
+    va_list         args
+);
 
 hemp_text
-    hemp_error_text(
-        hemp_error      error
-    );
+hemp_error_text(
+    hemp_error      error
+);
 
 hemp_error    
-    hemp_error_message(
-        hemp_hemp, 
-        hemp_errno, 
-        ...
-    );
+hemp_error_message(
+    hemp_hemp, 
+    hemp_errno, 
+    ...
+);
 
 void
-    hemp_error_free(
-        hemp_error      error
-    );
+hemp_error_free(
+    hemp_error      error
+);
 
 
 /* these macros are for testing */

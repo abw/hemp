@@ -9,12 +9,12 @@
  */
 
 struct hemp_scan_pos {
-    hemp_template tmpl;
-    hemp_tag      tag;
-    hemp_string      start;
-    hemp_pos      pos;
-    hemp_string      current;
-    hemp_symbol   symbol;
+    hemp_template   tmpl;
+    hemp_tag        tag;
+    hemp_string     start;
+    hemp_pos        pos;
+    hemp_string     current;
+    hemp_symbol     symbol;
 };
 
 
@@ -40,25 +40,19 @@ struct hemp_scan_pos {
  *--------------------------------------------------------------------------*/
 
 hemp_scan_pos
-    hemp_scan_pos_init(
-        HEMP_SCAN_ARGS
-    );
+hemp_scan_pos_init(
+    HEMP_SCAN_ARGS
+);
 
 void 
-    hemp_scan_pos_free(
-        hemp_scan_pos scan_pos
-    );
+hemp_scan_pos_free(
+    hemp_scan_pos scan_pos
+);
 
 hemp_bool
-    hemp_scan_text(
-        hemp_template
-    );
-
-//hemp_tag
-//    hemp_scan_tag_start(
-//        hemp_pnode, 
-//        hemp_string *
-//    );
+hemp_scan_text(
+    hemp_template
+);
 
 
 

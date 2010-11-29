@@ -41,117 +41,116 @@
 
 
 struct hemp_test_plan_s {
-    hemp_uint     skip_all;
-    hemp_uint     skip_some;
-    hemp_uint     planned;
-    hemp_uint     expected;
-    hemp_uint     tested;
-    hemp_uint     passed;
-    hemp_uint     failed;
-    hemp_uint     skipped;
-    hemp_uint     verbose;
-    hemp_uint     todo;
-    hemp_string      todo_msg;
+    hemp_uint       skip_all;
+    hemp_uint       skip_some;
+    hemp_uint       planned;
+    hemp_uint       expected;
+    hemp_uint       tested;
+    hemp_uint       passed;
+    hemp_uint       failed;
+    hemp_uint       skipped;
+    hemp_uint       verbose;
+    hemp_uint       todo;
+    hemp_string     todo_msg;
 };
 
 typedef struct hemp_test_plan_s *hemp_test_plan_p;
 
 void
-    hemp_test_global_setup();
+hemp_test_global_setup();
 
 void
-    hemp_test_global_cleanup();
+hemp_test_global_cleanup();
 
 hemp_test_plan_p 
-    hemp_test_global_plan(
-        hemp_uint planned
-    );
+hemp_test_global_plan(
+    hemp_uint       planned
+);
 
 hemp_test_plan_p 
-    hemp_test_plan_setup(
-        hemp_uint planned
-    );
+hemp_test_plan_setup(
+    hemp_uint       planned
+);
 
 void 
-    hemp_test_plan_summary(
-        hemp_test_plan_p plan
-    );
+hemp_test_plan_summary(
+    hemp_test_plan_p plan
+);
 
 hemp_uint
-    hemp_test_plan_result(
-        hemp_test_plan_p plan
-    );
+hemp_test_plan_result(
+    hemp_test_plan_p plan
+);
 
 void    
-    hemp_test_plan_cleanup(
-        hemp_test_plan_p plan
-    );
+hemp_test_plan_cleanup(
+    hemp_test_plan_p plan
+);
 
 hemp_test_plan_p 
-    hemp_test_plan(
-        hemp_uint planned
-    );
+hemp_test_plan(
+    hemp_uint planned
+);
 
 hemp_uint
-    hemp_test_result(
-        hemp_test_plan_p    plan,
-        hemp_bool         ok,         /* true=pass false=fail */
-        hemp_name         func,        
-        hemp_name         file,       /* source file          */
-        hemp_uint         line,       /* line number          */
-        hemp_name         name,       /* test name            */
-        ...
-    );
+hemp_test_result(
+    hemp_test_plan_p plan,
+    hemp_bool       ok,         /* true=pass false=fail */
+    hemp_name       func,        
+    hemp_name       file,       /* source file          */
+    hemp_uint       line,       /* line number          */
+    hemp_name       name,       /* test name            */
+    ...
+);
 
 void 
-    hemp_test_output(
-        hemp_string  name,
-        hemp_text output,
-        hemp_string  expect
-    );
-
+hemp_test_output(
+    hemp_string  name,
+    hemp_text output,
+    hemp_string  expect
+);
 
 void 
-    hemp_test_error(
-        hemp_string name,
-        hemp_string error,
-        hemp_string expect
-    );
+hemp_test_error(
+    hemp_string name,
+    hemp_string error,
+    hemp_string expect
+);
 
 void
-    hemp_test_warning(
-        char *fmt, ...
-    );
+hemp_test_warning(
+    char *fmt, ...
+);
 
 
 
 void hemp_mem_trace_ok(void);
 
 hemp_uint
-    hemp_test_expect_text(
-        hemp_string     language,
-        hemp_string     dialect,
-        hemp_string     text,
-        hemp_string     alias,
-        hemp_context context
-    );
+hemp_test_expect_text(
+    hemp_string     language,
+    hemp_string     dialect,
+    hemp_string     text,
+    hemp_string     alias,
+    hemp_context    context
+);
 
 hemp_uint
-    hemp_test_expect_file(
-        hemp_string     language,
-        hemp_string     dialect,
-        hemp_string     file,
-        hemp_context context
-    );
+hemp_test_expect_file(
+    hemp_string     language,
+    hemp_string     dialect,
+    hemp_string     file,
+    hemp_context context
+);
 
 hemp_uint
-    hemp_test_expect_script(
-        hemp_string     language,
-        hemp_string     dialect,
-        hemp_string     testdir,
-        hemp_string     name,
-        hemp_context context
-    );
+hemp_test_expect_script(
+    hemp_string     language,
+    hemp_string     dialect,
+    hemp_string     testdir,
+    hemp_string     name,
+    hemp_context context
+);
 
 
 /*--------------------------------------------------------------------------

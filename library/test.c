@@ -397,7 +397,7 @@ hemp_test_expect_text(
     hemp_string      alias,
     hemp_context  context
 ) {
-    hemp_hemp          hemp = hemp_init();
+    hemp_hemp          hemp = hemp_new();
     hemp_string      test, name, expect, error, end;
     hemp_list     list;
     hemp_template tmpl;

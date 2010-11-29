@@ -79,7 +79,7 @@ hemp_context_enter(
      * Also has local vars hash which are chained to current context vars
      * and then installed in the context as the new master set
      */
-    hemp_frame frame  = hemp_frame_new();
+    hemp_frame frame    = hemp_frame_new();
     frame->element      = element;
     frame->context      = context;
     frame->parent       = context->frame;
