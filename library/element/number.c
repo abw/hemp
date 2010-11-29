@@ -37,7 +37,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_number) {
 }
 
 
-HEMP_SYMBOL_FUNC(hemp_element_number_symbol) {
+HEMP_SYMBOL(hemp_element_number_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->parse_prefix    = &hemp_element_literal_prefix;
     symbol->value           = &hemp_element_number_value;
@@ -70,7 +70,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_integer) {
 }
 
 
-HEMP_SYMBOL_FUNC(hemp_element_integer_symbol) {
+HEMP_SYMBOL(hemp_element_integer_symbol) {
     hemp_element_number_symbol(hemp, symbol);
     symbol->value   = &hemp_element_integer_value;
     symbol->integer = &hemp_element_integer_value;
@@ -94,7 +94,7 @@ HEMP_VALUE_FUNC(hemp_element_integer_value) {
  * auto-increment
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_autoinc_symbol) {
+HEMP_SYMBOL(hemp_element_number_autoinc_symbol) {
     hemp_element_prepostfix_symbol(hemp, symbol);
     symbol->value  =
     symbol->number = &hemp_element_number_autoinc_value;
@@ -111,7 +111,7 @@ HEMP_VALUE_FUNC(hemp_element_number_autoinc_value) {
  * auto-decrement
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_autodec_symbol) {
+HEMP_SYMBOL(hemp_element_number_autodec_symbol) {
     hemp_element_prepostfix_symbol(hemp, symbol);
     symbol->value  =
     symbol->number = &hemp_element_number_autodec_value;
@@ -128,7 +128,7 @@ HEMP_VALUE_FUNC(hemp_element_number_autodec_value) {
  * number plus, e.g. '+'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_plus_symbol) {
+HEMP_SYMBOL(hemp_element_number_plus_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     /* also works as prefix operator */
     symbol->parse_prefix    = &hemp_element_parse_prefix;
@@ -178,7 +178,7 @@ HEMP_VALUE_FUNC(hemp_element_number_plus_value) {
  * number minus, e.g. '-'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_minus_symbol) {
+HEMP_SYMBOL(hemp_element_number_minus_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     /* also works as prefix operator */
     symbol->parse_prefix    = &hemp_element_parse_prefix;
@@ -231,7 +231,7 @@ HEMP_VALUE_FUNC(hemp_element_number_minus_value) {
  * number raised to power, e.g. '**', '^', or something similar
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_power_symbol) {
+HEMP_SYMBOL(hemp_element_number_power_symbol) {
     hemp_element_infix_right_symbol(hemp, symbol);
     symbol->value  =
     symbol->number = &hemp_element_number_power_value;
@@ -275,7 +275,7 @@ HEMP_VALUE_FUNC(hemp_element_number_power_value) {
  * number multiplication, e.g. '*' or 'x'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_multiply_symbol) {
+HEMP_SYMBOL(hemp_element_number_multiply_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     symbol->value  =
     symbol->number = &hemp_element_number_multiply_value;
@@ -314,7 +314,7 @@ HEMP_VALUE_FUNC(hemp_element_number_multiply_value) {
  * number division, e.g. '/'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_divide_symbol) {
+HEMP_SYMBOL(hemp_element_number_divide_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     symbol->value  = 
     symbol->number = &hemp_element_number_divide_value;
@@ -355,7 +355,7 @@ HEMP_VALUE_FUNC(hemp_element_number_divide_value) {
  * integer division forces both sides to integers, e.g. 'div'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_divint_symbol) {
+HEMP_SYMBOL(hemp_element_number_divint_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     symbol->value   =
     symbol->number  =
@@ -383,7 +383,7 @@ HEMP_VALUE_FUNC(hemp_element_number_divint_value) {
  * integer modulus, e.g. '%', 'mod', etc.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_modulus_symbol) {
+HEMP_SYMBOL(hemp_element_number_modulus_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     symbol->value   =
     symbol->number  =
@@ -411,7 +411,7 @@ HEMP_VALUE_FUNC(hemp_element_number_modulus_value) {
  * number comparison, e.g. '<=>'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_compare_symbol) {
+HEMP_SYMBOL(hemp_element_number_compare_symbol) {
     hemp_element_compare_symbol(hemp, symbol);
     symbol->value   = 
     symbol->compare = &hemp_element_number_compare_value;
@@ -440,7 +440,7 @@ HEMP_VALUE_FUNC(hemp_element_number_compare_value) {
  * number equality, e.g. '=='
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_equal_symbol) {
+HEMP_SYMBOL(hemp_element_number_equal_symbol) {
     hemp_element_compare_equal_symbol(hemp, symbol);
     symbol->compare = &hemp_element_number_compare_value;
     return symbol;
@@ -451,7 +451,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_equal_symbol) {
  * number inequality, e.g. '!=', '<>', etc.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_not_equal_symbol) {
+HEMP_SYMBOL(hemp_element_number_not_equal_symbol) {
     hemp_element_compare_not_equal_symbol(hemp, symbol);
     symbol->compare = &hemp_element_number_compare_value;
     return symbol;
@@ -462,7 +462,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_not_equal_symbol) {
  * number less than, e.g. '<'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_before_symbol) {
+HEMP_SYMBOL(hemp_element_number_before_symbol) {
     hemp_element_compare_before_symbol(hemp, symbol);
     symbol->compare = &hemp_element_number_compare_value;
     return symbol;
@@ -473,7 +473,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_before_symbol) {
  * number less than or equal to, e.g. '<=', '!>', etc
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_not_after_symbol) {
+HEMP_SYMBOL(hemp_element_number_not_after_symbol) {
     hemp_element_compare_not_after_symbol(hemp, symbol);
     symbol->compare = &hemp_element_number_compare_value;
     return symbol;
@@ -484,7 +484,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_not_after_symbol) {
  * number more than, e.g. '>'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_after_symbol) {
+HEMP_SYMBOL(hemp_element_number_after_symbol) {
     hemp_element_compare_after_symbol(hemp, symbol);
     symbol->compare = &hemp_element_number_compare_value;
     return symbol;
@@ -495,7 +495,7 @@ HEMP_SYMBOL_FUNC(hemp_element_number_after_symbol) {
  * number more than more than or equal to, e.g. '>=', '!<', etc.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_number_not_before_symbol) {
+HEMP_SYMBOL(hemp_element_number_not_before_symbol) {
     hemp_element_compare_not_before_symbol(hemp, symbol);
     symbol->compare = &hemp_element_number_compare_value;
     return symbol;

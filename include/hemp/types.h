@@ -89,14 +89,12 @@ struct hemp_hemp {
     hemp_factory        scheme;
     hemp_factory        viewer;
 
-//    hemp_hash           schemes;
 //  hemp_hash           tags;
     hemp_hash           templates;
-//    hemp_dialect        dialect;
+//  hemp_dialect        dialect;
 
     hemp_bool           verbose;
     hemp_bool           debug;
-//  hemp_hash_t dialect_factory;
     hemp_jump           jump;
     hemp_error          error;
     hemp_string       * errmsg;
@@ -143,12 +141,6 @@ typedef hemp_bool
     (* hemp_pool_iter)(             /* iterate over pool items              */
         hemp_memory      item       /* pointer to memory                    */
     );
-
-
-//typedef hemp_bool
-//    (* hemp_source_op)(             /* source operations: check, read, etc  */
-//        hemp_source     source
-//    );
 
 
 /*--------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include <hemp/element.h>
 
 
-HEMP_SYMBOL_FUNC(hemp_element_literal_symbol) {
+HEMP_SYMBOL(hemp_element_literal_symbol) {
     symbol->token       = &hemp_element_literal_token;
     symbol->source      = &hemp_element_literal_source;
     symbol->text        = &hemp_element_literal_text;

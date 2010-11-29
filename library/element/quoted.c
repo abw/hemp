@@ -5,7 +5,7 @@
  * single quoted strings
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_squote_symbol) {
+HEMP_SYMBOL(hemp_element_squote_symbol) {
     symbol->flags           = HEMP_BE_FIXED;
     symbol->scanner         = &hemp_element_squote_scanner;
     symbol->cleanup         = &hemp_element_text_clean;
@@ -86,7 +86,7 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
  * double quoted strings
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_dquote_symbol) {
+HEMP_SYMBOL(hemp_element_dquote_symbol) {
     symbol->scanner         = &hemp_element_dquote_scanner;
     symbol->cleanup         = &hemp_element_text_clean;
     symbol->parse_prefix    = &hemp_element_literal_prefix;

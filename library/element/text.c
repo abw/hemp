@@ -17,7 +17,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_text) {
 }
 
 
-HEMP_SYMBOL_FUNC(hemp_element_text_symbol) {
+HEMP_SYMBOL(hemp_element_text_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->parse_prefix  = &hemp_element_literal_prefix;
     symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED;
@@ -25,7 +25,7 @@ HEMP_SYMBOL_FUNC(hemp_element_text_symbol) {
 }
 
 
-//HEMP_SYMBOL_FUNC(hemp_element_textop_symbol) {
+//HEMP_SYMBOL(hemp_element_textop_symbol) {
 //    hemp_element_binary_symbol(hemp, symbol);
 //    symbol->text    = &hemp_element_not_text;      /* redefined for each op */
 //    symbol->number  = &hemp_element_textop_number;
@@ -73,7 +73,7 @@ hemp_element_text_clean(
  * text concatentation '~'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_text_concat_symbol) {
+HEMP_SYMBOL(hemp_element_text_concat_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     symbol->value = &hemp_element_text_value;
     symbol->text  = &hemp_element_text_concat_value;
@@ -104,7 +104,7 @@ HEMP_OUTPUT_FUNC(hemp_element_text_concat_value) {
  * text comparison, e.g. '<=>'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_text_compare_symbol) {
+HEMP_SYMBOL(hemp_element_text_compare_symbol) {
     hemp_element_compare_symbol(hemp, symbol);
     symbol->compare = &hemp_element_text_compare_value;
     return symbol;
@@ -136,7 +136,7 @@ HEMP_VALUE_FUNC(hemp_element_text_compare_value) {
  * text equality, e.g. 'eq'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_text_equal_symbol) {
+HEMP_SYMBOL(hemp_element_text_equal_symbol) {
     hemp_element_compare_equal_symbol(hemp, symbol);
     symbol->compare = &hemp_element_text_compare_value;
     return symbol;
@@ -147,7 +147,7 @@ HEMP_SYMBOL_FUNC(hemp_element_text_equal_symbol) {
  * text inequality, e.g. 'ne'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_text_not_equal_symbol) {
+HEMP_SYMBOL(hemp_element_text_not_equal_symbol) {
     hemp_element_compare_not_equal_symbol(hemp, symbol);
     symbol->compare = &hemp_element_text_compare_value;
     return symbol;
@@ -158,7 +158,7 @@ HEMP_SYMBOL_FUNC(hemp_element_text_not_equal_symbol) {
  * text less than, e.g. 'lt'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_text_before_symbol) {
+HEMP_SYMBOL(hemp_element_text_before_symbol) {
     hemp_element_compare_before_symbol(hemp, symbol);
     symbol->compare = &hemp_element_text_compare_value;
     return symbol;
@@ -169,7 +169,7 @@ HEMP_SYMBOL_FUNC(hemp_element_text_before_symbol) {
  * text more than more than or equal to, e.g. 'ge'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_text_not_before_symbol) {
+HEMP_SYMBOL(hemp_element_text_not_before_symbol) {
     hemp_element_compare_not_before_symbol(hemp, symbol);
     symbol->compare = &hemp_element_text_compare_value;
     return symbol;
@@ -180,7 +180,7 @@ HEMP_SYMBOL_FUNC(hemp_element_text_not_before_symbol) {
  * text more than, e.g. 'gt'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_text_after_symbol) {
+HEMP_SYMBOL(hemp_element_text_after_symbol) {
     hemp_element_compare_after_symbol(hemp, symbol);
     symbol->compare = &hemp_element_text_compare_value;
     return symbol;
@@ -191,7 +191,7 @@ HEMP_SYMBOL_FUNC(hemp_element_text_after_symbol) {
  * text less than or equal to, e.g. 'le'
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_text_not_after_symbol) {
+HEMP_SYMBOL(hemp_element_text_not_after_symbol) {
     hemp_element_compare_not_after_symbol(hemp, symbol);
     symbol->compare = &hemp_element_text_compare_value;
     return symbol;

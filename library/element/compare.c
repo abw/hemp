@@ -7,7 +7,7 @@
  * cmp, <=>, etc.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_compare_symbol) {
+HEMP_SYMBOL(hemp_element_compare_symbol) {
     hemp_element_infix_symbol(hemp, symbol);
     symbol->value   = &hemp_element_compare_value;
     symbol->compare = &hemp_element_not_compare;    /* subtypes redefine    */
@@ -27,7 +27,7 @@ HEMP_VALUE_FUNC(hemp_element_compare_value) {
  * the value is HempEqual
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_compare_equal_symbol) {
+HEMP_SYMBOL(hemp_element_compare_equal_symbol) {
     hemp_element_boolean_symbol(hemp, symbol);
     symbol->boolean = &hemp_element_compare_equal_value;
     return symbol;
@@ -48,7 +48,7 @@ HEMP_VALUE_FUNC(hemp_element_compare_equal_value) {
  * not equal is like equal... NOT!
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_compare_not_equal_symbol) {
+HEMP_SYMBOL(hemp_element_compare_not_equal_symbol) {
     hemp_element_boolean_symbol(hemp, symbol);
     symbol->boolean = &hemp_element_compare_not_equal_value;
     return symbol;
@@ -69,7 +69,7 @@ HEMP_VALUE_FUNC(hemp_element_compare_not_equal_value) {
  * before - did the compare() method return HempBefore?
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_compare_before_symbol) {
+HEMP_SYMBOL(hemp_element_compare_before_symbol) {
     hemp_element_boolean_symbol(hemp, symbol);
     symbol->boolean = &hemp_element_compare_before_value;
     return symbol;
@@ -90,7 +90,7 @@ HEMP_VALUE_FUNC(hemp_element_compare_before_value) {
  * not before (i.e. equal or after)
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_compare_not_before_symbol) {
+HEMP_SYMBOL(hemp_element_compare_not_before_symbol) {
     hemp_element_boolean_symbol(hemp, symbol);
     symbol->boolean = &hemp_element_compare_not_before_value;
     return symbol;
@@ -111,7 +111,7 @@ HEMP_VALUE_FUNC(hemp_element_compare_not_before_value) {
  * after
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_compare_after_symbol) {
+HEMP_SYMBOL(hemp_element_compare_after_symbol) {
     hemp_element_boolean_symbol(hemp, symbol);
     symbol->boolean = &hemp_element_compare_after_value;
     return symbol;
@@ -132,7 +132,7 @@ HEMP_VALUE_FUNC(hemp_element_compare_after_value) {
  * not after (i.e. equal or before)
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_compare_not_after_symbol) {
+HEMP_SYMBOL(hemp_element_compare_not_after_symbol) {
     hemp_element_boolean_symbol(hemp, symbol);
     symbol->boolean = &hemp_element_compare_not_after_value;
     return symbol;

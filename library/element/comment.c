@@ -13,7 +13,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_comment) {
 }
 
 
-HEMP_SYMBOL_FUNC(hemp_element_comment_symbol) {
+HEMP_SYMBOL(hemp_element_comment_symbol) {
     symbol->scanner    = &hemp_element_comment_scanner;
     symbol->token      = &hemp_element_literal_token;
     symbol->source     = &hemp_element_literal_source;

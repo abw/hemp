@@ -6,11 +6,11 @@
 HEMP_LANGUAGE(hemp_language_hemp_init);
 
 /* symbol collections */
-HEMP_SYMBOLS_FUNC(hemp_element_assign_symbols);
-HEMP_SYMBOLS_FUNC(hemp_element_bracket_symbols);
-HEMP_SYMBOLS_FUNC(hemp_element_boolean_symbols);
-HEMP_SYMBOLS_FUNC(hemp_element_number_symbols);
-HEMP_SYMBOLS_FUNC(hemp_element_text_symbols);
+HEMP_SYMBOLS(hemp_element_assign_symbols);
+HEMP_SYMBOLS(hemp_element_bracket_symbols);
+HEMP_SYMBOLS(hemp_element_boolean_symbols);
+HEMP_SYMBOLS(hemp_element_number_symbols);
+HEMP_SYMBOLS(hemp_element_text_symbols);
 
 /* grammar initialisers */
 HEMP_GRAMMAR(hemp_grammar_hemp_alpha);
@@ -138,7 +138,7 @@ HEMP_LANGUAGE(hemp_language_hemp_init) {
  * bracket elements
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOLS_FUNC(hemp_element_bracket_symbols) {
+HEMP_SYMBOLS(hemp_element_bracket_symbols) {
     /* we should detect if we've done this already and skip it */
     hemp_register_elements(
         hemp, hemp_symbols_hemp_bracket
@@ -155,7 +155,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_bracket_symbols) {
  * boolean operator elements
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOLS_FUNC(hemp_element_boolean_symbols) {
+HEMP_SYMBOLS(hemp_element_boolean_symbols) {
     /* we should detect if we've done this already and skip it */
     hemp_register_elements(
         hemp, hemp_symbols_hemp_boolean
@@ -172,7 +172,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_boolean_symbols) {
  * number operator elements
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOLS_FUNC(hemp_element_number_symbols) {
+HEMP_SYMBOLS(hemp_element_number_symbols) {
     /* we should detect if we've done this already and skip it */
     hemp_register_elements(
         hemp, hemp_symbols_hemp_number
@@ -189,7 +189,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_number_symbols) {
  * text operator elements
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOLS_FUNC(hemp_element_text_symbols) {
+HEMP_SYMBOLS(hemp_element_text_symbols) {
     /* we should detect if we've done this already and skip it */
     hemp_register_elements(
         hemp, hemp_symbols_hemp_text
@@ -206,7 +206,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_text_symbols) {
  * assignment operator elements
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOLS_FUNC(hemp_element_assign_symbols) {
+HEMP_SYMBOLS(hemp_element_assign_symbols) {
     /* I'm getting tired of this... should have some way to specify the 
      * symbol set instead of a function... oh well it'll do for now...
      */

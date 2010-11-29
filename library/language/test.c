@@ -100,7 +100,7 @@ HEMP_GRAMMAR(hemp_grammar_test) {
  * elements
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_test_test_symbol) {
+HEMP_SYMBOL(hemp_element_test_test_symbol) {
     hemp_debug("test.test symbol: %s\n", symbol->name);
     symbol->scanner         = &hemp_element_test_test_scanner;
     symbol->cleanup         = &hemp_element_test_test_clean,

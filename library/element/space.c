@@ -14,7 +14,7 @@ hemp_symbol HempSymbolEOF       = NULL;
  * generic symbol constructor functions
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_punctuation_symbol) {
+HEMP_SYMBOL(hemp_element_punctuation_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->parse_fixed = NULL; // hemp_element_decline;
     symbol->flags = HEMP_BE_SOURCE | HEMP_BE_FIXED | HEMP_BE_HIDDEN;
@@ -33,7 +33,7 @@ HEMP_SYMBOL_FUNC(hemp_element_punctuation_symbol) {
  * to indicate where embedded languages begin.
  */
 
-HEMP_SYMBOL_FUNC(hemp_element_delimiter_symbol) {
+HEMP_SYMBOL(hemp_element_delimiter_symbol) {
     hemp_element_punctuation_symbol(hemp, symbol);
     symbol->flags |= HEMP_BE_DELIMITER;
     return symbol;
@@ -82,7 +82,7 @@ HEMP_SYMBOL_FUNC(hemp_element_delimiter_symbol) {
  * automagically.
  */
 
-HEMP_SYMBOL_FUNC(hemp_element_separator_symbol) {
+HEMP_SYMBOL(hemp_element_separator_symbol) {
     hemp_element_punctuation_symbol(hemp, symbol);
     symbol->flags |= HEMP_BE_SEPARATOR;
     return symbol;
@@ -96,7 +96,7 @@ HEMP_SYMBOL_FUNC(hemp_element_separator_symbol) {
  * it is the correct one.
  */ 
 
-HEMP_SYMBOL_FUNC(hemp_element_terminator_symbol) {
+HEMP_SYMBOL(hemp_element_terminator_symbol) {
     hemp_element_punctuation_symbol(hemp, symbol);
     symbol->flags |= HEMP_BE_TERMINATOR;
     return symbol;
@@ -131,7 +131,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_space) {
 }
 
 
-HEMP_SYMBOL_FUNC(hemp_element_space_symbol) {
+HEMP_SYMBOL(hemp_element_space_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->parse_prefix    = &hemp_element_next_prefix;
     symbol->parse_postfix   = &hemp_element_space_postfix;
@@ -188,7 +188,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_start) {
 }
 
 
-HEMP_SYMBOL_FUNC(hemp_element_tag_start_symbol) {
+HEMP_SYMBOL(hemp_element_tag_start_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->parse_prefix = &hemp_element_next_prefix;
     symbol->flags        = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
@@ -210,7 +210,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_end) {
 }
 
 
-HEMP_SYMBOL_FUNC(hemp_element_tag_end_symbol) {
+HEMP_SYMBOL(hemp_element_tag_end_symbol) {
     hemp_element_delimiter_symbol(hemp, symbol);
     return symbol;
 }
@@ -230,7 +230,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_eof) {
 }
 
 
-HEMP_SYMBOL_FUNC(hemp_element_eof_symbol) {
+HEMP_SYMBOL(hemp_element_eof_symbol) {
     symbol->token   = &hemp_element_eof_token;
     symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED | HEMP_BE_HIDDEN
                     | HEMP_BE_EOF;

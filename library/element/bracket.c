@@ -23,7 +23,7 @@ hemp_element_params_clean(
  * generic functions for all bracketed constructs
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_brackets_symbol) {
+HEMP_SYMBOL(hemp_element_brackets_symbol) {
     hemp_element_block_symbol(hemp, symbol);
     symbol->token           = &hemp_element_literal_token;
     symbol->parse_prefix    = &hemp_element_brackets_prefix;
@@ -105,7 +105,7 @@ hemp_element_brackets_clean(
  * parenthesis: ( )
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_parens_symbol) {
+HEMP_SYMBOL(hemp_element_parens_symbol) {
     hemp_element_brackets_symbol(hemp, symbol);
     symbol->parse_postfix   = &hemp_element_parens_postfix;
     symbol->value           = &hemp_element_parens_value;
@@ -186,7 +186,7 @@ HEMP_VALUE_FUNC(hemp_element_parens_value) {
  * like I just did).
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_params_symbol) {
+HEMP_SYMBOL(hemp_element_params_symbol) {
     hemp_element_parens_symbol(hemp, symbol);           // FIXME: don't do this
     symbol->value   = &hemp_element_params_value;
     symbol->values  = &hemp_element_value_values;
@@ -295,7 +295,7 @@ hemp_element_params_compile(
  * square brackets: [ ]
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_list_symbol) {
+HEMP_SYMBOL(hemp_element_list_symbol) {
     hemp_element_brackets_symbol(hemp, symbol);
     symbol->value = &hemp_element_list_value;
     return symbol;
@@ -315,7 +315,7 @@ HEMP_VALUE_FUNC(hemp_element_list_value) {
  * hash
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_hash_symbol) {
+HEMP_SYMBOL(hemp_element_hash_symbol) {
     hemp_element_brackets_symbol(hemp, symbol);
     symbol->value = &hemp_element_hash_value;
     return symbol;

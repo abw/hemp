@@ -17,7 +17,7 @@ hemp_symbol_block() {
  * block
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_block_symbol) {
+HEMP_SYMBOL(hemp_element_block_symbol) {
     symbol->source     = &hemp_element_block_source;
     symbol->value      = &hemp_element_block_value;
     symbol->text       = &hemp_element_block_text;
@@ -160,7 +160,7 @@ hemp_element_block_clean(
  * function
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_function_symbol) {
+HEMP_SYMBOL(hemp_element_function_symbol) {
     hemp_debug_call("hemp_element_function_symbol()\n");
 //  symbol->source      = &hemp_element_function_source;
     symbol->value       = &hemp_value_self;

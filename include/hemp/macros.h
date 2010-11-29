@@ -43,9 +43,13 @@
     HEMP_TYPE_INSTANCE(name, name)
 
 
-
 /*--------------------------------------------------------------------------
  * Macros for declaring language, dialect and grammar constructors.
+ *
+ * A language (or "language pack", more accurately) defines one or more 
+ * dialects.  Each dialect is a configuration of tags that can appear in a 
+ * document.  Each tag may define a grammar that denotes which tokens may
+ * appear inside a tag and how they map to elements.
  *--------------------------------------------------------------------------*/
 
 #define HEMP_LANGUAGE(f)                        \
@@ -84,11 +88,11 @@
  * perhaps 'x') and left/right precedence levels are also specified, where 
  * appropriate (used to implement operator precedence parsing).
  *
- * HEMP_SYMBOLS_FUNC(name) (note plural) can be used to declare/define a 
+ * HEMP_SYMBOLS(name) (note plural) can be used to declare/define a 
  * function which can provide hemp with a list of symbols, e.g. all the 
  * hemp.numop.* symbols.
  *
- * HEMP_SYMBOL_FUNC(name) (not singular) can be used to declare/define a 
+ * HEMP_SYMBOL(name) (not singular) can be used to declare/define a 
  * function which initialises a single symbol type.
  *
  * HEMP_SYMBOL0(...), HEMP_SYMBOL1(...) and HEMP_SYMBOL2(...) can be used as 
@@ -114,7 +118,7 @@
 #define HEMP_SYMBOLS_ARG_NAMES              \
     hemp, name
 
-#define HEMP_SYMBOLS_FUNC(f)                \
+#define HEMP_SYMBOLS(f)                     \
     hemp_action f(                          \
         hemp_hemp    hemp,                  \
         hemp_string  name                   \
@@ -127,7 +131,7 @@
 #define HEMP_SYMBOL_ARG_NAMES               \
     hemp, symbol
 
-#define HEMP_SYMBOL_FUNC(f)                 \
+#define HEMP_SYMBOL(f)                      \
     hemp_symbol f(                          \
         HEMP_SYMBOL_ARGS                    \
     )

@@ -15,7 +15,7 @@
  * each other in a deadly embrace until the universe grows cold.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_boolean_symbol) {
+HEMP_SYMBOL(hemp_element_boolean_symbol) {
     hemp_element_infix_symbol(hemp, symbol);
     symbol->value   = &hemp_element_boolean_value;
     symbol->boolean = &hemp_element_not_boolean;
@@ -38,7 +38,7 @@ HEMP_VALUE_FUNC(hemp_element_boolean_value) {
  * that, it's just a case of patching in the boolean() evaluation function.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_boolean_not_symbol) {
+HEMP_SYMBOL(hemp_element_boolean_not_symbol) {
     hemp_element_boolean_symbol(HEMP_SYMBOL_ARG_NAMES);
     symbol->parse_prefix  = &hemp_element_parse_prefix;
     symbol->parse_postfix = NULL;
@@ -67,7 +67,7 @@ HEMP_VALUE_FUNC(hemp_element_boolean_not_value) {
  * evaluation method.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_boolean_and_symbol) {
+HEMP_SYMBOL(hemp_element_boolean_and_symbol) {
     hemp_element_boolean_symbol(HEMP_SYMBOL_ARG_NAMES);
     symbol->boolean = &hemp_element_boolean_and_value;
     return symbol;
@@ -99,7 +99,7 @@ HEMP_VALUE_FUNC(hemp_element_boolean_and_value) {
  * Another standard binary boolean operator.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_boolean_or_symbol) {
+HEMP_SYMBOL(hemp_element_boolean_or_symbol) {
     hemp_element_boolean_symbol(HEMP_SYMBOL_ARG_NAMES);
     symbol->boolean = &hemp_element_boolean_or_value;
     return symbol;

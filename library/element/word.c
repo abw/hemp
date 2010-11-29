@@ -13,7 +13,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_word) {
 }
 
 
-HEMP_SYMBOL_FUNC(hemp_element_word_symbol) {
+HEMP_SYMBOL(hemp_element_word_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     /* these aren't right, but they'll do for now, for testing purposes */
     symbol->parse_prefix    = &hemp_element_word_prefix;

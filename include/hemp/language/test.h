@@ -9,9 +9,9 @@
 HEMP_LANGUAGE(hemp_language_test);
 HEMP_DIALECT(hemp_dialect_test);
 HEMP_GRAMMAR(hemp_grammar_test);
-HEMP_SYMBOLS_FUNC(hemp_element_test_symbols);
-HEMP_SYMBOL_FUNC(hemp_element_test_test_symbol);
-HEMP_SYMBOL_FUNC(hemp_element_test_expect_symbol);
+HEMP_SYMBOLS(hemp_element_test_symbols);
+HEMP_SYMBOL(hemp_element_test_test_symbol);
+HEMP_SYMBOL(hemp_element_test_expect_symbol);
 HEMP_SCAN_FUNC(hemp_element_test_test_scanner);
 HEMP_PREFIX_FUNC(hemp_element_test_test_prefix);
 HEMP_VALUE_FUNC(hemp_element_test_test_value);

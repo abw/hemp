@@ -6,7 +6,7 @@
  * assignment operators
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL_FUNC(hemp_element_assign_symbol) {
+HEMP_SYMBOL(hemp_element_assign_symbol) {
     hemp_element_infix_right_symbol(hemp, symbol);
     symbol->text   = &hemp_element_assign_text;
     symbol->value  = &hemp_element_assign_value;

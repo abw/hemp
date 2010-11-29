@@ -3,7 +3,7 @@
 #include <hemp/scope.h>
 
 
-HEMP_SYMBOL_FUNC(hemp_element_dotop_symbol) {
+HEMP_SYMBOL(hemp_element_dotop_symbol) {
     hemp_element_infix_left_symbol(hemp, symbol);
     symbol->parse_postfix = &hemp_element_dotop_postfix;
     symbol->value         = &hemp_element_dotop_value;
