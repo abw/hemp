@@ -33,7 +33,7 @@ hemp_grammar_new_symbol(
 //  );
 
     hemp_action constructor = hemp_factory_constructor(
-        grammar->hemp->elements, etype
+        grammar->hemp->element, etype
     );
     if (! constructor)
         hemp_throw(grammar->hemp, HEMP_ERROR_INVALID, "element", etype);

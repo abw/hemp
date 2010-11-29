@@ -93,9 +93,10 @@ am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-context.lo \
 	language/libhemp_la-test.lo language/libhemp_la-tt3.lo \
 	libhemp_la-memory.lo libhemp_la-namespace.lo \
 	libhemp_la-params.lo libhemp_la-pool.lo libhemp_la-ptree.lo \
-	libhemp_la-scanner.lo libhemp_la-scheme.lo libhemp_la-scope.lo \
-	libhemp_la-slab.lo libhemp_la-slot.lo libhemp_la-source.lo \
-	libhemp_la-symbol.lo libhemp_la-tag.lo \
+	libhemp_la-scanner.lo libhemp_la-scheme.lo \
+	scheme/libhemp_la-text.lo scheme/libhemp_la-file.lo \
+	libhemp_la-scope.lo libhemp_la-slab.lo libhemp_la-slot.lo \
+	libhemp_la-source.lo libhemp_la-symbol.lo libhemp_la-tag.lo \
 	tag/libhemp_la-comment.lo tag/libhemp_la-control.lo \
 	tag/libhemp_la-inline.lo tag/libhemp_la-outline.lo \
 	libhemp_la-tagset.lo libhemp_la-template.lo libhemp_la-test.lo \
@@ -295,6 +296,8 @@ libhemp_la_SOURCES = action.c            \
                         ptree.c             \
                         scanner.c           \
                         scheme.c            \
+                        scheme/text.c       \
+                        scheme/file.c       \
                         scope.c             \
                         slab.c              \
                         slot.c              \
@@ -434,6 +437,16 @@ language/libhemp_la-test.lo: language/$(am__dirstamp) \
 	language/$(DEPDIR)/$(am__dirstamp)
 language/libhemp_la-tt3.lo: language/$(am__dirstamp) \
 	language/$(DEPDIR)/$(am__dirstamp)
+scheme/$(am__dirstamp):
+	@$(MKDIR_P) scheme
+	@: > scheme/$(am__dirstamp)
+scheme/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) scheme/$(DEPDIR)
+	@: > scheme/$(DEPDIR)/$(am__dirstamp)
+scheme/libhemp_la-text.lo: scheme/$(am__dirstamp) \
+	scheme/$(DEPDIR)/$(am__dirstamp)
+scheme/libhemp_la-file.lo: scheme/$(am__dirstamp) \
+	scheme/$(DEPDIR)/$(am__dirstamp)
 tag/$(am__dirstamp):
 	@$(MKDIR_P) tag
 	@: > tag/$(am__dirstamp)
@@ -519,6 +532,10 @@ mostlyclean-compile:
 	-rm -f language/libhemp_la-test.lo
 	-rm -f language/libhemp_la-tt3.$(OBJEXT)
 	-rm -f language/libhemp_la-tt3.lo
+	-rm -f scheme/libhemp_la-file.$(OBJEXT)
+	-rm -f scheme/libhemp_la-file.lo
+	-rm -f scheme/libhemp_la-text.$(OBJEXT)
+	-rm -f scheme/libhemp_la-text.lo
 	-rm -f tag/libhemp_la-comment.$(OBJEXT)
 	-rm -f tag/libhemp_la-comment.lo
 	-rm -f tag/libhemp_la-control.$(OBJEXT)
@@ -602,6 +619,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@language/$(DEPDIR)/libhemp_la-hemp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@language/$(DEPDIR)/libhemp_la-test.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@language/$(DEPDIR)/libhemp_la-tt3.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@scheme/$(DEPDIR)/libhemp_la-file.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@scheme/$(DEPDIR)/libhemp_la-text.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/libhemp_la-comment.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/libhemp_la-control.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/libhemp_la-inline.Plo@am__quote@
@@ -907,6 +926,20 @@ libhemp_la-scheme.lo: scheme.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-scheme.lo `test -f 'scheme.c' || echo '$(srcdir)/'`scheme.c
 
+scheme/libhemp_la-text.lo: scheme/text.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT scheme/libhemp_la-text.lo -MD -MP -MF scheme/$(DEPDIR)/libhemp_la-text.Tpo -c -o scheme/libhemp_la-text.lo `test -f 'scheme/text.c' || echo '$(srcdir)/'`scheme/text.c
+@am__fastdepCC_TRUE@	$(am__mv) scheme/$(DEPDIR)/libhemp_la-text.Tpo scheme/$(DEPDIR)/libhemp_la-text.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='scheme/text.c' object='scheme/libhemp_la-text.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o scheme/libhemp_la-text.lo `test -f 'scheme/text.c' || echo '$(srcdir)/'`scheme/text.c
+
+scheme/libhemp_la-file.lo: scheme/file.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT scheme/libhemp_la-file.lo -MD -MP -MF scheme/$(DEPDIR)/libhemp_la-file.Tpo -c -o scheme/libhemp_la-file.lo `test -f 'scheme/file.c' || echo '$(srcdir)/'`scheme/file.c
+@am__fastdepCC_TRUE@	$(am__mv) scheme/$(DEPDIR)/libhemp_la-file.Tpo scheme/$(DEPDIR)/libhemp_la-file.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='scheme/file.c' object='scheme/libhemp_la-file.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o scheme/libhemp_la-file.lo `test -f 'scheme/file.c' || echo '$(srcdir)/'`scheme/file.c
+
 libhemp_la-scope.lo: scope.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-scope.lo -MD -MP -MF $(DEPDIR)/libhemp_la-scope.Tpo -c -o libhemp_la-scope.lo `test -f 'scope.c' || echo '$(srcdir)/'`scope.c
 @am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-scope.Tpo $(DEPDIR)/libhemp_la-scope.Plo
@@ -1103,6 +1136,7 @@ clean-libtool:
 	-rm -rf .libs _libs
 	-rm -rf element/.libs element/_libs
 	-rm -rf language/.libs language/_libs
+	-rm -rf scheme/.libs scheme/_libs
 	-rm -rf tag/.libs tag/_libs
 	-rm -rf type/.libs type/_libs
 	-rm -rf viewer/.libs viewer/_libs
@@ -1221,6 +1255,8 @@ distclean-generic:
 	-rm -f element/$(am__dirstamp)
 	-rm -f language/$(DEPDIR)/$(am__dirstamp)
 	-rm -f language/$(am__dirstamp)
+	-rm -f scheme/$(DEPDIR)/$(am__dirstamp)
+	-rm -f scheme/$(am__dirstamp)
 	-rm -f tag/$(DEPDIR)/$(am__dirstamp)
 	-rm -f tag/$(am__dirstamp)
 	-rm -f type/$(DEPDIR)/$(am__dirstamp)
@@ -1237,7 +1273,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) tag/$(DEPDIR) type/$(DEPDIR) viewer/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) scheme/$(DEPDIR) tag/$(DEPDIR) type/$(DEPDIR) viewer/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -1283,7 +1319,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) tag/$(DEPDIR) type/$(DEPDIR) viewer/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) element/$(DEPDIR) language/$(DEPDIR) scheme/$(DEPDIR) tag/$(DEPDIR) type/$(DEPDIR) viewer/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

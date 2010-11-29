@@ -51,7 +51,7 @@ hemp_dialect_test_prepare(
 
     hemp_hemp         hemp    = tmpl->dialect->hemp;
     hemp_tagset  tagset  = tmpl->tagset;
-    hemp_grammar grammar = hemp_grammar(hemp, HEMP_TEST);
+    hemp_grammar grammar = hemp_grammar_instance(hemp, HEMP_TEST);
 
     hemp_tagset_add_tag(
         tagset, 

@@ -12,10 +12,10 @@
  *-------------------------------------------------------------------------*/
 
 struct hemp_source {
-    hemp_scheme scheme;           /* e.g. text, file, etc                 */
-    hemp_string    md5;              /* MD5 hex digest of template uri       */
-    hemp_string    name;             /* path to file or source text          */
-    hemp_string    text;             /* file contents or source text         */
+    hemp_scheme         scheme;     /* e.g. text, file, etc                 */
+    hemp_string         name;       /* path to file or source text          */
+    hemp_string         md5;        /* MD5 hex digest of template uri       */
+    hemp_string         text;       /* file contents or source text         */
 };
 
 
@@ -24,8 +24,16 @@ struct hemp_source {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_source   hemp_source_init( hemp_scheme, hemp_string );
-void            hemp_source_free( hemp_source );
+hemp_source
+    hemp_source_new(
+        hemp_scheme     scheme,
+        hemp_string     name
+    );
+
+void
+    hemp_source_free(
+        hemp_source     source
+    );
 
 
 
@@ -33,14 +41,15 @@ void            hemp_source_free( hemp_source );
  * macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_source_read(source) (          \
-    source->text                            \
-        ? source->text                      \
-        : source->scheme->reader(source)    \
+#define hemp_source_read(source) (              \
+    source->text                                \
+        ? source->text                          \
+        : source->scheme->reader(source)        \
 )                                           
 
-#define hemp_source_name(source)            \
-    ((hemp_string) source->scheme->namer(source))
+#define hemp_source_name(source) (              \
+    (hemp_string) source->scheme->namer(source) \
+)
 
 
 #endif /* HEMP_SOURCE_H */

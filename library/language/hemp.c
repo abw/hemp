@@ -138,7 +138,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_bracket_symbols) {
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(
-        hemp->elements->constructors, name
+        hemp->element->constructors, name
     );
 }
 
@@ -153,7 +153,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_boolean_symbols) {
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(
-        hemp->elements->constructors, name
+        hemp->element->constructors, name
     );
 }
 
@@ -168,7 +168,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_number_symbols) {
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(
-        hemp->elements->constructors, name
+        hemp->element->constructors, name
     );
 }
 
@@ -183,7 +183,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_text_symbols) {
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(
-        hemp->elements->constructors, name
+        hemp->element->constructors, name
     );
 }
 
@@ -199,7 +199,7 @@ HEMP_SYMBOLS_FUNC(hemp_element_assign_symbols) {
     HEMP_ELEMENTS(hemp_symbols_hemp_assign);
 
     return (hemp_action) hemp_hash_fetch_pointer(
-        hemp->elements->constructors, name
+        hemp->element->constructors, name
     );
 }
 

@@ -153,7 +153,7 @@ hemp_factory_instance(
 
 hemp_bool
 hemp_factory_free_constructor(
-    hemp_hash     dialects,
+    hemp_hash     constructors,
     hemp_pos      position,
     hemp_slot     item
 ) {

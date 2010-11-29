@@ -148,17 +148,21 @@ hemp_string
 hemp_filesystem_read_file(
     hemp_string path
 ) {
-    hemp_string  text = NULL;
-    hemp_size size = 0;
+    hemp_string text = NULL;
+    hemp_size   size = 0;
     FILE *fp = fopen(path,"r");
+
     struct stat stat_buf;
 
     if (fp) {
-        fstat(fileno(fp), &stat_buf);
-        text = hemp_mem_alloc(stat_buf.st_size + 1);
+        fseek(fp, 0, SEEK_END);
+        long pos = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
 
-        if (fread(text, stat_buf.st_size, 1, fp)) {
-            text[stat_buf.st_size] = '\0';
+        text = hemp_mem_alloc(pos + 1);
+
+        if (fread(text, pos, 1, fp)) {
+            text[pos] = HEMP_NUL;
         }
         else {
             perror(path);               // fix me
@@ -171,4 +175,5 @@ hemp_filesystem_read_file(
 
     return text;
 }
+
 

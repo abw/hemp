@@ -80,8 +80,8 @@ hemp_dialect_tt3_prepare(
 
     hemp_hemp         hemp    = tmpl->dialect->hemp;
     hemp_tagset  tagset  = tmpl->tagset;
-    hemp_grammar command = hemp_grammar(hemp, "tt3.command");
-    hemp_grammar control = hemp_grammar(hemp, "tt3.control");
+    hemp_grammar command = hemp_grammar_instance(hemp, "tt3.command");
+    hemp_grammar control = hemp_grammar_instance(hemp, "tt3.control");
 
     hemp_tagset_add_tag(
         tagset, 
@@ -190,7 +190,7 @@ hemp_element_tt3_command_symbols(
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(
-        hemp->elements->constructors, name
+        hemp->element->constructors, name
     );
 }
 

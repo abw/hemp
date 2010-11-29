@@ -6,7 +6,7 @@
  *-------------------------------------------------------------------------*/
 
 hemp_source
-hemp_source_init(
+hemp_source_new(
     hemp_scheme scheme,
     hemp_string name
 ) {
@@ -17,13 +17,6 @@ hemp_source_init(
     source->scheme = scheme;
     source->md5    = 
     source->text   = NULL;
-
-    /*
-    hemp_debug_mem(
-        "Allocated %s source at %p\n", 
-        scheme->name, source
-    );]
-    */
 
     return source;
 }
@@ -50,8 +43,12 @@ hemp_source_free(
     if (source->md5)
         hemp_mem_free(source->md5);
 
+    if (source->scheme->cleaner) {
+        hemp_debug("TODO: run source cleaner\n");
+    }
     /* text sources have the name and text fields pointing at the same 
      * string so we only free the text field if it's different
+     * TODO: add custom source cleaner
      */
 
     if (source->text && source->text != source->name) {

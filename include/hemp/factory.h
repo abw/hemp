@@ -12,7 +12,7 @@
 struct hemp_factory {
     hemp_hash           instances;
     hemp_hash           constructors;
-    hemp_hash_iter    cleaner;
+    hemp_hash_iter      cleaner;
 }; 
 
 
@@ -30,7 +30,7 @@ void
 
 hemp_bool
     hemp_factory_free_constructor(
-        hemp_hash       dialects,
+        hemp_hash       constructors,
         hemp_pos        position,
         hemp_slot       slot
     );

@@ -1,7 +1,7 @@
 #include <hemp/test.h>
 
 void test_grammar();
-void test_hemp_grammar();
+void test_hemp_grammar_instance();
 void test_hemp_grammar_hemp();
 
 
@@ -11,7 +11,7 @@ int main(
     plan(12);
 
     test_grammar();
-    test_hemp_grammar();
+    test_hemp_grammar_instance();
     test_hemp_grammar_hemp();
 
     return done();
@@ -33,7 +33,7 @@ void test_grammar() {
     hemp_language_instance(hemp, HEMP_TT3);
 
     HEMP_TRY;
-        hemp_grammar grammar = hemp_grammar(hemp, "tt3.core");
+        hemp_grammar grammar = hemp_grammar_instance(hemp, "tt3.core");
         ok( grammar, "got grammar" );
         is( grammar->name, "tt3.core", "grammar name is tt3.core" );
         hemp_symbol space = hemp_grammar_symbol(grammar, "hemp.space");
@@ -43,7 +43,7 @@ void test_grammar() {
     HEMP_END;
         
     HEMP_TRY;
-        hemp_grammar(hemp, "dud");
+        hemp_grammar_instance(hemp, "dud");
         fail("there should be no grammar called 'dud'");
     HEMP_CATCH_ALL;
         pass("caught error for dud grammar");
@@ -98,7 +98,7 @@ hemp_grammar_test(
 
 
 
-void test_hemp_grammar() {
+void test_hemp_grammar_instance() {
     hemp_hemp hemp = hemp_init();
     ok( hemp, "created hemp object at %p", hemp );
 
@@ -107,7 +107,7 @@ void test_hemp_grammar() {
         hemp, "test", (hemp_actor) &hemp_grammar_test
     );
     
-    hemp_grammar grammar = hemp_grammar(hemp, "test");
+    hemp_grammar grammar = hemp_grammar_instance(hemp, "test");
     ok( grammar, "got grammar" );
 
     hemp_free(hemp);
@@ -118,10 +118,10 @@ void test_hemp_grammar_hemp() {
     ok( hemp, "created hemp object at %p", hemp );
 
     HEMP_TRY;
-        hemp_grammar grammar_a = hemp_grammar(hemp, "hemp.alpha");
+        hemp_grammar grammar_a = hemp_grammar_instance(hemp, "hemp.alpha");
         ok( grammar_a, "got hemp.alpha grammar" );
 
-        hemp_grammar grammar_b = hemp_grammar(hemp, "hemp.bravo");
+        hemp_grammar grammar_b = hemp_grammar_instance(hemp, "hemp.bravo");
         ok( grammar_b, "got hemp.bravo grammar" );
 
     HEMP_CATCH_ALL;

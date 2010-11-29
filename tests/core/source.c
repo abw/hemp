@@ -35,9 +35,11 @@ void test_source() {
     );
 
     hemp_source_free(source);
+    
+    hemp_string path  = hemp_filesystem_join_path(HEMP_TESTDIR, "data/file1");
 
     ok(
-        (source = hemp_source_instance(hemp, HEMP_FILE, "source/file.html")),
+        (source = hemp_source_instance(hemp, HEMP_FILE, path)),
         "created file source"
     );
     ok( 
@@ -48,6 +50,8 @@ void test_source() {
         (text = hemp_source_read(source)),
         "read file again: %s", text
     );
+
+    hemp_mem_free(path);
 
     hemp_source_free(source);
 

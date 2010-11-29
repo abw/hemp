@@ -185,7 +185,7 @@ void hemp_interactive(
     hemp_string  input, word, args;
     hemp_command *cmd;
 
-    rl_readline_name = HEMP_HEMP;
+    rl_readline_name = HEMP_STR_HEMP;
 //    rl_attempted_completion_function = hemp_completion;
     rl_completion_entry_function = hemp_command_generator;
 

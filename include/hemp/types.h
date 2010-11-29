@@ -82,16 +82,17 @@ typedef struct hemp_viewer      * hemp_viewer;
  *--------------------------------------------------------------------------*/
 
 struct hemp_hemp {
-    hemp_factory        languages;
-    hemp_factory        elements;
-    hemp_factory        grammars;
-    hemp_factory        dialects;
-    hemp_factory        viewers;
+    hemp_factory        dialect;
+    hemp_factory        element;
+    hemp_factory        grammar;
+    hemp_factory        language;
+    hemp_factory        scheme;
+    hemp_factory        viewer;
 
-    hemp_hash           schemes;
+//    hemp_hash           schemes;
 //  hemp_hash           tags;
     hemp_hash           templates;
-    hemp_dialect        dialect;
+//    hemp_dialect        dialect;
 
     hemp_bool           verbose;
     hemp_bool           debug;
@@ -142,6 +143,12 @@ typedef hemp_bool
     (* hemp_pool_iter)(             /* iterate over pool items              */
         hemp_memory      item       /* pointer to memory                    */
     );
+
+
+//typedef hemp_bool
+//    (* hemp_source_op)(             /* source operations: check, read, etc  */
+//        hemp_source     source
+//    );
 
 
 /*--------------------------------------------------------------------------
@@ -319,11 +326,6 @@ typedef hemp_memory
         hemp_type     type,       /* pointer to type                      */
         hemp_string      name        /* method name                          */
     );
-
-
-typedef hemp_string     (* hemp_source_namer_f   )( hemp_source );
-typedef hemp_bool       (* hemp_source_checker_f )( hemp_source );
-typedef hemp_string     (* hemp_source_reader_f  )( hemp_source );
 
 
 #endif /* HEMP_TYPES_H */

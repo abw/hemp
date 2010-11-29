@@ -38,6 +38,8 @@ libhemp_la_SOURCES  =   action.c            \
                         ptree.c             \
                         scanner.c           \
                         scheme.c            \
+                        scheme/text.c       \
+                        scheme/file.c       \
                         scope.c             \
                         slab.c              \
                         slot.c              \

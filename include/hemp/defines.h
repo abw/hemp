@@ -26,6 +26,7 @@
 #define HEMP_UNDERSCORE     '_'
 
 /* aliases for various short strings */
+#define HEMP_STR_HEMP       "Hemp"
 #define HEMP_STR_UNKNOWN    "Unknown"
 #define HEMP_STR_INFINITY   "Infinity"
 #define HEMP_STR_MISSING    "Missing"
@@ -63,6 +64,7 @@
 #define HEMP_FMT_NUM        "%g"
 
 /* names of standard schemes, languages, dialects, libraries, etc */
+// TODO: rename HEMP_NAME_XXXX
 #define HEMP_HEMP           "hemp"
 #define HEMP_TEXT           "text"
 #define HEMP_FILE           "file"
