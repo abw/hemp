@@ -16,7 +16,7 @@ typedef hemp_string (* hemp_source_sop)(hemp_source);
 
 
 /*--------------------------------------------------------------------------
- * data structures
+ * type definitions
  *--------------------------------------------------------------------------*/
 
 struct hemp_scheme {

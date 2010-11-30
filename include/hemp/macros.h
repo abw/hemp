@@ -269,7 +269,7 @@
  * Elements
  *
  * Right down at the very bottom of it all we have elements.  Elements are 
- * data structures representing a parsed template.  Each element has a pointer
+ * type definitions representing a parsed template.  Each element has a pointer
  * the grammar symbol that defines what kind of element it is.
  *
  * hemp_register_elements(hemp, ...) is a macro for registering a set of element types
