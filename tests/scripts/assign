@@ -23,7 +23,7 @@ a is 420
 -- expect
 a is 420
 
--- stop --
+-- start --
 -- test lazy assignment 
 [% name = 'Nobody';
 

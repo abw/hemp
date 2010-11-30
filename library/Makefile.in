@@ -92,7 +92,7 @@ am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-context.lo \
 	libhemp_la-language.lo language/libhemp_la-hemp.lo \
 	language/libhemp_la-test.lo language/libhemp_la-tt3.lo \
 	libhemp_la-memory.lo libhemp_la-namespace.lo \
-	libhemp_la-params.lo libhemp_la-pool.lo libhemp_la-ptree.lo \
+	libhemp_la-proto.lo libhemp_la-pool.lo libhemp_la-ptree.lo \
 	libhemp_la-scanner.lo libhemp_la-scheme.lo \
 	scheme/libhemp_la-text.lo scheme/libhemp_la-file.lo \
 	libhemp_la-scope.lo libhemp_la-slab.lo libhemp_la-slot.lo \
@@ -291,7 +291,7 @@ libhemp_la_SOURCES = action.c            \
                         language/tt3.c      \
                         memory.c            \
                         namespace.c         \
-                        params.c            \
+                        proto.c             \
                         pool.c              \
                         ptree.c             \
                         scanner.c           \
@@ -584,8 +584,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-language.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-memory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-namespace.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-params.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-pool.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-proto.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-ptree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-scanner.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-scheme.Plo@am__quote@
@@ -891,12 +891,12 @@ libhemp_la-namespace.lo: namespace.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-namespace.lo `test -f 'namespace.c' || echo '$(srcdir)/'`namespace.c
 
-libhemp_la-params.lo: params.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-params.lo -MD -MP -MF $(DEPDIR)/libhemp_la-params.Tpo -c -o libhemp_la-params.lo `test -f 'params.c' || echo '$(srcdir)/'`params.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-params.Tpo $(DEPDIR)/libhemp_la-params.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='params.c' object='libhemp_la-params.lo' libtool=yes @AMDEPBACKSLASH@
+libhemp_la-proto.lo: proto.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-proto.lo -MD -MP -MF $(DEPDIR)/libhemp_la-proto.Tpo -c -o libhemp_la-proto.lo `test -f 'proto.c' || echo '$(srcdir)/'`proto.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-proto.Tpo $(DEPDIR)/libhemp_la-proto.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='proto.c' object='libhemp_la-proto.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-params.lo `test -f 'params.c' || echo '$(srcdir)/'`params.c
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-proto.lo `test -f 'proto.c' || echo '$(srcdir)/'`proto.c
 
 libhemp_la-pool.lo: pool.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-pool.lo -MD -MP -MF $(DEPDIR)/libhemp_la-pool.Tpo -c -o libhemp_la-pool.lo `test -f 'pool.c' || echo '$(srcdir)/'`pool.c

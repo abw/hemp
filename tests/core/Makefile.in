@@ -36,7 +36,7 @@ host_triplet = @host@
 check_PROGRAMS = action$(EXEEXT) context$(EXEEXT) dialect$(EXEEXT) \
 	element$(EXEEXT) elements$(EXEEXT) error$(EXEEXT) \
 	factory$(EXEEXT) filesystem$(EXEEXT) grammar$(EXEEXT) \
-	memory$(EXEEXT) namespace$(EXEEXT) params$(EXEEXT) \
+	memory$(EXEEXT) namespace$(EXEEXT) proto$(EXEEXT) \
 	pool$(EXEEXT) ptree$(EXEEXT) slab$(EXEEXT) source$(EXEEXT) \
 	string$(EXEEXT) tag$(EXEEXT) tagset$(EXEEXT) template$(EXEEXT) \
 	type$(EXEEXT) utils$(EXEEXT) value$(EXEEXT) viewer$(EXEEXT)
@@ -101,14 +101,14 @@ namespace_SOURCES = namespace.c
 namespace_OBJECTS = namespace.$(OBJEXT)
 namespace_LDADD = $(LDADD)
 namespace_DEPENDENCIES = ../../library/libhemp.la
-params_SOURCES = params.c
-params_OBJECTS = params.$(OBJEXT)
-params_LDADD = $(LDADD)
-params_DEPENDENCIES = ../../library/libhemp.la
 pool_SOURCES = pool.c
 pool_OBJECTS = pool.$(OBJEXT)
 pool_LDADD = $(LDADD)
 pool_DEPENDENCIES = ../../library/libhemp.la
+proto_SOURCES = proto.c
+proto_OBJECTS = proto.$(OBJEXT)
+proto_LDADD = $(LDADD)
+proto_DEPENDENCIES = ../../library/libhemp.la
 ptree_SOURCES = ptree.c
 ptree_OBJECTS = ptree.$(OBJEXT)
 ptree_LDADD = $(LDADD)
@@ -167,13 +167,13 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = action.c context.c dialect.c element.c elements.c error.c \
-	factory.c filesystem.c grammar.c memory.c namespace.c params.c \
-	pool.c ptree.c slab.c source.c string.c tag.c tagset.c \
+	factory.c filesystem.c grammar.c memory.c namespace.c pool.c \
+	proto.c ptree.c slab.c source.c string.c tag.c tagset.c \
 	template.c type.c utils.c value.c viewer.c
 DIST_SOURCES = action.c context.c dialect.c element.c elements.c \
 	error.c factory.c filesystem.c grammar.c memory.c namespace.c \
-	params.c pool.c ptree.c slab.c source.c string.c tag.c \
-	tagset.c template.c type.c utils.c value.c viewer.c
+	pool.c proto.c ptree.c slab.c source.c string.c tag.c tagset.c \
+	template.c type.c utils.c value.c viewer.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -400,12 +400,12 @@ memory$(EXEEXT): $(memory_OBJECTS) $(memory_DEPENDENCIES)
 namespace$(EXEEXT): $(namespace_OBJECTS) $(namespace_DEPENDENCIES) 
 	@rm -f namespace$(EXEEXT)
 	$(LINK) $(namespace_OBJECTS) $(namespace_LDADD) $(LIBS)
-params$(EXEEXT): $(params_OBJECTS) $(params_DEPENDENCIES) 
-	@rm -f params$(EXEEXT)
-	$(LINK) $(params_OBJECTS) $(params_LDADD) $(LIBS)
 pool$(EXEEXT): $(pool_OBJECTS) $(pool_DEPENDENCIES) 
 	@rm -f pool$(EXEEXT)
 	$(LINK) $(pool_OBJECTS) $(pool_LDADD) $(LIBS)
+proto$(EXEEXT): $(proto_OBJECTS) $(proto_DEPENDENCIES) 
+	@rm -f proto$(EXEEXT)
+	$(LINK) $(proto_OBJECTS) $(proto_LDADD) $(LIBS)
 ptree$(EXEEXT): $(ptree_OBJECTS) $(ptree_DEPENDENCIES) 
 	@rm -f ptree$(EXEEXT)
 	$(LINK) $(ptree_OBJECTS) $(ptree_LDADD) $(LIBS)
@@ -457,8 +457,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/grammar.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/namespace.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/params.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pool.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/proto.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ptree.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/slab.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/source.Po@am__quote@

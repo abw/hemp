@@ -34,7 +34,7 @@ tests/core/filesystem
 tests/core/grammar
 tests/core/memory
 tests/core/namespace
-tests/core/params
+tests/core/proto
 tests/core/parser
 tests/core/pool
 tests/core/slab

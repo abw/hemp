@@ -9,7 +9,7 @@ check_PROGRAMS  =   action      \
                     grammar     \
                     memory      \
                     namespace   \
-                    params      \
+                    proto       \
                     pool        \
                     ptree       \
                     slab        \

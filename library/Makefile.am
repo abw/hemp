@@ -33,7 +33,7 @@ libhemp_la_SOURCES  =   action.c            \
                         language/tt3.c      \
                         memory.c            \
                         namespace.c         \
-                        params.c            \
+                        proto.c             \
                         pool.c              \
                         ptree.c             \
                         scanner.c           \
