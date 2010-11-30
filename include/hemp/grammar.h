@@ -14,6 +14,12 @@
  * data structures
  *--------------------------------------------------------------------------*/
 
+typedef hemp_grammar 
+(*  hemp_grammar_f) (
+    hemp_hemp       hemp,
+    hemp_string     name
+);
+
 struct hemp_grammar {
     hemp_hemp       hemp;
     hemp_string     name;
@@ -22,6 +28,15 @@ struct hemp_grammar {
     hemp_ptree      operators;
 };
 
+struct hemp_grammars {
+    hemp_string     name;
+    hemp_grammar_f  ctor;
+};
+
+
+/*--------------------------------------------------------------------------
+ * function prototypes
+ *--------------------------------------------------------------------------*/
 
 hemp_grammar
 hemp_grammar_new(

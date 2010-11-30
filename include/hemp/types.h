@@ -42,6 +42,7 @@ typedef struct hemp_action      * hemp_action;
 typedef struct hemp_code        * hemp_code;
 typedef struct hemp_context     * hemp_context;
 typedef struct hemp_dialect     * hemp_dialect;
+typedef struct hemp_dialects    * hemp_dialects;
 typedef struct hemp_element     * hemp_element;
 typedef struct hemp_elements    * hemp_elements;
 typedef struct hemp_error       * hemp_error;
@@ -50,6 +51,7 @@ typedef struct hemp_filesystem  * hemp_filesystem;
 typedef struct hemp_frame       * hemp_frame;
 typedef struct hemp_global      * hemp_global;
 typedef struct hemp_grammar     * hemp_grammar;
+typedef struct hemp_grammars    * hemp_grammars;
 typedef struct hemp_hash        * hemp_hash;
 typedef struct hemp_jump        * hemp_jump;
 typedef struct hemp_language    * hemp_language;
@@ -70,6 +72,7 @@ typedef struct hemp_symbol      * hemp_symbol;
 typedef struct hemp_symbols     * hemp_symbols;
 typedef struct hemp_template    * hemp_template;
 typedef struct hemp_tag         * hemp_tag;
+typedef struct hemp_tags        * hemp_tags;
 typedef struct hemp_tagset      * hemp_tagset;
 typedef struct hemp_text        * hemp_text;
 typedef struct hemp_type        * hemp_type;
@@ -82,23 +85,23 @@ typedef struct hemp_viewer      * hemp_viewer;
  *--------------------------------------------------------------------------*/
 
 struct hemp_hemp {
-    hemp_factory        dialect;
-    hemp_factory        element;
-    hemp_factory        grammar;
-    hemp_factory        language;
-    hemp_factory        scheme;
-    hemp_factory        tag;
-    hemp_factory        viewer;
-
-//  hemp_hash           tags;
-    hemp_hash           templates;
-//  hemp_dialect        dialect;
-
-    hemp_bool           verbose;
-    hemp_bool           debug;
-    hemp_jump           jump;
-    hemp_error          error;
-    hemp_string       * errmsg;
+    hemp_factory    dialect;
+    hemp_factory    element;
+    hemp_factory    grammar;
+    hemp_factory    language;
+    hemp_factory    scheme;
+    hemp_factory    tag;
+    hemp_factory    viewer;
+                    
+//  hemp_hash       tags;
+    hemp_hash       templates;
+//  hemp_dialect    dialect;
+                    
+    hemp_bool       verbose;
+    hemp_bool       debug;
+    hemp_jump       jump;
+    hemp_error      error;
+    hemp_string   * errmsg;
 };
 
 
@@ -109,9 +112,19 @@ struct hemp_hemp {
  *--------------------------------------------------------------------------*/
 
 union hemp_value {
-    hemp_u64            bits;
-    hemp_num            number;
+    hemp_u64        bits;
+    hemp_num        number;
 };
+
+
+/*--------------------------------------------------------------------------
+ * Mapping a name to a constructor function
+ *--------------------------------------------------------------------------*/
+
+//struct hemp_constructor {
+//    hemp_string     name;
+//    hemp_actor      constructor;
+//};
 
 
 /*--------------------------------------------------------------------------
@@ -147,18 +160,6 @@ typedef hemp_bool
 /*--------------------------------------------------------------------------
  * TODO: in the process of cleaning up everything below this line.
  *--------------------------------------------------------------------------*/
-
-
-typedef hemp_symbol
-    (* hemp_symbol_f)(
-        hemp_hemp       hemp,       /* pointer to current hemp context      */
-        hemp_symbol   symbol      /* pointer to new symbol to initialise  */
-    );
-
-typedef hemp_dialect 
-    (* hemp_dialect_f)(
-        hemp_dialect  dialect      /* pointer to dialect to prepare       */
-    );
 
 // TODO: rename this to hemp_template_f
 typedef hemp_template 

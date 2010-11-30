@@ -6,8 +6,14 @@
 
 
 /*--------------------------------------------------------------------------
- * data structures
+ * type definitions
  *--------------------------------------------------------------------------*/
+
+typedef hemp_dialect
+(*  hemp_dialect_f) (
+    hemp_hemp       hemp,
+    hemp_string     name
+);
 
 struct hemp_dialect {
     hemp_hemp       hemp;
@@ -17,6 +23,11 @@ struct hemp_dialect {
     hemp_scan_f     scanner;
     hemp_clean_f    cleanup;
 //  hemp_tagset_t   tagset;
+};
+
+struct hemp_dialects {
+    hemp_string     name;
+    hemp_dialect_f  ctor;
 };
 
 

@@ -7,16 +7,9 @@
 #include <hemp/grammar.h>
 #include <hemp/scanner.h>
 
-/*
-#include "hemp/ptree.h"
-#include "hemp/elements.h"
-#include "hemp/template.h"
-#include "hemp/utils.h"
-*/
-
 
 /*--------------------------------------------------------------------------
- * data structures
+ * type definitions
  *--------------------------------------------------------------------------*/
 
 enum hemp_tag_style {
@@ -24,18 +17,31 @@ enum hemp_tag_style {
     HEMP_OUTLINE_TAG = 2
 };
 
-
+typedef hemp_tag 
+(* hemp_tag_f)(
+    hemp_hemp       hemp,
+    hemp_string     type,
+    hemp_string     name,
+    hemp_string     start,
+    hemp_string     end,
+    hemp_grammar    grammar
+);
 
 struct hemp_tag {
-   hemp_tagset      tagset;
-   hemp_string      type;
-   hemp_string      name;
-   hemp_tag_style   style;
-   hemp_string      start;
-   hemp_string      end;
-   hemp_grammar     grammar;
-   hemp_tag_scan_f  scan;
-   hemp_tag_skip_f  to_eol;
+    hemp_tagset     tagset;
+    hemp_string     type;
+    hemp_string     name;
+    hemp_tag_style  style;
+    hemp_string     start;
+    hemp_string     end;
+    hemp_grammar    grammar;
+    hemp_tag_scan_f scan;
+    hemp_tag_skip_f to_eol;
+};
+
+struct hemp_tags {
+    hemp_string     name;
+    hemp_tag_f      ctor;
 };
 
 

@@ -70,6 +70,10 @@ hemp_bool       hemp_free_viewer  ( hemp_hash, hemp_pos, hemp_slot );
 hemp_context    hemp_context_instance(hemp_hemp);
 hemp_template   hemp_template_instance(hemp_hemp, hemp_string, hemp_string, hemp_string);
 
+void            hemp_register_dialects(hemp_hemp, hemp_dialects);
+void            hemp_register_tags(hemp_hemp, hemp_tags);
+void            hemp_register_grammars(hemp_hemp, hemp_grammars);
+
 hemp_string     hemp_error_format(hemp_hemp, hemp_errno);
 hemp_error      hemp_error_message(hemp_hemp, hemp_errno, ...);
 hemp_error      hemp_error_scan_pos(hemp_error, hemp_scan_pos);

@@ -7,8 +7,15 @@
 
 
 /*--------------------------------------------------------------------------
- * data structures
+ * tye definitions
  *--------------------------------------------------------------------------*/
+
+typedef hemp_symbol 
+(* hemp_symbol_f)(
+    hemp_hemp       hemp,
+    hemp_symbol     symbol
+);
+
 
 /* symbol vtable */
 
@@ -43,11 +50,9 @@ struct hemp_symbol {
 };
 
 
-/* symbols collection */
-
 struct hemp_symbols {
     hemp_string     name;
-    hemp_symbol_f   constructor;
+    hemp_symbol_f   ctor;
 };
 
 /*--------------------------------------------------------------------------

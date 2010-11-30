@@ -37,7 +37,7 @@
     if (! _item)                                                            \
         hemp_throw(hemp, HEMP_ERROR_INVALID, #type, name);                  \
     _item;                                                                  \
-})    
+})
 
 
 #define hemp_register_dialect(hemp, name, constructor)                      \

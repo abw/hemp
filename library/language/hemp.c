@@ -79,6 +79,18 @@ static struct hemp_symbols hemp_symbols_hemp_assign[] = {
     { NULL, NULL },
 };
 
+static struct hemp_grammars hemp_grammars_hemp[] = {
+    { "hemp.alpha",             &hemp_grammar_hemp_alpha                },
+    { "hemp.bravo",             &hemp_grammar_hemp_alpha                },
+    { NULL, NULL },
+};
+
+static struct hemp_tags hemp_tags_hemp[] = {
+    { "hemp.inline",            &hemp_tag_inline                        },
+    { "hemp.outline",           &hemp_tag_outline                       },
+    { "hemp.comment",           &hemp_tag_comment                       },
+    { NULL, NULL },
+};
 
 /*--------------------------------------------------------------------------
  * hemp language initialisation
@@ -92,9 +104,7 @@ HEMP_LANGUAGE(hemp_language_hemp_new) {
     );
 
     /* register all the basic symbols */
-    hemp_register_elements(
-        hemp, hemp_symbols_hemp
-    );
+    hemp_register_elements(hemp, hemp_symbols_hemp);
 
     /* register factories for bracket, boolean, number and text operator symbols */
     HEMP_ELEMENT("hemp.operator.assign.*",  &hemp_element_assign_symbols);
@@ -104,17 +114,16 @@ HEMP_LANGUAGE(hemp_language_hemp_new) {
     HEMP_ELEMENT("hemp.text.*",             &hemp_element_text_symbols);
 
     /* register grammars */
-    hemp_register_grammar(
-        hemp, "hemp.alpha", &hemp_grammar_hemp_alpha
-    );
-    hemp_register_grammar(
-        hemp, "hemp.bravo", &hemp_grammar_hemp_bravo
-    );
+    hemp_register_grammars(hemp, hemp_grammars_hemp);
+//    hemp_register_grammar(hemp, "hemp.alpha", &hemp_grammar_hemp_alpha);
+//    hemp_register_grammar(hemp, "hemp.bravo", &hemp_grammar_hemp_bravo);
+
 
     /* register tag styles */
-    hemp_register_tag(hemp, "hemp.inline",   &hemp_tag_inline);
-    hemp_register_tag(hemp, "hemp.outline",  &hemp_tag_outline);
-    hemp_register_tag(hemp, "hemp.comment",  &hemp_tag_comment);
+    hemp_register_tags(hemp, hemp_tags_hemp);
+//    hemp_register_tag(hemp, "hemp.inline",   &hemp_tag_inline);
+//    hemp_register_tag(hemp, "hemp.outline",  &hemp_tag_outline);
+//    hemp_register_tag(hemp, "hemp.comment",  &hemp_tag_comment);
 
     return language;
 }
