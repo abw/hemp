@@ -1,9 +1,9 @@
 #include <hemp/params.h>
 
 
-hemp_params
-hemp_params_init(
-    hemp_params params
+hemp_proto
+hemp_proto_init(
+    hemp_proto params
 ) {
     HEMP_ALLOCATE(params);
 
@@ -17,8 +17,8 @@ hemp_params_init(
 
 
 void
-hemp_params_free(
-    hemp_params params
+hemp_proto_free(
+    hemp_proto params
 ) {
     hemp_list_each(params->item, &hemp_list_each_free);
 
@@ -35,11 +35,11 @@ hemp_params_free(
 
 
 hemp_bool
-hemp_params_add_item(
-    hemp_params   params,
+hemp_proto_add_item(
+    hemp_proto   params,
     hemp_string      name
 ) {
-    hemp_debug_call("hemp_params_add_item(%s)\n", name);
+    hemp_debug_call("hemp_proto_add_item(%s)\n", name);
 
     if (hemp_hash_fetch_string(params->name, name)) {
         hemp_fatal("duplicate parameter: %s", name);
@@ -61,11 +61,11 @@ hemp_params_add_item(
 
 
 hemp_bool
-hemp_params_add_list(
-    hemp_params   params,
+hemp_proto_add_list(
+    hemp_proto   params,
     hemp_string      name
 ) {
-    hemp_debug_call("hemp_params_add_list(%s)\n", name);
+    hemp_debug_call("hemp_proto_add_list(%s)\n", name);
 
     if (hemp_hash_fetch_string(params->name, name)) {
         hemp_fatal("duplicate parameter: %s", name);
@@ -92,11 +92,11 @@ hemp_params_add_list(
 
 
 hemp_bool
-hemp_params_add_hash(
-    hemp_params   params,
+hemp_proto_add_hash(
+    hemp_proto   params,
     hemp_string      name
 ) {
-    hemp_debug_call("hemp_params_add_hash(%s)\n", name);
+    hemp_debug_call("hemp_proto_add_hash(%s)\n", name);
 
     if (hemp_hash_fetch_string(params->name, name)) {
         hemp_fatal("duplicate parameter: %s", name);

@@ -308,28 +308,13 @@ hemp_free_viewer(
  * dialect, tag and element management
  *--------------------------------------------------------------------------*/
 
-#define hemp_register_resources(hemp, type, resource) ({    \
-    while (resource && resource->name) {                    \
-        hemp_factory_register(                              \
-            hemp->type,                                     \
-            resource->name,                                 \
-            (hemp_actor) resource->ctor,                    \
-            hemp                                            \
-        );                                                  \
-        resource++;                                         \
-    }                                                       \
-})
-
 
 void 
 hemp_register_dialects(
     hemp_hemp       hemp,
     hemp_dialects   dialect
 ) {
-    while (dialect && dialect->name) {
-        hemp_register_dialect(hemp, dialect->name, dialect->ctor);
-        dialect++;
-    }
+    hemp_register_all(hemp, dialect, dialect);
 }
 
 
@@ -338,10 +323,7 @@ hemp_register_tags(
     hemp_hemp   hemp,
     hemp_tags   tag
 ) {
-    while (tag && tag->name) {
-        hemp_register_tag(hemp, tag->name, tag->ctor);
-        tag++;
-    }
+    hemp_register_all(hemp, tag, tag);
 }
 
 
@@ -350,13 +332,11 @@ hemp_register_grammars(
     hemp_hemp       hemp,
     hemp_grammars   grammar
 ) {
-    while (grammar && grammar->name) {
-        hemp_register_grammar(hemp, grammar->name, grammar->ctor);
-        grammar++;
-    }
+    hemp_register_all(hemp, grammar, grammar);
 }
 
 
+/* TODO: sort out the names: element/symbols */
 void 
 hemp_register_elements(
     hemp_hemp       hemp,

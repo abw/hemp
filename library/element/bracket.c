@@ -266,7 +266,7 @@ hemp_element_params_compile(
 ) {
     hemp_debug("hemp_element_parens_params()\n");
     hemp_list     exprs  = hemp_val_list( hemp_expr(element) );
-    hemp_params   params = hemp_params_new();
+    hemp_proto   params = hemp_proto_new();
     hemp_element  expr;
     hemp_value    item;
     hemp_size     n;

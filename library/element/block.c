@@ -61,7 +61,7 @@ HEMP_OUTPUT_FUNC(hemp_element_block_text) {
 
     if (hemp_has_flag(element, HEMP_BE_ARGS)) {
         hemp_element  args    = hemp_val_elem(hemp_block_args(element));
-        hemp_params   params  = (hemp_params) hemp_val_ptr(hemp_lhs(args));
+        hemp_proto   params  = (hemp_proto) hemp_val_ptr(hemp_lhs(args));
         hemp_list     list    = params->item;
         hemp_debug("TODO: handle block arguments, params are at %p\n", params);
         for (n = 0; n < list->length; n++) {
@@ -143,9 +143,9 @@ hemp_element_block_clean(
 
     if (hemp_has_flag(element, HEMP_BE_ARGS)) {
         hemp_element  args    = hemp_val_elem(hemp_block_args(element));
-        hemp_params   params  = (hemp_params) hemp_val_ptr(hemp_lhs(args));
+        hemp_proto   params  = (hemp_proto) hemp_val_ptr(hemp_lhs(args));
 //      hemp_debug("cleaning block params at %p\n", params);
-        hemp_params_free(params);
+        hemp_proto_free(params);
     }
 
     // hmmm... are block always synthesised and hence need freeing?

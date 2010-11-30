@@ -94,13 +94,13 @@ HEMP_OPERATE_FUNC(hemp_element_word_assign) {
 
 HEMP_COMPILE_FUNC(hemp_element_word_lvalue_param) {
     hemp_debug_msg("hemp_element_word_lvalue_param()\n");
-    hemp_params params = (hemp_params) hemp_val_ptr(compiler);
+    hemp_proto params = (hemp_proto) hemp_val_ptr(compiler);
     hemp_string    name   = hemp_string_extract(
         element->token, 
         element->token + element->length
     );
     hemp_debug_msg("adding param: %s\n", name);
-    hemp_params_add_item(params, name);
+    hemp_proto_add_item(params, name);
 //    hemp_mem_free(name);
 }
 

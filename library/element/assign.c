@@ -31,19 +31,6 @@ HEMP_VALUE_FUNC(hemp_element_assign_value) {
     hemp_value    rhs     = hemp_rhs(element);
     hemp_debug_msg("assign lhs: %s\n", hemp_type_name(lhs));
     return hemp_obcall(lhs, assign, context, rhs);
-
-/*
-Old way - pre-evaluated value
-
-    hemp_value    rhs     = hemp_rhs(element);
-    hemp_value    rval    = hemp_call(rhs, value, context);
-//    hemp_debug(
-//        "calling assign on %s: %p\n", 
-//        hemp_val_elem(lhs)->type->name, 
-//        hemp_val_elem(lhs)->type->assign
-//    );
-    return hemp_obcall(lhs, assign, context, rval);
-*/
 }
 
 

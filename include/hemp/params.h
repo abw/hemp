@@ -10,7 +10,7 @@
  * type definitions
  *--------------------------------------------------------------------------*/
 
-struct hemp_params {
+struct hemp_proto {
     hemp_hash       name;
     hemp_list       item;
     hemp_string     list;
@@ -22,31 +22,31 @@ struct hemp_params {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_params
-hemp_params_init(
-    hemp_params     params
+hemp_proto
+hemp_proto_init(
+    hemp_proto     params
 );
 
 void
-hemp_params_free(
-    hemp_params     params
+hemp_proto_free(
+    hemp_proto     params
 );
 
 hemp_bool
-hemp_params_add_item(
-    hemp_params     params,
+hemp_proto_add_item(
+    hemp_proto     params,
     hemp_string     name
 );
 
 hemp_bool
-hemp_params_add_list(
-    hemp_params     params,
+hemp_proto_add_list(
+    hemp_proto     params,
     hemp_string     name
 );
 
 hemp_bool
-hemp_params_add_hash(
-    hemp_params     params,
+hemp_proto_add_hash(
+    hemp_proto     params,
     hemp_string     name
 );
 
@@ -55,10 +55,10 @@ hemp_params_add_hash(
  * macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_params_new()                       \
-    hemp_params_init(NULL)
+#define hemp_proto_new()                       \
+    hemp_proto_init(NULL)
 
-#define hemp_params_item(params, n)             \
+#define hemp_proto_item(params, n)             \
     hemp_hash_fetch_string(params->name, n)
 
 

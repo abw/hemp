@@ -5,7 +5,7 @@
  * static tables defining symbol collections
  *--------------------------------------------------------------------------*/
 
-static struct hemp_symbols hemp_symbols_hemp[] = {
+static struct hemp_symbols hemp_symbols_hemp_core[] = {
     { "hemp.text",              &hemp_element_text_symbol               },
     { "hemp.space",             &hemp_element_space_symbol              },
     { "hemp.comment",           &hemp_element_comment_symbol            },
@@ -25,6 +25,14 @@ static struct hemp_symbols hemp_symbols_hemp[] = {
     { "hemp.eof",               &hemp_element_eof_symbol                },
     { NULL, NULL },
 };
+
+//static struct hemp_symbols hemp_symbols_hemp_autoload[] = {
+//    { "hemp.bracket.*",         &hemp_element_bracket_symbols           },
+//    { "hemp.boolean.*",         &hemp_element_boolean_symbols           },
+//    { "hemp.number.*",          &hemp_element_number_symbols            },
+//    { "hemp.text.*",            &hemp_element_text_symbols              },
+//    { "hemp.operator.assign.*", &hemp_element_assign_symbols            },
+//};
 
 static struct hemp_symbols hemp_symbols_hemp_bracket[] = {
 //    { "hemp.bracket.parens",    &hemp_element_parens_symbol             },
@@ -104,7 +112,9 @@ HEMP_LANGUAGE(hemp_language_hemp_new) {
     );
 
     /* register all the basic symbols */
-    hemp_register_elements(hemp, hemp_symbols_hemp);
+    hemp_register_elements(hemp, hemp_symbols_hemp_core);
+
+//    hemp_register_elements(hemp, hemp_symbols_hemp_autoload);
 
     /* register factories for bracket, boolean, number and text operator symbols */
     HEMP_ELEMENT("hemp.operator.assign.*",  &hemp_element_assign_symbols);
@@ -113,17 +123,8 @@ HEMP_LANGUAGE(hemp_language_hemp_new) {
     HEMP_ELEMENT("hemp.number.*",           &hemp_element_number_symbols);
     HEMP_ELEMENT("hemp.text.*",             &hemp_element_text_symbols);
 
-    /* register grammars */
     hemp_register_grammars(hemp, hemp_grammars_hemp);
-//    hemp_register_grammar(hemp, "hemp.alpha", &hemp_grammar_hemp_alpha);
-//    hemp_register_grammar(hemp, "hemp.bravo", &hemp_grammar_hemp_bravo);
-
-
-    /* register tag styles */
     hemp_register_tags(hemp, hemp_tags_hemp);
-//    hemp_register_tag(hemp, "hemp.inline",   &hemp_tag_inline);
-//    hemp_register_tag(hemp, "hemp.outline",  &hemp_tag_outline);
-//    hemp_register_tag(hemp, "hemp.comment",  &hemp_tag_comment);
 
     return language;
 }

@@ -6,13 +6,32 @@
  * Macros for registering component constructors and instantiating components
  *--------------------------------------------------------------------------*/
 
-#define hemp_register(hemp, type, name, constructor)                        \
+#define hemp_register(hemp, type, name, ctor)                               \
     hemp_factory_register(                                                  \
         hemp->type,                                                         \
         name,                                                               \
-        (hemp_actor) constructor,                                           \
+        (hemp_actor) ctor,                                                  \
         hemp                                                                \
     )
+
+/* 
+ * Calls to this macro should be wrapped in a dedicated function to provide 
+ * static type checking of the resource list and to ensure that a local item
+ * variable is provided that the macro can increment without affecting the 
+ * code in the calling scope - see hemp_register_dialects(), etc., in hemp.c
+ */
+
+#define hemp_register_all(hemp, type, item) ({                              \
+    while (item && item->name) {                                            \
+        hemp_factory_register(                                              \
+            hemp->type,                                                     \
+            item->name,                                                     \
+            (hemp_actor) item->ctor,                                        \
+            hemp                                                            \
+        );                                                                  \
+        item++;                                                             \
+    }                                                                       \
+})
 
 #define hemp_constructor(hemp, type, name) ({                               \
     hemp_action _cons = hemp_factory_constructor(                           \

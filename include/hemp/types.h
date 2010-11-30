@@ -58,7 +58,7 @@ typedef struct hemp_language    * hemp_language;
 typedef struct hemp_list        * hemp_list;
 typedef struct hemp_namespace   * hemp_namespace;
 typedef struct hemp_object      * hemp_object;
-typedef struct hemp_params      * hemp_params;
+typedef struct hemp_proto      * hemp_proto;
 typedef struct hemp_pnode       * hemp_pnode;
 typedef struct hemp_pool        * hemp_pool;
 typedef struct hemp_ptree       * hemp_ptree;
@@ -115,16 +115,6 @@ union hemp_value {
     hemp_u64        bits;
     hemp_num        number;
 };
-
-
-/*--------------------------------------------------------------------------
- * Mapping a name to a constructor function
- *--------------------------------------------------------------------------*/
-
-//struct hemp_constructor {
-//    hemp_string     name;
-//    hemp_actor      constructor;
-//};
 
 
 /*--------------------------------------------------------------------------

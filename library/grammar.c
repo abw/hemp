@@ -22,7 +22,7 @@ hemp_grammar_new(
 
 hemp_symbol
 hemp_grammar_new_symbol(
-    hemp_grammar grammar,
+    hemp_grammar    grammar,
     hemp_string     etype,
     hemp_string     start,
     hemp_string     end
@@ -55,12 +55,12 @@ hemp_grammar_new_symbol(
 
 hemp_symbol
 hemp_grammar_add_symbol(
-    hemp_grammar  grammar,
-    hemp_string      etype,
-    hemp_string      start,
-    hemp_string      end,
-    hemp_oprec     lprec,
-    hemp_oprec     rprec
+    hemp_grammar    grammar,
+    hemp_string     etype,
+    hemp_string     start,
+    hemp_string     end,
+    hemp_oprec      lprec,
+    hemp_oprec      rprec
 ) {
 //  hemp_debug_call(
 //      "adding [%s => %s] symbol to %s grammar [%d|%d]\n", 

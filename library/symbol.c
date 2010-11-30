@@ -29,27 +29,26 @@ hemp_symbol_new(
     symbol->parse_fixed     = NULL;
     symbol->parse_params    = NULL;
     symbol->lvalue_param    = NULL;
-    symbol->token   = &hemp_element_not_token;
-    symbol->source  = &hemp_element_not_source;
-    symbol->text    = &hemp_element_not_text;
-    symbol->value   = &hemp_element_not_value;
-//  symbol->values  = &hemp_element_not_values;
-//  symbol->params  = &hemp_element_not_params;
-    symbol->number  = &hemp_element_not_number;
-    symbol->integer = &hemp_element_not_integer;
-    symbol->boolean = &hemp_element_not_boolean;
-    symbol->compare = &hemp_element_not_compare;
-    symbol->assign  = &hemp_element_not_assign;
-//    symbol->parse_fixed   = &hemp_element_decline;
-    symbol->text    = &hemp_element_literal_text;       // tmp
+    symbol->token           = &hemp_element_not_token;
+    symbol->source          = &hemp_element_not_source;
+    symbol->text            = &hemp_element_not_text;
+    symbol->value           = &hemp_element_not_value;
+//  symbol->values          = &hemp_element_not_values;
+//  symbol->params          = &hemp_element_not_params;
+    symbol->number          = &hemp_element_not_number;
+    symbol->integer         = &hemp_element_not_integer;
+    symbol->boolean         = &hemp_element_not_boolean;
+    symbol->compare         = &hemp_element_not_compare;
+    symbol->assign          = &hemp_element_not_assign;
+//  symbol->parse_fixed     = &hemp_element_decline;
+    symbol->text            = &hemp_element_literal_text;       // tmp
     
     // hmmm... can we set the same defaults as we do for value types?
-    symbol->values  = &hemp_value_values;
-    symbol->params  = &hemp_value_values;
-//  symbol->apply   = &hemp_value_self;
-//  symbol->apply   = &hemp_element_value_apply;
-    symbol->apply   = &hemp_element_value;
-
+    symbol->values          = &hemp_value_values;
+    symbol->params          = &hemp_value_values;
+//  symbol->apply           = &hemp_value_self;
+//  symbol->apply           = &hemp_element_value_apply;
+    symbol->apply           = &hemp_element_value;
 
     /* clone the start token if there is one, and the end token if there 
      * is one and it's not the same as the start token
