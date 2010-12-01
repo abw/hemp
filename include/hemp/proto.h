@@ -1,5 +1,5 @@
-#ifndef HEMP_PARAMS_H
-#define HEMP_PARAMS_H
+#ifndef HEMP_PROTO_H
+#define HEMP_PROTO_H
 
 #include <hemp/core.h>
 #include <hemp/type/list.h>
@@ -50,6 +50,11 @@ hemp_proto_add_hash(
     hemp_string     name
 );
 
+void 
+hemp_proto_dump(
+    hemp_proto proto
+);
+
 
 /*--------------------------------------------------------------------------
  * macros
@@ -63,4 +68,4 @@ hemp_proto_add_hash(
 
 
 
-#endif /* HEMP_PARAMS_H */
+#endif /* HEMP_PROTO_H */

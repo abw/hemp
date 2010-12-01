@@ -18,19 +18,19 @@ HEMP_SYMBOL(hemp_element_word_symbol) {
     /* these aren't right, but they'll do for now, for testing purposes */
     symbol->parse_prefix    = &hemp_element_word_prefix;
     symbol->parse_fixed     = &hemp_element_fixed;
-//    symbol->parse_fixed    = &hemp_element_word_fixed;
+    symbol->parse_proto     = &hemp_element_word_proto;
+
     symbol->value    = &hemp_element_word_value;
     symbol->text     = &hemp_element_value_text;
     symbol->number   = &hemp_element_value_number;
     symbol->integer  = &hemp_element_value_integer;
     symbol->boolean  = &hemp_element_value_boolean;
     symbol->assign   = &hemp_element_word_assign;
-    symbol->lvalue_param = &hemp_element_word_lvalue_param;
     symbol->cleanup  = &hemp_element_word_clean;
+    symbol->flags   |= HEMP_BE_LVALUE;
 //    symbol->flags    = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }
-
 
 
 HEMP_PREFIX_FUNC(hemp_element_word_prefix) {
@@ -46,6 +46,20 @@ HEMP_PREFIX_FUNC(hemp_element_word_prefix) {
 
     return hemp_parse_postfix(elemptr, scope, precedence, force, element);
 }
+
+
+HEMP_FIXUP_FUNC(hemp_element_word_proto) {
+    hemp_debug_call("hemp_element_word_proto()\n");
+    hemp_proto  proto   = (hemp_proto) hemp_val_ptr(fixative);
+    hemp_string name    = hemp_string_extract(
+        element->token, 
+        element->token + element->length
+    );
+    hemp_debug_msg("adding word to prototype: %s\n", name);
+    hemp_proto_add_item(proto, name);
+//    hemp_mem_free(name);
+}
+
 
 
 HEMP_VALUE_FUNC(hemp_element_word_value) {
@@ -72,11 +86,11 @@ HEMP_VALUE_FUNC(hemp_element_word_value) {
 }
 
 
-HEMP_OPERATE_FUNC(hemp_element_word_assign) {
-    hemp_debug_call("hemp_element_word_assign()\n");
+HEMP_INPUT_FUNC(hemp_element_word_assign) {
+    hemp_debug_msg("hemp_element_word_assign() <- %s\n", hemp_type_name(input));
     hemp_element  element = hemp_val_elem(value);
     hemp_value    word    = hemp_expr(element);
-
+    
     /* The value we're passed as an operand is an element that should be
      * evaluated to yield a value.  Not sure if this is the best approach,
      * but it allows LHS expressions that are "lazy" (i.e. have parens on
@@ -86,23 +100,13 @@ HEMP_OPERATE_FUNC(hemp_element_word_assign) {
 
     hemp_hash_store(
         context->vars, hemp_val_str(word), 
-        hemp_call(operand, value, context)
+        hemp_call(input, value, context)
     );
-    return operand;
+    return input;
 }
 
 
-HEMP_COMPILE_FUNC(hemp_element_word_lvalue_param) {
-    hemp_debug_msg("hemp_element_word_lvalue_param()\n");
-    hemp_proto params = (hemp_proto) hemp_val_ptr(compiler);
-    hemp_string    name   = hemp_string_extract(
-        element->token, 
-        element->token + element->length
-    );
-    hemp_debug_msg("adding param: %s\n", name);
-    hemp_proto_add_item(params, name);
-//    hemp_mem_free(name);
-}
+
 
 void
 hemp_element_word_clean(

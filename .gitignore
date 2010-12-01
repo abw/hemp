@@ -52,6 +52,7 @@ tests/core/view
 tests/type/code
 tests/type/hash
 tests/type/list
+tests/type/params
 tests/type/text
 
 tests/language/hemp/assign

@@ -37,6 +37,11 @@ hemp_list_push(
     hemp_value      item
 );
 
+hemp_value
+hemp_list_shift(
+    hemp_list       list
+);
+
 hemp_pos 
 hemp_list_each(
     hemp_list       list,
@@ -51,7 +56,7 @@ hemp_list_each_free(
 );
 
 // tmp hack for debugging
-hemp_string 
+hemp_text
 hemp_list_dump(
     hemp_list       list
 );

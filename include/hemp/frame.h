@@ -2,8 +2,7 @@
 #define HEMP_FRAME_H
 
 #include <hemp/core.h>
-#include <hemp/type/list.h>
-#include <hemp/type/hash.h>
+#include <hemp/type/params.h>
 
 
 /*--------------------------------------------------------------------------
@@ -14,8 +13,9 @@ struct hemp_frame {
     hemp_context    context;
     hemp_frame      parent;
     hemp_element    element;
-    hemp_list       args;
+    hemp_params     params;
     hemp_hash       vars;
+//    hemp_list       args;
 };
 
 

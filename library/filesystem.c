@@ -50,6 +50,8 @@ hemp_filesystem_set_path(
     hemp_filesystem_clear_path(filesystem);             // TODO: free strings
     hemp_debug_file("setting filesystem path to %s\n", path);
     filesystem->path = hemp_string_split(path, HEMP_PATH_SEPARATOR);      // TODO: handle errors?
+    // TODO: the following now leaks memory as the text object returned by 
+    // hemp_list_dump() is never freed.
     hemp_debug_file("filesystem path is now %s\n", hemp_list_dump(filesystem->path));
 }
 

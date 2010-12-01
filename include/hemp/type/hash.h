@@ -53,7 +53,7 @@ HEMP_INLINE hemp_slot
 hemp_hash_store_keylen(
     hemp_hash       hash,
     hemp_string     key, 
-    hemp_value    value,
+    hemp_value      value,
     hemp_size       length
 );
 
@@ -61,7 +61,7 @@ hemp_slot
 hemp_hash_store(
     hemp_hash       hash,
     hemp_string     key, 
-    hemp_value    value
+    hemp_value      value
 );
 
 
@@ -152,6 +152,7 @@ hemp_hash_dump(
 HEMP_TYPE_FUNC(hemp_type_hash);
 HEMP_OUTPUT_FUNC(hemp_type_hash_text);
 HEMP_FETCH_FUNC(hemp_type_hash_fetch);
+HEMP_STORE_FUNC(hemp_type_hash_store);
 HEMP_FETCH_FUNC(hemp_type_hash_dot);
 HEMP_VALUE_FUNC(hemp_method_hash_length);
 

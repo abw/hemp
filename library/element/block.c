@@ -5,7 +5,7 @@ hemp_symbol HempSymbolBlock = NULL;
 
 hemp_symbol
 hemp_symbol_block() {
-    hemp_debug_call("hemp_symbol_block()\n");
+//  hemp_debug_msg("hemp_symbol_block()\n");
     return hemp_element_block_symbol(
         NULL,
         hemp_symbol_new("hemp.block", NULL, NULL)
@@ -23,6 +23,7 @@ HEMP_SYMBOL(hemp_element_block_symbol) {
     symbol->text       = &hemp_element_block_text;
     symbol->values     = &hemp_element_block_values;
     symbol->cleanup    = &hemp_element_block_clean;
+//  hemp_debug("created block symbol at %p with cleanup at %p\n", symbol, symbol->cleanup);
     return symbol;
 }
 
@@ -59,17 +60,21 @@ HEMP_OUTPUT_FUNC(hemp_element_block_text) {
     hemp_text text;
     hemp_prepare_text(context, output, text);
 
-    if (hemp_has_flag(element, HEMP_BE_ARGS)) {
-        hemp_element  args    = hemp_val_elem(hemp_block_args(element));
-        hemp_proto   params  = (hemp_proto) hemp_val_ptr(hemp_lhs(args));
-        hemp_list     list    = params->item;
-        hemp_debug("TODO: handle block arguments, params are at %p\n", params);
-        for (n = 0; n < list->length; n++) {
-            hemp_string name = hemp_val_str( hemp_list_item(list, n) );
-            hemp_debug("- %s\n", name);
-        }
-        // hemp_value args = hemp_block_args(element);
-    }
+//    if (hemp_has_flag(element, HEMP_BE_ARGS)) {
+//        hemp_debug("TODO: handle block arguments\n");
+//        hemp_value args = hemp_block_args(element);
+//        hemp_debug("args type: %s\n", hemp_type_name(args));
+//
+//            hemp_element  args    = hemp_val_elem(hemp_block_args(element));
+//        hemp_proto   params  = (hemp_proto) hemp_val_ptr(hemp_lhs(args));
+//        hemp_list     list    = params->item;
+//        hemp_debug("TODO: handle block arguments, params are at %p\n", params);
+//        for (n = 0; n < list->length; n++) {
+//            hemp_string name = hemp_val_str( hemp_list_item(list, n) );
+//            hemp_debug("- %s\n", name);
+//        }
+//        // hemp_value args = hemp_block_args(element);
+//    }
     
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
@@ -122,8 +127,12 @@ HEMP_OUTPUT_FUNC(hemp_element_block_params) {
     
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
-//      hemp_debug_msg("calling params() on %s\n", hemp_val_elem(item)->type->name);
-        hemp_obcall(item, params, context, output);
+//      hemp_debug_msg(
+//          "calling params() on %s => %s\n", 
+//          hemp_val_elem(item)->type->name, 
+//          hemp_type_name(item)
+//      );
+        hemp_call(item, params, context, output);
     }
 
     return output;
@@ -141,17 +150,18 @@ hemp_element_block_clean(
     if (exprs)
         hemp_list_free(exprs);
 
-    if (hemp_has_flag(element, HEMP_BE_ARGS)) {
-        hemp_element  args    = hemp_val_elem(hemp_block_args(element));
-        hemp_proto   params  = (hemp_proto) hemp_val_ptr(hemp_lhs(args));
-//      hemp_debug("cleaning block params at %p\n", params);
-        hemp_proto_free(params);
-    }
+// This is now implemented with a separate code value
+//    if (hemp_has_flag(element, HEMP_BE_ARGS)) {
+//        hemp_element  args    = hemp_val_elem(hemp_block_args(element));
+//        hemp_proto   params  = (hemp_proto) hemp_val_ptr(hemp_lhs(args));
+////      hemp_debug("cleaning block params at %p\n", params);
+//        hemp_proto_free(params);
+//    }
 
     // hmmm... are block always synthesised and hence need freeing?
     // TODO: allocate block elements via the elements object so that it 
     // can memory manage them en masse.
-    hemp_element_free(element);
+//    hemp_element_free(element);
 }
 
 

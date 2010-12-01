@@ -1,21 +1,8 @@
--- test function call
+-- test no-op function call on a string 
 %% msg = 'Hello World'
 msg: [% msg('Badger', x=20, y=30) %]
 -- expect
 msg: Hello World
-
--- test quick hack
-[%  name = 'Nobody';    # until we get this working properly
-
-    sub msg; 
-        "Hello " name "!"; 
-    end; 
-    
-    msg( name = 'World' )
-%]
--- expect --
-Hello World!
-
 
 -- test argless function with explicit call --
 [%  sub msg; 
@@ -48,11 +35,31 @@ Hello World!
 -- expect --
 Hello World!
 
+
+
+-- start --
+
+-- test quick hack
+[%  name = 'Nobody';    # until we get this working properly
+
+    sub msg(name,x,y); 
+        "Hello " name "!" '  x is ' x ' and y is ' y;
+    end; 
+    
+    msg('World',y=10,x=123.45)
+%]
+-- expect --
+Hello World!  x is 123.45 and y is 10
 -- stop --
+
+
+
+
+
 -- test named function with an arg --
 [%  name = 'Nobody';    # until we get this working properly
 
-    sub msg(name, age, height); 
+    sub msg(name); 
         'Hello ' name '!';
     end;
 
@@ -60,6 +67,8 @@ Hello World!
 %]
 -- expect --
 Hello World!
+
+
 
 
 

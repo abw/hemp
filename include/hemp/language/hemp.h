@@ -17,6 +17,8 @@ HEMP_GRAMMAR(hemp_grammar_hemp_alpha);
 HEMP_GRAMMAR(hemp_grammar_hemp_bravo);
 HEMP_GRAMMAR(hemp_grammar_hemp_charlie);
 
+HEMP_SYMBOL(hemp_element_sub_symbol);
+
 void hemp_grammar_add_hemp_alpha(hemp_grammar);
 void hemp_grammar_add_hemp_bravo(hemp_grammar);
 void hemp_grammar_add_hemp_charlie(hemp_grammar);

@@ -56,6 +56,11 @@ hemp_string_wordlike(
 );
 
 HEMP_INLINE hemp_bool
+hemp_string_intlike(
+    hemp_string     string
+);
+
+HEMP_INLINE hemp_bool
 hemp_string_numlike(
     hemp_string     string
 );

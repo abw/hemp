@@ -34,7 +34,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = code$(EXEEXT) text$(EXEEXT) list$(EXEEXT) \
-	hash$(EXEEXT)
+	hash$(EXEEXT) params$(EXEEXT)
 subdir = tests/type
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -64,6 +64,10 @@ list_SOURCES = list.c
 list_OBJECTS = list.$(OBJEXT)
 list_LDADD = $(LDADD)
 list_DEPENDENCIES = ../../library/libhemp.la
+params_SOURCES = params.c
+params_OBJECTS = params.$(OBJEXT)
+params_LDADD = $(LDADD)
+params_DEPENDENCIES = ../../library/libhemp.la
 text_SOURCES = text.c
 text_OBJECTS = text.$(OBJEXT)
 text_LDADD = $(LDADD)
@@ -81,8 +85,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = code.c hash.c list.c text.c
-DIST_SOURCES = code.c hash.c list.c text.c
+SOURCES = code.c hash.c list.c params.c text.c
+DIST_SOURCES = code.c hash.c list.c params.c text.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -285,6 +289,9 @@ hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES)
 list$(EXEEXT): $(list_OBJECTS) $(list_DEPENDENCIES) 
 	@rm -f list$(EXEEXT)
 	$(LINK) $(list_OBJECTS) $(list_LDADD) $(LIBS)
+params$(EXEEXT): $(params_OBJECTS) $(params_DEPENDENCIES) 
+	@rm -f params$(EXEEXT)
+	$(LINK) $(params_OBJECTS) $(params_LDADD) $(LIBS)
 text$(EXEEXT): $(text_OBJECTS) $(text_DEPENDENCIES) 
 	@rm -f text$(EXEEXT)
 	$(LINK) $(text_OBJECTS) $(text_LDADD) $(LIBS)
@@ -298,6 +305,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/code.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/params.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Po@am__quote@
 
 .c.o:

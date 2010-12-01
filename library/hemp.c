@@ -212,8 +212,7 @@ hemp_free_scheme(
     hemp_pos  position,
     hemp_slot item
 ) {
-    hemp_debug("cleaning %s scheme\n", ((hemp_scheme) hemp_val_ptr(item->value))->name);
-
+    hemp_debug_init("cleaning %s scheme\n", ((hemp_scheme) hemp_val_ptr(item->value))->name);
     hemp_scheme_free( (hemp_scheme) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }

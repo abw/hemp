@@ -43,6 +43,7 @@ HEMP_TYPE_FUNC(hemp_type_hash) {
     hemp_type type = hemp_type_subtype(HempValue, id, name);
     type->text       = &hemp_type_hash_text;
     type->fetch      = &hemp_type_hash_fetch;
+    type->store      = &hemp_type_hash_store;
     type->dot        = &hemp_type_hash_dot;
     type->boolean    = &hemp_value_true;            /* hash is always true or use hash size? */
     type->defined    = &hemp_value_true;
@@ -560,6 +561,11 @@ HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
 }
 
 
+HEMP_STORE_FUNC(hemp_type_hash_store) {
+    hemp_todo("hemp_type_hash_store()\n");
+}
+
+
 HEMP_FETCH_FUNC(hemp_type_hash_dot) {
     hemp_bool kmine  = HEMP_FALSE;
     hemp_text ktext;
@@ -649,7 +655,7 @@ hemp_hash_dump_item(
         hemp_text_append_string(hemp_hash_dump_buffer, hemp_val_str(item->value));
     }
     else {
-        hemp_text_append_string(hemp_hash_dump_buffer, "???");
+        hemp_text_append_string(hemp_hash_dump_buffer, hemp_type_name(item->value));
     }
     hemp_text_append_string(hemp_hash_dump_buffer, "\n");
 
@@ -664,7 +670,7 @@ void
 hemp_hash_dump_hash(
     hemp_hash hash
 ) {
-    char buffer[100];
+    char buffer[1000];
     sprintf(buffer, "[%p] ", hash);
 //  hemp_debug("dump hash: %p (%d items)\n", hash, hash->size);
     hemp_text_append_string(hemp_hash_dump_buffer, buffer);

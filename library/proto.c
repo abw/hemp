@@ -120,3 +120,40 @@ hemp_proto_add_hash(
     proto->hash = name;
     return HEMP_TRUE;
 }
+
+
+void 
+hemp_proto_dump(
+    hemp_proto proto
+) {
+    hemp_debug_msg("hemp proto at %p:\n", proto);
+
+    if (proto->list) {
+        hemp_debug("list item: %s\n", proto->list);
+    }
+
+    if (proto->hash) {
+        hemp_debug("hash item: %s\n", proto->hash);
+    }
+    
+    if (proto->item) {
+        hemp_debug("%d items:\n", proto->item->length);
+        hemp_text text = hemp_list_dump(proto->item);
+        hemp_debug(text->string);
+        hemp_text_free(text);
+    }
+    else {
+        hemp_debug("no list\n");
+    }
+
+    if (proto->name) {
+        hemp_debug("%d named items:\n", proto->name->size);
+        hemp_text text = hemp_hash_dump(proto->name);
+        hemp_debug(text->string);
+        hemp_text_free(text);
+    }
+    else {
+        hemp_debug("no named items\n");
+    }
+
+}

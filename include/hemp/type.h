@@ -11,20 +11,20 @@
     hemp_string     name;           \
     hemp_namespace  namespace;      \
     hemp_hash       methods;        \
-    hemp_output_f   text;           \
-    hemp_output_f   values;         \
-    hemp_output_f   params;         \
     hemp_value_f    value;          \
     hemp_value_f    number;         \
     hemp_value_f    integer;        \
     hemp_value_f    boolean;        \
     hemp_value_f    compare;        \
     hemp_value_f    defined;        \
-    hemp_value_f    apply;          \
-    hemp_store_f    store;          \
-    hemp_fetch_f    fetch;          \
+    hemp_input_f    apply;          \
+    hemp_input_f    assign;         \
+    hemp_output_f   text;           \
+    hemp_output_f   values;         \
+    hemp_output_f   params;         \
     hemp_fetch_f    dot;            \
-    hemp_operate_f  assign;
+    hemp_fetch_f    fetch;          \
+    hemp_store_f    store;          
 
 //  hemp_output_f       list;       \   /* superfluous? */
 //  hemp_method_f       method;         /* TODO: method auto-generator */
@@ -69,6 +69,7 @@ extern hemp_type HempType;
 extern hemp_type HempValue;
 extern hemp_type HempNumber;
 extern hemp_type HempInteger;
+extern hemp_type HempPointer;
 extern hemp_type HempString;
 extern hemp_type HempText;
 extern hemp_type HempList;

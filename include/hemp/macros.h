@@ -413,11 +413,11 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
 #define HEMP_INFIX_FUNC(f)                  \
     HEMP_POSTFIX_FUNC(f)
 
-#define HEMP_COMPILE_FUNC(f)                \
-    HEMP_INLINE void f(                     \
+#define HEMP_FIXUP_FUNC(f)                  \
+    HEMP_INLINE hemp_element f(             \
         hemp_element    element,            \
         hemp_scope      scope,              \
-        hemp_value    compiler            \
+        hemp_value      fixative            \
     )
 
 /* operator precedence */
@@ -532,39 +532,45 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
  *--------------------------------------------------------------------------*/
 
 #define HEMP_VALUE_FUNC(f)                  \
-    HEMP_INLINE hemp_value f(             \
-        hemp_value    value,              \
+    HEMP_INLINE hemp_value f(               \
+        hemp_value      value,              \
         hemp_context    context             \
     )
 
-#define HEMP_OUTPUT_FUNC(f)                 \
-    HEMP_INLINE hemp_value f(             \
-        hemp_value    value,              \
+#define HEMP_INPUT_FUNC(f)                  \
+    HEMP_INLINE hemp_value f(               \
+        hemp_value      value,              \
         hemp_context    context,            \
-        hemp_value    output              \
+        hemp_value      input               \
+    )
+
+#define HEMP_OUTPUT_FUNC(f)                 \
+    HEMP_INLINE hemp_value f(               \
+        hemp_value      value,              \
+        hemp_context    context,            \
+        hemp_value      output              \
     )
 
 #define HEMP_FETCH_FUNC(f)                  \
-    HEMP_INLINE hemp_value f(             \
-        hemp_value    container,          \
+    HEMP_INLINE hemp_value f(               \
+        hemp_value      container,          \
         hemp_context    context,            \
-        hemp_value    key                 \
+        hemp_value      key                 \
     )
 
 #define HEMP_STORE_FUNC(f)                  \
-    HEMP_INLINE hemp_value f(             \
-        hemp_value    container,          \
+    HEMP_INLINE hemp_value f(               \
+        hemp_value      container,          \
         hemp_context    context,            \
-        hemp_value    key,                \
-        hemp_value    value               \
+        hemp_value      key,                \
+        hemp_value      value               \
     )
 
-#define HEMP_OPERATE_FUNC(f)                \
-    HEMP_INLINE hemp_value f(             \
-        hemp_value    value,              \
-        hemp_context    context,            \
-        hemp_value    operand             \
+#define HEMP_CLEAN_FUNC(f)                  \
+    HEMP_INLINE void f(                     \
+        hemp_element    element             \
     )
+
 
 
 /*--------------------------------------------------------------------------
@@ -679,6 +685,15 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
     }                                                               \
     else {                                                          \
         list   = hemp_val_list(output);                             \
+    }
+
+#define hemp_prepare_params(context, output, params)                \
+    if (hemp_is_undef(output)) {                                    \
+        params = hemp_context_tmp_params(context);                  \
+        output = hemp_params_val(params);                           \
+    }                                                               \
+    else {                                                          \
+        params = hemp_val_params(output);                           \
     }
 
 

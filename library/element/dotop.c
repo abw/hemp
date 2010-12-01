@@ -78,7 +78,7 @@ HEMP_VALUE_FUNC(hemp_element_dotop_value) {
 }
 
 
-HEMP_OPERATE_FUNC(hemp_element_dotop_assign) {
+HEMP_INPUT_FUNC(hemp_element_dotop_assign) {
     hemp_todo("hemp_element_dotop_assign()");
 
     /* Note the temporary hack: rhs is always a pre-evaluated value */
@@ -90,7 +90,7 @@ HEMP_OPERATE_FUNC(hemp_element_dotop_assign) {
     return hemp_store(
         lval, context, rval, 
         /* evaluate operand element tree to yield an immediate value */
-        hemp_call(operand, value, context)
+        hemp_call(input, value, context)
     );
 }
 

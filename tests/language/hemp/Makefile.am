@@ -1,4 +1,4 @@
-#check_PROGRAMS  =    functions
+#check_PROGRAMS  =    functions assign
 
 check_PROGRAMS  =   assign      \
                     boolops     \

@@ -1,5 +1,11 @@
 An incomplete list of things TODO, in no particular order.
 
+* Clean up the whole element/symbol confusion.  Symbols are maps from a token
+  to an element type, represented by a hemp_symbol, whereas elements are the
+  document instances with a symbol pointer.  But we talk about registering
+  elements (which makes sense linguistically) when we're actually registering
+  symbols.
+
 * hemp_element_parse_block() and various other methods need access to the 
   elements factory.  I think this should probably be encapsulated in the 
   scope object.
@@ -45,7 +51,7 @@ An incomplete list of things TODO, in no particular order.
   source position / scope for parse errors.
 
 * Add a fallback mechanism to the various factories.  e.g. if a tt3 dialect
-  is requested and not found then the fallback should call hemp_language("tt3")
+  is requested and not found then the fallback should call hemp_language_instance("tt3")
   to give it a chance to load it.  Just got to be careful we don't end up in
   a deathly spiral if we then re-attempt the lookup and it fails again.
 
@@ -127,14 +133,48 @@ An incomplete list of things TODO, in no particular order.
 
 * Add support for literal elements (other than word and number) being used
   as fixed tokens (merge/refactor token, source, etc., at the same time).
+
+* Pre-defined symbols like start_tag and end_tag should be bound to a grammar
+  so we don't get exceptions like when parse_block() wants to create a new
+  block element and needs an elements reference (which includes needing a 
+  grammar reference along the way).  Tags should pre-match the start_tag/end_tag
+  symbols via the grammar.
+  
+
+Configuration, Build and Installation
+-------------------------------------
+
+* Find some way to generate the relevant items hard-coded package details
+  without referencing the values defined in config.h.  We don't want to 
+  install the generated config.h with hemp or require end users to use it.
+  But we need some of the definitions contained therein.
+  
+  See include/hemp/defines.h and include/hemp/config.h
+
+
+Big Issues
+----------
+
+* The current implementation for function parameters using context, frame
+  and params results in all parameters for a function becoming global 
+  dynamic variable in the current context.  It's all a bit of a mess and
+  needs a bit of a re-think.
+
  
 
 HOT STACK
 ---------
 
-* Add context frames with args, vars, element, etc
+* change hemp_element_blah_symbol to be hemp_element_blah and unify with 
+  how tags, grammars, dialects, etc., are registered and constructed
 
-* Add context_enter(), context_leave() functions.
+* Add tags via a factory.  Move tags to separate files.
+
+* hemp_test_plan_p vs hemp_test_plan()
+
+* hemp_string_split_p vs hemp_string_split()
+
+* Add context frames with args, vars, element, etc
 
 * Have apply create new frame, evaluate params in frame.
   Hmmm... can we just create a new frame and then evaluate the params as
@@ -147,3 +187,9 @@ HOT STACK
   20->values => 20
   (x=10)->values => ah... yields 10 because we're asking for a value not a 
   param... oh well, 
+  
+* hemp_element_sub_clean() 
+    // TODO: call clean() method on element to map it automagically
+    // so that we don't have to rely on the rhs element being a block.
+    // Then we can move the cleaner into code.
+

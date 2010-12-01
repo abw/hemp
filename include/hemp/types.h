@@ -58,6 +58,7 @@ typedef struct hemp_language    * hemp_language;
 typedef struct hemp_list        * hemp_list;
 typedef struct hemp_namespace   * hemp_namespace;
 typedef struct hemp_object      * hemp_object;
+typedef struct hemp_params      * hemp_params;
 typedef struct hemp_proto       * hemp_proto;
 typedef struct hemp_pnode       * hemp_pnode;
 typedef struct hemp_pool        * hemp_pool;
@@ -118,33 +119,69 @@ union hemp_value {
 
 
 /*--------------------------------------------------------------------------
- * function pointers
+ * Type definitions for function pointers
  *--------------------------------------------------------------------------*/
 
 typedef hemp_memory     
-    (* hemp_actor)(
-        hemp_memory     argument, 
-        ...
-    );
+(* hemp_actor)(
+    hemp_memory     argument, 
+    ...
+);
+
+
+/*--------------------------------------------------------------------------
+ * Iterator functions
+ *--------------------------------------------------------------------------*/
 
 typedef hemp_bool     
-    (* hemp_hash_iter)(             /* iterator over hash items             */
-        hemp_hash       hash,       /* pointer to hash                      */
-        hemp_pos        index,      /* 0-based index of item in hash        */
-        hemp_slot       item        /* pointer to hash item entry           */
-    );
+(* hemp_hash_iter)(                 /* iterator over hash items             */
+    hemp_hash       hash,           /* pointer to hash                      */
+    hemp_pos        index,          /* 0-based index of item in hash        */
+    hemp_slot       item            /* pointer to hash item entry           */
+);
 
 typedef hemp_bool     
-    (* hemp_list_iter)(             /* iterator over list items             */
-        hemp_list       list,       /* pointer to list                      */
-        hemp_pos        index,      /* 0-based index of item in list        */
-        hemp_value      item        /* item value                           */
-    );
+(* hemp_list_iter)(                 /* iterator over list items             */
+    hemp_list       list,           /* pointer to list                      */
+    hemp_pos        index,          /* 0-based index of item in list        */
+    hemp_value      item            /* item value                           */
+);
 
 typedef hemp_bool     
-    (* hemp_pool_iter)(             /* iterate over pool items              */
-        hemp_memory      item       /* pointer to memory                    */
-    );
+(* hemp_pool_iter)(                 /* iterate over pool items              */
+    hemp_memory     item            /* pointer to memory                    */
+);
+
+
+//typedef hemp_element
+//(* hemp_skip)( 
+//    hemp_element  * current       /* pointer to current element pointer   */
+//);
+
+typedef hemp_element  
+(* hemp_prefix)(                    /* parse start of expression            */
+    hemp_element  * current,        /* pointer to current element pointer   */
+    hemp_scope      scope,          /* current lexical scope                */
+    hemp_oprec      precedence,     /* operator precedence level            */
+    hemp_bool       force           /* yes, really parse something          */
+);
+
+typedef hemp_element  
+(* hemp_postfix)(                   /* parse continuation of expression     */
+    hemp_element  * current,        /* pointer to current element pointer   */
+    hemp_scope      scope,          /* current lexical scope                */
+    hemp_oprec      precedence,     /* operator precedence level            */
+    hemp_bool       force,          /* yes, really parse something          */
+    hemp_element    element         /* preceding (lhs) element              */
+);
+
+typedef hemp_element
+(* hemp_fixup)(                     /* general purpose fixup parser handler */
+    hemp_element    element,        /* pointer to element                   */
+    hemp_scope      scope,          /* current lexical scope                */
+    hemp_value      fixative        /* optional argument                    */
+);
+
 
 
 /*--------------------------------------------------------------------------
@@ -206,6 +243,7 @@ typedef hemp_element
         hemp_symbol symbol
     );
 
+
 /*--------------------------------------------------------------------------
  * value functions
  *--------------------------------------------------------------------------*/
@@ -217,50 +255,22 @@ typedef hemp_value
     );
 
 typedef hemp_value 
+    (* hemp_input_f)(
+        hemp_value    value,
+        hemp_context  context,
+        hemp_value    input
+    );
+
+typedef hemp_value 
     (* hemp_output_f)(
         hemp_value    value,
         hemp_context  context,
         hemp_value    output
     );
 
-typedef hemp_value 
-    (* hemp_operate_f)(
-        hemp_value    value,
-        hemp_context  context,
-        hemp_value    operand
-    );
-
-
-typedef hemp_element
-    (* hemp_skip_f )( 
-        hemp_element *current     /* pointer to current element pointer   */
-    );
-
-typedef hemp_element  
-    (* hemp_prefix_f )(
-        hemp_element *current,    /* pointer to current element pointer   */
-        hemp_scope    scope,      /* current lexical scope                */
-        hemp_oprec     precedence, /* operator precedence level            */
-        hemp_bool     force       /* yes, really parse something          */
-    );
-
-typedef hemp_element  
-    (* hemp_postfix_f )(
-        hemp_element *current,    /* pointer to current element pointer   */
-        hemp_scope    scope,      /* current lexical scope                */
-        hemp_oprec     precedence, /* operator precedence level            */
-        hemp_bool     force,      /* yes, really parse something          */
-        hemp_element  element     /* preceding element                    */
-    );
 
 
 
-typedef void
-    (* hemp_compile_f )( 
-        hemp_element  element,
-        hemp_scope    scope,
-        hemp_value    compiler
-    );
 
 
 typedef hemp_value 

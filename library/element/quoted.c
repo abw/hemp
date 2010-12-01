@@ -20,11 +20,11 @@ HEMP_SYMBOL(hemp_element_squote_symbol) {
 
 
 HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
-    hemp_string      src       = *srcptr;
-    hemp_bool     is_source = HEMP_TRUE;
-    hemp_string      end       = symbol->end;
-    hemp_size     endlen    = strlen(end);
-    hemp_element  element;
+    hemp_string     src       = *srcptr;
+    hemp_bool       is_source = HEMP_TRUE;
+    hemp_string     end       = symbol->end;
+    hemp_size       endlen    = strlen(end);
+    hemp_element    element;
 
     hemp_debug_call("hemp_element_squote_scanner()\n");
 
@@ -194,9 +194,9 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
  *--------------------------------------------------------------------------*/
 
 HEMP_OUTPUT_FUNC(hemp_element_quoted_text) {
-    hemp_debug_call("hemp_element_quoted_text(%p) [%s]\n", element, element->type->name);
 
     hemp_element element = hemp_val_elem(value);
+    hemp_debug_call("hemp_element_quoted_text(%p) [%s]\n", element, element->type->name);
     hemp_text text;
     hemp_prepare_text_size(context, output, text, element->length);
 
@@ -217,6 +217,8 @@ HEMP_OUTPUT_FUNC(hemp_element_quoted_text) {
         /* TODO: check that it's OK to assume we always have a value */
         hemp_text_append_string(text, hemp_val_str(element->args.value));
     }
+    
+//  hemp_debug_msg("output for quoted text (%s): %s\n", hemp_type_name(output), text->string);
 
     return output;
 }

@@ -122,11 +122,12 @@ extern const hemp_value HempAfter;
 #define HEMP_INTEGER_ID         0x01        /* 32 bit integer               */
 #define HEMP_POINTER_ID         0x02        /* memory pointer/string        */
 #define HEMP_STRING_ID          0x03        /* memory pointer/string        */
-#define HEMP_TEXT_ID            0x04        /* hemp_text pointer          */
-#define HEMP_LIST_ID            0x05        /* hemp_list pointer          */
-#define HEMP_HASH_ID            0x06        /* hemp_hash pointer          */
-#define HEMP_CODE_ID            0x07        /* hemp_code pointer          */
-#define HEMP_OBJECT_ID          0x0F        /* hemp_object pointer        */
+#define HEMP_TEXT_ID            0x04        /* hemp_text pointer            */
+#define HEMP_LIST_ID            0x05        /* hemp_list pointer            */
+#define HEMP_HASH_ID            0x06        /* hemp_hash pointer            */
+#define HEMP_CODE_ID            0x07        /* hemp_code pointer            */
+#define HEMP_PARAMS_ID          0x08        /* hemp_params pointer          */
+#define HEMP_OBJECT_ID          0x0F        /* hemp_object pointer          */
 #define HEMP_IDENTITY_ID        0x10        /* identity values (NaN + n)    */
 
 /* out-of-band values used to mark unused/reserved type slots */
@@ -218,6 +219,7 @@ extern const hemp_value HempAfter;
 #define HEMP_LIST_TAG           HEMP_TAG_MAKE(HEMP_LIST_ID)
 #define HEMP_HASH_TAG           HEMP_TAG_MAKE(HEMP_HASH_ID)
 #define HEMP_CODE_TAG           HEMP_TAG_MAKE(HEMP_CODE_ID)
+#define HEMP_PARAMS_TAG         HEMP_TAG_MAKE(HEMP_PARAMS_ID)
 #define HEMP_OBJECT_TAG         HEMP_TAG_MAKE(HEMP_OBJECT_ID)
 #define HEMP_IDENTITY_TAG       HEMP_TAG_MAKE(HEMP_IDENTITY_ID)
 
@@ -236,6 +238,7 @@ extern const hemp_value HempAfter;
 #define hemp_is_list(v)         HEMP_TYPE_IS(v, HEMP_LIST_ID)
 #define hemp_is_hash(v)         HEMP_TYPE_IS(v, HEMP_HASH_ID)
 #define hemp_is_code(v)         HEMP_TYPE_IS(v, HEMP_CODE_ID)
+#define hemp_is_params(v)       HEMP_TYPE_IS(v, HEMP_PARAMS_ID)
 #define hemp_is_object(v)       HEMP_TYPE_IS(v, HEMP_OBJECT_ID)
 #define hemp_is_identity(v)     HEMP_TYPE_IS(v, HEMP_IDENTITY_ID)
 #define hemp_is_missing(v)      HEMP_IDENT_NOT(v, HEMP_FOUND_BIT)
@@ -319,6 +322,7 @@ extern HEMP_INLINE hemp_value     hemp_text_val(hemp_text t);
 extern HEMP_INLINE hemp_value     hemp_list_val(hemp_list l);
 extern HEMP_INLINE hemp_value     hemp_hash_val(hemp_hash l);
 extern HEMP_INLINE hemp_value     hemp_code_val(hemp_code c);
+extern HEMP_INLINE hemp_value     hemp_params_val(hemp_params p);
 extern HEMP_INLINE hemp_value     hemp_obj_val(hemp_object o);
 extern HEMP_INLINE hemp_value     hemp_bool_val(hemp_bool b);
 extern HEMP_INLINE hemp_value     hemp_ident_val(hemp_u8 i);
@@ -338,6 +342,7 @@ extern HEMP_INLINE hemp_text      hemp_val_text(hemp_value v);
 extern HEMP_INLINE hemp_list      hemp_val_list(hemp_value v);
 extern HEMP_INLINE hemp_hash      hemp_val_hash(hemp_value v);
 extern HEMP_INLINE hemp_code      hemp_val_code(hemp_value v);
+extern HEMP_INLINE hemp_params    hemp_val_params(hemp_value v);
 extern HEMP_INLINE hemp_object    hemp_val_obj(hemp_value v);
 extern HEMP_INLINE hemp_bool      hemp_val_bool(hemp_value v);
 extern HEMP_INLINE hemp_element   hemp_val_elem(hemp_value v);
@@ -357,7 +362,10 @@ HEMP_VALUE_FUNC(hemp_value_true);
 HEMP_VALUE_FUNC(hemp_value_false);
 HEMP_FETCH_FUNC(hemp_value_dot);
 
+HEMP_INPUT_FUNC(hemp_value_apply);
+
 HEMP_OUTPUT_FUNC(hemp_value_values);
+HEMP_OUTPUT_FUNC(hemp_value_params);
 
 /* default "cannot convert to X" function */
 HEMP_OUTPUT_FUNC(hemp_value_not_text);

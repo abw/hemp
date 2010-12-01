@@ -29,6 +29,8 @@ hemp_context_init(
     context->hemp      = hemp;
     context->frame     = NULL;
     context->vars      = hemp_hash_init();
+
+    // TODO: this is all rather wasteful and annoyingly repetitive.
     context->text_pool = hemp_pool_new(
         sizeof(struct hemp_text),
         HEMP_TMP_POOL_SIZE,
@@ -43,6 +45,11 @@ hemp_context_init(
         sizeof(struct hemp_code),
         HEMP_TMP_POOL_SIZE,
         &hemp_context_code_pool_cleaner
+    );
+    context->params_pool = hemp_pool_new(
+        sizeof(struct hemp_params),
+        HEMP_TMP_POOL_SIZE,
+        &hemp_context_params_pool_cleaner
     );
 
     return context;
@@ -62,6 +69,7 @@ hemp_context_free(
     hemp_pool_free(context->text_pool);
     hemp_pool_free(context->list_pool);
     hemp_pool_free(context->code_pool);
+    hemp_pool_free(context->params_pool);
 
     hemp_hash_free(context->vars);
     hemp_mem_free(context);
@@ -132,7 +140,53 @@ hemp_context_leave(
 }
 
 
-hemp_text
+/*--------------------------------------------------------------------------
+ * Shoot me now. This is an ugly hack to temporarily patch the named
+ * parameter hash (params->nominals) in the current context frame into 
+ * the context vars.  This is so that we can evaluate a parameter list as 
+ * usual, but capture any side-effects from variables being set.  e.g. For 
+ * a call like foo(a=10), we evaluate the (a=10) params which results in the 
+ * variable 'a' being set to 10.  Except that it's set in the params->nominal 
+ * hash, effectively making it a named parameter instead of a regular variable.
+ * We attach the old context->vars hash as the parent of the params hash so 
+ * that a) we can still lookup all other runtime variables and b) we can 
+ * restore the original vars in hemp_context_blur_params().
+ *--------------------------------------------------------------------------*/
+
+HEMP_INLINE void
+hemp_context_focus_params(
+    hemp_context context
+) {
+    if (! context->frame)
+        return;
+
+    hemp_params params = context->frame->params;
+//  hemp_debug_msg("focussing params at %p chained to %p\n", params->nominals, context->vars);
+    params->nominals->parent = context->vars;
+    context->vars  = params->nominals;
+}
+
+
+HEMP_INLINE void
+hemp_context_blur_params(
+    hemp_context context
+) {
+    if (! context->frame)
+        return;
+
+    hemp_params params = context->frame->params;
+//  hemp_debug_msg("blurring params at %p chained to %p\n", context->vars, context->vars->parent);
+    context->vars  = params->nominals->parent;
+    params->nominals->parent = NULL;
+}
+
+
+/*--------------------------------------------------------------------------
+ * Function to return temporary data items with memory managed by context.
+ * TODO: needs cleaning up and generalising
+ *--------------------------------------------------------------------------*/
+
+HEMP_INLINE hemp_text
 hemp_context_tmp_text(
     hemp_context context
 ) {
@@ -143,7 +197,7 @@ hemp_context_tmp_text(
 }
 
 
-hemp_text
+HEMP_INLINE hemp_text
 hemp_context_tmp_text_size(
     hemp_context context,
     hemp_size    size
@@ -152,7 +206,8 @@ hemp_context_tmp_text_size(
     return hemp_text_init_size(text, size);
 }
 
-hemp_list
+
+HEMP_INLINE hemp_list
 hemp_context_tmp_list(
     hemp_context context
 ) {
@@ -161,13 +216,26 @@ hemp_context_tmp_list(
     return hemp_list_init(list);
 }
 
-hemp_code
+
+HEMP_INLINE hemp_code
 hemp_context_tmp_code(
     hemp_context context
 ) {
     hemp_code code = (hemp_code) hemp_pool_take(context->code_pool);
-    hemp_debug_msg("*** got new code pointer at %p\n", code);
+//  hemp_debug_msg("*** got new code pointer at %p\n", code);
     return hemp_code_init(code);
+}
+
+
+HEMP_INLINE hemp_params
+hemp_context_tmp_params(
+    hemp_context context
+) {
+    return hemp_params_init(
+        (hemp_params) hemp_pool_take(
+            context->params_pool
+        )
+    );
 }
 
 
@@ -175,7 +243,7 @@ hemp_bool
 hemp_context_text_pool_cleaner(
     hemp_memory item
 ) {
-//    hemp_debug("hemp_context_text_pool_cleaner(%p)\n", item);
+//  hemp_debug_msg("hemp_context_text_pool_cleaner(%p)\n", item);
     hemp_text_release((hemp_text) item);
     return HEMP_TRUE;
 }
@@ -184,7 +252,7 @@ hemp_bool
 hemp_context_list_pool_cleaner(
     hemp_memory item
 ) {
-//    hemp_debug_call("hemp_context_list_pool_cleaner(%p)\n", item);
+//  hemp_debug_msg("hemp_context_list_pool_cleaner(%p)\n", item);
     hemp_list_release((hemp_list) item);
     return HEMP_TRUE;
 }
@@ -194,8 +262,17 @@ hemp_bool
 hemp_context_code_pool_cleaner(
     hemp_memory item
 ) {
-    hemp_debug_msg("hemp_context_code_pool_cleaner(%p)\n", item);
+//  hemp_debug_msg("hemp_context_code_pool_cleaner(%p)\n", item);
     hemp_code_release((hemp_code) item);
+    return HEMP_TRUE;
+}
+
+hemp_bool
+hemp_context_params_pool_cleaner(
+    hemp_memory item
+) {
+//  hemp_debug_msg("hemp_context_params_pool_cleaner(%p)\n", item);
+    hemp_params_release((hemp_params) item);
     return HEMP_TRUE;
 }
 

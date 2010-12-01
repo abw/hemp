@@ -75,6 +75,22 @@ hemp_hash_val(hemp_hash t) {
 
 
 HEMP_INLINE hemp_value
+hemp_code_val(hemp_code c) {
+    hemp_value v;
+    v.bits = HEMP_CODE_TAG | ((hemp_u64) c & HEMP_POINTER_MASK);
+    return v;
+}
+
+
+HEMP_INLINE hemp_value
+hemp_params_val(hemp_params p) {
+    hemp_value v;
+    v.bits = HEMP_PARAMS_TAG | ((hemp_u64) p & HEMP_POINTER_MASK);
+    return v;
+}
+
+
+HEMP_INLINE hemp_value
 hemp_obj_val(hemp_object t) {
     hemp_value v;
     v.bits = HEMP_OBJECT_TAG | ((hemp_u64) t & HEMP_POINTER_MASK);
@@ -163,6 +179,18 @@ hemp_val_hash(hemp_value v) {
 }
 
 
+HEMP_INLINE hemp_code
+hemp_val_code(hemp_value v) {
+    return (hemp_code) HEMP_POINTER(v);
+}
+
+
+HEMP_INLINE hemp_params
+hemp_val_params(hemp_value v) {
+    return (hemp_params) HEMP_POINTER(v);
+}
+
+
 HEMP_INLINE hemp_object
 hemp_val_obj(hemp_value v) {
     return (hemp_object) HEMP_POINTER(v);
@@ -211,7 +239,27 @@ HEMP_VALUE_FUNC(hemp_value_false) {
 }
 
 
+HEMP_INPUT_FUNC(hemp_value_input_self) {
+    hemp_debug_call("hemp_value_input_self()\n");
+    return value;
+}
+
+
+HEMP_INPUT_FUNC(hemp_value_apply) {
+    /* 
+     * The default behaviour for an element evaluated in a function application
+     * is to return iteself.
+     */
+    hemp_debug_call("hemp_value_apply()\n");
+    return value;
+}
+
+
 HEMP_OUTPUT_FUNC(hemp_value_values) {
+    /* 
+     * The default behaviour for an element evaluated in a list of values is
+     * to add itself to the value list
+     */
     hemp_debug_call("hemp_value_values()\n");
     hemp_list values;
     hemp_prepare_values(context, output, values);
@@ -221,8 +269,23 @@ HEMP_OUTPUT_FUNC(hemp_value_values) {
 }
 
 
+HEMP_OUTPUT_FUNC(hemp_value_params) {
+    /* 
+     * The default behaviour for an element evalauated as a parameter is to 
+     * add itself to the parameter's positional args, params->ordinals
+     */
+    hemp_debug_call("hemp_value_params()\n");
+    hemp_value result = hemp_call(value, value, context);
+    hemp_params params;
+    hemp_prepare_params(context, output, params);
+//  hemp_debug_msg("hemp_value_params() pushing %s => %s\n", hemp_type_name(value), hemp_type_name(result));
+    hemp_params_push(params, result);
+    return output;
+}
+
+
 HEMP_FETCH_FUNC(hemp_value_dot) {
-    hemp_debug("hemp_value_dot(%s)\n", hemp_type_name(container));
+    hemp_debug_call("hemp_value_dot(%s)\n", hemp_type_name(container));
     hemp_value result = HempMissing;
 
     /* call the value's fetch method, if it has one */

@@ -6,6 +6,7 @@ libhemp_la_SOURCES  =   action.c            \
                         dialect.c           \
                         elements.c          \
                         element.c           \
+                        element/apply.c     \
                         element/assign.c    \
                         element/block.c     \
                         element/boolean.c   \
@@ -18,6 +19,7 @@ libhemp_la_SOURCES  =   action.c            \
                         element/operator.c  \
                         element/quoted.c    \
                         element/space.c     \
+                        element/sub.c       \
                         element/text.c      \
                         element/word.c      \
                         error.c             \
@@ -61,6 +63,7 @@ libhemp_la_SOURCES  =   action.c            \
                         type/list.c         \
                         type/number.c       \
                         type/object.c       \
+                        type/params.c       \
                         type/string.c       \
                         type/text.c         \
                         utils.c             \

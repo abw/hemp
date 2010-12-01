@@ -31,7 +31,7 @@ hemp_element_init(
 
 void
 hemp_element_free(
-    hemp_element element
+    hemp_element    element
 ) {
     hemp_mem_free(element);
 }
@@ -39,7 +39,7 @@ hemp_element_free(
 
 HEMP_INLINE hemp_grammar
 hemp_element_grammar(
-    hemp_element  element
+    hemp_element    element
 ) {
     if (! element->type->grammar)
         hemp_fatal(
@@ -53,7 +53,7 @@ hemp_element_grammar(
 
 HEMP_INLINE hemp_elements
 hemp_element_elements(
-    hemp_element  element
+    hemp_element    element
 ) {
     if (! element->elements)
         hemp_fatal(
@@ -67,7 +67,7 @@ hemp_element_elements(
 
 HEMP_INLINE hemp_symbol
 hemp_element_grammar_symbol(
-    hemp_element element,
+    hemp_element    element,
     hemp_string     name
 ) {
     return hemp_grammar_symbol(
@@ -79,8 +79,8 @@ hemp_element_grammar_symbol(
 
 HEMP_INLINE hemp_element
 hemp_element_create(
-    hemp_element  element,
-    hemp_string      typename
+    hemp_element    element,
+    hemp_string     typename
 ) {
     return hemp_elements_append(
         hemp_element_elements(element),
@@ -125,18 +125,26 @@ hemp_element_retype(
 
 hemp_element
 hemp_element_parse(
-    hemp_element element,
-    hemp_scope   scope
+    hemp_element    element,
+    hemp_scope      scope
 ) {
     hemp_debug_call("hemp_element_parse()\n");
+    hemp_element *current = &element;
 
     hemp_element block = hemp_element_parse_block(
-        &element,
+        current,
         scope,
         0, 
         HEMP_FALSE
     );
+
+    hemp_element next_elem = *current;
     
+    if (next_elem->type != HempSymbolEOF)
+        hemp_fatal("Unexpected token: %s\n", next_elem->type->name);
+
+    // hemp_debug_msg("next element after parse is %s\n", next_elem->type->name);
+
     return block;
 }
 
@@ -146,19 +154,29 @@ hemp_element_parse(
  *--------------------------------------------------------------------------*/
 
 HEMP_PREFIX_FUNC(hemp_element_parse_block) {
+    hemp_debug_call("hemp_element_parse_block()\n");
     hemp_element element = *elemptr;
     hemp_list list       = hemp_element_parse_exprs(HEMP_PREFIX_ARG_NAMES);
     hemp_element block   = NULL;
 
+
     if (list) {
-        // hemp_debug("got list of %d exprs\n", list->length);
-        block = hemp_element_init(
-            NULL,
-            HempSymbolBlock, 
-            element->token,  
-            element->position,
-            element->length
+        block = hemp_elements_append(
+            hemp_element_elements(element),
+            HempSymbolBlock,
+            element->token, element->position, element->length
         );
+//      hemp_debug_msg("new element block at %p with list at %p and cleaner is %p\n", block, list, list->cleaner);
+
+        // hemp_debug("got list of %d exprs\n", list->length);
+//        block = hemp_element_init(
+//            NULL,
+//            HempSymbolBlock, 
+//            element->token,  
+//            element->position,
+//            element->length
+//        );
+
         hemp_set_block_exprs_list(block, list);
     }
 
@@ -170,9 +188,7 @@ hemp_list
 hemp_element_parse_exprs(
     HEMP_PREFIX_ARGS
 ) {
-    hemp_debug_call("hemp_element_parse_exprs()\n");
     hemp_debug_parse("hemp_element_parse_exprs( precedence => %d )\n", precedence);
-//    hemp_debug("hemp_element_parse_exprs(%p, %p, %d, %d)\n", elemptr, scope, precedence, force);
 
     hemp_element expr;
     hemp_list    exprs = hemp_list_new();
@@ -196,7 +212,7 @@ hemp_element_parse_exprs(
         hemp_debug_parse("parsed %s expression:\n", expr->type->name);
         hemp_element_dump(expr);
 #endif
-        hemp_list_push(exprs, hemp_ptr_val(expr));
+        hemp_list_push(exprs, hemp_elem_val(expr));
     }
 
     /* element should be EOF or we hit a duff token */
@@ -259,6 +275,22 @@ HEMP_POSTFIX_FUNC(hemp_element_not_postfix) {
     hemp_debug("%s is not postfix\n", (*elemptr)->type->name);
     hemp_debug_call("hemp_element_not_postfix()\n");
     return lhs;
+}
+
+
+HEMP_FIXUP_FUNC(hemp_element_not_lvalue) {
+    hemp_fatal(
+        "%s element cannot be assigned to\n", 
+        element->type->name
+    );
+    return NULL;
+}
+
+HEMP_FIXUP_FUNC(hemp_element_not_proto) {
+    hemp_fatal(
+        "%s element cannot be a function prototype\n", 
+        element->type->name
+    );
 }
 
 
@@ -355,7 +387,7 @@ HEMP_VALUE_FUNC(hemp_element_not_compare) {
 }
 
 
-HEMP_OPERATE_FUNC(hemp_element_not_assign) {
+HEMP_INPUT_FUNC(hemp_element_not_assign) {
     hemp_debug_msg("Throwing not_assign error....\n");
     hemp_fatal(
         "%s element cannot be assigned to\n", 
@@ -363,16 +395,6 @@ HEMP_OPERATE_FUNC(hemp_element_not_assign) {
     );
     return HempNothing;
 }
-
-
-HEMP_COMPILE_FUNC(hemp_element_not_lvalue_param) {
-    hemp_fatal(
-        "%s element cannot be a parameter\n", 
-        element->type->name
-    );
-}
-
-
 
 
 

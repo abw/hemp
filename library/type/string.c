@@ -177,9 +177,27 @@ hemp_string_wordlike(
 
 
 HEMP_INLINE hemp_bool
+hemp_string_intlike(
+    hemp_string string
+) {
+    /* not strictly correct, but good enough for integer list indexes */
+    while (isdigit(*string))
+        string++;
+
+    /* if we reached the end of the string then all characters are wordlike */
+    return *string
+        ? HEMP_FALSE
+        : HEMP_TRUE;
+}
+
+
+HEMP_INLINE hemp_bool
 hemp_string_numlike(
     hemp_string string
 ) {
+    // should use strtod() instead
+    hemp_debug_msg("WARNING: hemp_string_numlike() doesn't accept floating point numbers\n");
+    
     /* not strictly correct, but good enough for integer list indexes */
     while (isdigit(*string))
         string++;

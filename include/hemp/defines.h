@@ -42,10 +42,13 @@
 #define HEMP_STR_VALUE      "Value"
 #define HEMP_STR_NUMBER     "Number"
 #define HEMP_STR_INTEGER    "Integer"
+#define HEMP_STR_POINTER    "Pointer"
 #define HEMP_STR_STRING     "String"
 #define HEMP_STR_TEXT       "Text"
 #define HEMP_STR_LIST       "List"
 #define HEMP_STR_HASH       "Hash"
+#define HEMP_STR_CODE       "Code"
+#define HEMP_STR_PARAMS     "Params"
 #define HEMP_STR_OBJECT     "Object"
 #define HEMP_STR_IDENTITY   "Identity"
 #define HEMP_STR_RESERVED   "Reserved"
@@ -98,21 +101,22 @@
  * HEMP_IS_NUMBER and hemp_is_text.  So now ye knows, and may that guidance 
  * serve you well on yer merry sea-faring escapades... Arrrr!
  */
-#define HEMP_BE_WHITESPACE  0x0001  /* skippabled whitespace, comment, etc  */
-#define HEMP_BE_DELIMITER   0x0002  /* skippable list item delimiter        */
-#define HEMP_BE_SEPARATOR   0x0004  /* expression separator                 */
-#define HEMP_BE_TERMINATOR  0x0008  /* non-skippable expression terminator  */
-#define HEMP_BE_HIDDEN      0x0010  /* generates no output                  */
-#define HEMP_BE_SOURCE      0x0020  /* source text can yield output text    */
-#define HEMP_BE_FIXED       0x0040  /* element output is pre-defined        */
-#define HEMP_BE_PREFIX      0x0100  /* element is a prefix operator         */
-#define HEMP_BE_INFIX       0x0200  /* element is an infix operator         */
-#define HEMP_BE_POSTFIX     0x0400  /* element is a postfix operator        */
-#define HEMP_BE_POSTBOUND   0x0800  /* no space before postfix operator     */
-#define HEMP_BE_NAMED       0x1000  /* anonymous vs named functions         */
-#define HEMP_BE_ARGS        0x2000  /* functions with arguments             */
-#define HEMP_BE_ALLOCATED   0x4000  /* element has memory allocated         */
-#define HEMP_BE_EOF         0x8000  /* special marker for end of file/text  */
+#define HEMP_BE_WHITESPACE  0x00001  /* skippabled whitespace, comment, etc  */
+#define HEMP_BE_DELIMITER   0x00002  /* skippable list item delimiter        */
+#define HEMP_BE_SEPARATOR   0x00004  /* expression separator                 */
+#define HEMP_BE_TERMINATOR  0x00008  /* non-skippable expression terminator  */
+#define HEMP_BE_HIDDEN      0x00010  /* generates no output                  */
+#define HEMP_BE_SOURCE      0x00020  /* source text can yield output text    */
+#define HEMP_BE_FIXED       0x00040  /* element output is pre-defined        */
+#define HEMP_BE_PREFIX      0x00100  /* element is a prefix operator         */
+#define HEMP_BE_INFIX       0x00200  /* element is an infix operator         */
+#define HEMP_BE_POSTFIX     0x00400  /* element is a postfix operator        */
+#define HEMP_BE_POSTBOUND   0x00800  /* no space before postfix operator     */
+#define HEMP_BE_NAMED       0x01000  /* anonymous vs named functions         */
+#define HEMP_BE_ARGS        0x02000  /* functions with arguments             */
+#define HEMP_BE_LVALUE      0x04000  /* element can be lvalue for assignment */
+#define HEMP_BE_ALLOCATED   0x40000  /* element has memory allocated         */
+#define HEMP_BE_EOF         0x80000  /* special marker for end of file/text  */
 
 
 #endif /* HEMP_DEFINES_H */

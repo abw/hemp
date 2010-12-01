@@ -7,6 +7,7 @@
 #include <hemp/frame.h>
 #include <hemp/type/hash.h>
 #include <hemp/type/code.h>
+#include <hemp/type/params.h>
 
 
 /*--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ struct hemp_context {
     hemp_pool       text_pool;          /* tmp hack */
     hemp_pool       list_pool;          /* tmp hack */
     hemp_pool       code_pool;          /* tmp hack */
+    hemp_pool       params_pool;        /* tmp hack */
 };
 
 
@@ -37,24 +39,29 @@ hemp_context_free(
     hemp_context    context
 );
 
-hemp_text
+HEMP_INLINE hemp_text
 hemp_context_tmp_text(
     hemp_context    context
 );
 
-hemp_text
+HEMP_INLINE hemp_text
 hemp_context_tmp_text_size(
     hemp_context    context,
     hemp_size       size
 );
 
-hemp_list       
+HEMP_INLINE hemp_list       
 hemp_context_tmp_list(
     hemp_context    context
 );
 
-hemp_code
+HEMP_INLINE hemp_code
 hemp_context_tmp_code(
+    hemp_context    context
+);
+
+HEMP_INLINE hemp_params
+hemp_context_tmp_params(
     hemp_context    context
 );
 
@@ -73,6 +80,11 @@ hemp_context_code_pool_cleaner(
     hemp_memory     item
 );
 
+hemp_bool
+hemp_context_params_pool_cleaner(
+    hemp_memory     item
+);
+
 HEMP_INLINE hemp_frame
 hemp_context_frame(
     hemp_context    context
@@ -86,6 +98,16 @@ hemp_context_enter(
 
 HEMP_INLINE hemp_element
 hemp_context_leave(
+    hemp_context    context
+);
+
+HEMP_INLINE void
+hemp_context_focus_params(
+    hemp_context    context
+);
+
+HEMP_INLINE void
+hemp_context_blur_params(
     hemp_context    context
 );
 

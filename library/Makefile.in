@@ -79,12 +79,13 @@ am__dirstamp = $(am__leading_dot)dirstamp
 am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-context.lo \
 	libhemp_la-debug.lo libhemp_la-dialect.lo \
 	libhemp_la-elements.lo libhemp_la-element.lo \
-	element/libhemp_la-assign.lo element/libhemp_la-block.lo \
-	element/libhemp_la-boolean.lo element/libhemp_la-bracket.lo \
-	element/libhemp_la-comment.lo element/libhemp_la-compare.lo \
-	element/libhemp_la-dotop.lo element/libhemp_la-literal.lo \
-	element/libhemp_la-number.lo element/libhemp_la-operator.lo \
-	element/libhemp_la-quoted.lo element/libhemp_la-space.lo \
+	element/libhemp_la-apply.lo element/libhemp_la-assign.lo \
+	element/libhemp_la-block.lo element/libhemp_la-boolean.lo \
+	element/libhemp_la-bracket.lo element/libhemp_la-comment.lo \
+	element/libhemp_la-compare.lo element/libhemp_la-dotop.lo \
+	element/libhemp_la-literal.lo element/libhemp_la-number.lo \
+	element/libhemp_la-operator.lo element/libhemp_la-quoted.lo \
+	element/libhemp_la-space.lo element/libhemp_la-sub.lo \
 	element/libhemp_la-text.lo element/libhemp_la-word.lo \
 	libhemp_la-error.lo libhemp_la-factory.lo \
 	libhemp_la-filesystem.lo libhemp_la-frame.lo \
@@ -104,8 +105,9 @@ am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-context.lo \
 	type/libhemp_la-identity.lo type/libhemp_la-integer.lo \
 	type/libhemp_la-hash.lo type/libhemp_la-list.lo \
 	type/libhemp_la-number.lo type/libhemp_la-object.lo \
-	type/libhemp_la-string.lo type/libhemp_la-text.lo \
-	libhemp_la-utils.lo libhemp_la-value.lo libhemp_la-viewer.lo \
+	type/libhemp_la-params.lo type/libhemp_la-string.lo \
+	type/libhemp_la-text.lo libhemp_la-utils.lo \
+	libhemp_la-value.lo libhemp_la-viewer.lo \
 	viewer/libhemp_la-text.lo
 libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
 libhemp_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -264,6 +266,7 @@ libhemp_la_SOURCES = action.c            \
                         dialect.c           \
                         elements.c          \
                         element.c           \
+                        element/apply.c     \
                         element/assign.c    \
                         element/block.c     \
                         element/boolean.c   \
@@ -276,6 +279,7 @@ libhemp_la_SOURCES = action.c            \
                         element/operator.c  \
                         element/quoted.c    \
                         element/space.c     \
+                        element/sub.c       \
                         element/text.c      \
                         element/word.c      \
                         error.c             \
@@ -319,6 +323,7 @@ libhemp_la_SOURCES = action.c            \
                         type/list.c         \
                         type/number.c       \
                         type/object.c       \
+                        type/params.c       \
                         type/string.c       \
                         type/text.c         \
                         utils.c             \
@@ -397,6 +402,8 @@ element/$(am__dirstamp):
 element/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) element/$(DEPDIR)
 	@: > element/$(DEPDIR)/$(am__dirstamp)
+element/libhemp_la-apply.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
 element/libhemp_la-assign.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
 element/libhemp_la-block.lo: element/$(am__dirstamp) \
@@ -420,6 +427,8 @@ element/libhemp_la-operator.lo: element/$(am__dirstamp) \
 element/libhemp_la-quoted.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
 element/libhemp_la-space.lo: element/$(am__dirstamp) \
+	element/$(DEPDIR)/$(am__dirstamp)
+element/libhemp_la-sub.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
 element/libhemp_la-text.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
@@ -481,6 +490,8 @@ type/libhemp_la-number.lo: type/$(am__dirstamp) \
 	type/$(DEPDIR)/$(am__dirstamp)
 type/libhemp_la-object.lo: type/$(am__dirstamp) \
 	type/$(DEPDIR)/$(am__dirstamp)
+type/libhemp_la-params.lo: type/$(am__dirstamp) \
+	type/$(DEPDIR)/$(am__dirstamp)
 type/libhemp_la-string.lo: type/$(am__dirstamp) \
 	type/$(DEPDIR)/$(am__dirstamp)
 type/libhemp_la-text.lo: type/$(am__dirstamp) \
@@ -498,6 +509,8 @@ libhemp.la: $(libhemp_la_OBJECTS) $(libhemp_la_DEPENDENCIES)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f element/libhemp_la-apply.$(OBJEXT)
+	-rm -f element/libhemp_la-apply.lo
 	-rm -f element/libhemp_la-assign.$(OBJEXT)
 	-rm -f element/libhemp_la-assign.lo
 	-rm -f element/libhemp_la-block.$(OBJEXT)
@@ -522,6 +535,8 @@ mostlyclean-compile:
 	-rm -f element/libhemp_la-quoted.lo
 	-rm -f element/libhemp_la-space.$(OBJEXT)
 	-rm -f element/libhemp_la-space.lo
+	-rm -f element/libhemp_la-sub.$(OBJEXT)
+	-rm -f element/libhemp_la-sub.lo
 	-rm -f element/libhemp_la-text.$(OBJEXT)
 	-rm -f element/libhemp_la-text.lo
 	-rm -f element/libhemp_la-word.$(OBJEXT)
@@ -558,6 +573,8 @@ mostlyclean-compile:
 	-rm -f type/libhemp_la-number.lo
 	-rm -f type/libhemp_la-object.$(OBJEXT)
 	-rm -f type/libhemp_la-object.lo
+	-rm -f type/libhemp_la-params.$(OBJEXT)
+	-rm -f type/libhemp_la-params.lo
 	-rm -f type/libhemp_la-string.$(OBJEXT)
 	-rm -f type/libhemp_la-string.lo
 	-rm -f type/libhemp_la-text.$(OBJEXT)
@@ -602,6 +619,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-utils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-value.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-viewer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-apply.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-assign.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-block.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-boolean.Plo@am__quote@
@@ -614,6 +632,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-operator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-quoted.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-space.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-sub.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-text.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-word.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@language/$(DEPDIR)/libhemp_la-hemp.Plo@am__quote@
@@ -632,6 +651,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-list.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-number.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-object.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-params.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-string.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-text.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@viewer/$(DEPDIR)/libhemp_la-text.Plo@am__quote@
@@ -701,6 +721,13 @@ libhemp_la-element.lo: element.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element.c' object='libhemp_la-element.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-element.lo `test -f 'element.c' || echo '$(srcdir)/'`element.c
+
+element/libhemp_la-apply.lo: element/apply.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT element/libhemp_la-apply.lo -MD -MP -MF element/$(DEPDIR)/libhemp_la-apply.Tpo -c -o element/libhemp_la-apply.lo `test -f 'element/apply.c' || echo '$(srcdir)/'`element/apply.c
+@am__fastdepCC_TRUE@	$(am__mv) element/$(DEPDIR)/libhemp_la-apply.Tpo element/$(DEPDIR)/libhemp_la-apply.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/apply.c' object='element/libhemp_la-apply.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o element/libhemp_la-apply.lo `test -f 'element/apply.c' || echo '$(srcdir)/'`element/apply.c
 
 element/libhemp_la-assign.lo: element/assign.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT element/libhemp_la-assign.lo -MD -MP -MF element/$(DEPDIR)/libhemp_la-assign.Tpo -c -o element/libhemp_la-assign.lo `test -f 'element/assign.c' || echo '$(srcdir)/'`element/assign.c
@@ -785,6 +812,13 @@ element/libhemp_la-space.lo: element/space.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/space.c' object='element/libhemp_la-space.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o element/libhemp_la-space.lo `test -f 'element/space.c' || echo '$(srcdir)/'`element/space.c
+
+element/libhemp_la-sub.lo: element/sub.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT element/libhemp_la-sub.lo -MD -MP -MF element/$(DEPDIR)/libhemp_la-sub.Tpo -c -o element/libhemp_la-sub.lo `test -f 'element/sub.c' || echo '$(srcdir)/'`element/sub.c
+@am__fastdepCC_TRUE@	$(am__mv) element/$(DEPDIR)/libhemp_la-sub.Tpo element/$(DEPDIR)/libhemp_la-sub.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/sub.c' object='element/libhemp_la-sub.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o element/libhemp_la-sub.lo `test -f 'element/sub.c' || echo '$(srcdir)/'`element/sub.c
 
 element/libhemp_la-text.lo: element/text.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT element/libhemp_la-text.lo -MD -MP -MF element/$(DEPDIR)/libhemp_la-text.Tpo -c -o element/libhemp_la-text.lo `test -f 'element/text.c' || echo '$(srcdir)/'`element/text.c
@@ -1086,6 +1120,13 @@ type/libhemp_la-object.lo: type/object.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='type/object.c' object='type/libhemp_la-object.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o type/libhemp_la-object.lo `test -f 'type/object.c' || echo '$(srcdir)/'`type/object.c
+
+type/libhemp_la-params.lo: type/params.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT type/libhemp_la-params.lo -MD -MP -MF type/$(DEPDIR)/libhemp_la-params.Tpo -c -o type/libhemp_la-params.lo `test -f 'type/params.c' || echo '$(srcdir)/'`type/params.c
+@am__fastdepCC_TRUE@	$(am__mv) type/$(DEPDIR)/libhemp_la-params.Tpo type/$(DEPDIR)/libhemp_la-params.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='type/params.c' object='type/libhemp_la-params.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o type/libhemp_la-params.lo `test -f 'type/params.c' || echo '$(srcdir)/'`type/params.c
 
 type/libhemp_la-string.lo: type/string.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT type/libhemp_la-string.lo -MD -MP -MF type/$(DEPDIR)/libhemp_la-string.Tpo -c -o type/libhemp_la-string.lo `test -f 'type/string.c' || echo '$(srcdir)/'`type/string.c

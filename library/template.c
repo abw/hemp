@@ -29,8 +29,12 @@ hemp_template_free(
         template->dialect->cleanup(template);
 
     /* Then call any cleanup handler defined for the expression tree */
-    if (template->tree && template->tree->type->cleanup)
-        template->tree->type->cleanup(template->tree);
+    // no longer required as block element is managed by elements
+//    if (template->tree && template->tree->type->cleanup) {
+//        hemp_debug_msg("cleaning up template tree\n");
+//        template->tree->type->cleanup(template->tree);
+//        hemp_debug_msg("done\n");
+//    }
 
     /* Free the source, the tagset and then the template object itself. */
     /* The elements cleaner will take care of cleaning any other tokens */

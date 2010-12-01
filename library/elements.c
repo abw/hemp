@@ -41,8 +41,9 @@ hemp_elements_free(
     hemp_element n = e->next;
 
     while (e) {
+//        hemp_element_cleanup(e);
         if (e->type->cleanup) {
-//          hemp_debug("calling cleanup for %s\n", e->type->name);
+//          hemp_debug_msg("calling cleanup for %s\n", e->type->name);
             e->type->cleanup(e);
         }
         e = e->next;

@@ -28,7 +28,8 @@ hemp_symbol_new(
     symbol->parse_postfix   = NULL;
     symbol->parse_fixed     = NULL;
     symbol->parse_params    = NULL;
-    symbol->lvalue_param    = NULL;
+    symbol->parse_lvalue    = NULL; //&hemp_element_not_lvalue;
+    symbol->parse_proto     = &hemp_element_not_proto;
     symbol->token           = &hemp_element_not_token;
     symbol->source          = &hemp_element_not_source;
     symbol->text            = &hemp_element_not_text;
@@ -45,10 +46,8 @@ hemp_symbol_new(
     
     // hmmm... can we set the same defaults as we do for value types?
     symbol->values          = &hemp_value_values;
-    symbol->params          = &hemp_value_values;
-//  symbol->apply           = &hemp_value_self;
-//  symbol->apply           = &hemp_element_value_apply;
-    symbol->apply           = &hemp_element_value;
+    symbol->params          = &hemp_value_params;
+    symbol->apply           = &hemp_value_apply;
 
     /* clone the start token if there is one, and the end token if there 
      * is one and it's not the same as the start token
@@ -73,11 +72,6 @@ void
 hemp_symbol_free(
     hemp_symbol symbol
 ) {
-// No you fuckwit!  The cleanup is for cleaning up element instances, not
-// the symbol entries themselves
-//    if (symbol->cleanup)
-//        symbol->cleanup(symbol);
-
     /* only free the end token if it's not the same as the start token */
     if ( symbol->end 
     && ( (! symbol->start) || (symbol->start != symbol->end) ) ) 
@@ -87,7 +81,9 @@ hemp_symbol_free(
         hemp_mem_free(symbol->start);
 
 //  hemp_mem_free(symbol->name);                // now static
+//    hemp_debug_msg("freeing symbol: %s at %p\n", symbol->name, symbol);
     hemp_mem_free(symbol);
+//    hemp_debug_msg("done\n");
 }
 
 
@@ -101,7 +97,7 @@ void
 hemp_global_symbols_init(
     hemp_global   global
 ) {
-    hemp_debug_call("hemp_global_symbols_init()\n");
+    hemp_debug_init("hemp_global_symbols_init()\n");
     hemp_int n;
 
     /* return silently if it looks like we've already done this step */
@@ -126,7 +122,7 @@ void
 hemp_global_symbols_free(
     hemp_global global
 ) {
-    hemp_debug_call("hemp_global_symbols_free()\n");
+    hemp_debug_init("hemp_global_symbols_free()\n");
     hemp_symbol_free(HempSymbolSpace);      HempSymbolSpace     = NULL;
     hemp_symbol_free(HempSymbolComment);    HempSymbolComment   = NULL;
     hemp_symbol_free(HempSymbolTagStart);   HempSymbolTagStart  = NULL;
