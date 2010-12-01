@@ -25,6 +25,16 @@ Hello World!
 -- expect --
 Hello World!
 
+-- test argless named function with implicit call --
+[%  sub msg(); 
+        "Hello World!"; 
+    end; 
+    
+    msg();
+%]
+-- expect --
+Hello World!
+
 -- test anonymous argless function --
 [%  msg = sub; 
         "Hello World!";
@@ -34,10 +44,6 @@ Hello World!
 %]
 -- expect --
 Hello World!
-
-
-
--- start --
 
 -- test quick hack
 [%  name = 'Nobody';    # until we get this working properly
@@ -50,27 +56,6 @@ Hello World!
 %]
 -- expect --
 Hello World!  x is 123.45 and y is 10
--- stop --
-
-
-
-
-
--- test named function with an arg --
-[%  name = 'Nobody';    # until we get this working properly
-
-    sub msg(name); 
-        'Hello ' name '!';
-    end;
-
-    msg; #('World') 
-%]
--- expect --
-Hello World!
-
-
-
-
 
 -- test anonymous function with an arg --
 [%  msg = sub(name); 
@@ -92,4 +77,22 @@ Hello World!
 %]
 -- expect --
 Hello World!
+
+
+-- stop --
+
+
+
+-- test named function with an arg --
+[%  name = 'Nobody';    # until we get this working properly
+
+    sub msg(name); 
+        'Hello ' name '!';
+    end;
+
+    msg; #('World') 
+%]
+-- expect --
+Hello World!
+
 

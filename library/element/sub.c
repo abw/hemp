@@ -60,12 +60,10 @@ HEMP_PREFIX_FUNC(hemp_element_sub_prefix) {
     if (! block)
         hemp_fatal("missing block for %s\n", type->start);
 
-    hemp_debug_msg("sub block: %p\n", block);
     hemp_set_lhs_element(self, name);
-//    hemp_set_rhs_element(self, block);
 
     if (params) {
-        hemp_debug("constructing code value to manage sub with prototype\n");
+//      hemp_debug("constructing code value to manage sub with prototype\n");
         /* construct a code value to wrap around the block and handle params */
         hemp_set_flag(self, HEMP_BE_ARGS);
         hemp_code   code    = hemp_code_new();

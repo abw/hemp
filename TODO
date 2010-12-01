@@ -1,10 +1,24 @@
 An incomplete list of things TODO, in no particular order.
 
+
+* Add hash construction elements.
+
+* Add sigils
+
+* Add parallel assignment: @foo = @bar, (a, b, c) = (1, 2, 3)
+
 * Clean up the whole element/symbol confusion.  Symbols are maps from a token
   to an element type, represented by a hemp_symbol, whereas elements are the
   document instances with a symbol pointer.  But we talk about registering
   elements (which makes sense linguistically) when we're actually registering
   symbols.
+
+* change hemp_element_blah_symbol to be hemp_element_blah and unify with 
+  how tags, grammars, dialects, etc., are registered and constructed
+
+* hemp_test_plan_p vs hemp_test_plan()
+
+* hemp_string_split_p vs hemp_string_split()
 
 * hemp_element_parse_block() and various other methods need access to the 
   elements factory.  I think this should probably be encapsulated in the 
@@ -26,14 +40,9 @@ An incomplete list of things TODO, in no particular order.
 * Figure out what needs to go into the element data structure value union
   to represent all the various different element types.
 
-* Change elements to be object values.
-
 * This is my first time using autotools, and I'm sure I've made plenty of
   nooby mistakes.  The whole autoconf/automake/libtool setup needs cleaning
   up, ideally by someone more familiar with the tools than me
-
-* Add cleanup methods for squote and dquote to release the text memory when
-  HEMP_FLAG_FIXED is not set.  UPDATE: think that's done now.
 
 * filesystem is a quick hack... needs doing properly
 
@@ -58,37 +67,9 @@ An incomplete list of things TODO, in no particular order.
  
 -- HOT STACK --
 
-* postfix element should have option (HEMP_BE_POSTBOUND?) that space lookahead 
-  (hemp_element_next_postfix()) can check to see if it allows space before it
-  when used as a postfix operator.  This is so that () [] {} can be required 
-  to bind tight when used for function application / element access, e.g.
-  foo(bar), foo[bar], foo{bar} while rejecting those cases where spaces are 
-  present, treating them instead as separate expressions, e.g. 
-  foo (bar) [bar] {baz=10}
-
-* Add postfix handler to parens to create args for function application
-
-* Add args() method to element and provide implementation for ()
-
-* Add hemp_args_s data structure
-
-* Add context caller/argument stack, or something similar to pass args from
-  one place to another.
-
 * Perl CODE
 
-* Add apply() method to value types (or call() ?)
-
 * change function names in type/* from hemp_value_XXX_YYY to hemp_type_XXX_YYY
-
-* Have static symbols created at global startup time in the same way that 
-  value type now are. (now done?)
-
-* Change elements to be values so that we can have a single value() and 
-  text() interface instead of the similar (but not quite identical) 
-  hemp_eval_f and hemp_value_f typedefs.  UPDATE: started doing this from 
-  the inside, so that elements hold values (object tagged element pointers)
-  in their expr/lhs/rhs slots.
 
 * boolean vs truth: decide on the best terminology and stick to it.
 
@@ -119,14 +100,9 @@ An incomplete list of things TODO, in no particular order.
 * Should OPERATOR2 register terminator token?  e.g. in:
     HEMP_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);
 
-* change fixed() parse function to name()... on second thoughts, keep it 
-  because it fits nicely with prefix/postfix, but consider changing them all
-  to parse_infix(), etc., because we've got more parsing methods to add and 
-  there's a danger they will clash or be confused with evaluation methods.
+* Extend parse_fixed() to lookahead and merge with other fixed items 
+  (equivalent to filename in TT3).
 
-* add signature() parse function, or perhaps a flag in parens to indicate 
-  that it can provide a formal parameter list.
-  
 * element->next pointers could be broken by recent change to add 
   synthesised elements on the end, after EOF.  But there are places that 
   skip down the next chain and could possibly bypass EOF.
@@ -139,7 +115,13 @@ An incomplete list of things TODO, in no particular order.
   block element and needs an elements reference (which includes needing a 
   grammar reference along the way).  Tags should pre-match the start_tag/end_tag
   symbols via the grammar.
-  
+
+* The current implementation for function parameters using context, frame
+  and params results in all parameters for a function becoming global 
+  dynamic variable in the current context.  It's all a bit of a mess and
+  needs a bit of a re-think.
+
+
 
 Configuration, Build and Installation
 -------------------------------------
@@ -150,46 +132,4 @@ Configuration, Build and Installation
   But we need some of the definitions contained therein.
   
   See include/hemp/defines.h and include/hemp/config.h
-
-
-Big Issues
-----------
-
-* The current implementation for function parameters using context, frame
-  and params results in all parameters for a function becoming global 
-  dynamic variable in the current context.  It's all a bit of a mess and
-  needs a bit of a re-think.
-
- 
-
-HOT STACK
----------
-
-* change hemp_element_blah_symbol to be hemp_element_blah and unify with 
-  how tags, grammars, dialects, etc., are registered and constructed
-
-* Add tags via a factory.  Move tags to separate files.
-
-* hemp_test_plan_p vs hemp_test_plan()
-
-* hemp_string_split_p vs hemp_string_split()
-
-* Add context frames with args, vars, element, etc
-
-* Have apply create new frame, evaluate params in frame.
-  Hmmm... can we just create a new frame and then evaluate the params as
-  values()?
-  
-  foo(10, 20, x=10, y=20)  
-  
-  (10, 20, x=10, y=20) -> values
-  10->values => 10
-  20->values => 20
-  (x=10)->values => ah... yields 10 because we're asking for a value not a 
-  param... oh well, 
-  
-* hemp_element_sub_clean() 
-    // TODO: call clean() method on element to map it automagically
-    // so that we don't have to rely on the rhs element being a block.
-    // Then we can move the cleaner into code.
 
