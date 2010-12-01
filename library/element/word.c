@@ -55,7 +55,7 @@ HEMP_FIXUP_FUNC(hemp_element_word_proto) {
         element->token, 
         element->token + element->length
     );
-    hemp_debug_msg("adding word to prototype: %s\n", name);
+//  hemp_debug_msg("adding word to prototype: %s\n", name);
     hemp_proto_add_item(proto, name);
 //    hemp_mem_free(name);
 }
@@ -87,7 +87,7 @@ HEMP_VALUE_FUNC(hemp_element_word_value) {
 
 
 HEMP_INPUT_FUNC(hemp_element_word_assign) {
-    hemp_debug_msg("hemp_element_word_assign() <- %s\n", hemp_type_name(input));
+    hemp_debug_call("hemp_element_word_assign() <- %s\n", hemp_type_name(input));
     hemp_element  element = hemp_val_elem(value);
     hemp_value    word    = hemp_expr(element);
     

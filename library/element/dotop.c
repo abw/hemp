@@ -9,7 +9,7 @@ HEMP_SYMBOL(hemp_element_dotop_symbol) {
     symbol->value         = &hemp_element_dotop_value;
     symbol->assign        = &hemp_element_dotop_assign;
     symbol->cleanup       = &hemp_element_dotop_clean;
-
+    hemp_set_flag(symbol, HEMP_BE_LVALUE);
     return symbol;
 }
 
@@ -58,9 +58,9 @@ HEMP_POSTFIX_FUNC(hemp_element_dotop_postfix) {
 
 
 HEMP_VALUE_FUNC(hemp_element_dotop_value) {
-    hemp_debug("hemp_element_dotop_value()\n");
+    hemp_debug_call("hemp_element_dotop_value()\n");
 
-    /* Note the temporary hack: rhs is always a pre-evaluated value */
+    /* TODO: Note the temporary hack: rhs is always a pre-evaluated value */
     hemp_element  element = hemp_val_elem(value);
     hemp_value    lhs     = hemp_lhs(element);
     hemp_value    lval    = hemp_obcall(lhs, value, context);
@@ -79,7 +79,7 @@ HEMP_VALUE_FUNC(hemp_element_dotop_value) {
 
 
 HEMP_INPUT_FUNC(hemp_element_dotop_assign) {
-    hemp_todo("hemp_element_dotop_assign()");
+    hemp_debug_call("hemp_element_dotop_assign()\n");
 
     /* Note the temporary hack: rhs is always a pre-evaluated value */
     hemp_element  element = hemp_val_elem(value);

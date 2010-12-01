@@ -107,12 +107,12 @@ hemp_type_code_resolve_proto(
         
         if (hemp_is_found(value)) {
             nom++;
-            hemp_debug_msg("found nominal value for %s: %s\n", name, hemp_type_name(value));
+//          hemp_debug_msg("found nominal value for %s: %s\n", name, hemp_type_name(value));
         }
         else if (ord < params->ordinals->length) {
             value = hemp_list_item(params->ordinals, ord++);
 //          value = hemp_list_shift(params->ordinals);
-            hemp_debug_msg("found ordinal value for %s: %s\n", name, hemp_type_name(value));
+//          hemp_debug_msg("found ordinal value for %s: %s\n", name, hemp_type_name(value));
         }
         else {
             hemp_fatal("No value specified for %s parameter", name);
@@ -144,7 +144,7 @@ hemp_type_code_resolve_proto(
 
 
 HEMP_INPUT_FUNC(hemp_type_code_apply) {
-    hemp_debug_msg("hemp_type_code_apply()\n");
+    hemp_debug_call("hemp_type_code_apply()\n");
     hemp_code   code    = hemp_val_code(value);
     hemp_value  body    = code->body;
 
@@ -167,7 +167,7 @@ HEMP_INPUT_FUNC(hemp_type_code_apply) {
 
 
 HEMP_OUTPUT_FUNC(hemp_type_code_text) {
-    hemp_debug_msg("hemp_type_code_text()\n");
+    hemp_debug_call("hemp_type_code_text()\n");
     hemp_code   code    = hemp_val_code(value);
     hemp_value  body    = code->body;
 

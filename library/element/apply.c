@@ -5,7 +5,7 @@
 HEMP_FIXUP_FUNC(hemp_element_apply_lvalue);
 HEMP_VALUE_FUNC(hemp_element_apply_value);
 HEMP_INPUT_FUNC(hemp_element_apply_assign);
-HEMP_CLEAN_FUNC(hemp_element_apply_clean);
+// HEMP_CLEAN_FUNC(hemp_element_apply_clean);
 
 
 HEMP_SYMBOL(hemp_element_apply_symbol) {
@@ -14,7 +14,7 @@ HEMP_SYMBOL(hemp_element_apply_symbol) {
     symbol->values          = &hemp_element_value_values;
     symbol->text            = &hemp_element_value_text;
     symbol->assign          = &hemp_element_apply_assign;
-    symbol->cleanup         = &hemp_element_apply_clean;
+//  symbol->cleanup         = &hemp_element_apply_clean;
     return symbol;
 }
 
@@ -94,7 +94,7 @@ HEMP_VALUE_FUNC(hemp_element_apply_value) {
 
 
 HEMP_INPUT_FUNC(hemp_element_apply_assign) {
-    hemp_debug_msg("hemp_element_apply_assign()\n");
+    hemp_debug_call("hemp_element_apply_assign()\n");
     hemp_element element = hemp_val_elem(value);
     hemp_value   lhs     = hemp_lhs(element);
 
@@ -104,14 +104,14 @@ HEMP_INPUT_FUNC(hemp_element_apply_assign) {
     if (hemp_not_flag(element, HEMP_BE_LVALUE))
         hemp_fatal("hemp_element_apply_assign() called when HEMP_BE_LVALUE is not set\n");
 
-    hemp_debug_msg("apply assign %s\n", hemp_type_name(input));
+//  hemp_debug_msg("apply assign %s\n", hemp_type_name(input));
 
     return hemp_call(lhs, assign, context, input);
 }
 
 
 HEMP_CLEAN_FUNC(hemp_element_apply_clean) {
-    hemp_debug("TODO: hemp_element_apply_clean(%p)\n", element);
+//    hemp_debug("TODO: hemp_element_apply_clean(%p)\n", element);
 }
 
 

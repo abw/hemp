@@ -23,6 +23,19 @@ a is 420
 -- expect
 a is 420
 
+-- test lazy assignment with param
+[% name = 'Nobody';
+
+   msg(name) = name;
+   "A: " msg('Somebody') "\n"
+   "B: " msg('Anybody') "\n"
+%]
+-- expect 
+A: Somebody
+B: Anybody
+
+-- stop --
+
 -- test lazy assignment 
 [% name = 'Nobody';
 
@@ -38,20 +51,3 @@ a is 420
 A: Nobody
 B: Somebody
 
--- start --
--- test lazy assignment with param
-[% name = 'Nobody';
-
-   msg(name) = name;
-
-   "A: " msg "\n"
-
-   name = 'Somebody';
-   
-   "B: " msg() "\n"
-   "C: " msg('Anybody') "\n"
-%]
--- expect 
-A: Nobody
-B: Somebody
-C: Anybody
