@@ -99,13 +99,22 @@ HEMP_OUTPUT_FUNC(hemp_element_assign_pairs) {
     hemp_element    element = hemp_val_elem(value);
     hemp_value      lhs     = hemp_lhs(element);
     hemp_value      rhs     = hemp_rhs(element);
-    hemp_debug_msg("evaluating lhs: %s\n", hemp_type_name(lhs));
-    hemp_value      key     = hemp_to_text(lhs, context);
+    hemp_value      key     = hemp_call(lhs, value, context);
     hemp_value      rvalue  = hemp_call(rhs, value, context);
     hemp_hash       pairs;
     hemp_prepare_pairs(context, output, pairs);
 
-    hemp_debug_msg("assign pairs %s => %s\n", hemp_val_text(key)->string, hemp_type_name(rvalue));
-//    return hemp_obcall(lhs, text, context, rhs);
+    if (! hemp_is_string(key)) {
+        hemp_fatal("Non-string key for assignment pairs: %s\n", hemp_type_name(key));
+    }
+    
+    hemp_debug_msg(
+        "assign pairs %s => %s\n", 
+        hemp_val_str(key), 
+        hemp_type_name(rvalue)
+    );
+
+    hemp_hash_store(pairs, hemp_val_str(key), rvalue);
+
     return output;
 }

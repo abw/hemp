@@ -209,6 +209,7 @@ hemp_context_tmp_text_size(
     hemp_size    size
 ) {
     hemp_text text = (hemp_text) hemp_pool_take(context->text_pool);
+//  hemp_debug("new tmp text pointer at %p\n", list);
     return hemp_text_init_size(text, size);
 }
 
@@ -218,7 +219,7 @@ hemp_context_tmp_list(
     hemp_context context
 ) {
     hemp_list list = (hemp_list) hemp_pool_take(context->list_pool);
-//  hemp_debug("*** got new list pointer at %p\n", list);
+//  hemp_debug("new tmp list pointer at %p\n", list);
     return hemp_list_init(list);
 }
 
@@ -228,7 +229,7 @@ hemp_context_tmp_hash(
     hemp_context context
 ) {
     hemp_hash hash = (hemp_hash) hemp_pool_take(context->hash_pool);
-    hemp_debug("*** got new hash pointer at %p\n", hash);
+//  hemp_debug_msg("new tmp hash pointer at %p\n", hash);
     return hemp_hash_init(hash);
 }
 
@@ -238,7 +239,7 @@ hemp_context_tmp_code(
     hemp_context context
 ) {
     hemp_code code = (hemp_code) hemp_pool_take(context->code_pool);
-//  hemp_debug_msg("*** got new code pointer at %p\n", code);
+//  hemp_debug_msg("new tmp code pointer at %p\n", code);
     return hemp_code_init(code);
 }
 
@@ -278,7 +279,7 @@ hemp_bool
 hemp_context_hash_pool_cleaner(
     hemp_memory item
 ) {
-    hemp_debug_msg("hemp_context_hash_pool_cleaner(%p)\n", item);
+//  hemp_debug_msg("hemp_context_hash_pool_cleaner(%p)\n", item);
     hemp_hash_release((hemp_hash) item);
     return HEMP_TRUE;
 }

@@ -1,13 +1,18 @@
 An incomplete list of things TODO, in no particular order.
 
-* Add hash construction elements.
+* Outline tag fails if final newline is missing (probably makes sense in the
+  real world, but it's a problem in test scripts.  No, on second thoughts,
+  it looks like a problem when two outline tags appear on successive lines
+  - the second is not parsed... must be the scanner failing to re-apply the
+  start-of-line check for outline tags.
 
 * Add pairs method (%stuff) and items/fetch_all (@stuff)
 
 * Add parse_body() method and change those elements currently using 
   parse_block.  Add default handler that returns self (single expression
   body) and block-slurping handlers for "{...}", ";...;end" and 
-  "%]...[% end %]"
+  "%]...[% end %]".  UPDATE: added parse_body() and applied to sub and 
+  apply elements.  Needs changing in some other elements.
   
 * Add sigils
 

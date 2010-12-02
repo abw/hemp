@@ -1,15 +1,6 @@
 #include <hemp/element.h>
 #include <hemp/proto.h>
 
-HEMP_PREFIX_FUNC(hemp_element_brackets_parse);
-HEMP_PREFIX_FUNC(hemp_element_brackets_prefix);
-HEMP_CLEAN_FUNC(hemp_element_brackets_clean);
-
-HEMP_POSTFIX_FUNC(hemp_element_parens_postfix);
-HEMP_FIXUP_FUNC(hemp_element_parens_proto);
-HEMP_VALUE_FUNC(hemp_element_parens_value);
-
-
 
 /*--------------------------------------------------------------------------
  * generic functions for all bracketed constructs
@@ -88,6 +79,7 @@ HEMP_CLEAN_FUNC(hemp_element_brackets_clean) {
         );
     }
 }
+
 
 
 /*--------------------------------------------------------------------------
@@ -195,6 +187,7 @@ HEMP_VALUE_FUNC(hemp_element_list_value) {
 }
 
 
+
 /*--------------------------------------------------------------------------
  * hash: might want to rename this to 'scope' to better reflect it's dual
  * nature behaviour both as a hash constructor when used in an expression, 
@@ -238,13 +231,13 @@ HEMP_PREFIX_FUNC(hemp_element_hash_prefix) {
 HEMP_PREFIX_FUNC(hemp_element_hash_body) {
     hemp_debug_call("hemp_element_hash_body()\n");
     hemp_element element = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
-    hemp_set_flag(element, HEMP_BE_BODY|HEMP_BE_TERMINATED);   // better to retype?
+    hemp_set_flag(element, HEMP_BE_BODY|HEMP_BE_TERMINATED);
     return element;
 }
 
 
 HEMP_VALUE_FUNC(hemp_element_hash_value) {
-    hemp_debug_msg("hemp_element_hash_value()\n");
+    hemp_debug_call("hemp_element_hash_value()\n");
     hemp_element element = hemp_val_elem(value);
 
     if (hemp_has_flag(element, HEMP_BE_BODY))
@@ -262,10 +255,4 @@ HEMP_VALUE_FUNC(hemp_element_hash_value) {
     }
 
     return hashv;
-
-    // pairs/slots = block->type->pairs(block, context, HempNothing);
-    // add pairs/slots to a hash, return.
-    // or better still, pass hash to pairs()... but what if we want a list
-    // of pairs/slots instead?
-    // maybe call ->pairs to return a list of pairs and then hashify them
 }

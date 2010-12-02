@@ -1,7 +1,96 @@
--- test hash definition
+-- test hash with single item
 [%  num = { ten = 10 };
-    "ten: " num
+    "ten: " num.ten
 %]
 -- expect
 ten: 10
 
+-- test hash with multiple items
+[%  num = { 
+        four   = 4 
+        twenty = '20'
+    };
+    "time: " num.four ':' num.twenty
+%]
+-- expect
+time: 4:20
+
+-- test hash with comma separated items
+[%  num = { 
+        four   = 4,
+        twenty = '20',
+    };
+    "time: " num.four ':' num.twenty
+%]
+hash size: [% num.length %]
+-- expect
+time: 4:20
+hash size: 2
+
+-- test hash with extraneous commas
+[%  num = { ,,
+        four   = 4,,,,
+        twenty = '20', ,
+        ,,,
+    };
+    "time: " num.four ':' num.twenty
+%]
+hash size: [% num.length %]
+-- expect
+time: 4:20
+hash size: 2
+
+-- test hash with comments
+[%  num = {
+        # this is the first comment
+        four   = 4      # this is the second comment
+        # this is the third comment
+        twenty = '20',  # this is the fourth comment
+        # this is the fifth comment
+        ,,,
+        # this is the sixth and final comment
+    };
+    "time: " num.four ':' num.twenty
+%]
+hash size: [% num.length %]
+-- expect
+time: 4:20
+hash size: 2
+
+-- test nested hashes
+[%  n = {
+      u = {
+        m = {
+            four   = 4
+            twenty = '20'
+        }
+      }
+    };
+    "time: " n.u.m.four ':' n.u.m.twenty
+%]
+hash size: [% num.length %]
+-- expect
+time: 4:20
+hash size: 2
+
+-- test list of hashes
+[%  nums = [
+        { four   = 4    }
+        { twenty = '20' }
+    ];
+    "time: " nums.0.four ':' nums.1.twenty
+%]
+list size: [% nums.length %]
+nums.0 size: [% nums.0.length %]
+nums.1 size: [% nums.1.length %]
+-- expect
+time: 4:20
+list size: 2
+nums.0 size: 1
+nums.1 size: 1
+
+-- test outline hash
+%% foo = { x = 10, y = 20 }
+[% foo.x '/' foo.y %]
+-- expect
+10/20

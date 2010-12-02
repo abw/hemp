@@ -409,9 +409,12 @@ HEMP_OUTPUT_FUNC(hemp_element_infix_source);
 
 HEMP_SYMBOL(hemp_element_brackets_symbol);
 HEMP_PREFIX_FUNC(hemp_element_brackets_prefix);
+HEMP_PREFIX_FUNC(hemp_element_brackets_parse);
+HEMP_CLEAN_FUNC(hemp_element_brackets_clean);
 
 HEMP_SYMBOL(hemp_element_parens_symbol);
 HEMP_VALUE_FUNC(hemp_element_parens_value);
+HEMP_FIXUP_FUNC(hemp_element_parens_proto);
 HEMP_OUTPUT_FUNC(hemp_element_parens_values);
 HEMP_POSTFIX_FUNC(hemp_element_parens_postfix);
 HEMP_POSTFIX_FUNC(hemp_element_parens_parse_params);
