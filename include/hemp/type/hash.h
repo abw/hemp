@@ -185,9 +185,8 @@ HEMP_VALUE_FUNC(hemp_method_hash_length);
 #define hemp_hash_store_hash(h, k, v)       \
     hemp_hash_store(h, k, hemp_hash_val(v))
 
-/* temporary placeholder until hash has been reworked to split new/init */
 #define hemp_hash_new() \
-    hemp_hash_init()
+    hemp_hash_init(NULL)
 
 
 #endif /* HEMP_HASH_H */

@@ -161,7 +161,7 @@ HEMP_INPUT_FUNC(hemp_type_code_apply) {
         );
     }
 
-//  hemp_debug_msg("evaluating code body: %s\n", hemp_type_name(body));
+    hemp_debug_call("evaluating code body: %s\n", hemp_type_name(body));
     return hemp_call(body, value, context);
 }
 

@@ -113,7 +113,7 @@ void
 hemp_init_templates(
     hemp_hemp hemp
 ) {
-    hemp->templates = hemp_hash_init();
+    hemp->templates = hemp_hash_new();
 }
 
 

@@ -42,6 +42,7 @@ struct hemp_symbol {
     hemp_postfix    parse_postfix;
     hemp_prefix     parse_fixed;
     hemp_prefix     parse_params;
+    hemp_prefix     parse_body;
     hemp_fixup      parse_lvalue;
     hemp_fixup      parse_proto;
 

@@ -15,7 +15,7 @@
 
 @SET_MAKE@
 
-#check_PROGRAMS  =    functions assign
+#check_PROGRAMS  =    hash
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -36,9 +36,9 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = assign$(EXEEXT) boolops$(EXEEXT) comments$(EXEEXT) \
-	functions$(EXEEXT) lists$(EXEEXT) numbers$(EXEEXT) \
-	numops$(EXEEXT) parens$(EXEEXT) quotes$(EXEEXT) \
-	textops$(EXEEXT) words$(EXEEXT)
+	functions$(EXEEXT) hash$(EXEEXT) lists$(EXEEXT) \
+	numbers$(EXEEXT) numops$(EXEEXT) parens$(EXEEXT) \
+	quotes$(EXEEXT) textops$(EXEEXT) words$(EXEEXT)
 subdir = tests/language/hemp
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -72,6 +72,10 @@ functions_SOURCES = functions.c
 functions_OBJECTS = functions.$(OBJEXT)
 functions_LDADD = $(LDADD)
 functions_DEPENDENCIES = ../../../library/libhemp.la
+hash_SOURCES = hash.c
+hash_OBJECTS = hash.$(OBJEXT)
+hash_LDADD = $(LDADD)
+hash_DEPENDENCIES = ../../../library/libhemp.la
 lists_SOURCES = lists.c
 lists_OBJECTS = lists.$(OBJEXT)
 lists_LDADD = $(LDADD)
@@ -113,10 +117,10 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = assign.c boolops.c comments.c functions.c lists.c numbers.c \
-	numops.c parens.c quotes.c textops.c words.c
-DIST_SOURCES = assign.c boolops.c comments.c functions.c lists.c \
+SOURCES = assign.c boolops.c comments.c functions.c hash.c lists.c \
 	numbers.c numops.c parens.c quotes.c textops.c words.c
+DIST_SOURCES = assign.c boolops.c comments.c functions.c hash.c \
+	lists.c numbers.c numops.c parens.c quotes.c textops.c words.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -322,6 +326,9 @@ comments$(EXEEXT): $(comments_OBJECTS) $(comments_DEPENDENCIES)
 functions$(EXEEXT): $(functions_OBJECTS) $(functions_DEPENDENCIES) 
 	@rm -f functions$(EXEEXT)
 	$(LINK) $(functions_OBJECTS) $(functions_LDADD) $(LIBS)
+hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES) 
+	@rm -f hash$(EXEEXT)
+	$(LINK) $(hash_OBJECTS) $(hash_LDADD) $(LIBS)
 lists$(EXEEXT): $(lists_OBJECTS) $(lists_DEPENDENCIES) 
 	@rm -f lists$(EXEEXT)
 	$(LINK) $(lists_OBJECTS) $(lists_LDADD) $(LIBS)
@@ -354,6 +361,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/boolops.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/comments.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/functions.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lists.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numbers.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numops.Po@am__quote@

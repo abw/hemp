@@ -420,6 +420,7 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
         hemp_value      fixative            \
     )
 
+
 /* operator precedence */
 
 #define HEMP_PREC_DBG(type, tprec, lhs, prec, compare, action)              \
@@ -694,6 +695,15 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
     }                                                               \
     else {                                                          \
         params = hemp_val_params(output);                           \
+    }
+
+#define hemp_prepare_pairs(context, output, hash)                   \
+    if (hemp_is_undef(output)) {                                    \
+        hash   = hemp_context_tmp_hash(context);                    \
+        output = hemp_hash_val(hash);                               \
+    }                                                               \
+    else {                                                          \
+        hash   = hemp_val_hash(output);                             \
     }
 
 

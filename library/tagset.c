@@ -10,7 +10,7 @@ hemp_tagset_new(
 
     tagset->template     = template;
     tagset->text_symbol  = HempSymbolText;
-    tagset->tags         = hemp_hash_init();
+    tagset->tags         = hemp_hash_new();
     tagset->inline_tags  = hemp_ptree_new(HEMP_TAGSET_SIZE);
     tagset->outline_tags = hemp_ptree_new(HEMP_TAGSET_SIZE);
 

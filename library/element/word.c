@@ -19,6 +19,7 @@ HEMP_SYMBOL(hemp_element_word_symbol) {
     symbol->parse_prefix    = &hemp_element_word_prefix;
     symbol->parse_fixed     = &hemp_element_fixed;
     symbol->parse_proto     = &hemp_element_word_proto;
+    symbol->parse_lvalue    = &hemp_element_word_lvalue;
 
     symbol->value    = &hemp_element_word_value;
     symbol->text     = &hemp_element_value_text;
@@ -48,6 +49,13 @@ HEMP_PREFIX_FUNC(hemp_element_word_prefix) {
 }
 
 
+HEMP_FIXUP_FUNC(hemp_element_word_lvalue) {
+    hemp_debug_call("hemp_element_word_lvalue()\n");
+    hemp_set_flag(element, HEMP_BE_LVALUE|HEMP_BE_FIXED);
+    return hemp_val_elem(fixative);
+}
+
+
 HEMP_FIXUP_FUNC(hemp_element_word_proto) {
     hemp_debug_call("hemp_element_word_proto()\n");
     hemp_proto  proto   = (hemp_proto) hemp_val_ptr(fixative);
@@ -59,7 +67,6 @@ HEMP_FIXUP_FUNC(hemp_element_word_proto) {
     hemp_proto_add_item(proto, name);
 //    hemp_mem_free(name);
 }
-
 
 
 HEMP_VALUE_FUNC(hemp_element_word_value) {
@@ -87,9 +94,14 @@ HEMP_VALUE_FUNC(hemp_element_word_value) {
 
 
 HEMP_INPUT_FUNC(hemp_element_word_assign) {
-    hemp_debug_call("hemp_element_word_assign() <- %s\n", hemp_type_name(input));
     hemp_element  element = hemp_val_elem(value);
     hemp_value    word    = hemp_expr(element);
+
+    hemp_debug_call(
+        "hemp_element_word_assign() %s <- %s\n", 
+        hemp_val_str(word),
+        hemp_type_name(input)
+    );
     
     /* The value we're passed as an operand is an element that should be
      * evaluated to yield a value.  Not sure if this is the best approach,
@@ -104,8 +116,6 @@ HEMP_INPUT_FUNC(hemp_element_word_assign) {
     );
     return input;
 }
-
-
 
 
 void

@@ -224,7 +224,7 @@ HEMP_VALUE_FUNC(hemp_value_no_op) {
 
 
 HEMP_VALUE_FUNC(hemp_value_self) {
-    hemp_debug_call("hemp_value_self()\n");
+    hemp_debug_msg("hemp_value_self(%s)\n", hemp_type_name(value));
     return value;
 }
 
@@ -250,7 +250,7 @@ HEMP_INPUT_FUNC(hemp_value_apply) {
      * The default behaviour for an element evaluated in a function application
      * is to return iteself.
      */
-    hemp_debug_call("hemp_value_apply()\n");
+    hemp_debug_call("hemp_value_apply(%s)\n", hemp_type_name(value));
     return value;
 }
 
@@ -324,6 +324,16 @@ HEMP_OUTPUT_FUNC(hemp_value_not_text) {
         context, 
         hemp_type_name(value),
         HEMP_STR_TEXT,
+        HEMP_STR_BLANK
+    );
+}
+
+
+HEMP_OUTPUT_FUNC(hemp_value_not_pairs) {
+    HEMP_CONVERT_ERROR(
+        context,
+        hemp_type_name(value),
+        HEMP_STR_PAIRS,
         HEMP_STR_BLANK
     );
 }

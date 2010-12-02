@@ -12,8 +12,11 @@ HEMP_SYMBOL(hemp_element_assign_symbol) {
     symbol->text            = &hemp_element_assign_text;
     symbol->value           = &hemp_element_assign_value;
     symbol->params          = &hemp_element_assign_params;
+    symbol->pairs           = &hemp_element_assign_pairs;
+    hemp_set_flag(symbol, HEMP_BE_PAIRS);
     return symbol;
 }
+
 
 HEMP_POSTFIX_FUNC(hemp_element_assign_postfix) {
     hemp_element self    = *elemptr;
@@ -90,3 +93,19 @@ HEMP_OUTPUT_FUNC(hemp_element_assign_params) {
     return output;
 }
 
+
+HEMP_OUTPUT_FUNC(hemp_element_assign_pairs) {
+    hemp_debug_msg("hemp_element_assign_pairs()\n");
+    hemp_element    element = hemp_val_elem(value);
+    hemp_value      lhs     = hemp_lhs(element);
+    hemp_value      rhs     = hemp_rhs(element);
+    hemp_debug_msg("evaluating lhs: %s\n", hemp_type_name(lhs));
+    hemp_value      key     = hemp_to_text(lhs, context);
+    hemp_value      rvalue  = hemp_call(rhs, value, context);
+    hemp_hash       pairs;
+    hemp_prepare_pairs(context, output, pairs);
+
+    hemp_debug_msg("assign pairs %s => %s\n", hemp_val_text(key)->string, hemp_type_name(rvalue));
+//    return hemp_obcall(lhs, text, context, rhs);
+    return output;
+}

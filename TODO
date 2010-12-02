@@ -1,11 +1,21 @@
 An incomplete list of things TODO, in no particular order.
 
-
 * Add hash construction elements.
 
+* Add pairs method (%stuff) and items/fetch_all (@stuff)
+
+* Add parse_body() method and change those elements currently using 
+  parse_block.  Add default handler that returns self (single expression
+  body) and block-slurping handlers for "{...}", ";...;end" and 
+  "%]...[% end %]"
+  
 * Add sigils
 
 * Add parallel assignment: @foo = @bar, (a, b, c) = (1, 2, 3)
+
+* Add @list and %hash items to prototypes.
+
+* Add arrows.  a => 10, b -> 10
 
 * Clean up the whole element/symbol confusion.  Symbols are maps from a token
   to an element type, represented by a hemp_symbol, whereas elements are the
@@ -63,9 +73,6 @@ An incomplete list of things TODO, in no particular order.
   is requested and not found then the fallback should call hemp_language_instance("tt3")
   to give it a chance to load it.  Just got to be careful we don't end up in
   a deathly spiral if we then re-attempt the lookup and it fails again.
-
- 
--- HOT STACK --
 
 * Perl CODE
 

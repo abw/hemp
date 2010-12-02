@@ -59,6 +59,7 @@ tests/language/hemp/assign
 tests/language/hemp/boolops
 tests/language/hemp/comments
 tests/language/hemp/functions
+tests/language/hemp/hash
 tests/language/hemp/lists
 tests/language/hemp/numbers
 tests/language/hemp/numops

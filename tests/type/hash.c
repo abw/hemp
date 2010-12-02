@@ -25,8 +25,8 @@ int main(
 
 
 void test_hash() {
-    hemp_hash table = hemp_hash_init();
-    hemp_hash child = hemp_hash_init();
+    hemp_hash table = hemp_hash_new();
+    hemp_hash child = hemp_hash_new();
     
 
     hash_index_same(
@@ -212,7 +212,7 @@ hash_set(
 
 void test_hash_methods() {
     hemp_hemp       hemp    = hemp_new();
-    hemp_hash  hash    = hemp_hash_init();
+    hemp_hash  hash    = hemp_hash_new();
 //  hemp_text  text    = hemp_text_from_string("Hello World!");
     hemp_value value   = hemp_hash_val(hash);
     hemp_context  context = hemp_context_instance(hemp); 

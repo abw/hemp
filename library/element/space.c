@@ -16,7 +16,8 @@ hemp_symbol HempSymbolEOF       = NULL;
 
 HEMP_SYMBOL(hemp_element_punctuation_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
-    symbol->parse_fixed = NULL; // hemp_element_decline;
+    symbol->parse_fixed = NULL;
+    symbol->parse_body  = NULL;
     symbol->flags = HEMP_BE_SOURCE | HEMP_BE_FIXED | HEMP_BE_HIDDEN;
     return symbol;
 }
@@ -84,7 +85,8 @@ HEMP_SYMBOL(hemp_element_delimiter_symbol) {
 
 HEMP_SYMBOL(hemp_element_separator_symbol) {
     hemp_element_punctuation_symbol(hemp, symbol);
-    symbol->flags |= HEMP_BE_SEPARATOR;
+    symbol->parse_body = &hemp_element_parse_body_block;
+    symbol->flags     |= HEMP_BE_SEPARATOR;
     return symbol;
 }
 
@@ -135,6 +137,7 @@ HEMP_SYMBOL(hemp_element_space_symbol) {
     hemp_element_literal_symbol(hemp, symbol);
     symbol->parse_prefix    = &hemp_element_next_prefix;
     symbol->parse_postfix   = &hemp_element_space_postfix;
+    symbol->parse_body      = &hemp_element_next_body;
     symbol->flags           = HEMP_BE_WHITESPACE | HEMP_BE_SOURCE | HEMP_BE_FIXED 
                               | HEMP_BE_HIDDEN;
     return symbol;
@@ -212,6 +215,7 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_tag_end) {
 
 HEMP_SYMBOL(hemp_element_tag_end_symbol) {
     hemp_element_delimiter_symbol(hemp, symbol);
+    symbol->parse_body = &hemp_element_parse_body_block;
     return symbol;
 }
 
@@ -231,9 +235,10 @@ HEMP_GLOBAL_SYMBOL(hemp_symbol_eof) {
 
 
 HEMP_SYMBOL(hemp_element_eof_symbol) {
-    symbol->token   = &hemp_element_eof_token;
-    symbol->flags   = HEMP_BE_SOURCE | HEMP_BE_FIXED | HEMP_BE_HIDDEN
-                    | HEMP_BE_EOF;
+    symbol->parse_body  = NULL;
+    symbol->token       = &hemp_element_eof_token;
+    symbol->flags       = HEMP_BE_SOURCE | HEMP_BE_FIXED | HEMP_BE_HIDDEN
+                        | HEMP_BE_EOF;
     return symbol;
 }
 

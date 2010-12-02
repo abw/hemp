@@ -28,7 +28,7 @@ hemp_context_init(
 
     context->hemp      = hemp;
     context->frame     = NULL;
-    context->vars      = hemp_hash_init();
+    context->vars      = hemp_hash_new();
 
     // TODO: this is all rather wasteful and annoyingly repetitive.
     context->text_pool = hemp_pool_new(
@@ -40,6 +40,11 @@ hemp_context_init(
         sizeof(struct hemp_list), 
         HEMP_TMP_POOL_SIZE,
         &hemp_context_list_pool_cleaner
+    );
+    context->hash_pool = hemp_pool_new(
+        sizeof(struct hemp_hash), 
+        HEMP_TMP_POOL_SIZE,
+        &hemp_context_hash_pool_cleaner
     );
     context->code_pool = hemp_pool_new(
         sizeof(struct hemp_code),
@@ -68,6 +73,7 @@ hemp_context_free(
 
     hemp_pool_free(context->text_pool);
     hemp_pool_free(context->list_pool);
+    hemp_pool_free(context->hash_pool);
     hemp_pool_free(context->code_pool);
     hemp_pool_free(context->params_pool);
 
@@ -217,6 +223,16 @@ hemp_context_tmp_list(
 }
 
 
+HEMP_INLINE hemp_hash
+hemp_context_tmp_hash(
+    hemp_context context
+) {
+    hemp_hash hash = (hemp_hash) hemp_pool_take(context->hash_pool);
+    hemp_debug("*** got new hash pointer at %p\n", hash);
+    return hemp_hash_init(hash);
+}
+
+
 HEMP_INLINE hemp_code
 hemp_context_tmp_code(
     hemp_context context
@@ -254,6 +270,16 @@ hemp_context_list_pool_cleaner(
 ) {
 //  hemp_debug_msg("hemp_context_list_pool_cleaner(%p)\n", item);
     hemp_list_release((hemp_list) item);
+    return HEMP_TRUE;
+}
+
+
+hemp_bool
+hemp_context_hash_pool_cleaner(
+    hemp_memory item
+) {
+    hemp_debug_msg("hemp_context_hash_pool_cleaner(%p)\n", item);
+    hemp_hash_release((hemp_hash) item);
     return HEMP_TRUE;
 }
 

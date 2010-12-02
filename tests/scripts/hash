@@ -1,0 +1,7 @@
+-- test hash definition
+[%  num = { ten = 10 };
+    "ten: " num
+%]
+-- expect
+ten: 10
+

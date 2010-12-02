@@ -85,10 +85,12 @@ HEMP_VALUE_FUNC(hemp_element_apply_value) {
      * simply short-circuit and return the original value.
      */
     result = hemp_call(lhs, value, context);
+//  hemp_debug_msg("apply result: %s\n", hemp_type_name(result));
     result = hemp_call(result, apply, context, params);
 
     hemp_context_leave(context);
 
+//  hemp_debug_msg("apply result after application: %s\n", hemp_type_name(result));
     return result;
 }
 

@@ -78,21 +78,19 @@ Hello World!
 -- expect --
 Hello World!
 
+-- test function with single expression
+[%  sub bar(baz) "BAR: " ~ baz %]FOO: [% bar('BAZ') %]
+-- expect
+FOO: BAR: BAZ
 
--- stop --
+-- test function with tag end separators
+[%  sub bar(baz) %]BAR: [% baz %][% end %]FOO: [% bar('BAZ') %]
+-- expect
+FOO: BAR: BAZ
 
-
-
--- test named function with an arg --
-[%  name = 'Nobody';    # until we get this working properly
-
-    sub msg(name); 
-        'Hello ' name '!';
-    end;
-
-    msg; #('World') 
-%]
--- expect --
-Hello World!
+-- test function with curly braces
+[%  sub bar(baz) { "BAR: "; baz } %]FOO: [% bar('BAZ') %]
+-- expect
+FOO: BAR: BAZ
 
 

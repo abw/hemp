@@ -3,10 +3,10 @@
 
 HEMP_INLINE hemp_slot
 hemp_slot_init(
-    hemp_value    parent,
+    hemp_value      parent,
     hemp_size       index,
     hemp_string     name,
-    hemp_value    value,
+    hemp_value      value,
     hemp_slot       next
 ) {
     hemp_slot slot;

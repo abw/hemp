@@ -1,9 +1,10 @@
-#check_PROGRAMS  =    functions assign
+#check_PROGRAMS  =    hash
 
 check_PROGRAMS  =   assign      \
                     boolops     \
                     comments    \
                     functions   \
+                    hash        \
                     lists       \
                     numbers     \
                     numops      \

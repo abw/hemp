@@ -40,7 +40,7 @@ hemp_primes[] = {
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_hash) {
-    hemp_type type = hemp_type_subtype(HempValue, id, name);
+    hemp_type type   = hemp_type_subtype(HempValue, id, name);
     type->text       = &hemp_type_hash_text;
     type->fetch      = &hemp_type_hash_fetch;
     type->store      = &hemp_type_hash_store;
@@ -72,14 +72,11 @@ hemp_hash_wider(
 
 
 hemp_hash
-hemp_hash_init() {
+hemp_hash_init(
+    hemp_hash hash
+) {
+    HEMP_INSTANCE(hash);
     hemp_size w;
-    hemp_hash hash = (hemp_hash) hemp_mem_alloc(
-        sizeof(struct hemp_hash)
-    );
-    
-    if (! hash)
-        hemp_mem_fail("hash");
 
     /* hemp_debug_mem("Allocated hash table at %p\n", table); */
 

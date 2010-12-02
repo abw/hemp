@@ -20,6 +20,7 @@ struct hemp_context {
     hemp_frame      frame;
     hemp_pool       text_pool;          /* tmp hack */
     hemp_pool       list_pool;          /* tmp hack */
+    hemp_pool       hash_pool;          /* tmp hack */
     hemp_pool       code_pool;          /* tmp hack */
     hemp_pool       params_pool;        /* tmp hack */
 };
@@ -50,8 +51,13 @@ hemp_context_tmp_text_size(
     hemp_size       size
 );
 
-HEMP_INLINE hemp_list       
+HEMP_INLINE hemp_list
 hemp_context_tmp_list(
+    hemp_context    context
+);
+
+HEMP_INLINE hemp_hash
+hemp_context_tmp_hash(
     hemp_context    context
 );
 
@@ -66,12 +72,17 @@ hemp_context_tmp_params(
 );
 
 hemp_bool
+hemp_context_text_pool_cleaner(
+    hemp_memory     item
+);
+
+hemp_bool
 hemp_context_list_pool_cleaner(
     hemp_memory     item
 );
 
 hemp_bool
-hemp_context_text_pool_cleaner(
+hemp_context_hash_pool_cleaner(
     hemp_memory     item
 );
 

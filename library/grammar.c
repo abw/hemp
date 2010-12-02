@@ -11,8 +11,8 @@ hemp_grammar_new(
     HEMP_ALLOCATE(grammar);
 
     grammar->hemp      = hemp;
-    grammar->symbols   = hemp_hash_init();
-//  grammar->keywords  = hemp_hash_init();
+    grammar->symbols   = hemp_hash_new();
+//  grammar->keywords  = hemp_hash_new();
     grammar->operators = hemp_ptree_new(HEMP_OPERATORS_SIZE);
     grammar->name      = hemp_string_clone(name, "grammar name");
 

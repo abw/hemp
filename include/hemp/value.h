@@ -369,6 +369,7 @@ HEMP_OUTPUT_FUNC(hemp_value_params);
 
 /* default "cannot convert to X" function */
 HEMP_OUTPUT_FUNC(hemp_value_not_text);
+HEMP_OUTPUT_FUNC(hemp_value_not_pairs);
 HEMP_VALUE_FUNC(hemp_value_not_number);
 HEMP_VALUE_FUNC(hemp_value_not_integer);
 HEMP_VALUE_FUNC(hemp_value_not_boolean);

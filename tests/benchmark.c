@@ -88,7 +88,7 @@ void test_store(
 
 
 void hash_store() {
-    hemp_hash_t hash = hemp_hash_init();
+    hemp_hash_t hash = hemp_hash_new();
     test_store(hash, &hemp_hash_store, ITERATIONS);
     hemp_hash_free(hash);
 }
@@ -147,7 +147,7 @@ void test_fetch(
 }
 
 void hash_fetch() {
-    hemp_hash_t hash = hemp_hash_init();
+    hemp_hash_t hash = hemp_hash_new();
     test_fetch_prep(hash, &hemp_hash_store, 20);
     test_fetch(hash, &hemp_hash_fetch, ITERATIONS);
     hemp_hash_free(hash);

@@ -49,6 +49,7 @@
 #define HEMP_STR_HASH       "Hash"
 #define HEMP_STR_CODE       "Code"
 #define HEMP_STR_PARAMS     "Params"
+#define HEMP_STR_PAIRS      "Pairs"
 #define HEMP_STR_OBJECT     "Object"
 #define HEMP_STR_IDENTITY   "Identity"
 #define HEMP_STR_RESERVED   "Reserved"
@@ -115,6 +116,9 @@
 #define HEMP_BE_NAMED       0x01000  /* anonymous vs named functions         */
 #define HEMP_BE_ARGS        0x02000  /* functions with arguments             */
 #define HEMP_BE_LVALUE      0x04000  /* element can be lvalue for assignment */
+#define HEMP_BE_PAIRS       0x08000  /* element can yield pairs              */
+#define HEMP_BE_BODY        0x10000  /* element is a content body            */
+#define HEMP_BE_TERMINATED  0x20000  /* element body has been terminated     */
 #define HEMP_BE_ALLOCATED   0x40000  /* element has memory allocated         */
 #define HEMP_BE_EOF         0x80000  /* special marker for end of file/text  */
 

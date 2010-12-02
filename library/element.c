@@ -255,6 +255,42 @@ HEMP_PREFIX_FUNC(hemp_element_fixed) {
 }
 
 
+HEMP_PREFIX_FUNC(hemp_element_parse_body) {
+    hemp_debug_call("hemp_element_parse_body(%s)\n", (*elemptr)->type->name);
+
+    /* we don't need to skip whitespace here as any skippable whitespace 
+     * elements will forward the parse_prefix call onto the next token, but
+     * it's slightly more efficient this way.
+     */
+    hemp_skip_whitespace(elemptr);
+
+    /* See comments for parse_body() in Template::TT3::Element.pm
+     * It forces precedence to CMD_PRECEDENCE and FORCE to 1.  I don't 
+     * think we need to do this if we just use the values passed as args.
+     */
+    hemp_element element = hemp_parse_prefix(
+        elemptr, scope, precedence, force
+    );
+
+    /* A single expression body is fully terminated, so the caller should
+     * not look for a corresponding terminator token, e.g. sub inc(a) a + 1
+     * has a single expression body, a + 1, so it doesn't require an 'end',
+     * unlike: sub inc(a); a + 1; end, which invokes parse_body on the ';'
+     * terminator, returning an unterminated block
+     */
+    if (element)
+        hemp_set_flag(element, HEMP_BE_TERMINATED);
+
+    return element;
+}
+
+
+HEMP_PREFIX_FUNC(hemp_element_parse_body_block) {
+    hemp_debug_call("hemp_element_parse_body_block(%s)\n", (*elemptr)->type->name);
+    return hemp_element_parse_block(elemptr, scope, 0, 1);
+}
+
+
 /*--------------------------------------------------------------------------
  * decline functions
  *--------------------------------------------------------------------------*/
@@ -432,6 +468,18 @@ HEMP_POSTFIX_FUNC(hemp_element_next_postfix) {
     }
 
     return lhs;
+}
+
+
+HEMP_PREFIX_FUNC(hemp_element_next_body) {
+    hemp_debug_call("hemp_element_next_body()\n");
+
+    if (hemp_has_next(elemptr)) {
+        hemp_go_next(elemptr);
+        return hemp_parse_body(elemptr, scope, precedence, force);
+    }
+
+    return NULL;
 }
 
 

@@ -7,8 +7,8 @@ hemp_factory
 hemp_factory_new() {
     hemp_factory factory;
     HEMP_ALLOCATE(factory);
-    factory->instances    = hemp_hash_init();
-    factory->constructors = hemp_hash_init();
+    factory->instances    = hemp_hash_new();
+    factory->constructors = hemp_hash_new();
     factory->cleaner      = NULL;
     return factory;
 }

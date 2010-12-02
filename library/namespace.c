@@ -9,7 +9,7 @@ void hemp_global_namespace_init(
         return;
 
     global->namespace_id = 0;
-    global->namespaces   = hemp_hash_init();
+    global->namespaces   = hemp_hash_new();
 }
 
 
@@ -37,7 +37,7 @@ hemp_namespace_init(
 
     namespace->id       = id;
     namespace->name     = hemp_string_clone(name, "namespace name");
-    namespace->children = hemp_hash_init();
+    namespace->children = hemp_hash_new();
     namespace->parent   = NULL;
 
     return namespace;

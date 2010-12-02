@@ -187,7 +187,6 @@ HEMP_SYMBOL(hemp_element_list_symbol) {
 }
 
 
-
 HEMP_VALUE_FUNC(hemp_element_list_value) {
     hemp_debug_call("hemp_element_list_value()\n");
     return hemp_element_block_values(
@@ -197,20 +196,73 @@ HEMP_VALUE_FUNC(hemp_element_list_value) {
 
 
 /*--------------------------------------------------------------------------
- * hash
+ * hash: might want to rename this to 'scope' to better reflect it's dual
+ * nature behaviour both as a hash constructor when used in an expression, 
+ * e.g. hash = { a => 10 }, and as a code block: if a { b }
  *--------------------------------------------------------------------------*/
 
 HEMP_SYMBOL(hemp_element_hash_symbol) {
     hemp_element_brackets_symbol(hemp, symbol);
-    symbol->value = &hemp_element_hash_value;
+    symbol->parse_prefix    = &hemp_element_hash_prefix;
+    symbol->parse_body      = &hemp_element_hash_body;
+    symbol->value           = &hemp_element_hash_value;
+    hemp_set_flag(symbol, HEMP_BE_POSTBOUND);
     return symbol;
 }
 
 
+HEMP_PREFIX_FUNC(hemp_element_hash_prefix) {
+    hemp_debug_call("hemp_element_hash_prefix()\n");
+    hemp_element element = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
+    hemp_list    exprs   = hemp_block_exprs_list(element);
+    hemp_value   item;
+    hemp_element expr;
+    hemp_size    n;
+    
+    for (n = 0; n < exprs->length; n++) {
+        item = hemp_list_item(exprs, n);
+        expr = hemp_val_elem(item);
+        // should we also support a parse_pairs handler in case the 
+        // expression wants to make a decision about what it supports
+        if (hemp_not_flag(expr, HEMP_BE_PAIRS))
+            hemp_fatal(     // TODO: proper parse error
+                "Invalid expression inside hash definition: %s\n", 
+                expr->type->name
+            );
+    }
+
+    return element;
+}
+
+
+HEMP_PREFIX_FUNC(hemp_element_hash_body) {
+    hemp_debug_call("hemp_element_hash_body()\n");
+    hemp_element element = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
+    hemp_set_flag(element, HEMP_BE_BODY|HEMP_BE_TERMINATED);   // better to retype?
+    return element;
+}
+
+
 HEMP_VALUE_FUNC(hemp_element_hash_value) {
-    hemp_debug_call("hemp_element_hash_value()\n");
-    hemp_element element  = hemp_val_elem(value);
-    hemp_element block    = hemp_expr_element(element);
+    hemp_debug_msg("hemp_element_hash_value()\n");
+    hemp_element element = hemp_val_elem(value);
+
+    if (hemp_has_flag(element, HEMP_BE_BODY))
+        return hemp_element_block_value(value, context);
+    
+    hemp_list   exprs = hemp_block_exprs_list(element);
+    hemp_hash   hash  = hemp_context_tmp_hash(context);
+    hemp_value  hashv = hemp_hash_val(hash);
+    hemp_value  item;
+    hemp_size   n;
+
+    for (n = 0; n < exprs->length; n++) {
+        item = hemp_list_item(exprs, n);
+        hemp_call(item, pairs, context, hashv);
+    }
+
+    return hashv;
+
     // pairs/slots = block->type->pairs(block, context, HempNothing);
     // add pairs/slots to a hash, return.
     // or better still, pass hash to pairs()... but what if we want a list

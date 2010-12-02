@@ -29,6 +29,7 @@ hemp_symbol_new(
     symbol->parse_fixed     = NULL;
     symbol->parse_params    = NULL;
     symbol->parse_lvalue    = NULL; //&hemp_element_not_lvalue;
+    symbol->parse_body      = &hemp_element_parse_body;     // default to NULL?
     symbol->parse_proto     = &hemp_element_not_proto;
     symbol->token           = &hemp_element_not_token;
     symbol->source          = &hemp_element_not_source;

@@ -39,9 +39,10 @@ hemp_type_new(
     type->name      = hemp_string_clone(name, "type name");
     type->namespace = NULL;
     type->base      = NULL;
-    type->methods   = hemp_hash_init();
+    type->methods   = hemp_hash_new();
     type->value     = &hemp_value_self;
     type->values    = &hemp_value_values;
+    type->pairs     = &hemp_value_not_pairs;
     type->params    = &hemp_value_params;
     type->apply     = &hemp_value_apply;
     type->text      = &hemp_value_not_text; 

@@ -215,6 +215,13 @@ hemp_element_parse_exprs(
         : NULL                                                  \
 )
 
+#define hemp_parse_body(ep, sc, pr, fr) (                       \
+    (*ep)->type->parse_body                                     \
+        ? (*ep)->type->parse_body(ep, sc, pr, fr)               \
+        : NULL                                                  \
+)
+
+
 #define hemp_element_cleanup(e)                                 \
     e->type->cleanup                                            \
         ? e->type->cleanup(e)                                   \
@@ -250,6 +257,8 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_postfix);        // TODO: s/INFIX/POSTFIX
 HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left);
 HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right);
 HEMP_PREFIX_FUNC(hemp_element_fixed);
+HEMP_PREFIX_FUNC(hemp_element_parse_body);
+HEMP_PREFIX_FUNC(hemp_element_parse_body_block);
 
 HEMP_OUTPUT_FUNC(hemp_element_binary_source);
 
@@ -282,6 +291,7 @@ HEMP_INPUT_FUNC(hemp_element_not_assign);
 
 HEMP_PREFIX_FUNC(hemp_element_next_prefix);
 HEMP_POSTFIX_FUNC(hemp_element_next_postfix);
+HEMP_PREFIX_FUNC(hemp_element_next_body);
 
 
 /*--------------------------------------------------------------------------
@@ -295,15 +305,16 @@ HEMP_OUTPUT_FUNC(hemp_element_literal_token);
 HEMP_OUTPUT_FUNC(hemp_element_literal_source);
 HEMP_OUTPUT_FUNC(hemp_element_literal_text);
 HEMP_VALUE_FUNC(hemp_element_literal_value);
-void hemp_element_literal_clean(hemp_element);
+HEMP_CLEAN_FUNC(hemp_element_literal_clean);
 
 HEMP_SYMBOL(hemp_element_word_symbol);
 HEMP_PREFIX_FUNC(hemp_element_word_prefix);
 HEMP_PREFIX_FUNC(hemp_element_word_word);
 HEMP_FIXUP_FUNC(hemp_element_word_proto);
+HEMP_FIXUP_FUNC(hemp_element_word_lvalue);
 HEMP_VALUE_FUNC(hemp_element_word_value);
 HEMP_INPUT_FUNC(hemp_element_word_assign);
-void hemp_element_word_clean(hemp_element);
+HEMP_CLEAN_FUNC(hemp_element_word_clean);
 
 
 /*--------------------------------------------------------------------------
@@ -416,6 +427,8 @@ HEMP_SYMBOL(hemp_element_list_symbol);
 HEMP_VALUE_FUNC(hemp_element_list_value);
 
 HEMP_SYMBOL(hemp_element_hash_symbol);
+HEMP_PREFIX_FUNC(hemp_element_hash_prefix);
+HEMP_PREFIX_FUNC(hemp_element_hash_body);
 HEMP_VALUE_FUNC(hemp_element_hash_value);
 
 
@@ -536,6 +549,7 @@ HEMP_POSTFIX_FUNC(hemp_element_assign_postfix);
 HEMP_OUTPUT_FUNC(hemp_element_assign_text);
 HEMP_VALUE_FUNC(hemp_element_assign_value);
 HEMP_OUTPUT_FUNC(hemp_element_assign_params);
+HEMP_OUTPUT_FUNC(hemp_element_assign_pairs);
 
 
 /*--------------------------------------------------------------------------

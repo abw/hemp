@@ -6,7 +6,7 @@ int main(
 ) {
     hemp_hemp      hemp    = hemp_new();
     hemp_list list    = hemp_list_new();
-    hemp_hash hash    = hemp_hash_init();
+    hemp_hash hash    = hemp_hash_new();
     hemp_context context = hemp_context_instance(hemp);
     int         result;
 

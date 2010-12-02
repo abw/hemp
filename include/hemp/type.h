@@ -21,6 +21,7 @@
     hemp_input_f    assign;         \
     hemp_output_f   text;           \
     hemp_output_f   values;         \
+    hemp_output_f   pairs;          \
     hemp_output_f   params;         \
     hemp_fetch_f    dot;            \
     hemp_fetch_f    fetch;          \

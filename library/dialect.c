@@ -13,7 +13,7 @@ hemp_dialect_new(
     dialect->cleanup = NULL;
     dialect->hemp    = hemp;
     dialect->name    = hemp_string_clone(name, "dialect name");
-    dialect->tags    = hemp_hash_init();
+    dialect->tags    = hemp_hash_new();
 //  dialect->tagset  = hemp_tagset_new();
 //  dialect->scanner = &hemp_scan_text;
     return dialect;
