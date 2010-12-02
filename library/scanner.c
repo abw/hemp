@@ -64,24 +64,31 @@ hemp_scan_text(
         line++;
         hemp_debug_scan("\n%d (%02d) : ", line, src - text);
 
-        //if ((pnode = outroots[(hemp_char) *src % HEMP_PTREE_SIZE])) {
-        if ((pnode = hemp_ptree_root(tagset->outline_tags, src))) {
-            tagstr = src;
+        while (*src) {
+            if ((pnode = hemp_ptree_root(tagset->outline_tags, src))) {
+                tagstr = src;
             
-            if ((tag = (hemp_tag) hemp_pnode_match_more(pnode, &src))) {
-                hemp_debug_scan("[OUTLINE:%c]", *tagstr);
+                if ((tag = (hemp_tag) hemp_pnode_match_more(pnode, &src))) {
+                    hemp_debug_scan("[OUTLINE:%c]", *tagstr);
 
-                if (tagstr > from) {
-                    hemp_elements_append(
-                        elements, tagset->text_symbol,
-                        from, pos, tagstr - from
-                    );
-                    pos += tagstr - from;
-                    from = tagstr;
+                    if (tagstr > from) {
+                        hemp_elements_append(
+                            elements, tagset->text_symbol,
+                            from, pos, tagstr - from
+                        );
+                        pos += tagstr - from;
+                        from = tagstr;
+                    }
+                    tag->scan(tmpl, tag, tagstr, pos, &src);
+                    from = src;
+                    pos += src - tagstr;
                 }
-                tag->scan(tmpl, tag, tagstr, pos, &src);
-                from = src;
-                pos += src - tagstr;
+                else {
+                    break;
+                }
+            }
+            else {
+                break;
             }
         }
         

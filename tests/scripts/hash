@@ -91,6 +91,6 @@ nums.1 size: 1
 
 -- test outline hash
 %% foo = { x = 10, y = 20 }
-[% foo.x '/' foo.y %]
+%% foo.x '/' foo.y
 -- expect
 10/20
