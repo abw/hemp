@@ -153,3 +153,41 @@ hemp_scan_text(
 }
 
 
+
+hemp_bool
+hemp_scan_unplugged(
+    hemp_template tmpl
+) {
+    hemp_elements   elements = tmpl->elements;
+    hemp_tagset     tagset   = tmpl->tagset;
+    hemp_tag        tag      = tagset->unplugged_tag;
+    hemp_string     text     = hemp_source_read(tmpl->source),
+                    src      = text,
+                    from     = text,
+                    cmptr, tagstr;
+    hemp_pos        pos      = 0,
+                    line     = 1;
+
+    if (! tag)
+        hemp_fatal("No unplugged tag is defined in tagset\n");
+
+    tag->scan(tmpl, tag, src, pos, &src);
+    pos += src - from;
+    from = src;
+
+    while (*src)
+        src++;
+
+    if (src > from) {
+        hemp_elements_append(
+            elements, tagset->text_symbol,
+            from, pos, src - from
+        );
+        pos += src - from;
+    }
+    
+    hemp_elements_eof(elements, pos);
+
+    return HEMP_TRUE;
+}
+

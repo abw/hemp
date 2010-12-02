@@ -52,6 +52,7 @@ libhemp_la_SOURCES  =   action.c            \
                         tag/control.c       \
                         tag/inline.c        \
                         tag/outline.c       \
+                        tag/unplugged.c     \
                         tagset.c            \
                         template.c          \
                         test.c              \

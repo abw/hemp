@@ -100,14 +100,14 @@ am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-context.lo \
 	libhemp_la-source.lo libhemp_la-symbol.lo libhemp_la-tag.lo \
 	tag/libhemp_la-comment.lo tag/libhemp_la-control.lo \
 	tag/libhemp_la-inline.lo tag/libhemp_la-outline.lo \
-	libhemp_la-tagset.lo libhemp_la-template.lo libhemp_la-test.lo \
-	libhemp_la-type.lo type/libhemp_la-code.lo \
-	type/libhemp_la-identity.lo type/libhemp_la-integer.lo \
-	type/libhemp_la-hash.lo type/libhemp_la-list.lo \
-	type/libhemp_la-number.lo type/libhemp_la-object.lo \
-	type/libhemp_la-params.lo type/libhemp_la-string.lo \
-	type/libhemp_la-text.lo libhemp_la-utils.lo \
-	libhemp_la-value.lo libhemp_la-viewer.lo \
+	tag/libhemp_la-unplugged.lo libhemp_la-tagset.lo \
+	libhemp_la-template.lo libhemp_la-test.lo libhemp_la-type.lo \
+	type/libhemp_la-code.lo type/libhemp_la-identity.lo \
+	type/libhemp_la-integer.lo type/libhemp_la-hash.lo \
+	type/libhemp_la-list.lo type/libhemp_la-number.lo \
+	type/libhemp_la-object.lo type/libhemp_la-params.lo \
+	type/libhemp_la-string.lo type/libhemp_la-text.lo \
+	libhemp_la-utils.lo libhemp_la-value.lo libhemp_la-viewer.lo \
 	viewer/libhemp_la-text.lo
 libhemp_la_OBJECTS = $(am_libhemp_la_OBJECTS)
 libhemp_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -312,6 +312,7 @@ libhemp_la_SOURCES = action.c            \
                         tag/control.c       \
                         tag/inline.c        \
                         tag/outline.c       \
+                        tag/unplugged.c     \
                         tagset.c            \
                         template.c          \
                         test.c              \
@@ -470,6 +471,8 @@ tag/libhemp_la-inline.lo: tag/$(am__dirstamp) \
 	tag/$(DEPDIR)/$(am__dirstamp)
 tag/libhemp_la-outline.lo: tag/$(am__dirstamp) \
 	tag/$(DEPDIR)/$(am__dirstamp)
+tag/libhemp_la-unplugged.lo: tag/$(am__dirstamp) \
+	tag/$(DEPDIR)/$(am__dirstamp)
 type/$(am__dirstamp):
 	@$(MKDIR_P) type
 	@: > type/$(am__dirstamp)
@@ -559,6 +562,8 @@ mostlyclean-compile:
 	-rm -f tag/libhemp_la-inline.lo
 	-rm -f tag/libhemp_la-outline.$(OBJEXT)
 	-rm -f tag/libhemp_la-outline.lo
+	-rm -f tag/libhemp_la-unplugged.$(OBJEXT)
+	-rm -f tag/libhemp_la-unplugged.lo
 	-rm -f type/libhemp_la-code.$(OBJEXT)
 	-rm -f type/libhemp_la-code.lo
 	-rm -f type/libhemp_la-hash.$(OBJEXT)
@@ -644,6 +649,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/libhemp_la-control.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/libhemp_la-inline.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/libhemp_la-outline.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tag/$(DEPDIR)/libhemp_la-unplugged.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-code.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-hash.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@type/$(DEPDIR)/libhemp_la-identity.Plo@am__quote@
@@ -1043,6 +1049,13 @@ tag/libhemp_la-outline.lo: tag/outline.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tag/outline.c' object='tag/libhemp_la-outline.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o tag/libhemp_la-outline.lo `test -f 'tag/outline.c' || echo '$(srcdir)/'`tag/outline.c
+
+tag/libhemp_la-unplugged.lo: tag/unplugged.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT tag/libhemp_la-unplugged.lo -MD -MP -MF tag/$(DEPDIR)/libhemp_la-unplugged.Tpo -c -o tag/libhemp_la-unplugged.lo `test -f 'tag/unplugged.c' || echo '$(srcdir)/'`tag/unplugged.c
+@am__fastdepCC_TRUE@	$(am__mv) tag/$(DEPDIR)/libhemp_la-unplugged.Tpo tag/$(DEPDIR)/libhemp_la-unplugged.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tag/unplugged.c' object='tag/libhemp_la-unplugged.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o tag/libhemp_la-unplugged.lo `test -f 'tag/unplugged.c' || echo '$(srcdir)/'`tag/unplugged.c
 
 libhemp_la-tagset.lo: tagset.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-tagset.lo -MD -MP -MF $(DEPDIR)/libhemp_la-tagset.Tpo -c -o libhemp_la-tagset.lo `test -f 'tagset.c' || echo '$(srcdir)/'`tagset.c

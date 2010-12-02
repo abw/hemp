@@ -8,11 +8,12 @@ hemp_tagset_new(
     hemp_tagset tagset;
     HEMP_ALLOCATE(tagset);
 
-    tagset->template     = template;
-    tagset->text_symbol  = HempSymbolText;
-    tagset->tags         = hemp_hash_new();
-    tagset->inline_tags  = hemp_ptree_new(HEMP_TAGSET_SIZE);
-    tagset->outline_tags = hemp_ptree_new(HEMP_TAGSET_SIZE);
+    tagset->template      = template;
+    tagset->text_symbol   = HempSymbolText;
+    tagset->tags          = hemp_hash_new();
+    tagset->inline_tags   = hemp_ptree_new(HEMP_TAGSET_SIZE);
+    tagset->outline_tags  = hemp_ptree_new(HEMP_TAGSET_SIZE);
+    tagset->unplugged_tag = NULL;
 
     return tagset;
 }
@@ -26,16 +27,17 @@ hemp_tagset_free(
     hemp_hash_free(tagset->tags);
     hemp_ptree_free(tagset->inline_tags);
     hemp_ptree_free(tagset->outline_tags);
+
     hemp_mem_free(tagset);
 }
 
 
-hemp_pnode
+hemp_tag
 hemp_tagset_add_tag(
     hemp_tagset   tagset, 
     hemp_tag      tag
 ) {
-    hemp_ptree ptree;
+    hemp_ptree ptree = NULL;
 
     if (hemp_hash_fetch_pointer(tagset->tags, tag->name))
         hemp_fatal("Duplicate tag in tagset: %s", tag->name);
@@ -48,6 +50,18 @@ hemp_tagset_add_tag(
         case HEMP_OUTLINE_TAG:
             ptree = tagset->outline_tags;
             break;
+
+        case HEMP_UNPLUGGED_TAG:
+            // it might be better to store an unplugged tag in the hash
+            // (which we do anyway) and then look it up by name... although
+            // it might require us to use a specific name, like "unplugged"
+            // hmmm... it's also in the hash... maybe this should be an error?
+            if (tagset->unplugged_tag)
+                hemp_fatal("Tagset already has an unplugged tag");
+//                hemp_tag_free(tagset->unplugged_tag);
+
+            tagset->unplugged_tag = tag;
+            break;
         
         default:
             hemp_fatal("Invalid tag style for %s tag: %d", tag->name, tag->style);
@@ -57,11 +71,14 @@ hemp_tagset_add_tag(
 
     hemp_hash_store_pointer(tagset->tags, tag->name, tag);
 
-    return hemp_ptree_store(ptree, tag->start, (hemp_memory) tag);
+    if (ptree)
+        hemp_ptree_store(ptree, tag->start, (hemp_memory) tag);
+    
+    return tag;
 }
 
 
-hemp_pnode
+hemp_tag
 hemp_tagset_new_tag(
     hemp_tagset     tagset, 
     hemp_string     type,

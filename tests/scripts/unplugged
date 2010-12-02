@@ -1,0 +1,4 @@
+-- test basic unplugged commands
+a = 10; 'a is '; a
+-- expect
+a is 10

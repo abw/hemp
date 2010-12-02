@@ -18,6 +18,7 @@ struct hemp_tagset {
    hemp_hash        tags;
    hemp_ptree       inline_tags;
    hemp_ptree       outline_tags;
+   hemp_tag         unplugged_tag;
 };
 
 
@@ -33,13 +34,13 @@ hemp_tagset_new(
 void
 hemp_tagset_free();
 
-hemp_pnode
+hemp_tag
 hemp_tagset_add_tag(
     hemp_tagset     tagset, 
     hemp_tag        tag
 );
 
-hemp_pnode
+hemp_tag
 hemp_tagset_new_tag(
     hemp_tagset     tagset, 
     hemp_string     type,

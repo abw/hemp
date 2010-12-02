@@ -1,5 +1,8 @@
 An incomplete list of things TODO, in no particular order.
 
+* There's still a bunch of components with init() methods which need
+  changing to new() for consistency with new naming standard.
+ 
 * Add pairs method (%stuff) and items/fetch_all (@stuff)
 
 * Add parse_body() method and change those elements currently using 

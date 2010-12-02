@@ -10,11 +10,20 @@ hemp_tag_new(
 ) {
     hemp_tag tag;
     HEMP_ALLOCATE(tag);
+    
+    /* Some code assumes that all tags always have a start tag, but that's
+     * no longer true now that we have unplugged tags.  This'll do for now
+     * but should be cleaned up when this code is next refactored.
+     */
+    if (! start)
+        start = HEMP_STR_BLANK;
+
 
     tag->tagset  = NULL;
     tag->style   = HEMP_INLINE_TAG;                     // ymmv
     tag->grammar = grammar;
     tag->type    = hemp_string_clone(type,  "tag type");
+    hemp_debug_msg("tag type: %s @ %p\n", type, tag->type);
     tag->name    = hemp_string_clone(name,  "tag name");
     tag->start   = hemp_string_clone(start, "tag start");
     tag->end     = end 

@@ -8,6 +8,7 @@
 HEMP_LANGUAGE(hemp_language_tt3);
 
 HEMP_DIALECT(hemp_dialect_tt3);
+HEMP_DIALECT(hemp_dialect_tt3_unplugged);
 
 HEMP_GRAMMAR(hemp_grammar_tt3_core);
 HEMP_GRAMMAR(hemp_grammar_tt3_command);

@@ -97,6 +97,8 @@ static struct hemp_tags hemp_tags_hemp[] = {
     { "hemp.inline",            &hemp_tag_inline                        },
     { "hemp.outline",           &hemp_tag_outline                       },
     { "hemp.comment",           &hemp_tag_comment                       },
+    { "hemp.control",           &hemp_tag_control                       },
+    { "hemp.unplugged",         &hemp_tag_unplugged                     },
     { NULL, NULL },
 };
 

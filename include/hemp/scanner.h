@@ -46,12 +46,17 @@ hemp_scan_pos_init(
 
 void 
 hemp_scan_pos_free(
-    hemp_scan_pos scan_pos
+    hemp_scan_pos   scan_pos
 );
 
 hemp_bool
 hemp_scan_text(
-    hemp_template
+    hemp_template   template
+);
+
+hemp_bool
+hemp_scan_unplugged(
+    hemp_template   template
 );
 
 

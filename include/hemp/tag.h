@@ -13,8 +13,9 @@
  *--------------------------------------------------------------------------*/
 
 enum hemp_tag_style {
-    HEMP_INLINE_TAG  = 1,
-    HEMP_OUTLINE_TAG = 2
+    HEMP_INLINE_TAG    = 1,
+    HEMP_OUTLINE_TAG   = 2,
+    HEMP_UNPLUGGED_TAG = 3
 };
 
 typedef hemp_tag 
@@ -105,6 +106,7 @@ void        hemp_tag_inline_scan(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_outline_scan(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_comment_scan(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_control_scan(HEMP_TAG_SCAN_ARGS);
+void        hemp_tag_unplugged_scan(HEMP_TAG_SCAN_ARGS);
 
 hemp_string hemp_tag_outline_to_eol(HEMP_TAG_SKIP_ARGS);
 hemp_string hemp_tag_inline_to_eol(HEMP_TAG_SKIP_ARGS);
@@ -113,6 +115,7 @@ HEMP_TAG(hemp_tag_inline);
 HEMP_TAG(hemp_tag_outline);
 HEMP_TAG(hemp_tag_comment);
 HEMP_TAG(hemp_tag_control);
+HEMP_TAG(hemp_tag_unplugged);
 
 
 /*--------------------------------------------------------------------------
