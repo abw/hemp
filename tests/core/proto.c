@@ -21,6 +21,7 @@ void test_proto() {
     hemp_proto_add_hash(proto, hemp_string_copy("bop"));
 
     hemp_string i = hemp_proto_item(proto, "foo");
+    HEMP_UNUSED(i);
 
     is( hemp_proto_item(proto, "foo"), "item", "foo is an item" );
     is( hemp_proto_item(proto, "bar"), "item", "bar is an item" );

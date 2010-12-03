@@ -51,6 +51,7 @@ void test_viewer() {
     ok( root, "got root element: %p", root);
 
     hemp_value result = hemp_viewer_element(text, root, context, HempNothing);
+    HEMP_UNUSED(result);
 
     hemp_context_free(context);
     hemp_free(hemp);

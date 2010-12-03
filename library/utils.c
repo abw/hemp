@@ -94,6 +94,12 @@ static hemp_char HEMP_MD5_PADDING[64] = {
    (a) += (b); \
   }
 
+static void 
+hemp_md5_transform(
+    hemp_uint *buffer,
+    hemp_uint *input
+);
+
 
 /* Initialise an MD5 data structure */
 
@@ -125,9 +131,9 @@ hemp_md5_init(
 
 void 
 hemp_md5_update(
-    hemp_md5_p  md5,
+    hemp_md5_p   md5,
     hemp_string  input,
-    hemp_size length
+    hemp_size    length
 ) {
     hemp_uint in[16];
     int mdi;
@@ -217,9 +223,9 @@ hemp_md5_transform(
     hemp_uint *input
 ) {
     hemp_uint a = buffer[0], 
-                b = buffer[1], 
-                c = buffer[2], 
-                d = buffer[3];
+              b = buffer[1], 
+              c = buffer[2], 
+              d = buffer[3];
 
     /* Round 1 */
     #define S11 7

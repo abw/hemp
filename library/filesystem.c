@@ -132,7 +132,8 @@ hemp_filesystem_readable_path(
     hemp_string     path
 ) {
     int n;
-    hemp_string root, full;
+    hemp_string root;
+    hemp_string full = NULL;
     
     for (n = 0; n < filesystem->path->length; n++) {
         root = hemp_val_str( hemp_list_item(filesystem->path, n) );
@@ -154,17 +155,15 @@ hemp_filesystem_read_file(
     hemp_size   size = 0;
     FILE *fp = fopen(path,"r");
 
-    struct stat stat_buf;
-
     if (fp) {
         fseek(fp, 0, SEEK_END);
-        long pos = ftell(fp);
+        size = ftell(fp);
         fseek(fp, 0, SEEK_SET);
 
-        text = hemp_mem_alloc(pos + 1);
+        text = hemp_mem_alloc(size + 1);
 
-        if (fread(text, pos, 1, fp)) {
-            text[pos] = HEMP_NUL;
+        if (fread(text, size, 1, fp)) {
+            text[size] = HEMP_NUL;
         }
         else {
             perror(path);               // fix me

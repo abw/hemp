@@ -3,6 +3,26 @@
 //#include <hemp/source.h>
 
 
+hemp_string hemp_errmsg[] = {
+    "No error",
+    "Unknown error",
+    "Memory allocation failed",
+    "Failed to allocate memory for a new %s",
+    "No %s specified",
+    "Invalid %s specified: %s",
+    "Duplicate %s specified: %s",
+    "Number is too large: %s",
+    "Invalid token: %s",
+    "Unterminated %s: %s",
+    "Cannot convert %s to %s: %s",
+    "%s value",
+    "Cannot fetch '%s' from %s",
+    "Cannot store '%s' in %s",
+    "Invalid option: %s",
+    NULL
+};
+
+
 hemp_error
 hemp_error_new(
     hemp_errno number

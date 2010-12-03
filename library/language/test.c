@@ -54,11 +54,11 @@ hemp_dialect_test_prepare(
     hemp_template tmpl
 ) {
     hemp_debug("hemp_dialect_test_prepare(%p)\n", tmpl);
-
-    hemp_hemp         hemp    = tmpl->dialect->hemp;
+/*
+    hemp_hemp    hemp    = tmpl->dialect->hemp;
     hemp_tagset  tagset  = tmpl->tagset;
     hemp_grammar grammar = hemp_grammar_instance(hemp, HEMP_TEST);
-
+*/
 // broke while reworking tags
 //    hemp_tagset_add_tag(
 //        tagset, 
@@ -117,8 +117,6 @@ HEMP_SYMBOL(hemp_element_test_test_symbol) {
 
 HEMP_SCAN_FUNC(hemp_element_test_test_scanner) {
     hemp_string  src     = *srcptr;
-    hemp_string  tag_end = tag->end;
-    hemp_size tag_len = strlen(tag->end);
 
     hemp_debug_call("hemp_element_test_test_scanner()\n");
 
@@ -168,8 +166,9 @@ HEMP_PREFIX_FUNC(hemp_element_test_test_prefix) {
 
 
 HEMP_VALUE_FUNC(hemp_element_test_test_value) {
-    hemp_text text = hemp_context_tmp_text(context);
+//  hemp_text text = hemp_context_tmp_text(context);
     hemp_todo("hemp_element_test_test_value()\n");
+    return HempMissing;
 }
 
 
@@ -206,8 +205,6 @@ hemp_element_test_expect_symbol(
 
 HEMP_SCAN_FUNC(hemp_element_test_expect_scanner) {
     hemp_string  src     = *srcptr;
-    hemp_string  tag_end = tag->end;
-    hemp_size tag_len = strlen(tag->end);
 
     hemp_debug_call("hemp_element_test_expect_scanner()\n");
 

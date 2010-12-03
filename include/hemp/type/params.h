@@ -27,6 +27,11 @@ hemp_params_init(
     hemp_params     params
 );
 
+HEMP_INLINE void
+hemp_params_release(
+    hemp_params params
+);
+
 void
 hemp_params_free(
     hemp_params     params

@@ -24,9 +24,6 @@ HEMP_SYMBOL(hemp_element_comment_symbol) {
 
 
 HEMP_SCAN_FUNC(hemp_element_comment_scanner) {
-    hemp_string  tag_end = tag->end;
-    hemp_size tag_len = strlen(tag->end);
-
     hemp_debug_call("hemp_element_comment_scanner()\n");
 
     /* update the source pointer past the text we've consumed */

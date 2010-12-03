@@ -30,24 +30,7 @@ typedef enum {
 } hemp_errno;
 
 
-static hemp_string hemp_errmsg[] = {
-    "No error",
-    "Unknown error",
-    "Memory allocation failed",
-    "Failed to allocate memory for a new %s",
-    "No %s specified",
-    "Invalid %s specified: %s",
-    "Duplicate %s specified: %s",
-    "Number is too large: %s",
-    "Invalid token: %s",
-    "Unterminated %s: %s",
-    "Cannot convert %s to %s: %s",
-    "%s value",
-    "Cannot fetch '%s' from %s",
-    "Cannot store '%s' in %s",
-    "Invalid option: %s",
-    NULL
-};
+extern hemp_string hemp_errmsg[];
 
 
 /*--------------------------------------------------------------------------
@@ -116,6 +99,13 @@ void
 hemp_error_free(
     hemp_error      error
 );
+
+
+/* these are implemented in hemp.c */
+hemp_string     hemp_error_format(hemp_hemp, hemp_errno);
+hemp_error      hemp_error_message(hemp_hemp, hemp_errno, ...);
+hemp_error      hemp_error_scan_pos(hemp_error, hemp_scan_pos);
+void            hemp_error_throw(hemp_hemp, hemp_error);
 
 
 /* these macros are for testing */

@@ -560,6 +560,7 @@ HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
 
 HEMP_STORE_FUNC(hemp_type_hash_store) {
     hemp_todo("hemp_type_hash_store()\n");
+    return HempMissing;
 }
 
 

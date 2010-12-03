@@ -45,5 +45,6 @@ dummy_dialect_builder(
     hemp_hemp hemp
 ) {
     hemp_debug_cyan("dummy dialect builder\n");
+    return HEMP_TRUE;
 }
 

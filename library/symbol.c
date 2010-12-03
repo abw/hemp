@@ -89,54 +89,6 @@ hemp_symbol_free(
 
 
 
-
-/*--------------------------------------------------------------------------
- * global symbols
- *--------------------------------------------------------------------------*/
-
-void
-hemp_global_symbols_init(
-    hemp_global   global
-) {
-    hemp_debug_init("hemp_global_symbols_init()\n");
-    hemp_int n;
-
-    /* return silently if it looks like we've already done this step */
-    if (HempSymbolSpace)
-        return;
-
-    /* construct the global symbol objects */
-    HempSymbolSpace     = hemp_symbol_space();
-    HempSymbolComment   = hemp_symbol_comment();
-    HempSymbolTagStart  = hemp_symbol_tag_start();
-    HempSymbolTagEnd    = hemp_symbol_tag_end();
-    HempSymbolBlock     = hemp_symbol_block();
-    HempSymbolText      = hemp_symbol_text();
-    HempSymbolWord      = hemp_symbol_word();
-    HempSymbolNumber    = hemp_symbol_number();
-    HempSymbolInteger   = hemp_symbol_integer();
-    HempSymbolEOF       = hemp_symbol_eof();
-}
-
-
-void
-hemp_global_symbols_free(
-    hemp_global global
-) {
-    hemp_debug_init("hemp_global_symbols_free()\n");
-    hemp_symbol_free(HempSymbolSpace);      HempSymbolSpace     = NULL;
-    hemp_symbol_free(HempSymbolComment);    HempSymbolComment   = NULL;
-    hemp_symbol_free(HempSymbolTagStart);   HempSymbolTagStart  = NULL;
-    hemp_symbol_free(HempSymbolTagEnd);     HempSymbolTagEnd    = NULL;
-    hemp_symbol_free(HempSymbolBlock);      HempSymbolBlock     = NULL;
-    hemp_symbol_free(HempSymbolText);       HempSymbolText      = NULL;
-    hemp_symbol_free(HempSymbolWord);       HempSymbolWord      = NULL;
-    hemp_symbol_free(HempSymbolNumber);     HempSymbolNumber    = NULL;
-    hemp_symbol_free(HempSymbolInteger);    HempSymbolInteger   = NULL;
-    hemp_symbol_free(HempSymbolEOF);        HempSymbolEOF       = NULL;
-}
-
-
 /*--------------------------------------------------------------------------
  * debugging
  *--------------------------------------------------------------------------*/

@@ -15,6 +15,7 @@ extern "C" {
 #include <hemp/filesystem.h>
 #include <hemp/grammar.h>
 #include <hemp/language.h>
+#include <hemp/module.h>
 #include <hemp/namespace.h>
 #include <hemp/proto.h>
 #include <hemp/pool.h>
@@ -76,10 +77,6 @@ void            hemp_register_dialects(hemp_hemp, hemp_dialects);
 void            hemp_register_tags(hemp_hemp, hemp_tags);
 void            hemp_register_grammars(hemp_hemp, hemp_grammars);
 
-hemp_string     hemp_error_format(hemp_hemp, hemp_errno);
-hemp_error      hemp_error_message(hemp_hemp, hemp_errno, ...);
-hemp_error      hemp_error_scan_pos(hemp_error, hemp_scan_pos);
-void            hemp_error_throw(hemp_hemp, hemp_error);
 void            hemp_scan_error(hemp_hemp, HEMP_SCAN_ARGS, hemp_errno, ...);
 
 hemp_string     hemp_version();

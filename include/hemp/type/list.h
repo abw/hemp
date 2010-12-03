@@ -26,6 +26,11 @@ hemp_list_init(
     hemp_list       list
 );
 
+HEMP_INLINE void
+hemp_list_release(
+    hemp_list       list
+);
+
 void
 hemp_list_free(
     hemp_list       list
@@ -54,6 +59,14 @@ hemp_list_each_free(
     hemp_pos        index,
     hemp_value      value
 );
+
+HEMP_INLINE hemp_bool 
+hemp_list_index(
+    hemp_context  context,
+    hemp_value    key,
+    hemp_int     *index
+);
+    
 
 // tmp hack for debugging
 hemp_text

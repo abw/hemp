@@ -127,6 +127,8 @@ hemp_mem_trace_record(
         "free() called from %s at line %d\n", 
         ptr, file, line
     );
+
+    return NULL;
 }
 
 

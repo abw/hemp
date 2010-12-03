@@ -2,7 +2,7 @@
 #define HEMP_CORE_H
 
 /*--------------------------------------------------------------------------
-/* This header file includes all the other core header files that are 
+ * This header file includes all the other core header files that are 
  * required by most, if not all of the library source files.
  *--------------------------------------------------------------------------*/
  

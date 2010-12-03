@@ -67,7 +67,6 @@ hemp_list_resize(
 ) {
     hemp_u16    old_size = list->capacity;
     hemp_u16    new_size = old_size;
-    hemp_u16    size;
 
     if (! new_size)
         new_size = 1;
@@ -241,7 +240,7 @@ HEMP_OUTPUT_FUNC(hemp_type_list_text) {
 HEMP_FETCH_FUNC(hemp_type_list_fetch) {
     hemp_debug_call("hemp_type_list_fetch()\n");
 
-    hemp_int  index;
+    hemp_int  index = -1;
     hemp_list list  = hemp_val_list(container);
     hemp_bool found = hemp_list_index(context, key, &index);
 
@@ -266,7 +265,7 @@ HEMP_FETCH_FUNC(hemp_type_list_fetch) {
 HEMP_STORE_FUNC(hemp_type_list_store) {
     hemp_debug_call("hemp_type_list_store()\n");
 
-    hemp_int  index;
+    hemp_int  index = -1;
     hemp_bool found = hemp_list_index(context, key, &index);
     hemp_list list  = hemp_val_list(container);
     

@@ -28,7 +28,7 @@ hemp_source_md5(
     hemp_string md5
 ) {
     if (source->md5)
-        hem_mem_free(source->md5);
+        hemp_mem_free(source->md5);
     
     source->md5 = hemp_string_clone(md5, "source MD5 digest");
 }

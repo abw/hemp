@@ -74,11 +74,13 @@ HEMP_SYMBOL(hemp_element_infix_right_symbol) {
 
 HEMP_OUTPUT_FUNC(hemp_element_prefix_source) {
     hemp_todo("hemp_element_prefix_source()\n");
+    return output;
 }
 
 
 HEMP_OUTPUT_FUNC(hemp_element_postfix_source) {
     hemp_todo("hemp_element_postfix_source()\n");
+    return output;
 }
 
 

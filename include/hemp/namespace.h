@@ -17,16 +17,6 @@ struct hemp_namespace {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-void 
-hemp_global_namespace_init(
-    hemp_global     global
-);
-
-void 
-hemp_global_namespace_free(
-    hemp_global     global
-);
-
 hemp_namespace
 hemp_namespace_init(
     hemp_u16        id,

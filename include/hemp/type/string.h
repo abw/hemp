@@ -23,6 +23,12 @@ typedef struct hemp_string_split_s * hemp_string_split_p;
  *--------------------------------------------------------------------------*/
 
 hemp_string
+hemp_string_sprintf(
+    const hemp_string format,
+    ...
+);
+
+hemp_string
 hemp_string_extract(
     hemp_string     from,
     hemp_string     to
@@ -133,5 +139,7 @@ HEMP_VALUE_FUNC(hemp_method_string_length);
     _clone;                                     \
 })
 
+#define hemp_string_free(s)                     \
+    hemp_mem_free(s)
 
 #endif /* HEMP_STRING_H */

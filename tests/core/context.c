@@ -37,6 +37,12 @@ void test_context() {
         hemp_text text = hemp_context_tmp_text(context);
         hemp_code code = hemp_context_tmp_code(context);
         hemp_text_append_string(text, "hello world!");
+
+        /* prevent "unused variable" warnings */
+        HEMP_UNUSED(list);
+        HEMP_UNUSED(text);
+        HEMP_UNUSED(code);
+        
     }
 
     hemp_frame frame = hemp_context_enter(context, NULL);

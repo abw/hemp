@@ -203,7 +203,6 @@ hemp_use_type(
 ) {
     hemp_int  n;
     hemp_int  empty = 0;
-    hemp_type type;
     
     for (n = HEMP_TYPES_RESERVED + 1; n < HEMP_TYPES_SIZE; n++) {
         /* look for non-empty slot matching name */
@@ -223,8 +222,10 @@ hemp_use_type(
 
     hemp_fatal(
         "Failed to register %s type (global type registry is full)",
-        type->name
+        name
     );
+
+    return NULL;
 }
 
 

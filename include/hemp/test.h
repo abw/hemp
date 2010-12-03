@@ -122,6 +122,11 @@ hemp_test_warning(
     char *fmt, ...
 );
 
+int
+hemp_test_all_done(
+    hemp_test_plan_p plan
+);
+
 
 
 void hemp_mem_trace_ok(void);

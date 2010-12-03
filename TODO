@@ -1,7 +1,5 @@
 An incomplete list of things TODO, in no particular order.
 
-* elements for identity type: true, false, null for JSON, and maybe others
-
 * decide on a _FUNC suffix or otherwise and apply consistently, e.g.
   HEMP_GRAMMAR() vs HEMP_PREFIX_FUNC()
 
@@ -41,13 +39,7 @@ An incomplete list of things TODO, in no particular order.
   elements factory.  I think this should probably be encapsulated in the 
   scope object.
 
-* double and single quoted strings need to check for backslashes and 
-  and generate constant values on demand.  The default text  method for 
-  quoted strings (hemp_element_quoted_text()) returns the source token 
-  "tucked in" by one character at each end to remove the quotes.  Once we've 
-  got proper tokenisation working (i.e. identifying escaped characters and
-  interpolated variables) then we can mark quoted values as literal or 
-  otherwise and only generate a value for non-literal strings when required.
+* double quoted string should accept embedded variables.
 
 * Control tags and double quoted strings need to have tokens hanging off
   a BRANCH (or we need to figure out a different way to skin this cat 
@@ -115,7 +107,9 @@ An incomplete list of things TODO, in no particular order.
     HEMP_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);
 
 * Extend parse_fixed() to lookahead and merge with other fixed items 
-  (equivalent to filename in TT3).
+  (equivalent to filename in TT3).  No... hang on, that's a different
+  thing - we want filenames (uris) to be greedy, but a single fixed value
+  after a dotop should not be.
 
 * element->next pointers could be broken by recent change to add 
   synthesised elements on the end, after EOF.  But there are places that 
@@ -135,6 +129,14 @@ An incomplete list of things TODO, in no particular order.
   dynamic variable in the current context.  It's all a bit of a mess and
   needs a bit of a re-think.
 
+* Dynamic module loading.  Started off playing with a simple test module
+  (module.c) but gave up when I couldn't get the simplest example to work
+  as I expected.  Probably need to adjust my expectations.
+
+* MD5 implementation is broken.  It broke after changing hemp_char from 
+  'unsigned char' to 'char' but I think it was broken before that as it was
+  generating different results to other implementations.  Try Peter Deutsch's
+  implementation.
 
 
 Configuration, Build and Installation

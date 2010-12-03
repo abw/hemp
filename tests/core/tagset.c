@@ -24,8 +24,8 @@ void test_tagset() {
     hemp_dialect    dialect     = hemp_dialect_new(hemp, "test.dialect");
     hemp_source     source      = hemp_source_instance(hemp, "text", "Hello world");
     hemp_template   template    = hemp_template_new(dialect, source);
-    hemp_tag    inline_tag, outline_tag;
-    hemp_tagset tagset;
+    hemp_tag        inline_tag, outline_tag;
+    hemp_tagset     tagset = NULL;
 
     HEMP_TRY;
         inline_tag = hemp_tag_new(

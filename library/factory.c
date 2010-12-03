@@ -65,7 +65,7 @@ hemp_factory_constructor(
 ) {
     hemp_debug_call("hemp_factory_constructor(F, %s)\n", name);
     
-    static hemp_char  wildname[HEMP_BUFFER_SIZE];
+    static hemp_char wildname[HEMP_BUFFER_SIZE];
     hemp_list splits;
     
     hemp_action constructor = (hemp_action) hemp_hash_fetch_pointer(
@@ -121,9 +121,6 @@ hemp_factory_instance(
     hemp_string     name
 ) {
     hemp_debug_call("hemp_factory_instance(F, %s)\n", name);
-    
-    static hemp_char  wildname[HEMP_BUFFER_SIZE];
-    hemp_list splits;
     
     hemp_memory instance = hemp_hash_fetch_pointer(
         factory->instances, name

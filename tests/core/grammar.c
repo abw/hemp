@@ -22,7 +22,7 @@ void test_grammar() {
     hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
     
-    hemp_language language = hemp_language_instance(hemp, HEMP_TT3);
+    hemp_language_instance(hemp, HEMP_TT3);
     hemp_grammar grammar;
 
     /* calling this multiple times has no effect */
@@ -33,7 +33,7 @@ void test_grammar() {
     hemp_language_instance(hemp, HEMP_TT3);
 
     HEMP_TRY;
-        hemp_grammar grammar = hemp_grammar_instance(hemp, "tt3.core");
+        grammar = hemp_grammar_instance(hemp, "tt3.core");
         ok( grammar, "got grammar" );
         is( grammar->name, "tt3.core", "grammar name is tt3.core" );
         hemp_symbol space = hemp_grammar_symbol(grammar, "hemp.space");

@@ -44,13 +44,13 @@ hemp_scan_text(
 ) {
     hemp_elements   elements = tmpl->elements;
     hemp_tagset     tagset   = tmpl->tagset;
-    hemp_pnode     *inroots  = tagset->inline_tags->roots,
-                   *outroots = tagset->outline_tags->roots,
-                    pnode;
+    hemp_pnode      pnode;
+//                   *inroots  = tagset->inline_tags->roots,
+//                   *outroots = tagset->outline_tags->roots,
     hemp_string     text     = hemp_source_read(tmpl->source),
                     src      = text,
                     from     = text,
-                    cmptr, tagstr;
+                    tagstr;
     hemp_pos        pos      = 0,
                     line     = 0;
     hemp_tag        tag;
@@ -163,10 +163,8 @@ hemp_scan_unplugged(
     hemp_tag        tag      = tagset->unplugged_tag;
     hemp_string     text     = hemp_source_read(tmpl->source),
                     src      = text,
-                    from     = text,
-                    cmptr, tagstr;
-    hemp_pos        pos      = 0,
-                    line     = 1;
+                    from     = text;
+    hemp_pos        pos      = 0;
 
     if (! tag)
         hemp_fatal("No unplugged tag is defined in tagset\n");

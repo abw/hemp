@@ -92,7 +92,6 @@ void test_integer(hemp_int expect) {
 void test_values() {
     pass("testing values");
     hemp_value value;
-    hemp_type vtable;
 
     printf("HEMP_NAN:\n");
     hemp_dump_u64(HEMP_NAN);

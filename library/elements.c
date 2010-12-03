@@ -38,7 +38,6 @@ hemp_elements_free(
 
     /* call destructor on all elements that define one */
     hemp_element e = elements->head;
-    hemp_element n = e->next;
 
     while (e) {
 //        hemp_element_cleanup(e);
@@ -123,7 +122,6 @@ hemp_elements_dump(
 ) {
     hemp_debug("\n-- Elements --\n");
     hemp_element e = elements->head;
-    hemp_element n = e->next;
 
     while (e) {
         if (! hemp_element_dump(e) )

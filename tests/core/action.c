@@ -19,6 +19,7 @@ add_actor(
     int n2
 ) {
     result = n1 + n2;
+    return NULL;
 }
 
 
@@ -28,6 +29,7 @@ printf_actor(
     char *string
 ) {
     printf(format, string);
+    return NULL;
 }
 
 

@@ -65,6 +65,7 @@ HEMP_FIXUP_FUNC(hemp_element_word_proto) {
 //  hemp_debug_msg("adding word to prototype: %s\n", name);
     hemp_proto_add_item(proto, name);
 //    hemp_mem_free(name);
+    return element;
 }
 
 

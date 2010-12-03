@@ -204,7 +204,6 @@ hemp_test_result(
     hemp_string  fullname = NULL;
     hemp_bool badname  = HEMP_TRUE;   /* assume the worst */
     char *c;
-    int name_is_digits;
 
     HEMP_MUTEX_LOCK;
     

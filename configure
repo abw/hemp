@@ -11511,7 +11511,7 @@ done
 
 
 
-CFLAGS="${CFLAGS=}"
+CFLAGS="${CFLAGS=} -Wall"
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable debugging" >&5

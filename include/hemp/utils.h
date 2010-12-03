@@ -41,11 +41,11 @@ hemp_md5_final(
     hemp_md5_p      md5
 );
 
-static void 
-hemp_md5_transform(
-    hemp_uint     * buffer,
-    hemp_uint     * input
-);
+//static void 
+//hemp_md5_transform(
+//    hemp_uint     * buffer,
+//    hemp_uint     * input
+//);
 
 void 
 hemp_md5_free();

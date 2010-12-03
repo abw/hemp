@@ -326,6 +326,7 @@ HEMP_OUTPUT_FUNC(hemp_value_not_text) {
         HEMP_STR_TEXT,
         HEMP_STR_BLANK
     );
+    return output;
 }
 
 
@@ -336,6 +337,7 @@ HEMP_OUTPUT_FUNC(hemp_value_not_pairs) {
         HEMP_STR_PAIRS,
         HEMP_STR_BLANK
     );
+    return output;
 }
 
 
@@ -346,6 +348,7 @@ HEMP_VALUE_FUNC(hemp_value_not_number) {
         HEMP_STR_NUMBER,
         HEMP_STR_BLANK
     );
+    return HempMissing;
 }
 
 
@@ -356,6 +359,7 @@ HEMP_VALUE_FUNC(hemp_value_not_integer) {
         HEMP_STR_INTEGER,
         HEMP_STR_BLANK
     );
+    return HempMissing;
 }
 
 
@@ -366,6 +370,7 @@ HEMP_VALUE_FUNC(hemp_value_not_boolean) {
         HEMP_STR_BOOLEAN,
         HEMP_STR_BLANK
     );
+    return HempMissing;
 }
 
 
@@ -376,6 +381,7 @@ HEMP_VALUE_FUNC(hemp_value_not_compare) {
         HEMP_STR_COMPARE,
         HEMP_STR_BLANK
     );
+    return HempMissing;
 }
 
 
@@ -386,6 +392,7 @@ HEMP_VALUE_FUNC(hemp_value_not_defined) {
         HEMP_STR_DEFINED,
         HEMP_STR_BLANK
     );
+    return HempMissing;
 }
 
 
@@ -395,6 +402,7 @@ HEMP_FETCH_FUNC(hemp_value_not_fetch) {
         hemp_type_name(container),
         "Cannot fetch"
     );
+    return HempMissing;
 }
 
 
@@ -404,6 +412,7 @@ HEMP_STORE_FUNC(hemp_value_not_store) {
         hemp_type_name(container),
         "Cannot store"
     );
+    return HempMissing;
 }
 
 
@@ -413,6 +422,7 @@ HEMP_FETCH_FUNC(hemp_value_not_dot) {
         hemp_type_name(container),
         "Cannot dot"
     );
+    return HempMissing;
 }
 
 

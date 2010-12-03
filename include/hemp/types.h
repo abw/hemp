@@ -21,7 +21,7 @@ typedef unsigned long           hemp_size;      /* +ve size of list         */
 typedef unsigned long           hemp_pos;       /* +ve posn. in string/list */
 typedef unsigned short int      hemp_oprec;     /* operator precedence      */
 typedef unsigned char           hemp_bool;      /* boolean true/false       */
-typedef unsigned char           hemp_char;      /* single character         */
+typedef char                    hemp_char;      /* single character         */
 typedef void                  * hemp_memory;    /* generic memory pointer   */
 typedef const char            * hemp_name;      /* immutable C string       */
 typedef char                  * hemp_string;    /* C string                 */
@@ -56,6 +56,7 @@ typedef struct hemp_hash        * hemp_hash;
 typedef struct hemp_jump        * hemp_jump;
 typedef struct hemp_language    * hemp_language;
 typedef struct hemp_list        * hemp_list;
+typedef struct hemp_module      * hemp_module;
 typedef struct hemp_namespace   * hemp_namespace;
 typedef struct hemp_object      * hemp_object;
 typedef struct hemp_params      * hemp_params;
@@ -122,10 +123,16 @@ union hemp_value {
  * Type definitions for function pointers
  *--------------------------------------------------------------------------*/
 
-typedef hemp_memory     
+typedef hemp_memory
 (* hemp_actor)(
-    hemp_memory     argument, 
+    hemp_memory     argument,
     ...
+);
+
+
+typedef hemp_bool
+(* hemp_modload)(
+    hemp_hemp       hemp
 );
 
 

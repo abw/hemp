@@ -104,6 +104,7 @@ HEMP_SYMBOL(hemp_element_number_autoinc_symbol) {
 
 HEMP_VALUE_FUNC(hemp_element_number_autoinc_value) {
     hemp_todo("hemp_element_number_autoinc_value()\n");
+    return HempMissing;
 }
 
 
@@ -121,6 +122,7 @@ HEMP_SYMBOL(hemp_element_number_autodec_symbol) {
 
 HEMP_VALUE_FUNC(hemp_element_number_autodec_value) {
     hemp_todo("hemp_element_number_autodec_value()\n");
+    return HempMissing;
 }
 
 

@@ -238,7 +238,7 @@
  * HEMP_OPERATOR1(...) and HEMP_OPERATOR2(...) do similar things, but add 
  * left and rightward precedence levels as options.
  *
- * See library/language/*.c for examples of these in action.
+ * See library/language/XXX.c for examples of these in action.
  *--------------------------------------------------------------------------*/
 
 #define HEMP_GLOBAL_SYMBOL(f)               \
@@ -268,9 +268,6 @@
     hemp_symbol f(                          \
         HEMP_SYMBOL_ARGS                    \
     )
-
-//#define HEMP_SYMBOL0(name)                                      \
-//    hemp_grammar_add_symbol(grammar, name, NULL, NULL, 0, 0);
 
 #define HEMP_SYMBOL0(name)                                       \
     hemp_grammar_add_symbol(grammar, name, NULL, NULL, 0, 0);
@@ -713,6 +710,9 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
         hash   = hemp_val_hash(output);                             \
     }
 
+
+/* shut up "unused variable" compiler warnings */
+#define HEMP_UNUSED(x)  ((void) x)
 
 
 

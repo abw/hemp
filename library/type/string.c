@@ -23,6 +23,30 @@ HEMP_TYPE_FUNC(hemp_type_string) {
  *--------------------------------------------------------------------------*/
 
 hemp_string
+hemp_string_sprintf(
+    const hemp_string format,
+    ...
+) {
+    hemp_string  string;
+
+    va_list args;
+    va_start(args, format);
+    vasprintf(&string, format, args);
+    va_end(args);
+
+    if (! string)
+        hemp_mem_fail("string sprintf");
+
+#if HEMP_DEBUG & HEMP_DEBUG_MEM
+    /* tell the memory trace debugging code that we know about this memory */
+    hemp_mem_trace_external(string, strlen(string) + 1, __FILE__, __LINE__);
+#endif
+
+    return string;
+}
+
+
+hemp_string
 hemp_string_extract(
     hemp_string from,
     hemp_string to
@@ -49,7 +73,6 @@ hemp_string_split(
     hemp_string  from = source, to;
     hemp_size slen = strlen(split);
     hemp_string  item;
-    hemp_size size;
     
     /* we're dynamically allocating memory for each directory so we must
      * ensure that the list has a cleaner function associated with it that

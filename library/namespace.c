@@ -1,32 +1,6 @@
 #include <hemp/namespace.h>
 
 
-void hemp_global_namespace_init(
-    hemp_global global
-) {
-    /* return silently if we've already done this */
-    if (global->namespaces)
-        return;
-
-    global->namespace_id = 0;
-    global->namespaces   = hemp_hash_new();
-}
-
-
-void hemp_global_namespace_free(
-    hemp_global global
-) {
-    /* return silently if this has already been done */
-    if (! global->namespaces)
-        return;
-
-    hemp_hash_each(global->namespaces, &hemp_namespace_free_child);
-    hemp_hash_free(global->namespaces);
-    global->namespaces   = NULL;
-    global->namespace_id = 0;
-}
-
-    
 hemp_namespace
 hemp_namespace_init(
     hemp_u16    id,
@@ -52,7 +26,6 @@ hemp_namespace_subspace(
 ) {
     hemp_namespace  child;
     hemp_value      value;
-    hemp_u16        id;
 
     value = hemp_hash_fetch(hash, name);
 

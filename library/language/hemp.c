@@ -300,6 +300,8 @@ hemp_grammar_add_hemp_bravo(
 //    [ '%'       => sig_hash         =>   0, 350 ],      # %foo
 //    [ '.'       => op_dot           => 340,   0 ],      # foo.bar
 
+    HEMP_SYMBOL0("hemp.apply");
+
     HEMP_OPERATOR1("hemp.dotop",                ".",        200,  200);
 
 //  HEMP_OPERATOR1("hemp.number.autoinc",       "++",       195,  195);
@@ -353,7 +355,6 @@ hemp_grammar_add_hemp_bravo(
 //  HEMP_OPERATOR1("hemp.boolean.nor",          "nor",      110,    0);
 
 //    # grouping constructs...
-    HEMP_SYMBOL0("hemp.apply");
     HEMP_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);
     HEMP_OPERATOR2("hemp.bracket.list",         "[", "]",     0,    0);
     HEMP_OPERATOR2("hemp.bracket.hash",         "{", "}",     0,    0);

@@ -34,12 +34,11 @@ hemp_tag_unplugged_scan(
     hemp_pos        pos,
     hemp_string     *srcptr
 ) {
-    hemp_string     src    = *srcptr,
-                    from   = src,
-                    point;
+    hemp_string     src     = *srcptr,
+                    from    = src;
+    hemp_num        num_val = 0;
+    hemp_int        int_val = 0;
     hemp_element    element;
-    hemp_num        num_val;
-    hemp_int        int_val;
     hemp_bool       is_int, is_word;
     hemp_pnode      pnode;
     hemp_symbol     symbol;

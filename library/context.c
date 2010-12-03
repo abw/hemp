@@ -1,19 +1,9 @@
 #include <hemp/context.h>
 
-// local syntactic sugar macros for lazy programmers
-
-//#define hemp_context_init_pool(type)            \
-//    context->##type##_pool = hemp_pool_init(      \
-//        sizeof(struct hemp_##type##_s),         \
-//        HEMP_TMP_POOL_SIZE                      \
-//    );                                          \
-//    context->##type##_pool->cleaner = &hemp_context_##type##_pool_cleaner;
-    
 
 /*--------------------------------------------------------------------------
- * 
+ * constructor/destructor functions
  *--------------------------------------------------------------------------*/
-
 
 hemp_context
 hemp_context_init(

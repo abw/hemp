@@ -327,6 +327,7 @@ HEMP_FIXUP_FUNC(hemp_element_not_proto) {
         "%s element cannot be a function prototype\n", 
         element->type->name
     );
+    return NULL;
 }
 
 

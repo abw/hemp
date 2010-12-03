@@ -230,24 +230,6 @@ hemp_element_parse_exprs(
         ? e->type->cleanup(e)                                   \
         : NULL;
 
-//#define hemp_fixup_proto(e, sc, p) (                            \
-//    e->type->fixup_proto                                        \
-//        ? e->type->fixup_proto(e, sc, p)                        \
-//        : p                                                     \
-//)
-//
-
-//#define hemp_parse_infix_rhs(self, ep, sc, pr, fr)      \
-//    hemp_go_next(ep);                                   \
-//    self->args.binary.rhs = hemp_parse_prefix(            \
-//        ep, sc, self->type->lprec, 1                    \
-//    );                                                  \
-//    if (! self->args.binary.rhs)                        \
-//        hemp_fatal(                                     \
-//            "missing expression on rhs of %s\n",        \
-//            self->type->start                           \
-//        );
-//
 
 /*--------------------------------------------------------------------------
  * general parsing functions

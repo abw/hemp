@@ -52,7 +52,7 @@ AC_FUNC_STRTOD
 AC_CHECK_FUNCS([atexit bcopy getcwd memmove memset strchr strdup strrchr strstr strtol])
 
 
-CFLAGS="${CFLAGS=}"
+CFLAGS="${CFLAGS=} -Wall"
 
 dnl this macro is used to get the arguments supplied
 dnl to the configure script (./configure --enable-debug)

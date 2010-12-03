@@ -73,8 +73,5 @@ hemp_filesystem_read_file(
         fs->path = NULL;                        \
     }
 
-//#define hemp_filesystem_cwd(fs)                 \
-//    getcwd(NULL, 0)
-
 
 #endif /* HEMP_FILESYSTEM_H */

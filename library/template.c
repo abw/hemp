@@ -107,7 +107,7 @@ hemp_template_render(
     hemp_context  context
 ) {
     hemp_debug_call("hemp_template_render(%p)\n", template);
-    hemp_hemp hemp = template->dialect->hemp;
+//    hemp_hemp hemp = template->dialect->hemp;
     hemp_bool my_context = HEMP_FALSE;
     hemp_value v;
     hemp_text output;
@@ -149,7 +149,7 @@ hemp_template_data(
     hemp_context  context
 ) {
     hemp_debug_call("hemp_template_data(%p)\n", template);
-    hemp_hemp       hemp        = template->dialect->hemp;
+//    hemp_hemp       hemp        = template->dialect->hemp;
     hemp_bool       my_context  = HEMP_FALSE;
     hemp_element    root        = hemp_template_tree(template);
     hemp_value      values;

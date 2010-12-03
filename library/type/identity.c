@@ -65,6 +65,7 @@ HEMP_VALUE_FUNC(hemp_type_identity_number) {
         HEMP_STR_NUMBER, 
         hemp_identity_name(value)
     );
+    return HempMissing;
 }
 
 
@@ -78,6 +79,7 @@ HEMP_VALUE_FUNC(hemp_type_identity_integer) {
         HEMP_STR_INTEGER,
         hemp_identity_name(value)
     );
+    return HempMissing;
 }
 
 
@@ -93,6 +95,8 @@ HEMP_VALUE_FUNC(hemp_type_identity_boolean) {
             HEMP_STR_BOOLEAN, 
             hemp_identity_name(value)
         );
+
+    return HempMissing;
 }
 
 
@@ -106,6 +110,8 @@ HEMP_VALUE_FUNC(hemp_type_identity_compare) {
             HEMP_STR_COMPARE, 
             hemp_identity_name(value)
         );
+
+    return HempMissing;
 }
 
 
