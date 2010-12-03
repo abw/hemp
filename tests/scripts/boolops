@@ -87,3 +87,18 @@ True
 [% 6 < 5 or 8 < 5 %]
 -- expect
 False
+
+-- test pre-defined identity values
+[% True %] [% False %]
+-- expect
+True False
+
+-- test pre-defined identity ops: and
+[% True and True %] [% True and False %] [% False and False %]
+-- expect
+True False False
+
+-- test pre-defined identity ops: or
+[% True or True %] [% True or False %] [% False or False %]
+-- expect
+True True False

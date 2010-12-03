@@ -32,11 +32,11 @@ HEMP_LANGUAGE(hemp_language_tt3) {
 
     /* register tags */
     // TODO: try commenting these out and using hemp.XXX tags instead
-    hemp_register_tag(hemp, "tt3.inline",       &hemp_tag_inline);
-    hemp_register_tag(hemp, "tt3.outline",      &hemp_tag_outline);
-    hemp_register_tag(hemp, "tt3.control",      &hemp_tag_control);
-    hemp_register_tag(hemp, "tt3.comment",      &hemp_tag_comment);
-    hemp_register_tag(hemp, "tt3.unplugged",    &hemp_tag_unplugged);
+//    hemp_register_tag(hemp, "tt3.inline",       &hemp_tag_inline);
+//    hemp_register_tag(hemp, "tt3.outline",      &hemp_tag_outline);
+//    hemp_register_tag(hemp, "tt3.control",      &hemp_tag_control);
+//    hemp_register_tag(hemp, "tt3.comment",      &hemp_tag_comment);
+//    hemp_register_tag(hemp, "tt3.unplugged",    &hemp_tag_unplugged);
 
     /* register dialects */
     hemp_register_dialect(hemp, "tt3",           &hemp_dialect_tt3);
@@ -73,10 +73,10 @@ hemp_dialect_tt3_prepare(
     hemp_grammar command = hemp_grammar_instance(hemp, "tt3.command");
     hemp_grammar control = hemp_grammar_instance(hemp, "tt3.control");
 
-    hemp_tagset_new_tag(tagset, "tt3.comment",  "comment",  "[#",   "#]", NULL);
-    hemp_tagset_new_tag(tagset, "tt3.control",  "control",  "[?",   "?]", control);
-    hemp_tagset_new_tag(tagset, "tt3.outline",  "outline",  "%%",   NULL, command);
-    hemp_tagset_new_tag(tagset, "tt3.inline",   "inline",   "[%",   "%]", command);
+    hemp_tagset_new_tag(tagset, "hemp.comment",  "comment",  "[#",   "#]", NULL);
+    hemp_tagset_new_tag(tagset, "hemp.control",  "control",  "[?",   "?]", control);
+    hemp_tagset_new_tag(tagset, "hemp.outline",  "outline",  "%%",   NULL, command);
+    hemp_tagset_new_tag(tagset, "hemp.inline",   "inline",   "[%",   "%]", command);
 
 //    hemp_tagset_add_inline_tag(tagset, HempTagVariable);
 //    hemp_tagset_add_inline_tag(tagset, HempTagEmbed);
@@ -109,7 +109,7 @@ hemp_dialect_tt3_unplugged_prepare(
     hemp_grammar command = hemp_grammar_instance(hemp, "tt3.command");
 
     hemp_tagset_new_tag(
-        tagset, "tt3.unplugged", "unplugged",  NULL, NULL, command
+        tagset, "hemp.unplugged", "unplugged",  NULL, NULL, command
     );
 
     return template;
@@ -130,6 +130,8 @@ hemp_dialect_tt3_unplugged_prepare(
 HEMP_GRAMMAR(hemp_grammar_tt3_core) {
     hemp_debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_hemp_charlie(hemp, name);
+    HEMP_SYMBOL1("hemp.identity.true", "True");
+    HEMP_SYMBOL1("hemp.identity.false", "False");
     HEMP_SYMBOL2("hemp.squote", "q<<", ">>");
     HEMP_OPERATOR1("hemp.terminator", "end", 0, 0);
 

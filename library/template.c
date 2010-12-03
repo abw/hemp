@@ -141,3 +141,41 @@ hemp_template_render(
     return output;
 }
 
+
+
+hemp_value
+hemp_template_data(
+    hemp_template template,
+    hemp_context  context
+) {
+    hemp_debug_call("hemp_template_data(%p)\n", template);
+    hemp_hemp       hemp        = template->dialect->hemp;
+    hemp_bool       my_context  = HEMP_FALSE;
+    hemp_element    root        = hemp_template_tree(template);
+    hemp_value      values;
+    hemp_list       results;
+
+    if (! root)
+        hemp_fatal("template does not have a root element");
+    
+    if (! context) {
+        my_context  = HEMP_TRUE;
+        context     = hemp_context_init(template->dialect->hemp);
+    }
+
+    values  = root->type->values(hemp_elem_val(root), context, HempNothing);
+    results = hemp_val_list(values);
+    
+    if (my_context)
+        hemp_context_free(context);
+
+    if (results->length > 1) {
+        return values;
+    }
+    else if (results->length == 1) {
+        return hemp_list_item(results, 0);
+    }
+    else {
+        return HempEmpty;
+    }
+}

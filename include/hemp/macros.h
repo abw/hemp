@@ -168,6 +168,8 @@
  * appear inside a tag and how they map to elements.
  *--------------------------------------------------------------------------*/
 
+// TODO: decide on a _FUNC suffix or otherwise and apply consistently
+
 #define HEMP_LANGUAGE(f)                        \
     hemp_language f(                            \
         hemp_hemp   hemp,                       \
@@ -194,6 +196,11 @@
     hemp_grammar f(                             \
         hemp_hemp   hemp,                       \
         hemp_string name                        \
+    )
+
+#define HEMP_PREPARE(f)                         \
+    hemp_template f(                            \
+        hemp_template template                  \
     )
 
 

@@ -20,15 +20,14 @@ HEMP_SYMBOL(hemp_element_word_symbol) {
     symbol->parse_fixed     = &hemp_element_fixed;
     symbol->parse_proto     = &hemp_element_word_proto;
     symbol->parse_lvalue    = &hemp_element_word_lvalue;
-
-    symbol->value    = &hemp_element_word_value;
-    symbol->text     = &hemp_element_value_text;
-    symbol->number   = &hemp_element_value_number;
-    symbol->integer  = &hemp_element_value_integer;
-    symbol->boolean  = &hemp_element_value_boolean;
-    symbol->assign   = &hemp_element_word_assign;
-    symbol->cleanup  = &hemp_element_word_clean;
-    symbol->flags   |= HEMP_BE_LVALUE;
+    symbol->value           = &hemp_element_word_value;
+    symbol->text            = &hemp_element_value_text;
+    symbol->number          = &hemp_element_value_number;
+    symbol->integer         = &hemp_element_value_integer;
+    symbol->boolean         = &hemp_element_value_boolean;
+    symbol->assign          = &hemp_element_word_assign;
+    symbol->cleanup         = &hemp_element_word_clean;
+    symbol->flags          |= HEMP_BE_LVALUE;
 //    symbol->flags    = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
 }

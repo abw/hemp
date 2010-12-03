@@ -26,6 +26,18 @@ static struct hemp_symbols hemp_symbols_hemp_core[] = {
     { NULL, NULL },
 };
 
+static struct hemp_symbols hemp_symbols_hemp_identity[] = {
+    { "hemp.identity.missing",  &hemp_element_identity_missing          },
+    { "hemp.identity.nothing",  &hemp_element_identity_nothing          },
+    { "hemp.identity.empty",    &hemp_element_identity_empty            },
+    { "hemp.identity.true",     &hemp_element_identity_true             },
+    { "hemp.identity.false",    &hemp_element_identity_false            },
+    { "hemp.identity.before",   &hemp_element_identity_before           },
+    { "hemp.identity.after",    &hemp_element_identity_after            },
+    { "hemp.identity.equal",    &hemp_element_identity_equal            },
+    { NULL, NULL },
+};
+
 //static struct hemp_symbols hemp_symbols_hemp_autoload[] = {
 //    { "hemp.bracket.*",         &hemp_element_bracket_symbols           },
 //    { "hemp.boolean.*",         &hemp_element_boolean_symbols           },
@@ -120,6 +132,7 @@ HEMP_LANGUAGE(hemp_language_hemp_new) {
 
     /* register factories for bracket, boolean, number and text operator symbols */
     HEMP_ELEMENT("hemp.operator.assign.*",  &hemp_element_assign_symbols);
+    HEMP_ELEMENT("hemp.identity.*",         &hemp_element_identity_symbols);
     HEMP_ELEMENT("hemp.bracket.*",          &hemp_element_bracket_symbols);
     HEMP_ELEMENT("hemp.boolean.*",          &hemp_element_boolean_symbols);
     HEMP_ELEMENT("hemp.number.*",           &hemp_element_number_symbols);
@@ -129,6 +142,23 @@ HEMP_LANGUAGE(hemp_language_hemp_new) {
     hemp_register_tags(hemp, hemp_tags_hemp);
 
     return language;
+}
+
+
+/*--------------------------------------------------------------------------
+ * identity elements
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOLS(hemp_element_identity_symbols) {
+    /* we should detect if we've done this already and skip it */
+    hemp_register_elements(
+        hemp, hemp_symbols_hemp_identity
+    );
+
+    /* now try again */
+    return (hemp_action) hemp_hash_fetch_pointer(
+        hemp->element->constructors, name
+    );
 }
 
 

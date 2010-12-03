@@ -38,6 +38,7 @@ extern "C" {
 #include <hemp/type/code.h>
 #include <hemp/type/params.h>
 #include <hemp/language/hemp.h>
+#include <hemp/language/json.h>
 #include <hemp/language/tt3.h>
 #include <hemp/language/test.h>
 

@@ -16,11 +16,12 @@ AC_CONFIG_FILES([
     tests/type/Makefile
     tests/language/Makefile
     tests/language/hemp/Makefile
+    tests/language/json/Makefile
     tests/language/test/Makefile
     build/libltdl/Makefile
 ])
-
 #    modules/Makefile
+
 
 # Checks for programs
 AC_PROG_CC

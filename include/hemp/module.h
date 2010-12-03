@@ -1,7 +1,7 @@
 #ifndef HEMP_MODULE_H
 #define HEMP_MODULE_H
 
-#include "hemp/types.h"
+#include "hemp/core.h"
 //#include <ltdl.h>
 #include <dlfcn.h>
 

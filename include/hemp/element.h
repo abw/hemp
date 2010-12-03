@@ -134,6 +134,9 @@ hemp_element_parse_exprs(
 #define hemp_expr(elem)                                         \
     (elem->args.unary.expr)
 
+#define hemp_expr_args(elem)                                    \
+    (elem->args.unary.args)
+
 #define hemp_lhs(elem)                                          \
     (elem->args.binary.lhs)
 
@@ -292,6 +295,20 @@ HEMP_INPUT_FUNC(hemp_element_not_assign);
 HEMP_PREFIX_FUNC(hemp_element_next_prefix);
 HEMP_POSTFIX_FUNC(hemp_element_next_postfix);
 HEMP_PREFIX_FUNC(hemp_element_next_body);
+
+
+/*--------------------------------------------------------------------------
+ * identity elements
+ *--------------------------------------------------------------------------*/
+
+HEMP_SYMBOL(hemp_element_identity_true);
+HEMP_SYMBOL(hemp_element_identity_false);
+HEMP_SYMBOL(hemp_element_identity_empty);
+HEMP_SYMBOL(hemp_element_identity_nothing);
+HEMP_SYMBOL(hemp_element_identity_missing);
+HEMP_SYMBOL(hemp_element_identity_before);
+HEMP_SYMBOL(hemp_element_identity_after);
+HEMP_SYMBOL(hemp_element_identity_equal);
 
 
 /*--------------------------------------------------------------------------

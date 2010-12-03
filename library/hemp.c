@@ -97,11 +97,15 @@ void
 hemp_init_languages(
     hemp_hemp hemp
 ) {
+    // TODO: languages should be loaded on demand from modules
     hemp_register_language(
         hemp, HEMP_HEMP, &hemp_language_hemp_new
     );
     hemp_register_language(
         hemp, HEMP_TT3, &hemp_language_tt3
+    );
+    hemp_register_language(
+        hemp, "json", &hemp_language_json
     );
     hemp_register_language(
         hemp, "test", &hemp_language_test

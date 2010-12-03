@@ -64,6 +64,13 @@ hemp_template_render(
 );
 
 
+hemp_value
+hemp_template_data(
+    hemp_template   template,
+    hemp_context    context
+);
+
+
 /*--------------------------------------------------------------------------
  * macros
  *--------------------------------------------------------------------------*/

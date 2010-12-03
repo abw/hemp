@@ -7,6 +7,7 @@
 
 HEMP_LANGUAGE(hemp_language_hemp_new);
 
+HEMP_SYMBOLS(hemp_element_identity_symbols);
 HEMP_SYMBOLS(hemp_element_assign_symbols);
 HEMP_SYMBOLS(hemp_element_bracket_symbols);
 HEMP_SYMBOLS(hemp_element_boolean_symbols);

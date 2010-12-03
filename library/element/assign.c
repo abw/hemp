@@ -95,7 +95,7 @@ HEMP_OUTPUT_FUNC(hemp_element_assign_params) {
 
 
 HEMP_OUTPUT_FUNC(hemp_element_assign_pairs) {
-    hemp_debug_msg("hemp_element_assign_pairs()\n");
+    hemp_debug_call("hemp_element_assign_pairs()\n");
     hemp_element    element = hemp_val_elem(value);
     hemp_value      lhs     = hemp_lhs(element);
     hemp_value      rhs     = hemp_rhs(element);
@@ -108,11 +108,11 @@ HEMP_OUTPUT_FUNC(hemp_element_assign_pairs) {
         hemp_fatal("Non-string key for assignment pairs: %s\n", hemp_type_name(key));
     }
     
-    hemp_debug_msg(
-        "assign pairs %s => %s\n", 
-        hemp_val_str(key), 
-        hemp_type_name(rvalue)
-    );
+//    hemp_debug_msg(
+//        "assign pairs %s => %s\n", 
+//        hemp_val_str(key), 
+//        hemp_type_name(rvalue)
+//    );
 
     hemp_hash_store(pairs, hemp_val_str(key), rvalue);
 

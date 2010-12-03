@@ -1,4 +1,4 @@
-#check_PROGRAMS  =    unplugged
+#check_PROGRAMS  =    boolops
 
 check_PROGRAMS  =   assign      \
                     boolops     \

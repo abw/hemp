@@ -23,7 +23,6 @@ hemp_tag_new(
     tag->style   = HEMP_INLINE_TAG;                     // ymmv
     tag->grammar = grammar;
     tag->type    = hemp_string_clone(type,  "tag type");
-    hemp_debug_msg("tag type: %s @ %p\n", type, tag->type);
     tag->name    = hemp_string_clone(name,  "tag name");
     tag->start   = hemp_string_clone(start, "tag start");
     tag->end     = end 

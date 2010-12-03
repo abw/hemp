@@ -14,6 +14,7 @@ libhemp_la_SOURCES  =   action.c            \
                         element/comment.c   \
                         element/compare.c   \
                         element/dotop.c     \
+                        element/identity.c  \
                         element/literal.c   \
                         element/number.c    \
                         element/operator.c  \
@@ -31,9 +32,11 @@ libhemp_la_SOURCES  =   action.c            \
                         hemp.c              \
                         language.c          \
                         language/hemp.c     \
+                        language/json.c     \
                         language/test.c     \
                         language/tt3.c      \
                         memory.c            \
+                        module.c            \
                         namespace.c         \
                         proto.c             \
                         pool.c              \

@@ -1,5 +1,10 @@
 An incomplete list of things TODO, in no particular order.
 
+* elements for identity type: true, false, null for JSON, and maybe others
+
+* decide on a _FUNC suffix or otherwise and apply consistently, e.g.
+  HEMP_GRAMMAR() vs HEMP_PREFIX_FUNC()
+
 * There's still a bunch of components with init() methods which need
   changing to new() for consistency with new naming standard.
  

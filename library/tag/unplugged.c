@@ -44,7 +44,7 @@ hemp_tag_unplugged_scan(
     hemp_pnode      pnode;
     hemp_symbol     symbol;
 
-    hemp_debug_msg("hemp_tag_unplugged_scan()\n", tag->grammar);
+    hemp_debug_call("hemp_tag_unplugged_scan()\n", tag->grammar);
 
     is_word = HEMP_FALSE;
 

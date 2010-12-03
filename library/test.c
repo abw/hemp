@@ -431,7 +431,8 @@ hemp_test_expect_text(
 
     hemp_debug("found %d tests in %s\n", list->length, alias);
 
-    hemp_test_plan(list->length * 2);
+//    hemp_test_plan(list->length * 2);
+    hemp_test_plan(list->length);
 
     for (n = 0; n < list->length; n++) {
         test = hemp_val_str( hemp_list_item(list, n) );
@@ -481,7 +482,7 @@ hemp_test_expect_text(
                 test
             );
             output = hemp_template_render(tmpl, context);
-            ok( output, "%s rendered", name);
+//          ok( output, "%s (rendered)", name);
 
             if (expect)
                 hemp_test_output(name, output, expect);
@@ -492,12 +493,12 @@ hemp_test_expect_text(
             output = hemp_error_text(hemp->error);
 
             if (error) {
-                pass("%s raised error", name);
+//                pass("%s", name);
                 hemp_test_error(name, output->string, error);
             }
             else {
-                fail("%s raised error", name);
-                fail("error: %s", output->string);
+                fail("%s (error: %s)", name, output->string);
+//                fail("error: %s", output->string);
             }
         HEMP_END;
 
@@ -571,12 +572,12 @@ hemp_test_output(
     if (hemp_string_eq(output->string, expect)) {
 //      printf("EXPECT: [%s%s%s]\n", HEMP_ANSI_YELLOW, expect, HEMP_ANSI_RESET);
 //      printf("OUTPUT: [%s%s%s]\n", HEMP_ANSI_GREEN, output->string, HEMP_ANSI_RESET);
-        ok(1, "%s output matches expected", name);
+        ok(1, "%s", name);
     }
     else {
         printf("EXPECT: [%s%s%s]\n", HEMP_ANSI_YELLOW, expect, HEMP_ANSI_RESET);
         printf("OUTPUT: [%s%s%s]\n", HEMP_ANSI_RED, output->string, HEMP_ANSI_RESET);
-        ok(0, "%s output does not match expected", name);
+        ok(0, "%s (output mismatch)", name);
     }
 }
 
@@ -591,12 +592,12 @@ hemp_test_error(
     hemp_string_chomp(expect);
 
     if (hemp_string_eq(error, expect)) {
-        ok(1, "%s error matches expected", name);
+        ok(1, "%s (error match)", name);
     }
     else {
         printf("EXPECT ERROR: [%s%s%s]\n", HEMP_ANSI_YELLOW, expect, HEMP_ANSI_RESET);
         printf("ACTUAL ERROR: [%s%s%s]\n", HEMP_ANSI_RED, error, HEMP_ANSI_RESET);
-        ok(0, "%s error does not match expected", name);
+        ok(0, "%s (error mismatch)", name);
     }
 }
 
