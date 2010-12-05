@@ -20,7 +20,7 @@ struct hemp_global HempGlobal = {
  * Global initialisation and cleanup functions
  *--------------------------------------------------------------------------*/
 
-hemp_size
+hemp_global
 hemp_global_init() {
     hemp_global global = &HempGlobal;
 
@@ -39,11 +39,15 @@ hemp_global_init() {
         global->n_hemps
     );
 
-    return global->n_hemps;
+    return global;
 }
 
 
-hemp_size
+
+// TODO: change this name to something that doesn't suggest the memory is
+// being freed.
+
+void
 hemp_global_free() {
     hemp_global global = &HempGlobal;
 
@@ -63,8 +67,6 @@ hemp_global_free() {
 
 
     }
-
-    return global->n_hemps;
 }
 
 
@@ -164,6 +166,28 @@ void hemp_global_init_modules(
 }
 
 
+hemp_module
+hemp_global_module(
+    hemp_global     global,
+    hemp_string     name
+) {
+    /* see if the module is already defined */
+    hemp_value modval = hemp_hash_fetch(global->modules, name);
+
+    if (hemp_is_defined(modval))
+        return (hemp_module) hemp_val_ptr(modval);
+
+    /* otherwise create and cache a module record... */
+    hemp_module module = hemp_module_new(name);
+    hemp_hash_store(global->modules, name, hemp_ptr_val(module));
+
+    /* ...and attempt to load it (errors are stored inside module) */
+    hemp_module_load(module);
+
+    return module;
+}
+
+
 void hemp_global_free_modules(
     hemp_global global
 ) {
@@ -187,3 +211,5 @@ hemp_global_free_module(
     hemp_module_free((hemp_module) hemp_val_ptr(item->value));
     return HEMP_TRUE;
 }
+
+

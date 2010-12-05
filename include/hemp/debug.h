@@ -99,6 +99,7 @@ void hemp_debug_token(hemp_string type, hemp_string str, hemp_pos len);
     #endif
 #else
     #define hemp_assert
+    #define hemp_debug_msg(format, ...)
     #define hemp_debug_red(format, ...)
     #define hemp_debug_green(format, ...)
     #define hemp_debug_yellow(format, ...)

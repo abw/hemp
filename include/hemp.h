@@ -28,6 +28,7 @@ extern "C" {
 #include <hemp/tag.h>
 #include <hemp/tagset.h>
 #include <hemp/template.h>
+#include <hemp/uri.h>
 #include <hemp/value.h>
 #include <hemp/viewer.h>
 #include <hemp/macros.h>

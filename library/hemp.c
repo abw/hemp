@@ -9,8 +9,9 @@ hemp_hemp
 hemp_new() {
     hemp_hemp hemp;         /* So good they named it thrice! */
 
-    hemp_global_init();
     HEMP_ALLOCATE(hemp);
+
+    hemp->global = hemp_global_init();
 
     hemp_init_errors(hemp);
     hemp_init_factories(hemp);

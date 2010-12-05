@@ -11,10 +11,10 @@ struct hemp_global {
 extern struct hemp_global HempGlobal;
 
 
-hemp_size
+hemp_global
 hemp_global_init();
 
-hemp_size
+void
 hemp_global_free();
 
 void 
@@ -40,6 +40,12 @@ hemp_global_free_symbols(
 void 
 hemp_global_init_modules(
     hemp_global     global
+);
+
+hemp_module
+hemp_global_module(
+    hemp_global     global,
+    hemp_string     name
 );
 
 void 

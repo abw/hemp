@@ -23,6 +23,12 @@ typedef struct hemp_string_split_s * hemp_string_split_p;
  *--------------------------------------------------------------------------*/
 
 hemp_string
+hemp_string_vprintf(
+    const hemp_string format,
+    va_list args
+);
+
+hemp_string
 hemp_string_sprintf(
     const hemp_string format,
     ...

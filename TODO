@@ -138,6 +138,8 @@ An incomplete list of things TODO, in no particular order.
   generating different results to other implementations.  Try Peter Deutsch's
   implementation.
 
+* Improve URI parsing to handle incremental matching during scanning phase.
+
 
 Configuration, Build and Installation
 -------------------------------------

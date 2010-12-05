@@ -78,6 +78,7 @@ typedef struct hemp_tags        * hemp_tags;
 typedef struct hemp_tagset      * hemp_tagset;
 typedef struct hemp_text        * hemp_text;
 typedef struct hemp_type        * hemp_type;
+typedef struct hemp_uri         * hemp_uri;
 typedef struct hemp_viewer      * hemp_viewer;
 
 
@@ -87,6 +88,8 @@ typedef struct hemp_viewer      * hemp_viewer;
  *--------------------------------------------------------------------------*/
 
 struct hemp_hemp {
+    hemp_global     global;
+
     hemp_factory    dialect;
     hemp_factory    element;
     hemp_factory    grammar;
@@ -131,7 +134,7 @@ typedef hemp_memory
 
 
 typedef hemp_bool
-(* hemp_modload)(
+(* hemp_plugin)(
     hemp_hemp       hemp
 );
 

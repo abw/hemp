@@ -33,6 +33,7 @@ tests/core/factory
 tests/core/filesystem
 tests/core/grammar
 tests/core/memory
+tests/core/module
 tests/core/namespace
 tests/core/proto
 tests/core/parser
@@ -45,6 +46,7 @@ tests/core/tagset
 tests/core/template
 tests/core/ptree
 tests/core/type
+tests/core/uri
 tests/core/utils
 tests/core/value
 tests/core/view

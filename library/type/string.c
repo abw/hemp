@@ -23,7 +23,42 @@ HEMP_TYPE_FUNC(hemp_type_string) {
  *--------------------------------------------------------------------------*/
 
 hemp_string
+hemp_string_vprintf(
+    const hemp_string format,
+    va_list args
+) {
+    hemp_string  string;
+    vasprintf(&string, format, args);
+
+    if (! string)
+        hemp_mem_fail("string sprintf");
+
+#if HEMP_DEBUG & HEMP_DEBUG_MEM
+    /* tell the memory trace debugging code that we know about this memory */
+    hemp_mem_trace_external(string, strlen(string) + 1, __FILE__, __LINE__);
+#endif
+
+    return string;
+}
+
+
+hemp_string
 hemp_string_sprintf(
+    const hemp_string format,
+    ...
+) {
+    hemp_string  string;
+
+    va_list args;
+    va_start(args, format);
+    string = hemp_string_vprintf(format, args);
+    va_end(args);
+    return string;
+}
+
+
+hemp_string
+OLD_hemp_string_sprintf(
     const hemp_string format,
     ...
 ) {
@@ -44,6 +79,7 @@ hemp_string_sprintf(
 
     return string;
 }
+
 
 
 hemp_string

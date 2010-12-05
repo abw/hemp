@@ -19,9 +19,18 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_filesystem {
+    hemp_type       type;
     hemp_hemp       hemp;
     hemp_list       path;
-}; 
+};
+
+struct hemp_path {
+    hemp_type       type;
+    hemp_uri        uri;
+    hemp_filesystem hemp;
+};
+
+
 
 
 /*--------------------------------------------------------------------------

@@ -6,6 +6,9 @@
 #include <dlfcn.h>
 
 
+#define HEMP_PLUGIN_INIT "hemp_plugin_init"
+
+
 /*--------------------------------------------------------------------------
  * type definitions
  *--------------------------------------------------------------------------*/
@@ -20,6 +23,7 @@ struct hemp_module {
     hemp_string         name;
     hemp_string         error;
     hemp_memory         handle;
+    hemp_plugin         plugin;
 //    hemp_action         ctor;
 //    hemp_module_status  status;
 };
@@ -28,6 +32,13 @@ struct hemp_module {
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
+
+hemp_module
+hemp_use_module(
+    hemp_hemp       hemp,
+    hemp_string     name
+);
+
 
 hemp_module
 hemp_module_new(
@@ -51,5 +62,21 @@ hemp_module_unload(
     hemp_module     module
 );
 
+HEMP_INLINE hemp_bool
+hemp_module_failed(
+    hemp_module     module,
+    hemp_string     error,
+    ...
+);
+
+
+/*--------------------------------------------------------------------------
+ * macros
+ *--------------------------------------------------------------------------*/
+
+/*
+#define hemp_module_errorf(format, ...)             \
+    hemp_string_sprintf(format, __VA_ARGS__);
+*/
 
 #endif /* HEMP_MODULE_H */

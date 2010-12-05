@@ -70,6 +70,7 @@ libhemp_la_SOURCES  =   action.c            \
                         type/params.c       \
                         type/string.c       \
                         type/text.c         \
+                        uri.c               \
                         utils.c             \
                         value.c             \
                         viewer.c            \
