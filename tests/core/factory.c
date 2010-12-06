@@ -42,7 +42,8 @@ wildcard(
 
 
 void test_factory() {
-    hemp_factory factory = hemp_factory_new();
+    hemp_hemp hemp = hemp_new();
+    hemp_factory factory = hemp_factory_new(hemp);
     ok( factory, "created factory" );
 
     hemp_factory_register(
@@ -63,11 +64,13 @@ void test_factory() {
     ok( n == 1, "still made only one constructor call" );
 
     hemp_factory_free(factory);
+    hemp_free(hemp);
 }
 
 
 void test_factory_wildcard() {
-    hemp_factory factory = hemp_factory_new();
+    hemp_hemp hemp = hemp_new();
+    hemp_factory factory = hemp_factory_new(hemp);
     ok( factory, "created wildcard factory" );
 
     hemp_factory_register(
@@ -101,4 +104,5 @@ void test_factory_wildcard() {
     ok( n == 4, "now made four constructor calls" );
 
     hemp_factory_free(factory);
+    hemp_free(hemp);
 }

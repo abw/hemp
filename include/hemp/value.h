@@ -294,8 +294,17 @@ extern const hemp_value HempAfter;
 #define hemp_to_boolean(v,c)    (hemp_is_boolean(v) ? v : hemp_call(v,boolean,c))
 #define hemp_to_compare(v,c)    (hemp_is_compare(v) ? v : hemp_call(v,compare,c))
 #define hemp_to_text(v,c)       (hemp_is_text(v)    ? v : hemp_vtext(v,c,HempNothing))
+#define hemp_to_string(v,c)     hemp_value_to_string(v,c)
 #define hemp_onto_text(v,c,o)   hemp_vtext(v,c,o)
 
+/*
+#define hemp_to_string(v,c) ({  \                       
+    hemp_value _v = hemp_is_string(v)                   
+        ? v                                             
+        : hemp_vtext(v,c,HempNothing)->string;
+    _v->string;
+->string)
+*/
 
 //#define hemp_is_text(v)         HEMP_TYPE_IS(v, HEMP_TYPE_TEXT_ID)
 
@@ -352,7 +361,17 @@ extern HEMP_INLINE hemp_element   hemp_val_elem(hemp_value v);
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-HEMP_DO_INLINE hemp_string hemp_identity_name(hemp_value value);
+HEMP_INLINE hemp_value
+hemp_value_to_string(
+    hemp_value      value,
+    hemp_context    context
+);
+
+
+HEMP_INLINE 
+hemp_string hemp_identity_name(
+    hemp_value      value
+);
 
 
 /* generic value evalaution */

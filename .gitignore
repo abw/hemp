@@ -11,6 +11,9 @@ config.status
 build/libltdl/argz.h
 programs/hemp
 
+modules/codec/uri.o
+modules/codec/uri.hcm
+
 tests/benchmark
 tests/memtrace
 tests/debug

@@ -18,9 +18,9 @@ HEMP_OUTPUT_FUNC(hemp_type_number_text) {
     static hemp_char buffer[HEMP_BUFFER_SIZE];
     hemp_text text;
 
-    snprintf(buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, hemp_val_num(value));
-    hemp_prepare_text_size(context, output, text, strlen(buffer));
-    hemp_text_append_string(text, buffer);
+    snprintf((hemp_string) buffer, HEMP_BUFFER_SIZE, HEMP_FMT_NUM, hemp_val_num(value));
+    hemp_prepare_text_size(context, output, text, strlen((hemp_string) buffer));
+    hemp_text_append_string(text, (hemp_string) buffer);
 
     return output;
 }

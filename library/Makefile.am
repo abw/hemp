@@ -1,5 +1,6 @@
 lib_LTLIBRARIES     =   libhemp.la
 libhemp_la_CFLAGS   =   -I../include
+#libhemp_la_LDFLAGS   =   -module -export-dynamic $(LDFLAGS)
 libhemp_la_SOURCES  =   action.c            \
                         codec.c             \
                         context.c           \
@@ -80,4 +81,5 @@ libhemp_la_SOURCES  =   action.c            \
 # these ones have to stay behind after school
 #                       tag/embed.c         \
 #                       tag/variable.c
+
 

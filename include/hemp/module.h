@@ -36,6 +36,7 @@ struct hemp_module {
 hemp_module
 hemp_use_module(
     hemp_hemp       hemp,
+    hemp_string     type,
     hemp_string     name
 );
 

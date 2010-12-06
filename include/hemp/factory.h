@@ -5,14 +5,23 @@
 #include <hemp/type/hash.h>
 
 
+
 /*--------------------------------------------------------------------------
  * type definitions
  *--------------------------------------------------------------------------*/
 
+typedef hemp_bool 
+(* hemp_autoload)(
+    hemp_factory    factory,
+    hemp_string     name
+);
+
 struct hemp_factory {
+    hemp_hemp       hemp;
     hemp_hash       instances;
     hemp_hash       constructors;
     hemp_hash_iter  cleaner;
+    hemp_autoload   autoload;
 }; 
 
 
@@ -21,7 +30,9 @@ struct hemp_factory {
  *--------------------------------------------------------------------------*/
 
 hemp_factory 
-hemp_factory_new();
+hemp_factory_new(
+    hemp_hemp       hemp
+);
 
 void
 hemp_factory_free(

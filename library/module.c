@@ -7,18 +7,35 @@
 hemp_module
 hemp_use_module(
     hemp_hemp       hemp,
+    hemp_string     type,
     hemp_string     name
 ) {
-    hemp_debug_msg("hemp_use_module(%s)\n", name);
-    hemp_module module = hemp_global_module(hemp->global, name);
-    hemp_debug_msg("module: %p\n", module);
+    hemp_debug_call("hemp_use_module(%s => %s)\n", type, name);
+
+    /* quick hack to get something working */
+    hemp_string modpath = getenv("HEMP_MODULE_PATH");
+
+    if (! modpath) {
+        hemp_debug_msg("No HEMP_MODULE_PATH environment variable set\n");
+        return HEMP_FALSE;
+    }
+
+    hemp_text path = hemp_text_from_string(modpath);
+    hemp_text_append_string(path, "/");
+    hemp_text_append_string(path, type);
+    hemp_text_append_string(path, "/");
+    hemp_text_append_string(path, name);
+    hemp_text_append_string(path, ".hcm");
+    hemp_debug_msg("constructed module path: %s\n", path->string);
+
+    hemp_module module = hemp_global_module(hemp->global, path->string);
 
     if (module->plugin) {
-        hemp_debug_msg("calling plugin function\n");
+//      hemp_debug_msg("calling plugin function\n");
         module->plugin(hemp);
     }
     else if (module->error) {
-        hemp_debug_msg("reporting module error\n");
+//      hemp_debug_msg("reporting module error\n");
         hemp_fatal(module->error);
     }
     else {
@@ -26,8 +43,10 @@ hemp_use_module(
         hemp_fatal("No plugin function for %s module", name);
     }
 
+    hemp_text_free(path);
     return module;
 }
+
 
 
 hemp_module
@@ -73,7 +92,7 @@ hemp_module_failed(
     module->error = hemp_string_vprintf(error, args);
     va_end(args);
 
-    hemp_debug("ERROR: %s\n", module->error);
+//  hemp_debug("ERROR: %s\n", module->error);
 
     return HEMP_FALSE;
 }
@@ -83,15 +102,15 @@ hemp_bool
 hemp_module_load(
     hemp_module     module
 ) {
-    hemp_debug_msg("loading module: %s\n", module->name);
+    hemp_debug_call("loading module: %s\n", module->name);
 
     /* just in case we've been here before */
     if (module->handle) {
-        hemp_debug_msg("module is already loaded: %s\n", module->name);
+//      hemp_debug_msg("module is already loaded: %s\n", module->name);
         return HEMP_TRUE;
     }
     else if (module->error) {
-        hemp_debug_msg("module has already failed: %s (%s)\n", module->name, module->error);
+//      hemp_debug_msg("module has already failed: %s (%s)\n", module->name, module->error);
         return HEMP_FALSE;
     }
 
@@ -103,12 +122,9 @@ hemp_module_load(
             "Failed to load %s module: %s", 
             module->name, dlerror()
         );
-//      hemp_module_failed(module, dlerror());
-//        hemp_debug_msg("failed to load module: %s\n", module->error);
-//        return HEMP_FALSE;
     }
 
-    hemp_debug_msg("loaded module: %s\n", module->name);
+//  hemp_debug_msg("loaded module: %s\n", module->name);
 
     module->plugin = (hemp_plugin) dlsym(module->handle, HEMP_PLUGIN_INIT);
     
@@ -120,7 +136,7 @@ hemp_module_load(
         );
     }
 
-    hemp_debug_msg("found plugin init: %p\n", module->plugin);
+//  hemp_debug_msg("found plugin init: %p\n", module->plugin);
 
     return HEMP_TRUE;
 }

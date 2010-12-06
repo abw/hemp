@@ -175,7 +175,7 @@ hemp_md5_final(
     hemp_md5_p md5
 ) {
     hemp_uint in[16];
-    hemp_string str = md5->output;
+    hemp_string str = (hemp_string) md5->output;
     int mdi;
     unsigned int i, ii;
     unsigned int padlen;
@@ -189,7 +189,7 @@ hemp_md5_final(
 
     /* pad out to 56 mod 64 */
     padlen = (mdi < 56) ? (56 - mdi) : (120 - mdi);
-    hemp_md5_update(md5, HEMP_MD5_PADDING, padlen);
+    hemp_md5_update(md5, (hemp_string) HEMP_MD5_PADDING, padlen);
 
     /* append length in bits and transform */
     for (i = 0, ii = 0; i < 14; i++, ii += 4)

@@ -39,46 +39,12 @@ HEMP_DECODER(hemp_codec_no_decoder) {
 }
 
 
-/*--------------------------------------------------------------------------
- * quick hack for test purposes - should be moved into separate dynamically
- * loaded module.... but this is a chicken-and-egg problem - we need the URI
- * codec to decode URIs so we can implement filesystem paths, so we can locate
- * and load codec modules....
- *--------------------------------------------------------------------------*/
-
-HEMP_CODEC(hemp_codec_uri) {
-    hemp_debug_msg("instantiating uri codec\n");
-    hemp_codec codec = hemp_codec_new(hemp, name);
-    codec->encoder   = hemp_codec_uri_encoder;
-    codec->decoder   = hemp_codec_uri_decoder;
-    return codec;
+HEMP_AUTOLOAD(hemp_codec_autoload) {
+    hemp_debug_call("hemp_codec_autoload(%s)\n", name);
+    return hemp_use_module(factory->hemp, "codec", name)
+        ? HEMP_TRUE
+        : HEMP_FALSE;
 }
 
 
-HEMP_ENCODER(hemp_codec_uri_encoder) {
-    hemp_debug_msg("hemp_codec_uri_encoder()\n");
-
-    hemp_text output = hemp_context_tmp_text(context);
-    hemp_text_append_string(output, "TODO: uri encode: ");
-    
-    if (hemp_is_string(input)) {
-        hemp_debug_msg("%s encoder input is a string: %s\n", codec->name, hemp_val_str(input));
-        hemp_text_append_string(output, hemp_val_str(input));
-    }
-    else if (hemp_is_text(input)) {
-        hemp_debug_msg("%s encoder input is text: %s\n", codec->name, hemp_val_text(input)->string);
-        hemp_text_append_string(output, hemp_val_text(input)->string);
-    }
-    else {
-        hemp_fatal("%s cannot encode %s data\n", codec->name, hemp_type_name(input));
-    }
-
-    return output;
-}
-
-
-HEMP_DECODER(hemp_codec_uri_decoder) {
-    hemp_debug_msg("hemp_codec_uri_decoder()\n");
-    return HempMissing;
-}
 

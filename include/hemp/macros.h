@@ -210,6 +210,12 @@
     )
 
 
+#define HEMP_AUTOLOAD(f)                        \
+    hemp_bool f(                                \
+        hemp_factory    factory,                \
+        hemp_string     name                    \
+    )
+
 /*--------------------------------------------------------------------------
  * Symbols
  *

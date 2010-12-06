@@ -4,12 +4,16 @@ hemp_char _hemp_factory_name_buffer[HEMP_BUFFER_SIZE];
 
 
 hemp_factory
-hemp_factory_new() {
+hemp_factory_new(
+    hemp_hemp   hemp
+) {
     hemp_factory factory;
     HEMP_ALLOCATE(factory);
+    factory->hemp         = hemp;
     factory->instances    = hemp_hash_new();
     factory->constructors = hemp_hash_new();
     factory->cleaner      = NULL;
+    factory->autoload     = NULL;
     return factory;
 }
 
@@ -65,8 +69,9 @@ hemp_factory_constructor(
 ) {
     hemp_debug_call("hemp_factory_constructor(F, %s)\n", name);
     
-    static hemp_char wildname[HEMP_BUFFER_SIZE];
-    hemp_list splits;
+    static hemp_char    wildname[HEMP_BUFFER_SIZE];
+    hemp_list           splits;
+    hemp_autoload       autoload;
     
     hemp_action constructor = (hemp_action) hemp_hash_fetch_pointer(
         factory->constructors, name
@@ -80,18 +85,25 @@ hemp_factory_constructor(
      * to construct the constructor, e.g. ask foo.bar.* to construct baz, and 
      * if it declines, see if there's a foo.* to construct bar.baz
      */
-    if ((splits = hemp_string_splits(name, HEMP_STR_DOT))) {
+
+    splits   = hemp_string_splits(name, HEMP_STR_DOT);
+    autoload = NULL;
+
+lookup:
+    if (splits) {
         int n;
         hemp_string_split_p split;
         hemp_action wildcard;
             
         for (n = splits->length - 1; n >= 0; n--) {
             split = (hemp_string_split_p) hemp_val_ptr( hemp_list_item(splits, n) );
-            snprintf(wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
+            snprintf((char *) wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
+
+            hemp_debug_msg("looking for [%s]\n", wildname);
 
             /* look for a wildcard meta-constructor */
             wildcard = (hemp_action) hemp_hash_fetch_pointer(
-                factory->constructors, wildname
+                factory->constructors, (hemp_string) wildname
             );
             if (! wildcard)
                 continue;               /* no dice, try again               */
@@ -108,8 +120,24 @@ hemp_factory_constructor(
                 break;
             }
         }
-        hemp_list_free(splits);
     }
+    
+    if ( ! constructor 
+      && ! autoload 
+      && ( autoload = factory->autoload )
+      &&   autoload(factory, name) ) {
+//      hemp_debug_msg("autoload method has loaded\n");
+        /* autoload worked so look to see if our item is now available */
+        constructor = (hemp_action) hemp_hash_fetch_pointer(
+            factory->constructors, name
+        );
+        /* fall back to a wildcard provider that may have been installed */
+        if (! constructor)
+            goto lookup;            /* sorry */
+    }
+
+    if (splits)
+        hemp_list_free(splits);
 
     return constructor;
 }

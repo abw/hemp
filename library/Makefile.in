@@ -261,6 +261,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libhemp.la
 libhemp_la_CFLAGS = -I../include
+#libhemp_la_LDFLAGS   =   -module -export-dynamic $(LDFLAGS)
 libhemp_la_SOURCES = action.c            \
                         codec.c             \
                         context.c           \

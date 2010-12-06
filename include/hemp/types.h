@@ -21,7 +21,7 @@ typedef unsigned long           hemp_size;      /* +ve size of list         */
 typedef unsigned long           hemp_pos;       /* +ve posn. in string/list */
 typedef unsigned short int      hemp_oprec;     /* operator precedence      */
 typedef unsigned char           hemp_bool;      /* boolean true/false       */
-typedef char                    hemp_char;      /* single character         */
+typedef unsigned char           hemp_char;      /* single character         */
 typedef void                  * hemp_memory;    /* generic memory pointer   */
 typedef const char            * hemp_name;      /* immutable C string       */
 typedef char                  * hemp_string;    /* C string                 */

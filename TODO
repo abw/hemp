@@ -139,6 +139,11 @@ An incomplete list of things TODO, in no particular order.
   implementation.
 
 * Improve URI parsing to handle incremental matching during scanning phase.
+  UPDATE: nah, that's not going to work - see NOTES in uri.c
+
+* Figure out how to represent parameters with multiple values in uri.c
+
+* Percent encoding for URIs, implemented as a codec module
 
 
 Configuration, Build and Installation
@@ -150,4 +155,22 @@ Configuration, Build and Installation
   But we need some of the definitions contained therein.
   
   See include/hemp/defines.h and include/hemp/config.h
+
+Data Structures
+---------------
+
+Some other data structure we might want to add:
+
+* IP V4/V6 addresses (used in full uri parsing)
+
+    struct hemp_ipv4 {
+        hemp_uchar octet[4];             /* 1 bytes per octet */
+    }
+
+    struct hemp_ipv6 {
+        hemp_uchar data[16];            /* 2 bytes per quad */
+        // or 
+        hemp_quad  quad[8];
+    }
+
 

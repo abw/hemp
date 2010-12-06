@@ -17,10 +17,10 @@ void test_module() {
     hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
-    hemp_module foo1 = hemp_use_module(hemp, "modules/foo.so");
+    hemp_module foo1 = hemp_use_module(hemp, "test", "foo");
     ok( foo1, "created foo module" );
 
-    hemp_module foo2 = hemp_use_module(hemp, "modules/foo.so");
+    hemp_module foo2 = hemp_use_module(hemp, "test", "foo");
 
     ok( foo2, "loaded foo module again" );
 

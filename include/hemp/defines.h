@@ -62,6 +62,7 @@
 #define HEMP_STR_BLANK      ""
 #define HEMP_STR_SPACE      " "
 #define HEMP_STR_DOT        "."
+#define HEMP_STR_STAR       "*"
 
 /* format strings */
 #define HEMP_FMT_INT        "%d"

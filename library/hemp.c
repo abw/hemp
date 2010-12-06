@@ -16,6 +16,7 @@ hemp_new() {
     hemp_init_errors(hemp);
     hemp_init_factories(hemp);
     hemp_init_schemes(hemp);
+    hemp_init_codecs(hemp);
     hemp_init_languages(hemp);
     hemp_init_templates(hemp);
     hemp_init_viewers(hemp);
@@ -64,14 +65,16 @@ hemp_init_factories(
     hemp_hemp   hemp
 ) {
     /* create new factory objects to manage resources */
-    hemp->codec             = hemp_factory_new();
-    hemp->dialect           = hemp_factory_new();
-    hemp->element           = hemp_factory_new();
-    hemp->grammar           = hemp_factory_new();
-    hemp->language          = hemp_factory_new();
-    hemp->scheme            = hemp_factory_new();
-    hemp->tag               = hemp_factory_new();
-    hemp->viewer            = hemp_factory_new();
+    hemp->codec             = hemp_factory_new(hemp);
+    hemp->dialect           = hemp_factory_new(hemp);
+    hemp->element           = hemp_factory_new(hemp);
+    hemp->grammar           = hemp_factory_new(hemp);
+    hemp->language          = hemp_factory_new(hemp);
+    hemp->scheme            = hemp_factory_new(hemp);
+    hemp->tag               = hemp_factory_new(hemp);
+    hemp->viewer            = hemp_factory_new(hemp);
+
+    hemp->codec->autoload   = &hemp_codec_autoload;
 
     /* install the cleaners to automatically tidy up */
     hemp->dialect->cleaner  = &hemp_free_dialect;
@@ -95,6 +98,17 @@ hemp_init_schemes(
     hemp_register_scheme(
         hemp, HEMP_FILE, &hemp_scheme_file_new
     );
+}
+
+
+void
+hemp_init_codecs(
+    hemp_hemp hemp
+) {
+//    hemp_debug_msg("registering codec: %s\n", HEMP_STR_STAR);
+//    hemp_register_codec(
+//        hemp, HEMP_STR_STAR, &hemp_codec_load
+//    );
 }
 
 
@@ -397,7 +411,7 @@ hemp_template_instance(
     
 //  hemp_debug("MD5 for %s template [%s] is %s\n", scheme, source, md5.output);
 
-    tmpl = hemp_hash_fetch_pointer(hemp->templates, md5.output);
+    tmpl = hemp_hash_fetch_pointer(hemp->templates, (hemp_string) md5.output);
     
     if (tmpl) {
         if (hemp_string_eq(tmpl->source->scheme->name, scheme)
@@ -420,7 +434,7 @@ hemp_template_instance(
 //  hemp_debug("caching new template\n");
 
     /* let the source allocate memory for storing md5 permanently */
-    hemp_source_md5(tmpl->source, md5.output);
+    hemp_source_md5(tmpl->source, (hemp_string) md5.output);
     hemp_hash_store_pointer(hemp->templates, tmpl->source->md5, tmpl);
     
     return tmpl;

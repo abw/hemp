@@ -2,6 +2,7 @@
 
 #include <hemp/core.h>
 #include <hemp/context.h>
+#include <hemp/module.h>
 
 
 /*--------------------------------------------------------------------------
@@ -69,6 +70,7 @@ hemp_codec_free(
 
 HEMP_ENCODER(hemp_codec_no_encoder);
 HEMP_DECODER(hemp_codec_no_decoder);
+HEMP_AUTOLOAD(hemp_codec_autoload);
 
 
 
