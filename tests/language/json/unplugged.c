@@ -31,7 +31,7 @@ void test_unplugged() {
         );
         ok( template , "created template" );
 
-        context = hemp_context_init(hemp);
+        context = hemp_context_new(hemp);
         output  = hemp_template_data(template, context);
 
         ok( hemp_is_list(output), "got data list returned" );

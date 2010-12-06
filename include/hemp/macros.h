@@ -59,6 +59,9 @@
 })
 
 
+#define hemp_register_codec(hemp, name, constructor)                        \
+    hemp_register(hemp, codec, name, constructor)
+
 #define hemp_register_dialect(hemp, name, constructor)                      \
     hemp_register(hemp, dialect, name, constructor)
 
@@ -80,6 +83,9 @@
 #define hemp_register_viewer(hemp, name, constructor)                       \
     hemp_register(hemp, viewer, name, constructor)
 
+
+#define hemp_codec_instance(hemp, name)                                     \
+    hemp_instance(hemp, codec, name)
 
 #define hemp_dialect_instance(hemp, name)                                   \
     hemp_instance(hemp, dialect, name)

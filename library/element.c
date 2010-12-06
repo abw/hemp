@@ -675,7 +675,7 @@ hemp_bool
 hemp_element_dump(
     hemp_element e
 ) {
-    hemp_context context = hemp_context_init(NULL);       // tmp ugly hack
+    hemp_context context = hemp_context_new(NULL);       // tmp ugly hack
 
     if (! e->type->text)
         hemp_fatal("%s type does not define a text() method", e->type->name);

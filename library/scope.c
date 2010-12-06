@@ -10,7 +10,7 @@ hemp_scope_new(
 
     scope->hemp    = hemp;
     scope->parent  = NULL;
-    scope->context = hemp_context_init(hemp);
+    scope->context = hemp_context_new(hemp);
 
     return scope;
 }

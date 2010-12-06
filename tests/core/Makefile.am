@@ -1,4 +1,4 @@
-check_PROGRAMS  =   uri
+check_PROGRAMS  =   codec
 
 #check_PROGRAMS  =   action      \
 #                    context     \

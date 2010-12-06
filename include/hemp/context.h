@@ -31,7 +31,7 @@ struct hemp_context {
  *--------------------------------------------------------------------------*/
 
 hemp_context
-hemp_context_init(
+hemp_context_new(
     hemp_hemp       hemp
 );
 

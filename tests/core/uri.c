@@ -5,7 +5,7 @@ void test_uri();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(8);
+    plan(9);
     test_uri();
     return done();
 }
@@ -26,6 +26,9 @@ void test_uri() {
     is( uri->path,      "/over/there",      "matched URI path"      );
     is( uri->query,     "animal=badger",    "matched URI query"     );
     is( uri->fragment,  "nose",             "matched URI fragment"  );
+
+    hemp_string s = hemp_hash_fetch_string(uri->params, "animal");
+    is( s, "badger", "matched URI parameter" );
 
     hemp_uri_free(uri);
 }

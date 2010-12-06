@@ -20,6 +20,8 @@ hemp_new() {
     hemp_init_templates(hemp);
     hemp_init_viewers(hemp);
 
+    hemp->context = hemp_context_new(hemp);
+
     // YUK.  We have to do this to force all the hemp stuff to be loaded.
     // Needs work to make this more auto-load on demand.
     hemp_language_instance(hemp, "hemp");
@@ -62,6 +64,7 @@ hemp_init_factories(
     hemp_hemp   hemp
 ) {
     /* create new factory objects to manage resources */
+    hemp->codec             = hemp_factory_new();
     hemp->dialect           = hemp_factory_new();
     hemp->element           = hemp_factory_new();
     hemp->grammar           = hemp_factory_new();
@@ -72,6 +75,7 @@ hemp_init_factories(
 
     /* install the cleaners to automatically tidy up */
     hemp->dialect->cleaner  = &hemp_free_dialect;
+    hemp->codec->cleaner    = &hemp_free_codec;
 //  hemp->element->cleaner  = &hemp_free_element;
     hemp->grammar->cleaner  = &hemp_free_grammar;
     hemp->language->cleaner = &hemp_free_language;
@@ -143,6 +147,8 @@ hemp_free(
 ) {
     hemp_debug_call("hemp_free()\n");
 
+    hemp_context_free(hemp->context);
+
     /* free all the components */
     hemp_free_templates(hemp);
     hemp_free_factories(hemp);
@@ -180,6 +186,7 @@ hemp_free_factories(
     hemp_factory_free(hemp->dialect);
     hemp_factory_free(hemp->language);
     hemp_factory_free(hemp->scheme);
+    hemp_factory_free(hemp->codec);
 }
 
 
@@ -231,6 +238,19 @@ hemp_free_language(
 ) {
     hemp_debug_init("cleaning %s language\n", ((hemp_dialect) item->value)->name);
     hemp_language_free( (hemp_language) hemp_val_ptr(item->value) );
+    return HEMP_TRUE;
+}
+
+
+hemp_bool
+hemp_free_codec(
+    hemp_hash codecs,
+    hemp_pos  position,
+    hemp_slot item
+) {
+    hemp_codec codec = (hemp_codec) hemp_val_ptr(item->value);
+    hemp_debug_msg("cleaning %s codec\n", codec->name);
+    hemp_codec_free(codec);
     return HEMP_TRUE;
 }
 
@@ -415,7 +435,7 @@ hemp_context
 hemp_context_instance(
     hemp_hemp   hemp
 ) {
-    return hemp_context_init(hemp);
+    return hemp_context_new(hemp);
 }
 
 
@@ -501,8 +521,50 @@ hemp_error_throw(
 
 
 /*--------------------------------------------------------------------------
+ * Codecs 
+ *--------------------------------------------------------------------------*/
+
+HEMP_INLINE hemp_text
+hemp_encode(
+    hemp_hemp       hemp,
+    hemp_string     name,
+    hemp_value      input,
+    hemp_context    context
+) {
+    hemp_codec      codec = hemp_codec_instance(hemp, name);
+
+    return hemp_codec_encode(
+        codec,
+        input,
+        context ? context : hemp->context
+    );
+}
+
+
+HEMP_INLINE hemp_value
+hemp_decode(
+    hemp_hemp       hemp,
+    hemp_string     name,
+    hemp_text       input,
+    hemp_context    context
+) {
+    hemp_codec      codec = hemp_codec_instance(hemp, name);
+
+    return hemp_codec_decode(
+        codec,
+        input,
+        context ? context : hemp->context
+    );
+}
+
+
+
+
+
+/*--------------------------------------------------------------------------
  * Miscellaneous functions
  *--------------------------------------------------------------------------*/
+
 
 hemp_string
 hemp_version() {

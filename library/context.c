@@ -6,7 +6,7 @@
  *--------------------------------------------------------------------------*/
 
 hemp_context
-hemp_context_init(
+hemp_context_new(
     hemp_hemp hemp
 ) {
     hemp_context context = (hemp_context) hemp_mem_alloc(

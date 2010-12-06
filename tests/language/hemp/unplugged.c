@@ -31,7 +31,7 @@ void test_unplugged() {
         );
         ok( template , "created template" );
 
-        context = hemp_context_init(hemp);
+        context = hemp_context_new(hemp);
         output  = hemp_template_render(template, context);
 
         is( output->string, "a is 10", "correctly rendered template" );

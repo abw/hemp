@@ -7,6 +7,7 @@ extern "C" {
 
 #include <hemp/core.h>
 #include <hemp/action.h>
+#include <hemp/codec.h>
 #include <hemp/context.h>
 #include <hemp/dialect.h>
 #include <hemp/element.h>
@@ -62,6 +63,7 @@ void            hemp_free_templates(hemp_hemp);
 void            hemp_free_factories(hemp_hemp);
 void            hemp_free_errors(hemp_hemp);
 
+hemp_bool       hemp_free_codec   ( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_dialect ( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_element ( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_grammar ( hemp_hash, hemp_pos, hemp_slot );
@@ -83,6 +85,25 @@ void            hemp_scan_error(hemp_hemp, HEMP_SCAN_ARGS, hemp_errno, ...);
 hemp_string     hemp_version();
 
 void hemp_register_elements(hemp_hemp, hemp_symbols);
+
+HEMP_INLINE hemp_text
+hemp_encode(
+    hemp_hemp       hemp,
+    hemp_string     name,
+    hemp_value      input,
+    hemp_context    context
+);
+
+
+HEMP_INLINE hemp_value
+hemp_decode(
+    hemp_hemp       hemp,
+    hemp_string     name,
+    hemp_text       input,
+    hemp_context    context
+);
+
+
 
 
 #if defined(__cplusplus)

@@ -1,7 +1,6 @@
 #include <hemp/uri.h>
 
 
-
 HEMP_INLINE hemp_uri
 hemp_uri_init(
     hemp_uri uri
@@ -56,13 +55,20 @@ hemp_uri_free(
 }
 
 
-/* This implements a quick-and-dirty URI splitter based on the Badger::URL
+/*--------------------------------------------------------------------------
+ * This implements a quick-and-dirty URI splitter based on the Badger::URL
  * Perl module.  It splits well-formed URIs but does NOT validate them in 
  * any way.  It identifies the  basic components of URL-like syntaxes: 
  * scheme, user, host, port, path, query and fragment by splitting the URI on 
  * the delimiting characters ':', '/', '@', '?' and '#'.
  *
- *     scheme://user@host:port/path?query#fragment
+ *   foo://example.com:8042/over/there?name=ferret#nose
+ *   \_/   \______________/\_________/ \_________/ \__/
+ *    |           |            |            |        |
+ * scheme     authority       path        query   fragment
+ *    |   _____________________|__
+ *   / \ /                        \
+ *   urn:example:animal:ferret:nose
  *
  * See http://labs.apache.org/webarch/uri/rfc/rfc3986.html#regexp for an 
  * overview of the algorithm in use.
@@ -70,9 +76,9 @@ hemp_uri_free(
  * The path component is greedy and will consume all characters in the 
  * absence of any recognised delimiters.  e.g. "*" is considered a "valid"
  * URI path. The query part is also greedy up to any '#' character.  The 
- * fragment greedily consumes the remainder of the URI.  This needs to be 
- * improved so that we can incrementally match unquoted URIs in templates.
- */
+ * fragment greedily consumes the remainder of the URI.  
+ * 
+ *--------------------------------------------------------------------------*/
 
 hemp_bool
 hemp_uri_split(
@@ -83,20 +89,36 @@ hemp_uri_split(
     if (uri->buffer)
         hemp_uri_release(uri);
 
-    /* Allocate a new string buffer long enough for the URI and some extra
-     * NUL characters to place between the URI tokens.  This allows us to 
-     * allocate all the memory in one go rather than doing 9 separate 
-     * allocations and subsequent de-allocations. We only need the buffer to
-     * be the same length as the  original as we don't need to preserve the 
-     * separators and can replace then with NUL characters.
+    /* We clone the original uri and allocate a new string buffer twice as 
+     * long as the URI.  This gives us a buffer large enough to store all the 
+     * component parts of the URI separated by NUL characters.  This allows 
+     * us to allocate (and free) all the memory in one go instead of doing
+     * it many times over.  Each part of the URI (scheme, user, host, port,
+     * path, query, fragment) is copied into this buffer and the uri->XXX
+     * pointers set to the appropriate offset.  If a query string is present
+     * then all the keys and values will also be written into this buffer, 
+     * also separated by NUL characters.  These packed strings are then used
+     * as the keys and values in the parameters hash.  In the degenerate case
+     * when a URI consists of nothing but a query string, e.g. ?a=1 then the
+     * buffer will be just large enough to accomodate the complete query
+     * string, a NUL character, and then one or more repetitions of 
+     * (parameter name, NUL, parameter value, NUL)*.  We're adding some NUL
+     * characters, but removing the same number of delimiters ('?', '=' and 
+     * '&' or ';') and it all evens out.
+     *
+     *   ?a=1&b=2             # original query
+     *   a=1&b=2_             # NUL terminated copy (NUL shown as underscore)
+     *   a=1&b=2_a_1_b_2_     # with duplicated param key/values (length x 2)
+     *
+     * In all other cases, the required memory will be less than the allocated
+     * buffer size.  At the other end of the denegerate scale when the URI has
+     * no params, we'll be allocating twice as much memory as is actually 
+     * required.  But we're talking about a few tens or perhaps hundreds of 
+     * bytes so I'm not going to get too worried about it.
      */
-     /* come to think of it, we might as well dup the original string and
-      * then insert NUL chars in the right place.  If we allocate x2 the 
-      * length then we've got extra room for a buffer for parameters.
-      */
     hemp_string source = uri->uri    = hemp_string_clone(text, "uri");
     hemp_string buffer = uri->buffer = (hemp_string) hemp_mem_alloc( 
-        strlen(text)
+        strlen(text) * 2 + 2
     );
 
     if (! buffer)
@@ -113,6 +135,9 @@ hemp_uri_split(
     hemp_uri_match_query(uri, &source, &buffer);
     hemp_uri_match_fragment(uri, &source, &buffer);
 
+    if (uri->query)
+        hemp_uri_split_query(uri);
+
     return HEMP_TRUE;
 }
 
@@ -122,7 +147,7 @@ HEMP_URI_MATCHER(hemp_uri_match_scheme) {
     hemp_string     buffer = *bufpos;
     hemp_bool       ok     = HEMP_FALSE;
 
-    hemp_debug_msg("matching URI scheme: %s\n", source);
+    hemp_debug_call("matching URI scheme: %s\n", source);
 
     if (isalpha(*source)) {
         *buffer++ = *source++;
@@ -165,7 +190,7 @@ HEMP_URI_MATCHER(hemp_uri_match_scheme) {
 HEMP_URI_MATCHER(hemp_uri_match_authority) {
     hemp_string source = *srcpos;
 
-    hemp_debug_msg("matching URI authority: %s\n", source);
+    hemp_debug_call("matching URI authority: %s\n", source);
 
     if (strncmp(source, "//", 2) == 0) {
         *srcpos = source + 2;
@@ -183,7 +208,7 @@ HEMP_URI_MATCHER(hemp_uri_match_user) {
     hemp_string     source = *srcpos;
     hemp_string     buffer = *bufpos;
 
-    hemp_debug_msg("matching user at %s\n", source);
+    hemp_debug_call("matching user at %s\n", source);
 
     while (*source && *source != '@') {
         *buffer++ = *source++;
@@ -202,7 +227,7 @@ HEMP_URI_MATCHER(hemp_uri_match_host) {
     hemp_string     source = *srcpos;
     hemp_string     buffer = *bufpos;
 
-    hemp_debug_msg("matching URI host: %s\n", source);
+    hemp_debug_call("matching URI host: %s\n", source);
 
     while (*source && *source != ':' && *source != '/') {
         *buffer++ = *source++;
@@ -220,7 +245,7 @@ HEMP_URI_MATCHER(hemp_uri_match_port) {
     hemp_string     source = *srcpos;
     hemp_string     buffer = *bufpos;
 
-    hemp_debug_msg("matching URI port: %s\n", source);
+    hemp_debug_call("matching URI port: %s\n", source);
 
     if (*source && *source == ':') {
         source++;
@@ -243,7 +268,7 @@ HEMP_URI_MATCHER(hemp_uri_match_path) {
     hemp_string     source = *srcpos;
     hemp_string     buffer = *bufpos;
 
-    hemp_debug_msg("matching URI path: %s\n", source);
+    hemp_debug_call("matching URI path: %s\n", source);
 
     while (*source && *source != '?' && *source != '#') {
         *buffer++ = *source++;
@@ -262,7 +287,7 @@ HEMP_URI_MATCHER(hemp_uri_match_query) {
     hemp_string     source = *srcpos;
     hemp_string     buffer = *bufpos;
 
-    hemp_debug_msg("matching URI query: %s\n", source);
+    hemp_debug_call("matching URI query: %s\n", source);
 
     if (*source && *source == '?') {
         source++;
@@ -274,7 +299,6 @@ HEMP_URI_MATCHER(hemp_uri_match_query) {
 
     if (buffer != *bufpos) {
         HEMP_URI_MATCHED(query);
-        hemp_uri_split_query(uri);
         return HEMP_TRUE;
     }
 
@@ -286,7 +310,7 @@ HEMP_URI_MATCHER(hemp_uri_match_fragment) {
     hemp_string     source = *srcpos;
     hemp_string     buffer = *bufpos;
 
-    hemp_debug_msg("matching URI fragment: %s\n", source);
+    hemp_debug_call("matching URI fragment: %s\n", source);
 
     if (*source && *source == '#') {
         source++;
@@ -310,22 +334,27 @@ hemp_uri_split_query(
     hemp_uri    uri
 ) {
     hemp_string query = uri->query;
-    hemp_hash   params;
-    hemp_string key, value;
+    hemp_string buffer, key, value;
 
     if (uri->params)
         hemp_hash_free(uri->params);
     
-    params = hemp_hash_new();
+    uri->params = hemp_hash_new();
 
-    uri->params = params;
+    /* We copy the parameter names and values into the second half of the
+     * buffer we allocated earlier.  We start one byte (for the terminating
+     * NUL) after the length of the original URL.
+     */
+    buffer = uri->buffer + strlen(uri->uri) + 1;
 
     while (*query) {
-        key = query;
+        key = buffer;
+
         while (*query && *query != '=') {
-            query++;
+            *buffer++ = *query++;
         }
-        if (key == query) {
+
+        if (key == buffer) {
             // TODO: proper error handling
             hemp_fatal("Missing key in URI query: %s\n", key);
         }
@@ -338,16 +367,58 @@ hemp_uri_split_query(
         // query string.  Then we re-generate the query string on demand from
         // the hash as required.  Or just dup the query string onto the end of
         // the buffer and use that...
-        *query++ = HEMP_NUL;        // FIXME: buggers up original query string
-        value = query;
+        *buffer++ = HEMP_NUL;
+        query++;
+        value = buffer;
 
         while (*query && *query != '&' && *query != ';') {
-            query++;
+            *buffer++ = *query++;
         }
         
-        *query = HEMP_NUL;
-        hemp_debug_msg("parsed param: [%s] => [%s]\n", key, value);
+        *buffer = HEMP_NUL;
+        hemp_hash_store_string(uri->params, key, value);
+//      hemp_debug_msg("parsed param: [%s] => [%s]\n", key, value);
     }
 
     return HEMP_TRUE;
 }
+
+
+/*--------------------------------------------------------------------------
+ * NOTES
+ *
+ * I think it's probably sufficient (for now at least) to split a well-formed
+ * URI into component parts rather than attempting a complete parse.  If we
+ * go down the latter route then it would be better to use an existing URI
+ * parsing library (e.g. liburiparse).  It would be nice to be able to parse
+ * unquoted URIs in templates and intelligently detect the end of the URI,
+ * but I don't think it's possible because so many different characters are
+ * permitted in URIs.  e.g.  In "foo(file:blah)" the closing ')' is a valid 
+ * path character in the file:blah) URI.  So I think here we have to mandate
+ * the use of explit < > quote characters than can be pre-scanned to identify
+ * the start and end of the uri, e.g. foo(<file:blah>).  In which case we can
+ * be very liberal about what is accepted in a URI.
+ *
+ * Here's some relevant extracts from RFC3986 showing the URI syntax:
+ *
+ *   scheme      = ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
+ *   authority   = [ userinfo "@" ] host [ ":" port ]
+ *   userinfo    = *( unreserved / pct-encoded / sub-delims / ":" )
+ *   host        = IP-literal / IPv4address / reg-name
+ *   IP-literal  = "[" ( IPv6address / IPvFuture  ) "]"
+ *   IPvFuture   = "v" 1*HEXDIG "." 1*( unreserved / sub-delims / ":" )
+ *   IPv6address =  ...gnarly...
+ *   IPv4address = dec-octet "." dec-octet "." dec-octet "." dec-octet
+ *   reg-name    = *( unreserved / pct-encoded / sub-delims )
+ *   port        = *DIGIT
+ *   pchar       = unreserved / pct-encoded / sub-delims / ":" / "@"
+ *   query       = *( pchar / "/" / "?" )
+ *   fragment    = *( pchar / "/" / "?" )
+ *   unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
+ *   reserved    = gen-delims / sub-delims
+ *   gen-delims  = ":" / "/" / "?" / "#" / "[" / "]" / "@"
+ *   sub-delims  = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+ *   pct-encoded = "%" HEXDIG HEXDIG
+ * 
+ *--------------------------------------------------------------------------*/
+

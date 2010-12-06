@@ -40,6 +40,7 @@ typedef union hemp_value          hemp_value;
 typedef struct hemp_hemp        * hemp_hemp;
 typedef struct hemp_action      * hemp_action;
 typedef struct hemp_code        * hemp_code;
+typedef struct hemp_codec       * hemp_codec;
 typedef struct hemp_context     * hemp_context;
 typedef struct hemp_dialect     * hemp_dialect;
 typedef struct hemp_dialects    * hemp_dialects;
@@ -90,6 +91,7 @@ typedef struct hemp_viewer      * hemp_viewer;
 struct hemp_hemp {
     hemp_global     global;
 
+    hemp_factory    codec;
     hemp_factory    dialect;
     hemp_factory    element;
     hemp_factory    grammar;
@@ -98,6 +100,8 @@ struct hemp_hemp {
     hemp_factory    tag;
     hemp_factory    viewer;
                     
+    hemp_context    context;
+
 //  hemp_hash       tags;
     hemp_hash       templates;
 //  hemp_dialect    dialect;

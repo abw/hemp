@@ -116,7 +116,7 @@ hemp_template_render(
 
     if (! context) {
         my_context = HEMP_TRUE;
-        context = hemp_context_init(template->dialect->hemp);
+        context = hemp_context_new(template->dialect->hemp);
     }
 
     if (! root)
@@ -160,7 +160,7 @@ hemp_template_data(
     
     if (! context) {
         my_context  = HEMP_TRUE;
-        context     = hemp_context_init(template->dialect->hemp);
+        context     = hemp_context_new(template->dialect->hemp);
     }
 
     values  = root->type->values(hemp_elem_val(root), context, HempNothing);

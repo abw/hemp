@@ -24,6 +24,7 @@ tests/core/Makefile.one
 tests/core/Makefile.all
 
 tests/core/action
+tests/core/codec
 tests/core/context
 tests/core/dialect
 tests/core/element
