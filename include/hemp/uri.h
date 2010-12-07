@@ -13,39 +13,47 @@ struct hemp_uri {
     hemp_string     path;
     hemp_string     query;
     hemp_string     fragment;
+    hemp_list       paths;
     hemp_hash       params;
 };
 
 
 HEMP_INLINE hemp_uri
 hemp_uri_init(
-    hemp_uri uri
+    hemp_uri        uri
 );
 
 HEMP_INLINE hemp_uri
 hemp_uri_wipe(
-    hemp_uri uri
+    hemp_uri        uri
 );
 
 HEMP_INLINE void
 hemp_uri_release(
-    hemp_uri uri
+    hemp_uri        uri
 );
 
 HEMP_INLINE void
 hemp_uri_free(
-    hemp_uri uri
+    hemp_uri        uri
 );
 
 hemp_bool
 hemp_uri_split(
-    hemp_uri    uri,
-    hemp_string text
+    hemp_uri        uri,
+    hemp_string     text
+);
+
+hemp_bool
+hemp_uri_split_path(
+    hemp_uri        uri,
+    hemp_string   * bufpos
 );
 
 hemp_bool
 hemp_uri_split_query(
-    hemp_uri    uri
+    hemp_uri        uri,
+    hemp_string   * bufpos
 );
 
 

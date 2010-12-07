@@ -156,7 +156,7 @@ hemp_global_free_symbols(
 void hemp_global_init_modules(
     hemp_global global
 ) {
-    hemp_debug_msg("initialising modules\n");
+    hemp_debug_init("initialising modules\n");
 
     /* return silently if we've already done this */
     if (global->modules)
@@ -191,7 +191,7 @@ hemp_global_module(
 void hemp_global_free_modules(
     hemp_global global
 ) {
-    hemp_debug_msg("freeing modules\n");
+    hemp_debug_init("freeing modules\n");
     /* return silently if this has already been done */
     if (! global->modules)
         return;

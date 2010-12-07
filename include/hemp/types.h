@@ -138,7 +138,14 @@ typedef hemp_memory
 
 
 typedef hemp_bool
-(* hemp_plugin)(
+(* hemp_loader)(
+    hemp_module     module
+);
+
+
+typedef hemp_bool
+(* hemp_binder)(
+    hemp_module     module,
     hemp_hemp       hemp
 );
 

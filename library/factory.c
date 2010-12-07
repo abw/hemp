@@ -99,7 +99,7 @@ lookup:
             split = (hemp_string_split_p) hemp_val_ptr( hemp_list_item(splits, n) );
             snprintf((char *) wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
 
-            hemp_debug_msg("looking for [%s]\n", wildname);
+//          hemp_debug_msg("looking for [%s]\n", wildname);
 
             /* look for a wildcard meta-constructor */
             wildcard = (hemp_action) hemp_hash_fetch_pointer(

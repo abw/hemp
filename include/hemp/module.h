@@ -6,7 +6,8 @@
 #include <dlfcn.h>
 
 
-#define HEMP_PLUGIN_INIT "hemp_plugin_init"
+#define HEMP_MODULE_LOADER "hemp_module_loader"
+#define HEMP_MODULE_BINDER "hemp_module_binder"
 
 
 /*--------------------------------------------------------------------------
@@ -23,9 +24,9 @@ struct hemp_module {
     hemp_string         name;
     hemp_string         error;
     hemp_memory         handle;
-    hemp_plugin         plugin;
-//    hemp_action         ctor;
-//    hemp_module_status  status;
+    hemp_loader         loader;
+    hemp_binder         binder;
+//  hemp_module_status  status;
 };
 
 

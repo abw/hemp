@@ -74,7 +74,8 @@ hemp_init_factories(
     hemp->tag               = hemp_factory_new(hemp);
     hemp->viewer            = hemp_factory_new(hemp);
 
-    hemp->codec->autoload   = &hemp_codec_autoload;
+    hemp->codec->autoload       = &hemp_codec_autoload;
+    hemp->language->autoload    = &hemp_language_autoload;
 
     /* install the cleaners to automatically tidy up */
     hemp->dialect->cleaner  = &hemp_free_dialect;
@@ -122,9 +123,6 @@ hemp_init_languages(
     );
     hemp_register_language(
         hemp, HEMP_TT3, &hemp_language_tt3
-    );
-    hemp_register_language(
-        hemp, "json", &hemp_language_json
     );
     hemp_register_language(
         hemp, "test", &hemp_language_test

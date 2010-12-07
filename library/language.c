@@ -24,3 +24,11 @@ hemp_language_free(
     hemp_mem_free(language->name);
     hemp_mem_free(language);
 }
+
+
+HEMP_AUTOLOAD(hemp_language_autoload) {
+    return hemp_use_module(factory->hemp, "language", name)
+        ? HEMP_TRUE
+        : HEMP_FALSE;
+}
+

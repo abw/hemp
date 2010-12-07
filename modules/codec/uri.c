@@ -1,18 +1,27 @@
-#include <hemp/codec.h>
+#include <hemp.h>
 
 HEMP_CODEC(hemp_codec_uri);
 HEMP_ENCODER(hemp_codec_uri_encoder);
 HEMP_DECODER(hemp_codec_uri_decoder);
 
 
+/*--------------------------------------------------------------------------
+ * Binder function called to bind the used module into a hemp instance
+ *--------------------------------------------------------------------------*/
+
 hemp_bool
-hemp_plugin_init(
+hemp_module_binder(
+    hemp_module module,
     hemp_hemp   hemp
 ) {
     hemp_register_codec(hemp, "uri", &hemp_codec_uri);
     return HEMP_TRUE;
 }
 
+
+/*--------------------------------------------------------------------------
+ * Codec functions
+ *--------------------------------------------------------------------------*/
 
 HEMP_CODEC(hemp_codec_uri) {
     hemp_debug_msg("instantiating uri codec\n");

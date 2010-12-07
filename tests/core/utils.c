@@ -30,7 +30,7 @@ void test_md5_dynamic() {
 
     ok(
         hemp_string_eq(
-            md5->output,
+            (hemp_string) md5->output,
             "6f5902ac237024bdd0c176cb93063dc4"        // correct value
 //            "b746ca570487aa55ab3f1dff25d7949a"
         ),

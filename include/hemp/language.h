@@ -2,6 +2,8 @@
 #define HEMP_LANGUAGE_H
 
 #include <hemp/core.h>
+#include <hemp/factory.h>
+#include <hemp/module.h>
 
 
 /*--------------------------------------------------------------------------
@@ -30,6 +32,8 @@ void
 hemp_language_free(
     hemp_language   language
 );
+
+HEMP_AUTOLOAD(hemp_language_autoload);
 
 
 #endif /* HEMP_LANGUAGE_H */

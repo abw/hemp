@@ -56,7 +56,6 @@ libhemp_la_SOURCES  =   action.c            \
                         element/text.c      \
                         element/word.c      \
                         language/hemp.c     \
-                        language/json.c     \
                         language/test.c     \
                         language/tt3.c      \
                         scheme/text.c       \

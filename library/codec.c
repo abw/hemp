@@ -46,5 +46,3 @@ HEMP_AUTOLOAD(hemp_codec_autoload) {
         : HEMP_FALSE;
 }
 
-
-

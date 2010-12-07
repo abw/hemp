@@ -30,17 +30,15 @@ hemp_use_module(
 
     hemp_module module = hemp_global_module(hemp->global, path->string);
 
-    if (module->plugin) {
-//      hemp_debug_msg("calling plugin function\n");
-        module->plugin(hemp);
+    if (module->binder) {
+        module->binder(module, hemp);
     }
     else if (module->error) {
-//      hemp_debug_msg("reporting module error\n");
         hemp_fatal(module->error);
     }
     else {
         /* should never happen - famous last word */
-        hemp_fatal("No plugin function for %s module", name);
+        hemp_fatal("No binder function for %s module", name);
     }
 
     hemp_text_free(path);
@@ -58,7 +56,8 @@ hemp_module_new(
     module->name   = hemp_string_clone(name, "module name");
     module->error  = NULL;
     module->handle = NULL;
-    module->plugin = NULL;
+    module->loader = NULL;
+    module->binder = NULL;
     return module;
 }
 
@@ -126,13 +125,22 @@ hemp_module_load(
 
 //  hemp_debug_msg("loaded module: %s\n", module->name);
 
-    module->plugin = (hemp_plugin) dlsym(module->handle, HEMP_PLUGIN_INIT);
+    module->loader = (hemp_loader) dlsym(module->handle, HEMP_MODULE_LOADER);
+    module->binder = (hemp_binder) dlsym(module->handle, HEMP_MODULE_BINDER);
+
+    /* customer loader can augment module and/or perform initialisation */    
+    if (module->loader) {
+        hemp_debug_msg("calling module loader: %s", HEMP_MODULE_LOADER);
+        if (! module->loader(module)) {
+            return HEMP_FALSE;
+        }
+    }
     
-    if (! module->plugin) {
+    if (! module->binder) {
         return hemp_module_failed(
             module,
             "Missing %s() function in %s module",
-            HEMP_PLUGIN_INIT, module->name
+            HEMP_MODULE_BINDER, module->name
         );
     }
 
@@ -150,7 +158,7 @@ hemp_module_unload(
         return HEMP_TRUE;
     
     if (dlclose(module->handle) == 0) {
-        hemp_debug_msg("closed '%s' module library\n", module->name);
+        hemp_debug_init("closed '%s' module library\n", module->name);
         module->handle = NULL;
         return HEMP_TRUE;
     }

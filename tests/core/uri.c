@@ -5,7 +5,7 @@ void test_uri();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(9);
+    plan(12);
     test_uri();
     return done();
 }
@@ -29,6 +29,14 @@ void test_uri() {
 
     hemp_string s = hemp_hash_fetch_string(uri->params, "animal");
     is( s, "badger", "matched URI parameter" );
+
+    hemp_value v = hemp_list_item(uri->paths, 0);
+    ok( hemp_is_empty(v), "matched empty zeroth URI path element" );
+    
+    s = hemp_list_item_string(uri->paths, 1);
+    is( s, "over", "matched first URI path element" );
+    s = hemp_list_item_string(uri->paths, 2);
+    is( s, "there", "matched second URI path element" );
 
     hemp_uri_free(uri);
 }

@@ -1,2 +1,2 @@
-SUBDIRS = hemp json
+SUBDIRS = json
 #SUBDIRS = hemp json test

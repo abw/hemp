@@ -1,28 +1,4 @@
-check_PROGRAMS  =   action      \
-                    codec       \
-                    context     \
-                    dialect     \
-                    element     \
-                    elements    \
-                    error       \
-                    factory     \
-                    filesystem  \
-                    grammar     \
-                    memory      \
-                    namespace   \
-                    proto       \
-                    pool        \
-                    ptree       \
-                    slab        \
-                    source      \
-                    string      \
-                    tag         \
-                    tagset      \
-                    template    \
-                    type        \
-                    utils       \
-                    value       \
-                    viewer
+check_PROGRAMS  =   codec      
  
 TESTS           = $(check_PROGRAMS)
 LDADD           = ../../library/libhemp.la

@@ -129,14 +129,16 @@ An incomplete list of things TODO, in no particular order.
   dynamic variable in the current context.  It's all a bit of a mess and
   needs a bit of a re-think.
 
-* Dynamic module loading.  Started off playing with a simple test module
-  (module.c) but gave up when I couldn't get the simplest example to work
-  as I expected.  Probably need to adjust my expectations.
+* Dynamic module loading.  Got a basic working implementation using dlopen(),
+  and friends, but it needs generalising for other platforms and making more
+  robust.  Also need to figure out how to construct the Makefiles using 
+  autotools or by rolling yer own.
 
 * MD5 implementation is broken.  It broke after changing hemp_char from 
   'unsigned char' to 'char' but I think it was broken before that as it was
   generating different results to other implementations.  Try Peter Deutsch's
-  implementation.
+  implementation.  NOTE: I changed hemp_char back to unsigned char because
+  I originally set it that way for a reason (the reason being utf8).
 
 * Improve URI parsing to handle incremental matching during scanning phase.
   UPDATE: nah, that's not going to work - see NOTES in uri.c
@@ -144,6 +146,10 @@ An incomplete list of things TODO, in no particular order.
 * Figure out how to represent parameters with multiple values in uri.c
 
 * Percent encoding for URIs, implemented as a codec module
+
+* Might want to add name parameter to module binder function so that we
+  can do the equivalent of "use x as y".  Hmm... although I suppose the 
+  names that it registers are supposed to be namespaced and unique. Hmm.
 
 
 Configuration, Build and Installation
@@ -173,4 +179,26 @@ Some other data structure we might want to add:
         hemp_quad  quad[8];
     }
 
+
+Hot Stack
+---------
+
+A reminder of what I'm working towards right now...
+
+Hemp config.  Any value with fetch() method.
+
+config_file reads config from template using default data dialect, e.g. json
+
+  hemp.config.file
+  hemp.config.dialect
+
+  hemp.data.path
+  hemp.data.dialect
+
+  hemp.template.path
+  hemp.template.dialect
+
+  etc
+
+Let's start by making json a plugin language and have it autoload...
 

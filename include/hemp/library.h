@@ -4,6 +4,8 @@
 #include "hemp/core.h"
 
 
+/* NOT IN USE */
+
 /*--------------------------------------------------------------------------
  * type definitions
  *--------------------------------------------------------------------------*/
@@ -24,17 +26,5 @@ hemp_library_new(
 );
 
 
-void
-hemp_module_free(
-    hemp_module     module
-);
 
-
-hemp_bool
-hemp_module_load(
-    hemp_hemp       hemp,
-    hemp_string     name
-);
-
-
-#endif /* HEMP_MODULE_H */
+#endif /* HEMP_LIBRARY_H */

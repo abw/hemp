@@ -24,6 +24,7 @@ hemp_uri_wipe(
     uri->path       = NULL;
     uri->query      = NULL;
     uri->fragment   = NULL;
+    uri->paths      = NULL;
     uri->params     = NULL;
     return uri;
 }
@@ -38,6 +39,9 @@ hemp_uri_release(
 
     if (uri->buffer)
         hemp_mem_free(uri->buffer);
+
+    if (uri->paths)
+        hemp_list_free(uri->paths);
 
     if (uri->params)
         hemp_hash_free(uri->params);
@@ -95,30 +99,15 @@ hemp_uri_split(
      * us to allocate (and free) all the memory in one go instead of doing
      * it many times over.  Each part of the URI (scheme, user, host, port,
      * path, query, fragment) is copied into this buffer and the uri->XXX
-     * pointers set to the appropriate offset.  If a query string is present
-     * then all the keys and values will also be written into this buffer, 
-     * also separated by NUL characters.  These packed strings are then used
-     * as the keys and values in the parameters hash.  In the degenerate case
-     * when a URI consists of nothing but a query string, e.g. ?a=1 then the
-     * buffer will be just large enough to accomodate the complete query
-     * string, a NUL character, and then one or more repetitions of 
-     * (parameter name, NUL, parameter value, NUL)*.  We're adding some NUL
-     * characters, but removing the same number of delimiters ('?', '=' and 
-     * '&' or ';') and it all evens out.
-     *
-     *   ?a=1&b=2             # original query
-     *   a=1&b=2_             # NUL terminated copy (NUL shown as underscore)
-     *   a=1&b=2_a_1_b_2_     # with duplicated param key/values (length x 2)
-     *
-     * In all other cases, the required memory will be less than the allocated
-     * buffer size.  At the other end of the denegerate scale when the URI has
-     * no params, we'll be allocating twice as much memory as is actually 
-     * required.  But we're talking about a few tens or perhaps hundreds of 
-     * bytes so I'm not going to get too worried about it.
+     * pointers set to the appropriate offset.  The path is then copied into
+     * the buffer, followed by the query string if present.  The original 
+     * delimiters in the path and query string are then replaced with NUL 
+     * NUL characters.  These packed strings are then used as the components
+     * in the path list and the keys and values in the parameters hash. 
      */
     hemp_string source = uri->uri    = hemp_string_clone(text, "uri");
     hemp_string buffer = uri->buffer = (hemp_string) hemp_mem_alloc( 
-        strlen(text) * 2 + 2
+        strlen(text) * 2 + 2    /* a couple extra to account for NULs */
     );
 
     if (! buffer)
@@ -135,8 +124,11 @@ hemp_uri_split(
     hemp_uri_match_query(uri, &source, &buffer);
     hemp_uri_match_fragment(uri, &source, &buffer);
 
+    if (uri->path)
+        hemp_uri_split_path(uri, &buffer);
+
     if (uri->query)
-        hemp_uri_split_query(uri);
+        hemp_uri_split_query(uri, &buffer);
 
     return HEMP_TRUE;
 }
@@ -330,22 +322,66 @@ HEMP_URI_MATCHER(hemp_uri_match_fragment) {
 
 
 hemp_bool
-hemp_uri_split_query(
-    hemp_uri    uri
+hemp_uri_split_path(
+    hemp_uri        uri,
+    hemp_string   * bufpos
 ) {
-    hemp_string query = uri->query;
-    hemp_string buffer, key, value;
+    hemp_string path   = uri->path;
+    hemp_string buffer = *bufpos;
+    hemp_string name;
+
+    if (! path)
+        return HEMP_FALSE;
+
+    if (uri->paths)
+        hemp_list_free(uri->paths);
+    
+    uri->paths = hemp_list_new();
+
+    while (*path) {
+        name = buffer;
+
+        while (*path && *path != '/') {
+            *buffer++ = *path++;
+        }
+
+        if (name == buffer) {
+            /* we haven't moved so add an "empty" path entry */
+//          hemp_debug_msg("found empty path\n");
+            hemp_list_push(uri->paths, HempEmpty);
+        }
+        else {
+            /* NUL terminate the copy in the buffer and add to list */
+            *buffer++ = HEMP_NUL;
+//          hemp_debug_msg("found path: [%s]\n", name);
+            hemp_list_push(uri->paths, hemp_str_val(name));
+        }
+
+        if (*path)
+            path++;
+
+        name = buffer;
+    }
+
+    *bufpos = buffer;
+
+    return HEMP_TRUE;
+}
+
+
+hemp_bool
+hemp_uri_split_query(
+    hemp_uri        uri,
+    hemp_string   * bufpos
+) {
+    hemp_string query   = uri->query;
+    hemp_string buffer  = *bufpos;
+    hemp_string key, value;
 
     if (uri->params)
         hemp_hash_free(uri->params);
     
     uri->params = hemp_hash_new();
-
-    /* We copy the parameter names and values into the second half of the
-     * buffer we allocated earlier.  We start one byte (for the terminating
-     * NUL) after the length of the original URL.
-     */
-    buffer = uri->buffer + strlen(uri->uri) + 1;
 
     while (*query) {
         key = buffer;
@@ -379,6 +415,8 @@ hemp_uri_split_query(
         hemp_hash_store_string(uri->params, key, value);
 //      hemp_debug_msg("parsed param: [%s] => [%s]\n", key, value);
     }
+
+    *bufpos = buffer;
 
     return HEMP_TRUE;
 }

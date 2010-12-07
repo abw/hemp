@@ -11,8 +11,8 @@ config.status
 build/libltdl/argz.h
 programs/hemp
 
-modules/codec/uri.o
 modules/codec/uri.hcm
+modules/language/json.hcm
 
 tests/benchmark
 tests/memtrace
@@ -74,6 +74,8 @@ tests/language/hemp/quotes
 tests/language/hemp/textops
 tests/language/hemp/unplugged
 tests/language/hemp/words
+
+tests/language/json/unplugged
 
 tests/language/test/test1
 
