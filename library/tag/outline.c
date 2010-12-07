@@ -12,7 +12,6 @@ HEMP_TAG(hemp_tag_outline) {
     );
     tag->style  = HEMP_OUTLINE_TAG;
     tag->scan   = &hemp_tag_outline_scan;
-    tag->to_eol = &hemp_tag_outline_to_eol;
     return tag;
 }
 
@@ -180,19 +179,4 @@ bareword:
     );
     
     *srcptr = src;
-}
-
-
-
-hemp_string
-hemp_tag_outline_to_eol(
-    HEMP_TAG_SKIP_ARGS
-) {
-    while ( *src
-        &&  hemp_not_newline(src) 
-    ) {
-        src++;
-    }
-
-    return src;
 }

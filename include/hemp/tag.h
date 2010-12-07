@@ -98,6 +98,7 @@ hemp_tag_free(
 );
 
 
+
 /*--------------------------------------------------------------------------
  * function protoypes for builtin tag types
  *--------------------------------------------------------------------------*/
@@ -106,9 +107,9 @@ void        hemp_tag_inline_scan(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_outline_scan(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_comment_scan(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_control_scan(HEMP_TAG_SCAN_ARGS);
-void        hemp_tag_unplugged_scan(HEMP_TAG_SCAN_ARGS);
 
-hemp_string hemp_tag_outline_to_eol(HEMP_TAG_SKIP_ARGS);
+hemp_string hemp_tag_to_eol(HEMP_TAG_SKIP_ARGS);
+//hemp_string hemp_tag_outline_to_eol(HEMP_TAG_SKIP_ARGS);
 hemp_string hemp_tag_inline_to_eol(HEMP_TAG_SKIP_ARGS);
 
 HEMP_TAG(hemp_tag_inline);
@@ -116,6 +117,8 @@ HEMP_TAG(hemp_tag_outline);
 HEMP_TAG(hemp_tag_comment);
 HEMP_TAG(hemp_tag_control);
 HEMP_TAG(hemp_tag_unplugged);
+
+HEMP_AUTOLOAD(hemp_tag_autoload);
 
 
 /*--------------------------------------------------------------------------

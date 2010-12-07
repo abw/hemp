@@ -1,5 +1,4 @@
 #include <hemp/scheme.h>
-#include <hemp/filesystem.h>
 
 
 hemp_scheme
@@ -37,5 +36,12 @@ hemp_scheme_namer(
     hemp_source source
 ) {
     return source->scheme->name;
+}
+
+
+HEMP_AUTOLOAD(hemp_scheme_autoload) {
+    return hemp_use_module(factory->hemp, "scheme", name)
+        ? HEMP_TRUE
+        : HEMP_FALSE;
 }
 

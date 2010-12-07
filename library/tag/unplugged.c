@@ -1,30 +1,26 @@
-#include <hemp/core.h>
-#include <hemp/ptree.h>
-#include <hemp/element.h>
-#include <hemp/tag.h>
-#include <hemp/scanner.h>
-#include <hemp/symbol.h>
-#include <hemp/grammar.h>
+#include <hemp.h>
+
+HEMP_TAG(hemp_tag_unplugged);
+void hemp_tag_unplugged_scan(HEMP_TAG_SCAN_ARGS);
 
 
+/*--------------------------------------------------------------------------
+ * Tag constructor
+ *--------------------------------------------------------------------------*/
 
 HEMP_TAG(hemp_tag_unplugged) {
-//  hemp_debug_msg(
-//      "hemp_tag_inline(%p, %s, %s, %s, %s, %s)\n",
-//      hemp, type, name, start, end ? end : "", 
-//      grammar ? grammar->name : "no grammar"
-//  );
-
     hemp_tag tag = hemp_tag_new(
         type, name, start, end, grammar
     );
     tag->style  = HEMP_UNPLUGGED_TAG;
     tag->scan   = &hemp_tag_unplugged_scan;
-    tag->to_eol = &hemp_tag_outline_to_eol;
-
     return tag;
 }
 
+
+/*--------------------------------------------------------------------------
+ * Tag scanner
+ *--------------------------------------------------------------------------*/
 
 void 
 hemp_tag_unplugged_scan(

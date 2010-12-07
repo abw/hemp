@@ -30,14 +30,6 @@ HEMP_LANGUAGE(hemp_language_tt3) {
     hemp_register_grammar(hemp, "tt3.command",  &hemp_grammar_tt3_command);
     hemp_register_grammar(hemp, "tt3.control",  &hemp_grammar_tt3_control);
 
-    /* register tags */
-    // TODO: try commenting these out and using hemp.XXX tags instead
-//    hemp_register_tag(hemp, "tt3.inline",       &hemp_tag_inline);
-//    hemp_register_tag(hemp, "tt3.outline",      &hemp_tag_outline);
-//    hemp_register_tag(hemp, "tt3.control",      &hemp_tag_control);
-//    hemp_register_tag(hemp, "tt3.comment",      &hemp_tag_comment);
-//    hemp_register_tag(hemp, "tt3.unplugged",    &hemp_tag_unplugged);
-
     /* register dialects */
     hemp_register_dialect(hemp, "tt3",           &hemp_dialect_tt3);
     hemp_register_dialect(hemp, "tt3.unplugged", &hemp_dialect_tt3_unplugged);

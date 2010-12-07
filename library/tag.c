@@ -31,7 +31,7 @@ hemp_tag_new(
 
     // TODO: put some sensible defaults in here
     tag->scan    = NULL;
-    tag->to_eol  = NULL;
+    tag->to_eol  = &hemp_tag_to_eol;
     return tag;
 }
 
@@ -115,5 +115,26 @@ hemp_tag_free(
         hemp_mem_free(tag->end);
     
     hemp_mem_free(tag);
+}
+
+
+hemp_string
+hemp_tag_to_eol(
+    HEMP_TAG_SKIP_ARGS
+) {
+    while ( *src
+        &&  hemp_not_newline(src) 
+    ) {
+        src++;
+    }
+
+    return src;
+}
+
+
+HEMP_AUTOLOAD(hemp_tag_autoload) {
+    return hemp_use_module(factory->hemp, "tag", name)
+        ? HEMP_TRUE
+        : HEMP_FALSE;
 }
 

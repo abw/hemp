@@ -53,7 +53,6 @@ hemp_hemp       hemp_new();
 void            hemp_init_errors(hemp_hemp);
 void            hemp_init_factories(hemp_hemp);
 void            hemp_init_schemes(hemp_hemp);
-void            hemp_init_codecs(hemp_hemp);
 void            hemp_init_languages(hemp_hemp);
 void            hemp_init_templates(hemp_hemp);
 void            hemp_init_viewers(hemp_hemp);

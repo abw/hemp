@@ -16,7 +16,6 @@ hemp_new() {
     hemp_init_errors(hemp);
     hemp_init_factories(hemp);
     hemp_init_schemes(hemp);
-    hemp_init_codecs(hemp);
     hemp_init_languages(hemp);
     hemp_init_templates(hemp);
     hemp_init_viewers(hemp);
@@ -74,8 +73,10 @@ hemp_init_factories(
     hemp->tag               = hemp_factory_new(hemp);
     hemp->viewer            = hemp_factory_new(hemp);
 
+    hemp->scheme->autoload      = &hemp_scheme_autoload;
     hemp->codec->autoload       = &hemp_codec_autoload;
     hemp->language->autoload    = &hemp_language_autoload;
+    hemp->tag->autoload         = &hemp_tag_autoload;
 
     /* install the cleaners to automatically tidy up */
     hemp->dialect->cleaner  = &hemp_free_dialect;
@@ -103,21 +104,11 @@ hemp_init_schemes(
 
 
 void
-hemp_init_codecs(
-    hemp_hemp hemp
-) {
-//    hemp_debug_msg("registering codec: %s\n", HEMP_STR_STAR);
-//    hemp_register_codec(
-//        hemp, HEMP_STR_STAR, &hemp_codec_load
-//    );
-}
-
-
-void
 hemp_init_languages(
     hemp_hemp hemp
 ) {
     // TODO: languages should be loaded on demand from modules
+    // UPDATE: json is now.
     hemp_register_language(
         hemp, HEMP_HEMP, &hemp_language_hemp_new
     );

@@ -2,6 +2,9 @@
 #define HEMP_SCHEME_H
 
 #include <hemp/core.h>
+#include <hemp/factory.h>
+#include <hemp/filesystem.h>
+#include <hemp/module.h>
 #include <hemp/source.h>
 #include <hemp/type/hash.h>
 
@@ -48,6 +51,9 @@ hemp_string
 hemp_scheme_namer( 
     hemp_source     source
 );
+
+HEMP_AUTOLOAD(hemp_scheme_autoload);
+
 
 
 #endif /* HEMP_SCHEME_H */
