@@ -48,7 +48,7 @@ hemp_viewer_text_init(
     hemp_string     name
 );
 
-HEMP_VIEW_FUNC(hemp_viewer_element);
+HEMP_VIEW(hemp_viewer_fragment);
 
 
 #endif /* HEMP_VIEWER_H */

@@ -1,12 +1,7 @@
-#include <limits.h>
-#include <errno.h>
-#include <hemp/core.h>
-#include <hemp/ptree.h>
-#include <hemp/element.h>
 #include <hemp/tag.h>
-#include <hemp/scanner.h>
-#include <hemp/element.h>
-#include <hemp/grammar.h>
+//#include <hemp/scanner.h>
+//#include <hemp/element.h>
+//#include <hemp/grammar.h>
 
 
 
@@ -42,12 +37,12 @@ hemp_tag_inline_scan(
     hemp_size       endlen  = strlen(tagend);
     hemp_num        num_val = 0;
     hemp_int        int_val = 0;
-    hemp_element    element;
+    hemp_fragment   fragment;
     hemp_bool       is_int, is_word;
     hemp_pnode      pnode;
-    hemp_symbol     symbol;
+    hemp_element    element;
 
-    hemp_debug_call("hemp_scan_inline_tag()\n");
+    hemp_debug_call("hemp_tag_inline_scan()\n");
 
     // add the tag start token
     hemp_fragments_add_fragment(
@@ -111,24 +106,24 @@ hemp_tag_inline_scan(
             }
             else if (is_int) {
                 hemp_debug_token("INTEGER", from, src-from);
-                element = hemp_fragments_add_fragment(
+                fragment = hemp_fragments_add_fragment(
                     tmpl->fragments, HempElementInteger,
                     from, pos, src - from
                 );
-                element->args.value = hemp_int_val(int_val);
+                fragment->args.value = hemp_int_val(int_val);
             }
             else {
                 hemp_debug_token("NUMBER", from, src-from);
-                element = hemp_fragments_add_fragment(
+                fragment = hemp_fragments_add_fragment(
                     tmpl->fragments, HempElementNumber,
                     from, pos, src - from
                 );
-                element->args.value = hemp_num_val(num_val);
+                fragment->args.value = hemp_num_val(num_val);
             }
         }
         else if (
-            (pnode  = hemp_ptree_root(tag->grammar->operators, src))
-        &&  (symbol = (hemp_symbol) hemp_pnode_match_more(pnode, &src))
+            (pnode   = hemp_ptree_root(tag->grammar->operators, src))
+        &&  (element = (hemp_element) hemp_pnode_match_more(pnode, &src))
         ) {
             hemp_debug_token("OPERATOR", from, src-from);
 
@@ -147,13 +142,13 @@ hemp_tag_inline_scan(
             if (isalpha(*src) && isalpha(*(src - 1)))
                 goto bareword;
 
-            if (symbol->scanner) {
-//              hemp_debug("symbol has dedicated scanner\n");
-                symbol->scanner(tmpl, tag, from, pos, &src, symbol);
+            if (element->scanner) {
+//              hemp_debug("element has dedicated scanner\n");
+                element->scanner(tmpl, tag, from, pos, &src, element);
             }
             else {
                 hemp_fragments_add_fragment(
-                    tmpl->fragments, symbol,
+                    tmpl->fragments, element,
                     from, pos, src - from
                 );
             }

@@ -176,6 +176,13 @@
 
 // TODO: decide on a _FUNC suffix or otherwise and apply consistently
 
+
+#define HEMP_AUTOLOAD(f)                        \
+    hemp_bool f(                                \
+        hemp_factory    factory,                \
+        hemp_string     name                    \
+    )
+
 #define HEMP_LANGUAGE(f)                        \
     hemp_language f(                            \
         hemp_hemp   hemp,                       \
@@ -200,8 +207,8 @@
 
 #define HEMP_GRAMMAR(f)                         \
     hemp_grammar f(                             \
-        hemp_hemp   hemp,                       \
-        hemp_string name                        \
+        hemp_hemp       hemp,                   \
+        hemp_string     name                    \
     )
 
 #define HEMP_GLOBAL_ELEMENT(f)                  \
@@ -215,77 +222,77 @@
 
 #define HEMP_ELEMENTS(f)                        \
     hemp_action f(                              \
-        hemp_hemp    hemp,                      \
-        hemp_string  name                       \
+        hemp_hemp       hemp,                   \
+        hemp_string     name                    \
+    )
+
+#define HEMP_VIEWER(f)                          \
+    hemp_viewer f(                              \
+        hemp_hemp       hemp,                   \
+        hemp_string     name                    \
+    )
+
+#define HEMP_VIEW(f)                            \
+    HEMP_INLINE hemp_value f(                   \
+        hemp_viewer     viewer,                 \
+        hemp_fragment   fragment,               \
+        hemp_context    context,                \
+        hemp_value      output                  \
     )
 
 #define HEMP_PREPARE(f)                         \
     hemp_template f(                            \
-        hemp_template template                  \
-    )
-
-
-#define HEMP_AUTOLOAD(f)                        \
-    hemp_bool f(                                \
-        hemp_factory    factory,                \
-        hemp_string     name                    \
+        hemp_template   template                \
     )
 
 /*--------------------------------------------------------------------------
- * Symbols
+ * Elements
  *
  * A language grammar maps input tokens (words, numbers, punctuation 
- * characters, etc) to symbols.  A symbol entry is effectively a vtable
+ * characters, etc) to elements.  An element entry is effectively a vtable
  * containing functions that implement the behaviours for a particular 
  * kind of template element (a chunk of text, number, variable, operator, 
  * keyword, etc) along with a few other flags and values for housekeeping
  * purpose.
  *
- * A grammar is constructed by asking hemp to create symbols to represent 
+ * A grammar is constructed by asking hemp to create elements to represent 
  * the different element types (e.g. via hemp_grammar_add_symbol()).  A 
  * unique name is used to identify the element type (e.g. hemp.numop.multiply 
  * to represent numerical multiplication).  The relevant token (e.g. '*' or 
  * perhaps 'x') and left/right precedence levels are also specified, where 
  * appropriate (used to implement operator precedence parsing).
  *
- * HEMP_SYMBOLS(name) (note plural) can be used to declare/define a 
- * function which can provide hemp with a list of symbols, e.g. all the 
- * hemp.numop.* symbols.
- *
- * HEMP_ELEMENT(name) (not singular) can be used to declare/define a 
- * function which initialises a single symbol type.
- *
- * HEMP_SYMBOL0(...), HEMP_SYMBOL1(...) and HEMP_SYMBOL2(...) can be used as 
+ * HEMP_USE_ELEMENT0(...), HEMP_USE_ELEMENT1(...) and HEMP_USE_ELEMENT2(...) can be used as 
  * shortcuts for registering a symbol with a grammar.  The first is for 
  * symbols that don't have any particular start or end token (e.g. number,
  * word, text), the second is for those that have a unique start token, (e.g.
  * '+', '#', 'if', etc) and the third is for those that have start and end 
  * tokens (e.g. quoted strings like "...", '...', q{...}, etc).
  *
- * HEMP_OPERATOR1(...) and HEMP_OPERATOR2(...) do similar things, but add 
+ * HEMP_USE_OPERATOR1(...) and HEMP_USE_OPERATOR2(...) do similar things, but add 
  * left and rightward precedence levels as options.
  *
  * See library/language/XXX.c for examples of these in action.
  *--------------------------------------------------------------------------*/
 
 
-#define HEMP_SYMBOL0(name)                                       \
-    hemp_grammar_add_symbol(grammar, name, NULL, NULL, 0, 0);
+#define HEMP_USE_ELEMENT0(name)                                     \
+    hemp_grammar_add_element(grammar, name, NULL, NULL, 0, 0);
 
-#define HEMP_SYMBOL1(name, start)                               \
-    hemp_grammar_add_symbol(grammar, name, start, NULL, 0, 0);
+#define HEMP_USE_ELEMENT1(name, start)                              \
+    hemp_grammar_add_element(grammar, name, start, NULL, 0, 0);
 
-#define HEMP_SYMBOL2(name, start, end)                          \
-    hemp_grammar_add_symbol(grammar, name, start, end,  0, 0);
+#define HEMP_USE_ELEMENT2(name, start, end)                         \
+    hemp_grammar_add_element(grammar, name, start, end,  0, 0);
 
-#define HEMP_OPERATOR1(name, start, lprec, rprec)               \
-    hemp_grammar_add_symbol(grammar, name, start, NULL, lprec, rprec);
+#define HEMP_USE_OPERATOR1(name, start, lprec, rprec)               \
+    hemp_grammar_add_element(grammar, name, start, NULL, lprec, rprec);
 
-#define HEMP_OPERATOR2(name, start, end, lprec, rprec)          \
-    hemp_grammar_add_symbol(grammar, name, start, end, lprec, rprec);
+#define HEMP_USE_OPERATOR2(name, start, end, lprec, rprec)          \
+    hemp_grammar_add_element(grammar, name, start, end, lprec, rprec);
 
-#define HEMP_BLOCKOP(name, start, prec)                         \
-    hemp_grammar_add_symbol(grammar, name, start, NULL, prec, prec);
+#define HEMP_USE_BLOCK(name, start, prec)                           \
+    hemp_grammar_add_element(grammar, name, start, NULL, prec, prec);
 
 
 
@@ -471,33 +478,7 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
  * Views: comment TODO
  *--------------------------------------------------------------------------*/
 
-#define HEMP_VIEW_ARGS                      \
-    hemp_viewer   viewer,                 \
-    hemp_element  element,                  \
-    hemp_context  context,                  \
-    hemp_value    output
-
-#define HEMP_VIEW_ARG_NAMES                 \
-    viewer, element, context, output
-
-#define HEMP_VIEW_FUNC(f)                   \
-    HEMP_INLINE hemp_value f(             \
-        HEMP_VIEW_ARGS                      \
-    )
-
-#define HEMP_VIEWER_FUNC(f)                 \
-    hemp_viewer f(                        \
-        hemp_hemp   hemp,                   \
-        hemp_string name                    \
-    )
-
-#define HEMP_VIEWER(name, constructor)      \
-    hemp_register_viewer(                   \
-        hemp, name,                         \
-        (hemp_actor) constructor            \
-    );
-
-#define HEMP_VIEW(name, view)               \
+#define HEMP_USE_VIEW(name, view)           \
     hemp_viewer_add_view(viewer, name, view);
 
 

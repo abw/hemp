@@ -47,19 +47,19 @@ HEMP_DIALECT(hemp_dialect_json) {
 HEMP_GRAMMAR(hemp_grammar_json) {
     hemp_grammar grammar = (hemp_grammar) hemp_grammar_new(hemp, name);
 
-    HEMP_SYMBOL0("hemp.text");
-    HEMP_SYMBOL0("hemp.space");
-    HEMP_SYMBOL0("hemp.block");
-    HEMP_SYMBOL1("hemp.identity.true",            "true"     );
-    HEMP_SYMBOL1("hemp.identity.false",           "false"    );
-    HEMP_SYMBOL1("hemp.identity.nothing",         "null"     );
-    HEMP_SYMBOL1("hemp.terminator",               "]"        );
-    HEMP_SYMBOL1("hemp.terminator",               "}"        );
-    HEMP_SYMBOL1("hemp.delimiter",                ","        );
-    HEMP_SYMBOL1("hemp.operator.assign.equals",   ":"        )
-    HEMP_SYMBOL2("hemp.bracket.list",             "[", "]"   );
-    HEMP_SYMBOL2("hemp.bracket.hash",             "{", "}"   );
-    HEMP_SYMBOL2("hemp.dquote",                   "\"", "\"" );
+    HEMP_USE_ELEMENT0("hemp.text");
+    HEMP_USE_ELEMENT0("hemp.space");
+    HEMP_USE_ELEMENT0("hemp.block");
+    HEMP_USE_ELEMENT1("hemp.identity.true",            "true"     );
+    HEMP_USE_ELEMENT1("hemp.identity.false",           "false"    );
+    HEMP_USE_ELEMENT1("hemp.identity.nothing",         "null"     );
+    HEMP_USE_ELEMENT1("hemp.terminator",               "]"        );
+    HEMP_USE_ELEMENT1("hemp.terminator",               "}"        );
+    HEMP_USE_ELEMENT1("hemp.delimiter",                ","        );
+    HEMP_USE_ELEMENT1("hemp.operator.assign.equals",   ":"        )
+    HEMP_USE_ELEMENT2("hemp.bracket.list",             "[", "]"   );
+    HEMP_USE_ELEMENT2("hemp.bracket.hash",             "{", "}"   );
+    HEMP_USE_ELEMENT2("hemp.dquote",                   "\"", "\"" );
 
     return grammar;
 }

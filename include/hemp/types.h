@@ -306,7 +306,7 @@ typedef hemp_value
 typedef hemp_value 
     (* hemp_view_f)(
         hemp_viewer   view,       /* pointer to viewer                    */
-        hemp_element  element,    /* pointer to element                   */
+        hemp_fragment fragment,   /* pointer to element                   */
         hemp_context  context,    /* runtime context                      */
         hemp_value    output      /* optional output buffer               */
     );

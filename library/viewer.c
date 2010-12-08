@@ -43,7 +43,7 @@ hemp_viewer_resize(
     hemp_debug_call("hemp_viewer_resize(%s, %d)\n", viewer->name, min_size);
     hemp_u16    old_size = viewer->size;
     hemp_u16    new_size = old_size;
-    hemp_memory    buffer;
+    hemp_memory buffer;
     hemp_u16    size;
 
     if (! new_size)
@@ -77,8 +77,8 @@ hemp_viewer_resize(
 hemp_bool
 hemp_viewer_add_view(
     hemp_viewer viewer,
-    hemp_string    name,
-    hemp_view_f   view
+    hemp_string name,
+    hemp_view_f view
 ) {
     hemp_debug_call("hemp_viewer_add_view(%s:%s => %p)\n", viewer->name, name, view);
     hemp_u16 id = hemp_namespace_id(name);
@@ -99,9 +99,9 @@ hemp_viewer_add_view(
 }
 
 
-HEMP_VIEW_FUNC(hemp_viewer_element) {
-    hemp_debug("hemp_viewer_element(%s, %s)\n", viewer->name, element->type->name);
-    hemp_namespace namespace = element->type->namespace;
+HEMP_VIEW(hemp_viewer_fragment) {
+    hemp_debug("hemp_viewer_fragment(%s, %s)\n", viewer->name, fragment->type->name);
+    hemp_namespace namespace = fragment->type->namespace;
     hemp_view_f view;
     
     while (namespace) {

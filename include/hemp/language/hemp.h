@@ -11,12 +11,12 @@ HEMP_GRAMMAR(hemp_grammar_hemp_alpha);
 HEMP_GRAMMAR(hemp_grammar_hemp_bravo);
 HEMP_GRAMMAR(hemp_grammar_hemp_charlie);
 
-HEMP_ELEMENTS(hemp_element_identity_symbols);
-HEMP_ELEMENTS(hemp_element_assign_symbols);
-HEMP_ELEMENTS(hemp_element_bracket_symbols);
-HEMP_ELEMENTS(hemp_element_boolean_symbols);
-HEMP_ELEMENTS(hemp_element_number_symbols);
-HEMP_ELEMENTS(hemp_element_text_symbols);
+HEMP_ELEMENTS(hemp_element_identity_elements);
+HEMP_ELEMENTS(hemp_element_assign_elements);
+HEMP_ELEMENTS(hemp_element_bracket_elements);
+HEMP_ELEMENTS(hemp_element_boolean_elements);
+HEMP_ELEMENTS(hemp_element_number_elements);
+HEMP_ELEMENTS(hemp_element_text_elements);
 
 HEMP_ELEMENT(hemp_element_sub_symbol);
 

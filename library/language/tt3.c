@@ -1,9 +1,9 @@
 #include <hemp/language/tt3.h>
 
 
-static struct hemp_symbols hemp_symbols_tt3_command[] = {
-    { "tt3.command.if",   &hemp_element_tt3_if_symbol   },
-    { "tt3.command.sub",  &hemp_element_sub_symbol      },
+static struct hemp_elements hemp_elements_tt3_command[] = {
+    { "tt3.command.if",   &hemp_element_tt3_if   },
+    { "tt3.command.sub",  &hemp_element_sub      },
     { NULL, NULL },
 };
 
@@ -16,7 +16,7 @@ HEMP_LANGUAGE(hemp_language_tt3) {
     );
     
     /* register handlers for command symbols */
-    hemp_register_element("tt3.command.*", &hemp_element_tt3_command_symbols);
+    hemp_register_element(hemp, "tt3.command.*", &hemp_elements_tt3_command);
 
     /* register grammars */
     hemp_register_grammar(hemp, "tt3.core",     &hemp_grammar_tt3_core);
@@ -106,10 +106,10 @@ hemp_dialect_tt3_unplugged_prepare(
 HEMP_GRAMMAR(hemp_grammar_tt3_core) {
     hemp_debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_hemp_charlie(hemp, name);
-    HEMP_SYMBOL1("hemp.identity.true", "True");
-    HEMP_SYMBOL1("hemp.identity.false", "False");
-    HEMP_SYMBOL2("hemp.squote", "q<<", ">>");
-    HEMP_OPERATOR1("hemp.terminator", "end", 0, 0);
+    HEMP_USE_ELEMENT1("hemp.identity.true", "True");
+    HEMP_USE_ELEMENT1("hemp.identity.false", "False");
+    HEMP_USE_ELEMENT2("hemp.squote", "q<<", ">>");
+    HEMP_USE_OPERATOR1("hemp.terminator", "end", 0, 0);
 
     return grammar;
 }
@@ -118,8 +118,8 @@ HEMP_GRAMMAR(hemp_grammar_tt3_core) {
 HEMP_GRAMMAR(hemp_grammar_tt3_command) {
     hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_tt3_core(hemp, name);
-    HEMP_OPERATOR1("tt3.command.if", "if", 100, 100);
-    HEMP_OPERATOR2("tt3.command.sub", "sub", "end", 100, 100);
+    HEMP_USE_OPERATOR1("tt3.command.if", "if", 100, 100);
+    HEMP_USE_OPERATOR2("tt3.command.sub", "sub", "end", 100, 100);
     return grammar;
 }
 
@@ -137,16 +137,14 @@ HEMP_GRAMMAR(hemp_grammar_tt3_control) {
  *--------------------------------------------------------------------------*/
 
 hemp_action
-hemp_element_tt3_command_symbols(
+hemp_element_tt3_command_elements(
     hemp_hemp     hemp,
     hemp_string name
 ) {
     hemp_debug_init("** Initialising tt3 command symbols (%s requested)\n", name);
 
     /* we should detect if we've done this already and skip it */
-    hemp_register_elements(
-        hemp, hemp_symbols_tt3_command
-    );
+    hemp_register_elements(hemp, hemp_elements_tt3_command);
 
     /* now try again */
     return (hemp_action) hemp_hash_fetch_pointer(
@@ -155,23 +153,10 @@ hemp_element_tt3_command_symbols(
 }
 
 
-hemp_symbol
-hemp_element_tt3_TODO_symbol(
-    hemp_hemp        hemp,
-    hemp_symbol symbol
-) {
-    hemp_todo("tt3 constructor for %s symbol", symbol->name);
-//    DONT_OPTIMISE_ME_AWAY;
-    return symbol;
-}
-
-
-hemp_symbol
-hemp_element_tt3_if_symbol(
-    hemp_hemp        hemp,
-    hemp_symbol symbol
-) {
-    return hemp_element_tt3_TODO_symbol(hemp, symbol);
+HEMP_ELEMENT(hemp_element_tt3_if) {
+//    return hemp_element_tt3_TODO_symbol(hemp, symbol);
+    hemp_todo("tt3 'if' element\n");
+    return element;
 }
 
 
