@@ -11,10 +11,11 @@ hemp_template_new(
 
     template->dialect  = dialect;
     template->source   = source;
-    template->tagset   = hemp_tagset_new(template);
+//    template->tagset   = hemp_tagset_new(template);
     template->scope    = hemp_scope_new(dialect->hemp);
     template->elements = hemp_elements_new(dialect->hemp, 0);
     template->tree     = NULL;
+    template->scanner  = NULL;
         
     return template;
 }
@@ -41,7 +42,7 @@ hemp_template_free(
     hemp_elements_free(template->elements);
     hemp_scope_free(template->scope);
     hemp_source_free(template->source);
-    hemp_tagset_free(template->tagset);
+//    hemp_tagset_free(template->tagset);
 
     hemp_mem_free(template);
 }
@@ -64,11 +65,17 @@ hemp_bool
 hemp_template_scan(
     hemp_template template
 ) {
-    hemp_debug_call("hemp_template_scan(%p)\n", template);
-    
-    hemp_bool result = template->dialect->scanner(template);
-    
-    return result;
+    hemp_debug_msg("hemp_template_scan(%p)\n", template);
+
+    if (! template->scanner)
+        hemp_fatal("No scanner defined for %s template\n", template->dialect->name);
+
+    if (! template->source->text)
+        hemp_source_read(template->source);
+
+    return hemp_action_run(template->scanner, template)
+        ? HEMP_TRUE
+        : HEMP_FALSE;
 }
 
 

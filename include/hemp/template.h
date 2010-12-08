@@ -14,10 +14,15 @@
 struct hemp_template {
     hemp_dialect    dialect;
     hemp_source     source;
-    hemp_tagset     tagset;
+//    hemp_tagset     tagset;
     hemp_scope      scope;
     hemp_elements   elements;
     hemp_element    tree;
+    hemp_action     scanner;
+
+    /* these don't really belong here but it'll do for now */
+    hemp_pos        pos;
+    hemp_string   * srcptr;
 };
 
 

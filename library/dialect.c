@@ -9,7 +9,7 @@ hemp_dialect_new(
     hemp_dialect dialect;
     HEMP_ALLOCATE(dialect);
     dialect->prepare = NULL;
-    dialect->scanner = NULL;
+//  dialect->scanner = NULL;
     dialect->cleanup = NULL;
     dialect->hemp    = hemp;
     dialect->name    = hemp_string_clone(name, "dialect name");

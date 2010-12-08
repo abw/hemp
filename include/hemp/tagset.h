@@ -57,5 +57,21 @@ hemp_tagset_free_tag(
     hemp_slot       item
 );
 
+hemp_tagset
+hemp_tagset_prepare(
+    hemp_template   template
+);
+
+void
+hemp_tagset_cleanup(
+    hemp_template template
+);
+
+hemp_memory
+hemp_tagset_scanner(
+    hemp_actor      self,
+    hemp_template   template
+);
+
 
 #endif /* HEMP_TAGS_H */

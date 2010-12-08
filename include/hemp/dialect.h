@@ -20,7 +20,7 @@ struct hemp_dialect {
     hemp_string     name;
     hemp_hash       tags;
     hemp_prep_f     prepare;
-    hemp_scan_f     scanner;
+//  hemp_scan_f     scanner;
     hemp_clean_f    cleanup;
 //  hemp_tagset_t   tagset;
 };

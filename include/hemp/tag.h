@@ -103,6 +103,11 @@ hemp_tag_free(
  * function protoypes for builtin tag types
  *--------------------------------------------------------------------------*/
 
+hemp_memory hemp_tag_scanner(
+    hemp_actor      self,
+    hemp_template   template
+);
+
 void        hemp_tag_inline_scan(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_outline_scan(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_comment_scan(HEMP_TAG_SCAN_ARGS);

@@ -4,9 +4,9 @@
 int main(
     int argc, char **argv, char **env
 ) {
-    hemp_hemp      hemp    = hemp_new();
-    hemp_context context = hemp_context_instance(hemp);
-    int         result;
+    hemp_hemp       hemp    = hemp_new();
+    hemp_context    context = hemp_context_instance(hemp);
+    int             result  = 0;
 
     hemp_context_set_integer( context, "answer", 42 );
     hemp_context_set_string( context, "n", "400" );

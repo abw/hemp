@@ -135,3 +135,140 @@ hemp_tagset_dump(
 }
 
 
+hemp_tagset
+hemp_tagset_prepare(
+    hemp_template   template
+) {
+    hemp_tagset tagset = hemp_tagset_new(template);
+    template->scanner  = hemp_action_new(
+        (hemp_actor) &hemp_tagset_scanner, 
+        (hemp_memory) tagset
+    );
+
+    return tagset;
+}
+
+
+void
+hemp_tagset_cleanup(
+    hemp_template template
+) {
+    if (template->scanner) {
+        hemp_debug_init("tagset scanner cleanup\n");
+        hemp_tagset_free((hemp_tagset) template->scanner->script);
+        hemp_action_free(template->scanner);
+    }
+}
+
+
+hemp_memory
+hemp_tagset_scanner(
+    hemp_actor      self,
+    hemp_template   template
+) {
+    hemp_debug_msg("hemp_tagset_scanner()\n");
+
+    hemp_tagset     tagset   = (hemp_tagset) self;
+    hemp_pnode      pnode;
+    hemp_string     text     = template->source->text,
+                    src      = text,
+                    from     = text,
+                    tagstr;
+    hemp_pos        pos      = 0,
+                    line     = 0;
+    hemp_tag        tag;
+
+#if HEMP_DEBUG & HEMP_DEBUG_SCAN
+    hemp_debug_magenta("-- source ---\n%s\n-------------\n", text);
+#endif
+
+    while (*src) {
+        /* at start of line */
+        line++;
+        hemp_debug_scan("\n%d (%02d) : ", line, src - text);
+
+        while (*src) {
+            if ((pnode = hemp_ptree_root(tagset->outline_tags, src))) {
+                tagstr = src;
+            
+                if ((tag = (hemp_tag) hemp_pnode_match_more(pnode, &src))) {
+                    hemp_debug_scan("[OUTLINE:%c]", *tagstr);
+
+                    if (tagstr > from) {
+                        hemp_elements_append(
+                            template->elements, tagset->text_symbol,
+                            from, pos, tagstr - from
+                        );
+                        pos += tagstr - from;
+                        from = tagstr;
+                    }
+                    tag->scan(template, tag, tagstr, pos, &src);
+                    from = src;
+                    pos += src - tagstr;
+                }
+                else {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+        }
+        
+        while (*src) {
+            if (*src == HEMP_LF) {
+                src++;
+                break;
+            }
+            else if (*src == HEMP_CR) {
+                src++;
+                if (*src == HEMP_LF)
+                    src++;
+                break;
+            }
+            else if ((pnode = hemp_ptree_root(tagset->inline_tags, src))) {
+                tagstr = src;
+
+                if ((tag = (hemp_tag) hemp_pnode_match_more(pnode, &src))) {
+                    hemp_debug_scan("[INLINE:%c]", *tagstr);
+
+                    if (tagstr > from) {
+                        hemp_elements_append(
+                            template->elements, tagset->text_symbol,
+                            from, pos, tagstr - from
+                        );
+                        pos += tagstr - from;
+                        from = tagstr;
+                    }
+                    tag->scan(template, tag, tagstr, pos, &src);
+                    from = src;
+                    pos += src - tagstr;
+                }
+                else {
+                    src++;
+                }
+            }
+            else {
+                src++;
+            }
+        }
+    }
+
+    if (src > from) {
+        hemp_elements_append(
+            template->elements, tagset->text_symbol,
+            from, pos, src - from
+        );
+        pos += src - from;
+    }
+    
+    hemp_elements_eof(template->elements, pos);
+
+#if HEMP_DEBUG & HEMP_DEBUG_SCAN
+    hemp_elements_dump(template->elements);
+#endif
+
+    return (hemp_memory) template;
+}
+
+

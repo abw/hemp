@@ -80,5 +80,12 @@ hemp_grammar_free_symbol(
     hemp_slot       item
 );
 
+hemp_memory
+hemp_grammar_scanner(
+    hemp_actor      self,
+    hemp_template   template
+);
+
+
 
 #endif /* HEMP_GRAMMAR_H */

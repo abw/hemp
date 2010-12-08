@@ -151,6 +151,7 @@ An incomplete list of things TODO, in no particular order.
   can do the equivalent of "use x as y".  Hmm... although I suppose the 
   names that it registers are supposed to be namespaced and unique. Hmm.
 
+* HEMP_ACTION
 
 Configuration, Build and Installation
 -------------------------------------
@@ -200,5 +201,47 @@ config_file reads config from template using default data dialect, e.g. json
 
   etc
 
-Let's start by making json a plugin language and have it autoload...
+Let's start by making json a plugin language and have it autoload...[DONE]
 
+Then create a JSON codec to read JSON data.
+
+Hmmm... got diverted onto cleaning up the scanner functions.  Thinking now 
+about having each scanlet define a scan action that embodies their scan
+method and a reference to themselves.  This allows us to call a "scan" 
+method on each item without have to encode it in a vtable or suchlike.
+
+Symbol needs access to outer tag or at least access to scan_to_eol and 
+scan_to_eot function relevant to the enclosing tag.
+
+If a scanner pushes the tag start token onto the elements list before
+invoking the tag scanner then we don't need to pass the tagtok.  A tag
+can always inspect the template->elements->tail if it needs to.
+
+Add an extra function to unwrap the dialect tags and call a dedicated
+tagset scanner (also an action with the tagset as an argument - then we 
+don't need to worry about storing a tagset in a template - it can be 
+created in the dialect prepare method)
+
+hemp_bool
+hemp_scan_text(
+    hemp_template tmpl
+) {
+
+void 
+hemp_tag_inline_scan(
+    hemp_template   tmpl,
+    hemp_tag        tag,
+    hemp_string     tagtok,
+    hemp_pos        pos,
+    hemp_string     *srcptr
+) {
+
+void 
+hemp_symbol_scan(
+    hemp_template   tmpl,
+    hemp_tag        tag,
+    hemp_string     tagtok,
+    hemp_pos        pos,
+    hemp_string     *srcptr
+    hemp_symbol     *symbol
+) {

@@ -42,7 +42,7 @@ HEMP_DIALECT(hemp_dialect_test) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
     
     dialect->prepare = &hemp_dialect_test_prepare;
-    dialect->scanner = &hemp_scan_text;
+//    dialect->scanner = &hemp_scan_text;
     dialect->cleanup = &hemp_dialect_test_cleanup;
     
     return dialect;
@@ -193,7 +193,7 @@ hemp_element_test_expect_symbol(
     hemp_symbol symbol
 ) {
     hemp_debug("test.test symbol: %s\n", symbol->name);
-    symbol->scanner         = &hemp_element_test_expect_scanner;
+//    symbol->scanner         = &hemp_element_test_expect_scanner;
     symbol->cleanup         = &hemp_element_test_expect_clean,
     symbol->token           = &hemp_element_literal_token;
     symbol->source          = &hemp_element_literal_source;

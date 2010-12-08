@@ -20,4 +20,11 @@ HEMP_SYMBOL(hemp_element_tt3_if_symbol);
 HEMP_SYMBOL(hemp_element_tt3_TODO_symbol);
 
 
+hemp_template   hemp_dialect_tt3_prepare(hemp_template template);
+void            hemp_dialect_tt3_cleanup(hemp_template template);
+
+hemp_template   hemp_dialect_tt3_unplugged_prepare(hemp_template template);
+void            hemp_dialect_tt3_unplugged_cleanup(hemp_template template);
+
+
 #endif /* HEMP_LANGUAGE_TT3_H */
