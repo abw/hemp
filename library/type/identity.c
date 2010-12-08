@@ -35,7 +35,7 @@ hemp_identity_name(
 
 
 
-HEMP_OUTPUT_FUNC(hemp_type_identity_text) {
+HEMP_OUTPUT(hemp_type_identity_text) {
     if (hemp_is_undefined(value)) {
         hemp_debug("throwing undefined entity error\n");
         HEMP_UNDEF_ERROR(
@@ -55,7 +55,7 @@ HEMP_OUTPUT_FUNC(hemp_type_identity_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_identity_number) {
+HEMP_VALUE(hemp_type_identity_number) {
     /* might want to auto-convert true(1), false(0), before(-1), equal(0)
      * and after(1)
      */
@@ -69,7 +69,7 @@ HEMP_VALUE_FUNC(hemp_type_identity_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_identity_integer) {
+HEMP_VALUE(hemp_type_identity_integer) {
     /* might want to auto-convert true(1), false(0), before(-1), equal(0)
      * and after(1)
      */
@@ -83,7 +83,7 @@ HEMP_VALUE_FUNC(hemp_type_identity_integer) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_identity_boolean) {
+HEMP_VALUE(hemp_type_identity_boolean) {
     if (hemp_is_boolean(value)) 
         return hemp_is_true(value) 
             ? HempTrue 
@@ -100,7 +100,7 @@ HEMP_VALUE_FUNC(hemp_type_identity_boolean) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_identity_compare) {
+HEMP_VALUE(hemp_type_identity_compare) {
     if (hemp_is_compare(value)) 
         return value;
     else 
@@ -115,7 +115,7 @@ HEMP_VALUE_FUNC(hemp_type_identity_compare) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_identity_defined) {
+HEMP_VALUE(hemp_type_identity_defined) {
     return hemp_is_defined(value) 
         ? HempTrue 
         : HempFalse;

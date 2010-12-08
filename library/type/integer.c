@@ -14,7 +14,7 @@ HEMP_TYPE_FUNC(hemp_type_integer) {
 };
 
 
-HEMP_OUTPUT_FUNC(hemp_type_integer_text) {
+HEMP_OUTPUT(hemp_type_integer_text) {
     static hemp_char buffer[HEMP_BUFFER_SIZE];
     hemp_text text;
 
@@ -26,19 +26,19 @@ HEMP_OUTPUT_FUNC(hemp_type_integer_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_integer_number) {
+HEMP_VALUE(hemp_type_integer_number) {
     return hemp_num_val((hemp_num) hemp_val_int(value));
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_integer_boolean) {
+HEMP_VALUE(hemp_type_integer_boolean) {
     return hemp_val_int(value) == 0
         ? HempFalse
         : HempTrue;
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_integer_compare) {
+HEMP_VALUE(hemp_type_integer_compare) {
     hemp_num cmp = hemp_val_int(value);
     return  cmp < 0 ? HempBefore
         :   cmp > 0 ? HempAfter

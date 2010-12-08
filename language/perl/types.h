@@ -14,30 +14,30 @@ hemp_value    hemp_perl_value(SV *);
 
 
 HEMP_TYPE_FUNC(hemp_type_perl_scalar);
-HEMP_OUTPUT_FUNC(hemp_perl_scalar_text);
-HEMP_VALUE_FUNC(hemp_perl_scalar_number);
-HEMP_VALUE_FUNC(hemp_perl_scalar_integer);
-HEMP_VALUE_FUNC(hemp_perl_scalar_boolean);
-HEMP_VALUE_FUNC(hemp_perl_scalar_defined);
-HEMP_VALUE_FUNC(hemp_perl_scalar_length);
+HEMP_OUTPUT(hemp_perl_scalar_text);
+HEMP_VALUE(hemp_perl_scalar_number);
+HEMP_VALUE(hemp_perl_scalar_integer);
+HEMP_VALUE(hemp_perl_scalar_boolean);
+HEMP_VALUE(hemp_perl_scalar_defined);
+HEMP_VALUE(hemp_perl_scalar_length);
 
 HEMP_TYPE_FUNC(hemp_type_perl_array);
-HEMP_VALUE_FUNC(hemp_perl_array_boolean);
-HEMP_VALUE_FUNC(hemp_perl_array_length);
+HEMP_VALUE(hemp_perl_array_boolean);
+HEMP_VALUE(hemp_perl_array_length);
 HEMP_FETCH_FUNC(hemp_perl_array_fetch);
 
 HEMP_TYPE_FUNC(hemp_type_perl_hash);
-HEMP_VALUE_FUNC(hemp_perl_hash_boolean);
-HEMP_VALUE_FUNC(hemp_perl_hash_length);
+HEMP_VALUE(hemp_perl_hash_boolean);
+HEMP_VALUE(hemp_perl_hash_length);
 HEMP_FETCH_FUNC(hemp_perl_hash_fetch);
 
 HEMP_TYPE_FUNC(hemp_type_perl_code);
-HEMP_OUTPUT_FUNC(hemp_perl_code_text);
-HEMP_VALUE_FUNC(hemp_perl_code_apply);
+HEMP_OUTPUT(hemp_perl_code_text);
+HEMP_VALUE(hemp_perl_code_apply);
 
 HEMP_TYPE_FUNC(hemp_type_perl_object);
 
-HEMP_VALUE_FUNC(hemp_perl_true);
+HEMP_VALUE(hemp_perl_true);
 
 
 #define hemp_perl_val_sv(value) \

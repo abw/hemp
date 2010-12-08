@@ -14,7 +14,7 @@
 
 struct hemp_tagset {
    hemp_template    template;
-   hemp_symbol      text_symbol;
+   hemp_element     text_element;
    hemp_hash        tags;
    hemp_ptree       inline_tags;
    hemp_ptree       outline_tags;

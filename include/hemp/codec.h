@@ -2,6 +2,7 @@
 
 #include <hemp/core.h>
 #include <hemp/context.h>
+#include <hemp/factory.h>
 #include <hemp/module.h>
 
 

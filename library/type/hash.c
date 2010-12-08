@@ -516,7 +516,7 @@ hemp_hash_function_jenkins32(
  * Runtime hash evaluation methods
  *--------------------------------------------------------------------------*/
 
-HEMP_OUTPUT_FUNC(hemp_type_hash_text) {
+HEMP_OUTPUT(hemp_type_hash_text) {
     hemp_text text;
     hemp_prepare_text(context, output, text);
     hemp_text_append_string(text, "TODO: hash.text");
@@ -621,7 +621,7 @@ HEMP_FETCH_FUNC(hemp_type_hash_dot) {
  * Hash pseudo-object methods
  *--------------------------------------------------------------------------*/
 
-HEMP_VALUE_FUNC(hemp_method_hash_length) {
+HEMP_VALUE(hemp_method_hash_length) {
     return hemp_int_val( hemp_val_hash(value)->size );
 }
 

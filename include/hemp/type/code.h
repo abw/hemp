@@ -47,7 +47,7 @@ hemp_code_proto(
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_code);
-HEMP_OUTPUT_FUNC(hemp_type_code_text);
+HEMP_OUTPUT(hemp_type_code_text);
 
 
 

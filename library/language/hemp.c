@@ -131,12 +131,12 @@ HEMP_LANGUAGE(hemp_language_hemp_new) {
 //    hemp_register_elements(hemp, hemp_symbols_hemp_autoload);
 
     /* register factories for bracket, boolean, number and text operator symbols */
-    HEMP_ELEMENT("hemp.operator.assign.*",  &hemp_element_assign_symbols);
-    HEMP_ELEMENT("hemp.identity.*",         &hemp_element_identity_symbols);
-    HEMP_ELEMENT("hemp.bracket.*",          &hemp_element_bracket_symbols);
-    HEMP_ELEMENT("hemp.boolean.*",          &hemp_element_boolean_symbols);
-    HEMP_ELEMENT("hemp.number.*",           &hemp_element_number_symbols);
-    HEMP_ELEMENT("hemp.text.*",             &hemp_element_text_symbols);
+    hemp_register_element(hemp, "hemp.operator.assign.*",  &hemp_element_assign_symbols);
+    hemp_register_element(hemp, "hemp.identity.*",         &hemp_element_identity_symbols);
+    hemp_register_element(hemp, "hemp.bracket.*",          &hemp_element_bracket_symbols);
+    hemp_register_element(hemp, "hemp.boolean.*",          &hemp_element_boolean_symbols);
+    hemp_register_element(hemp, "hemp.number.*",           &hemp_element_number_symbols);
+    hemp_register_element(hemp, "hemp.text.*",             &hemp_element_text_symbols);
 
     hemp_register_grammars(hemp, hemp_grammars_hemp);
     hemp_register_tags(hemp, hemp_tags_hemp);

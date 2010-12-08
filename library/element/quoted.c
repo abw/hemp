@@ -5,26 +5,26 @@
  * single quoted strings
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_squote_symbol) {
-    symbol->flags           = HEMP_BE_FIXED;
-    symbol->scanner         = &hemp_element_squote_scanner;
-    symbol->cleanup         = &hemp_element_text_clean;
-    symbol->parse_prefix    = &hemp_element_literal_prefix;
-    symbol->token           = &hemp_element_literal_token;
-    symbol->source          = &hemp_element_literal_source;
-    symbol->text            = &hemp_element_quoted_text;
-    symbol->value           = &hemp_element_quoted_value;
-    symbol->values          = &hemp_element_value_values;
-    return symbol;
+HEMP_ELEMENT(hemp_element_squote) {
+    element->flags          = HEMP_BE_FIXED;
+    element->scanner        = &hemp_element_squote_scanner;
+    element->cleanup        = &hemp_element_text_cleanup;
+    element->parse_prefix   = &hemp_element_literal_prefix;
+    element->token          = &hemp_element_literal_text;
+    element->source         = &hemp_element_literal_text;
+    element->text           = &hemp_element_quoted_text;
+    element->value          = &hemp_element_quoted_value;
+    element->values         = &hemp_element_value_values;
+    return element;
 }
 
 
 HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
     hemp_string     src       = *srcptr;
     hemp_bool       is_source = HEMP_TRUE;
-    hemp_string     end       = symbol->end;
+    hemp_string     end       = element->end;
     hemp_size       endlen    = strlen(end);
-    hemp_element    element;
+    hemp_fragment   fragment;
 
     hemp_debug_call("hemp_element_squote_scanner()\n");
 
@@ -50,20 +50,20 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
 
     hemp_debug_token("SQUOTE", start, src-start);
 
-    element = hemp_elements_append(
-        tmpl->elements, symbol,
+    fragment = hemp_fragments_add_fragment(
+        tmpl->fragments, element,
         start, pos, src - start
     );
 
     if (is_source) {
         /* we can generate the output text from the source token */
-        hemp_set_flag(element, HEMP_BE_SOURCE);
+        hemp_set_flag(fragment, HEMP_BE_SOURCE);
     }
     else {
         /* we need to create a new string with escapes resolved */
         hemp_string sqfrom   = *srcptr;
         hemp_string squote   = (hemp_string) hemp_mem_alloc(end - sqfrom + 1);
-        element->args.value = hemp_str_val(squote);
+        fragment->args.value = hemp_str_val(squote);
                     
         while (sqfrom < end) {
             /* skip past the '\' if we've got "\\" or "\'" */
@@ -78,7 +78,7 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
     }
 
     *srcptr = src;
-    return element;
+    return fragment;
 }
 
 
@@ -86,25 +86,25 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
  * double quoted strings
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_dquote_symbol) {
-    symbol->scanner         = &hemp_element_dquote_scanner;
-    symbol->cleanup         = &hemp_element_text_clean;
-    symbol->parse_prefix    = &hemp_element_literal_prefix;
-    symbol->token           = &hemp_element_literal_token;
-    symbol->source          = &hemp_element_literal_source;
-    symbol->text            = &hemp_element_quoted_text;
-    symbol->value           = &hemp_element_quoted_value;
-    symbol->values          = &hemp_element_value_values;
-    return symbol;
+HEMP_ELEMENT(hemp_element_dquote) {
+    element->scanner        = &hemp_element_dquote_scanner;
+    element->cleanup        = &hemp_element_text_cleanup;
+    element->parse_prefix   = &hemp_element_literal_prefix;
+    element->token          = &hemp_element_literal_text;
+    element->source         = &hemp_element_literal_text;
+    element->text           = &hemp_element_quoted_text;
+    element->value          = &hemp_element_quoted_value;
+    element->values         = &hemp_element_value_values;
+    return element;
 }
 
 
 HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
     hemp_string     src       = *srcptr;
-    hemp_bool    is_source = HEMP_TRUE;
-    hemp_string     end       = symbol->end;
-    hemp_size    endlen    = strlen(end);
-    hemp_element element;
+    hemp_bool       is_source = HEMP_TRUE;
+    hemp_string     end       = element->end;
+    hemp_size       endlen    = strlen(end);
+    hemp_fragment   fragment;
 
     hemp_debug_call("hemp_element_dquote_scanner()\n");
 
@@ -132,20 +132,20 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
 
     hemp_debug_token("SQUOTE", start, src-start);
 
-    element = hemp_elements_append(
-        tmpl->elements, symbol,
+    fragment = hemp_fragments_add_fragment(
+        tmpl->fragments, element,
         start, pos, src - start
     );
 
     if (is_source) {
         /* we can generate the output text from the source token */
-        hemp_set_flag(element, HEMP_BE_SOURCE);
+        hemp_set_flag(fragment, HEMP_BE_SOURCE);
     }
     else {
         /* we need to create a new string with escapes resolved */
         hemp_string dqfrom   = *srcptr;
         hemp_string dquote   = (hemp_string) hemp_mem_alloc(end - dqfrom + 1);        // CHECK ME
-        element->args.value = hemp_str_val(dquote);
+        fragment->args.value = hemp_str_val(dquote);
                     
         while (dqfrom < end) {
             if (*dqfrom == HEMP_BACKSLASH) {
@@ -185,7 +185,8 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
     }
 
     *srcptr = src;
-    return element;
+
+    return fragment;
 }
 
 
@@ -193,38 +194,36 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
  * generic text output function for quoted strings
  *--------------------------------------------------------------------------*/
 
-HEMP_OUTPUT_FUNC(hemp_element_quoted_text) {
+HEMP_OUTPUT(hemp_element_quoted_text) {
 
-    hemp_element element = hemp_val_elem(value);
-    hemp_debug_call("hemp_element_quoted_text(%p) [%s]\n", element, element->type->name);
+    hemp_fragment fragment = hemp_val_frag(value);
+    hemp_debug_call("hemp_element_quoted_text(%p) [%s]\n", fragment, fragment->type->name);
     hemp_text text;
-    hemp_prepare_text_size(context, output, text, element->length);
+    hemp_prepare_text_size(context, output, text, fragment->length);
 
-    if (hemp_has_flag(element, HEMP_BE_SOURCE)) {
+    if (hemp_has_flag(fragment, HEMP_BE_SOURCE)) {
         /* quoted string can be regenerated from source */
-        hemp_symbol symbol = element->type;
-        hemp_size slen     = symbol->start ? strlen(symbol->start) : 0;
-        hemp_size elen     = symbol->end   ? strlen(symbol->end)   : 0;
+        hemp_element element = fragment->type;
+        hemp_size    slen    = element->start ? strlen(element->start) : 0;
+        hemp_size    elen    = element->end   ? strlen(element->end)   : 0;
 
         /* "pinch" in the ends of the token range to avoid the quotes */
         hemp_text_append_stringn(
             text, 
-            element->token  + slen,         /* skip past start              */
-            element->length - slen - elen   /* shorten by start/end lengths */
+            fragment->token  + slen,         /* skip past start              */
+            fragment->length - slen - elen   /* shorten by start/end lengths */
         );
     }
     else {
         /* TODO: check that it's OK to assume we always have a value */
-        hemp_text_append_string(text, hemp_val_str(element->args.value));
+        hemp_text_append_string(text, hemp_val_str(fragment->args.value));
     }
-    
-//  hemp_debug_msg("output for quoted text (%s): %s\n", hemp_type_name(output), text->string);
 
     return output;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_quoted_value) {
+HEMP_VALUE(hemp_element_quoted_value) {
     return hemp_element_quoted_text(value, context, HempNothing);
 }
 

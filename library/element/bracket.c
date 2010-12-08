@@ -6,45 +6,45 @@
  * generic functions for all bracketed constructs
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_brackets_symbol) {
-    hemp_element_block_symbol(hemp, symbol);
-    symbol->token           = &hemp_element_literal_token;
-    symbol->parse_prefix    = &hemp_element_brackets_prefix;
+HEMP_ELEMENT(hemp_element_brackets) {
+    hemp_element_block(hemp, element);
+    element->token           = &hemp_element_literal_text;
+    element->parse_prefix    = &hemp_element_brackets_prefix;
     /* each subtype must define its own value() method */
-    symbol->values          = &hemp_element_value_values;
-    symbol->text            = &hemp_element_value_text;
-    symbol->number          = &hemp_element_value_number;
-    symbol->integer         = &hemp_element_value_integer;
-    symbol->boolean         = &hemp_element_value_boolean;
-    symbol->compare         = &hemp_element_value_compare;
-    symbol->cleanup         = &hemp_element_brackets_clean;
-    return symbol;
+    element->values          = &hemp_element_value_values;
+    element->text            = &hemp_element_value_text;
+    element->number          = &hemp_element_value_number;
+    element->integer         = &hemp_element_value_integer;
+    element->boolean         = &hemp_element_value_boolean;
+    element->compare         = &hemp_element_value_compare;
+    element->cleanup         = &hemp_element_brackets_clean;
+    return element;
 }
 
 
-HEMP_PREFIX_FUNC(hemp_element_brackets_parse) {
+HEMP_PREFIX(hemp_element_brackets_parse) {
     hemp_debug_call("hemp_element_brackets_parse()\n");
-    hemp_element  self = *elemptr;
-    hemp_symbol   type = self->type;
+    hemp_fragment self = *fragptr;
+    hemp_element  type = self->type;
     hemp_list     exprs;
 
     /* skip opening bracket */
-    hemp_go_next(elemptr);
+    hemp_advance(fragptr);
 
     /* parse a list of none or more expressions - first number (0) indicates
      * no forwarded precedence level, second number (1) forces an empty list 
      * to be returned if no expressions are found
      */
-    exprs = hemp_element_parse_exprs(elemptr, scope, 0, 1);
+    exprs = hemp_fragment_parse_exprs(fragptr, scope, 0, 1);
 
     /* skip any whitespace then check for closing parenthesis */
-    hemp_skip_whitespace(elemptr);
+    hemp_skip_whitespace(fragptr);
 
-    if (! hemp_element_terminator_matches(*elemptr, type->end))
+    if (! hemp_element_terminator_matches(*fragptr, type->end))
         hemp_fatal("missing terminator to match %s => %s\n", type->start, type->end);
 
     /* skip closing bracket */
-    hemp_go_next(elemptr);
+    hemp_advance(fragptr);
 
     /* stash the list of expressions in the element */
     hemp_set_block_exprs_list(self, exprs);
@@ -54,28 +54,28 @@ HEMP_PREFIX_FUNC(hemp_element_brackets_parse) {
 }
 
 
-HEMP_PREFIX_FUNC(hemp_element_brackets_prefix) {
+HEMP_PREFIX(hemp_element_brackets_prefix) {
     hemp_debug_call("hemp_element_brackets_prefix()\n");
 
     /* parse the bracketed expressions */
-    hemp_element self = hemp_element_brackets_parse(
-        elemptr, scope, precedence, force
+    hemp_fragment self = hemp_element_brackets_parse(
+        fragptr, scope, precedence, force
     );
 
     /* parse onwards in case there's a postfix operator following */
     /* TODO: should we mute the force flag? */
     return hemp_parse_postfix(
-        elemptr, scope, precedence, force, self
+        fragptr, scope, precedence, force, self
     );
 }
 
 
-HEMP_CLEAN_FUNC(hemp_element_brackets_clean) {
-    hemp_debug_call("hemp_element_brackets_clean(%p)\n", element);
+HEMP_CLEANUP(hemp_element_brackets_clean) {
+    hemp_debug_call("hemp_element_brackets_clean(%p)\n", fragment);
 
-    if (hemp_has_flag(element, HEMP_BE_ALLOCATED)) {
+    if (hemp_has_flag(fragment, HEMP_BE_ALLOCATED)) {
         hemp_list_free(
-            hemp_block_exprs_list(element)
+            hemp_block_exprs_list(fragment)
         );
     }
 }
@@ -86,71 +86,69 @@ HEMP_CLEAN_FUNC(hemp_element_brackets_clean) {
  * parenthesis: ( )
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_parens_symbol) {
-    hemp_element_brackets_symbol(hemp, symbol);
-    symbol->parse_params    = &hemp_element_brackets_parse;
-    symbol->parse_postfix   = &hemp_element_parens_postfix;
-    symbol->parse_proto     = &hemp_element_parens_proto;
-    symbol->value           = &hemp_element_parens_value;
-    symbol->values          = &hemp_element_block_values;
-    symbol->params          = &hemp_element_block_params;
-    symbol->flags  |= HEMP_BE_POSTBOUND;
-    return symbol;
+HEMP_ELEMENT(hemp_element_parens) {
+    hemp_element_brackets(hemp, element);
+    element->parse_params    = &hemp_element_brackets_parse;
+    element->parse_postfix   = &hemp_element_parens_postfix;
+    element->parse_proto     = &hemp_element_parens_proto;
+    element->value           = &hemp_element_parens_value;
+    element->values          = &hemp_element_block_values;
+    element->params          = &hemp_element_block_params;
+    hemp_set_flag(element, HEMP_BE_POSTBOUND);
+    return element;
 }
 
 
-HEMP_POSTFIX_FUNC(hemp_element_parens_postfix) {
+HEMP_POSTFIX(hemp_element_parens_postfix) {
     hemp_debug_call("hemp_element_parens_postfix()\n");
     
-    hemp_element  self = *elemptr;
-    hemp_symbol   type = self->type;
+    hemp_fragment  self = *fragptr;
+    hemp_element   type = self->type;
 
     HEMP_INFIX_LEFT_PRECEDENCE;
 
     /* parse the bracketed expressions */
     self = hemp_element_brackets_parse(
-        elemptr, scope, precedence, force
+        fragptr, scope, precedence, force
     );
 
     hemp_set_flag(self, HEMP_BE_INFIX);
 
-    hemp_element apply = hemp_element_create(
+    hemp_fragment apply = hemp_fragment_new_fragment(
         self, "hemp.apply"
     );
 
-    hemp_set_lhs_element(apply, lhs);
-    hemp_set_rhs_element(apply, self);
+    hemp_set_lhs_fragment(apply, lhs);
+    hemp_set_rhs_fragment(apply, self);
 
     return hemp_parse_postfix(
-        elemptr, scope, precedence, 0,
+        fragptr, scope, precedence, 0,
         apply
     );
 }
 
 
-HEMP_FIXUP_FUNC(hemp_element_parens_proto) {
-    hemp_debug_call("hemp_element_parens_proto(%p)\n", element);
-    hemp_list     exprs = hemp_block_exprs_list(element);
+HEMP_FIXUP(hemp_element_parens_proto) {
+    hemp_debug_call("hemp_element_parens_proto(%p)\n", fragment);
+    hemp_list     exprs = hemp_block_exprs_list(fragment);
+    hemp_fragment expr;
     hemp_value    item;
-    hemp_element  expr;
     hemp_size     n;
 
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
-        expr = hemp_val_elem(item);
+        expr = hemp_val_frag(item);
         expr->type->parse_proto(expr, scope, fixative);
     }
 
-    return element;
+    return fragment;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_parens_value) {
+HEMP_VALUE(hemp_element_parens_value) {
     hemp_debug_call("hemp_element_parens_value()\n");
-    hemp_value    values  = hemp_obcall(value, values, context, HempNothing);
-    hemp_list     list    = hemp_val_list(values);
-
-//  hemp_debug_msg("got %d values returned by parens\n", list->length);
+    hemp_value values  = hemp_obcall(value, values, context, HempNothing);
+    hemp_list  list    = hemp_val_list(values);
 
     if (list->length > 1) {
 //      hemp_debug_msg("squishing list of %d items to text\n", list->length);
@@ -172,14 +170,14 @@ HEMP_VALUE_FUNC(hemp_element_parens_value) {
  * square brackets: [ ]
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_list_symbol) {
-    hemp_element_brackets_symbol(hemp, symbol);
-    symbol->value = &hemp_element_list_value;
-    return symbol;
+HEMP_ELEMENT(hemp_element_list) {
+    hemp_element_brackets(hemp, element);
+    element->value = &hemp_element_list_value;
+    return element;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_list_value) {
+HEMP_VALUE(hemp_element_list_value) {
     hemp_debug_call("hemp_element_list_value()\n");
     return hemp_element_block_values(
         value, context, HempNothing
@@ -194,27 +192,27 @@ HEMP_VALUE_FUNC(hemp_element_list_value) {
  * e.g. hash = { a => 10 }, and as a code block: if a { b }
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_hash_symbol) {
-    hemp_element_brackets_symbol(hemp, symbol);
-    symbol->parse_prefix    = &hemp_element_hash_prefix;
-    symbol->parse_body      = &hemp_element_hash_body;
-    symbol->value           = &hemp_element_hash_value;
-    hemp_set_flag(symbol, HEMP_BE_POSTBOUND);
-    return symbol;
+HEMP_ELEMENT(hemp_element_hash) {
+    hemp_element_brackets(hemp, element);
+    element->parse_prefix    = &hemp_element_hash_prefix;
+    element->parse_body      = &hemp_element_hash_body;
+    element->value           = &hemp_element_hash_value;
+    hemp_set_flag(element, HEMP_BE_POSTBOUND);
+    return element;
 }
 
 
-HEMP_PREFIX_FUNC(hemp_element_hash_prefix) {
+HEMP_PREFIX(hemp_element_hash_prefix) {
     hemp_debug_call("hemp_element_hash_prefix()\n");
-    hemp_element element = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
-    hemp_list    exprs   = hemp_block_exprs_list(element);
-    hemp_value   item;
-    hemp_element expr;
-    hemp_size    n;
+    hemp_fragment fragment = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
+    hemp_list     exprs    = hemp_block_exprs_list(fragment);
+    hemp_fragment expr;
+    hemp_value    item;
+    hemp_size     n;
     
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
-        expr = hemp_val_elem(item);
+        expr = hemp_val_frag(item);
         // should we also support a parse_pairs handler in case the 
         // expression wants to make a decision about what it supports
         if (hemp_not_flag(expr, HEMP_BE_PAIRS))
@@ -224,26 +222,26 @@ HEMP_PREFIX_FUNC(hemp_element_hash_prefix) {
             );
     }
 
-    return element;
+    return fragment;
 }
 
 
-HEMP_PREFIX_FUNC(hemp_element_hash_body) {
+HEMP_PREFIX(hemp_element_hash_body) {
     hemp_debug_call("hemp_element_hash_body()\n");
-    hemp_element element = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
-    hemp_set_flag(element, HEMP_BE_BODY|HEMP_BE_TERMINATED);
-    return element;
+    hemp_fragment fragment = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
+    hemp_set_flag(fragment, HEMP_BE_BODY|HEMP_BE_TERMINATED);
+    return fragment;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_hash_value) {
+HEMP_VALUE(hemp_element_hash_value) {
     hemp_debug_call("hemp_element_hash_value()\n");
-    hemp_element element = hemp_val_elem(value);
+    hemp_fragment fragment = hemp_val_frag(value);
 
-    if (hemp_has_flag(element, HEMP_BE_BODY))
+    if (hemp_has_flag(fragment, HEMP_BE_BODY))
         return hemp_element_block_value(value, context);
     
-    hemp_list   exprs = hemp_block_exprs_list(element);
+    hemp_list   exprs = hemp_block_exprs_list(fragment);
     hemp_hash   hash  = hemp_context_tmp_hash(context);
     hemp_value  hashv = hemp_hash_val(hash);
     hemp_value  item;

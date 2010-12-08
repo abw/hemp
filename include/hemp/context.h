@@ -3,7 +3,7 @@
 
 #include <hemp/core.h>
 #include <hemp/pool.h>
-#include <hemp/element.h>
+#include <hemp/fragment.h>
 #include <hemp/frame.h>
 #include <hemp/type/hash.h>
 #include <hemp/type/code.h>
@@ -104,10 +104,10 @@ hemp_context_frame(
 HEMP_INLINE hemp_frame
 hemp_context_enter(
     hemp_context    context,
-    hemp_element    element
+    hemp_fragment   fragment
 );
 
-HEMP_INLINE hemp_element
+HEMP_INLINE hemp_fragment
 hemp_context_leave(
     hemp_context    context
 );

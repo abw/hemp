@@ -120,11 +120,11 @@ hemp_string_nwords(
 
 
 HEMP_TYPE_FUNC(hemp_type_string);
-HEMP_OUTPUT_FUNC(hemp_type_string_text);
-HEMP_VALUE_FUNC(hemp_type_string_number);
-HEMP_VALUE_FUNC(hemp_type_string_integer);
-HEMP_VALUE_FUNC(hemp_type_string_boolean);
-HEMP_VALUE_FUNC(hemp_method_string_length);
+HEMP_OUTPUT(hemp_type_string_text);
+HEMP_VALUE(hemp_type_string_number);
+HEMP_VALUE(hemp_type_string_integer);
+HEMP_VALUE(hemp_type_string_boolean);
+HEMP_VALUE(hemp_method_string_length);
 
 
 /*--------------------------------------------------------------------------

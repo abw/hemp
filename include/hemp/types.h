@@ -49,6 +49,8 @@ typedef struct hemp_elements    * hemp_elements;
 typedef struct hemp_error       * hemp_error;
 typedef struct hemp_factory     * hemp_factory;
 typedef struct hemp_filesystem  * hemp_filesystem;
+typedef struct hemp_fragment    * hemp_fragment;
+typedef struct hemp_fragments   * hemp_fragments;
 typedef struct hemp_frame       * hemp_frame;
 typedef struct hemp_global      * hemp_global;
 typedef struct hemp_grammar     * hemp_grammar;
@@ -71,8 +73,6 @@ typedef struct hemp_scope       * hemp_scope;
 typedef struct hemp_slab        * hemp_slab;
 typedef struct hemp_slot        * hemp_slot;
 typedef struct hemp_source      * hemp_source;
-typedef struct hemp_symbol      * hemp_symbol;
-typedef struct hemp_symbols     * hemp_symbols;
 typedef struct hemp_template    * hemp_template;
 typedef struct hemp_tag         * hemp_tag;
 typedef struct hemp_tags        * hemp_tags;
@@ -179,35 +179,43 @@ typedef hemp_bool
 );
 
 
-//typedef hemp_element
-//(* hemp_skip)( 
-//    hemp_element  * current       /* pointer to current element pointer   */
-//);
+/*--------------------------------------------------------------------------
+ * Parsing functions
+ *--------------------------------------------------------------------------*/
 
-typedef hemp_element  
+typedef hemp_fragment
 (* hemp_prefix)(                    /* parse start of expression            */
-    hemp_element  * current,        /* pointer to current element pointer   */
+    hemp_fragment * fragptr,        /* pointer to current element pointer   */
     hemp_scope      scope,          /* current lexical scope                */
     hemp_oprec      precedence,     /* operator precedence level            */
     hemp_bool       force           /* yes, really parse something          */
 );
 
-typedef hemp_element  
+typedef hemp_fragment  
 (* hemp_postfix)(                   /* parse continuation of expression     */
-    hemp_element  * current,        /* pointer to current element pointer   */
+    hemp_fragment * fragptr,        /* pointer to current element pointer   */
     hemp_scope      scope,          /* current lexical scope                */
     hemp_oprec      precedence,     /* operator precedence level            */
     hemp_bool       force,          /* yes, really parse something          */
-    hemp_element    element         /* preceding (lhs) element              */
+    hemp_fragment   lhs         /* preceding (lhs) element              */
 );
 
-typedef hemp_element
+typedef hemp_fragment
 (* hemp_fixup)(                     /* general purpose fixup parser handler */
-    hemp_element    element,        /* pointer to element                   */
+    hemp_fragment   fragptr,        /* pointer to element                   */
     hemp_scope      scope,          /* current lexical scope                */
     hemp_value      fixative        /* optional argument                    */
 );
 
+
+/*--------------------------------------------------------------------------
+ * cleanup functions
+ *--------------------------------------------------------------------------*/
+
+typedef void
+    (* hemp_cleanup)(
+        hemp_fragment  fragment   /* pointer to fragment to clean          */
+    );
 
 
 /*--------------------------------------------------------------------------
@@ -230,10 +238,6 @@ typedef void
         hemp_template template    /* pointer to template to clean         */
     );
 
-typedef void
-    (* hemp_eclean_f)(
-        hemp_element  element     /* pointer to element to clean          */
-    );
 
 typedef void
     (* hemp_dclean_f)(
@@ -263,10 +267,10 @@ typedef hemp_string
         HEMP_TAG_SKIP_ARGS
     );
 
-typedef hemp_element
-    (* hemp_sym_scan_f)(
+typedef hemp_fragment
+    (* hemp_fscanner)(
         HEMP_TAG_SCAN_ARGS,
-        hemp_symbol symbol
+        hemp_element element
     );
 
 

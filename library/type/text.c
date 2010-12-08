@@ -230,7 +230,7 @@ hemp_text_replace_string(
  * Runtime text evaluation methods
  *--------------------------------------------------------------------------*/
 
-HEMP_OUTPUT_FUNC(hemp_type_text_text) {
+HEMP_OUTPUT(hemp_type_text_text) {
      hemp_debug_call("hemp_type_text_text\n");
 
     /* FIXME: can we safely return value?  Should we return a copy?  What 
@@ -251,7 +251,7 @@ HEMP_OUTPUT_FUNC(hemp_type_text_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_text_number) {
+HEMP_VALUE(hemp_type_text_number) {
     hemp_text text = hemp_val_text(value);
     hemp_string  end;
     hemp_num  nval;
@@ -290,13 +290,13 @@ HEMP_VALUE_FUNC(hemp_type_text_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_text_integer) {
+HEMP_VALUE(hemp_type_text_integer) {
     hemp_value nval = hemp_type_text_number(value, context);
     return hemp_int_val((hemp_int) hemp_val_num(nval));
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_text_boolean) {
+HEMP_VALUE(hemp_type_text_boolean) {
     /* hmmm... must be careful here... I think the best approach is to say 
      * that any non-zero length string is true, but unlike Perl, we won't 
      * perform any implicit text->number conversion.  The end result is that 
@@ -314,7 +314,7 @@ HEMP_VALUE_FUNC(hemp_type_text_boolean) {
  * Text pseudo-object methods
  *--------------------------------------------------------------------------*/
 
-HEMP_VALUE_FUNC(hemp_method_text_length) {
+HEMP_VALUE(hemp_method_text_length) {
     return hemp_int_val( hemp_val_text(value)->length );
 }
 

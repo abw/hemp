@@ -16,7 +16,7 @@ HEMP_LANGUAGE(hemp_language_tt3) {
     );
     
     /* register handlers for command symbols */
-    HEMP_ELEMENT("tt3.command.*", &hemp_element_tt3_command_symbols);
+    hemp_register_element("tt3.command.*", &hemp_element_tt3_command_symbols);
 
     /* register grammars */
     hemp_register_grammar(hemp, "tt3.core",     &hemp_grammar_tt3_core);

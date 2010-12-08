@@ -87,7 +87,7 @@ HEMP_TYPE_FUNC(hemp_type_perl_scalar) {
 };
 
 
-HEMP_OUTPUT_FUNC(hemp_perl_scalar_text) {
+HEMP_OUTPUT(hemp_perl_scalar_text) {
     hemp_debug_call("hemp_perl_scalar_text()\n");
 
     hemp_string  string;
@@ -102,7 +102,7 @@ HEMP_OUTPUT_FUNC(hemp_perl_scalar_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_perl_scalar_number) {
+HEMP_VALUE(hemp_perl_scalar_number) {
     hemp_debug_call("hemp_perl_scalar_number()\n");
 
     // TODO: should use looks_like_number first and throw error if not
@@ -112,7 +112,7 @@ HEMP_VALUE_FUNC(hemp_perl_scalar_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_perl_scalar_integer) {
+HEMP_VALUE(hemp_perl_scalar_integer) {
     hemp_debug_call("hemp_perl_scalar_integer()\n");
 
     // TODO: should use looks_like_number first and throw error if not
@@ -122,7 +122,7 @@ HEMP_VALUE_FUNC(hemp_perl_scalar_integer) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_perl_scalar_boolean) {
+HEMP_VALUE(hemp_perl_scalar_boolean) {
     hemp_debug_call("hemp_perl_scalar_boolean()\n");
 
     return SvTRUE( hemp_perl_val_sv(value) )
@@ -131,7 +131,7 @@ HEMP_VALUE_FUNC(hemp_perl_scalar_boolean) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_perl_scalar_defined) {
+HEMP_VALUE(hemp_perl_scalar_defined) {
     hemp_debug_call("hemp_perl_scalar_defined()");
 
     return SvOK( hemp_perl_val_sv(value) )
@@ -140,7 +140,7 @@ HEMP_VALUE_FUNC(hemp_perl_scalar_defined) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_perl_scalar_length) {
+HEMP_VALUE(hemp_perl_scalar_length) {
     hemp_debug_call("hemp_perl_scalar_length()\n");
     return hemp_int_val(
         SvCUR( hemp_perl_val_sv(value) )
@@ -165,7 +165,7 @@ HEMP_TYPE_FUNC(hemp_type_perl_array) {
 };
 
 
-HEMP_VALUE_FUNC(hemp_perl_array_boolean) {
+HEMP_VALUE(hemp_perl_array_boolean) {
     hemp_debug_call("hemp_perl_array_boolean()\n");
     return (av_len( hemp_perl_val_av(value) ) >= 0)
         ? HempTrue
@@ -173,7 +173,7 @@ HEMP_VALUE_FUNC(hemp_perl_array_boolean) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_perl_array_length) {
+HEMP_VALUE(hemp_perl_array_length) {
     hemp_debug_call("hemp_perl_array_length()\n");
     return hemp_int_val(
         av_len( hemp_perl_val_av(value) ) + 1
@@ -265,7 +265,7 @@ HEMP_TYPE_FUNC(hemp_type_perl_hash) {
 };
 
 
-HEMP_VALUE_FUNC(hemp_perl_hash_boolean) {
+HEMP_VALUE(hemp_perl_hash_boolean) {
     hemp_debug_call("hemp_perl_hash_boolean()\n");
     return (HvKEYS( hemp_perl_val_av(value) ) > 0)
         ? HempTrue
@@ -273,7 +273,7 @@ HEMP_VALUE_FUNC(hemp_perl_hash_boolean) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_perl_hash_length) {
+HEMP_VALUE(hemp_perl_hash_length) {
     hemp_debug_call("hemp_perl_hash_length()\n");
     return hemp_int_val(
         HvKEYS( hemp_perl_val_av(value) )
@@ -336,7 +336,7 @@ HEMP_TYPE_FUNC(hemp_type_perl_code) {
 };
 
 
-HEMP_OUTPUT_FUNC(hemp_perl_code_text) {
+HEMP_OUTPUT(hemp_perl_code_text) {
     hemp_debug_call("hemp_perl_code_text()\n");
     hemp_debug("hemp_perl_code_text() calling hemp_perl_code_apply()\n");
     hemp_value result = hemp_perl_code_apply(value, context);
@@ -345,7 +345,7 @@ HEMP_OUTPUT_FUNC(hemp_perl_code_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_perl_code_apply) {
+HEMP_VALUE(hemp_perl_code_apply) {
     hemp_debug("TODO: hemp_perl_code_apply()");
     SV *sv = hemp_perl_val_sv(value);
     I32 nret;
@@ -379,7 +379,7 @@ HEMP_TYPE_FUNC(hemp_type_perl_object) {
  * Miscellaneous Perl value function
  *--------------------------------------------------------------------------*/
 
-HEMP_VALUE_FUNC(hemp_perl_true) {
+HEMP_VALUE(hemp_perl_true) {
     return HempTrue;
 }
 

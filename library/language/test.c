@@ -101,14 +101,14 @@ HEMP_GRAMMAR(hemp_grammar_test) {
  * elements
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_test_test_symbol) {
+HEMP_ELEMENT(hemp_element_test_test_symbol) {
     hemp_debug("test.test symbol: %s\n", symbol->name);
     symbol->scanner         = &hemp_element_test_test_scanner;
     symbol->cleanup         = &hemp_element_test_test_clean,
     symbol->value           = &hemp_element_test_test_value,
     symbol->text            = &hemp_element_value_text,
-    symbol->token           = &hemp_element_literal_token;
-    symbol->source          = &hemp_element_literal_source;
+    symbol->token           = &hemp_element_literal_text;
+    symbol->source          = &hemp_element_element;
     symbol->parse_prefix    = &hemp_element_test_test_prefix;
     symbol->flags           = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
@@ -133,14 +133,14 @@ HEMP_SCAN_FUNC(hemp_element_test_test_scanner) {
     *srcptr = src;
     
     /* add a comment element to the list of scanned tokens */
-    return hemp_elements_append(
+    return hemp_fragments_add_fragment(
         tmpl->elements, symbol,
         start, pos, src - start
     );
 }
 
 
-HEMP_PREFIX_FUNC(hemp_element_test_test_prefix) {
+HEMP_PREFIX(hemp_element_test_test_prefix) {
     hemp_element self = *elemptr;
     hemp_symbol  type = self->type;
     hemp_element block;
@@ -149,7 +149,7 @@ HEMP_PREFIX_FUNC(hemp_element_test_test_prefix) {
     hemp_debug("my precedence: %d   request precedence: %d\n", type->rprec, precedence);
 
     HEMP_PREFIX_PRECEDENCE;
-    hemp_go_next(elemptr);
+    hemp_advance(elemptr);
 
     block = hemp_element_parse_block(elemptr, scope, type->rprec, 1);
 
@@ -165,7 +165,7 @@ HEMP_PREFIX_FUNC(hemp_element_test_test_prefix) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_test_test_value) {
+HEMP_VALUE(hemp_element_test_test_value) {
 //  hemp_text text = hemp_context_tmp_text(context);
     hemp_todo("hemp_element_test_test_value()\n");
     return HempMissing;
@@ -195,8 +195,8 @@ hemp_element_test_expect_symbol(
     hemp_debug("test.test symbol: %s\n", symbol->name);
 //    symbol->scanner         = &hemp_element_test_expect_scanner;
     symbol->cleanup         = &hemp_element_test_expect_clean,
-    symbol->token           = &hemp_element_literal_token;
-    symbol->source          = &hemp_element_literal_source;
+    symbol->token           = &hemp_element_literal_text;
+    symbol->source          = &hemp_element_element;
     symbol->parse_prefix    = &hemp_element_test_expect_prefix;
     symbol->flags           = HEMP_BE_SOURCE | HEMP_BE_FIXED;
     return symbol;
@@ -222,14 +222,14 @@ HEMP_SCAN_FUNC(hemp_element_test_expect_scanner) {
     *srcptr = src;
     
     /* add a comment element to the list of scanned tokens */
-    return hemp_elements_append(
+    return hemp_fragments_add_fragment(
         tmpl->elements, symbol,
         start, pos, src - start
     );
 }
 
 
-HEMP_PREFIX_FUNC(hemp_element_test_expect_prefix) {
+HEMP_PREFIX(hemp_element_test_expect_prefix) {
     hemp_element self = *elemptr;
     hemp_symbol  type = self->type;
     hemp_element block;
@@ -239,7 +239,7 @@ HEMP_PREFIX_FUNC(hemp_element_test_expect_prefix) {
 
     HEMP_PREFIX_PRECEDENCE;
 
-    hemp_go_next(elemptr);
+    hemp_advance(elemptr);
 
     block = hemp_element_parse_block(elemptr, scope, type->rprec, 1);
 

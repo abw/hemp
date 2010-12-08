@@ -37,8 +37,8 @@ hemp_tag_outline_scan(
     hemp_debug("hemp_scan_outline_tag()\n");
 
     // add the tag start token
-    hemp_elements_append(
-        tmpl->elements, HempSymbolTagStart,
+    hemp_fragments_add_fragment(
+        tmpl->fragments, HempElementTagStart,
         tagtok, pos, src - tagtok
     );
     pos += src - tagtok;
@@ -67,8 +67,8 @@ hemp_tag_outline_scan(
             );
             /* whitespace */
             hemp_debug_token("SPACE", from, src-from);
-            hemp_elements_append(
-                tmpl->elements, HempSymbolSpace,
+            hemp_fragments_add_fragment(
+                tmpl->fragments, HempElementSpace,
                 from, pos, src - from
             );
         }
@@ -105,16 +105,16 @@ hemp_tag_outline_scan(
             }
             else if (is_int) {
                 hemp_debug_token("INTEGER", from, src-from);
-                element = hemp_elements_append(
-                    tmpl->elements, HempSymbolInteger,
+                element = hemp_fragments_add_fragment(
+                    tmpl->fragments, HempElementInteger,
                     from, pos, src - from
                 );
                 element->args.value = hemp_int_val(int_val);
             }
             else {
                 hemp_debug_token("NUMBER", from, src-from);
-                element = hemp_elements_append(
-                    tmpl->elements, HempSymbolNumber,
+                element = hemp_fragments_add_fragment(
+                    tmpl->fragments, HempElementNumber,
                     from, pos, src - from
                 );
                 element->args.value = hemp_num_val(num_val);
@@ -145,8 +145,8 @@ hemp_tag_outline_scan(
                 symbol->scanner(tmpl, tag, from, pos, &src, symbol);
             }
             else {
-                hemp_elements_append(
-                    tmpl->elements, symbol,
+                hemp_fragments_add_fragment(
+                    tmpl->fragments, symbol,
                     from, pos, src - from
                 );
             }
@@ -157,8 +157,8 @@ bareword:
             hemp_scan_while(src, isalnum);
             // TODO: check for ':' following after, e.g. file:/blah/blah
             hemp_debug_token("WORD", from, src-from);
-            hemp_elements_append(
-                tmpl->elements, HempSymbolWord,
+            hemp_fragments_add_fragment(
+                tmpl->fragments, HempElementWord,
                 from, pos, src - from
             );
         }
@@ -173,8 +173,8 @@ bareword:
 
     /* tag end */
     hemp_debug_token("TAG END", from, src - from);
-    hemp_elements_append(
-        tmpl->elements, HempSymbolTagEnd,
+    hemp_fragments_add_fragment(
+        tmpl->fragments, HempElementTagEnd,
         from, pos, src - from
     );
     

@@ -220,7 +220,7 @@ hemp_list_each_free(
  *--------------------------------------------------------------------------*/
 
 
-HEMP_OUTPUT_FUNC(hemp_type_list_text) {
+HEMP_OUTPUT(hemp_type_list_text) {
     hemp_list  list = hemp_val_list(value);
     hemp_value item;
     hemp_text  text;
@@ -303,12 +303,12 @@ HEMP_STORE_FUNC(hemp_type_list_store) {
  * List pseudo-object methods
  *--------------------------------------------------------------------------*/
 
-HEMP_VALUE_FUNC(hemp_method_list_length) {
+HEMP_VALUE(hemp_method_list_length) {
     return hemp_int_val( hemp_val_list(value)->length );
 }
 
 
-HEMP_VALUE_FUNC(hemp_method_list_text) {
+HEMP_VALUE(hemp_method_list_text) {
     return hemp_type_list_text(value, context, HempNothing);
 }
 

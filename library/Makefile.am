@@ -6,11 +6,12 @@ libhemp_la_SOURCES  =   action.c            \
                         context.c           \
                         debug.c             \
                         dialect.c           \
-                        elements.c          \
                         element.c           \
                         error.c             \
                         factory.c           \
                         filesystem.c        \
+                        fragment.c          \
+                        fragments.c         \
                         frame.c             \
                         global.c            \
                         grammar.c           \
@@ -28,7 +29,6 @@ libhemp_la_SOURCES  =   action.c            \
                         slab.c              \
                         slot.c              \
                         source.c            \
-                        symbol.c            \
                         tag.c               \
                         tagset.c            \
                         template.c          \
@@ -43,7 +43,6 @@ libhemp_la_SOURCES  =   action.c            \
                         element/block.c     \
                         element/boolean.c   \
                         element/bracket.c   \
-                        element/comment.c   \
                         element/compare.c   \
                         element/dotop.c     \
                         element/identity.c  \

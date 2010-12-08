@@ -115,8 +115,8 @@ hemp_bool_val(hemp_bool b) {
 
 
 HEMP_INLINE hemp_value
-hemp_elem_val(hemp_element e) {
-    return hemp_obj_val((hemp_object) e);
+hemp_frag_val(hemp_fragment f) {
+    return hemp_obj_val((hemp_object) f);
 }
 
 
@@ -129,8 +129,6 @@ hemp_type_val(
     v.bits = HEMP_TAG_MAKE(type->id) | ((hemp_u64) ptr & HEMP_POINTER_MASK);
     return v;
 }
-
-extern HEMP_INLINE hemp_value     hemp_elem_val(hemp_element e);
 
 
 /*--------------------------------------------------------------------------
@@ -196,9 +194,9 @@ hemp_val_obj(hemp_value v) {
     return (hemp_object) HEMP_POINTER(v);
 }
 
-HEMP_INLINE hemp_element
-hemp_val_elem(hemp_value v) {
-    return (hemp_element) HEMP_POINTER(v);
+HEMP_INLINE hemp_fragment
+hemp_val_frag(hemp_value v) {
+    return (hemp_fragment) HEMP_POINTER(v);
 }
 
 
@@ -218,34 +216,34 @@ hemp_val_bool(hemp_value v) {
  * syntactic sugar so that our type vtables are more self-documenting.
  *--------------------------------------------------------------------------*/
 
-HEMP_VALUE_FUNC(hemp_value_no_op) {
+HEMP_VALUE(hemp_value_no_op) {
     return value;
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_self) {
+HEMP_VALUE(hemp_value_self) {
     hemp_debug_msg("hemp_value_self(%s)\n", hemp_type_name(value));
     return value;
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_true) {
+HEMP_VALUE(hemp_value_true) {
     return HempTrue;
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_false) {
+HEMP_VALUE(hemp_value_false) {
     return HempFalse;
 }
 
 
-HEMP_INPUT_FUNC(hemp_value_input_self) {
+HEMP_INPUT(hemp_value_input_self) {
     hemp_debug_call("hemp_value_input_self()\n");
     return value;
 }
 
 
-HEMP_INPUT_FUNC(hemp_value_apply) {
+HEMP_INPUT(hemp_value_apply) {
     /* 
      * The default behaviour for an element evaluated in a function application
      * is to return iteself.
@@ -255,7 +253,7 @@ HEMP_INPUT_FUNC(hemp_value_apply) {
 }
 
 
-HEMP_OUTPUT_FUNC(hemp_value_values) {
+HEMP_OUTPUT(hemp_value_values) {
     /* 
      * The default behaviour for an element evaluated in a list of values is
      * to add itself to the value list
@@ -269,7 +267,7 @@ HEMP_OUTPUT_FUNC(hemp_value_values) {
 }
 
 
-HEMP_OUTPUT_FUNC(hemp_value_params) {
+HEMP_OUTPUT(hemp_value_params) {
     /* 
      * The default behaviour for an element evalauated as a parameter is to 
      * add itself to the parameter's positional args, params->ordinals
@@ -343,7 +341,7 @@ hemp_value_to_string(
  * Default "I'm sorry Dave, I'm afraid I can't do that" functions
  *--------------------------------------------------------------------------*/
 
-HEMP_OUTPUT_FUNC(hemp_value_not_text) {
+HEMP_OUTPUT(hemp_value_not_text) {
     HEMP_CONVERT_ERROR(
         context, 
         hemp_type_name(value),
@@ -354,7 +352,7 @@ HEMP_OUTPUT_FUNC(hemp_value_not_text) {
 }
 
 
-HEMP_OUTPUT_FUNC(hemp_value_not_pairs) {
+HEMP_OUTPUT(hemp_value_not_pairs) {
     HEMP_CONVERT_ERROR(
         context,
         hemp_type_name(value),
@@ -365,7 +363,7 @@ HEMP_OUTPUT_FUNC(hemp_value_not_pairs) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_not_number) {
+HEMP_VALUE(hemp_value_not_number) {
     HEMP_CONVERT_ERROR(
         context, 
         hemp_type_name(value),
@@ -376,7 +374,7 @@ HEMP_VALUE_FUNC(hemp_value_not_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_not_integer) {
+HEMP_VALUE(hemp_value_not_integer) {
     HEMP_CONVERT_ERROR(
         context, 
         hemp_type_name(value),
@@ -387,7 +385,7 @@ HEMP_VALUE_FUNC(hemp_value_not_integer) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_not_boolean) {
+HEMP_VALUE(hemp_value_not_boolean) {
     HEMP_CONVERT_ERROR(
         context, 
         hemp_type_name(value),
@@ -398,7 +396,7 @@ HEMP_VALUE_FUNC(hemp_value_not_boolean) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_not_compare) {
+HEMP_VALUE(hemp_value_not_compare) {
     HEMP_CONVERT_ERROR(
         context, 
         hemp_type_name(value),
@@ -409,7 +407,7 @@ HEMP_VALUE_FUNC(hemp_value_not_compare) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_value_not_defined) {
+HEMP_VALUE(hemp_value_not_defined) {
     HEMP_CONVERT_ERROR(
         context, 
         hemp_type_name(value),

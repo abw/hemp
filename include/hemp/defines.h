@@ -83,7 +83,7 @@
 #define HEMP_BUFFER_SIZE    256     /* size of uri/name lookup buffers      */
 #define HEMP_MESSAGE_SIZE   2048    /* size of message/error buffers        */
 #define HEMP_HASH_DENSITY   5       /* max hash density before resizing     */
-#define HEMP_ELEMENTS_SIZE  32      /* # of elements allocated per slab     */
+#define HEMP_FRAGMENTS_SIZE 32      /* # of fragments allocated per slab    */
 #define HEMP_OPERATORS_SIZE 32      /* # of operators allocated per slab    */
 #define HEMP_TYPES_SIZE     32      /* # of data types (Nan-tagged)         */
 #define HEMP_TYPES_RESERVED 16      /* # of reserved data types             */

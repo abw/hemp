@@ -78,22 +78,22 @@ libhemp_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_libhemp_la_OBJECTS = libhemp_la-action.lo libhemp_la-codec.lo \
 	libhemp_la-context.lo libhemp_la-debug.lo \
-	libhemp_la-dialect.lo libhemp_la-elements.lo \
-	libhemp_la-element.lo libhemp_la-error.lo \
-	libhemp_la-factory.lo libhemp_la-filesystem.lo \
-	libhemp_la-frame.lo libhemp_la-global.lo libhemp_la-grammar.lo \
-	libhemp_la-hemp.lo libhemp_la-language.lo libhemp_la-memory.lo \
+	libhemp_la-dialect.lo libhemp_la-element.lo \
+	libhemp_la-error.lo libhemp_la-factory.lo \
+	libhemp_la-filesystem.lo libhemp_la-fragment.lo \
+	libhemp_la-fragments.lo libhemp_la-frame.lo \
+	libhemp_la-global.lo libhemp_la-grammar.lo libhemp_la-hemp.lo \
+	libhemp_la-language.lo libhemp_la-memory.lo \
 	libhemp_la-module.lo libhemp_la-namespace.lo \
 	libhemp_la-proto.lo libhemp_la-pool.lo libhemp_la-ptree.lo \
 	libhemp_la-scanner.lo libhemp_la-scheme.lo libhemp_la-scope.lo \
 	libhemp_la-slab.lo libhemp_la-slot.lo libhemp_la-source.lo \
-	libhemp_la-symbol.lo libhemp_la-tag.lo libhemp_la-tagset.lo \
-	libhemp_la-template.lo libhemp_la-test.lo libhemp_la-type.lo \
-	libhemp_la-uri.lo libhemp_la-utils.lo libhemp_la-value.lo \
-	libhemp_la-viewer.lo element/libhemp_la-apply.lo \
-	element/libhemp_la-assign.lo element/libhemp_la-block.lo \
-	element/libhemp_la-boolean.lo element/libhemp_la-bracket.lo \
-	element/libhemp_la-comment.lo element/libhemp_la-compare.lo \
+	libhemp_la-tag.lo libhemp_la-tagset.lo libhemp_la-template.lo \
+	libhemp_la-test.lo libhemp_la-type.lo libhemp_la-uri.lo \
+	libhemp_la-utils.lo libhemp_la-value.lo libhemp_la-viewer.lo \
+	element/libhemp_la-apply.lo element/libhemp_la-assign.lo \
+	element/libhemp_la-block.lo element/libhemp_la-boolean.lo \
+	element/libhemp_la-bracket.lo element/libhemp_la-compare.lo \
 	element/libhemp_la-dotop.lo element/libhemp_la-identity.lo \
 	element/libhemp_la-literal.lo element/libhemp_la-number.lo \
 	element/libhemp_la-operator.lo element/libhemp_la-quoted.lo \
@@ -267,11 +267,12 @@ libhemp_la_SOURCES = action.c            \
                         context.c           \
                         debug.c             \
                         dialect.c           \
-                        elements.c          \
                         element.c           \
                         error.c             \
                         factory.c           \
                         filesystem.c        \
+                        fragment.c          \
+                        fragments.c         \
                         frame.c             \
                         global.c            \
                         grammar.c           \
@@ -289,7 +290,6 @@ libhemp_la_SOURCES = action.c            \
                         slab.c              \
                         slot.c              \
                         source.c            \
-                        symbol.c            \
                         tag.c               \
                         tagset.c            \
                         template.c          \
@@ -304,7 +304,6 @@ libhemp_la_SOURCES = action.c            \
                         element/block.c     \
                         element/boolean.c   \
                         element/bracket.c   \
-                        element/comment.c   \
                         element/compare.c   \
                         element/dotop.c     \
                         element/identity.c  \
@@ -419,8 +418,6 @@ element/libhemp_la-boolean.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
 element/libhemp_la-bracket.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
-element/libhemp_la-comment.lo: element/$(am__dirstamp) \
-	element/$(DEPDIR)/$(am__dirstamp)
 element/libhemp_la-compare.lo: element/$(am__dirstamp) \
 	element/$(DEPDIR)/$(am__dirstamp)
 element/libhemp_la-dotop.lo: element/$(am__dirstamp) \
@@ -530,8 +527,6 @@ mostlyclean-compile:
 	-rm -f element/libhemp_la-boolean.lo
 	-rm -f element/libhemp_la-bracket.$(OBJEXT)
 	-rm -f element/libhemp_la-bracket.lo
-	-rm -f element/libhemp_la-comment.$(OBJEXT)
-	-rm -f element/libhemp_la-comment.lo
 	-rm -f element/libhemp_la-compare.$(OBJEXT)
 	-rm -f element/libhemp_la-compare.lo
 	-rm -f element/libhemp_la-dotop.$(OBJEXT)
@@ -606,10 +601,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-debug.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-dialect.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-element.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-elements.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-error.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-factory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-filesystem.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-fragment.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-fragments.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-frame.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-global.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-grammar.Plo@am__quote@
@@ -627,7 +623,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-slab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-slot.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-source.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-symbol.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-tag.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-tagset.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libhemp_la-template.Plo@am__quote@
@@ -642,7 +637,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-block.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-boolean.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-bracket.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-comment.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-compare.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-dotop.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@element/$(DEPDIR)/libhemp_la-identity.Plo@am__quote@
@@ -735,13 +729,6 @@ libhemp_la-dialect.lo: dialect.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-dialect.lo `test -f 'dialect.c' || echo '$(srcdir)/'`dialect.c
 
-libhemp_la-elements.lo: elements.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-elements.lo -MD -MP -MF $(DEPDIR)/libhemp_la-elements.Tpo -c -o libhemp_la-elements.lo `test -f 'elements.c' || echo '$(srcdir)/'`elements.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-elements.Tpo $(DEPDIR)/libhemp_la-elements.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='elements.c' object='libhemp_la-elements.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-elements.lo `test -f 'elements.c' || echo '$(srcdir)/'`elements.c
-
 libhemp_la-element.lo: element.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-element.lo -MD -MP -MF $(DEPDIR)/libhemp_la-element.Tpo -c -o libhemp_la-element.lo `test -f 'element.c' || echo '$(srcdir)/'`element.c
 @am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-element.Tpo $(DEPDIR)/libhemp_la-element.Plo
@@ -769,6 +756,20 @@ libhemp_la-filesystem.lo: filesystem.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='filesystem.c' object='libhemp_la-filesystem.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-filesystem.lo `test -f 'filesystem.c' || echo '$(srcdir)/'`filesystem.c
+
+libhemp_la-fragment.lo: fragment.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-fragment.lo -MD -MP -MF $(DEPDIR)/libhemp_la-fragment.Tpo -c -o libhemp_la-fragment.lo `test -f 'fragment.c' || echo '$(srcdir)/'`fragment.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-fragment.Tpo $(DEPDIR)/libhemp_la-fragment.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fragment.c' object='libhemp_la-fragment.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-fragment.lo `test -f 'fragment.c' || echo '$(srcdir)/'`fragment.c
+
+libhemp_la-fragments.lo: fragments.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-fragments.lo -MD -MP -MF $(DEPDIR)/libhemp_la-fragments.Tpo -c -o libhemp_la-fragments.lo `test -f 'fragments.c' || echo '$(srcdir)/'`fragments.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-fragments.Tpo $(DEPDIR)/libhemp_la-fragments.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='fragments.c' object='libhemp_la-fragments.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-fragments.lo `test -f 'fragments.c' || echo '$(srcdir)/'`fragments.c
 
 libhemp_la-frame.lo: frame.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-frame.lo -MD -MP -MF $(DEPDIR)/libhemp_la-frame.Tpo -c -o libhemp_la-frame.lo `test -f 'frame.c' || echo '$(srcdir)/'`frame.c
@@ -889,13 +890,6 @@ libhemp_la-source.lo: source.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-source.lo `test -f 'source.c' || echo '$(srcdir)/'`source.c
 
-libhemp_la-symbol.lo: symbol.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-symbol.lo -MD -MP -MF $(DEPDIR)/libhemp_la-symbol.Tpo -c -o libhemp_la-symbol.lo `test -f 'symbol.c' || echo '$(srcdir)/'`symbol.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-symbol.Tpo $(DEPDIR)/libhemp_la-symbol.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='symbol.c' object='libhemp_la-symbol.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o libhemp_la-symbol.lo `test -f 'symbol.c' || echo '$(srcdir)/'`symbol.c
-
 libhemp_la-tag.lo: tag.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT libhemp_la-tag.lo -MD -MP -MF $(DEPDIR)/libhemp_la-tag.Tpo -c -o libhemp_la-tag.lo `test -f 'tag.c' || echo '$(srcdir)/'`tag.c
 @am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libhemp_la-tag.Tpo $(DEPDIR)/libhemp_la-tag.Plo
@@ -993,13 +987,6 @@ element/libhemp_la-bracket.lo: element/bracket.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/bracket.c' object='element/libhemp_la-bracket.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o element/libhemp_la-bracket.lo `test -f 'element/bracket.c' || echo '$(srcdir)/'`element/bracket.c
-
-element/libhemp_la-comment.lo: element/comment.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT element/libhemp_la-comment.lo -MD -MP -MF element/$(DEPDIR)/libhemp_la-comment.Tpo -c -o element/libhemp_la-comment.lo `test -f 'element/comment.c' || echo '$(srcdir)/'`element/comment.c
-@am__fastdepCC_TRUE@	$(am__mv) element/$(DEPDIR)/libhemp_la-comment.Tpo element/$(DEPDIR)/libhemp_la-comment.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='element/comment.c' object='element/libhemp_la-comment.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -c -o element/libhemp_la-comment.lo `test -f 'element/comment.c' || echo '$(srcdir)/'`element/comment.c
 
 element/libhemp_la-compare.lo: element/compare.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libhemp_la_CFLAGS) $(CFLAGS) -MT element/libhemp_la-compare.lo -MD -MP -MF element/$(DEPDIR)/libhemp_la-compare.Tpo -c -o element/libhemp_la-compare.lo `test -f 'element/compare.c' || echo '$(srcdir)/'`element/compare.c

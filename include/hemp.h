@@ -11,9 +11,10 @@ extern "C" {
 #include <hemp/context.h>
 #include <hemp/dialect.h>
 #include <hemp/element.h>
-#include <hemp/elements.h>
 #include <hemp/factory.h>
 #include <hemp/filesystem.h>
+#include <hemp/fragment.h>
+#include <hemp/fragments.h>
 #include <hemp/grammar.h>
 #include <hemp/language.h>
 #include <hemp/module.h>
@@ -25,7 +26,6 @@ extern "C" {
 #include <hemp/scheme.h>
 #include <hemp/scope.h>
 #include <hemp/source.h>
-#include <hemp/symbol.h>
 #include <hemp/tag.h>
 #include <hemp/tagset.h>
 #include <hemp/template.h>
@@ -83,7 +83,7 @@ void            hemp_scan_error(hemp_hemp, HEMP_SCAN_ARGS, hemp_errno, ...);
 
 hemp_string     hemp_version();
 
-void hemp_register_elements(hemp_hemp, hemp_symbols);
+void hemp_register_elements(hemp_hemp, hemp_elements);
 
 HEMP_INLINE hemp_text
 hemp_encode(

@@ -18,7 +18,7 @@ int main(
 void test_element() {
     hemp_hemp hemp = hemp_new();
     hemp_element element = hemp_element_new(
-        HempSymbolSpace, NULL, 0, 0
+        HempElementSpace, NULL, 0, 0
     );
     ok( element, "created element" );
     hemp_element_free(element);

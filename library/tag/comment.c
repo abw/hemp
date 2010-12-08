@@ -29,8 +29,8 @@ hemp_tag_comment_scan(
 
     hemp_debug_token("comment", tagtok, to - tagtok);
 
-    hemp_elements_append(
-        tmpl->elements, HempSymbolComment,
+    hemp_fragments_add_fragment(
+        tmpl->fragments, HempElementComment,
         tagtok, pos, to - tagtok
     );
 

@@ -1,5 +1,4 @@
 #include <hemp/grammar.h>
-#include <hemp/namespace.h>
 
 
 hemp_grammar
@@ -11,7 +10,7 @@ hemp_grammar_new(
     HEMP_ALLOCATE(grammar);
 
     grammar->hemp      = hemp;
-    grammar->symbols   = hemp_hash_new();
+    grammar->elements  = hemp_hash_new();
 //  grammar->keywords  = hemp_hash_new();
     grammar->operators = hemp_ptree_new(HEMP_OPERATORS_SIZE);
     grammar->name      = hemp_string_clone(name, "grammar name");
@@ -20,8 +19,8 @@ hemp_grammar_new(
 }
 
 
-hemp_symbol
-hemp_grammar_new_symbol(
+hemp_element
+hemp_grammar_new_element(
     hemp_grammar    grammar,
     hemp_string     etype,
     hemp_string     start,
@@ -38,23 +37,23 @@ hemp_grammar_new_symbol(
     if (! constructor)
         hemp_throw(grammar->hemp, HEMP_ERROR_INVALID, "element", etype);
 
-    hemp_symbol symbol = hemp_symbol_new(
+    hemp_element element = hemp_element_new(
         etype, start, end
     );
 
-    symbol = (hemp_symbol) hemp_action_run(
-        constructor, symbol 
+    element = (hemp_element) hemp_action_run(
+        constructor, element 
     );
 
-    if (! symbol)
+    if (! element)
         hemp_throw(grammar->hemp, HEMP_ERROR_INVALID, "element", etype);
 
-    return symbol;
+    return element;
 }
 
 
-hemp_symbol
-hemp_grammar_add_symbol(
+hemp_element
+hemp_grammar_add_element(
     hemp_grammar    grammar,
     hemp_string     etype,
     hemp_string     start,
@@ -67,63 +66,62 @@ hemp_grammar_add_symbol(
 //      token, etype, grammar->name, lprec, rprec
 //  );
 
-    /* Any symbol with a start token goes into the operator prefix tree 
+    /* Any element with a start token goes into the operator prefix tree 
      * (a modified ternary search tree) which allows the scanner to easily 
      * and efficiently match longest tokens, e.g. so that '++' is 
      * recognised as one single token, not two instances of '+'
      *
-     * Symbols without start tokens can't be matched directly by a parser,
-     * but may be synthesised into an element tree by other elements as 
-     * part of the parsing process (e.g. elements that create a hemp.block
+     * Elements without start tokens can't be matched directly by a parser,
+     * but may be synthesised into an element tree by other fragments as 
+     * part of the parsing process (e.g. fragments that create a hemp.block
      * to store their body content).  We use the fully-qualified element type
      * name (e.g. hemp.block) as a hash index for retrieving the symbol table
      * entry.
      *
-     * Either way, the symbol or element type name must be unique for a 
-     * grammar.
+     * Either way, the element type name must be unique for a grammar.
      */
     hemp_string name = start ? start : etype;
 
-    if (hemp_hash_fetch_pointer(grammar->symbols, name))
-        hemp_throw(grammar->hemp, HEMP_ERROR_DUPLICATE, "symbol", name);
+    if (hemp_hash_fetch_pointer(grammar->elements, name))
+        hemp_throw(grammar->hemp, HEMP_ERROR_DUPLICATE, "element", name);
 
-    hemp_symbol symbol = hemp_grammar_new_symbol(
+    hemp_element element = hemp_grammar_new_element(
         grammar, etype, start, end
     );
 
-    symbol->lprec   = lprec;
-    symbol->rprec   = rprec;
-    symbol->grammar = grammar;
+    element->lprec   = lprec;
+    element->rprec   = rprec;
+    element->grammar = grammar;
 
     if (start) {
         hemp_ptree_store(
-            grammar->operators, start, (hemp_memory) symbol
+            grammar->operators, start, (hemp_memory) element
         );
     }
 
-    hemp_hash_store_pointer(grammar->symbols, name, symbol);
+    hemp_hash_store_pointer(grammar->elements, name, element);
 
-    return symbol;
+    return element;
 }
 
 
-HEMP_INLINE hemp_symbol
-hemp_grammar_symbol(
+HEMP_INLINE hemp_element
+hemp_grammar_element(
     hemp_grammar  grammar,
-    hemp_string      name
+    hemp_string   name
 ) {
-    hemp_symbol symbol = (hemp_symbol) hemp_hash_fetch_pointer(
-        grammar->symbols, name
+    hemp_element element = (hemp_element) hemp_hash_fetch_pointer(
+        grammar->elements, name
     );
 
-    if (! symbol) {
+    if (! element) {
         hemp_fatal(
-            "Invalid element type specified.  %s symbol not found in %s grammar",
+            "Invalid element %s not found in %s grammar",
             name, grammar->name
         );
-}
+    }
 
-    return symbol;
+    return element;
 }
 
 
@@ -131,8 +129,8 @@ void
 hemp_grammar_free(
     hemp_grammar grammar
 ) {
-    hemp_hash_each(grammar->symbols, &hemp_grammar_free_symbol);
-    hemp_hash_free(grammar->symbols);
+    hemp_hash_each(grammar->elements, &hemp_grammar_free_element);
+    hemp_hash_free(grammar->elements);
     hemp_ptree_free(grammar->operators);
     hemp_mem_free(grammar->name);
     hemp_mem_free(grammar);
@@ -140,12 +138,12 @@ hemp_grammar_free(
 
 
 hemp_bool
-hemp_grammar_free_symbol(
+hemp_grammar_free_element(
     hemp_hash     grammars,
     hemp_pos      position,
     hemp_slot     item
 ) {
-    hemp_symbol_free( (hemp_symbol) hemp_val_ptr(item->value) );
+    hemp_element_free( (hemp_element) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
@@ -165,10 +163,10 @@ hemp_grammar_scanner(
     hemp_pos        pos      = 0;
     hemp_num        num_val  = 0;
     hemp_int        int_val  = 0;
+    hemp_fragment   fragment;
     hemp_element    element;
     hemp_bool       is_int, is_word;
     hemp_pnode      pnode;
-    hemp_symbol     symbol;
 
     is_word = HEMP_FALSE;
 
@@ -177,8 +175,8 @@ hemp_grammar_scanner(
             /* whitespace */
             hemp_scan_while(src, isspace);
             hemp_debug_token("SPACE", from, src-from);
-            hemp_elements_append(
-                template->elements, HempSymbolSpace,
+            hemp_fragments_add_fragment(
+                template->fragments, HempElementSpace,
                 from, pos, src - from
             );
         }
@@ -215,30 +213,30 @@ hemp_grammar_scanner(
             }
             else if (is_int) {
                 hemp_debug_token("INTEGER", from, src-from);
-                element = hemp_elements_append(
-                    template->elements, HempSymbolInteger,
+                fragment = hemp_fragments_add_fragment(
+                    template->fragments, HempElementInteger,
                     from, pos, src - from
                 );
-                element->args.value = hemp_int_val(int_val);
+                fragment->args.value = hemp_int_val(int_val);
             }
             else {
                 hemp_debug_token("NUMBER", from, src-from);
-                element = hemp_elements_append(
-                    template->elements, HempSymbolNumber,
+                fragment = hemp_fragments_add_fragment(
+                    template->fragments, HempElementNumber,
                     from, pos, src - from
                 );
-                element->args.value = hemp_num_val(num_val);
+                fragment->args.value = hemp_num_val(num_val);
             }
         }
         else if (
-            (pnode  = hemp_ptree_root(grammar->operators, src))
-        &&  (symbol = (hemp_symbol) hemp_pnode_match_more(pnode, &src))
+            (pnode   = hemp_ptree_root(grammar->operators, src))
+        &&  (element = (hemp_element) hemp_pnode_match_more(pnode, &src))
         ) {
             hemp_debug_token("OPERATOR", from, src-from);
 
             /* We have to be check that we haven't matched the first part of
              * a longer word, e.g. matching 'le' at the start of 'length'.
-             * However, we also have to account for the fact that symbols
+             * However, we also have to account for the fact that elements
              * may contain a mixture of word and non-word characters, e.g.
              * 'C<', 'q/' and so on.  It's OK to have a non-word followed by
              * a word, e.g. 'q/a' ('q/' is the operator, 'a' the next word),
@@ -251,14 +249,13 @@ hemp_grammar_scanner(
             if (isalpha(*src) && isalpha(*(src - 1)))
                 goto bareword;
 
-            if (symbol->scanner) {
-//              hemp_debug("symbol has dedicated scanner\n");
-                hemp_debug_msg("TODO: can't call symbol scanner for %s without tag\n", symbol->name);
+            if (element->scanner) {
+                hemp_debug_msg("TODO: can't call element scanner for %s without tag\n", element->name);
                 // symbol->scanner(tmpl, tag, from, pos, &src, symbol);
             }
             else {
-                hemp_elements_append(
-                    template->elements, symbol,
+                hemp_fragments_add_fragment(
+                    template->fragments, element,
                     from, pos, src - from
                 );
             }
@@ -269,8 +266,8 @@ bareword:
             hemp_scan_while(src, isalnum);
             // TODO: check for ':' following after, e.g. file:/blah/blah
             hemp_debug_token("WORD", from, src-from);
-            hemp_elements_append(
-                template->elements, HempSymbolWord,
+            hemp_fragments_add_fragment(
+                template->fragments, HempElementWord,
                 from, pos, src - from
             );
         }
@@ -283,7 +280,7 @@ bareword:
         from = src;
     }
     
-    hemp_elements_eof(template->elements, pos);
+    hemp_fragments_add_eof(template->fragments, pos);
 
     return (hemp_memory) template;
 }

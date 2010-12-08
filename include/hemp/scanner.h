@@ -14,7 +14,7 @@ struct hemp_scan_pos {
     hemp_string     start;
     hemp_pos        pos;
     hemp_string     current;
-    hemp_symbol     symbol;
+    hemp_element    element;
 };
 
 

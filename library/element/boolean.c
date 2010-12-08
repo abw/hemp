@@ -5,8 +5,8 @@
 /*--------------------------------------------------------------------------
  * boolean operators
  *
- * The "base class" boolean symbol role is a "sub-class" of a binary operator
- * symbol.  It patches in a value() "method" which delegates to an element's
+ * The "base class" boolean element role is a "sub-class" of a binary operator
+ * element.  It patches in a value() "method" which delegates to an element's
  * boolean() method.  Each boolean operator should then define a boolean()
  * method to Do The Right Thing[tm].  Note that we initially patch the 
  * boolean() method to throw an error just in case someone (i.e. me) forgets
@@ -15,14 +15,14 @@
  * each other in a deadly embrace until the universe grows cold.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_boolean_symbol) {
-    hemp_element_infix_symbol(hemp, symbol);
-    symbol->value   = &hemp_element_boolean_value;
-    symbol->boolean = &hemp_element_not_boolean;
-    return symbol;
+HEMP_ELEMENT(hemp_element_boolean) {
+    hemp_element_infix(hemp, element);
+    element->value   = &hemp_element_boolean_value;
+    element->boolean = &hemp_element_not_boolean;
+    return element;
 }
 
-HEMP_VALUE_FUNC(hemp_element_boolean_value) {
+HEMP_VALUE(hemp_element_boolean_value) {
     hemp_debug_call("hemp_element_boolean_value()\n");
     return hemp_obcall(value, boolean, context);
 }
@@ -34,25 +34,25 @@ HEMP_VALUE_FUNC(hemp_element_boolean_value) {
  *
  * The exception that proves the rule: 'not' is a prefix operator rather 
  * than an infix/postfix operator, so we have to unpick some of the work we
- * did in the call to hemp_element_(boolean|infix)_symbol().  Other than
- * that, it's just a case of patching in the boolean() evaluation function.
+ * did in the call to hemp_element_boolean/infix.  Other than that, it's 
+ * just a case of patching in the boolean() evaluation function.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_boolean_not_symbol) {
-    hemp_element_boolean_symbol(HEMP_SYMBOL_ARG_NAMES);
-    symbol->parse_prefix  = &hemp_element_parse_prefix;
-    symbol->parse_postfix = NULL;
-    symbol->boolean       = &hemp_element_boolean_not_value;
-    return symbol;
+HEMP_ELEMENT(hemp_element_boolean_not) {
+    hemp_element_boolean(hemp, element);
+    element->parse_prefix  = &hemp_element_parse_prefix;
+    element->parse_postfix = NULL;
+    element->boolean       = &hemp_element_boolean_not_value;
+    return element;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_boolean_not_value) {
+HEMP_VALUE(hemp_element_boolean_not_value) {
     hemp_debug_call("hemp_element_boolean_not_value()\n");
 
-    hemp_element element  = hemp_val_elem(value);
-    hemp_value   expr     = hemp_expr(element);
-    hemp_value   result   = hemp_obcall(expr, boolean, context);
+    hemp_fragment fragment = hemp_val_frag(value);
+    hemp_value    expr     = hemp_expr(fragment);
+    hemp_value    result   = hemp_obcall(expr, boolean, context);
 
     return hemp_is_true(result)
         ? HempFalse
@@ -67,19 +67,19 @@ HEMP_VALUE_FUNC(hemp_element_boolean_not_value) {
  * evaluation method.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_boolean_and_symbol) {
-    hemp_element_boolean_symbol(HEMP_SYMBOL_ARG_NAMES);
-    symbol->boolean = &hemp_element_boolean_and_value;
-    return symbol;
+HEMP_ELEMENT(hemp_element_boolean_and) {
+    hemp_element_boolean(hemp, element);
+    element->boolean = &hemp_element_boolean_and_value;
+    return element;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_boolean_and_value) {
+HEMP_VALUE(hemp_element_boolean_and_value) {
     hemp_debug_call("hemp_element_boolean_and_value()\n");
 
-    hemp_element element  = hemp_val_elem(value);
-    hemp_value   lhs      = hemp_lhs(element);
-    hemp_value   rhs      = hemp_rhs(element);
+    hemp_fragment fragment = hemp_val_frag(value);
+    hemp_value    lhs      = hemp_lhs(fragment);
+    hemp_value    rhs      = hemp_rhs(fragment);
 //  hemp_debug("[and] evaluating LHS (%s) as boolean\n", lhs->type->name);
     hemp_value lval       = hemp_obcall(lhs, boolean, context);
     
@@ -99,21 +99,21 @@ HEMP_VALUE_FUNC(hemp_element_boolean_and_value) {
  * Another standard binary boolean operator.
  *--------------------------------------------------------------------------*/
 
-HEMP_SYMBOL(hemp_element_boolean_or_symbol) {
-    hemp_element_boolean_symbol(HEMP_SYMBOL_ARG_NAMES);
-    symbol->boolean = &hemp_element_boolean_or_value;
-    return symbol;
+HEMP_ELEMENT(hemp_element_boolean_or) {
+    hemp_element_boolean(hemp, element);
+    element->boolean = &hemp_element_boolean_or_value;
+    return element;
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_boolean_or_value) {
+HEMP_VALUE(hemp_element_boolean_or_value) {
     hemp_debug_call("hemp_element_boolean_or_value()\n");
 
-    hemp_element  element = hemp_val_elem(value);
-    hemp_value    lhs     = hemp_lhs(element);
-    hemp_value    rhs     = hemp_rhs(element);
-    hemp_value    lval    = hemp_obcall(lhs, boolean, context);
-    hemp_value    rval    = hemp_obcall(rhs, boolean, context);
+    hemp_fragment fragment = hemp_val_frag(value);
+    hemp_value    lhs      = hemp_lhs(fragment);
+    hemp_value    rhs      = hemp_rhs(fragment);
+    hemp_value    lval     = hemp_obcall(lhs, boolean, context);
+    hemp_value    rval     = hemp_obcall(rhs, boolean, context);
 
     return (hemp_is_true(lval) || hemp_is_true(rval))
         ? HempTrue

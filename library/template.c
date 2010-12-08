@@ -13,7 +13,7 @@ hemp_template_new(
     template->source   = source;
 //    template->tagset   = hemp_tagset_new(template);
     template->scope    = hemp_scope_new(dialect->hemp);
-    template->elements = hemp_elements_new(dialect->hemp, 0);
+    template->fragments = hemp_fragments_new(dialect->hemp, 0);
     template->tree     = NULL;
     template->scanner  = NULL;
         
@@ -30,7 +30,7 @@ hemp_template_free(
         template->dialect->cleanup(template);
 
     /* Then call any cleanup handler defined for the expression tree */
-    // no longer required as block element is managed by elements
+    // no longer required as block element is managed by fragments
 //    if (template->tree && template->tree->type->cleanup) {
 //        hemp_debug_msg("cleaning up template tree\n");
 //        template->tree->type->cleanup(template->tree);
@@ -38,8 +38,8 @@ hemp_template_free(
 //    }
 
     /* Free the source, the tagset and then the template object itself. */
-    /* The elements cleaner will take care of cleaning any other tokens */
-    hemp_elements_free(template->elements);
+    /* The fragments cleaner will take care of cleaning any other tokens */
+    hemp_fragments_free(template->fragments);
     hemp_scope_free(template->scope);
     hemp_source_free(template->source);
 //    hemp_tagset_free(template->tagset);
@@ -48,16 +48,16 @@ hemp_template_free(
 }
 
 
-hemp_element
+hemp_fragment
 hemp_template_tokens(
     hemp_template template
 ) {
     hemp_debug_call("hemp_template_tokens(%p)\n", template);
 
-    if (! template->elements->head)
+    if (! template->fragments->head)
         hemp_template_scan(template);
 
-    return template->elements->head;
+    return template->fragments->head;
 }
 
 
@@ -85,7 +85,7 @@ hemp_template_compile(
 ) {
     hemp_debug_call("hemp_template_compile(%p)\n", template);
     
-    template->tree = hemp_element_parse(
+    template->tree = hemp_fragment_parse(
         hemp_template_tokens(template),
         template->scope
     );
@@ -95,7 +95,7 @@ hemp_template_compile(
 }
 
 
-hemp_element
+hemp_fragment
 hemp_template_tree(
     hemp_template template
 ) {
@@ -119,7 +119,7 @@ hemp_template_render(
     hemp_value v;
     hemp_text output;
 
-    hemp_element root = hemp_template_tree(template);
+    hemp_fragment root = hemp_template_tree(template);
 
     if (! context) {
         my_context = HEMP_TRUE;
@@ -132,7 +132,7 @@ hemp_template_render(
 //    hemp_debug("root type: %s\n", root->type->name);
 
 //    HEMP_TRY;
-        v = root->type->text(hemp_elem_val(root), context, HempNothing);
+        v = root->type->text(hemp_frag_val(root), context, HempNothing);
 //    HEMP_CATCH_ALL;
 //       hemp_fatal("Error processing template: %s", hemp->error->message);
 //    HEMP_END;
@@ -158,7 +158,7 @@ hemp_template_data(
     hemp_debug_call("hemp_template_data(%p)\n", template);
 //    hemp_hemp       hemp        = template->dialect->hemp;
     hemp_bool       my_context  = HEMP_FALSE;
-    hemp_element    root        = hemp_template_tree(template);
+    hemp_fragment   root        = hemp_template_tree(template);
     hemp_value      values;
     hemp_list       results;
 
@@ -170,7 +170,7 @@ hemp_template_data(
         context     = hemp_context_new(template->dialect->hemp);
     }
 
-    values  = root->type->values(hemp_elem_val(root), context, HempNothing);
+    values  = root->type->values(hemp_frag_val(root), context, HempNothing);
     results = hemp_val_list(values);
     
     if (my_context)

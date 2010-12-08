@@ -4,7 +4,7 @@
 #include <hemp/dialect.h>
 #include <hemp/source.h>
 #include <hemp/scope.h>
-#include <hemp/elements.h>
+#include <hemp/fragments.h>
 
 
 /*--------------------------------------------------------------------------
@@ -16,8 +16,8 @@ struct hemp_template {
     hemp_source     source;
 //    hemp_tagset     tagset;
     hemp_scope      scope;
-    hemp_elements   elements;
-    hemp_element    tree;
+    hemp_fragments  fragments;
+    hemp_fragment   tree;
     hemp_action     scanner;
 
     /* these don't really belong here but it'll do for now */
@@ -41,7 +41,7 @@ hemp_template_free(
     hemp_template   template
 );
 
-hemp_element
+hemp_fragment
 hemp_template_tokens(
     hemp_template   template
 );
@@ -56,7 +56,7 @@ hemp_template_compile(
     hemp_template   template
 );
     
-hemp_element
+hemp_fragment
 hemp_template_tree(
     hemp_template   template
 );
@@ -81,10 +81,10 @@ hemp_template_data(
  *--------------------------------------------------------------------------*/
 
 #define hemp_template_first_element(t)  \
-    t->elements->head
+    t->fragments->head
 
 #define hemp_template_last_element(t)  \
-    t->elements->tail
+    t->fragments->tail
 
 
 #endif /* HEMP_TEMPLATE_H */

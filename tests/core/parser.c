@@ -19,8 +19,8 @@ void test_punctuation() {
     hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp" );
 
-    hemp_elements elements = hemp_elements_new(hemp, 0);
-    ok( elements, "created elements" );
+    hemp_fragments fragments = hemp_fragments_new(hemp, 0);
+    ok( fragments, "created fragments" );
 
     hemp_symbol space, comma, semicolon, terminator;
     
@@ -42,31 +42,31 @@ void test_punctuation() {
 
     HEMP_END;
 
-    hemp_elements_append(elements, space,       text, 0, 0);
-    hemp_elements_append(elements, comma,       text, 0, 0);
-    hemp_elements_append(elements, space,       text, 0, 0);
-    hemp_elements_append(elements, comma,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, space,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, comma,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, space,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, comma,       text, 0, 0);
     /* skipping delimiters should stop here */
-    hemp_elements_append(elements, semicolon,   text, 0, 0);
-    hemp_elements_append(elements, space,       text, 0, 0);
-    hemp_elements_append(elements, semicolon,   text, 0, 0);
-    hemp_elements_append(elements, comma,       text, 0, 0);
-    hemp_elements_append(elements, space,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, semicolon,   text, 0, 0);
+    hemp_fragments_add_fragment(fragments, space,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, semicolon,   text, 0, 0);
+    hemp_fragments_add_fragment(fragments, comma,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, space,       text, 0, 0);
     /* skipping separators should stop here */
-    hemp_elements_append(elements, terminator,  text, 0, 0);
-    hemp_elements_append(elements, space,       text, 0, 0);
-    hemp_elements_append(elements, comma,       text, 0, 0);
-    hemp_elements_append(elements, space,       text, 0, 0);
-    hemp_elements_append(elements, semicolon,   text, 0, 0);
-    hemp_elements_append(elements, space,       text, 0, 0);
-    hemp_elements_append(elements, terminator,  text, 0, 0);
-    hemp_elements_append(elements, terminator,  text, 0, 0);
-    hemp_elements_append(elements, space,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, terminator,  text, 0, 0);
+    hemp_fragments_add_fragment(fragments, space,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, comma,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, space,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, semicolon,   text, 0, 0);
+    hemp_fragments_add_fragment(fragments, space,       text, 0, 0);
+    hemp_fragments_add_fragment(fragments, terminator,  text, 0, 0);
+    hemp_fragments_add_fragment(fragments, terminator,  text, 0, 0);
+    hemp_fragments_add_fragment(fragments, space,       text, 0, 0);
     /* skipping terminators should stop here */
-    hemp_elements_append(elements, HempSymbolText,       text, 0, 0);
-    hemp_elements_eof(elements, 0);
+    hemp_fragments_add_fragment(fragments, HempElementText,       text, 0, 0);
+    hemp_fragments_add_eof(fragments, 0);
 
-    hemp_element elem = elements->head;
+    hemp_element elem = fragments->head;
     
     hemp_skip_delimiter(&elem);
     ok( elem->type == semicolon, "blocked at semicolon separator" );
@@ -75,9 +75,9 @@ void test_punctuation() {
     ok( elem->type == terminator, "blocked at terminator" );
 
     hemp_skip_terminator(&elem);
-    ok( elem->type == HempSymbolText, "blocked at text" );
+    ok( elem->type == HempElementText, "blocked at text" );
 
-    hemp_elements_free(elements);
+    hemp_fragments_free(fragments);
     hemp_symbol_free(space);
     hemp_symbol_free(comma);
     hemp_symbol_free(semicolon);

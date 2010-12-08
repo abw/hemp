@@ -2,26 +2,24 @@
 #include <hemp/proto.h>
 #include <hemp/type/code.h>
 
-HEMP_FIXUP_FUNC(hemp_element_apply_lvalue);
-HEMP_VALUE_FUNC(hemp_element_apply_value);
-HEMP_INPUT_FUNC(hemp_element_apply_assign);
-// HEMP_CLEAN_FUNC(hemp_element_apply_clean);
+HEMP_FIXUP(hemp_element_apply_lvalue);
+HEMP_VALUE(hemp_element_apply_value);
+HEMP_INPUT(hemp_element_apply_assign);
 
 
-HEMP_SYMBOL(hemp_element_apply_symbol) {
-    symbol->parse_lvalue    = &hemp_element_apply_lvalue;
-    symbol->value           = &hemp_element_apply_value;
-    symbol->values          = &hemp_element_value_values;
-    symbol->text            = &hemp_element_value_text;
-    symbol->assign          = &hemp_element_apply_assign;
-//  symbol->cleanup         = &hemp_element_apply_clean;
-    return symbol;
+
+HEMP_ELEMENT(hemp_element_apply) {
+    element->parse_lvalue    = &hemp_element_apply_lvalue;
+    element->value           = &hemp_element_apply_value;
+    element->assign          = &hemp_element_apply_assign;
+    element->text            = &hemp_element_value_text;
+    return element;
 }
 
 
-HEMP_FIXUP_FUNC(hemp_element_apply_lvalue) {
+HEMP_FIXUP(hemp_element_apply_lvalue) {
     hemp_debug_call("hemp_element_apply_lvalue()\n");
-    hemp_set_flag(element, HEMP_BE_LVALUE);
+    hemp_set_flag(fragment, HEMP_BE_LVALUE);
 
     /* This function application element has the function name (or some other
      * expression) in the LHS slot and the list of parenthesised expressions
@@ -45,11 +43,11 @@ HEMP_FIXUP_FUNC(hemp_element_apply_lvalue) {
      *   e.g. foo(a,b) = a ~ b  
      *    =>  [assign, [apply,foo,(a,b)], [code,(a,b),[concat,a,b]]
      */
-    hemp_element parens = hemp_rhs_element(element);
-    hemp_element assign = hemp_val_elem(fixative);
-    hemp_code    code   = hemp_code_new();
-    hemp_proto   proto  = hemp_code_proto(code);
-    code->body          = hemp_rhs(assign);
+    hemp_fragment parens = hemp_rhs_fragment(fragment);
+    hemp_fragment assign = hemp_val_frag(fixative);
+    hemp_code    code    = hemp_code_new();
+    hemp_proto   proto   = hemp_code_proto(code);
+    code->body           = hemp_rhs(assign);
 
     parens->type->parse_proto(parens, scope, hemp_ptr_val(proto));
     hemp_set_rhs(assign, hemp_code_val(code));
@@ -58,18 +56,18 @@ HEMP_FIXUP_FUNC(hemp_element_apply_lvalue) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_apply_value) {
+HEMP_VALUE(hemp_element_apply_value) {
     hemp_debug_call("hemp_element_apply_value()\n");
-    hemp_element  element = hemp_val_elem(value);
+    hemp_fragment fragment = hemp_val_frag(value);
     
-    if (hemp_has_flag(element, HEMP_BE_LVALUE)) {
+    if (hemp_has_flag(fragment, HEMP_BE_LVALUE)) {
         // TODO
         hemp_fatal("Attempt to directly apply lvalue function declaration\n");
     }
 
-    hemp_value    lhs     = hemp_lhs(element);
-    hemp_value    parens  = hemp_rhs(element);
-    hemp_frame    frame   = hemp_context_enter(context, element);
+    hemp_value    lhs     = hemp_lhs(fragment);
+    hemp_value    parens  = hemp_rhs(fragment);
+    hemp_frame    frame   = hemp_context_enter(context, fragment);
     hemp_value    params  = hemp_params_val(frame->params);
     hemp_value    result;
 
@@ -95,15 +93,15 @@ HEMP_VALUE_FUNC(hemp_element_apply_value) {
 }
 
 
-HEMP_INPUT_FUNC(hemp_element_apply_assign) {
+HEMP_INPUT(hemp_element_apply_assign) {
     hemp_debug_call("hemp_element_apply_assign()\n");
-    hemp_element element = hemp_val_elem(value);
-    hemp_value   lhs     = hemp_lhs(element);
+    hemp_fragment fragment = hemp_val_frag(value);
+    hemp_value    lhs      = hemp_lhs(fragment);
 
     /* TODO: there's an iffy cross-dependence with hemp_element_apply_lvalue()
      * that could do with being cleaned up
      */
-    if (hemp_not_flag(element, HEMP_BE_LVALUE))
+    if (hemp_not_flag(fragment, HEMP_BE_LVALUE))
         hemp_fatal("hemp_element_apply_assign() called when HEMP_BE_LVALUE is not set\n");
 
 //  hemp_debug_msg("apply assign %s\n", hemp_type_name(input));
@@ -111,9 +109,5 @@ HEMP_INPUT_FUNC(hemp_element_apply_assign) {
     return hemp_call(lhs, assign, context, input);
 }
 
-
-HEMP_CLEAN_FUNC(hemp_element_apply_clean) {
-//    hemp_debug("TODO: hemp_element_apply_clean(%p)\n", element);
-}
 
 

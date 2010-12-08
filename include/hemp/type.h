@@ -128,17 +128,17 @@ HEMP_TYPE_FUNC(hemp_type_integer);
 HEMP_TYPE_FUNC(hemp_type_identity);
 HEMP_TYPE_FUNC(hemp_type_object);
 
-HEMP_VALUE_FUNC(hemp_method_value_name);
-HEMP_VALUE_FUNC(hemp_method_value_text);
-HEMP_VALUE_FUNC(hemp_method_value_number);
-HEMP_VALUE_FUNC(hemp_method_value_integer);
-HEMP_VALUE_FUNC(hemp_method_value_boolean);
-HEMP_VALUE_FUNC(hemp_method_value_defined);
-HEMP_VALUE_FUNC(hemp_method_value_type);
+HEMP_VALUE(hemp_method_value_name);
+HEMP_VALUE(hemp_method_value_text);
+HEMP_VALUE(hemp_method_value_number);
+HEMP_VALUE(hemp_method_value_integer);
+HEMP_VALUE(hemp_method_value_boolean);
+HEMP_VALUE(hemp_method_value_defined);
+HEMP_VALUE(hemp_method_value_type);
 
-HEMP_OUTPUT_FUNC(hemp_valueype_text);
-HEMP_VALUE_FUNC(hemp_method_type_name);
-HEMP_VALUE_FUNC(hemp_method_type_id);
+HEMP_OUTPUT(hemp_valueype_text);
+HEMP_VALUE(hemp_method_type_name);
+HEMP_VALUE(hemp_method_type_id);
 
 
 

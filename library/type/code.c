@@ -2,8 +2,8 @@
 #include <hemp/context.h>
 #include <hemp/type/code.h>
 
-HEMP_OUTPUT_FUNC(hemp_type_code_text);
-HEMP_INPUT_FUNC(hemp_type_code_apply);
+HEMP_OUTPUT(hemp_type_code_text);
+HEMP_INPUT(hemp_type_code_apply);
 
 HEMP_TYPE_FUNC(hemp_type_code) {
     hemp_type type  = hemp_type_subtype(HempValue, id, name);
@@ -143,7 +143,7 @@ hemp_type_code_resolve_proto(
 }
 
 
-HEMP_INPUT_FUNC(hemp_type_code_apply) {
+HEMP_INPUT(hemp_type_code_apply) {
     hemp_debug_call("hemp_type_code_apply()\n");
     hemp_code   code    = hemp_val_code(value);
     hemp_value  body    = code->body;
@@ -166,7 +166,7 @@ HEMP_INPUT_FUNC(hemp_type_code_apply) {
 }
 
 
-HEMP_OUTPUT_FUNC(hemp_type_code_text) {
+HEMP_OUTPUT(hemp_type_code_text) {
     hemp_debug_call("hemp_type_code_text()\n");
     hemp_code   code    = hemp_val_code(value);
     hemp_value  body    = code->body;

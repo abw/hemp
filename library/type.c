@@ -247,7 +247,7 @@ HEMP_TYPE_FUNC(hemp_type_type) {
 };
 
 
-HEMP_OUTPUT_FUNC(hemp_valueype_text) {                          // HUH?
+HEMP_OUTPUT(hemp_valueype_text) {                          // HUH?
     hemp_type type = (hemp_type) hemp_val_ptr(value);
     hemp_text text;
     
@@ -266,46 +266,46 @@ HEMP_OUTPUT_FUNC(hemp_valueype_text) {                          // HUH?
 }
 
 
-HEMP_VALUE_FUNC(hemp_method_type_name) {
+HEMP_VALUE(hemp_method_type_name) {
     return hemp_str_val( ((hemp_type) hemp_val_ptr(value))->name );
 }
 
 
-HEMP_VALUE_FUNC(hemp_method_type_id) {
+HEMP_VALUE(hemp_method_type_id) {
     return hemp_int_val( ((hemp_type) hemp_val_ptr(value))->id );
 }
 
 
-HEMP_VALUE_FUNC(hemp_method_value_name) {
+HEMP_VALUE(hemp_method_value_name) {
     return hemp_str_val( hemp_vtype(value)->name );
 }
 
 
-HEMP_VALUE_FUNC(hemp_method_value_type) {
+HEMP_VALUE(hemp_method_value_type) {
     return hemp_obj_val( (hemp_object) hemp_vtype(value) );
 }
 
 
-HEMP_VALUE_FUNC(hemp_method_value_text) {
+HEMP_VALUE(hemp_method_value_text) {
     return hemp_to_text(value, context);
 }
 
 
-HEMP_VALUE_FUNC(hemp_method_value_number) {
+HEMP_VALUE(hemp_method_value_number) {
     return hemp_to_number(value, context);
 }
 
 
-HEMP_VALUE_FUNC(hemp_method_value_integer) {
+HEMP_VALUE(hemp_method_value_integer) {
     return hemp_to_integer(value, context);
 }
 
 
-HEMP_VALUE_FUNC(hemp_method_value_boolean) {
+HEMP_VALUE(hemp_method_value_boolean) {
     return hemp_to_boolean(value, context);
 }
 
 
-HEMP_VALUE_FUNC(hemp_method_value_defined) {
+HEMP_VALUE(hemp_method_value_defined) {
     return hemp_call(value, defined, context);
 }

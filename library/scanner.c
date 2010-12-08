@@ -19,7 +19,7 @@ hemp_scan_pos_init(HEMP_SCAN_ARGS) {
     scan_pos->start   = start;
     scan_pos->pos     = pos;
     scan_pos->current = *srcptr;
-    scan_pos->symbol  = symbol;
+    scan_pos->element = element;
 
     return scan_pos;
 }
@@ -40,7 +40,7 @@ hemp_bool
 hemp_scan_unplugged(
     hemp_template tmpl
 ) {
-    hemp_elements   elements = tmpl->elements;
+    hemp_fragments   fragments = tmpl->fragments;
     hemp_tagset     tagset   = tmpl->tagset;
     hemp_tag        tag      = tagset->unplugged_tag;
     hemp_string     text     = hemp_source_read(tmpl->source),
@@ -59,14 +59,14 @@ hemp_scan_unplugged(
         src++;
 
     if (src > from) {
-        hemp_elements_append(
-            elements, tagset->text_symbol,
+        hemp_fragments_add_fragment(
+            fragments, tagset->text_symbol,
             from, pos, src - from
         );
         pos += src - from;
     }
     
-    hemp_elements_eof(elements, pos);
+    hemp_fragments_add_eof(fragments, pos);
 
     return HEMP_TRUE;
 }

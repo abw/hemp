@@ -204,6 +204,21 @@
         hemp_string name                        \
     )
 
+#define HEMP_GLOBAL_ELEMENT(f)                  \
+    hemp_element f()
+
+#define HEMP_ELEMENT(f)                         \
+    hemp_element f(                             \
+        hemp_hemp       hemp,                   \
+        hemp_element    element                 \
+    )
+
+#define HEMP_ELEMENTS(f)                        \
+    hemp_action f(                              \
+        hemp_hemp    hemp,                      \
+        hemp_string  name                       \
+    )
+
 #define HEMP_PREPARE(f)                         \
     hemp_template f(                            \
         hemp_template template                  \
@@ -237,7 +252,7 @@
  * function which can provide hemp with a list of symbols, e.g. all the 
  * hemp.numop.* symbols.
  *
- * HEMP_SYMBOL(name) (not singular) can be used to declare/define a 
+ * HEMP_ELEMENT(name) (not singular) can be used to declare/define a 
  * function which initialises a single symbol type.
  *
  * HEMP_SYMBOL0(...), HEMP_SYMBOL1(...) and HEMP_SYMBOL2(...) can be used as 
@@ -253,33 +268,6 @@
  * See library/language/XXX.c for examples of these in action.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_GLOBAL_SYMBOL(f)               \
-    hemp_symbol f()
-
-#define HEMP_SYMBOLS_ARGS                   \
-    hemp_hemp        hemp,                  \
-    hemp_string      name
-
-#define HEMP_SYMBOLS_ARG_NAMES              \
-    hemp, name
-
-#define HEMP_SYMBOLS(f)                     \
-    hemp_action f(                          \
-        hemp_hemp    hemp,                  \
-        hemp_string  name                   \
-    )
-
-#define HEMP_SYMBOL_ARGS                    \
-    hemp_hemp       hemp,                   \
-    hemp_symbol     symbol
-
-#define HEMP_SYMBOL_ARG_NAMES               \
-    hemp, symbol
-
-#define HEMP_SYMBOL(f)                      \
-    hemp_symbol f(                          \
-        HEMP_SYMBOL_ARGS                    \
-    )
 
 #define HEMP_SYMBOL0(name)                                       \
     hemp_grammar_add_symbol(grammar, name, NULL, NULL, 0, 0);
@@ -300,27 +288,6 @@
     hemp_grammar_add_symbol(grammar, name, start, NULL, prec, prec);
 
 
-/*--------------------------------------------------------------------------
- * Elements
- *
- * Right down at the very bottom of it all we have elements.  Elements are 
- * type definitions representing a parsed template.  Each element has a pointer
- * the grammar symbol that defines what kind of element it is.
- *
- * hemp_register_elements(hemp, ...) is a macro for registering a set of element types
- * (e.g. hemp.numop.*).  Hemp will automatically call the registered callback
- * when any matching elements are requested for adding to a grammar as a 
- * symbol (e.g. a grammar using hemp.numop.multiply will trigger a call to 
- * the provider registered for hemp.numop.*).  HEMP_ELEMENT(...) is used to
- * register a callback to construct an individual element type (e.g. 
- * hemp.numop.multiply).
- *--------------------------------------------------------------------------*/
-
-#define HEMP_ELEMENT(name, constructor)     \
-    hemp_register_element(                  \
-        hemp, name,                         \
-        (hemp_actor) constructor            \
-    );
 
 
 /*--------------------------------------------------------------------------
@@ -330,7 +297,7 @@
  * for embedded tags (as specified by the dialect defined for the current 
  * template) and then calls the function registered to scan the tag.  The
  * callback should create one or more elements and attach them to the 
- * template->elements stream by calling hemp_elements_append().
+ * template->elements stream by calling hemp_fragments_add_fragment().
  * 
  * HEMP_SCAN_FUNC(name) can be used as a shortcut to declare and define such 
  * functions.  HEMP_SCAN_ERROR(...) can be used inside scanner functions to
@@ -343,13 +310,13 @@
     hemp_string     start,                  \
     hemp_pos        pos,                    \
     hemp_string    *srcptr,                 \
-    hemp_symbol     symbol
+    hemp_element    element
 
 #define HEMP_SCAN_ARG_NAMES                 \
-    tmpl, tag, start, pos, srcptr, symbol
+    tmpl, tag, start, pos, srcptr, element
 
 #define HEMP_SCAN_FUNC(f)                   \
-    hemp_element f(                         \
+    hemp_fragment f(                        \
         HEMP_SCAN_ARGS                      \
     )
 
@@ -385,7 +352,7 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
  * operator precedence parsing.  See Ch.9 of "Beautiful Code" (O'Reilly, 
  * ISBN-13: 978-0-596-51004-6) for a good introduction to the subject.
  *
- * HEMP_PREFIX_FUNC() and HEMP_POSTFIX_FUNC() can be used to declare and 
+ * HEMP_PREFIX() and HEMP_POSTFIX() can be used to declare and 
  * define expression parsing functions for this purpose.  A prefix function
  * is called when an element appears at the start of an expression.  A 
  * postfix function is called when it appears following a preceding 
@@ -393,32 +360,30 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
  *--------------------------------------------------------------------------*/
 
 #define HEMP_PREFIX_ARGS                    \
-    hemp_element   *elemptr,                \
+    hemp_fragment  *fragptr,                \
     hemp_scope      scope,                  \
     hemp_oprec      precedence,             \
     hemp_bool       force
 
 #define HEMP_PREFIX_ARG_NAMES               \
-    elemptr, scope, precedence, force
+    fragptr, scope, precedence, force
 
-#define HEMP_PREFIX_FUNC(f)                 \
-    HEMP_INLINE hemp_element f(             \
+#define HEMP_PREFIX(f)                      \
+    HEMP_INLINE hemp_fragment f(            \
         HEMP_PREFIX_ARGS                    \
     )
 
 #define HEMP_POSTFIX_ARGS                   \
     HEMP_PREFIX_ARGS,                       \
-    hemp_element  lhs 
+    hemp_fragment   lhs 
 
 #define HEMP_POSTFIX_ARG_NAMES              \
-    elemptr, scope, precedence, force, lhs
+    fragptr, scope, precedence, force, lhs
 
-#define HEMP_POSTFIX_FUNC(f)                \
-    HEMP_INLINE hemp_element f(             \
+#define HEMP_POSTFIX(f)                     \
+    HEMP_INLINE hemp_fragment f(            \
         HEMP_POSTFIX_ARGS                   \
     )
-
-/* Add these for completeness, in case we ever need to make them different */
 
 #define HEMP_INFIX_ARGS                     \
     HEMP_POSTFIX_ARGS
@@ -426,12 +391,12 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
 #define HEMP_INFIX_ARG_NAMES                \
     HEMP_POSTFIX_ARG_NAMES
 
-#define HEMP_INFIX_FUNC(f)                  \
-    HEMP_POSTFIX_FUNC(f)
+#define HEMP_INFIX(f)                       \
+    HEMP_POSTFIX(f)
 
-#define HEMP_FIXUP_FUNC(f)                  \
-    HEMP_INLINE hemp_element f(             \
-        hemp_element    element,            \
+#define HEMP_FIXUP(f)                       \
+    HEMP_INLINE hemp_fragment f(            \
+        hemp_fragment   fragment,           \
         hemp_scope      scope,              \
         hemp_value      fixative            \
     )
@@ -542,26 +507,26 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
  * Data values define vtables for coercing one type to another (e.g. number
  * to text) and other methods that can be called on values, e.g. text.length
  *
- * HEMP_VALUE_FUNC() can be used to declare and define value functions.
- * HEMP_OUTPUT_FUNC() is a special case for text yielding functions where we 
+ * HEMP_VALUE() can be used to declare and define value functions.
+ * HEMP_OUTPUT() is a special case for text yielding functions where we 
  * allow an existing text/list object to be passed as an extra argument for 
  * the function to append the value onto.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_VALUE_FUNC(f)                  \
+#define HEMP_VALUE(f)                  \
     HEMP_INLINE hemp_value f(               \
         hemp_value      value,              \
         hemp_context    context             \
     )
 
-#define HEMP_INPUT_FUNC(f)                  \
+#define HEMP_INPUT(f)                  \
     HEMP_INLINE hemp_value f(               \
         hemp_value      value,              \
         hemp_context    context,            \
         hemp_value      input               \
     )
 
-#define HEMP_OUTPUT_FUNC(f)                 \
+#define HEMP_OUTPUT(f)                 \
     HEMP_INLINE hemp_value f(               \
         hemp_value      value,              \
         hemp_context    context,            \
@@ -583,9 +548,9 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
         hemp_value      value               \
     )
 
-#define HEMP_CLEAN_FUNC(f)                  \
+#define HEMP_CLEANUP(f)                     \
     HEMP_INLINE void f(                     \
-        hemp_element    element             \
+        hemp_fragment   fragment            \
     )
 
 

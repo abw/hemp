@@ -1,0 +1,274 @@
+#include <hemp/fragment.h>
+
+
+/*--------------------------------------------------------------------------
+ * initialisation and cleanup functions
+ *--------------------------------------------------------------------------*/
+
+hemp_fragment
+hemp_fragment_init(
+    hemp_fragment   fragment,
+    hemp_element    element,
+    hemp_string     token,
+    hemp_pos        position,
+    hemp_size       length
+);
+
+hemp_fragment
+hemp_fragment_init(
+    hemp_fragment   fragment,
+    hemp_element    type, 
+    hemp_string     token, 
+    hemp_pos        position, 
+    hemp_size       length
+) {
+    HEMP_INSTANCE(fragment);
+        
+    fragment->fragments = NULL;
+    fragment->next      = NULL;
+    fragment->type      = type;
+    fragment->token     = token;
+    fragment->position  = position;
+    fragment->length    = length;
+    fragment->flags     = type->flags;
+// TODO: should we zero this memory?
+//  fragment->value    = NULL;
+
+    return fragment;
+}
+
+
+void
+hemp_fragment_free(
+    hemp_fragment fragment
+) {
+    hemp_mem_free(fragment);
+}
+
+
+HEMP_INLINE hemp_grammar
+hemp_fragment_grammar(
+    hemp_fragment fragment
+) {
+    if (! fragment->type->grammar)
+        hemp_fatal(
+            "No grammar defined for %s fragment", 
+            fragment->type->name
+        );
+
+    return fragment->type->grammar;
+}
+
+
+HEMP_INLINE hemp_fragments
+hemp_fragment_fragments(
+    hemp_fragment fragment
+) {
+    if (! fragment->fragments)
+        hemp_fatal(
+            "No fragments defined for %s fragment", 
+            fragment->type->name
+    );
+
+    return fragment->fragments;
+}
+
+
+HEMP_INLINE hemp_element
+hemp_fragment_grammar_element(
+    hemp_fragment fragment,
+    hemp_string   name
+) {
+    return hemp_grammar_element(
+        hemp_fragment_grammar(fragment),
+        name
+    );
+}
+
+
+HEMP_INLINE hemp_fragment
+hemp_fragment_new_fragment(
+    hemp_fragment fragment,
+    hemp_string   typename
+) {
+    return hemp_fragments_add_fragment(
+        hemp_fragment_fragments(fragment),
+        hemp_fragment_grammar_element(fragment, typename),
+        fragment->token, fragment->position, 0
+    );
+}
+
+
+hemp_element 
+hemp_fragment_retype(
+    hemp_fragment fragment,
+    hemp_string   typename
+) {
+    hemp_element type    = fragment->type;
+    hemp_grammar grammar = type->grammar;
+
+    if (grammar) {
+        hemp_debug("found fragment grammar\n");
+    }
+    else {
+        hemp_fatal("No grammar defined for fragment type: %s", type->name);
+    }
+
+    type = hemp_grammar_element(grammar, typename);
+
+    if (! type)
+        hemp_fatal(
+            "Invalid fragment type specified (symbol not found in %s grammar): %s",
+            grammar->name, typename
+        );
+
+    fragment->type = type;
+
+    return type;
+}
+
+
+
+/*--------------------------------------------------------------------------
+ * parsing functions
+ *--------------------------------------------------------------------------*/
+
+hemp_fragment
+hemp_fragment_parse(
+    hemp_fragment fragment,
+    hemp_scope    scope
+) {
+    hemp_debug_call("hemp_fragment_parse()\n");
+    hemp_fragment *current = &fragment;
+
+    hemp_fragment block = hemp_fragment_parse_block(
+        current,
+        scope,
+        0, 
+        HEMP_FALSE
+    );
+
+    hemp_fragment next_frag = *current;
+    
+    if (next_frag->type != HempElementEOF)
+        hemp_fatal("Unexpected token: %s\n", next_frag->type->name);
+
+    return block;
+}
+
+
+hemp_list
+hemp_fragment_parse_exprs(
+    HEMP_PREFIX_ARGS
+) {
+    hemp_debug_parse("hemp_fragment_parse_exprs( precedence => %d )\n", precedence);
+
+    hemp_fragment   expr;
+    hemp_list       exprs = hemp_list_new();
+
+    while (1) {
+        /* skip whitespace, delimiters (commas) and separators (semi-colons) */
+        hemp_skip_separator(fragptr);
+
+        /* ask the next token to return an expression */
+        expr = hemp_parse_prefix(fragptr, scope, precedence, HEMP_FALSE);
+
+        /* if it's not an expression (e.g. a terminator) then we're done */
+        if (! expr)
+            break;
+
+        hemp_list_push(exprs, hemp_frag_val(expr));
+    }
+
+    /* element should be EOF or we hit a duff token */
+    if (hemp_at_eof(fragptr)) {
+        hemp_debug_parse("%sReached EOF\n%s\n", HEMP_ANSI_GREEN, HEMP_ANSI_RESET);
+    }
+    else {
+        hemp_debug_parse("%sNot an expression: %s:%s\n", HEMP_ANSI_RED, (*fragptr)->type->name, HEMP_ANSI_RESET);
+    }
+
+    // hemp_debug("n expressions: %d\n", exprs->length);
+    
+    if (! exprs->length && ! force) {
+        hemp_list_free(exprs);
+        exprs = NULL;
+    }
+
+#if HEMP_DEBUG & HEMP_DEBUG_PARSE
+    hemp_fragment_dump_exprs(exprs);
+#endif
+    
+    return exprs;
+}
+
+
+HEMP_PREFIX(hemp_fragment_parse_block) {
+    hemp_debug_call("hemp_fragment_parse_block()\n");
+    hemp_fragment   fragment    = *fragptr;
+    hemp_list       list        = hemp_fragment_parse_exprs(HEMP_PREFIX_ARG_NAMES);
+    hemp_fragment   block       = NULL;
+
+    if (list) {
+        block = hemp_fragments_add_fragment(
+            hemp_fragment_fragments(fragment),
+            HempElementBlock,
+            fragment->token, fragment->position, 0
+        );
+        hemp_set_block_exprs_list(block, list);
+    }
+
+    return block;
+}
+
+
+
+/*--------------------------------------------------------------------------
+ * debugging functions
+ *--------------------------------------------------------------------------*/
+
+hemp_bool
+hemp_fragment_dump(
+    hemp_fragment f
+) {
+    hemp_context context = hemp_context_new(NULL);       // tmp ugly hack
+
+    if (! f->type->text)
+        hemp_fatal("%s type does not define a text() method", f->type->name);
+
+    hemp_value output = f->type->token
+        ? f->type->token(hemp_frag_val(f), context, HempNothing)
+        : f->type->text(hemp_frag_val(f), context, HempNothing);
+
+
+    hemp_text text  = hemp_val_text(output);
+    hemp_string string = text ? text->string : "-- NO OUTPUT --";
+    
+    hemp_debug(
+        "%p %03d:%02d %-20s %s[%s%s%s]%s\n", f,
+        (int) f->position, (int) f->length, f->type->name, 
+        HEMP_ANSI_BLUE, HEMP_ANSI_YELLOW, string, HEMP_ANSI_BLUE, HEMP_ANSI_RESET
+    );
+
+    hemp_context_free(context);
+
+    return hemp_string_eq(f->type->name, "EOF")
+        ? HEMP_FALSE
+        : HEMP_TRUE;
+}
+
+
+void hemp_fragment_dump_exprs(
+    hemp_list exprs
+) {
+    hemp_debug("\n-- FRAGS --\n");
+    hemp_size n;
+    
+    for (n = 0; n < exprs->length; n++) {
+        hemp_value    v = hemp_list_item(exprs, n);
+        hemp_fragment f = hemp_val_frag(v);
+        hemp_fragment_dump(f);
+    }
+    hemp_debug("-- /EXPRS --\n");
+}
+

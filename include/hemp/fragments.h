@@ -1,20 +1,19 @@
-#ifndef HEMP_ELEMENTS_H
-#define HEMP_ELEMENTS_H
+#ifndef HEMP_FRAGMENTS_H
+#define HEMP_FRAGMENTS_H
 
-#include <hemp/element.h>
+#include <hemp/fragment.h>
 #include <hemp/pool.h>
-#include <hemp/symbol.h>
 
 
 /*--------------------------------------------------------------------------
  * type definitions
  *--------------------------------------------------------------------------*/
 
-struct hemp_elements {
+struct hemp_fragments {
     hemp_hemp       hemp;
     hemp_pool       pool;
-    hemp_element    head;
-    hemp_element    tail;
+    hemp_fragment   head;
+    hemp_fragment   tail;
 };
 
 
@@ -22,45 +21,50 @@ struct hemp_elements {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_elements
-hemp_elements_new(
+hemp_fragments
+hemp_fragments_new(
     hemp_hemp       hemp,
     hemp_size       capacity
 );
 
-hemp_element
-hemp_elements_create(
-    hemp_elements   elements,
-    hemp_symbol     type,
+hemp_fragment
+hemp_fragments_create(
+    hemp_fragments  fragments,
+    hemp_element    type,
     hemp_string     token,
     hemp_pos        position,
     hemp_size       length
 );
 
-hemp_element
-hemp_elements_append(
-    hemp_elements   elements,
-    hemp_symbol     type,
+hemp_fragment
+hemp_fragments_add_fragment(
+    hemp_fragments  fragments,
+    hemp_element    type,
     hemp_string     token,
     hemp_pos        position,
     hemp_size       length
 );
 
-hemp_element
-hemp_elements_eof(
-    hemp_elements   elements,
+hemp_fragment
+hemp_fragments_add_eof(
+    hemp_fragments  fragments,
     hemp_pos        position
 );
 
 void 
-hemp_elements_free(
-    hemp_elements   elements
+hemp_fragments_free(
+    hemp_fragments  fragments
+);
+
+hemp_bool
+hemp_fragments_free_fragment(
+    hemp_memory     item
 );
     
 void 
-hemp_elements_dump(
-    hemp_elements   elements
+hemp_fragments_dump(
+    hemp_fragments  fragments
 );
 
 
-#endif /* HEMP_ELEMENTS_H */
+#endif /* HEMP_FRAGMENTS_H */

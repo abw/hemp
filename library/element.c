@@ -6,24 +6,64 @@
  *--------------------------------------------------------------------------*/
 
 hemp_element
-hemp_element_init(
-    hemp_element    element,
-    hemp_symbol     type, 
-    hemp_string     token, 
-    hemp_pos        position, 
-    hemp_size       length
+hemp_element_new(
+    hemp_string name,
+    hemp_string start,
+    hemp_string end
 ) {
-    HEMP_INSTANCE(element);
+    hemp_element element;
+    HEMP_ALLOCATE(element);
+
+    /* initialise the basic element details */
+    element->name            = name;    // should be const?
+    element->namespace       = hemp_namespace_instance(name);
+    element->flags           = 0;
+    element->lprec           = 0;
+    element->rprec           = 0;
+    element->grammar         = NULL;
+    element->scanner         = NULL;
+    element->cleanup         = NULL;
+
+    /* different element types override these evaluation functions */
+    element->text            = &hemp_element_not_text;
+    element->value           = &hemp_element_not_value;
+    element->number          = &hemp_element_not_number;
+    element->integer         = &hemp_element_not_integer;
+    element->boolean         = &hemp_element_not_boolean;
+    element->compare         = &hemp_element_not_compare;
+    element->assign          = &hemp_element_not_assign;
+
+    /* some additional evaluation method specific to element fragments */
+    element->token           = &hemp_element_not_token;
+    element->source          = &hemp_element_not_source;
+
+    /* it's safe to use these defaults as they all call element->value */
+    element->values          = &hemp_value_values;
+    element->params          = &hemp_value_params;
+    element->apply           = &hemp_value_apply;
+
+    /* different element types override these parsing function */
+    element->parse_prefix    = NULL;
+    element->parse_postfix   = NULL;
+    element->parse_fixed     = NULL;
+    element->parse_params    = NULL;
+    element->parse_lvalue    = NULL; //&hemp_element_not_lvalue;
+    element->parse_proto     = &hemp_element_not_proto;
+    element->parse_body      = &hemp_element_parse_body;     // default to NULL?
+
+    /* clone the start token if there is one, and the end token if there 
+     * is one and it's not the same as the start token
+     */
+    if (start) 
+        start = hemp_string_clone(start, "element start token");
+
+    if (end)
+        end = (start && (start == end || hemp_string_eq(start, end)))
+            ? start
+            : hemp_string_clone(end, "element end token");
         
-    element->elements = NULL;
-    element->next     = NULL;
-    element->type     = type;
-    element->token    = token;
-    element->position = position;
-    element->length   = length;
-    element->flags    = type->flags;
-// TODO: should we zero this memory?
-//  element->value    = NULL;
+    element->start   = start;
+    element->end     = end;
 
     return element;
 }
@@ -31,245 +71,158 @@ hemp_element_init(
 
 void
 hemp_element_free(
-    hemp_element    element
+    hemp_element element
 ) {
+    /* only free the end token if it's not the same as the start token */
+    if ( element->end 
+    && ( (! element->start) || (element->start != element->end) ) ) 
+        hemp_mem_free(element->end);
+
+    if (element->start)
+        hemp_mem_free(element->start);
+
     hemp_mem_free(element);
 }
 
 
-HEMP_INLINE hemp_grammar
-hemp_element_grammar(
-    hemp_element    element
-) {
-    if (! element->type->grammar)
-        hemp_fatal(
-            "No grammar defined for %s element", 
-            element->type->name
-        );
 
-    return element->type->grammar;
-}
+/*--------------------------------------------------------------------------
+ * Default functions which raise an error when a fragment is used in a 
+ * parsing context not supported by the element type.
+ *--------------------------------------------------------------------------*/
 
-
-HEMP_INLINE hemp_elements
-hemp_element_elements(
-    hemp_element    element
-) {
-    if (! element->elements)
-        hemp_fatal(
-            "No elements defined for %s element", 
-            element->type->name
+HEMP_FIXUP(hemp_element_not_proto) {
+    hemp_fatal(
+        "%s element cannot be a function prototype\n", 
+        fragment->type->name
     );
-
-    return element->elements;
+    return NULL;
 }
 
-
-HEMP_INLINE hemp_symbol
-hemp_element_grammar_symbol(
-    hemp_element    element,
-    hemp_string     name
-) {
-    return hemp_grammar_symbol(
-        hemp_element_grammar(element),
-        name
-    );
-}
-
-
-HEMP_INLINE hemp_element
-hemp_element_create(
-    hemp_element    element,
-    hemp_string     typename
-) {
-    return hemp_elements_append(
-        hemp_element_elements(element),
-        hemp_element_grammar_symbol(element, typename),
-        element->token, element->position, element->length
-    );
-}
-
-
-hemp_symbol 
-hemp_element_retype(
-    hemp_element    element,
-    hemp_string     typename
-) {
-    hemp_symbol  type    = element->type;
-    hemp_grammar grammar = type->grammar;
-
-    if (grammar) {
-        hemp_debug("found element grammar\n");
-    }
-    else {
-        hemp_fatal("No grammar defined for element type: %s", type->name);
-    }
-
-    type = hemp_grammar_symbol(grammar, typename);
-
-    if (! type)
-        hemp_fatal(
-            "Invalid element type specified (symbol not found in %s grammar): %s",
-            grammar->name, typename
-        );
-
-    element->type = type;
-
-    return type;
-}
 
 
 /*--------------------------------------------------------------------------
- * front-end parsing pseudo-method
+ * Default functions which raise an error when a fragment is used in a 
+ * value context which is not supported by the element type.
  *--------------------------------------------------------------------------*/
 
-hemp_element
-hemp_element_parse(
-    hemp_element    element,
-    hemp_scope      scope
-) {
-    hemp_debug_call("hemp_element_parse()\n");
-    hemp_element *current = &element;
-
-    hemp_element block = hemp_element_parse_block(
-        current,
-        scope,
-        0, 
-        HEMP_FALSE
-    );
-
-    hemp_element next_elem = *current;
-    
-    if (next_elem->type != HempSymbolEOF)
-        hemp_fatal("Unexpected token: %s\n", next_elem->type->name);
-
-    // hemp_debug_msg("next element after parse is %s\n", next_elem->type->name);
-
-    return block;
+HEMP_OUTPUT(hemp_element_not_text) {
+    hemp_fatal(
+        "%s element does not yield text\n", 
+        hemp_val_frag(value)->type->name);
+    return output;
 }
+
+
+HEMP_VALUE(hemp_element_not_value) {
+    hemp_fatal(
+        "%s element does not yield value\n", 
+        hemp_val_frag(value)->type->name
+    );
+    return HempNothing;
+}
+
+
+HEMP_VALUE(hemp_element_not_number) {
+    hemp_fatal(
+        "%s element does not yield number\n", 
+        hemp_val_frag(value)->type->name
+    );
+    return HempNothing;
+}
+
+
+HEMP_VALUE(hemp_element_not_integer) {
+    hemp_fatal(
+        "%s element does not yield integer\n", 
+        hemp_val_frag(value)->type->name
+    );
+    return HempNothing;
+}
+
+
+HEMP_VALUE(hemp_element_not_boolean) {
+    hemp_fatal(
+        "%s element does not yield boolean\n", 
+        hemp_val_frag(value)->type->name
+    );
+    return HempNothing;
+}
+
+
+HEMP_VALUE(hemp_element_not_compare) {
+    hemp_fatal(
+        "%s element does not yield comparison\n", 
+        hemp_val_frag(value)->type->name
+    );
+    return HempNothing;
+}
+
+
+HEMP_INPUT(hemp_element_not_assign) {
+    hemp_debug_msg("Throwing not_assign error....\n");
+    hemp_fatal(
+        "%s element cannot be assigned to\n", 
+        hemp_val_frag(value)->type->name
+    );
+    return HempNothing;
+}
+
+
+HEMP_OUTPUT(hemp_element_not_token) {
+    hemp_fatal(
+        "%s element does not yield token\n", 
+        hemp_val_frag(value)->type->name
+    );
+    return output;
+}
+
+
+HEMP_OUTPUT(hemp_element_not_source) {
+    hemp_fatal(
+        "%s element does not yield source\n", 
+        hemp_val_frag(value)->type->name);
+    return output;
+}
+
 
 
 /*--------------------------------------------------------------------------
  * generic element parsing functions
  *--------------------------------------------------------------------------*/
 
-HEMP_PREFIX_FUNC(hemp_element_parse_block) {
-    hemp_debug_call("hemp_element_parse_block()\n");
-    hemp_element element = *elemptr;
-    hemp_list list       = hemp_element_parse_exprs(HEMP_PREFIX_ARG_NAMES);
-    hemp_element block   = NULL;
 
-
-    if (list) {
-        block = hemp_elements_append(
-            hemp_element_elements(element),
-            HempSymbolBlock,
-            element->token, element->position, element->length
-        );
-//      hemp_debug_msg("new element block at %p with list at %p and cleaner is %p\n", block, list, list->cleaner);
-
-        // hemp_debug("got list of %d exprs\n", list->length);
-//        block = hemp_element_init(
-//            NULL,
-//            HempSymbolBlock, 
-//            element->token,  
-//            element->position,
-//            element->length
-//        );
-
-        hemp_set_block_exprs_list(block, list);
-    }
-
-    return block;
-}
-
-
-hemp_list
-hemp_element_parse_exprs(
-    HEMP_PREFIX_ARGS
-) {
-    hemp_debug_parse("hemp_element_parse_exprs( precedence => %d )\n", precedence);
-
-    hemp_element expr;
-    hemp_list    exprs = hemp_list_new();
-
-#if HEMP_DEBUG & HEMP_DEBUG_PARSE
-    hemp_debug("\n-- EXPRS --\n");
-#endif
-
-    while (1) {
-        /* skip whitespace, delimiters (commas) and separators (semi-colons) */
-        hemp_skip_separator(elemptr);
-
-        /* ask the next token to return an expression */
-        expr = hemp_parse_prefix(elemptr, scope, precedence, HEMP_FALSE);
-
-        /* if it's not an expression (e.g. a terminator) then we're done */
-        if (! expr)
-            break;
-
-#if HEMP_DEBUG & HEMP_DEBUG_PARSE
-        hemp_debug_parse("parsed %s expression:\n", expr->type->name);
-        hemp_element_dump(expr);
-#endif
-        hemp_list_push(exprs, hemp_elem_val(expr));
-    }
-
-    /* element should be EOF or we hit a duff token */
-    if (hemp_at_eof(elemptr)) {
-        hemp_debug_parse("%sReached EOF\n%s\n", HEMP_ANSI_GREEN, HEMP_ANSI_RESET);
-    }
-    else {
-        hemp_debug_parse("%sNot an expression: %s:%s\n", HEMP_ANSI_RED, (*elemptr)->type->name, HEMP_ANSI_RESET);
-    }
-
-    // hemp_debug("n expressions: %d\n", exprs->length);
-    
-    if (! exprs->length && ! force) {
-        // hemp_debug("clearing empty list\n");
-        hemp_list_free(exprs);
-        exprs = NULL;
-    }
-
-#if HEMP_DEBUG & HEMP_DEBUG_PARSE
-    hemp_debug("-- /EXPRS --\n");
-#endif
-    
-    return exprs;
-}
-
-
-HEMP_PREFIX_FUNC(hemp_element_fixed) {
-    hemp_debug_call("hemp_element_fixed()\n");
-    hemp_element element = *elemptr;
-    hemp_string     string  = hemp_string_extract(
-        element->token,
-        element->token + element->length
+HEMP_PREFIX(hemp_element_parse_fixed) {
+    hemp_debug_call("hemp_element_parse_fixed()\n");
+    hemp_fragment fragment = *fragptr;
+    hemp_string   string   = hemp_string_extract(
+        fragment->token,
+        fragment->token + fragment->length
     );
 
-//    hemp_debug("extracted word token string: %s\n", string);
-    hemp_set_flag(element, HEMP_BE_FIXED | HEMP_BE_ALLOCATED);
-    hemp_set_expr(element, hemp_str_val(string));
-    hemp_go_next(elemptr);
-    return element;
+//  hemp_debug_msg("extracted word token string: %s\n", string);
+    hemp_set_flag(fragment, HEMP_BE_FIXED | HEMP_BE_ALLOCATED);
+    hemp_set_expr(fragment, hemp_str_val(string));
+    hemp_advance(fragptr);
+    return fragment;
 }
 
 
-HEMP_PREFIX_FUNC(hemp_element_parse_body) {
-    hemp_debug_call("hemp_element_parse_body(%s)\n", (*elemptr)->type->name);
+HEMP_PREFIX(hemp_element_parse_body) {
+    hemp_debug_call("hemp_element_parse_body(%s)\n", (*fragptr)->type->name);
 
     /* we don't need to skip whitespace here as any skippable whitespace 
      * elements will forward the parse_prefix call onto the next token, but
      * it's slightly more efficient this way.
      */
-    hemp_skip_whitespace(elemptr);
+    hemp_skip_whitespace(fragptr);
 
     /* See comments for parse_body() in Template::TT3::Element.pm
      * It forces precedence to CMD_PRECEDENCE and FORCE to 1.  I don't 
      * think we need to do this if we just use the values passed as args.
      */
-    hemp_element element = hemp_parse_prefix(
-        elemptr, scope, precedence, force
+    hemp_fragment fragment = hemp_parse_prefix(
+        fragptr, scope, precedence, force
     );
 
     /* A single expression body is fully terminated, so the caller should
@@ -278,210 +231,18 @@ HEMP_PREFIX_FUNC(hemp_element_parse_body) {
      * unlike: sub inc(a); a + 1; end, which invokes parse_body on the ';'
      * terminator, returning an unterminated block
      */
-    if (element)
-        hemp_set_flag(element, HEMP_BE_TERMINATED);
+    if (fragment)
+        hemp_set_flag(fragment, HEMP_BE_TERMINATED);
 
-    return element;
+    return fragment;
 }
 
 
-HEMP_PREFIX_FUNC(hemp_element_parse_body_block) {
-    hemp_debug_call("hemp_element_parse_body_block(%s)\n", (*elemptr)->type->name);
-    return hemp_element_parse_block(elemptr, scope, 0, 1);
+HEMP_PREFIX(hemp_element_parse_body_block) {
+    hemp_debug_call("hemp_element_parse_body_block(%s)\n", (*fragptr)->type->name);
+    return hemp_fragment_parse_block(fragptr, scope, 0, 1);
 }
 
-
-/*--------------------------------------------------------------------------
- * decline functions
- *--------------------------------------------------------------------------*/
-
-HEMP_PREFIX_FUNC(hemp_element_decline) {
-    return NULL;
-}
-
-
-HEMP_PREFIX_FUNC(hemp_element_not_prefix) {
-//  hemp_debug("%s is not prefix\n", (*elemptr)->type->name);
-    hemp_debug_call("hemp_element_not_prefix()\n");
-    return NULL;
-}
-
-
-HEMP_POSTFIX_FUNC(hemp_element_not_postfix) {
-    hemp_debug("%s is not postfix\n", (*elemptr)->type->name);
-    hemp_debug_call("hemp_element_not_postfix()\n");
-    return lhs;
-}
-
-
-HEMP_FIXUP_FUNC(hemp_element_not_lvalue) {
-    hemp_fatal(
-        "%s element cannot be assigned to\n", 
-        element->type->name
-    );
-    return NULL;
-}
-
-HEMP_FIXUP_FUNC(hemp_element_not_proto) {
-    hemp_fatal(
-        "%s element cannot be a function prototype\n", 
-        element->type->name
-    );
-    return NULL;
-}
-
-
-HEMP_PREFIX_FUNC(hemp_element_not_word) {
-    return NULL;
-}
-
-
-HEMP_OUTPUT_FUNC(hemp_element_not_token) {
-    hemp_fatal(
-        "%s element does not yield token\n", 
-        hemp_val_elem(value)->type->name
-    );
-    return output;
-}
-
-
-HEMP_OUTPUT_FUNC(hemp_element_not_source) {
-    hemp_fatal(
-        "%s element does not yield source\n", 
-        hemp_val_elem(value)->type->name);
-    return output;
-}
-
-
-HEMP_OUTPUT_FUNC(hemp_element_not_text) {
-    hemp_fatal(
-        "%s element does not yield text\n", 
-        hemp_val_elem(value)->type->name);
-    return output;
-}
-
-
-HEMP_OUTPUT_FUNC(hemp_element_not_values) {
-    hemp_fatal(
-        "%s element does not yield values\n", 
-        hemp_val_elem(value)->type->name
-    );
-    return HempNothing;
-}
-
-
-HEMP_OUTPUT_FUNC(hemp_element_not_params) {
-    hemp_fatal(
-        "%s element does not yield params\n", 
-        hemp_val_elem(value)->type->name
-    );
-    return HempNothing;
-}
-
-
-HEMP_VALUE_FUNC(hemp_element_not_value) {
-    hemp_fatal(
-        "%s element does not yield value\n", 
-        hemp_val_elem(value)->type->name
-    );
-    return HempNothing;
-}
-
-
-HEMP_VALUE_FUNC(hemp_element_not_number) {
-    hemp_fatal(
-        "%s element does not yield number\n", 
-        hemp_val_elem(value)->type->name
-    );
-    return HempNothing;
-}
-
-
-HEMP_VALUE_FUNC(hemp_element_not_integer) {
-    hemp_fatal(
-        "%s element does not yield integer\n", 
-        hemp_val_elem(value)->type->name
-    );
-    return HempNothing;
-}
-
-
-HEMP_VALUE_FUNC(hemp_element_not_boolean) {
-    hemp_fatal(
-        "%s element does not yield boolean\n", 
-        hemp_val_elem(value)->type->name
-    );
-    return HempNothing;
-}
-
-
-HEMP_VALUE_FUNC(hemp_element_not_compare) {
-    hemp_fatal(
-        "%s element does not yield comparison\n", 
-        hemp_val_elem(value)->type->name
-    );
-    return HempNothing;
-}
-
-
-HEMP_INPUT_FUNC(hemp_element_not_assign) {
-    hemp_debug_msg("Throwing not_assign error....\n");
-    hemp_fatal(
-        "%s element cannot be assigned to\n", 
-        hemp_val_elem(value)->type->name
-    );
-    return HempNothing;
-}
-
-
-
-
-/*--------------------------------------------------------------------------
- * delegation functions, forwarding the request to the next element
- *--------------------------------------------------------------------------*/
-
-HEMP_PREFIX_FUNC(hemp_element_next_prefix) {
-    hemp_debug_call("hemp_element_next_prefix()\n");
-
-    if (hemp_has_next(elemptr)) {
-        hemp_go_next(elemptr);
-        return hemp_parse_prefix(elemptr, scope, precedence, force);
-    }
-
-    return NULL;
-}
-
-
-/* this has been replaced by hemp_element_space_postfix */
-HEMP_POSTFIX_FUNC(hemp_element_next_postfix) {
-    hemp_debug_call("hemp_element_next_postfix()\n");
-
-    /* TODO: add check for HEMP_BE_XXXX flag to indicate if spaces are allowed
-     * or not before postfix operator.  For now, we allow them.  We currently
-     * use "infix" to distinguish "spacey" operators from "pure" postfix 
-     * operators that bind tight.  But none of this is currently enforced,
-     * and won't be until I've had a chance to rethink the terminology and 
-     * overall strategy.
-     */
-    if (hemp_has_next(elemptr)) {
-        hemp_go_next(elemptr);
-        return hemp_parse_postfix(elemptr, scope, precedence, force, lhs);
-    }
-
-    return lhs;
-}
-
-
-HEMP_PREFIX_FUNC(hemp_element_next_body) {
-    hemp_debug_call("hemp_element_next_body()\n");
-
-    if (hemp_has_next(elemptr)) {
-        hemp_go_next(elemptr);
-        return hemp_parse_body(elemptr, scope, precedence, force);
-    }
-
-    return NULL;
-}
 
 
 
@@ -489,106 +250,101 @@ HEMP_PREFIX_FUNC(hemp_element_next_body) {
  * expression parsing methods
  *--------------------------------------------------------------------------*/
 
-HEMP_PREFIX_FUNC(hemp_element_parse_prefix) {
-    hemp_element self = *elemptr;
-    hemp_symbol  type = self->type;
-    hemp_element expr;
+HEMP_PREFIX(hemp_element_parse_prefix) {
+    hemp_fragment self = *fragptr;
+    hemp_element  type = self->type;
+    hemp_fragment expr;
 
     hemp_debug_call("hemp_element_parse_prefix()\n");
 
     hemp_set_flag(self, HEMP_BE_PREFIX);
-    hemp_go_next(elemptr);
+    hemp_advance(fragptr);
 
-    expr = hemp_parse_prefix(elemptr, scope, type->rprec, 1);
+    expr = hemp_parse_prefix(fragptr, scope, type->rprec, 1);
 
     if (! expr)
         hemp_fatal("missing expression on rhs of %s\n", type->start);
     
-    hemp_set_expr_element(self, expr);
-//  hemp_skip_whitespace(elemptr);
+    hemp_set_expr_fragment(self, expr);
 
     return hemp_parse_postfix(
-        elemptr, scope, precedence, 0,
+        fragptr, scope, precedence, 0,
         self
     );
 }
 
 
-HEMP_POSTFIX_FUNC(hemp_element_parse_postfix) {
-    hemp_element self = *elemptr;
-    hemp_symbol  type = self->type;
-
+HEMP_POSTFIX(hemp_element_parse_postfix) {
     hemp_debug_call("hemp_element_parse_postfix()\n");
+    hemp_fragment self = *fragptr;
+    hemp_element  type = self->type;
 
     HEMP_INFIX_LEFT_PRECEDENCE;              // is that right?
-    hemp_set_flag(self, HEMP_BE_POSTFIX);
 
-    hemp_set_expr_element(self, lhs);
-    hemp_go_next(elemptr);
-//  hemp_skip_whitespace(elemptr);
+    hemp_set_flag(self, HEMP_BE_POSTFIX);
+    hemp_set_expr_fragment(self, lhs);
+    hemp_advance(fragptr);
 
     return hemp_parse_postfix(
-        elemptr, scope, precedence, 0,
+        fragptr, scope, precedence, 0,
         self
     );
 }
 
 
-HEMP_POSTFIX_FUNC(hemp_element_parse_infix_left) {
-    hemp_element self = *elemptr;
-    hemp_symbol  type = self->type;
-    hemp_element rhs;
-
+HEMP_POSTFIX(hemp_element_parse_infix_left) {
     hemp_debug_call("hemp_element_parse_infix_left()\n");
+    hemp_fragment self = *fragptr;
+    hemp_element  type = self->type;
+    hemp_fragment rhs;
 
     HEMP_INFIX_LEFT_PRECEDENCE;
+
     hemp_set_flag(self, HEMP_BE_INFIX);
-    hemp_set_lhs_element(self, lhs);
-    hemp_go_next(elemptr);
-    rhs = hemp_parse_prefix(elemptr, scope, type->lprec, 1);
+    hemp_set_lhs_fragment(self, lhs);
+    hemp_advance(fragptr);
+    rhs = hemp_parse_prefix(fragptr, scope, type->lprec, 1);
 
     if (! rhs)
         hemp_fatal("missing expression on rhs of %s\n", type->start);
 
-    hemp_set_rhs_element(self, rhs);
-//  hemp_skip_whitespace(elemptr);
+    hemp_set_rhs_fragment(self, rhs);
 
     hemp_debug_parse(
         "parsed infix [%s] [%s] [%s]\n", 
         lhs->type->name, self->type->start, rhs->type->name
     );
 
-    hemp_debug_parse("next element is %s:\n", (*elemptr)->type->name);
+    hemp_debug_parse("next fragment is %s:\n", (*fragptr)->type->name);
 
     return hemp_parse_postfix(
-        elemptr, scope, precedence, 0,
+        fragptr, scope, precedence, 0,
         self
     );
 }
 
 
-HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right) {
-    hemp_element self = *elemptr;
-    hemp_symbol  type = self->type;
-    hemp_element rhs;
+HEMP_POSTFIX(hemp_element_parse_infix_right) {
+    hemp_fragment self = *fragptr;
+    hemp_element  type = self->type;
+    hemp_fragment rhs;
 
     hemp_debug_call("hemp_element_parse_infix_right()\n");
 
     HEMP_INFIX_RIGHT_PRECEDENCE;
-    hemp_set_flag(self, HEMP_BE_INFIX);
 
-    hemp_set_lhs_element(self, lhs);
-    hemp_go_next(elemptr);
-    rhs = hemp_parse_prefix(elemptr, scope, type->lprec, 1);
+    hemp_set_flag(self, HEMP_BE_INFIX);
+    hemp_set_lhs_fragment(self, lhs);
+    hemp_advance(fragptr);
+    rhs = hemp_parse_prefix(fragptr, scope, type->lprec, 1);
 
     if (! rhs)
         hemp_fatal("missing expression on rhs of %s\n", type->start);
     
-    hemp_set_rhs_element(self, rhs);
-//  hemp_skip_whitespace(elemptr);
+    hemp_set_rhs_fragment(self, rhs);
 
     return hemp_parse_postfix(
-        elemptr, scope, precedence, 0,
+        fragptr, scope, precedence, 0,
         self
     );
 }
@@ -612,20 +368,20 @@ HEMP_POSTFIX_FUNC(hemp_element_parse_infix_right) {
  * evaluated multiple times.
  *--------------------------------------------------------------------------*/
 
-HEMP_VALUE_FUNC(hemp_element_value) {
+HEMP_VALUE(hemp_element_value) {
     hemp_debug_call("hemp_element_value()\n");
     return hemp_obcall(value, value, context);
 }
 
 
-HEMP_OUTPUT_FUNC(hemp_element_value_text) {
+HEMP_OUTPUT(hemp_element_value_text) {
     hemp_debug_call("hemp_element_value_text()\n");
     hemp_value result = hemp_obcall(value, value, context);
     return hemp_onto_text(result, context, output);
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_value_number) {
+HEMP_VALUE(hemp_element_value_number) {
     hemp_debug_call("hemp_element_value_number()\n");
     hemp_value result = hemp_obcall(value, value, context);
     return hemp_is_numeric(result)
@@ -637,28 +393,28 @@ HEMP_VALUE_FUNC(hemp_element_value_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_value_integer) {
+HEMP_VALUE(hemp_element_value_integer) {
     hemp_debug_call("hemp_element_value_integer()\n");
     hemp_value result = hemp_obcall(value, value, context);
     return hemp_to_integer(result, context);
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_value_boolean) {
+HEMP_VALUE(hemp_element_value_boolean) {
     hemp_debug_call("hemp_element_value_boolean()\n");
     hemp_value result = hemp_obcall(value, value, context);
     return hemp_to_boolean(result, context);
 }
 
 
-HEMP_VALUE_FUNC(hemp_element_value_compare) {
+HEMP_VALUE(hemp_element_value_compare) {
     hemp_debug_call("hemp_element_value_compare()\n");
     hemp_value result = hemp_obcall(value, value, context);
     return hemp_to_compare(result, context);
 }
 
 
-HEMP_OUTPUT_FUNC(hemp_element_value_values) {
+HEMP_OUTPUT(hemp_element_value_values) {
     hemp_debug_call("hemp_element_value_values()\n");
     hemp_value result = hemp_obcall(value, value, context);
     return hemp_values(result, context, output);
@@ -666,44 +422,30 @@ HEMP_OUTPUT_FUNC(hemp_element_value_values) {
 
 
 
-
 /*--------------------------------------------------------------------------
- * debugging functions
+ * debugging
  *--------------------------------------------------------------------------*/
 
-hemp_bool
+void 
 hemp_element_dump(
-    hemp_element e
+    hemp_element element
 ) {
-    hemp_context context = hemp_context_new(NULL);       // tmp ugly hack
-
-    if (! e->type->text)
-        hemp_fatal("%s type does not define a text() method", e->type->name);
-
-    hemp_value output = e->type->token
-        ? e->type->token(hemp_elem_val(e), context, HempNothing)
-        : e->type->text(hemp_elem_val(e), context, HempNothing);
-
-
-    hemp_text text  = hemp_val_text(output);
-    hemp_string string = text ? text->string : "-- NO OUTPUT --";
-    
-    hemp_debug(
-        "%p %03d:%02d %-20s %s[%s%s%s]%s\n", e,
-        (int) e->position, (int) e->length, e->type->name, 
-        HEMP_ANSI_BLUE, HEMP_ANSI_YELLOW, string, HEMP_ANSI_BLUE, HEMP_ANSI_RESET
-    );
-
-    if (text) {
-//        hemp_text_free(text);
-    }
-
-    hemp_context_free(context);
-
-    return hemp_string_eq(e->type->name, "EOF")
-        ? HEMP_FALSE
-        : HEMP_TRUE;
+    hemp_debug("element at %p\n", element->name, element);
+    hemp_debug("       name: %s\n", element->name);
+    hemp_debug("      start: %s\n", element->start ? element->start : "<none>");
+    hemp_debug("        end: %s\n", element->end ? element->end : "<none>");
+    hemp_debug("      flags: %04x\n", element->flags);
+    hemp_debug("      lprec: %d\n", element->lprec);
+    hemp_debug("      rprec: %d\n", element->rprec);
+    hemp_debug("    scanner: %p\n", element->scanner);
+    hemp_debug("    cleanup: %p\n", element->cleanup);
+    hemp_debug("     prefix: %p\n", element->parse_prefix);
+    hemp_debug("    postfix: %p\n", element->parse_postfix);
+    hemp_debug("      token: %p\n", element->token);
+    hemp_debug("     source: %p\n", element->source);
+    hemp_debug("       text: %p\n", element->text);
+    hemp_debug("      value: %p\n", element->value);
+    hemp_debug("     number: %p\n", element->number);
+    hemp_debug("    integer: %p\n", element->integer);
+    hemp_debug("    boolean: %p\n", element->boolean);
 }
-
-
-

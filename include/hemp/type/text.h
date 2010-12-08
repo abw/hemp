@@ -90,11 +90,11 @@ hemp_text_release(
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_text);
-HEMP_OUTPUT_FUNC(hemp_type_text_text);
-HEMP_VALUE_FUNC(hemp_type_text_number);
-HEMP_VALUE_FUNC(hemp_type_text_integer);
-HEMP_VALUE_FUNC(hemp_type_text_boolean);
-HEMP_VALUE_FUNC(hemp_method_text_length);
+HEMP_OUTPUT(hemp_type_text_text);
+HEMP_VALUE(hemp_type_text_number);
+HEMP_VALUE(hemp_type_text_integer);
+HEMP_VALUE(hemp_type_text_boolean);
+HEMP_VALUE(hemp_method_text_length);
 
 
 /*--------------------------------------------------------------------------

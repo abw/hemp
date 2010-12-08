@@ -9,7 +9,7 @@ hemp_tagset_new(
     HEMP_ALLOCATE(tagset);
 
     tagset->template      = template;
-    tagset->text_symbol   = HempSymbolText;
+    tagset->text_element  = HempElementText;
     tagset->tags          = hemp_hash_new();
     tagset->inline_tags   = hemp_ptree_new(HEMP_TAGSET_SIZE);
     tagset->outline_tags  = hemp_ptree_new(HEMP_TAGSET_SIZE);
@@ -195,8 +195,8 @@ hemp_tagset_scanner(
                     hemp_debug_scan("[OUTLINE:%c]", *tagstr);
 
                     if (tagstr > from) {
-                        hemp_elements_append(
-                            template->elements, tagset->text_symbol,
+                        hemp_fragments_add_fragment(
+                            template->fragments, tagset->text_element,
                             from, pos, tagstr - from
                         );
                         pos += tagstr - from;
@@ -233,8 +233,8 @@ hemp_tagset_scanner(
                     hemp_debug_scan("[INLINE:%c]", *tagstr);
 
                     if (tagstr > from) {
-                        hemp_elements_append(
-                            template->elements, tagset->text_symbol,
+                        hemp_fragments_add_fragment(
+                            template->fragments, tagset->text_element,
                             from, pos, tagstr - from
                         );
                         pos += tagstr - from;
@@ -255,17 +255,17 @@ hemp_tagset_scanner(
     }
 
     if (src > from) {
-        hemp_elements_append(
-            template->elements, tagset->text_symbol,
+        hemp_fragments_add_fragment(
+            template->fragments, tagset->text_element,
             from, pos, src - from
         );
         pos += src - from;
     }
     
-    hemp_elements_eof(template->elements, pos);
+    hemp_fragments_add_eof(template->fragments, pos);
 
 #if HEMP_DEBUG & HEMP_DEBUG_SCAN
-    hemp_elements_dump(template->elements);
+    hemp_fragments_dump(template->fragments);
 #endif
 
     return (hemp_memory) template;

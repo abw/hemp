@@ -8,12 +8,12 @@ hemp_frame_init(
     hemp_debug_call("hemp_frame_init(%p)\n", frame);
     HEMP_ALLOCATE(frame);
 
-    frame->context = NULL;
-    frame->parent  = NULL;
-    frame->element = NULL;
-    frame->params  = hemp_params_new();
-//  frame->vars    = frame->params->nominals;
-    frame->vars    = hemp_hash_new();
+    frame->context  = NULL;
+    frame->parent   = NULL;
+    frame->fragment = NULL;
+    frame->params   = hemp_params_new();
+//  frame->vars     = frame->params->nominals;
+    frame->vars     = hemp_hash_new();
 
     return frame;
 }

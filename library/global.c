@@ -1,6 +1,6 @@
 #include <hemp/core.h>
 #include <hemp/namespace.h>
-#include <hemp/symbol.h>
+#include <hemp/element.h>
 #include <hemp/module.h>
 
 
@@ -113,20 +113,20 @@ hemp_global_init_symbols(
     hemp_debug_init("hemp_global_init_symbols()\n");
 
     /* return silently if it looks like we've already done this step */
-    if (HempSymbolSpace)
+    if (HempElementSpace)
         return;
 
     /* construct the global symbol objects */
-    HempSymbolSpace     = hemp_symbol_space();
-    HempSymbolComment   = hemp_symbol_comment();
-    HempSymbolTagStart  = hemp_symbol_tag_start();
-    HempSymbolTagEnd    = hemp_symbol_tag_end();
-    HempSymbolBlock     = hemp_symbol_block();
-    HempSymbolText      = hemp_symbol_text();
-    HempSymbolWord      = hemp_symbol_word();
-    HempSymbolNumber    = hemp_symbol_number();
-    HempSymbolInteger   = hemp_symbol_integer();
-    HempSymbolEOF       = hemp_symbol_eof();
+    HempElementSpace     = hemp_global_element_space();
+    HempElementComment   = hemp_global_element_comment();
+    HempElementTagStart  = hemp_global_element_tag_start();
+    HempElementTagEnd    = hemp_global_element_tag_end();
+    HempElementBlock     = hemp_global_element_block();
+    HempElementText      = hemp_global_element_text();
+    HempElementWord      = hemp_global_element_word();
+    HempElementNumber    = hemp_global_element_number();
+    HempElementInteger   = hemp_global_element_integer();
+    HempElementEOF       = hemp_global_element_eof();
 }
 
 
@@ -135,16 +135,16 @@ hemp_global_free_symbols(
     hemp_global global
 ) {
     hemp_debug_init("hemp_global_free_symbols()\n");
-    hemp_symbol_free(HempSymbolSpace);      HempSymbolSpace     = NULL;
-    hemp_symbol_free(HempSymbolComment);    HempSymbolComment   = NULL;
-    hemp_symbol_free(HempSymbolTagStart);   HempSymbolTagStart  = NULL;
-    hemp_symbol_free(HempSymbolTagEnd);     HempSymbolTagEnd    = NULL;
-    hemp_symbol_free(HempSymbolBlock);      HempSymbolBlock     = NULL;
-    hemp_symbol_free(HempSymbolText);       HempSymbolText      = NULL;
-    hemp_symbol_free(HempSymbolWord);       HempSymbolWord      = NULL;
-    hemp_symbol_free(HempSymbolNumber);     HempSymbolNumber    = NULL;
-    hemp_symbol_free(HempSymbolInteger);    HempSymbolInteger   = NULL;
-    hemp_symbol_free(HempSymbolEOF);        HempSymbolEOF       = NULL;
+    hemp_element_free(HempElementSpace);      HempElementSpace     = NULL;
+    hemp_element_free(HempElementComment);    HempElementComment   = NULL;
+    hemp_element_free(HempElementTagStart);   HempElementTagStart  = NULL;
+    hemp_element_free(HempElementTagEnd);     HempElementTagEnd    = NULL;
+    hemp_element_free(HempElementBlock);      HempElementBlock     = NULL;
+    hemp_element_free(HempElementText);       HempElementText      = NULL;
+    hemp_element_free(HempElementWord);       HempElementWord      = NULL;
+    hemp_element_free(HempElementNumber);     HempElementNumber    = NULL;
+    hemp_element_free(HempElementInteger);    HempElementInteger   = NULL;
+    hemp_element_free(HempElementEOF);        HempElementEOF       = NULL;
 }
 
 

@@ -7,18 +7,18 @@
 
 HEMP_LANGUAGE(hemp_language_hemp_new);
 
-HEMP_SYMBOLS(hemp_element_identity_symbols);
-HEMP_SYMBOLS(hemp_element_assign_symbols);
-HEMP_SYMBOLS(hemp_element_bracket_symbols);
-HEMP_SYMBOLS(hemp_element_boolean_symbols);
-HEMP_SYMBOLS(hemp_element_number_symbols);
-HEMP_SYMBOLS(hemp_element_text_symbols);
-
 HEMP_GRAMMAR(hemp_grammar_hemp_alpha);
 HEMP_GRAMMAR(hemp_grammar_hemp_bravo);
 HEMP_GRAMMAR(hemp_grammar_hemp_charlie);
 
-HEMP_SYMBOL(hemp_element_sub_symbol);
+HEMP_ELEMENTS(hemp_element_identity_symbols);
+HEMP_ELEMENTS(hemp_element_assign_symbols);
+HEMP_ELEMENTS(hemp_element_bracket_symbols);
+HEMP_ELEMENTS(hemp_element_boolean_symbols);
+HEMP_ELEMENTS(hemp_element_number_symbols);
+HEMP_ELEMENTS(hemp_element_text_symbols);
+
+HEMP_ELEMENT(hemp_element_sub_symbol);
 
 void hemp_grammar_add_hemp_alpha(hemp_grammar);
 void hemp_grammar_add_hemp_bravo(hemp_grammar);

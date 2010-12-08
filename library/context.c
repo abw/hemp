@@ -74,8 +74,8 @@ hemp_context_free(
 
 HEMP_INLINE hemp_frame
 hemp_context_enter(
-    hemp_context context,
-    hemp_element element
+    hemp_context  context,
+    hemp_fragment fragment
 ) {
     hemp_debug_call("hemp_context_enter(%p, %p)\n", context, element);
 
@@ -84,7 +84,7 @@ hemp_context_enter(
      * and then installed in the context as the new master set
      */
     hemp_frame frame    = hemp_frame_new();
-    frame->element      = element;
+    frame->fragment     = fragment;
     frame->context      = context;
     frame->parent       = context->frame;
     frame->vars->parent = context->vars;
@@ -112,13 +112,13 @@ hemp_context_frame(
 }
 
 
-HEMP_INLINE hemp_element
+HEMP_INLINE hemp_fragment
 hemp_context_leave(
     hemp_context context
 ) {
     hemp_debug_call("hemp_context_leave(%p, %p)\n", context, context->frame);
-    hemp_frame    frame   = hemp_context_frame(context);
-    hemp_element  element = frame->element;
+    hemp_frame    frame    = hemp_context_frame(context);
+    hemp_fragment fragment = frame->fragment;
 
     /* restore pointer to parent frame and parent frame's vars */
     context->frame = frame->parent;
@@ -132,7 +132,7 @@ hemp_context_leave(
 
     hemp_frame_free(frame);
     
-    return element;
+    return fragment;
 }
 
 

@@ -6,9 +6,10 @@ nobase_include_HEADERS  = hemp/config.h         \
                           hemp/defines.h        \
                           hemp/dialect.h        \
                           hemp/element.h        \
-                          hemp/elements.h       \
                           hemp/error.h          \
                           hemp/filesystem.h     \
+                          hemp/fragment.h       \
+                          hemp/fragments.h      \
                           hemp/memory.h         \
                           hemp/module.h         \
                           hemp/os.h             \

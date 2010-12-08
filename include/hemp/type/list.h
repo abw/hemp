@@ -82,9 +82,9 @@ hemp_list_dump(
 HEMP_TYPE_FUNC(hemp_type_list);
 HEMP_FETCH_FUNC(hemp_type_list_fetch);
 HEMP_STORE_FUNC(hemp_type_list_store);
-HEMP_OUTPUT_FUNC(hemp_type_list_text);
-HEMP_VALUE_FUNC(hemp_method_list_length);
-HEMP_VALUE_FUNC(hemp_method_list_text);
+HEMP_OUTPUT(hemp_type_list_text);
+HEMP_VALUE(hemp_method_list_length);
+HEMP_VALUE(hemp_method_list_text);
 
 /*--------------------------------------------------------------------------
  * macros

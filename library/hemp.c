@@ -367,13 +367,13 @@ hemp_register_grammars(
 void 
 hemp_register_elements(
     hemp_hemp       hemp,
-    hemp_symbols    symbols
+    hemp_elements   elements
 ) {
-    while (symbols && symbols->name) {
+    while (elements && elements->name) {
         hemp_factory_register(
-            hemp->element, symbols->name, (hemp_actor) symbols->ctor, hemp
+            hemp->element, elements->name, (hemp_actor) elements->ctor, hemp
         );
-        symbols++;
+        elements++;
     }
 }
 

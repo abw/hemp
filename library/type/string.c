@@ -443,7 +443,7 @@ hemp_string_nwords(
  *--------------------------------------------------------------------------*/
 
 
-HEMP_OUTPUT_FUNC(hemp_type_string_text) {
+HEMP_OUTPUT(hemp_type_string_text) {
     hemp_string  str = hemp_val_str(value);
     hemp_text text;
 
@@ -454,7 +454,7 @@ HEMP_OUTPUT_FUNC(hemp_type_string_text) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_string_number) {
+HEMP_VALUE(hemp_type_string_number) {
     hemp_string str = hemp_val_str(value);
     hemp_string end;
     hemp_num nval;
@@ -493,13 +493,13 @@ HEMP_VALUE_FUNC(hemp_type_string_number) {
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_string_integer) {
+HEMP_VALUE(hemp_type_string_integer) {
     hemp_value nval = hemp_type_string_number(value, context);
     return hemp_int_val((hemp_int) hemp_val_num(nval));
 }
 
 
-HEMP_VALUE_FUNC(hemp_type_string_boolean) {
+HEMP_VALUE(hemp_type_string_boolean) {
     hemp_string str = hemp_val_str(value);
     /* TODO: check this is right: any non-zero length string is true.
      * What about "0" and "0.000" ?
@@ -514,7 +514,7 @@ HEMP_VALUE_FUNC(hemp_type_string_boolean) {
  * String pseudo-object methods
  *--------------------------------------------------------------------------*/
 
-HEMP_VALUE_FUNC(hemp_method_string_length) {
+HEMP_VALUE(hemp_method_string_length) {
     return hemp_int_val( strlen( hemp_val_str(value) ) );
 }
 
