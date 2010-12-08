@@ -134,7 +134,7 @@ hemp_init_viewers(
     hemp_hemp hemp
 ) {
     hemp_register_viewer(
-        hemp, HEMP_TEXT, &hemp_viewer_text_init
+        hemp, HEMP_TEXT, &hemp_viewer_text
     );
 }
 

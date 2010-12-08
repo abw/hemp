@@ -36,7 +36,7 @@ void test_grammar() {
         grammar = hemp_grammar_instance(hemp, "tt3.core");
         ok( grammar, "got grammar" );
         is( grammar->name, "tt3.core", "grammar name is tt3.core" );
-        hemp_symbol space = hemp_grammar_symbol(grammar, "hemp.space");
+        hemp_element space = hemp_grammar_element(grammar, "hemp.space");
         ok( space, "got space symbol" );
     HEMP_CATCH_ALL;
         fail("eek! caught error: %s", hemp->error->message);
@@ -67,22 +67,22 @@ hemp_grammar_test(
     hemp_grammar grammar = (hemp_grammar) hemp_grammar_new(hemp, name);
 
     HEMP_TRY;
-        hemp_grammar_add_symbol(
+        hemp_grammar_add_element(
             grammar, "hemp.text", "_TEXT", NULL, 0, 0
         );
-        hemp_grammar_add_symbol(
+        hemp_grammar_add_element(
             grammar, "hemp.space", "_SPACE", NULL, 0, 0
         );
-        hemp_grammar_add_symbol(
+        hemp_grammar_add_element(
             grammar, "hemp.numop.plus", "+", NULL, 42, 420
         );
-        hemp_grammar_add_symbol(
+        hemp_grammar_add_element(
             grammar, "hemp.boolop.and", "and", NULL, 42, 420
         );
-        hemp_grammar_add_symbol(
+        hemp_grammar_add_element(
             grammar, "hemp.textop.concat", "~", NULL, 42, 420
         );
-        hemp_grammar_add_symbol(
+        hemp_grammar_add_element(
             grammar, "hemp.numop.dud", "--", NULL, 55, 99
         );
 //        hemp_grammar_add_symbol(

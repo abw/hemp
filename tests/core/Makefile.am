@@ -2,11 +2,11 @@ check_PROGRAMS  =   action      \
                     codec       \
                     context     \
                     dialect     \
-                    element     \
-                    elements    \
                     error       \
                     factory     \
                     filesystem  \
+                    fragment    \
+                    fragments   \
                     grammar     \
                     memory      \
                     namespace   \

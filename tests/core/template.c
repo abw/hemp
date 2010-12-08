@@ -37,7 +37,7 @@ void test_template() {
     );
     ok( tmpl2 , "created same template" );
 
-    hemp_element first = hemp_template_tokens(tmpl);
+    hemp_fragment first = hemp_template_tokens(tmpl);
     ok( first, "got first token from template" );
     
     hemp_free(hemp);

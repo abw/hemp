@@ -42,12 +42,7 @@ hemp_viewer_add_view(
     hemp_view_f     view
 );
 
-hemp_viewer 
-hemp_viewer_text_init(
-    hemp_hemp       hemp,
-    hemp_string     name
-);
-
+HEMP_VIEWER(hemp_viewer_text);
 HEMP_VIEW(hemp_viewer_fragment);
 
 

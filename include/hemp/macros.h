@@ -103,14 +103,14 @@
     hemp_instance(hemp, viewer, name)
 
 
-#define hemp_symbol_instance(hemp,type,start,end) ({                        \
+#define hemp_element_instance(hemp,type,start,end) ({                       \
         hemp_action _cons = (hemp_action) hemp_factory_constructor(         \
             hemp->element, type                                             \
         );                                                                  \
         if (! _cons)                                                        \
             hemp_throw(hemp, HEMP_ERROR_INVALID, "element", type);          \
-        (hemp_symbol) hemp_action_run(                                      \
-            _cons, hemp_symbol_new(type, start, end)                        \
+        (hemp_element) hemp_action_run(                                     \
+            _cons, hemp_element_new(type, start, end)                       \
         );                                                                  \
     })
 

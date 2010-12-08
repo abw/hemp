@@ -8,7 +8,7 @@
 hemp_element HempElementWord = NULL;
 
 
-HEMP_GLOBAL_ELEMENT(hemp_global_word_element) {
+HEMP_GLOBAL_ELEMENT(hemp_global_element_word) {
     return hemp_element_word(
         NULL,
         hemp_element_new("hemp.word", NULL, NULL)

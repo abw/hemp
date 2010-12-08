@@ -30,8 +30,8 @@ tests/core/action
 tests/core/codec
 tests/core/context
 tests/core/dialect
-tests/core/element
-tests/core/elements
+tests/core/fragment
+tests/core/fragments
 tests/core/error
 tests/core/factory
 tests/core/filesystem
