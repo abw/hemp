@@ -1,27 +1,27 @@
-#include <hemp/templates.h>
+#include <hemp/documents.h>
 
 // NOTE: may not be required after all - putting functionality straight into 
 // hemp
 
-hemp_templates_p
-hemp_templates_init(
+hemp_documents_p
+hemp_documents_init(
     hemp_hemp hemp
 ) {
-    hemp_templates_p templates = (hemp_templates_p) hemp_mem_alloc(
-        sizeof(struct hemp_templates_s)
+    hemp_documents_p documents = (hemp_documents_p) hemp_mem_alloc(
+        sizeof(struct hemp_documents_s)
     );
 
-    if (! templates)
-        hemp_mem_fail("templates");
+    if (! documents)
+        hemp_mem_fail("documents");
 
-    return templates;
+    return documents;
 }
 
 
 void
-hemp_templates_free(
-    hemp_templates_p templates
+hemp_documents_free(
+    hemp_documents_p documents
 ) {
-    hemp_mem_free(templates);
+    hemp_mem_free(documents);
 }
 

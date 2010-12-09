@@ -17,7 +17,7 @@ main(
 
 void test_unplugged() {
     hemp_hemp       hemp = hemp_new();
-    hemp_template   template;
+    hemp_document   document;
     hemp_context    context;
     hemp_value      output;
     ok( hemp, "created hemp object" );
@@ -26,13 +26,13 @@ void test_unplugged() {
         hemp_language_instance(hemp, "json");
         pass("got json langauge"); 
 
-        template = hemp_template_instance(
+        document = hemp_document_instance(
             hemp, "json", HEMP_TEXT, "[10, 20, {w:10,x:null,y:false,z:true}]"
         );
-        ok( template , "created template" );
+        ok( document , "created document" );
 
         context = hemp_context_new(hemp);
-        output  = hemp_template_data(template, context);
+        output  = hemp_document_data(document, context);
 
         ok( hemp_is_list(output), "got data list returned" );
         hemp_list list = hemp_val_list(output);

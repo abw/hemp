@@ -117,10 +117,7 @@ hemp_tag_free(
 }
 
 
-hemp_string
-hemp_tag_to_eol(
-    HEMP_TAG_SKIP_ARGS
-) {
+HEMP_SKIPPER(hemp_tag_to_eol) {
     while ( *src
         &&  hemp_not_newline(src) 
     ) {

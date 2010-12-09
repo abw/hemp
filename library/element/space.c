@@ -100,7 +100,7 @@ HEMP_ELEMENT(hemp_element_delimiter) {
  *
  *   [ fill header with title="Hello World", author="Brian Badger" ]
  *
- * If we want to capture the output from processing two different templates
+ * If we want to capture the output from processing two different documents
  * then we can do something like this:
  * 
  *   [ 
@@ -248,8 +248,8 @@ HEMP_SCANNER(hemp_element_comment_scanner) {
     hemp_debug_call("hemp_element_comment_scanner()\n");
 
     hemp_element element = (hemp_element) self;
-    hemp_string  src     = template->scanptr;
-    hemp_tag     tag     = hemp_template_current_tag(template);
+    hemp_string  src     = document->scanptr;
+    hemp_tag     tag     = hemp_document_current_tag(document);
 
     if (! tag)
         hemp_fatal("Can't scan comment without a tag in scope\n");
@@ -261,8 +261,8 @@ HEMP_SCANNER(hemp_element_comment_scanner) {
     src = tag->to_eol(tag, src);
 
     /* add a comment element to the list of scanned tokens */
-    hemp_template_scanned_to(
-        template, element, src
+    hemp_document_scanned_to(
+        document, element, src
     );
 
     return HEMP_TRUE;

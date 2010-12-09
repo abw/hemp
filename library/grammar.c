@@ -152,12 +152,12 @@ hemp_grammar_free_element(
 hemp_memory
 hemp_grammar_scanner(
     hemp_actor      self,
-    hemp_template   template
+    hemp_document   document
 ) {
     hemp_debug_msg("hemp_grammar_scanner()\n");
 
     hemp_grammar    grammar  = (hemp_grammar) self;
-    hemp_string     text     = template->source->text,
+    hemp_string     text     = document->source->text,
                     src      = text,
                     from     = text;
     hemp_pos        pos      = 0;
@@ -176,7 +176,7 @@ hemp_grammar_scanner(
             hemp_scan_while(src, isspace);
             hemp_debug_token("SPACE", from, src-from);
             hemp_fragments_add_fragment(
-                template->fragments, HempElementSpace,
+                document->fragments, HempElementSpace,
                 from, pos, src - from
             );
         }
@@ -202,7 +202,7 @@ hemp_grammar_scanner(
 
             if (errno == ERANGE) {
                 /* TODO: trim next token out of text */
-                hemp_throw(template->dialect->hemp, HEMP_ERROR_OVERFLOW, from);
+                hemp_throw(document->dialect->hemp, HEMP_ERROR_OVERFLOW, from);
             }
             else if (errno) {
                 /* should never happen (famous last words) as we pre-check 
@@ -214,7 +214,7 @@ hemp_grammar_scanner(
             else if (is_int) {
                 hemp_debug_token("INTEGER", from, src-from);
                 fragment = hemp_fragments_add_fragment(
-                    template->fragments, HempElementInteger,
+                    document->fragments, HempElementInteger,
                     from, pos, src - from
                 );
                 fragment->args.value = hemp_int_val(int_val);
@@ -222,7 +222,7 @@ hemp_grammar_scanner(
             else {
                 hemp_debug_token("NUMBER", from, src-from);
                 fragment = hemp_fragments_add_fragment(
-                    template->fragments, HempElementNumber,
+                    document->fragments, HempElementNumber,
                     from, pos, src - from
                 );
                 fragment->args.value = hemp_num_val(num_val);
@@ -251,11 +251,11 @@ hemp_grammar_scanner(
 
             if (element->scanner) {
                 hemp_debug_msg("TODO: can't call element scanner for %s without tag\n", element->name);
-                // symbol->scanner(tmpl, tag, from, pos, &src, symbol);
+                // symbol->scanner(document, tag, from, pos, &src, symbol);
             }
             else {
                 hemp_fragments_add_fragment(
-                    template->fragments, element,
+                    document->fragments, element,
                     from, pos, src - from
                 );
             }
@@ -267,12 +267,12 @@ bareword:
             // TODO: check for ':' following after, e.g. file:/blah/blah
             hemp_debug_token("WORD", from, src-from);
             hemp_fragments_add_fragment(
-                template->fragments, HempElementWord,
+                document->fragments, HempElementWord,
                 from, pos, src - from
             );
         }
         else {
-            hemp_throw(template->dialect->hemp, HEMP_ERROR_TOKEN, src);
+            hemp_throw(document->dialect->hemp, HEMP_ERROR_TOKEN, src);
             break;
         }
 
@@ -280,7 +280,7 @@ bareword:
         from = src;
     }
     
-    hemp_fragments_add_eof(template->fragments, pos);
+    hemp_fragments_add_eof(document->fragments, pos);
 
-    return (hemp_memory) template;
+    return (hemp_memory) document;
 }

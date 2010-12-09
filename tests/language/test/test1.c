@@ -16,7 +16,7 @@ int test_test_language() {
     hemp_hemp          hemp    = hemp_new();
     hemp_context     context = hemp_context_instance(hemp);
     hemp_string      name    = "test1";
-    hemp_template tmpl;
+    hemp_document document;
     hemp_text     output;
 
     hemp_string  dir    = hemp_filesystem_join_path(HEMP_TESTDIR, "scripts");
@@ -29,13 +29,13 @@ int test_test_language() {
     hemp_test_plan_p plan = hemp_test_plan(5);
 
     HEMP_TRY;
-        tmpl = hemp_template_instance(
+        document = hemp_document_instance(
             hemp,
             HEMP_TEST,
             HEMP_TEXT, 
             text
         );
-        output = hemp_template_render(tmpl, context);
+        output = hemp_document_render(document, context);
         ok( output, "%s rendered", name);
         fprintf(stderr, "OUTPUT:\n%s\n/OUTPUT\n", output->string);
 

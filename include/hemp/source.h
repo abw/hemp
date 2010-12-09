@@ -7,14 +7,14 @@
 
 /*--------------------------------------------------------------------------
  * A source is a data structure used to represent the source text for a 
- * template.  It has a pointer to a scheme and fields for the template name
+ * document.  It has a pointer to a scheme and fields for the document name
  * and input text.
  *-------------------------------------------------------------------------*/
 
 struct hemp_source {
     hemp_scheme     scheme;         /* e.g. text, file, etc                 */
     hemp_string     name;           /* path to file or source text          */
-    hemp_string     md5;            /* MD5 hex digest of template uri       */
+    hemp_string     md5;            /* MD5 hex digest of document uri       */
     hemp_string     text;           /* file contents or source text         */
 };
 

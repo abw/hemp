@@ -399,7 +399,7 @@ hemp_test_expect_text(
     hemp_hemp          hemp = hemp_new();
     hemp_string      test, name, expect, error, end;
     hemp_list     list;
-    hemp_template tmpl;
+    hemp_document document;
     hemp_text     output;
     hemp_size     n;
 
@@ -474,13 +474,13 @@ hemp_test_expect_text(
 
         HEMP_TRY;
 
-            tmpl = hemp_template_instance(
+            document = hemp_document_instance(
                 hemp,
                 HEMP_TT3,
                 HEMP_TEXT, 
                 test
             );
-            output = hemp_template_render(tmpl, context);
+            output = hemp_document_render(document, context);
 //          ok( output, "%s (rendered)", name);
 
             if (expect)

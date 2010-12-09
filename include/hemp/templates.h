@@ -1,7 +1,7 @@
 #ifndef HEMP_TEMPLATES_H
 #define HEMP_TEMPLATES_H
 
-#include <hemp/template.h>
+#include <hemp/document.h>
 
 // NOTE: may not be required after all - putting functionality straight into 
 // hemp
@@ -11,9 +11,9 @@
  * type definitions
  *--------------------------------------------------------------------------*/
 
-struct hemp_templates_s {
+struct hemp_documents_s {
     hemp_hemp       hemp;
-    hemp_hash       templates;
+    hemp_hash       documents;
     hemp_dialect    dialect;
 
     // TODO: cache
@@ -27,14 +27,14 @@ struct hemp_templates_s {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_templates_p
-hemp_templates_init(
+hemp_documents_p
+hemp_documents_init(
     hemp_hemp       hemp
 );
 
 void
-hemp_templates_free(
-    hemp_templates  templates
+hemp_documents_free(
+    hemp_documents  documents
 );
 
 

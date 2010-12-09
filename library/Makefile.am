@@ -6,6 +6,7 @@ libhemp_la_SOURCES  =   action.c            \
                         context.c           \
                         debug.c             \
                         dialect.c           \
+                        document.c          \
                         element.c           \
                         error.c             \
                         factory.c           \
@@ -32,7 +33,6 @@ libhemp_la_SOURCES  =   action.c            \
                         stack.c             \
                         tag.c               \
                         tagset.c            \
-                        template.c          \
                         test.c              \
                         type.c              \
                         uri.c               \

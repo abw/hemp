@@ -8,7 +8,7 @@
  * create prefix, postfix and infix operators that have the correct default
  * parsing methods attached (operators are of course free to implement their
  * own parsing methods), and the correct source() method for re-generating 
- * the canonical form of the template source.
+ * the canonical form of the document source.
  *--------------------------------------------------------------------------*/
 
 HEMP_ELEMENT(hemp_element_operator) {

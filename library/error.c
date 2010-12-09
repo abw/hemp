@@ -1,6 +1,5 @@
 #include <hemp/core.h>
 #include <hemp/scanner.h>
-//#include <hemp/source.h>
 
 
 hemp_string hemp_errmsg[] = {
@@ -37,7 +36,7 @@ hemp_error_new(
     error->number   = number;
     error->message  = NULL;
     error->parent   = NULL;
-    error->scan_pos = NULL;
+    error->document = NULL;
 
     return error;
 }
@@ -94,11 +93,11 @@ hemp_error_initfv(
 
 
 hemp_error
-hemp_error_scan_pos(
+hemp_error_document(
     hemp_error    error,
-    hemp_scan_pos scan_pos
+    hemp_document document
 ) {
-    error->scan_pos = scan_pos;
+    error->document = document;
     return error;
 }
 
@@ -112,9 +111,6 @@ hemp_error_free(
      */
     if (error->message)
         free(error->message);
-
-    if (error->scan_pos)
-        hemp_scan_pos_free(error->scan_pos);
 
     hemp_mem_free(error);
 }

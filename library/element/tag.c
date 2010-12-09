@@ -14,10 +14,10 @@ HEMP_ELEMENT(hemp_element_tag_inline) {
 
 HEMP_SCANNER(hemp_element_tag_inline_scanner) {
     hemp_tag        tag     = (hemp_tag) self;
-    hemp_string     tagtok  = template->scantok;
-    hemp_pos        pos     = template->scanpos;
-    hemp_string     src     = template->scanptr,
-                    from    = template->scanptr;
+    hemp_string     tagtok  = document->scantok;
+    hemp_pos        pos     = document->scanpos;
+    hemp_string     src     = document->scanptr,
+                    from    = document->scanptr;
     hemp_string     tagend  = tag->end;
     hemp_size       endlen  = strlen(tagend);
     hemp_num        num_val = 0;
@@ -31,13 +31,13 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
 
     // add the tag start token
     hemp_fragments_add_fragment(
-        template->fragments, HempElementTagStart,
+        document->fragments, HempElementTagStart,
         tagtok, pos, src - tagtok
     );
     pos += src - tagtok;
     
-    template->scanpos = pos;
-    template->scantok = src;
+    document->scanpos = pos;
+    document->scantok = src;
     
     is_word = HEMP_FALSE;
 
@@ -47,7 +47,7 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
             hemp_scan_while(src, isspace);
             hemp_debug_token("SPACE", from, src-from);
             hemp_fragments_add_fragment(
-                template->fragments, HempElementSpace,
+                document->fragments, HempElementSpace,
                 from, pos, src - from
             );
         }
@@ -55,7 +55,7 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
             /* tag end */
             hemp_debug_token("TAG END", from, endlen);
             hemp_fragments_add_fragment(
-                template->fragments, HempElementTagEnd,
+                document->fragments, HempElementTagEnd,
                 from, pos, endlen
             );
             src += endlen;
@@ -83,7 +83,7 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
 
             if (errno == ERANGE) {
                 /* TODO: trim next token out of text */
-                hemp_throw(template->dialect->hemp, HEMP_ERROR_OVERFLOW, from);
+                hemp_throw(document->dialect->hemp, HEMP_ERROR_OVERFLOW, from);
             }
             else if (errno) {
                 /* should never happen (famous last words) as we pre-check 
@@ -95,7 +95,7 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
             else if (is_int) {
                 hemp_debug_token("INTEGER", from, src-from);
                 fragment = hemp_fragments_add_fragment(
-                    template->fragments, HempElementInteger,
+                    document->fragments, HempElementInteger,
                     from, pos, src - from
                 );
                 fragment->args.value = hemp_int_val(int_val);
@@ -103,7 +103,7 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
             else {
                 hemp_debug_token("NUMBER", from, src-from);
                 fragment = hemp_fragments_add_fragment(
-                    template->fragments, HempElementNumber,
+                    document->fragments, HempElementNumber,
                     from, pos, src - from
                 );
                 fragment->args.value = hemp_num_val(num_val);
@@ -132,11 +132,11 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
 
             if (element->scanner) {
                 hemp_debug_msg("%s element has dedicated scanner\n", element->name);
-                element->scanner(element, template); //, tag, from, pos, &src, element);
+                element->scanner(element, document); //, tag, from, pos, &src, element);
             }
             else {
                 hemp_fragments_add_fragment(
-                    template->fragments, element,
+                    document->fragments, element,
                     from, pos, src - from
                 );
             }
@@ -148,23 +148,23 @@ bareword:
             // TODO: check for ':' following after, e.g. file:/blah/blah
             hemp_debug_token("WORD", from, src-from);
             hemp_fragments_add_fragment(
-                template->fragments, HempElementWord,
+                document->fragments, HempElementWord,
                 from, pos, src - from
             );
         }
         else {
-            hemp_throw(template->dialect->hemp, HEMP_ERROR_TOKEN, src);
+            hemp_throw(document->dialect->hemp, HEMP_ERROR_TOKEN, src);
             break;
         }
 
         pos += src - from;
         from = src;
-        template->scanpos = pos;
-        template->scantok = src;
+        document->scanpos = pos;
+        document->scantok = src;
     }
     
-    template->scanpos = pos;
-    template->scanptr = src;
+    document->scanpos = pos;
+    document->scanptr = src;
 
     return HEMP_TRUE;
 }

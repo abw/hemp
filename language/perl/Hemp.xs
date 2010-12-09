@@ -6,7 +6,7 @@
 #include "types.h"
 
 typedef hemp_hemp          Hemp;
-typedef hemp_template Hemp__Template;
+typedef hemp_document Hemp__Template;
 typedef hemp_context  Hemp__Context;
 typedef hemp_text     Hemp__Text;
 
@@ -51,15 +51,15 @@ language(hemp, language)
 
 
 Hemp::Template
-template(hemp, dialect, scheme, source)
+document(hemp, dialect, scheme, source)
     Hemp   hemp
     char * dialect
     char * scheme
     char * source
     INIT:
-        fprintf(stderr, "Hemp->template('%s', '%s', '%s')\n", dialect, scheme, source);
+        fprintf(stderr, "Hemp->document('%s', '%s', '%s')\n", dialect, scheme, source);
     CODE:
-        RETVAL = hemp_template_instance(hemp, dialect, scheme, source);
+        RETVAL = hemp_document_instance(hemp, dialect, scheme, source);
     OUTPUT:
         RETVAL
 
@@ -94,15 +94,15 @@ PROTOTYPES: enable
 
 
 Hemp::Text
-render(template, context)
-    Hemp::Template template
+render(document, context)
+    Hemp::Template document
     Hemp::Context  context
     INIT:
         fprintf(stderr, "Hemp::Template->render()\n");
     CODE:
         hemp_hemp hemp = context->hemp;
         HEMP_TRY;
-            RETVAL = hemp_template_render(template, context);
+            RETVAL = hemp_document_render(document, context);
         HEMP_CATCH_ALL;
             croak("Hemp error: %s", hemp->error->message);
         HEMP_END;

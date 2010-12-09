@@ -66,14 +66,14 @@ HEMP_GRAMMAR(hemp_grammar_json) {
 
 
 HEMP_PREPARE(hemp_dialect_json_prepare) {
-    hemp_hemp    hemp    = template->dialect->hemp;
+    hemp_hemp    hemp    = document->dialect->hemp;
     hemp_grammar grammar = hemp_grammar_instance(hemp, "json");
 
-    template->scanner = hemp_action_new(
+    document->scanner = hemp_action_new(
         (hemp_actor)    &hemp_grammar_scanner, 
         (hemp_memory)   grammar
     );
 
-    return template;
+    return document;
 }
 

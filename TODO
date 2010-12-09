@@ -145,8 +145,6 @@ An incomplete list of things TODO, in no particular order.
 
 * Clean up scanner errors, number parse errors, etc., including quoted strings
 
-* Change 'template' to 'document'
-
 
 
 Configuration, Build and Installation
@@ -185,7 +183,7 @@ A reminder of what I'm working towards right now...
 
 Hemp config.  Any value with fetch() method.
 
-config_file reads config from template using default data dialect, e.g. json
+config_file reads config from document using default data dialect, e.g. json
 
   hemp.config.file
   hemp.config.dialect
@@ -193,8 +191,8 @@ config_file reads config from template using default data dialect, e.g. json
   hemp.data.path
   hemp.data.dialect
 
-  hemp.template.path
-  hemp.template.dialect
+  hemp.document.path
+  hemp.document.dialect
 
   etc
 

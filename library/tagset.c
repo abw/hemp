@@ -3,12 +3,12 @@
 
 hemp_tagset
 hemp_tagset_new(
-    hemp_template   template
+    hemp_document   document
 ) {
     hemp_tagset tagset;
     HEMP_ALLOCATE(tagset);
 
-    tagset->template      = template;
+    tagset->document      = document;
     tagset->text_element  = HempElementText;
     tagset->tags          = hemp_hash_new();
     tagset->inline_tags   = hemp_ptree_new(HEMP_TAGSET_SIZE);
@@ -87,8 +87,8 @@ hemp_tagset_new_tag(
     hemp_string     end,
     hemp_grammar    grammar
 ) {
-//    hemp_debug("tagset: %p  template: %p\n", tagset, tagset->template);
-//    hemp_dialect d = tagset->template->dialect;
+//    hemp_debug("tagset: %p  document: %p\n", tagset, tagset->document);
+//    hemp_dialect d = tagset->document->dialect;
 //    hemp_debug("dialect: %p  hemp: %p\n", d, d->hemp);
 //    hemp_debug("type: %s  name: %s   start: %s   end: %s  grammar: %p\n", type, name, start, end ? end : "", grammar);
 //
@@ -99,7 +99,7 @@ hemp_tagset_new_tag(
 //    hemp_debug("called constructor\n");
 //
 //    hemp_tag tag = hemp_tag_construct(
-//        tagset->template->dialect->hemp,        // a rather tenuous link
+//        tagset->document->dialect->hemp,        // a rather tenuous link
 //        type, name, start, end, grammar
 //    );
 //    hemp_debug("created tag: %p\n", tag);
@@ -107,7 +107,7 @@ hemp_tagset_new_tag(
     return hemp_tagset_add_tag(
         tagset,
         hemp_tag_construct(
-            tagset->template->dialect->hemp,        // a rather tenuous link
+            tagset->document->dialect->hemp,        // a rather tenuous link
             type, name, start, end, grammar
         )
     );
@@ -137,19 +137,19 @@ hemp_tagset_dump(
 
 hemp_tagset
 hemp_tagset_prepare(
-    hemp_template   template
+    hemp_document   document
 ) {
-    hemp_debug_call("hemp_tagset_prepare(%p)\n", template);
-    hemp_tagset tagset = hemp_tagset_new(template);
-    template->scanner  = hemp_action_new(
+    hemp_debug_call("hemp_tagset_prepare(%p)\n", document);
+    hemp_tagset tagset = hemp_tagset_new(document);
+    document->scanner  = hemp_action_new(
         (hemp_actor) &hemp_tagset_scanner, 
         (hemp_memory) tagset
     );
 //    hemp_debug_msg(
 //        "scanner: %p = [%p, %p]\n", 
-//        template->scanner, 
-//        template->scanner->actor,
-//        template->scanner->script
+//        document->scanner, 
+//        document->scanner->actor,
+//        document->scanner->script
 //    );
 
     return tagset;
@@ -158,12 +158,12 @@ hemp_tagset_prepare(
 
 void
 hemp_tagset_cleanup(
-    hemp_template template
+    hemp_document document
 ) {
-    if (template->scanner) {
+    if (document->scanner) {
         hemp_debug_init("tagset scanner cleanup\n");
-        hemp_tagset_free((hemp_tagset) template->scanner->script);
-        hemp_action_free(template->scanner);
+        hemp_tagset_free((hemp_tagset) document->scanner->script);
+        hemp_action_free(document->scanner);
     }
 }
 
@@ -172,13 +172,13 @@ HEMP_SCANNER(hemp_tagset_scanner) {
     hemp_debug_call("hemp_tagset_scanner()\n");
 
     hemp_tagset     tagset   = (hemp_tagset) self;
-    hemp_string     src      = template->scanptr,
-                    from     = template->scantok,
+    hemp_string     src      = document->scanptr,
+                    from     = document->scantok,
                     tagstr;
     hemp_pnode      pnode;
     hemp_tag        tag;
 
-//    hemp_debug_msg("POS [%d] TEXT [%s]\n", template->scanpos, template->scantok);
+//    hemp_debug_msg("POS [%d] TEXT [%s]\n", document->scanpos, document->scantok);
 
 #if HEMP_DEBUG & HEMP_DEBUG_SCAN
     hemp_debug_magenta("-- source ---\n%s\n-------------\n", src);
@@ -202,15 +202,15 @@ HEMP_SCANNER(hemp_tagset_scanner) {
 
             /* add any preceding text */
             if (tagstr > from) {
-                hemp_template_scanned_to(
-                    template, tagset->text_element, tagstr
+                hemp_document_scanned_to(
+                    document, tagset->text_element, tagstr
                 );
             }
 
-            /* update template state before and after call to tag */
-            template->scanptr = src;
-            tag->scanner(tag, template);
-            from = src = template->scanptr;
+            /* update document state before and after call to tag */
+            document->scanptr = src;
+            tag->scanner(tag, document);
+            from = src = document->scanptr;
         }
 
         /* then look for inline tags within lines */
@@ -244,27 +244,27 @@ HEMP_SCANNER(hemp_tagset_scanner) {
 
             /* create a fragment for any preceding text */
             if (tagstr > from) {
-                hemp_template_scanned_to(
-                    template, tagset->text_element, tagstr
+                hemp_document_scanned_to(
+                    document, tagset->text_element, tagstr
                 );
             }
 
-            template->scanptr = src;
-            tag->scanner(tag, template);
-            from = src = template->scanptr;
+            document->scanptr = src;
+            tag->scanner(tag, document);
+            from = src = document->scanptr;
         }
     }
 
     if (src > from) {
-        hemp_template_scanned_to(
-            template, tagset->text_element, src
+        hemp_document_scanned_to(
+            document, tagset->text_element, src
         );
     }
     
-    hemp_fragments_add_eof(template->fragments, template->scanpos);
+    hemp_fragments_add_eof(document->fragments, document->scanpos);
 
 #if HEMP_DEBUG & HEMP_DEBUG_SCAN
-    hemp_fragments_dump(template->fragments);
+    hemp_fragments_dump(document->fragments);
 #endif
 
     return HEMP_TRUE;

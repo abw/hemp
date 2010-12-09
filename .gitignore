@@ -30,6 +30,7 @@ tests/core/action
 tests/core/codec
 tests/core/context
 tests/core/dialect
+tests/core/document
 tests/core/fragment
 tests/core/fragments
 tests/core/error
@@ -48,7 +49,6 @@ tests/core/stack
 tests/core/string
 tests/core/tag
 tests/core/tagset
-tests/core/template
 tests/core/ptree
 tests/core/type
 tests/core/uri

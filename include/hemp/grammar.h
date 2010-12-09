@@ -7,7 +7,7 @@
 #include <hemp/factory.h>
 #include <hemp/ptree.h>
 #include <hemp/namespace.h>
-#include <hemp/template.h>
+#include <hemp/document.h>
 #include <hemp/type/hash.h>
 
 
@@ -84,7 +84,7 @@ hemp_grammar_free_element(
 hemp_memory
 hemp_grammar_scanner(
     hemp_actor      self,
-    hemp_template   template
+    hemp_document   document
 );
 
 

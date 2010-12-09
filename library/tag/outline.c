@@ -24,15 +24,15 @@ HEMP_TAG(hemp_tag_outline) {
 
 HEMP_SCANNER(hemp_tag_outline_scanner) {
     hemp_tag        tag     = (hemp_tag) self;
-    hemp_string     src     = template->scanptr,
-                    from    = template->scanptr;
+    hemp_string     src     = document->scanptr,
+                    from    = document->scanptr;
     hemp_pnode      pnode;
     hemp_element    element;
 
     hemp_debug_call("hemp_tag_outline_tag()\n");
 
-    hemp_template_enter_tag(template, tag);
-    hemp_template_scanned(template, HempElementTagStart);
+    hemp_document_enter_tag(document, tag);
+    hemp_document_scanned(document, HempElementTagStart);
 
     while (*src) {
         /* This is similar to the inline tag scanner but differs in the way
@@ -53,11 +53,11 @@ HEMP_SCANNER(hemp_tag_outline_scanner) {
             } while ( 
                 isspace(*src) && *src != HEMP_CR && *src != HEMP_LF
             );
-            hemp_template_scanned_to(template, HempElementSpace, src);
+            hemp_document_scanned_to(document, HempElementSpace, src);
         }
         else if (isdigit(*src)) {
-            hemp_scan_number(template);
-            src = template->scanptr;
+            hemp_scan_number(document);
+            src = document->scanptr;
         }
         else if (
             (pnode   = hemp_ptree_root(tag->grammar->operators, src))
@@ -81,13 +81,13 @@ HEMP_SCANNER(hemp_tag_outline_scanner) {
                 goto bareword;
 
             if (element->scanner) {
-                template->scanptr = src;
-                element->scanner(element, template);
-                src = template->scanptr;
+                document->scanptr = src;
+                element->scanner(element, document);
+                src = document->scanptr;
             }
             else {
-                hemp_template_scanned_to(
-                    template, element, src
+                hemp_document_scanned_to(
+                    document, element, src
                 );
             }
         }
@@ -96,22 +96,22 @@ bareword:
             /* word */
             hemp_scan_while(src, isalnum);
             // TODO: check for ':' following after, e.g. file:/blah/blah
-            hemp_template_scanned_to(
-                template, HempElementWord, src
+            hemp_document_scanned_to(
+                document, HempElementWord, src
             );
         }
         else {
-            hemp_throw(template->dialect->hemp, HEMP_ERROR_TOKEN, src);
+            hemp_throw(document->dialect->hemp, HEMP_ERROR_TOKEN, src);
             break;
         }
     }
 
     /* tag end - newlines characters matched but not yet consumed */
-    hemp_template_scanned_to(
-        template, HempElementTagEnd, src
+    hemp_document_scanned_to(
+        document, HempElementTagEnd, src
     );
 
-    hemp_template_leave_tag(template);
+    hemp_document_leave_tag(document);
 
     return HEMP_TRUE;
 }

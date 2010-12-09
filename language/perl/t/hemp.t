@@ -50,11 +50,11 @@ sub test_hemp() {
     # load the tt3 language pack
     $hemp->language("tt3");
 
-    # create a template
-    my $template = $hemp->template( tt3 => text => "Hello [% name %]! [% n + 20 %]" );
-    ok( $template, "Got hemp template: $template\n" );
+    # create a document
+    my $document = $hemp->document( tt3 => text => "Hello [% name %]! [% n + 20 %]" );
+    ok( $document, "Got hemp document: $document\n" );
 
-    # create a runtime template
+    # create a runtime document
     my $context = $hemp->context;
     ok( $context, "Got hemp context: $context\n" );
 
@@ -66,7 +66,7 @@ sub test_hemp() {
     my $code   = sub { warn "in Perl subroutine\n"; return "Returned from Perl code" };
 #    print "Foo: $object\n";
 
-    # define a template variable
+    # define a document variable
     $context->set( name   => "World" );
     $context->set( n      => 400 );
     $context->set( items  => $items );
@@ -76,31 +76,31 @@ sub test_hemp() {
     $context->set( object => $object );
     $context->set( plcode => $code );
 
-    # render the template
-#    my $output = $template->render($context);
-#    ok( $output, "Processed template: $output" );
+    # render the document
+#    my $output = $document->render($context);
+#    ok( $output, "Processed document: $output" );
 #    is( $output, "Hello World! 420", "got correct output" );
 #    print STDERR "OUTPUT: $output\n";
 
-    $template = $hemp->template( 
+    $document = $hemp->document( 
 #        tt3 => text => "hash.a:[% hash.a %]  hash.b:[% hash.b %]  hash.c:[% hash.c %]" 
         tt3 => text => "code: [% plcode(n) %]" 
     );
-    ok( $template, "Got hemp template: $template\n" );
-    my $r = $template->render($context);
+    ok( $document, "Got hemp document: $document\n" );
+    my $r = $document->render($context);
     my $t = $r->text;
     print "rendered: ", $r->text, "\n";
     print "autostring: $r\n";
 
 #    print STDERR "OUTPUT: $r\n"; 
 
-#    $template = $hemp->template( tt3 => text => "World:[% name.length %] [% n %]:[% n.length %]" );
-#    ok( $template, "Got hemp template: $template\n" );
+#    $document = $hemp->document( tt3 => text => "World:[% name.length %] [% n %]:[% n.length %]" );
+#    ok( $document, "Got hemp document: $document\n" );
 
 #    print STDERR 
 #        "OUTPUT: ", 
 #        $hemp
-#            ->template( tt3 => text => 
+#            ->document( tt3 => text => 
 #"hash length: [% hash.length %] nohash: [% nohash.length %]  items: [% items.length %]  empty: [% empty.length %]" )
 #">>>> [% object %]" )
 #            ->render($context),

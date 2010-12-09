@@ -24,7 +24,7 @@ HEMP_PREFIX(hemp_element_test_expect_prefix);
 HEMP_VALUE(hemp_element_test_expect_value);
 HEMP_CLEANUP(hemp_element_test_expect_cleanup);
 
-hemp_template hemp_dialect_test_prepare(hemp_template tmpl);
-void hemp_dialect_test_cleanup(hemp_template tmpl);
+hemp_document hemp_dialect_test_prepare(hemp_document doc);
+void hemp_dialect_test_cleanup(hemp_document doc);
 
 #endif /* HEMP_LANGUAGE_TEST_H */

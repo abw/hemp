@@ -55,8 +55,8 @@ hemp_command hemp_commands[] = {
     { &hemp_cmd_expr,   "expr",   "Evaluate a single hemp expression"       },
     { &hemp_cmd_exprs,  "exprs",  "Evaluate hemp expressions, line by line" },
     { &hemp_cmd_todo,   "data",   "Load data definitions from a file"       },
-    { &hemp_cmd_todo,   "text",   "Process some template text"              },
-    { &hemp_cmd_todo,   "file",   "Process a template file"                 },
+    { &hemp_cmd_todo,   "text",   "Process some document text"              },
+    { &hemp_cmd_todo,   "file",   "Process a document file"                 },
     { &hemp_cmd_help,   "help",   "Help on using hemp"                      },
     { &hemp_cmd_quit,   "quit",   "Quit using hemp"                         },
     { NULL, NULL, NULL }
@@ -84,7 +84,7 @@ int main(
 ) {
     hemp_hemp          hemp = hemp_new();
     hemp_string      filename;
-    hemp_template template;
+    hemp_document document;
     hemp_text     input, output;
     
     hemp_language_instance(hemp, "tt3");
@@ -107,40 +107,40 @@ int main(
                 hemp_text_append_string(input, " ");
             }
             // hemp_verbose(hemp, "loaded text: %s", input->string);
-            template = hemp_template_instance(
+            document = hemp_document_instance(
                 hemp, HEMP_TT3, HEMP_TEXT, input->string
             );
             
-            if (! template)
-                hemp_fatal("could not load template: %s", filename);
+            if (! document)
+                hemp_fatal("could not load document: %s", filename);
 
-            output = hemp_template_render(template, NULL);
+            output = hemp_document_render(document, NULL);
             if (! output)
-                hemp_fatal("could not render template output: %s", filename);
+                hemp_fatal("could not render document output: %s", filename);
 
             puts(output->string);
             
             hemp_text_free(input);
             hemp_text_free(output);
-            hemp_template_free(template);
+            hemp_document_free(document);
         }
         else {
             while (optind < argc) {
                 filename = argv[optind++];
                 hemp_verbose(hemp, "loading file: %s", filename);
 
-                template = hemp_template_instance(hemp, HEMP_TT3, HEMP_FILE, filename);
-                if (! template)
-                    hemp_fatal("could not load template: %s", filename);
+                document = hemp_document_instance(hemp, HEMP_TT3, HEMP_FILE, filename);
+                if (! document)
+                    hemp_fatal("could not load document: %s", filename);
 
-                output = hemp_template_render(template, NULL);
+                output = hemp_document_render(document, NULL);
                 if (! output)
-                    hemp_fatal("could not render template output: %s", filename);
+                    hemp_fatal("could not render document output: %s", filename);
 
                 puts(output->string);
             
                 hemp_text_free(output);
-                hemp_template_free(template);
+                hemp_document_free(document);
             }
         }
     }
@@ -395,7 +395,7 @@ hemp_cmd_expr(
     hemp_string text
 ) {
     hemp_text     input, output;
-    hemp_template hemplate;
+    hemp_document hemplate;
 
     if (! text)
         text = hemp_input_read(HEMP_EXPR_PROMPT);
@@ -415,19 +415,19 @@ hemp_cmd_expr(
 
     HEMP_TRY;
         // hemp_verbose(hemp, "loaded text: %s", input->string);
-        hemplate = hemp_template_instance(
+        hemplate = hemp_document_instance(
             hemp, HEMP_TT3, HEMP_TEXT, input->string
         );
         
         if (! hemplate)
-            hemp_fatal("failed to create template... I think this should never happen, but need to check\n");
+            hemp_fatal("failed to create document... I think this should never happen, but need to check\n");
 
-        output = hemp_template_render(hemplate, NULL);
+        output = hemp_document_render(hemplate, NULL);
 
         if (output)
             puts(output->string);
         else 
-            hemp_fatal("could not render template output");
+            hemp_fatal("could not render document output");
 
 
     HEMP_CATCH_ALL;
@@ -442,7 +442,7 @@ hemp_cmd_expr(
   
 // cleaned up automatically  
 //    if (hemplate)
-//        hemp_template_free(hemplate);
+//        hemp_document_free(hemplate);
 
 
     return HEMP_FALSE;

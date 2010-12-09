@@ -22,39 +22,39 @@ HEMP_TAG(hemp_tag_inline) {
 hemp_bool
 hemp_tag_inline_scanner(
     hemp_memory     self,
-    hemp_template   template
+    hemp_document   document
 ) {
     hemp_tag        tag     = (hemp_tag) self;
-    hemp_string     src     = template->scanptr;
+    hemp_string     src     = document->scanptr;
     hemp_string     tagend  = tag->end;
     hemp_size       endlen  = strlen(tagend);
     hemp_bool       closed  = HEMP_FALSE;
     hemp_pnode      pnode;
     hemp_element    element;
 
-    hemp_template_enter_tag(template, tag);
+    hemp_document_enter_tag(document, tag);
 
     // add the tag start token
-    hemp_template_scanned(template, HempElementTagStart);
+    hemp_document_scanned(document, HempElementTagStart);
 
-    src = template->scanptr;
+    src = document->scanptr;
 
     while (*src) {
         if (isspace(*src)) {
             /* whitespace */
             hemp_scan_while(src, isspace);
-            hemp_template_scanned_to(template, HempElementSpace, src);
+            hemp_document_scanned_to(document, HempElementSpace, src);
         }
         else if (hemp_stringn_eq(src, tagend, endlen)) {      // TODO: end flags
             /* tag end */
             src += endlen;
-            hemp_template_scanned_to(template, HempElementTagEnd, src);
+            hemp_document_scanned_to(document, HempElementTagEnd, src);
             closed = HEMP_TRUE;
             break;                                          /* ESCAPE ROUTE */
         }
         else if (isdigit(*src)) {
-            hemp_scan_number(template);
-            src = template->scanptr;
+            hemp_scan_number(document);
+            src = document->scanptr;
         }
         else if (
             (pnode   = hemp_ptree_root(tag->grammar->operators, src))
@@ -76,13 +76,13 @@ hemp_tag_inline_scanner(
                 goto bareword;
 
             if (element->scanner) {
-                template->scanptr = src;
-                element->scanner(element, template);
-                src = template->scanptr;
+                document->scanptr = src;
+                element->scanner(element, document);
+                src = document->scanptr;
             }
             else {
-                hemp_template_scanned_to(
-                    template, element, src
+                hemp_document_scanned_to(
+                    document, element, src
                 );
             }
         }
@@ -91,35 +91,32 @@ bareword:
             /* word */
             hemp_scan_while(src, isalnum);
             // TODO: check for ':' following after, e.g. file:/blah/blah
-            hemp_template_scanned_to(
-                template, HempElementWord, src
+            hemp_document_scanned_to(
+                document, HempElementWord, src
             );
         }
         else {
             hemp_debug_msg("unexpected token: %s\n", src);
-            hemp_throw(template->dialect->hemp, HEMP_ERROR_TOKEN, src);
+            hemp_throw(document->dialect->hemp, HEMP_ERROR_TOKEN, src);
             break;
         }
 
-//        template->scantok = src;
+//        document->scantok = src;
     }
     
-    template->scanptr = src;
+    document->scanptr = src;
 
     if (tag->end && ! closed)
         hemp_fatal("Missing tag end: %s", tag->end);
 
-    hemp_template_leave_tag(template);
+    hemp_document_leave_tag(document);
 
     return HEMP_TRUE;
 }
 
 
 
-hemp_string
-hemp_tag_inline_to_eol(
-    HEMP_TAG_SKIP_ARGS
-) {
+HEMP_SKIPPER(hemp_tag_inline_to_eol) {
     hemp_debug_call("hemp_tag_inline_to_eol()\n");
     hemp_string tag_end = tag->end;
     hemp_size   tag_len = strlen(tag->end);

@@ -37,7 +37,7 @@ struct hemp_tag {
     hemp_string     end;
     hemp_grammar    grammar;
     hemp_scanner    scanner;
-    hemp_tag_skip_f to_eol;
+    hemp_skipper    to_eol;
 };
 
 struct hemp_tags {
@@ -105,17 +105,11 @@ hemp_tag_free(
 
 hemp_memory hemp_tag_scanner(
     hemp_actor      self,
-    hemp_template   template
+    hemp_document   document
 );
 
-void        hemp_tag_inline_scan_OLD(HEMP_TAG_SCAN_ARGS);
-void        hemp_tag_outline_scan(HEMP_TAG_SCAN_ARGS);
-void        hemp_tag_comment_scan(HEMP_TAG_SCAN_ARGS);
-void        hemp_tag_control_scan(HEMP_TAG_SCAN_ARGS);
-
-hemp_string hemp_tag_to_eol(HEMP_TAG_SKIP_ARGS);
-//hemp_string hemp_tag_outline_to_eol(HEMP_TAG_SKIP_ARGS);
-hemp_string hemp_tag_inline_to_eol(HEMP_TAG_SKIP_ARGS);
+HEMP_SKIPPER(hemp_tag_to_eol);
+HEMP_SKIPPER(hemp_tag_inline_to_eol);
 
 HEMP_TAG(hemp_tag_inline);
 HEMP_TAG(hemp_tag_outline);

@@ -2,6 +2,7 @@ check_PROGRAMS  =   action      \
                     codec       \
                     context     \
                     dialect     \
+                    document    \
                     error       \
                     factory     \
                     filesystem  \
@@ -18,7 +19,6 @@ check_PROGRAMS  =   action      \
                     string      \
                     tag         \
                     tagset      \
-                    template    \
                     type        \
                     utils       \
                     value       \

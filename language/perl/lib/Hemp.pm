@@ -37,8 +37,8 @@ Hemp - Hemp weaves data into text
     # load the TT3 language pack (what little there is of it)
     $hemp->language("tt3");
 
-    # create a TT3 template from a text string
-    my $template = $hemp->template(
+    # create a TT3 document from a text string
+    my $document = $hemp->document(
         'tt3',                          # dialect
         text => "Hello [% name %]!"     # source
     );
@@ -46,11 +46,11 @@ Hemp - Hemp weaves data into text
     # create a runtime context
     my $context = $hemp->context;
     
-    # define a template variable
+    # define a document variable
     $context->set( name => "World" );   # NOTE: only scalars at present
     
-    # render the template in the context
-    my $output = $template->render($context);
+    # render the document in the context
+    my $output = $document->render($context);
     
     # sit back and relax
     print $output;              # Hello World!
@@ -58,11 +58,11 @@ Hemp - Hemp weaves data into text
 =head1 DESCRIPTION
 
 Hemp weaves data into text.  It implements a parsing and processing 
-framework for template languages and mini-markup languages like POD,
+framework for document languages and mini-markup languages like POD,
 Markdown, etc.  Or rather, it will do, when it's finished.
 
 As of September 2010, Hemp is just about advanced enough to process very
-simple templates (think "Hello [% name %]!"). 
+simple documents (think "Hello [% name %]!"). 
 
 This module is a first attempt at providing a Perl wrapper around the Hemp C
 library.  It is still at the proof-of-concept stage and is most definitely 

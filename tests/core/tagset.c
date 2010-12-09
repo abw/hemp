@@ -12,18 +12,12 @@ int main(
 }
 
 
-void test1_scan(
-    HEMP_TAG_SCAN_ARGS
-) {
-    hemp_debug("custom scanner");
-}
-
 
 void test_tagset() {
     hemp_hemp       hemp        = hemp_new();
     hemp_dialect    dialect     = hemp_dialect_new(hemp, "test.dialect");
     hemp_source     source      = hemp_source_instance(hemp, "text", "Hello world");
-    hemp_template   template    = hemp_template_new(dialect, source);
+    hemp_document   document    = hemp_document_new(dialect, source);
     hemp_tag        inline_tag, outline_tag;
     hemp_tagset     tagset = NULL;
 
@@ -41,7 +35,7 @@ void test_tagset() {
         );
         ok( outline_tag, "created outline tag object" );
 
-        tagset = hemp_tagset_new(template);
+        tagset = hemp_tagset_new(document);
         ok( tagset, "created tagset object" );
 
         ok( hemp_tagset_add_tag(tagset, inline_tag),  "added inline tag" );
@@ -58,7 +52,7 @@ void test_tagset() {
         fail("unexpected error: %s", hemp->error->message);
     HEMP_END;
 
-    hemp_template_free(template);
+    hemp_document_free(document);
     hemp_tagset_free(tagset);
     hemp_dialect_free(dialect);
     hemp_free(hemp);

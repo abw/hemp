@@ -19,10 +19,10 @@ void test_viewer() {
 
     hemp_language_instance(hemp, "tt3");
 
-    hemp_template tmpl = hemp_template_instance(
+    hemp_document document = hemp_document_instance(
         hemp, HEMP_TT3, HEMP_TEXT, "Hello [% name %]!"
     );
-    ok( tmpl , "created template" );
+    ok( document , "created document" );
     
     hemp_context context = hemp_context_instance(hemp);
     ok( context, "created hemp context" );
@@ -38,8 +38,8 @@ void test_viewer() {
     hemp_text output;
 
     HEMP_TRY;
-        output = hemp_template_render(tmpl, context);
-        ok( output, "rendered template");
+        output = hemp_document_render(document, context);
+        ok( output, "rendered document");
     HEMP_CATCH_ALL;
         output = hemp_error_text(hemp->error);
     HEMP_END;
@@ -47,7 +47,7 @@ void test_viewer() {
     printf("** OUTPUT ** : %s\n", output->string);
     hemp_text_free(output);
 
-    hemp_fragment root = hemp_template_tree(tmpl);
+    hemp_fragment root = hemp_document_tree(document);
     ok( root, "got root element: %p", root);
 
     hemp_value result = hemp_viewer_fragment(text, root, context, HempNothing);

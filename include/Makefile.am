@@ -24,7 +24,7 @@ nobase_include_HEADERS  = hemp/config.h         \
                           hemp/source.h         \
                           hemp/tag.h            \
                           hemp/tagset.h         \
-                          hemp/template.h       \
+                          hemp/document.h       \
                           hemp/type.h           \
                           hemp/type/code.h      \
                           hemp/type/hash.h      \

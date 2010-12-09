@@ -31,19 +31,19 @@ hemp_dialect_free(
 }
 
 
-hemp_template
-hemp_dialect_template(
+hemp_document
+hemp_dialect_document(
     hemp_dialect    dialect,
     hemp_source     source
 ) {
-    hemp_template tmpl = hemp_template_new(
+    hemp_document document = hemp_document_new(
         dialect, source
     );
     
     /* call any custom dialect initialiser */
     if (dialect->prepare)
-        tmpl = dialect->prepare(tmpl);
+        document = dialect->prepare(document);
 
-    return tmpl;
+    return document;
 }
 

@@ -1,53 +1,21 @@
 #include <hemp/scanner.h>
 
 
-/*--------------------------------------------------------------------------
- * scan_pos is a temporary hack to store scan position in an exception
- *--------------------------------------------------------------------------*/
-
-hemp_scan_pos
-hemp_scan_pos_init(HEMP_SCAN_ARGS) {
-    hemp_scan_pos scan_pos = (hemp_scan_pos) hemp_mem_alloc(
-        sizeof(struct hemp_scan_pos)
-    );
-
-    if (! scan_pos)
-        hemp_mem_fail("scanner position");
-    
-    scan_pos->tmpl    = tmpl;
-    scan_pos->tag     = tag;
-    scan_pos->start   = start;
-    scan_pos->pos     = pos;
-    scan_pos->current = *srcptr;
-    scan_pos->element = element;
-
-    return scan_pos;
-}
-
-
-void
-hemp_scan_pos_free(
-    hemp_scan_pos scan_pos
-) {
-    hemp_mem_free(scan_pos);
-}
-
-
 HEMP_INLINE void
 hemp_scan_number(
-    hemp_template   template
+    hemp_document   document
 ) {
-    hemp_string     src     = template->scanptr;
+    hemp_string     src     = document->scanptr;
     hemp_num        num_val = 0;
     hemp_int        int_val = 0;
     hemp_bool       is_int  = HEMP_FALSE;
     hemp_fragment   fragment;
 
-//  hemp_debug_scan("scanning number: %s\n", template->scanptr);
+//  hemp_debug_scan("scanning number: %s\n", document->scanptr);
 
     /* number - try integer first */
     errno   = 0;
-    int_val = strtol(template->scanptr, &src, 0);
+    int_val = strtol(document->scanptr, &src, 0);
     is_int  = HEMP_TRUE;
 
     /* If there's a decimal point and a digit following then it's a 
@@ -61,12 +29,12 @@ hemp_scan_number(
       || ( *src == 'e' || *src == 'E' )
     )  {
         is_int  = HEMP_FALSE;
-        num_val = strtod(template->scanptr, &src);
+        num_val = strtod(document->scanptr, &src);
     }
 
     if (errno == ERANGE) {
         /* TODO: trim next token out of text */
-        hemp_throw(template->dialect->hemp, HEMP_ERROR_OVERFLOW, template->scanptr);
+        hemp_throw(document->dialect->hemp, HEMP_ERROR_OVERFLOW, document->scanptr);
     }
     else if (errno) {
         /* should never happen (famous last words) as we pre-check 
@@ -76,14 +44,14 @@ hemp_scan_number(
         hemp_fatal("Unknown number parsing error: %d", errno);
     }
     else if (is_int) {
-        fragment = hemp_template_scanned_to(
-            template, HempElementInteger, src
+        fragment = hemp_document_scanned_to(
+            document, HempElementInteger, src
         );
         fragment->args.value = hemp_int_val(int_val);
     }
     else {
-        fragment = hemp_template_scanned_to(
-            template, HempElementNumber, src
+        fragment = hemp_document_scanned_to(
+            document, HempElementNumber, src
         );
         fragment->args.value = hemp_num_val(num_val);
     }
@@ -94,12 +62,12 @@ hemp_scan_number(
 /*
 hemp_bool
 hemp_scan_unplugged(
-    hemp_template tmpl
+    hemp_document document
 ) {
-    hemp_fragments   fragments = tmpl->fragments;
-    hemp_tagset     tagset   = tmpl->tagset;
+    hemp_fragments   fragments = document->fragments;
+    hemp_tagset     tagset   = document->tagset;
     hemp_tag        tag      = tagset->unplugged_tag;
-    hemp_string     text     = hemp_source_read(tmpl->source),
+    hemp_string     text     = hemp_source_read(document->source),
                     src      = text,
                     from     = text;
     hemp_pos        pos      = 0;
@@ -107,7 +75,7 @@ hemp_scan_unplugged(
     if (! tag)
         hemp_fatal("No unplugged tag is defined in tagset\n");
 
-    tag->scan(tmpl, tag, src, pos, &src);
+    tag->scan(document, tag, src, pos, &src);
     pos += src - from;
     from = src;
 

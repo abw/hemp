@@ -35,14 +35,14 @@ HEMP_DIALECT(hemp_dialect_test) {
 }
 
 
-hemp_template
+hemp_document
 hemp_dialect_test_prepare(
-    hemp_template tmpl
+    hemp_document document
 ) {
-    hemp_debug("hemp_dialect_test_prepare(%p)\n", tmpl);
+    hemp_debug("hemp_dialect_test_prepare(%p)\n", document);
 /*
-    hemp_hemp    hemp    = tmpl->dialect->hemp;
-    hemp_tagset  tagset  = tmpl->tagset;
+    hemp_hemp    hemp    = document->dialect->hemp;
+    hemp_tagset  tagset  = document->tagset;
     hemp_grammar grammar = hemp_grammar_instance(hemp, HEMP_TEST);
 */
 // broke while reworking tags
@@ -57,15 +57,15 @@ hemp_dialect_test_prepare(
 //        )
 //    );
 
-    return tmpl;
+    return document;
 }
 
 
 void
 hemp_dialect_test_cleanup(
-    hemp_template tmpl
+    hemp_document document
 ) {
-    hemp_debug_call("hemp_dialect_test_cleanup(%p)\n", tmpl);
+    hemp_debug_call("hemp_dialect_test_cleanup(%p)\n", document);
 }
 
 
@@ -102,7 +102,7 @@ HEMP_ELEMENT(hemp_element_test_test) {
 
 HEMP_SCANNER(hemp_element_test_test_scanner) {
     hemp_element element = (hemp_element) self;
-    hemp_string  src     = template->scanptr;
+    hemp_string  src     = document->scanptr;
 
 
     hemp_debug_msg("hemp_element_test_test_scanner()\n");
@@ -124,8 +124,8 @@ HEMP_SCANNER(hemp_element_test_test_scanner) {
 //    hemp_debug_token("TEST", *srcptr, src - *srcptr);
 
     /* add a comment element to the list of scanned tokens */
-    hemp_template_scanned_to(
-        template, element, src
+    hemp_document_scanned_to(
+        document, element, src
     );
     
     return HEMP_TRUE;
@@ -186,7 +186,7 @@ HEMP_ELEMENT(hemp_element_test_expect) {
 
 HEMP_SCANNER(hemp_element_test_expect_scanner) {
     hemp_element element = (hemp_element) self;
-    hemp_string  src     = template->scanptr;
+    hemp_string  src     = document->scanptr;
 
     hemp_debug_call("hemp_element_test_expect_scanner()\n");
 
@@ -199,8 +199,8 @@ HEMP_SCANNER(hemp_element_test_expect_scanner) {
     );
 
     /* add a comment element to the list of scanned tokens */
-    hemp_template_scanned_to(
-        template, element, src
+    hemp_document_scanned_to(
+        document, element, src
     );
     
     return HEMP_TRUE;

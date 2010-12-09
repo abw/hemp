@@ -1,7 +1,6 @@
 #include <hemp.h>
 
 HEMP_TAG(hemp_tag_unplugged);
-//void hemp_tag_unplugged_scan(HEMP_TAG_SCAN_ARGS);
 
 
 /*--------------------------------------------------------------------------

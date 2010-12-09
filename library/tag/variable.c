@@ -15,7 +15,7 @@ hemp_tag_t HempTagVariable = &hemp_variable_tag;
 
 void 
 hemp_scan_variable_tag(
-    hemp_template tmpl,
+    hemp_document document,
     hemp_tag      tag,
     hemp_string      tagtok,
     hemp_pos      pos,

@@ -178,7 +178,7 @@ hemp_hash_key_match(
 ) {
     /* We allow hash keys to be looked up using an unterminated C string
      * (with length specified explicitly) so that we can use an element's
-     * source as the lookup key (e.g. in the template "Hello [% name %]"
+     * source as the lookup key (e.g. in the document "Hello [% name %]"
      * we can pass a pointer to the 9th character and length 4 to lookup
      * the value for "name" without having to allocate and prepare a short
      * C string to hold the hash key for lookup.  One side effect of this 

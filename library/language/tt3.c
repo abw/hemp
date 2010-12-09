@@ -45,15 +45,15 @@ HEMP_DIALECT(hemp_dialect_tt3) {
 }
 
 
-hemp_template
+hemp_document
 hemp_dialect_tt3_prepare(
-    hemp_template template
+    hemp_document document
     // TODO: options
 ) {
-    hemp_debug_call("hemp_dialect_tt3_prepare(%p)\n", template);
+    hemp_debug_call("hemp_dialect_tt3_prepare(%p)\n", document);
 
-    hemp_hemp    hemp    = template->dialect->hemp;
-    hemp_tagset  tagset  = hemp_tagset_prepare(template);
+    hemp_hemp    hemp    = document->dialect->hemp;
+    hemp_tagset  tagset  = hemp_tagset_prepare(document);
     hemp_grammar command = hemp_grammar_instance(hemp, "tt3.command");
     hemp_grammar control = hemp_grammar_instance(hemp, "tt3.control");
 
@@ -62,7 +62,7 @@ hemp_dialect_tt3_prepare(
     hemp_tagset_new_tag(tagset, "hemp.outline",  "outline",  "%%",   NULL, command);
     hemp_tagset_new_tag(tagset, "hemp.inline",   "inline",   "[%",   "%]", command);
 
-    return template;
+    return document;
 }
 
 
@@ -74,21 +74,21 @@ HEMP_DIALECT(hemp_dialect_tt3_unplugged) {
 }
 
 
-hemp_template
+hemp_document
 hemp_dialect_tt3_unplugged_prepare(
-    hemp_template template
+    hemp_document document
 ) {
-    hemp_debug_call("hemp_dialect_tt3_unplugged_prepare(%p)\n", template);
+    hemp_debug_call("hemp_dialect_tt3_unplugged_prepare(%p)\n", document);
 
-    hemp_hemp    hemp    = template->dialect->hemp;
+    hemp_hemp    hemp    = document->dialect->hemp;
     hemp_grammar grammar = hemp_grammar_instance(hemp, "tt3.command");
 
-    template->scanner = hemp_action_new(
+    document->scanner = hemp_action_new(
         (hemp_actor)    &hemp_grammar_scanner, 
         (hemp_memory)   grammar
     );
 
-    return template;
+    return document;
 }
 
 

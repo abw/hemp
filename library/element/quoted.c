@@ -21,8 +21,8 @@ HEMP_ELEMENT(hemp_element_squote) {
 
 HEMP_SCANNER(hemp_element_squote_scanner) {
     hemp_element    element   = (hemp_element) self;
-    hemp_string     src       = template->scanptr;
-    hemp_string     start     = template->scanptr;
+    hemp_string     src       = document->scanptr;
+    hemp_string     start     = document->scanptr;
     hemp_string     end       = element->end;
     hemp_size       endlen    = strlen(end);
     hemp_bool       is_source = HEMP_TRUE;
@@ -40,9 +40,7 @@ HEMP_SCANNER(hemp_element_squote_scanner) {
             is_source = HEMP_FALSE;
         }
         if (! *++src) {
-            hemp_fatal("Unterminated single quote: %s\n", start);  
-            // FIXME
-            // HEMP_SCANNER_ERROR(template, BADQUOTE, HEMP_STR_QUOTED, start);
+            HEMP_SCAN_ERROR(document, BADQUOTE, HEMP_STR_QUOTED, start);
         }
     }
 
@@ -50,8 +48,8 @@ HEMP_SCANNER(hemp_element_squote_scanner) {
     end  = src;
     src += endlen;
 
-    fragment = hemp_template_scanned_to(
-        template, element, src
+    fragment = hemp_document_scanned_to(
+        document, element, src
     );
 
     if (is_source) {
@@ -99,8 +97,8 @@ HEMP_ELEMENT(hemp_element_dquote) {
 
 HEMP_SCANNER(hemp_element_dquote_scanner) {
     hemp_element    element   = (hemp_element) self;
-    hemp_string     src       = template->scanptr;
-    hemp_string     start     = template->scanptr;
+    hemp_string     src       = document->scanptr;
+    hemp_string     start     = document->scanptr;
     hemp_string     end       = element->end;
     hemp_size       endlen    = strlen(end);
     hemp_bool       is_source = HEMP_TRUE;
@@ -118,9 +116,7 @@ HEMP_SCANNER(hemp_element_dquote_scanner) {
             is_source = HEMP_FALSE;
         }
         if (! *++src) {
-            hemp_fatal("bad quoted string: %s\n", start);
-            // FIXME
-            // HEMP_SCAN_ERROR(BADQUOTE, HEMP_STR_QUOTED, start);
+            HEMP_SCAN_ERROR(document, BADQUOTE, HEMP_STR_QUOTED, start);
         }
     }
 
@@ -128,8 +124,8 @@ HEMP_SCANNER(hemp_element_dquote_scanner) {
     end  = src;
     src += endlen;
 
-    fragment = hemp_template_scanned_to(
-        template, element, src
+    fragment = hemp_document_scanned_to(
+        document, element, src
     );
 
     if (is_source) {

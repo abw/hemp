@@ -2,7 +2,7 @@
 #define HEMP_DIALECT_H
 
 #include <hemp/tagset.h>
-#include <hemp/template.h>
+#include <hemp/document.h>
 
 
 /*--------------------------------------------------------------------------
@@ -52,8 +52,8 @@ hemp_dialect_add_tag(
     hemp_tag        tag
 );
 
-hemp_template
-hemp_dialect_template(
+hemp_document
+hemp_dialect_document(
     hemp_dialect    dialect,
     hemp_source     source
 );

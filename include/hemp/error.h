@@ -46,7 +46,7 @@ struct hemp_jump {
 struct hemp_error {
     hemp_errno      number;
     hemp_string     message;
-    hemp_scan_pos   scan_pos;
+    hemp_document   document;
     hemp_error      parent;
 };
 
@@ -103,8 +103,8 @@ hemp_error_free(
 
 /* these are implemented in hemp.c */
 hemp_string     hemp_error_format(hemp_hemp, hemp_errno);
-hemp_error      hemp_error_message(hemp_hemp, hemp_errno, ...);
-hemp_error      hemp_error_scan_pos(hemp_error, hemp_scan_pos);
+//hemp_error      hemp_error_message(hemp_hemp, hemp_errno, ...);
+hemp_error      hemp_error_document(hemp_error, hemp_document);
 void            hemp_error_throw(hemp_hemp, hemp_error);
 
 

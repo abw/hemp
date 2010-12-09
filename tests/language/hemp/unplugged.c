@@ -17,7 +17,7 @@ main(
 
 void test_unplugged() {
     hemp_hemp       hemp = hemp_new();
-    hemp_template   template;
+    hemp_document   document;
     hemp_context    context;
     hemp_text       output;
     ok( hemp, "created hemp object" );
@@ -26,15 +26,15 @@ void test_unplugged() {
     hemp_debug_msg("got tt3 langauge\n"); 
 
     HEMP_TRY;
-        template = hemp_template_instance(
+        document = hemp_document_instance(
             hemp, "tt3.unplugged", HEMP_TEXT, "a=10; 'a is '; a"
         );
-        ok( template , "created template" );
+        ok( document , "created document" );
 
         context = hemp_context_new(hemp);
-        output  = hemp_template_render(template, context);
+        output  = hemp_document_render(document, context);
 
-        is( output->string, "a is 10", "correctly rendered template" );
+        is( output->string, "a is 10", "correctly rendered document" );
 //      hemp_debug_msg("OUTPUT: %s\n", output->string);
         hemp_context_free(context);
         hemp_text_free(output);

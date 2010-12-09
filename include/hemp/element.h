@@ -9,7 +9,7 @@
 
 //#include <hemp/type.h>
 //#include <hemp/tag.h>
-//#include <hemp/template.h>
+//#include <hemp/document.h>
 //#include <hemp/context.h>
 //#include <hemp/value.h>
 //#include <hemp/macros.h>

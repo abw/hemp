@@ -1,30 +1,7 @@
 #ifndef HEMP_SCANNER_H
 #define HEMP_SCANNER_H
 
-#include <hemp/template.h>
-
-
-struct hemp_scan {
-    hemp_template   tmpl;
-    hemp_string     source;
-    hemp_string   * srcpos;
-    hemp_string     token;
-    hemp_pos        pos;
-};
-
-
-/* not sure about the name/structure of this... might be better to be more 
- * generic so we can store parse-time scan and/or runtime error position.
- */
-
-struct hemp_scan_pos {
-    hemp_template   tmpl;
-    hemp_tag        tag;
-    hemp_string     start;
-    hemp_pos        pos;
-    hemp_string     current;
-    hemp_element    element;
-};
+#include <hemp/document.h>
 
 
 #define hemp_scan_while(src, cmp)       \
@@ -48,29 +25,19 @@ struct hemp_scan_pos {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_scan_pos
-hemp_scan_pos_init(
-    HEMP_SCAN_ARGS
-);
-
-void 
-hemp_scan_pos_free(
-    hemp_scan_pos   scan_pos
-);
-
 hemp_bool
 hemp_scan_text(
-    hemp_template   template
+    hemp_document   document
 );
 
 HEMP_INLINE void
 hemp_scan_number(
-    hemp_template   template
+    hemp_document   document
 );
 
 //hemp_bool
 //hemp_scan_unplugged(
-//    hemp_template   template
+//    hemp_document   document
 //);
 
 

@@ -44,6 +44,7 @@ typedef struct hemp_codec       * hemp_codec;
 typedef struct hemp_context     * hemp_context;
 typedef struct hemp_dialect     * hemp_dialect;
 typedef struct hemp_dialects    * hemp_dialects;
+typedef struct hemp_document    * hemp_document;
 typedef struct hemp_element     * hemp_element;
 typedef struct hemp_elements    * hemp_elements;
 typedef struct hemp_error       * hemp_error;
@@ -74,7 +75,6 @@ typedef struct hemp_slab        * hemp_slab;
 typedef struct hemp_slot        * hemp_slot;
 typedef struct hemp_source      * hemp_source;
 typedef struct hemp_stack       * hemp_stack;
-typedef struct hemp_template    * hemp_template;
 typedef struct hemp_tag         * hemp_tag;
 typedef struct hemp_tags        * hemp_tags;
 typedef struct hemp_tagset      * hemp_tagset;
@@ -104,7 +104,7 @@ struct hemp_hemp {
     hemp_context    context;
 
 //  hemp_hash       tags;
-    hemp_hash       templates;
+    hemp_hash       documents;
 //  hemp_dialect    dialect;
                     
     hemp_bool       verbose;
@@ -151,8 +151,15 @@ typedef hemp_bool
 typedef hemp_bool
 (* hemp_scanner)(
     hemp_memory     self,
-    hemp_template   template
+    hemp_document   document
 );
+
+typedef hemp_string
+(* hemp_skipper)(
+    hemp_tag        tag,
+    hemp_string     src
+);
+
 
 
 
@@ -223,20 +230,20 @@ typedef void
  * TODO: in the process of cleaning up everything below this line.
  *--------------------------------------------------------------------------*/
 
-// TODO: rename this to hemp_template_f
-typedef hemp_template 
+// TODO: rename this to hemp_document_f
+typedef hemp_document 
     (* hemp_prep_f)(
-        hemp_template template    /* pointer to template to prepare       */
+        hemp_document document    /* pointer to document to prepare       */
     );
 
 typedef hemp_bool 
     (* hemp_scan_f)(
-        hemp_template template    /* pointer to template to scan          */
+        hemp_document document    /* pointer to document to scan          */
     );
 
 typedef void
     (* hemp_clean_f)(
-        hemp_template template    /* pointer to template to clean         */
+        hemp_document document    /* pointer to document to clean         */
     );
 
 
@@ -245,34 +252,6 @@ typedef void
         hemp_dialect  dialect     /* pointer to dialect to clean          */
     );
 
-
-
-#define HEMP_TAG_SCAN_ARGS    \
-    hemp_template tmpl,     \
-    hemp_tag      tag,      \
-    hemp_string      tagtok,   \
-    hemp_pos      pos,      \
-    hemp_string     *srcptr
-
-#define HEMP_TAG_SKIP_ARGS    \
-    hemp_tag      tag,      \
-    hemp_string      src
-
-typedef void 
-    (* hemp_tag_scan_f)(
-        HEMP_TAG_SCAN_ARGS
-    );
-
-typedef hemp_string
-    (* hemp_tag_skip_f)(
-        HEMP_TAG_SKIP_ARGS
-    );
-
-typedef hemp_fragment
-    (* hemp_fscanner)(
-        HEMP_TAG_SCAN_ARGS,
-        hemp_element element
-    );
 
 
 /*--------------------------------------------------------------------------

@@ -29,10 +29,10 @@ void test_tt3() {
         hemp_dialect dial = hemp_dialect_instance(hemp, "tt3");
         ok( dial, "got %s dialect", dial->name );
 
-        hemp_template tmpl = hemp_template_instance(
+        hemp_document document = hemp_document_instance(
             hemp, HEMP_TT3, HEMP_TEXT, "Hello World!"
             );
-        ok( tmpl , "created template" );
+        ok( document , "created document" );
 
     HEMP_CATCH_ALL;
         fail( "Caught error: %s", hemp->error->message );

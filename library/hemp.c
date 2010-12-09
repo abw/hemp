@@ -17,7 +17,7 @@ hemp_new() {
     hemp_init_factories(hemp);
     hemp_init_schemes(hemp);
     hemp_init_languages(hemp);
-    hemp_init_templates(hemp);
+    hemp_init_documents(hemp);
     hemp_init_viewers(hemp);
 
     hemp->context = hemp_context_new(hemp);
@@ -122,10 +122,10 @@ hemp_init_languages(
 
 
 void
-hemp_init_templates(
+hemp_init_documents(
     hemp_hemp hemp
 ) {
-    hemp->templates = hemp_hash_new();
+    hemp->documents = hemp_hash_new();
 }
 
 
@@ -153,7 +153,7 @@ hemp_free(
     hemp_context_free(hemp->context);
 
     /* free all the components */
-    hemp_free_templates(hemp);
+    hemp_free_documents(hemp);
     hemp_free_factories(hemp);
     hemp_free_errors(hemp);
 
@@ -170,11 +170,11 @@ hemp_free(
 
 
 void
-hemp_free_templates(
+hemp_free_documents(
     hemp_hemp hemp
 ) {
-    hemp_hash_each(hemp->templates, &hemp_free_template);
-    hemp_hash_free(hemp->templates);
+    hemp_hash_each(hemp->documents, &hemp_free_document);
+    hemp_hash_free(hemp->documents);
 }
 
 
@@ -307,13 +307,13 @@ hemp_free_grammar(
 
 
 hemp_bool
-hemp_free_template(
-    hemp_hash templates,
+hemp_free_document(
+    hemp_hash documents,
     hemp_pos  position,
     hemp_slot item
 ) {
-    hemp_debug_init("cleaning template\n");
-    hemp_template_free( (hemp_template) hemp_val_ptr(item->value) );
+    hemp_debug_init("cleaning document\n");
+    hemp_document_free( (hemp_document) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
@@ -380,17 +380,17 @@ hemp_register_elements(
 
 
 /*--------------------------------------------------------------------------
- * template functions
+ * document functions
  *--------------------------------------------------------------------------*/
 
-hemp_template
-hemp_template_instance(
+hemp_document
+hemp_document_instance(
     hemp_hemp     hemp,
     hemp_string dialect,
     hemp_string scheme,
     hemp_string source
 ) {
-    hemp_template     tmpl;
+    hemp_document     document;
     static hemp_md5_t   md5;
 
     hemp_md5_init(&md5);
@@ -398,35 +398,35 @@ hemp_template_instance(
     hemp_md5_update_string(&md5, source);
     hemp_md5_final(&md5);
     
-//  hemp_debug("MD5 for %s template [%s] is %s\n", scheme, source, md5.output);
+//  hemp_debug("MD5 for %s document [%s] is %s\n", scheme, source, md5.output);
 
-    tmpl = hemp_hash_fetch_pointer(hemp->templates, (hemp_string) md5.output);
+    document = hemp_hash_fetch_pointer(hemp->documents, (hemp_string) md5.output);
     
-    if (tmpl) {
-        if (hemp_string_eq(tmpl->source->scheme->name, scheme)
-        &&  hemp_string_eq(tmpl->source->name, source)) {
+    if (document) {
+        if (hemp_string_eq(document->source->scheme->name, scheme)
+        &&  hemp_string_eq(document->source->name, source)) {
             // TODO: bump up LRU cache
-//          hemp_debug("returning cached template\n");
-            return tmpl;
+//          hemp_debug("returning cached document\n");
+            return document;
         }
         else {
-            /* different template with MD5 hash collision - free old one */
-            hemp_template_free(tmpl);
+            /* different document with MD5 hash collision - free old one */
+            hemp_document_free(document);
         }
     }
 
-    tmpl = hemp_dialect_template(
+    document = hemp_dialect_document(
         hemp_dialect_instance(hemp, dialect),
         hemp_source_instance(hemp, scheme, source)
     );
 
-//  hemp_debug("caching new template\n");
+//  hemp_debug("caching new document\n");
 
     /* let the source allocate memory for storing md5 permanently */
-    hemp_source_md5(tmpl->source, (hemp_string) md5.output);
-    hemp_hash_store_pointer(hemp->templates, tmpl->source->md5, tmpl);
+    hemp_source_md5(document->source, (hemp_string) md5.output);
+    hemp_hash_store_pointer(hemp->documents, document->source->md5, document);
     
-    return tmpl;
+    return document;
 }
 
 
@@ -489,16 +489,16 @@ hemp_text
 hemp_error_text(
     hemp_error error
 ) {
-    hemp_scan_pos sp = error->scan_pos;
+    hemp_document doc = error->document;
     hemp_text text;
     hemp_string  buffer;
     
-    if (sp) {
+    if (doc) {
         asprintf(
             &buffer, 
             "error at pos %d of %s:\n   Error: %s\n  Source: %s",
-            sp->pos, hemp_source_name(sp->tmpl->source), error->message,
-            sp->start
+            doc->scanpos, hemp_source_name(doc->source), error->message,
+            doc->scanptr
         );
         text = hemp_text_from_string(buffer);
     }
@@ -512,8 +512,8 @@ hemp_error_text(
 
 void 
 hemp_error_throw(
-    hemp_hemp       hemp,
-    hemp_error error
+    hemp_hemp   hemp,
+    hemp_error  error
 ) {
     hemp_debug_call("hemp_error_throw()\n");
     error->parent = hemp->error;

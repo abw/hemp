@@ -221,7 +221,13 @@
 #define HEMP_SCANNER(f)                         \
     hemp_bool f(                                \
         hemp_memory     self,                   \
-        hemp_template   template                \
+        hemp_document   document                \
+    )
+
+#define HEMP_SKIPPER(f)                         \
+    hemp_string f(                              \
+        hemp_tag        tag,                    \
+        hemp_string     src                     \
     )
 
 #define HEMP_VIEWER(f)                          \
@@ -239,8 +245,8 @@
     )
 
 #define HEMP_PREPARE(f)                         \
-    hemp_template f(                            \
-        hemp_template   template                \
+    hemp_document f(                            \
+        hemp_document   document                \
     )
 
 /*--------------------------------------------------------------------------
@@ -249,7 +255,7 @@
  * A language grammar maps input tokens (words, numbers, punctuation 
  * characters, etc) to elements.  An element entry is effectively a vtable
  * containing functions that implement the behaviours for a particular 
- * kind of template element (a chunk of text, number, variable, operator, 
+ * kind of document element (a chunk of text, number, variable, operator, 
  * keyword, etc) along with a few other flags and values for housekeeping
  * purpose.
  *
@@ -297,53 +303,24 @@
 
 /*--------------------------------------------------------------------------
  * Scanning
- *
- * The main template scanner (see library/scanner.c) scans the template text 
- * for embedded tags (as specified by the dialect defined for the current 
- * template) and then calls the function registered to scan the tag.  The
- * callback should create one or more elements and attach them to the 
- * template->elements stream by calling hemp_fragments_add_fragment().
- * 
- * HEMP_SCAN_FUNC(name) can be used as a shortcut to declare and define such 
- * functions.  HEMP_SCAN_ERROR(...) can be used inside scanner functions to
- * report errors.  It relies on the local definition of the HEMP_SCAN_ARGS.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_SCAN_ARGS                      \
-    hemp_template   tmpl,                   \
-    hemp_tag        tag,                    \
-    hemp_string     start,                  \
-    hemp_pos        pos,                    \
-    hemp_string    *srcptr,                 \
-    hemp_element    element
+#define hemp_document_errmsg(document, error_no, ...) ({    \
+    hemp_error _hemp_err = hemp_error_message(              \
+        document->dialect->hemp,                            \
+        error_no,                                           \
+        __VA_ARGS__                                         \
+    );                                                      \
+    _hemp_err->document = document;                         \
+    hemp_error_throw(document->dialect->hemp, _hemp_err);   \
+})
 
-#define HEMP_SCAN_ARG_NAMES                 \
-    tmpl, tag, start, pos, srcptr, element
-
-#define HEMP_SCAN_FUNC(f)                   \
-    hemp_fragment f(                        \
-        HEMP_SCAN_ARGS                      \
-    )
-
-/* TODO: move this into scanner.h */
-hemp_scan_pos hemp_scan_pos_init(HEMP_SCAN_ARGS);
-hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
-
-// OLD - needs updating
-#define HEMP_SCAN_ERROR(type,...)           \
-    hemp_error_throw(                       \
-        tmpl->dialect->hemp,                \
-        hemp_error_scan_pos(                \
-            hemp_error_message(             \
-                tmpl->dialect->hemp,        \
-                HEMP_ERROR_##type,          \
-                __VA_ARGS__                 \
-            ),                              \
-            hemp_scan_pos_init(             \
-                HEMP_SCAN_ARG_NAMES         \
-            )                               \
-        )                                   \
-    )
+#define HEMP_SCAN_ERROR(document, error_type, ...)          \
+    hemp_document_errmsg(                                   \
+        document,                                           \
+        HEMP_ERROR_##error_type,                            \
+        __VA_ARGS__                                         \
+    )                                                       \
 
 
 
@@ -351,8 +328,8 @@ hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
  * Parsing
  *
  * After the scanner has done its thing we have a single linked list of 
- * elements representing the raw tokens in the template.  We use parse 
- * functions to build a tree representation of the template.  We skip over
+ * elements representing the raw tokens in the document.  We use parse 
+ * functions to build a tree representation of the document.  We skip over
  * any elements that don't generate output (whitespace, comments, tag markers,
  * etc) and organise the rest into the appropriate structure using top-down
  * operator precedence parsing.  See Ch.9 of "Beautiful Code" (O'Reilly, 

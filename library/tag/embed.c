@@ -15,7 +15,7 @@ hemp_tag_t HempTagEmbed = &hemp_embed_tag;
 
 void 
 hemp_scan_embed_tag(
-    hemp_template tmpl,
+    hemp_document document,
     hemp_tag      tag,
     hemp_string      tagtok,
     hemp_pos      pos,

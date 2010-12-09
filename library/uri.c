@@ -429,7 +429,7 @@ hemp_uri_split_query(
  * URI into component parts rather than attempting a complete parse.  If we
  * go down the latter route then it would be better to use an existing URI
  * parsing library (e.g. liburiparse).  It would be nice to be able to parse
- * unquoted URIs in templates and intelligently detect the end of the URI,
+ * unquoted URIs in documents and intelligently detect the end of the URI,
  * but I don't think it's possible because so many different characters are
  * permitted in URIs.  e.g.  In "foo(file:blah)" the closing ')' is a valid 
  * path character in the file:blah) URI.  So I think here we have to mandate

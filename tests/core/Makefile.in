@@ -34,12 +34,12 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = action$(EXEEXT) codec$(EXEEXT) context$(EXEEXT) \
-	dialect$(EXEEXT) error$(EXEEXT) factory$(EXEEXT) \
-	filesystem$(EXEEXT) fragment$(EXEEXT) fragments$(EXEEXT) \
-	grammar$(EXEEXT) memory$(EXEEXT) namespace$(EXEEXT) \
-	proto$(EXEEXT) pool$(EXEEXT) ptree$(EXEEXT) slab$(EXEEXT) \
-	source$(EXEEXT) string$(EXEEXT) tag$(EXEEXT) tagset$(EXEEXT) \
-	template$(EXEEXT) type$(EXEEXT) utils$(EXEEXT) value$(EXEEXT) \
+	dialect$(EXEEXT) document$(EXEEXT) error$(EXEEXT) \
+	factory$(EXEEXT) filesystem$(EXEEXT) fragment$(EXEEXT) \
+	fragments$(EXEEXT) grammar$(EXEEXT) memory$(EXEEXT) \
+	namespace$(EXEEXT) proto$(EXEEXT) pool$(EXEEXT) ptree$(EXEEXT) \
+	slab$(EXEEXT) source$(EXEEXT) string$(EXEEXT) tag$(EXEEXT) \
+	tagset$(EXEEXT) type$(EXEEXT) utils$(EXEEXT) value$(EXEEXT) \
 	viewer$(EXEEXT)
 subdir = tests/core
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
@@ -74,6 +74,10 @@ dialect_SOURCES = dialect.c
 dialect_OBJECTS = dialect.$(OBJEXT)
 dialect_LDADD = $(LDADD)
 dialect_DEPENDENCIES = ../../library/libhemp.la
+document_SOURCES = document.c
+document_OBJECTS = document.$(OBJEXT)
+document_LDADD = $(LDADD)
+document_DEPENDENCIES = ../../library/libhemp.la
 error_SOURCES = error.c
 error_OBJECTS = error.$(OBJEXT)
 error_LDADD = $(LDADD)
@@ -138,10 +142,6 @@ tagset_SOURCES = tagset.c
 tagset_OBJECTS = tagset.$(OBJEXT)
 tagset_LDADD = $(LDADD)
 tagset_DEPENDENCIES = ../../library/libhemp.la
-template_SOURCES = template.c
-template_OBJECTS = template.$(OBJEXT)
-template_LDADD = $(LDADD)
-template_DEPENDENCIES = ../../library/libhemp.la
 type_SOURCES = type.c
 type_OBJECTS = type.$(OBJEXT)
 type_LDADD = $(LDADD)
@@ -171,14 +171,14 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = action.c codec.c context.c dialect.c error.c factory.c \
-	filesystem.c fragment.c fragments.c grammar.c memory.c \
-	namespace.c pool.c proto.c ptree.c slab.c source.c string.c \
-	tag.c tagset.c template.c type.c utils.c value.c viewer.c
-DIST_SOURCES = action.c codec.c context.c dialect.c error.c factory.c \
-	filesystem.c fragment.c fragments.c grammar.c memory.c \
-	namespace.c pool.c proto.c ptree.c slab.c source.c string.c \
-	tag.c tagset.c template.c type.c utils.c value.c viewer.c
+SOURCES = action.c codec.c context.c dialect.c document.c error.c \
+	factory.c filesystem.c fragment.c fragments.c grammar.c \
+	memory.c namespace.c pool.c proto.c ptree.c slab.c source.c \
+	string.c tag.c tagset.c type.c utils.c value.c viewer.c
+DIST_SOURCES = action.c codec.c context.c dialect.c document.c error.c \
+	factory.c filesystem.c fragment.c fragments.c grammar.c \
+	memory.c namespace.c pool.c proto.c ptree.c slab.c source.c \
+	string.c tag.c tagset.c type.c utils.c value.c viewer.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -384,6 +384,9 @@ context$(EXEEXT): $(context_OBJECTS) $(context_DEPENDENCIES)
 dialect$(EXEEXT): $(dialect_OBJECTS) $(dialect_DEPENDENCIES) 
 	@rm -f dialect$(EXEEXT)
 	$(LINK) $(dialect_OBJECTS) $(dialect_LDADD) $(LIBS)
+document$(EXEEXT): $(document_OBJECTS) $(document_DEPENDENCIES) 
+	@rm -f document$(EXEEXT)
+	$(LINK) $(document_OBJECTS) $(document_LDADD) $(LIBS)
 error$(EXEEXT): $(error_OBJECTS) $(error_DEPENDENCIES) 
 	@rm -f error$(EXEEXT)
 	$(LINK) $(error_OBJECTS) $(error_LDADD) $(LIBS)
@@ -432,9 +435,6 @@ tag$(EXEEXT): $(tag_OBJECTS) $(tag_DEPENDENCIES)
 tagset$(EXEEXT): $(tagset_OBJECTS) $(tagset_DEPENDENCIES) 
 	@rm -f tagset$(EXEEXT)
 	$(LINK) $(tagset_OBJECTS) $(tagset_LDADD) $(LIBS)
-template$(EXEEXT): $(template_OBJECTS) $(template_DEPENDENCIES) 
-	@rm -f template$(EXEEXT)
-	$(LINK) $(template_OBJECTS) $(template_LDADD) $(LIBS)
 type$(EXEEXT): $(type_OBJECTS) $(type_DEPENDENCIES) 
 	@rm -f type$(EXEEXT)
 	$(LINK) $(type_OBJECTS) $(type_LDADD) $(LIBS)
@@ -458,6 +458,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/codec.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/context.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialect.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/document.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/factory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filesystem.Po@am__quote@
@@ -474,7 +475,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/string.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tag.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tagset.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/template.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/type.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/value.Po@am__quote@

@@ -19,11 +19,11 @@ HEMP_ELEMENT(hemp_element_tt3_if);
 HEMP_ELEMENT(hemp_element_tt3_TODO);
 
 
-hemp_template   hemp_dialect_tt3_prepare(hemp_template template);
-void            hemp_dialect_tt3_cleanup(hemp_template template);
+hemp_document   hemp_dialect_tt3_prepare(hemp_document document);
+void            hemp_dialect_tt3_cleanup(hemp_document document);
 
-hemp_template   hemp_dialect_tt3_unplugged_prepare(hemp_template template);
-void            hemp_dialect_tt3_unplugged_cleanup(hemp_template template);
+hemp_document   hemp_dialect_tt3_unplugged_prepare(hemp_document document);
+void            hemp_dialect_tt3_unplugged_cleanup(hemp_document document);
 
 
 #endif /* HEMP_LANGUAGE_TT3_H */
