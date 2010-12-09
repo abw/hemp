@@ -186,8 +186,8 @@ void hemp_interactive(
     hemp_command *cmd;
 
     rl_readline_name = HEMP_STR_HEMP;
-//    rl_attempted_completion_function = hemp_completion;
-    rl_completion_entry_function = hemp_command_generator;
+//  rl_attempted_completion_function = hemp_completion;
+    rl_completion_entry_function = (Function *) &hemp_command_generator;
 
     while(! done) {
         input = hemp_input_read(prompt);
@@ -295,7 +295,6 @@ hemp_completion(
 //    matches = rl_completion_matches(text, &hemp_command_generator);
 }
 
-
 char *
 hemp_command_generator(
     const char *text,
@@ -313,7 +312,7 @@ hemp_command_generator(
     }
 
     /* Return the next name which partially matches from the command list. */
-    while (name = hemp_commands[list_index].name) {
+    while ((name = hemp_commands[list_index].name)) {
         list_index++;
 
         if (hemp_stringn_eq(name, text, len))

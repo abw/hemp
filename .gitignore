@@ -44,6 +44,7 @@ tests/core/parser
 tests/core/pool
 tests/core/slab
 tests/core/source
+tests/core/stack
 tests/core/string
 tests/core/tag
 tests/core/tagset

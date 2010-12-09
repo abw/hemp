@@ -19,12 +19,12 @@ struct hemp_slab {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_slab
+HEMP_INLINE hemp_slab
 hemp_slab_new(
     hemp_size       size
 );
 
-void
+HEMP_INLINE void
 hemp_slab_free(
     hemp_slab       slab
 );

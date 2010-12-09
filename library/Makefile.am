@@ -29,6 +29,7 @@ libhemp_la_SOURCES  =   action.c            \
                         slab.c              \
                         slot.c              \
                         source.c            \
+                        stack.c             \
                         tag.c               \
                         tagset.c            \
                         template.c          \

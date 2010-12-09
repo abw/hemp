@@ -4,6 +4,15 @@
 #include <hemp/template.h>
 
 
+struct hemp_scan {
+    hemp_template   tmpl;
+    hemp_string     source;
+    hemp_string   * srcpos;
+    hemp_string     token;
+    hemp_pos        pos;
+};
+
+
 /* not sure about the name/structure of this... might be better to be more 
  * generic so we can store parse-time scan and/or runtime error position.
  */

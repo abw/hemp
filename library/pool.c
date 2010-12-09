@@ -9,10 +9,10 @@
 
 hemp_pool
 hemp_pool_init(
-    hemp_pool           pool, 
-    hemp_size           size, 
-    hemp_size           capacity,
-    hemp_pool_iter    cleaner
+    hemp_pool       pool, 
+    hemp_size       size, 
+    hemp_size       capacity,
+    hemp_pool_iter  cleaner
 ) {
     HEMP_INSTANCE(pool);
 
@@ -58,7 +58,45 @@ hemp_pool_take(
 }
 
 
-void 
+HEMP_INLINE void
+hemp_pool_give(
+    hemp_pool   pool,
+    hemp_memory item
+) {
+    hemp_debug_mem("giving %p to pool at %p with slab at %p\n", item, pool, pool->slab);
+
+    /* This hasn't been tested yet... I implemented it and then realised 
+     * that it wasn't going to be suitable for the use I had in mind, so 
+     * it lies semi-abandonded.  The difficulty in restored returning items 
+     * across slab boundaries and/or out of order makes me thing we would 
+     * be better off with a different data structure.  So it's on the back
+     * burner for now.
+     */
+
+    if (pool->next == item + pool->size) {
+        /* The simple case where the item returned is the last one taken,
+         * immediately preceding the next item in memory.  We call any 
+         * cleanup function and then update the next/used values
+         */
+        hemp_debug_msg("item returned to pool is the last item taken\n");
+
+        if (pool->cleaner)
+            pool->cleaner(item);
+        
+        pool->used--;
+        pool->next = item;
+    }
+    else {
+        /* Otherwise we'll barf for now... I don't have a pressing need (yet)
+         * to use this for anything other than a strict last-out, first-in 
+         * stack for scanning nested tags, which the above case handles.
+         */
+        hemp_fatal("Unable to return item to pool (that functionality is TODO)\n");
+    }
+}
+
+
+HEMP_INLINE void 
 hemp_pool_grow(
     hemp_pool pool
 ) {
@@ -94,8 +132,8 @@ hemp_pool_free(
 
 void
 hemp_pool_each(
-    hemp_pool           pool,
-    hemp_pool_iter    func
+    hemp_pool       pool,
+    hemp_pool_iter  func
 ) {
     hemp_slab   slab = pool->slab;
     hemp_memory item;

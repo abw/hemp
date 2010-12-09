@@ -30,12 +30,18 @@ hemp_pool_init(
     hemp_pool_iter  cleaner
 );
 
-hemp_memory
+HEMP_INLINE hemp_memory
 hemp_pool_take(
     hemp_pool       pool
 );
 
-void 
+HEMP_INLINE void
+hemp_pool_give(
+    hemp_pool       pool,
+    hemp_memory     item
+);
+
+HEMP_INLINE void 
 hemp_pool_grow(
     hemp_pool       pool
 );

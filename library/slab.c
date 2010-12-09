@@ -1,7 +1,7 @@
 #include "hemp/slab.h"
 
 
-hemp_slab
+HEMP_INLINE hemp_slab
 hemp_slab_new(
     hemp_size   size
 ) {
@@ -25,7 +25,7 @@ hemp_slab_new(
 }
 
 
-void
+HEMP_INLINE void
 hemp_slab_free(
     hemp_slab slab
 ) {

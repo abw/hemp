@@ -23,6 +23,8 @@ struct hemp_template {
     /* these don't really belong here but it'll do for now */
     hemp_pos        pos;
     hemp_string   * srcptr;
+    hemp_string     token;
+//    hemp_symbol     scan_stack[HEMP_SCAN_SCAN_STACK_SIZE]
 };
 
 

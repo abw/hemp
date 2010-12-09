@@ -26,6 +26,7 @@ extern "C" {
 #include <hemp/scheme.h>
 #include <hemp/scope.h>
 #include <hemp/source.h>
+#include <hemp/stack.h>
 #include <hemp/tag.h>
 #include <hemp/tagset.h>
 #include <hemp/template.h>

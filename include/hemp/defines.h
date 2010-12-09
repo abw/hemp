@@ -80,18 +80,19 @@
 #define HEMP_WTFS           HEMP_WTF, HEMP_WTF, HEMP_WTF, HEMP_WTF, HEMP_WTF
 
 /* default setting for various internals */
-#define HEMP_BUFFER_SIZE    256     /* size of uri/name lookup buffers      */
-#define HEMP_MESSAGE_SIZE   2048    /* size of message/error buffers        */
-#define HEMP_HASH_DENSITY   5       /* max hash density before resizing     */
-#define HEMP_FRAGMENTS_SIZE 32      /* # of fragments allocated per slab    */
-#define HEMP_OPERATORS_SIZE 32      /* # of operators allocated per slab    */
-#define HEMP_TYPES_SIZE     32      /* # of data types (Nan-tagged)         */
-#define HEMP_TYPES_RESERVED 16      /* # of reserved data types             */
-#define HEMP_PTREE_SIZE     8       /* # of bucket chains in a ptree        */
-#define HEMP_VTYPES_SIZE    8
-#define HEMP_TAGSET_SIZE    8
-#define HEMP_VIEW_SIZE      32
-#define HEMP_TMP_POOL_SIZE  8       /* # of temporary data items to pool    */
+#define HEMP_BUFFER_SIZE        256     /* size of uri/name lookup buffers      */
+#define HEMP_MESSAGE_SIZE       2048    /* size of message/error buffers        */
+#define HEMP_HASH_DENSITY       5       /* max hash density before resizing     */
+#define HEMP_FRAGMENTS_SIZE     32      /* # of fragments allocated per slab    */
+#define HEMP_OPERATORS_SIZE     32      /* # of operators allocated per slab    */
+#define HEMP_TYPES_SIZE         32      /* # of data types (Nan-tagged)         */
+#define HEMP_TYPES_RESERVED     16      /* # of reserved data types             */
+#define HEMP_PTREE_SIZE         8       /* # of bucket chains in a ptree        */
+#define HEMP_STACK_SIZE         16
+#define HEMP_VTYPES_SIZE        8
+#define HEMP_TAGSET_SIZE        8
+#define HEMP_VIEW_SIZE          32
+#define HEMP_TMP_POOL_SIZE      8       /* # of temporary data items to pool    */
 
 /* 
  * Arrrr!  These be the element flags, m'hearties.  They be the bits what'll

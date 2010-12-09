@@ -73,6 +73,7 @@ typedef struct hemp_scope       * hemp_scope;
 typedef struct hemp_slab        * hemp_slab;
 typedef struct hemp_slot        * hemp_slot;
 typedef struct hemp_source      * hemp_source;
+typedef struct hemp_stack       * hemp_stack;
 typedef struct hemp_template    * hemp_template;
 typedef struct hemp_tag         * hemp_tag;
 typedef struct hemp_tags        * hemp_tags;
