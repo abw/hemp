@@ -88,7 +88,8 @@
 #define HEMP_TYPES_SIZE         32      /* # of data types (Nan-tagged)         */
 #define HEMP_TYPES_RESERVED     16      /* # of reserved data types             */
 #define HEMP_PTREE_SIZE         8       /* # of bucket chains in a ptree        */
-#define HEMP_STACK_SIZE         16
+#define HEMP_STACK_SIZE         16      /* default initial size for a stack     */
+#define HEMP_SCANNERS_SIZE      8       /* stack size for nested scanners       */
 #define HEMP_VTYPES_SIZE        8
 #define HEMP_TAGSET_SIZE        8
 #define HEMP_VIEW_SIZE          32

@@ -175,15 +175,10 @@ hemp_fragment_parse_exprs(
         expr = hemp_parse_prefix(fragptr, scope, precedence, HEMP_FALSE);
 
         /* if it's not an expression (e.g. a terminator) then we're done */
-        if (expr) {
-            hemp_debug_parse("got expr: %s\n", expr->type->name);
-        }
-        if (! expr) {
-            hemp_debug_msg("no expr\n");
+        if (! expr)
             break;
-        
-        }
 
+        hemp_debug_parse("expr: %s\n", expr->type->name);
         hemp_list_push(exprs, hemp_frag_val(expr));
     }
 
@@ -268,14 +263,16 @@ hemp_fragment_dump(
 void hemp_fragment_dump_exprs(
     hemp_list exprs
 ) {
-    hemp_debug("\n-- FRAGS --\n");
     hemp_size n;
     
+    hemp_debug("\n-- exprs --\n");
+
     for (n = 0; n < exprs->length; n++) {
         hemp_value    v = hemp_list_item(exprs, n);
         hemp_fragment f = hemp_val_frag(v);
         hemp_fragment_dump(f);
     }
-    hemp_debug("-- /EXPRS --\n");
+
+    hemp_debug("-- /exprs --\n");
 }
 

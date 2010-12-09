@@ -38,6 +38,7 @@ struct hemp_tag {
     hemp_grammar    grammar;
     hemp_tag_scan_f scan;
     hemp_tag_skip_f to_eol;
+    hemp_scanner    scanner;
 };
 
 struct hemp_tags {
@@ -108,7 +109,7 @@ hemp_memory hemp_tag_scanner(
     hemp_template   template
 );
 
-void        hemp_tag_inline_scan(HEMP_TAG_SCAN_ARGS);
+void        hemp_tag_inline_scan_OLD(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_outline_scan(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_comment_scan(HEMP_TAG_SCAN_ARGS);
 void        hemp_tag_control_scan(HEMP_TAG_SCAN_ARGS);

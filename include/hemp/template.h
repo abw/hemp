@@ -4,6 +4,7 @@
 #include <hemp/dialect.h>
 #include <hemp/source.h>
 #include <hemp/scope.h>
+#include <hemp/stack.h>
 #include <hemp/fragments.h>
 
 
@@ -21,10 +22,10 @@ struct hemp_template {
     hemp_action     scanner;
 
     /* these don't really belong here but it'll do for now */
-    hemp_pos        pos;
-    hemp_string   * srcptr;
-    hemp_string     token;
-//    hemp_symbol     scan_stack[HEMP_SCAN_SCAN_STACK_SIZE]
+    hemp_pos        scanpos;
+    hemp_string     scanptr;
+    hemp_string     scantok;
+    hemp_stack      scanners;
 };
 
 

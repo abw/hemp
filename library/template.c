@@ -16,6 +16,7 @@ hemp_template_new(
     template->fragments = hemp_fragments_new(dialect->hemp, 0);
     template->tree     = NULL;
     template->scanner  = NULL;
+    template->scanners = NULL;
         
     return template;
 }
@@ -29,13 +30,9 @@ hemp_template_free(
     if (template->dialect->cleanup)
         template->dialect->cleanup(template);
 
-    /* Then call any cleanup handler defined for the expression tree */
-    // no longer required as block element is managed by fragments
-//    if (template->tree && template->tree->type->cleanup) {
-//        hemp_debug_msg("cleaning up template tree\n");
-//        template->tree->type->cleanup(template->tree);
-//        hemp_debug_msg("done\n");
-//    }
+    /* Zap the scanner stack if we have one */ 
+    if (template->scanners)
+        hemp_stack_free(template->scanners);
 
     /* Free the source, the tagset and then the template object itself. */
     /* The fragments cleaner will take care of cleaning any other tokens */
@@ -52,7 +49,7 @@ hemp_fragment
 hemp_template_tokens(
     hemp_template template
 ) {
-    hemp_debug_msg("hemp_template_tokens(%p)\n", template);
+    hemp_debug_call("hemp_template_tokens(%p)\n", template);
 
     if (! template->fragments->head)
         hemp_template_scan(template);
@@ -65,13 +62,20 @@ hemp_bool
 hemp_template_scan(
     hemp_template template
 ) {
-    hemp_debug_msg("hemp_template_scan(%p)\n", template);
+    hemp_debug_call("hemp_template_scan(%p)\n", template);
 
     if (! template->scanner)
         hemp_fatal("No scanner defined for %s template\n", template->dialect->name);
 
     if (! template->source->text)
         hemp_source_read(template->source);
+
+    template->scanptr = 
+    template->scantok = template->source->text;
+    template->scanpos = 0;
+
+    if (! template->scanners)
+        template->scanners = hemp_stack_new(HEMP_SCANNERS_SIZE);
 
     return hemp_action_run(template->scanner, template)
         ? HEMP_TRUE

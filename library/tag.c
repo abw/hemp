@@ -31,6 +31,7 @@ hemp_tag_new(
 
     // TODO: put some sensible defaults in here
     tag->scan    = NULL;
+    tag->scanner = NULL;
     tag->to_eol  = &hemp_tag_to_eol;
     return tag;
 }

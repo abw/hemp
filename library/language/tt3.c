@@ -50,7 +50,7 @@ hemp_dialect_tt3_prepare(
     hemp_template template
     // TODO: options
 ) {
-    hemp_debug_msg("hemp_dialect_tt3_prepare(%p)\n", template);
+    hemp_debug_call("hemp_dialect_tt3_prepare(%p)\n", template);
 
     hemp_hemp    hemp    = template->dialect->hemp;
     hemp_tagset  tagset  = hemp_tagset_prepare(template);
@@ -78,7 +78,7 @@ hemp_template
 hemp_dialect_tt3_unplugged_prepare(
     hemp_template template
 ) {
-    hemp_debug_msg("hemp_dialect_tt3_unplugged_prepare(%p)\n", template);
+    hemp_debug_call("hemp_dialect_tt3_unplugged_prepare(%p)\n", template);
 
     hemp_hemp    hemp    = template->dialect->hemp;
     hemp_grammar grammar = hemp_grammar_instance(hemp, "tt3.command");
@@ -110,7 +110,7 @@ HEMP_GRAMMAR(hemp_grammar_tt3_core) {
 
 
 HEMP_GRAMMAR(hemp_grammar_tt3_command) {
-    hemp_debug_msg("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
+    hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_tt3_core(hemp, name);
 //    HEMP_USE_OPERATOR1("tt3.command.if", "if", 100, 100);
     HEMP_USE_OPERATOR2("tt3.command.sub", "sub", "end", 100, 100);

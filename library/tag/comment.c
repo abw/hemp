@@ -12,6 +12,7 @@ HEMP_TAG(hemp_tag_comment) {
         hemp, type, name, start, end, grammar
     );
     tag->scan = &hemp_tag_comment_scan;
+    tag->scanner = NULL;
     return tag;
 }
 

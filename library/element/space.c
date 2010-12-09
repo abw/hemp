@@ -181,7 +181,7 @@ HEMP_ELEMENT(hemp_element_space) {
 
 
 HEMP_PREFIX(hemp_element_space_prefix) {
-    hemp_debug("hemp_element_space_prefix()\n");
+    hemp_debug_call("hemp_element_space_prefix()\n");
 
     return hemp_advance(fragptr)
         ? hemp_parse_prefix(fragptr, scope, precedence, force)
