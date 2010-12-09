@@ -249,10 +249,16 @@ HEMP_SCANNER(hemp_element_comment_scanner) {
 
     hemp_element element = (hemp_element) self;
     hemp_string  src     = template->scanptr;
+    hemp_tag     tag     = hemp_template_current_tag(template);
 
+    if (! tag)
+        hemp_fatal("Can't scan comment without a tag in scope\n");
+
+    if (! tag->to_eol)
+        hemp_fatal("No line scanner for current '%s' tag\n", tag->name);
+    
     /* update the source pointer past the text we've consumed */
-    hemp_fatal("Can't scan comment without a tag in scope\n");
-//    *srcptr = tag->to_eol(tag, *srcptr);
+    src = tag->to_eol(tag, src);
 
     /* add a comment element to the list of scanned tokens */
     hemp_template_scanned_to(

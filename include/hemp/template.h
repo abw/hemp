@@ -25,7 +25,7 @@ struct hemp_template {
     hemp_pos        scanpos;
     hemp_string     scanptr;
     hemp_string     scantok;
-    hemp_stack      scanners;
+    hemp_stack      scantags;
 };
 
 
@@ -105,7 +105,6 @@ hemp_template_data(
     _hemp_frag;                                                 \
 })
 
-
 #define hemp_template_scanned_to(template, element, src) ({     \
     template->scanptr = src;                                    \
     hemp_fragment _hemp_frag = hemp_template_add_fragment(      \
@@ -116,6 +115,14 @@ hemp_template_data(
     _hemp_frag;                                                 \
 })
 
+#define hemp_template_enter_tag(template, tag)                  \
+    hemp_stack_push(template->scantags, tag)
+
+#define hemp_template_leave_tag(template)                       \
+    hemp_stack_pop(template->scantags)
+
+#define hemp_template_current_tag(template)                     \
+    ((hemp_tag) hemp_stack_top(template->scantags))
 
 
 #endif /* HEMP_TEMPLATE_H */

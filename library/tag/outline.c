@@ -29,9 +29,9 @@ HEMP_SCANNER(hemp_tag_outline_scanner) {
     hemp_pnode      pnode;
     hemp_element    element;
 
-    hemp_debug("hemp_tag_outline_tag()\n");
+    hemp_debug_call("hemp_tag_outline_tag()\n");
 
-    // add the tag start token
+    hemp_template_enter_tag(template, tag);
     hemp_template_scanned(template, HempElementTagStart);
 
     while (*src) {
@@ -110,6 +110,8 @@ bareword:
     hemp_template_scanned_to(
         template, HempElementTagEnd, src
     );
+
+    hemp_template_leave_tag(template);
 
     return HEMP_TRUE;
 }

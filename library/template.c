@@ -16,7 +16,7 @@ hemp_template_new(
     template->fragments = hemp_fragments_new(dialect->hemp, 0);
     template->tree     = NULL;
     template->scanner  = NULL;
-    template->scanners = NULL;
+    template->scantags = NULL;
         
     return template;
 }
@@ -31,8 +31,8 @@ hemp_template_free(
         template->dialect->cleanup(template);
 
     /* Zap the scanner stack if we have one */ 
-    if (template->scanners)
-        hemp_stack_free(template->scanners);
+    if (template->scantags)
+        hemp_stack_free(template->scantags);
 
     /* Free the source, the tagset and then the template object itself. */
     /* The fragments cleaner will take care of cleaning any other tokens */
@@ -74,8 +74,8 @@ hemp_template_scan(
     template->scantok = template->source->text;
     template->scanpos = 0;
 
-    if (! template->scanners)
-        template->scanners = hemp_stack_new(HEMP_SCANNERS_SIZE);
+    if (! template->scantags)
+        template->scantags = hemp_stack_new(HEMP_SCANTAGS_SIZE);
 
     return hemp_action_run(template->scanner, template)
         ? HEMP_TRUE

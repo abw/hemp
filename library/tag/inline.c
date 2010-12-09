@@ -32,6 +32,8 @@ hemp_tag_inline_scanner(
     hemp_pnode      pnode;
     hemp_element    element;
 
+    hemp_template_enter_tag(template, tag);
+
     // add the tag start token
     hemp_template_scanned(template, HempElementTagStart);
 
@@ -107,6 +109,8 @@ bareword:
     if (tag->end && ! closed)
         hemp_fatal("Missing tag end: %s", tag->end);
 
+    hemp_template_leave_tag(template);
+
     return HEMP_TRUE;
 }
 
@@ -117,8 +121,8 @@ hemp_tag_inline_to_eol(
     HEMP_TAG_SKIP_ARGS
 ) {
     hemp_debug_call("hemp_tag_inline_to_eol()\n");
-    hemp_string  tag_end = tag->end;
-    hemp_size tag_len = strlen(tag->end);
+    hemp_string tag_end = tag->end;
+    hemp_size   tag_len = strlen(tag->end);
 
     /* walk to the end of line or end of tag */
     while ( *src
