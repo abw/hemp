@@ -16,7 +16,7 @@ HEMP_LANGUAGE(hemp_language_tt3) {
     );
     
     /* register handlers for command symbols */
-    hemp_register_element(hemp, "tt3.command.*", &hemp_elements_tt3_command);
+    hemp_register_element(hemp, "tt3.command.*", &hemp_elements_tt3_command_registrar);
 
     /* register grammars */
     hemp_register_grammar(hemp, "tt3.core",     &hemp_grammar_tt3_core);
@@ -94,12 +94,6 @@ hemp_dialect_tt3_unplugged_prepare(
 
 
 /*--------------------------------------------------------------------------
- * tags
- *--------------------------------------------------------------------------*/
-
-
-
-/*--------------------------------------------------------------------------
  * grammars
  *--------------------------------------------------------------------------*/
 
@@ -116,7 +110,7 @@ HEMP_GRAMMAR(hemp_grammar_tt3_core) {
 
 
 HEMP_GRAMMAR(hemp_grammar_tt3_command) {
-    hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
+    hemp_debug_msg("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_tt3_core(hemp, name);
 //    HEMP_USE_OPERATOR1("tt3.command.if", "if", 100, 100);
     HEMP_USE_OPERATOR2("tt3.command.sub", "sub", "end", 100, 100);
@@ -136,12 +130,9 @@ HEMP_GRAMMAR(hemp_grammar_tt3_control) {
  * elements
  *--------------------------------------------------------------------------*/
 
-hemp_action
-hemp_element_tt3_command_elements(
-    hemp_hemp     hemp,
-    hemp_string name
-) {
-    hemp_debug_init("** Initialising tt3 command symbols (%s requested)\n", name);
+
+HEMP_ELEMENTS(hemp_elements_tt3_command_registrar) {
+    hemp_debug_msg("** Initialising tt3 command symbols (%s requested)\n", name);
 
     /* we should detect if we've done this already and skip it */
     hemp_register_elements(hemp, hemp_elements_tt3_command);

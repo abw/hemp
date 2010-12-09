@@ -139,10 +139,18 @@ hemp_tagset
 hemp_tagset_prepare(
     hemp_template   template
 ) {
+    hemp_debug_msg("hemp_tagset_prepare(template:%p)\n", template);
     hemp_tagset tagset = hemp_tagset_new(template);
+    hemp_debug_msg("tagset: %p\n", tagset);
     template->scanner  = hemp_action_new(
         (hemp_actor) &hemp_tagset_scanner, 
         (hemp_memory) tagset
+    );
+    hemp_debug_msg(
+        "scanner: %p = [%p, %p]\n", 
+        template->scanner, 
+        template->scanner->actor,
+        template->scanner->script
     );
 
     return tagset;

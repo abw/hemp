@@ -47,10 +47,10 @@ void test_viewer() {
     printf("** OUTPUT ** : %s\n", output->string);
     hemp_text_free(output);
 
-    hemp_element root = hemp_template_tree(tmpl);
+    hemp_fragment root = hemp_template_tree(tmpl);
     ok( root, "got root element: %p", root);
 
-    hemp_value result = hemp_viewer_element(text, root, context, HempNothing);
+    hemp_value result = hemp_viewer_fragment(text, root, context, HempNothing);
     HEMP_UNUSED(result);
 
     hemp_context_free(context);

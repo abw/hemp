@@ -34,19 +34,30 @@ void hemp_debug(char *format, ...)
 }
 
 
-void hemp_debug_col(char *col, char *format, ...) 
-{
+void hemp_debug_col(
+    hemp_string file, 
+    hemp_pos    line,
+    hemp_string colour,
+    hemp_string format, 
+    ...
+) {
 #ifdef HEMP_DEBUG
     if (hemp_debugging) {
         va_list args;
         va_start(args, format);
-        fprintf(stderr, "%s", col);
+        fprintf(
+            stderr, "%s%5ld %s%-20s %s", 
+            HEMP_DEBUG_LINE_COL, line,
+            HEMP_DEBUG_FILE_COL, file,
+            colour
+        );
         vfprintf(stderr, format, args);
         fprintf(stderr, HEMP_ANSI_RESET);
         va_end(args);
     }
 #endif
 }
+
 
 void 
 hemp_debug_token(
@@ -63,22 +74,3 @@ hemp_debug_token(
 } 
 
 
-void hemp_debug_at(
-    hemp_string file, 
-    hemp_pos line,
-    hemp_string format, 
-    ...
-) {
-#ifdef HEMP_DEBUG
-    if (hemp_debugging) {
-        va_list args;
-        va_start(args, format);
-        fprintf(
-            stderr, "%s%5ld %-20s %s", 
-            HEMP_ANSI_YELLOW, line, file, HEMP_ANSI_RESET
-        );
-        vfprintf(stderr, format, args);
-        va_end(args);
-    }
-#endif
-}

@@ -52,7 +52,7 @@ hemp_fragment
 hemp_template_tokens(
     hemp_template template
 ) {
-    hemp_debug_call("hemp_template_tokens(%p)\n", template);
+    hemp_debug_msg("hemp_template_tokens(%p)\n", template);
 
     if (! template->fragments->head)
         hemp_template_scan(template);

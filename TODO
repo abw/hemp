@@ -1,7 +1,7 @@
 An incomplete list of things TODO, in no particular order.
 
 * decide on a _FUNC suffix or otherwise and apply consistently, e.g.
-  HEMP_GRAMMAR() vs HEMP_PREFIX_FUNC()
+  HEMP_GRAMMAR() vs HEMP_PREFIX()
 
 * There's still a bunch of components with init() methods which need
   changing to new() for consistency with new naming standard.
@@ -104,7 +104,7 @@ An incomplete list of things TODO, in no particular order.
   a similar process (e.g.for syntax highlighting)
 
 * Should OPERATOR2 register terminator token?  e.g. in:
-    HEMP_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);
+    HEMP_USE_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);
 
 * Extend parse_fixed() to lookahead and merge with other fixed items 
   (equivalent to filename in TT3).  No... hang on, that's a different
@@ -152,6 +152,8 @@ An incomplete list of things TODO, in no particular order.
   names that it registers are supposed to be namespaced and unique. Hmm.
 
 * HEMP_ACTION
+
+* Rewrite HEMP_PREFIX_PRECEDENCE, etc., so they don't rely on 'type'
 
 Configuration, Build and Installation
 -------------------------------------

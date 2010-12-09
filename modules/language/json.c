@@ -38,7 +38,7 @@ HEMP_LANGUAGE(hemp_language_json) {
 HEMP_DIALECT(hemp_dialect_json) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
     dialect->prepare = &hemp_dialect_json_prepare;
-    dialect->scanner = &hemp_scan_unplugged;
+//  dialect->scanner = &hemp_scan_unplugged;
     dialect->cleanup = NULL;
     return dialect;
 }
@@ -67,9 +67,13 @@ HEMP_GRAMMAR(hemp_grammar_json) {
 
 HEMP_PREPARE(hemp_dialect_json_prepare) {
     hemp_hemp    hemp    = template->dialect->hemp;
-    hemp_tagset  tagset  = template->tagset;
     hemp_grammar grammar = hemp_grammar_instance(hemp, "json");
-    hemp_tagset_new_tag(tagset, "hemp.unplugged", "json",  NULL, NULL, grammar);
+
+    template->scanner = hemp_action_new(
+        (hemp_actor)    &hemp_grammar_scanner, 
+        (hemp_memory)   grammar
+    );
+
     return template;
 }
 

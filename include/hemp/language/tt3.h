@@ -14,7 +14,7 @@ HEMP_GRAMMAR(hemp_grammar_tt3_core);
 HEMP_GRAMMAR(hemp_grammar_tt3_command);
 HEMP_GRAMMAR(hemp_grammar_tt3_control);
 
-HEMP_ELEMENTS(hemp_element_tt3_command_elements);
+HEMP_ELEMENTS(hemp_elements_tt3_command_registrar);
 HEMP_ELEMENT(hemp_element_tt3_if);
 HEMP_ELEMENT(hemp_element_tt3_TODO);
 

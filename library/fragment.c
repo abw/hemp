@@ -138,7 +138,7 @@ hemp_fragment_parse(
     hemp_fragment fragment,
     hemp_scope    scope
 ) {
-    hemp_debug_call("hemp_fragment_parse()\n");
+    hemp_debug_parse("hemp_fragment_parse()\n");
     hemp_fragment *current = &fragment;
 
     hemp_fragment block = hemp_fragment_parse_block(
@@ -171,11 +171,18 @@ hemp_fragment_parse_exprs(
         hemp_skip_separator(fragptr);
 
         /* ask the next token to return an expression */
+        hemp_debug_parse("%s parse_prefix: %p\n", (*fragptr)->type->name, (*fragptr)->type->parse_prefix);
         expr = hemp_parse_prefix(fragptr, scope, precedence, HEMP_FALSE);
 
         /* if it's not an expression (e.g. a terminator) then we're done */
-        if (! expr)
+        if (expr) {
+            hemp_debug_parse("got expr: %s\n", expr->type->name);
+        }
+        if (! expr) {
+            hemp_debug_msg("no expr\n");
             break;
+        
+        }
 
         hemp_list_push(exprs, hemp_frag_val(expr));
     }

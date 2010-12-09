@@ -67,7 +67,7 @@ hemp_factory_constructor(
     hemp_factory    factory,
     hemp_string     name
 ) {
-    hemp_debug_call("hemp_factory_constructor(F, %s)\n", name);
+    hemp_debug_factory("hemp_factory_constructor(%p, %s)\n", factory, name);
     
     static hemp_char    wildname[HEMP_BUFFER_SIZE];
     hemp_list           splits;
@@ -99,7 +99,7 @@ lookup:
             split = (hemp_string_split_p) hemp_val_ptr( hemp_list_item(splits, n) );
             snprintf((char *) wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
 
-//          hemp_debug_msg("looking for [%s]\n", wildname);
+            hemp_debug_factory("factory looking for [%s]\n", wildname);
 
             /* look for a wildcard meta-constructor */
             wildcard = (hemp_action) hemp_hash_fetch_pointer(
@@ -107,6 +107,9 @@ lookup:
             );
             if (! wildcard)
                 continue;               /* no dice, try again               */
+
+
+            hemp_debug_factory("factory calling constructor: %p\n", wildcard);
 
             /* see if it can generate a constructor */
             constructor = hemp_action_run(
@@ -122,18 +125,22 @@ lookup:
         }
     }
     
-    if ( ! constructor 
-      && ! autoload 
-      && ( autoload = factory->autoload )
-      &&   autoload(factory, name) ) {
-//      hemp_debug_msg("autoload method has loaded\n");
-        /* autoload worked so look to see if our item is now available */
-        constructor = (hemp_action) hemp_hash_fetch_pointer(
-            factory->constructors, name
-        );
-        /* fall back to a wildcard provider that may have been installed */
-        if (! constructor)
-            goto lookup;            /* sorry */
+    if ( ! constructor && ! autoload && ( autoload = factory->autoload ) ) {
+        hemp_debug_factory("factory calling autoload method\n");
+
+        if (autoload(factory, name)) {
+            hemp_debug_factory("factory autoload returned true\n");
+            /* autoload worked so look to see if our item is now available */
+            constructor = (hemp_action) hemp_hash_fetch_pointer(
+                factory->constructors, name
+            );
+            /* fall back to a wildcard provider that may have been installed */
+            if (! constructor)
+                goto lookup;            /* sorry */
+        }
+        else {
+            hemp_debug_factory("factory autoload returned false\n");
+        }
     }
 
     if (splits)
@@ -148,7 +155,7 @@ hemp_factory_instance(
     hemp_factory factory,
     hemp_string     name
 ) {
-    hemp_debug_call("hemp_factory_instance(F, %s)\n", name);
+    hemp_debug_factory("hemp_factory_instance(%p, %s)\n", factory, name);
     
     hemp_memory instance = hemp_hash_fetch_pointer(
         factory->instances, name
