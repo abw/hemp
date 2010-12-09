@@ -122,7 +122,11 @@ void hemp_fragment_dump_exprs(
     hemp_list exprs
 );
 
-    
+void
+hemp_fragment_debug(
+    hemp_fragment f
+);
+
 
 /*--------------------------------------------------------------------------
  * general purpose macros

@@ -1,0 +1,16 @@
+-- test Hello World
+[% "Hello " 'World' ', the time is ' 2 + 2 ':' 10 * 2 %]
+-- expect
+Hello World, the time is 4:20
+
+-- stop --
+
+-- test numbers World
+[% 4 [% 1 + 1 %] [% '0' 
+-- expect
+420
+
+-- test Hello World
+[% "Hello " [% 'World' %] '!' %]
+-- expect
+Hello World!

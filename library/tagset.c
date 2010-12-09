@@ -168,32 +168,25 @@ hemp_tagset_cleanup(
 }
 
 
-hemp_memory
-hemp_tagset_scanner(
-    hemp_actor      self,
-    hemp_template   template
-) {
-    hemp_debug_msg("hemp_tagset_scanner()\n");
+HEMP_SCANNER(hemp_tagset_scanner) {
+    hemp_debug_call("hemp_tagset_scanner()\n");
 
     hemp_tagset     tagset   = (hemp_tagset) self;
-    hemp_pos        pos      = template->scanpos,
-                    line     = 0;
     hemp_string     src      = template->scanptr,
                     from     = template->scantok,
                     tagstr;
     hemp_pnode      pnode;
     hemp_tag        tag;
 
-    hemp_debug_msg("POS [%d] TEXT [%s]\n", template->scanpos, template->scantok);
+//    hemp_debug_msg("POS [%d] TEXT [%s]\n", template->scanpos, template->scantok);
 
 #if HEMP_DEBUG & HEMP_DEBUG_SCAN
-    hemp_debug_magenta("-- source ---\n%s\n-------------\n", text);
+    hemp_debug_magenta("-- source ---\n%s\n-------------\n", src);
 #endif
 
     while (*src) {
         /* look for outline tags at the start of line */
-        line++;
-        hemp_debug_scan("\n%d (%02d) : ", line, src - text);
+ //     hemp_debug_scan("\n%d (%02d) : \n", line, src - from);
 
         while (*src) {
             pnode = hemp_ptree_root(tagset->outline_tags, src);
@@ -201,31 +194,23 @@ hemp_tagset_scanner(
             if (! pnode)
                 break;              /* didn't match first character of tag */
                 
-            template->scantok = tagstr = src;
-
-            tag = (hemp_tag) hemp_pnode_match_more(pnode, &src);
+            tagstr = src;
+            tag    = (hemp_tag) hemp_pnode_match_more(pnode, &src);
     
             if (! tag)
                 break;              /* didn't match remaining characters */
 
-            hemp_debug_scan("[OUTLINE:%c]", *(template->scantok));
-
             /* add any preceding text */
             if (tagstr > from) {
-                hemp_fragments_add_fragment(
-                    template->fragments, tagset->text_element,
-                    from, pos, tagstr - from
+                hemp_template_scanned_to(
+                    template, tagset->text_element, tagstr
                 );
-                pos += tagstr - from;
-                from = tagstr;
             }
 
             /* update template state before and after call to tag */
             template->scanptr = src;
-            template->scanpos = pos;
-            tag->scan(template, tag, tagstr, pos, &src);
-            from = src; // = template->scanptr;
-            pos += src - tagstr;
+            tag->scanner(tag, template);
+            from = src = template->scanptr;
         }
 
         /* then look for inline tags within lines */
@@ -249,61 +234,40 @@ hemp_tagset_scanner(
                 continue;           /* didn't match first character, go on */
             }
 
-            template->scantok = tagstr = src;
-
-            tag = (hemp_tag) hemp_pnode_match_more(pnode, &src);
+            tagstr = src;
+            tag    = (hemp_tag) hemp_pnode_match_more(pnode, &src);
 
             if (! tag) {
                 src++;
                 continue;           /* didn't matching remaining chars, go on */
             }
 
-            hemp_debug_scan("[INLINE:%c]", *tagstr);
-
             /* create a fragment for any preceding text */
             if (tagstr > from) {
-                hemp_fragments_add_fragment(
-                    template->fragments, tagset->text_element,
-                    from, pos, tagstr - from
+                hemp_template_scanned_to(
+                    template, tagset->text_element, tagstr
                 );
-                pos += tagstr - from;
-                from = tagstr;
             }
 
-            /* update template state before and after call to tag */
             template->scanptr = src;
-            template->scanpos = pos;
-
-            /* tmp hack while migrating to new scanner api */
-            if (tag->scanner) {
-                hemp_debug_msg("%s tag has new-skool scanner method\n", tag->name);
-                tag->scanner(tag, template);
-                from = src = template->scanptr;
-            }
-            else {
-                hemp_debug_msg("%s tag has old-skool scan method\n", tag->name);
-                tag->scan(template, tag, tagstr, pos, &src);
-                from = src;
-            }
-            pos += src - tagstr;
+            tag->scanner(tag, template);
+            from = src = template->scanptr;
         }
     }
 
     if (src > from) {
-        hemp_fragments_add_fragment(
-            template->fragments, tagset->text_element,
-            from, pos, src - from
+        hemp_template_scanned_to(
+            template, tagset->text_element, src
         );
-        pos += src - from;
     }
     
-    hemp_fragments_add_eof(template->fragments, pos);
+    hemp_fragments_add_eof(template->fragments, template->scanpos);
 
 #if HEMP_DEBUG & HEMP_DEBUG_SCAN
     hemp_fragments_dump(template->fragments);
 #endif
 
-    return (hemp_memory) template;
+    return HEMP_TRUE;
 }
 
 

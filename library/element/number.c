@@ -138,7 +138,7 @@ HEMP_ELEMENT(hemp_element_number_plus) {
 
 
 HEMP_VALUE(hemp_element_number_plus_value) {
-    hemp_debug_call("hemp_element_number_plus_value() [%p]\n", element);
+    hemp_debug_call("hemp_element_number_plus_value()\n");
 
     hemp_fragment fragment = hemp_val_frag(value);
 

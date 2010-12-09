@@ -53,6 +53,7 @@ libhemp_la_SOURCES  =   action.c            \
                         element/quoted.c    \
                         element/space.c     \
                         element/sub.c       \
+                        element/tag.c       \
                         element/text.c      \
                         element/word.c      \
                         language/hemp.c     \

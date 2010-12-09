@@ -63,6 +63,11 @@ hemp_scan_text(
     hemp_template   template
 );
 
+HEMP_INLINE void
+hemp_scan_number(
+    hemp_template   template
+);
+
 //hemp_bool
 //hemp_scan_unplugged(
 //    hemp_template   template

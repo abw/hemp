@@ -77,7 +77,7 @@ hemp_context_enter(
     hemp_context  context,
     hemp_fragment fragment
 ) {
-    hemp_debug_call("hemp_context_enter(%p, %p)\n", context, element);
+    hemp_debug_call("hemp_context_enter(%p, %p)\n", context, fragment);
 
     /* Frame points at master context, parent frame and current element.
      * Also has local vars hash which are chained to current context vars

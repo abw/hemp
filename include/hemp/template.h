@@ -83,11 +83,39 @@ hemp_template_data(
  * macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_template_first_element(t)  \
+#define hemp_template_first_element(t)      \
     t->fragments->head
 
-#define hemp_template_last_element(t)  \
+#define hemp_template_last_element(t)       \
     t->fragments->tail
+
+#define hemp_template_add_fragment(template, element)           \
+    hemp_fragments_add_fragment(                                \
+        template->fragments, element,                           \
+        template->scantok, template->scanpos,                   \
+        template->scanptr - template->scantok                   \
+    )
+
+#define hemp_template_scanned(template, element) ({             \
+    hemp_fragment _hemp_frag = hemp_template_add_fragment(      \
+        template, element                                       \
+    );                                                          \
+    template->scantok  = template->scanptr;                     \
+    template->scanpos += _hemp_frag->length;                    \
+    _hemp_frag;                                                 \
+})
+
+
+#define hemp_template_scanned_to(template, element, src) ({     \
+    template->scanptr = src;                                    \
+    hemp_fragment _hemp_frag = hemp_template_add_fragment(      \
+        template, element                                       \
+    );                                                          \
+    template->scantok  = src;                                   \
+    template->scanpos += _hemp_frag->length;                    \
+    _hemp_frag;                                                 \
+})
+
 
 
 #endif /* HEMP_TEMPLATE_H */

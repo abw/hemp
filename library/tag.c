@@ -29,8 +29,6 @@ hemp_tag_new(
                  ? hemp_string_clone(end,   "tag end") 
                  : NULL;
 
-    // TODO: put some sensible defaults in here
-    tag->scan    = NULL;
     tag->scanner = NULL;
     tag->to_eol  = &hemp_tag_to_eol;
     return tag;
@@ -49,7 +47,7 @@ hemp_tag_copy(
         tag->grammar
     );
     copy->style   = tag->style;
-    copy->scan    = tag->scan;
+    copy->scanner = tag->scanner;
     copy->to_eol  = tag->to_eol;
     return copy;
 }

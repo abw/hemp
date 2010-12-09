@@ -36,9 +36,8 @@ struct hemp_tag {
     hemp_string     start;
     hemp_string     end;
     hemp_grammar    grammar;
-    hemp_tag_scan_f scan;
-    hemp_tag_skip_f to_eol;
     hemp_scanner    scanner;
+    hemp_tag_skip_f to_eol;
 };
 
 struct hemp_tags {
@@ -123,6 +122,11 @@ HEMP_TAG(hemp_tag_outline);
 HEMP_TAG(hemp_tag_comment);
 HEMP_TAG(hemp_tag_control);
 HEMP_TAG(hemp_tag_unplugged);
+
+HEMP_SCANNER(hemp_tag_inline_scanner);
+HEMP_SCANNER(hemp_tag_outline_scanner);
+HEMP_SCANNER(hemp_tag_control_scanner);
+HEMP_SCANNER(hemp_tag_comment_scanner);
 
 HEMP_AUTOLOAD(hemp_tag_autoload);
 

@@ -1,4 +1,4 @@
-#check_PROGRAMS  =    boolops
+#check_PROGRAMS  =    quotes
 
 check_PROGRAMS  =   assign      \
                     boolops     \
@@ -6,6 +6,7 @@ check_PROGRAMS  =   assign      \
                     functions   \
                     hash        \
                     lists       \
+                    nested      \
                     numbers     \
                     numops      \
                     parens      \

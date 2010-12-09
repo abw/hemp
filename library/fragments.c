@@ -84,6 +84,8 @@ hemp_fragments_add_fragment(
     hemp_fragment fragment = hemp_fragments_new_fragment(
         fragments, type, token, position, length
     );
+
+//  hemp_fragment_debug(fragment);
     
     if (fragments->tail) {
         fragments->tail->next = fragment;
@@ -114,13 +116,12 @@ void
 hemp_fragments_dump(
     hemp_fragments   fragments
 ) {
-    hemp_debug("\n-- Fragments --\n");
+    hemp_debug("\n-- frags --\n");
     hemp_fragment f = fragments->head;
 
     while (f) {
-        if (! hemp_fragment_dump(f) )
-            break;
+        hemp_fragment_debug(f);
         f = f->next;
     }
-    hemp_debug("-- /Elements --\n");
+    hemp_debug("-- /frags --\n");
 }

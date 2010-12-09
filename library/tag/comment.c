@@ -11,30 +11,24 @@ HEMP_TAG(hemp_tag_comment) {
     hemp_tag tag = hemp_tag_inline(
         hemp, type, name, start, end, grammar
     );
-    tag->scan = &hemp_tag_comment_scan;
-    tag->scanner = NULL;
+    tag->scanner = &hemp_tag_comment_scanner;
     return tag;
 }
 
 
-void 
-hemp_tag_comment_scan(
-    HEMP_TAG_SCAN_ARGS
-) {
-    hemp_string to = strstr(*srcptr, tag->end);
+HEMP_SCANNER(hemp_tag_comment_scanner) {
+    hemp_tag    tag = (hemp_tag) self;
+    hemp_string end = strstr(template->scanptr, tag->end);
     
-    if (! to)
+    if (! end)
         hemp_fatal("missing end of comment tag");
 
-    to += strlen(tag->end);
+    end += strlen(tag->end);
 
-    hemp_debug_token("comment", tagtok, to - tagtok);
-
-    hemp_fragments_add_fragment(
-        tmpl->fragments, HempElementComment,
-        tagtok, pos, to - tagtok
+    hemp_template_scanned_to(
+        template, HempElementComment, end
     );
 
-    *srcptr = to;
+    return HEMP_TRUE;
 }
 

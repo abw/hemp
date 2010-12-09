@@ -166,16 +166,8 @@
 
 
 /*--------------------------------------------------------------------------
- * Macros for declaring language, dialect, tag and grammar constructors.
- *
- * A language (or "language pack", more accurately) defines one or more 
- * dialects.  Each dialect is a configuration of tags that can appear in a 
- * document.  Each tag may define a grammar that denotes which tokens may
- * appear inside a tag and how they map to elements.
+ * Macros for declaring language, dialect, tag, grammar, etc. constructors.
  *--------------------------------------------------------------------------*/
-
-// TODO: decide on a _FUNC suffix or otherwise and apply consistently
-
 
 #define HEMP_AUTOLOAD(f)                        \
     hemp_bool f(                                \
@@ -183,14 +175,35 @@
         hemp_string     name                    \
     )
 
-#define HEMP_LANGUAGE(f)                        \
-    hemp_language f(                            \
+#define HEMP_DIALECT(f)                         \
+    hemp_dialect f(                             \
         hemp_hemp   hemp,                       \
         hemp_string name                        \
     )
 
-#define HEMP_DIALECT(f)                         \
-    hemp_dialect f(                             \
+#define HEMP_ELEMENT(f)                         \
+    hemp_element f(                             \
+        hemp_hemp       hemp,                   \
+        hemp_element    element                 \
+    )
+
+#define HEMP_ELEMENTS(f)                        \
+    hemp_action f(                              \
+        hemp_hemp       hemp,                   \
+        hemp_string     name                    \
+    )
+
+#define HEMP_GLOBAL_ELEMENT(f)                  \
+    hemp_element f()
+
+#define HEMP_GRAMMAR(f)                         \
+    hemp_grammar f(                             \
+        hemp_hemp       hemp,                   \
+        hemp_string     name                    \
+    )
+
+#define HEMP_LANGUAGE(f)                        \
+    hemp_language f(                            \
         hemp_hemp   hemp,                       \
         hemp_string name                        \
     )
@@ -205,25 +218,10 @@
         hemp_grammar    grammar                 \
     )
 
-#define HEMP_GRAMMAR(f)                         \
-    hemp_grammar f(                             \
-        hemp_hemp       hemp,                   \
-        hemp_string     name                    \
-    )
-
-#define HEMP_GLOBAL_ELEMENT(f)                  \
-    hemp_element f()
-
-#define HEMP_ELEMENT(f)                         \
-    hemp_element f(                             \
-        hemp_hemp       hemp,                   \
-        hemp_element    element                 \
-    )
-
-#define HEMP_ELEMENTS(f)                        \
-    hemp_action f(                              \
-        hemp_hemp       hemp,                   \
-        hemp_string     name                    \
+#define HEMP_SCANNER(f)                         \
+    hemp_bool f(                                \
+        hemp_memory     self,                   \
+        hemp_template   template                \
     )
 
 #define HEMP_VIEWER(f)                          \
@@ -331,6 +329,7 @@
 hemp_scan_pos hemp_scan_pos_init(HEMP_SCAN_ARGS);
 hemp_error    hemp_error_scan_pos(hemp_error, hemp_scan_pos);
 
+// OLD - needs updating
 #define HEMP_SCAN_ERROR(type,...)           \
     hemp_error_throw(                       \
         tmpl->dialect->hemp,                \

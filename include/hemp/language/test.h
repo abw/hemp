@@ -14,12 +14,12 @@ HEMP_ELEMENTS(hemp_element_test_elements);
 HEMP_ELEMENT(hemp_element_test_test);
 HEMP_ELEMENT(hemp_element_test_expect);
 
-HEMP_SCAN_FUNC(hemp_element_test_test_scanner);
+HEMP_SCANNER(hemp_element_test_test_scanner);
 HEMP_PREFIX(hemp_element_test_test_prefix);
 HEMP_VALUE(hemp_element_test_test_value);
 HEMP_CLEANUP(hemp_element_test_test_cleanup);
 
-HEMP_SCAN_FUNC(hemp_element_test_expect_scanner);
+HEMP_SCANNER(hemp_element_test_expect_scanner);
 HEMP_PREFIX(hemp_element_test_expect_prefix);
 HEMP_VALUE(hemp_element_test_expect_value);
 HEMP_CLEANUP(hemp_element_test_expect_cleanup);

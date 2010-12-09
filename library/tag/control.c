@@ -11,16 +11,14 @@ HEMP_TAG(hemp_tag_control) {
         hemp, type, name, start, end, grammar
     );
     
-    tag->scan = &hemp_tag_control_scan;
+    tag->scanner = &hemp_tag_control_scanner;
 
     return tag;
 }
 
 
-void 
-hemp_tag_control_scan(
-    HEMP_TAG_SCAN_ARGS
-) {
+HEMP_SCANNER(hemp_tag_control_scanner) {
     hemp_todo("control tag");
+    return HEMP_FALSE;
 }
 

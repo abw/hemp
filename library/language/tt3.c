@@ -114,6 +114,8 @@ HEMP_GRAMMAR(hemp_grammar_tt3_command) {
     hemp_grammar grammar = hemp_grammar_tt3_core(hemp, name);
 //    HEMP_USE_OPERATOR1("tt3.command.if", "if", 100, 100);
     HEMP_USE_OPERATOR2("tt3.command.sub", "sub", "end", 100, 100);
+//    hemp_element intag = HEMP_USE_ELEMENT2("hemp.tag.inline", "[%", "%]");
+//  hemp_debug_msg("embedded tag: %p => %s\n", intag, intag->name); 
     return grammar;
 }
 
@@ -132,7 +134,7 @@ HEMP_GRAMMAR(hemp_grammar_tt3_control) {
 
 
 HEMP_ELEMENTS(hemp_elements_tt3_command_registrar) {
-    hemp_debug_msg("** Initialising tt3 command symbols (%s requested)\n", name);
+    hemp_debug_init("** Initialising tt3 command symbols (%s requested)\n", name);
 
     /* we should detect if we've done this already and skip it */
     hemp_register_elements(hemp, hemp_elements_tt3_command);

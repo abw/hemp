@@ -144,7 +144,7 @@ HEMP_OUTPUT(hemp_element_sub_text) {
 
 
 HEMP_CLEANUP(hemp_element_sub_cleanup) {
-    hemp_debug_call("hemp_element_sub_clean(%p)\n", element);
+    hemp_debug_call("hemp_element_sub_clean(%p)\n", fragment);
 
     if (hemp_has_flag(fragment, HEMP_BE_ARGS)) {
         hemp_code code = hemp_val_code( hemp_rhs(fragment) );

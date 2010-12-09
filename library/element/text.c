@@ -55,7 +55,7 @@ HEMP_VALUE(hemp_element_text_value) {
  */
 
 HEMP_CLEANUP(hemp_element_text_cleanup) {
-    hemp_debug_call("hemp_element_text_cleanup(%p)\n", element);
+    hemp_debug_call("hemp_element_text_cleanup(%p)\n", fragment);
 
     /* squote and dquote elements may have allocated memory to accomodate
      * translated escape sequences, e.g. \n \\, etc

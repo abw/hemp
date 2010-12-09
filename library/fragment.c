@@ -138,7 +138,7 @@ hemp_fragment_parse(
     hemp_fragment fragment,
     hemp_scope    scope
 ) {
-    hemp_debug_parse("hemp_fragment_parse()\n");
+    hemp_debug_call("hemp_fragment_parse()\n");
     hemp_fragment *current = &fragment;
 
     hemp_fragment block = hemp_fragment_parse_block(
@@ -161,7 +161,7 @@ hemp_list
 hemp_fragment_parse_exprs(
     HEMP_PREFIX_ARGS
 ) {
-    hemp_debug_parse("hemp_fragment_parse_exprs( precedence => %d )\n", precedence);
+    hemp_debug_call("hemp_fragment_parse_exprs( precedence => %d )\n", precedence);
 
     hemp_fragment   expr;
     hemp_list       exprs = hemp_list_new();
@@ -171,7 +171,7 @@ hemp_fragment_parse_exprs(
         hemp_skip_separator(fragptr);
 
         /* ask the next token to return an expression */
-        hemp_debug_parse("%s parse_prefix: %p\n", (*fragptr)->type->name, (*fragptr)->type->parse_prefix);
+        // hemp_debug_parse("%s parse_prefix: %p\n", (*fragptr)->type->name, (*fragptr)->type->parse_prefix);
         expr = hemp_parse_prefix(fragptr, scope, precedence, HEMP_FALSE);
 
         /* if it's not an expression (e.g. a terminator) then we're done */
@@ -270,9 +270,29 @@ void hemp_fragment_dump_exprs(
     for (n = 0; n < exprs->length; n++) {
         hemp_value    v = hemp_list_item(exprs, n);
         hemp_fragment f = hemp_val_frag(v);
-        hemp_fragment_dump(f);
+        hemp_fragment_debug(f);
     }
 
     hemp_debug("-- /exprs --\n");
 }
 
+
+void
+hemp_fragment_debug(
+    hemp_fragment f
+) {
+    static char buffer[80];
+    hemp_pos len = f->length;
+    if (len > 79) len = 79;
+    strncpy(buffer, f->token, len);
+    buffer[len] = '\0';
+
+    hemp_debug(
+        "%s%03d:%02d %s%-20s %s[%s%s%s]%s\n",
+        HEMP_ANSI_CYAN, (int) f->position, (int) f->length, 
+        HEMP_ANSI_BLUE, f->type->name, 
+        HEMP_ANSI_BLUE, HEMP_ANSI_RESET, 
+        buffer, 
+        HEMP_ANSI_BLUE, HEMP_ANSI_RESET
+    );
+}

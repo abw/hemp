@@ -38,7 +38,7 @@ struct hemp_element {
     hemp_oprec      rprec;
 
     /* intialisation (on scan) and cleanup methods */
-    hemp_fscanner   scanner;
+    hemp_scanner    scanner;
     hemp_cleanup    cleanup;
 
     /* parsing methods */
@@ -147,6 +147,7 @@ HEMP_POSTFIX(hemp_element_parse_infix_left);
 HEMP_POSTFIX(hemp_element_parse_infix_right);
 
 
+
 /*--------------------------------------------------------------------------
  * whitespace, comments, etc
  *--------------------------------------------------------------------------*/
@@ -166,6 +167,14 @@ HEMP_POSTFIX(hemp_element_space_postfix);
 HEMP_PREFIX(hemp_element_space_body);
 
 hemp_bool hemp_element_terminator_matches(hemp_fragment, hemp_string);
+
+/*--------------------------------------------------------------------------
+ * tag elements
+ *--------------------------------------------------------------------------*/
+
+HEMP_ELEMENT(hemp_element_tag_inline);
+HEMP_SCANNER(hemp_element_tag_inline_scanner);
+
 
 
 /*--------------------------------------------------------------------------
@@ -221,10 +230,10 @@ HEMP_CLEANUP(hemp_element_word_cleanup);
  *--------------------------------------------------------------------------*/
 
 HEMP_ELEMENT(hemp_element_squote);
-HEMP_SCAN_FUNC(hemp_element_squote_scanner);
+HEMP_SCANNER(hemp_element_squote_scanner);
 
 HEMP_ELEMENT(hemp_element_dquote);
-HEMP_SCAN_FUNC(hemp_element_dquote_scanner);
+HEMP_SCANNER(hemp_element_dquote_scanner);
 
 HEMP_OUTPUT(hemp_element_quoted_text);
 HEMP_VALUE(hemp_element_quoted_value);
@@ -429,7 +438,7 @@ HEMP_OUTPUT(hemp_element_value_values);
 
 
 
-HEMP_SCAN_FUNC(hemp_element_comment_scanner);
+HEMP_SCANNER(hemp_element_comment_scanner);
 HEMP_PREFIX(hemp_element_space_parse_expr);
 HEMP_OUTPUT(hemp_element_eof_token);
 

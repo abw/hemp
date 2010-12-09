@@ -15,7 +15,7 @@
 
 @SET_MAKE@
 
-#check_PROGRAMS  =    boolops
+#check_PROGRAMS  =    quotes
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -37,9 +37,9 @@ build_triplet = @build@
 host_triplet = @host@
 check_PROGRAMS = assign$(EXEEXT) boolops$(EXEEXT) comments$(EXEEXT) \
 	functions$(EXEEXT) hash$(EXEEXT) lists$(EXEEXT) \
-	numbers$(EXEEXT) numops$(EXEEXT) parens$(EXEEXT) \
-	quotes$(EXEEXT) textops$(EXEEXT) unplugged$(EXEEXT) \
-	words$(EXEEXT)
+	nested$(EXEEXT) numbers$(EXEEXT) numops$(EXEEXT) \
+	parens$(EXEEXT) quotes$(EXEEXT) textops$(EXEEXT) \
+	unplugged$(EXEEXT) words$(EXEEXT)
 subdir = tests/language/hemp
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -81,6 +81,10 @@ lists_SOURCES = lists.c
 lists_OBJECTS = lists.$(OBJEXT)
 lists_LDADD = $(LDADD)
 lists_DEPENDENCIES = ../../../library/libhemp.la
+nested_SOURCES = nested.c
+nested_OBJECTS = nested.$(OBJEXT)
+nested_LDADD = $(LDADD)
+nested_DEPENDENCIES = ../../../library/libhemp.la
 numbers_SOURCES = numbers.c
 numbers_OBJECTS = numbers.$(OBJEXT)
 numbers_LDADD = $(LDADD)
@@ -123,11 +127,11 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = assign.c boolops.c comments.c functions.c hash.c lists.c \
-	numbers.c numops.c parens.c quotes.c textops.c unplugged.c \
-	words.c
-DIST_SOURCES = assign.c boolops.c comments.c functions.c hash.c \
-	lists.c numbers.c numops.c parens.c quotes.c textops.c \
+	nested.c numbers.c numops.c parens.c quotes.c textops.c \
 	unplugged.c words.c
+DIST_SOURCES = assign.c boolops.c comments.c functions.c hash.c \
+	lists.c nested.c numbers.c numops.c parens.c quotes.c \
+	textops.c unplugged.c words.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -339,6 +343,9 @@ hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES)
 lists$(EXEEXT): $(lists_OBJECTS) $(lists_DEPENDENCIES) 
 	@rm -f lists$(EXEEXT)
 	$(LINK) $(lists_OBJECTS) $(lists_LDADD) $(LIBS)
+nested$(EXEEXT): $(nested_OBJECTS) $(nested_DEPENDENCIES) 
+	@rm -f nested$(EXEEXT)
+	$(LINK) $(nested_OBJECTS) $(nested_LDADD) $(LIBS)
 numbers$(EXEEXT): $(numbers_OBJECTS) $(numbers_DEPENDENCIES) 
 	@rm -f numbers$(EXEEXT)
 	$(LINK) $(numbers_OBJECTS) $(numbers_LDADD) $(LIBS)
@@ -373,6 +380,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/functions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lists.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nested.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numbers.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numops.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parens.Po@am__quote@

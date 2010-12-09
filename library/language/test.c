@@ -100,28 +100,35 @@ HEMP_ELEMENT(hemp_element_test_test) {
 }
 
 
-HEMP_SCAN_FUNC(hemp_element_test_test_scanner) {
-    hemp_string src = *srcptr;
+HEMP_SCANNER(hemp_element_test_test_scanner) {
+    hemp_element element = (hemp_element) self;
+    hemp_string  src     = template->scanptr;
 
-    hemp_debug_call("hemp_element_test_test_scanner()\n");
+
+    hemp_debug_msg("hemp_element_test_test_scanner()\n");
 
     /* TODO: add to_tag_end() method to scan all text, accounting for
      * inline/outline tags
      */
 
     /* walk to the end of line or end of tag */
-    src = tag->to_eol(tag, src);
-
-    hemp_debug_token("TEST", *srcptr, src - *srcptr);
-
-    /* update the source pointer past the text we've consumed */
-    *srcptr = src;
-    
-    /* add a comment element to the list of scanned tokens */
-    return hemp_fragments_add_fragment(
-        tmpl->fragments, element,
-        start, pos, src - start
+//    src = tag->to_eol(tag, src);
+    do {
+        ++src;
+    }
+    while (
+        *src && *src != HEMP_LF && *src != HEMP_CR
     );
+
+
+//    hemp_debug_token("TEST", *srcptr, src - *srcptr);
+
+    /* add a comment element to the list of scanned tokens */
+    hemp_template_scanned_to(
+        template, element, src
+    );
+    
+    return HEMP_TRUE;
 }
 
 
@@ -177,8 +184,9 @@ HEMP_ELEMENT(hemp_element_test_expect) {
 }
 
 
-HEMP_SCAN_FUNC(hemp_element_test_expect_scanner) {
-    hemp_string  src     = *srcptr;
+HEMP_SCANNER(hemp_element_test_expect_scanner) {
+    hemp_element element = (hemp_element) self;
+    hemp_string  src     = template->scanptr;
 
     hemp_debug_call("hemp_element_test_expect_scanner()\n");
 
@@ -190,16 +198,12 @@ HEMP_SCAN_FUNC(hemp_element_test_expect_scanner) {
         *src && *src != HEMP_LF && *src != HEMP_CR
     );
 
-    hemp_debug_token("EXPECT", *srcptr, src - *srcptr);
-
-    /* update the source pointer past the text we've consumed */
-    *srcptr = src;
-    
     /* add a comment element to the list of scanned tokens */
-    return hemp_fragments_add_fragment(
-        tmpl->fragments, element,
-        start, pos, src - start
+    hemp_template_scanned_to(
+        template, element, src
     );
+    
+    return HEMP_TRUE;
 }
 
 

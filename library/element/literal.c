@@ -43,7 +43,7 @@ HEMP_VALUE(hemp_element_literal_value) {
 
 
 HEMP_CLEANUP(hemp_element_literal_cleanup) {
-    hemp_debug_call("hemp_element_literal_cleanup(%p)\n", element);
+    hemp_debug_call("hemp_element_literal_cleanup(%p)\n", fragment);
 
     /* literal elements may be used as fixed values in which case they
      * have memory allocated (via hemp_element_parse_fixed()) which we must 

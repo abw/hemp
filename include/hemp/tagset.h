@@ -67,11 +67,7 @@ hemp_tagset_cleanup(
     hemp_template template
 );
 
-hemp_memory
-hemp_tagset_scanner(
-    hemp_actor      self,
-    hemp_template   template
-);
+HEMP_SCANNER(hemp_tagset_scanner);
 
 
 #endif /* HEMP_TAGS_H */

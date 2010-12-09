@@ -68,6 +68,7 @@ tests/language/hemp/comments
 tests/language/hemp/functions
 tests/language/hemp/hash
 tests/language/hemp/lists
+tests/language/hemp/nested
 tests/language/hemp/numbers
 tests/language/hemp/numops
 tests/language/hemp/parens

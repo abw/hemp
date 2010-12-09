@@ -1,3 +1,9 @@
+-- test single string
+[% "Hello\nWorld!" %]
+-- expect
+Hello
+World!
+
 -- test single quoted strings
 [% 'foo' ' ' 'foo bar' '' %]
 

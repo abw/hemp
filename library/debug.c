@@ -46,7 +46,7 @@ void hemp_debug_col(
         va_list args;
         va_start(args, format);
         fprintf(
-            stderr, "%s%5ld %s%-20s %s", 
+            stderr, "%s%6ld %s%-20s %s", 
             HEMP_DEBUG_LINE_COL, line,
             HEMP_DEBUG_FILE_COL, file,
             colour
@@ -63,7 +63,7 @@ void
 hemp_debug_token(
     hemp_string type,
     hemp_string str,
-    hemp_pos len
+    hemp_pos    len
 ) {
     static char buffer[80];
     if (len > 79)
@@ -72,5 +72,4 @@ hemp_debug_token(
     buffer[len] = '\0';
     hemp_debug_scan("[%s:%s]\n", type, buffer);
 } 
-
 

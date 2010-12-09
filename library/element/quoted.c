@@ -19,17 +19,16 @@ HEMP_ELEMENT(hemp_element_squote) {
 }
 
 
-HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
-    hemp_string     src       = *srcptr;
-    hemp_bool       is_source = HEMP_TRUE;
+HEMP_SCANNER(hemp_element_squote_scanner) {
+    hemp_element    element   = (hemp_element) self;
+    hemp_string     src       = template->scanptr;
+    hemp_string     start     = template->scanptr;
     hemp_string     end       = element->end;
     hemp_size       endlen    = strlen(end);
+    hemp_bool       is_source = HEMP_TRUE;
     hemp_fragment   fragment;
 
     hemp_debug_call("hemp_element_squote_scanner()\n");
-
-    if (! end)
-        end = start;
 
     /* walk to the end */
     while (1) {
@@ -40,19 +39,19 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
             src++;
             is_source = HEMP_FALSE;
         }
-        if (! *++src)
-            HEMP_SCAN_ERROR(BADQUOTE, HEMP_STR_QUOTED, start);
+        if (! *++src) {
+            hemp_fatal("Unterminated single quote: %s\n", start);  
+            // FIXME
+            // HEMP_SCANNER_ERROR(template, BADQUOTE, HEMP_STR_QUOTED, start);
+        }
     }
 
     /* skip over the terminating character(s) */
     end  = src;
     src += endlen;
 
-    hemp_debug_token("SQUOTE", start, src-start);
-
-    fragment = hemp_fragments_add_fragment(
-        tmpl->fragments, element,
-        start, pos, src - start
+    fragment = hemp_template_scanned_to(
+        template, element, src
     );
 
     if (is_source) {
@@ -61,7 +60,7 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
     }
     else {
         /* we need to create a new string with escapes resolved */
-        hemp_string sqfrom   = *srcptr;
+        hemp_string sqfrom   = start;
         hemp_string squote   = (hemp_string) hemp_mem_alloc(end - sqfrom + 1);
         fragment->args.value = hemp_str_val(squote);
                     
@@ -77,8 +76,7 @@ HEMP_SCAN_FUNC(hemp_element_squote_scanner) {
         *squote = HEMP_NUL;
     }
 
-    *srcptr = src;
-    return fragment;
+    return HEMP_TRUE;
 }
 
 
@@ -99,19 +97,16 @@ HEMP_ELEMENT(hemp_element_dquote) {
 }
 
 
-HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
-    hemp_string     src       = *srcptr;
-    hemp_bool       is_source = HEMP_TRUE;
+HEMP_SCANNER(hemp_element_dquote_scanner) {
+    hemp_element    element   = (hemp_element) self;
+    hemp_string     src       = template->scanptr;
+    hemp_string     start     = template->scanptr;
     hemp_string     end       = element->end;
     hemp_size       endlen    = strlen(end);
+    hemp_bool       is_source = HEMP_TRUE;
     hemp_fragment   fragment;
 
     hemp_debug_call("hemp_element_dquote_scanner()\n");
-
-    if (! end)
-        end = start;
-
-//  hemp_debug("end token: %s  length: %d\n", end, endlen);
 
     /* walk to the end */
     while (1) {
@@ -122,19 +117,19 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
             src++;
             is_source = HEMP_FALSE;
         }
-        if (! *++src)
-            HEMP_SCAN_ERROR(BADQUOTE, HEMP_STR_QUOTED, start);
+        if (! *++src) {
+            hemp_fatal("bad quoted string: %s\n", start);
+            // FIXME
+            // HEMP_SCAN_ERROR(BADQUOTE, HEMP_STR_QUOTED, start);
+        }
     }
 
     /* skip over the terminating character(s) */
     end  = src;
     src += endlen;
 
-    hemp_debug_token("SQUOTE", start, src-start);
-
-    fragment = hemp_fragments_add_fragment(
-        tmpl->fragments, element,
-        start, pos, src - start
+    fragment = hemp_template_scanned_to(
+        template, element, src
     );
 
     if (is_source) {
@@ -143,7 +138,7 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
     }
     else {
         /* we need to create a new string with escapes resolved */
-        hemp_string dqfrom   = *srcptr;
+        hemp_string dqfrom   = start;
         hemp_string dquote   = (hemp_string) hemp_mem_alloc(end - dqfrom + 1);        // CHECK ME
         fragment->args.value = hemp_str_val(dquote);
                     
@@ -184,9 +179,7 @@ HEMP_SCAN_FUNC(hemp_element_dquote_scanner) {
         *dquote = HEMP_NUL;
     }
 
-    *srcptr = src;
-
-    return fragment;
+    return HEMP_TRUE;
 }
 
 

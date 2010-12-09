@@ -136,6 +136,8 @@ HEMP_LANGUAGE(hemp_language_hemp_new) {
     hemp_register_element(hemp, "hemp.number.*",           &hemp_element_number_elements);
     hemp_register_element(hemp, "hemp.text.*",             &hemp_element_text_elements);
 
+    hemp_register_element(hemp, "hemp.tag.inline",         &hemp_element_tag_inline);
+
     hemp_register_grammars(hemp, hemp_grammars_hemp);
     hemp_register_tags(hemp, hemp_tags_hemp);
 
