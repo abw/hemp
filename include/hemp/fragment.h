@@ -241,25 +241,25 @@ void hemp_fragment_dump_exprs(
  * Macros for invoking parsing methods
  *--------------------------------------------------------------------------*/
 
-#define hemp_parse_method(fp, method, ...) (                    \
+#define hemp_parse_method(fp, method, retval, ...) (            \
     (*fp)->type->parse_##method                                 \
         ? (*fp)->type->parse_##method(fp, __VA_ARGS__)          \
-        : NULL                                                  \
+        : retval                                                \
 )
 
-#define hemp_parse_prefix(fp, ...)                              \
-    hemp_parse_method(fp, prefix, __VA_ARGS__)
+#define hemp_parse_prefix(fp, sc, pr, fr)                       \
+    hemp_parse_method(fp, prefix, NULL, sc, pr, fr)
 
-#define hemp_parse_postfix(fp, ...)                             \
-    hemp_parse_method(fp, postfix, __VA_ARGS__)
+#define hemp_parse_postfix(fp, sc, pr, fr, lhs)                 \
+    hemp_parse_method(fp, postfix, lhs, sc, pr, fr, lhs)
 
 #define hemp_parse_fixed(fp, ...)                               \
-    hemp_parse_method(fp, fixed, __VA_ARGS__)
+    hemp_parse_method(fp, fixed, NULL, __VA_ARGS__)
 
 #define hemp_parse_params(fp, ...)                              \
-    hemp_parse_method(fp, params, __VA_ARGS__)
+    hemp_parse_method(fp, params, NULL, __VA_ARGS__)
 
 #define hemp_parse_body(fp, ...)                                \
-    hemp_parse_method(fp, body, __VA_ARGS__)
+    hemp_parse_method(fp, body, NULL, __VA_ARGS__)
 
 #endif /* HEMP_FRAGMENT_H */

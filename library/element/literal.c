@@ -13,13 +13,22 @@ HEMP_ELEMENT(hemp_element_literal) {
 
 
 HEMP_PREFIX(hemp_element_literal_prefix) {
-    hemp_debug_call("hemp_element_literal_prefix()\n"); 
+    hemp_debug_parse("hemp_element_literal_prefix() at %s\n", (*fragptr)->type->name); 
     hemp_fragment fragment = *fragptr;
+
+    if (hemp_advance(fragptr)) {
+        hemp_debug_msg("advanced to %s\n", (*fragptr)->type->name);
+        return hemp_parse_postfix(fragptr, scope, precedence, force, fragment);
+    }
+    else {
+        hemp_debug_msg("no advanced, returning %s\n", (*fragptr)->type->name);
+    }
 
     return hemp_advance(fragptr)
         ? hemp_parse_postfix(fragptr, scope, precedence, force, fragment)
         : fragment;
 }
+
 
 
 HEMP_OUTPUT(hemp_element_literal_text) {
