@@ -92,11 +92,11 @@ hemp_factory_constructor(
 lookup:
     if (splits) {
         int n;
-        hemp_string_split_p split;
+        hemp_str_split split;
         hemp_action wildcard;
             
         for (n = splits->length - 1; n >= 0; n--) {
-            split = (hemp_string_split_p) hemp_val_ptr( hemp_list_item(splits, n) );
+            split = (hemp_str_split) hemp_val_ptr( hemp_list_item(splits, n) );
             snprintf((char *) wildname, HEMP_BUFFER_SIZE, "%s.*", split->left);
 
             hemp_debug_factory("factory looking for [%s]\n", wildname);

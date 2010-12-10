@@ -22,10 +22,10 @@ struct hemp_document {
     hemp_action     scanner;
 
     /* these don't really belong here but it'll do for now */
-    hemp_pos        scanpos;
-    hemp_string     scanptr;
-    hemp_string     scantok;
-    hemp_stack      scantags;
+    hemp_string     scanptr;    /* position in source string during scanning */
+    hemp_string     scantok;    /* start of current token being scanned      */
+    hemp_pos        scanpos;    /* byte position of scanptr (can we compute this?) */
+    hemp_stack      scantags;   /* stack of nested tags                 */
 };
 
 

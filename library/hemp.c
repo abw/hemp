@@ -490,15 +490,33 @@ hemp_error_text(
     hemp_error error
 ) {
     hemp_document doc = error->document;
-    hemp_text text;
-    hemp_string  buffer;
+    hemp_text     text;
+    hemp_string   buffer;
     
     if (doc) {
+        struct hemp_str_pos spos = hemp_string_position(
+            doc->source->text,
+            doc->scantok
+        );
+        hemp_debug_msg("ok\n");
+
+        static hemp_char extract[80];
+        hemp_string s = spos.extract;
+        hemp_string x = (hemp_string) extract;
+        hemp_pos    n = 78;
+
+        while (n-- && *s && *s != HEMP_LF && *s != HEMP_CR) {
+            *x++ = *s++;
+        }
+        *x = HEMP_NUL;
+
         asprintf(
             &buffer, 
-            "error at pos %d of %s:\n   Error: %s\n  Source: %s",
-            doc->scanpos, hemp_source_name(doc->source), error->message,
-            doc->scanptr
+            "Error at line %ld, column %ld (position %ld) of %s:\n   Error: %s\n  Source: %s\n%*s^ here\n",
+            spos.line, spos.column, spos.position,
+            hemp_source_name(doc->source), 
+            error->message, (hemp_string) extract,
+            10 + spos.column, " "
         );
         text = hemp_text_from_string(buffer);
     }

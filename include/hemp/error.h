@@ -12,7 +12,6 @@
 typedef enum { 
     HEMP_ERROR_NONE = 0,
     HEMP_ERROR_UNKNOWN,
-    HEMP_ERROR_MALLOC,
     HEMP_ERROR_MEMORY,
     HEMP_ERROR_MISSING,
     HEMP_ERROR_INVALID,
@@ -31,6 +30,7 @@ typedef enum {
 
 
 extern hemp_string hemp_errmsg[];
+
 
 
 /*--------------------------------------------------------------------------

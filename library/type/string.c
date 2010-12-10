@@ -87,8 +87,8 @@ hemp_string_extract(
     hemp_string from,
     hemp_string to
 ) {
-    hemp_size size = to - from;
-    hemp_string  str  = hemp_mem_alloc(size + 1);
+    hemp_size   size = to - from;
+    hemp_string str  = hemp_mem_alloc(size + 1);
     
     if (! str)
         hemp_mem_fail("string extract");
@@ -142,7 +142,7 @@ hemp_string_splits(
     hemp_size tlen = strlen(token);
     hemp_string  from  = source, to;
     hemp_pos  pos  = 0;
-    hemp_string_split_p split;
+    hemp_str_split split;
     
     /* we're dynamically allocating memory for each directory so we must
      * ensure that the list has a cleaner function associated with it that
@@ -159,10 +159,10 @@ hemp_string_splits(
          * we only need one call to malloc() and another to free() (called by 
          * the generic list cleaner installed above.
          */
-        split = (hemp_string_split_p) hemp_mem_alloc(
-            sizeof(struct hemp_string_split_s) + slen
+        split = (hemp_str_split) hemp_mem_alloc(
+            sizeof(struct hemp_str_split) + slen
         );
-        split->left = (hemp_string) split + sizeof(struct hemp_string_split_s);
+        split->left = (hemp_string) split + sizeof(struct hemp_str_split);
         strcpy(split->left, source);
         hemp_list_push(list, hemp_ptr_val(split));
 
@@ -413,6 +413,37 @@ hemp_string_nwords(
 
     return list;
 };
+
+
+struct hemp_str_pos
+hemp_string_position(
+    hemp_string string,
+    hemp_string marker
+) {
+    hemp_string scan = string;
+    struct hemp_str_pos str_pos;
+
+    str_pos.position = marker - string;
+    str_pos.extract  = string;
+    str_pos.line     = 1;
+
+    hemp_debug_msg("computing of position from %p to %p\n", string, marker);
+
+    while ( (scan = hemp_string_next_line(scan)) && scan < marker ) {
+        hemp_debug_msg("- line %d:\n", str_pos.line);
+        str_pos.extract = scan;
+        str_pos.line++;
+    }
+    str_pos.column = marker - str_pos.extract;
+
+    hemp_debug_msg(
+        "position for string from %p to %p is pos:%ld  line:%ld  col:%ld\n", 
+        string, marker, str_pos.position, str_pos.line, str_pos.column
+    );
+
+    return str_pos;
+}
+
 
 
 //HEMP_DO_INLINE hemp_bool

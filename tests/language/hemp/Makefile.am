@@ -1,19 +1,19 @@
-#check_PROGRAMS  =    quotes
+check_PROGRAMS  =    quotes
 
-check_PROGRAMS  =   assign      \
-                    boolops     \
-                    comments    \
-                    functions   \
-                    hash        \
-                    lists       \
-                    nested      \
-                    numbers     \
-                    numops      \
-                    parens      \
-                    quotes      \
-                    textops     \
-                    unplugged   \
-                    words
+#check_PROGRAMS  =   assign      \
+#                    boolops     \
+#                    comments    \
+#                    functions   \
+#                    hash        \
+#                    lists       \
+#                    nested      \
+#                    numbers     \
+#                    numops      \
+#                    parens      \
+#                    quotes      \
+#                    textops     \
+#                    unplugged   \
+#                    words
 
 TESTS           = $(check_PROGRAMS)
 LDADD           = ../../../library/libhemp.la

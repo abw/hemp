@@ -5,7 +5,6 @@
 hemp_string hemp_errmsg[] = {
     "No error",
     "Unknown error",
-    "Memory allocation failed",
     "Failed to allocate memory for a new %s",
     "No %s specified",
     "Invalid %s specified: %s",

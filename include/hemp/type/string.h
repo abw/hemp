@@ -9,12 +9,20 @@
  * type definitions
  *--------------------------------------------------------------------------*/
 
-struct hemp_string_split_s {
+struct hemp_str_split {
     hemp_string     left;
     hemp_string     right;
 };
 
-typedef struct hemp_string_split_s * hemp_string_split_p;
+struct hemp_str_pos {
+    hemp_pos        position;   /* byte offset 0 to n-1     */
+    hemp_pos        line;       /* line number, 1 to n      */
+    hemp_pos        column;     /* column number, 1 to n    */
+    hemp_string     extract;
+};
+
+typedef struct hemp_str_split * hemp_str_split;
+typedef struct hemp_str_pos   * hemp_str_pos;
 
 
 
@@ -116,6 +124,12 @@ hemp_list
 hemp_string_nwords(
     hemp_string     string,
     hemp_size       max
+);
+
+struct hemp_str_pos
+hemp_string_position(
+    hemp_string string,
+    hemp_string marker
 );
 
 
