@@ -4,7 +4,6 @@ jmp_buf state;
 
 
 void test_error1();
-void test_error2();
 void test_error3();
 void test_error4();
 void test_error_object();
@@ -15,10 +14,10 @@ void thrower(hemp_errno, char *msg);
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(10);
+    plan(9);
 
     test_error1();
-    test_error2();
+    /* test_error2() has been deprecated */
     test_error3();
     test_error_object();
     test_hemp_throw();
@@ -48,21 +47,6 @@ void test_error1() {
     }
 }
 
-
-void test_error2() {
-    /* tmp hack - global error buffer */
-    _HEMP_TRY
-        _HEMP_THROW(HEMP_ERROR_INVALID);
-        fail("returned from thrower (this should not happen)");
-
-    _HEMP_CATCH(HEMP_ERROR_MISSING)
-        fail("caught HEMP_ERROR_MISSING");
-
-    _HEMP_CATCH(HEMP_ERROR_INVALID)
-        pass("caught HEMP_ERROR_INVALID");
-
-    _HEMP_END
-}
 
 
 void test_error3() {

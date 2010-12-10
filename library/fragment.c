@@ -8,15 +8,6 @@
 hemp_fragment
 hemp_fragment_init(
     hemp_fragment   fragment,
-    hemp_element    element,
-    hemp_string     token,
-    hemp_pos        position,
-    hemp_size       length
-);
-
-hemp_fragment
-hemp_fragment_init(
-    hemp_fragment   fragment,
     hemp_element    type, 
     hemp_string     token, 
     hemp_pos        position, 
@@ -31,7 +22,7 @@ hemp_fragment_init(
     fragment->position  = position;
     fragment->length    = length;
     fragment->flags     = type->flags;
-// TODO: should we zero this memory?
+//  TODO: should we zero this memory?
 //  fragment->value    = NULL;
 
     return fragment;

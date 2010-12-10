@@ -427,19 +427,19 @@ hemp_string_position(
     str_pos.extract  = string;
     str_pos.line     = 1;
 
-    hemp_debug_msg("computing of position from %p to %p\n", string, marker);
+//  hemp_debug_msg("computing of position from %p to %p\n", string, marker);
 
     while ( (scan = hemp_string_next_line(scan)) && scan < marker ) {
-        hemp_debug_msg("- line %d:\n", str_pos.line);
+//      hemp_debug_msg("- line %d:\n", str_pos.line);
         str_pos.extract = scan;
         str_pos.line++;
     }
     str_pos.column = marker - str_pos.extract;
 
-    hemp_debug_msg(
-        "position for string from %p to %p is pos:%ld  line:%ld  col:%ld\n", 
-        string, marker, str_pos.position, str_pos.line, str_pos.column
-    );
+//  hemp_debug_msg(
+//      "position for string from %p to %p is pos:%ld  line:%ld  col:%ld\n", 
+//      string, marker, str_pos.position, str_pos.line, str_pos.column
+//  );
 
     return str_pos;
 }

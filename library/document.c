@@ -9,14 +9,15 @@ hemp_document_new(
     hemp_document document;
     HEMP_ALLOCATE(document);
 
-    document->dialect  = dialect;
-    document->source   = source;
-//    document->tagset   = hemp_tagset_new(document);
-    document->scope    = hemp_scope_new(dialect->hemp);
-    document->fragments = hemp_fragments_new(dialect->hemp, 0);
-    document->tree     = NULL;
-    document->scanner  = NULL;
-    document->scantags = NULL;
+    document->dialect   = dialect;
+    document->source    = source;
+    document->scope     = hemp_scope_new(dialect->hemp);
+    document->fragments = hemp_fragments_new(document, 0);
+    document->tree      = NULL;
+    document->scanner   = NULL;
+    document->scantags  = NULL;
+
+//  document->tagset   = hemp_tagset_new(document);
         
     return document;
 }

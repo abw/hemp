@@ -498,8 +498,8 @@ hemp_error_text(
             doc->source->text,
             doc->scantok
         );
-        hemp_debug_msg("ok\n");
 
+        // TODO: clean this up
         static hemp_char extract[80];
         hemp_string s = spos.extract;
         hemp_string x = (hemp_string) extract;
@@ -512,12 +512,13 @@ hemp_error_text(
 
         asprintf(
             &buffer, 
-            "Error at line %ld, column %ld (position %ld) of %s:\n   Error: %s\n  Source: %s\n%*s^ here\n",
-            spos.line, spos.column, spos.position,
+            "Error at line %ld, column %ld of %s:\n   Error: %s\n  Source: %s\n%*s^ here\n",
+            spos.line, spos.column,
             hemp_source_name(doc->source), 
             error->message, (hemp_string) extract,
             10 + spos.column, " "
         );
+
         text = hemp_text_from_string(buffer);
     }
     else {
@@ -535,7 +536,8 @@ hemp_error_throw(
 ) {
     hemp_debug_call("hemp_error_throw()\n");
     error->parent = hemp->error;
-    hemp->error = error;
+    hemp->error   = error;
+//    HEMP_JUMP(HEMP_JUMP_ERROR);
     HEMP_THROW(error->number);
 }
 

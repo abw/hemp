@@ -1,3 +1,5 @@
+#check_PROGRAMS  =   namespace
+
 check_PROGRAMS  =   action      \
                     codec       \
                     context     \

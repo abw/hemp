@@ -38,28 +38,27 @@ Some text [% 123 %] more text [% '456' %]
 -- expect --
 Some text 123 more text 456
 
--- start --
-
 -- test unterminated single quoted string
 [% 'oops %] oh dear!
 
 -- error
-Error at line 1 of "unterminated single quoted string" test:
-    Error: Unterminated quoted string
-   Source: [% 'oops %] oh dear!
-              ^ here
+Error at line 1, column 3 of text:
+   Error: Unterminated quoted string, missing closing '
+  Source: [% 'oops %] oh dear!
+             ^ here
 
 -- test unterminated double quoted string
 You
 really [% "suck %] at this
 -- error
-Error at line 2 of "unterminated double quoted string" test:
-    Error: Unterminated quoted string
-   Source: really [% "suck %] at this
-                     ^ here
-
+Error at line 2, column 10 of text:
+   Error: Unterminated quoted string, missing closing "
+  Source: really [% "suck %] at this
+                    ^ here
 
 -- stop --
+
+
 
 # NOTE: the next test only passes when a dedicated q<< >> quote operator
 # is forced into the grammar.  Need to figure out a nice way for test 

@@ -13,9 +13,9 @@ int main(
 
 void test_fragments() {
     hemp_hemp hemp = hemp_new();
-    ok( hemp, "created hemp" );
-
-    hemp_fragments fragments = hemp_fragments_new(hemp, 0);
+    ok( hemp, "created hemp object" );
+    
+    hemp_fragments fragments = hemp_fragments_new(NULL, 0);
     ok( fragments, "created fragments" );
     
     hemp_fragment eof = hemp_fragments_add_eof(fragments, 0);

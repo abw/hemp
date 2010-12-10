@@ -6,7 +6,7 @@ void test_namespace();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(15);
+    plan(17);
     test_namespace();
     return done();
 }
@@ -23,6 +23,7 @@ void test_namespace() {
 
     hemp_namespace bar = hemp_namespace_child(foo, "bar");
     ok( bar, "created foo.bar namespace" );
+    is( bar->path, "foo.bar", "path is set: foo.bar" );
     is( bar->name, "bar", "name is set: bar" );
     ok( bar->parent == foo, "bar parent is foo" );
     is( bar->parent->name, "foo", "bar's parent is foo" );
@@ -33,6 +34,7 @@ void test_namespace() {
 
     hemp_namespace wam = hemp_namespace_instance("foo.bar.baz.wam");
     ok( wam, "fetched foo.bar.baz.wam namespace" );
+    is( wam->path, "foo.bar.baz.wam", "wam path");
     ok( 
         wam->parent->parent->id == bar->id, 
         "foo.bar.baz.wam has correct grandparent" 

@@ -315,13 +315,6 @@
     hemp_error_throw(document->dialect->hemp, _hemp_err);   \
 })
 
-#define HEMP_SCAN_ERROR(document, error_type, ...)          \
-    hemp_document_errmsg(                                   \
-        document,                                           \
-        HEMP_ERROR_##error_type,                            \
-        __VA_ARGS__                                         \
-    )                                                       \
-
 
 
 /*--------------------------------------------------------------------------

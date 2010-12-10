@@ -44,12 +44,12 @@ hemp_pool_take(
 ) {
     hemp_memory value;
 
-//  hemp_debug_mem("taking from pool at %p with slab at %p\n", pool, pool->slab);
+//  hemp_debug_msg("taking from pool at %p with slab at %p\n", pool, pool->slab);
 
     if (pool->used == pool->capacity)
         hemp_pool_grow(pool);
 
-//  hemp_debug_mem("Returning pool item %d at %p\n", pool->used, pool->next);
+//  hemp_debug_msg("Returning pool item %d at %p\n", pool->used, pool->next);
 
     value = pool->next;
     pool->next += pool->size;

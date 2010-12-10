@@ -4,8 +4,10 @@
 struct hemp_global {
     hemp_size       n_hemps;
     hemp_u16        namespace_id;
-    hemp_hash       namespaces;
+    hemp_namespace  namespace;
     hemp_hash       modules;
+    /* shortcut to hemp.element namespace which gets used often */
+    hemp_namespace  elements;
 };
 
 extern struct hemp_global HempGlobal;

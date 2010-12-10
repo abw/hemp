@@ -7,10 +7,17 @@
 
 struct hemp_namespace {
     hemp_u16        id;
+    hemp_string     path;
     hemp_string     name;
     hemp_namespace  parent;
     hemp_hash       children;
 };
+
+//struct hemp_namespaces {
+//    hemp_u16        next_id;
+//    hemp_string     name;
+//    hemp_hash       namespaces;
+//};
 
 
 /*--------------------------------------------------------------------------
@@ -20,19 +27,19 @@ struct hemp_namespace {
 hemp_namespace
 hemp_namespace_init(
     hemp_u16        id,
-    hemp_string     name
-);
-
-hemp_namespace
-hemp_namespace_subspace(
-    hemp_hash       hash,
     hemp_string     name,
     hemp_namespace  parent
 );
 
 hemp_namespace
+hemp_namespace_child(
+    hemp_namespace  namespace,
+    hemp_string     name
+);
+
+hemp_namespace
 hemp_resolve_namespace(
-    hemp_string     fullname
+    hemp_string     path
 );
 
 void
@@ -49,6 +56,7 @@ hemp_namespace_free_child(
 
 
 
+
 /*--------------------------------------------------------------------------
  * macros
  *--------------------------------------------------------------------------*/
@@ -58,8 +66,8 @@ hemp_namespace_free_child(
 
 
 #define hemp_namespace_root(name)                               \
-    hemp_namespace_subspace(                                    \
-        HempGlobal.namespaces, name, NULL                       \
+    hemp_namespace_child(                                    \
+        HempGlobal.namespace, name                              \
     )
 
 #define hemp_namespace_instance(name) (                         \
@@ -71,11 +79,6 @@ hemp_namespace_free_child(
 #define hemp_namespace_id(name) (                               \
     hemp_namespace_instance(name)->id                           \
 )
-
-#define hemp_namespace_child(namespace, name)                   \
-    hemp_namespace_subspace(                                    \
-        namespace->children, name, namespace                    \
-    )
 
 
 #endif /* HEMP_NAMESPACE_H */

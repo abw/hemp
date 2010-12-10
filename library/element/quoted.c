@@ -1,5 +1,9 @@
 #include <hemp/element.h>
 
+#define HEMP_THROW_UNTERM_STRING(doc, end)      \
+    hemp_document_errmsg(doc, HEMP_ERROR_UNTERM, HEMP_STR_QUOTED, end)
+
+
 
 /*--------------------------------------------------------------------------
  * single quoted strings
@@ -40,7 +44,7 @@ HEMP_SCANNER(hemp_element_squote_scanner) {
             is_source = HEMP_FALSE;
         }
         if (! *++src) {
-            HEMP_SCAN_ERROR(document, BADQUOTE, HEMP_STR_QUOTED, start);
+            HEMP_THROW_UNTERM_STRING(document, end);
         }
     }
 
@@ -116,7 +120,7 @@ HEMP_SCANNER(hemp_element_dquote_scanner) {
             is_source = HEMP_FALSE;
         }
         if (! *++src) {
-            HEMP_SCAN_ERROR(document, BADQUOTE, HEMP_STR_QUOTED, start);
+            HEMP_THROW_UNTERM_STRING(document, end);
         }
     }
 

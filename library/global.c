@@ -11,8 +11,9 @@
 struct hemp_global HempGlobal = {
     0,          /* nhemps - number of live hemp objects   */
     0,          /* namespaces allocated (+1 for next id)  */
-    NULL,       /* root namespace hash                    */
-    NULL        /* module hash                            */
+    NULL,       /* root namespace                         */
+    NULL,       /* module hash                            */
+    NULL        /* element namespace                      */
 };
 
 
@@ -79,11 +80,11 @@ void hemp_global_init_namespaces(
     hemp_global global
 ) {
     /* return silently if we've already done this */
-    if (global->namespaces)
+    if (global->namespace)
         return;
 
     global->namespace_id = 0;
-    global->namespaces   = hemp_hash_new();
+    global->namespace    = hemp_namespace_init(0, "", NULL);
 }
 
 
@@ -91,12 +92,12 @@ void hemp_global_free_namespaces(
     hemp_global global
 ) {
     /* return silently if this has already been done */
-    if (! global->namespaces)
+    if (! global->namespace)
         return;
 
-    hemp_hash_each(global->namespaces, &hemp_namespace_free_child);
-    hemp_hash_free(global->namespaces);
-    global->namespaces   = NULL;
+    hemp_namespace_free(global->namespace);
+    global->elements     = NULL;
+    global->namespace    = NULL;
     global->namespace_id = 0;
 }
 

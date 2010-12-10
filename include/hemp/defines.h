@@ -63,6 +63,7 @@
 #define HEMP_STR_SPACE      " "
 #define HEMP_STR_DOT        "."
 #define HEMP_STR_STAR       "*"
+#define HEMP_STR_NAMESEP    "."
 
 /* format strings */
 #define HEMP_FMT_INT        "%d"
@@ -74,6 +75,10 @@
 #define HEMP_TEXT           "text"
 #define HEMP_FILE           "file"
 #define HEMP_TT3            "tt3"
+
+#define HEMP_NS_HEMP        "hemp"
+#define HEMP_NS_ELEMENT     "hemp.element"
+#define HEMP_NS_ERROR       "hemp.error"
 
 /* dummy arguments(s) as a fallback for generating error messages */
 #define HEMP_WTF            "<?>"

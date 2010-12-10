@@ -3,10 +3,10 @@
 
 hemp_fragments
 hemp_fragments_new(
-    hemp_hemp   hemp,
-    hemp_size   capacity
+    hemp_document   document,
+    hemp_size       capacity
 ) {
-    hemp_fragments fragments;
+    hemp_fragments  fragments;
     HEMP_ALLOCATE(fragments);
 
     if (! capacity)
@@ -19,9 +19,9 @@ hemp_fragments_new(
     );
     fragments->pool->cleaner = &hemp_fragments_free_fragment;
 
-    fragments->hemp = hemp;
-    fragments->head = NULL;
-    fragments->tail = NULL;
+    fragments->document = document;
+    fragments->head     = NULL;
+    fragments->tail     = NULL;
 
     return fragments;
 }
@@ -58,7 +58,7 @@ hemp_fragments_new_fragment(
     hemp_fragment fragment = (hemp_fragment) hemp_pool_take(
         fragments->pool
     );
-    
+
     fragment->fragments  = fragments;
     fragment->type       = type;
     fragment->token      = token;
@@ -81,6 +81,8 @@ hemp_fragments_add_fragment(
     hemp_pos        position,
     hemp_size       length
 ) {
+    hemp_debug_call("hemp_fragments_add_fragment()\n");
+
     hemp_fragment fragment = hemp_fragments_new_fragment(
         fragments, type, token, position, length
     );

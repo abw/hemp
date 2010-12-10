@@ -11,7 +11,7 @@ hemp_string hemp_errmsg[] = {
     "Duplicate %s specified: %s",
     "Number is too large: %s",
     "Invalid token: %s",
-    "Unterminated %s: %s",
+    "Unterminated %s, missing closing %s",
     "Cannot convert %s to %s: %s",
     "%s value",
     "Cannot fetch '%s' from %s",
