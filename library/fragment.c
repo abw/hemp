@@ -14,16 +14,20 @@ hemp_fragment_init(
     hemp_size       length
 ) {
     HEMP_INSTANCE(fragment);
-        
-    fragment->fragments = NULL;
-    fragment->next      = NULL;
-    fragment->type      = type;
-    fragment->token     = token;
-    fragment->position  = position;
-    fragment->length    = length;
-    fragment->flags     = type->flags;
-//  TODO: should we zero this memory?
-//  fragment->value    = NULL;
+
+    /* NOTE: this function isn't used in the general case because 
+     * fragments are slab-allocated by the fragments module - see 
+     * hemp_fragments_new_fragment() in fragments.c
+     */
+    fragment->fragments  = NULL;
+    fragment->next       = NULL;
+    fragment->branch     = NULL;
+    fragment->type       = type;
+    fragment->token      = token;
+    fragment->position   = position;
+    fragment->length     = length;
+    fragment->flags      = type->flags;
+    fragment->args.value = HempMissing;
 
     return fragment;
 }

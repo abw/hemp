@@ -66,6 +66,7 @@ hemp_fragments_new_fragment(
     fragment->length     = length;
     fragment->flags      = type->flags;
     fragment->next       = NULL;
+    fragment->branch     = NULL;
 
 //  hemp_debug("created new %s fragment at %p\n", type->name, fragment);
 

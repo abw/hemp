@@ -43,9 +43,11 @@ typedef union {
 }   hemp_opargs;
 
 struct hemp_fragment {
+    // TODO: clean this up and remove some superfluous items
     hemp_element    type;
     hemp_fragments  fragments;
     hemp_fragment   next;
+    hemp_fragment   branch;
     hemp_string     token;
     hemp_pos        position;
     hemp_size       length;
@@ -260,6 +262,9 @@ hemp_fragment_debug(
 
 #define hemp_parse_postfix(fp, sc, pr, fr, lhs)                 \
     hemp_parse_method(fp, postfix, lhs, sc, pr, fr, lhs)
+
+#define hemp_parse_branch(fp, ...)                              \
+    hemp_parse_method(fp, branch, NULL, __VA_ARGS__)
 
 #define hemp_parse_fixed(fp, ...)                               \
     hemp_parse_method(fp, fixed, NULL, __VA_ARGS__)

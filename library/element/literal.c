@@ -22,7 +22,6 @@ HEMP_PREFIX(hemp_element_literal_prefix) {
 }
 
 
-
 HEMP_OUTPUT(hemp_element_literal_text) {
     hemp_debug_call("hemp_element_literal_text()\n");
 

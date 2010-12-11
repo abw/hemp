@@ -58,7 +58,7 @@ After
 Hello World
 
 -- test if with separate tags
-[% if True %]Hello World[% end %]
+[% if True %]Hell[% 'o W' %]orld[% end %]
 -- expect
 Hello World
 
@@ -85,3 +85,71 @@ Hello World!
 %%  list.length " items: " list.text
 -- expect
 2 items: HelloWorld
+
+-- test if with else, true
+%% if True "foo" else "bar"
+-- expect
+foo
+
+-- test if with else, false
+%% if False "foo" else "bar"
+-- expect
+bar
+
+-- test if with else block to end
+%% if False "foo" else; "b" 'a' "r"; end
+-- expect
+bar
+
+-- test if with else block and separate tags
+[% if False "foo" else %]b[% 'a' %]r[% end %]
+-- expect
+bar
+
+-- test if with else block and curly braces
+[%  if False {
+        "foo" 
+    }
+    else {
+        "bar"
+    }
+%]
+-- expect
+bar
+
+-- test multiple ifs
+[%  if False {
+        "foo" 
+    }
+    else if True {
+        "bar"
+    }
+    else if Whatever {
+        "baz"
+    }
+%]
+-- expect
+bar
+
+-- test multiple ifs with single expressions
+[%  if False
+        "foo" 
+    else if True
+        "bar"
+    else if Whatever
+        "baz"
+%]
+-- expect
+bar
+
+-- test multiple ifs with single expressions and semi-colons
+[%  if False;
+        "foo"; 
+    else if True;
+        "bar";
+    else if Whatever;
+        "baz";
+    end;
+%]
+-- expect
+bar

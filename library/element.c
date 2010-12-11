@@ -45,6 +45,7 @@ hemp_element_new(
     /* different element types override these parsing function */
     element->parse_prefix    = NULL;
     element->parse_postfix   = NULL;
+    element->parse_branch    = NULL;
     element->parse_fixed     = NULL;
     element->parse_params    = NULL;
     element->parse_lvalue    = NULL; //&hemp_element_not_lvalue;

@@ -44,6 +44,7 @@ struct hemp_element {
     /* parsing methods */
     hemp_prefix     parse_prefix;
     hemp_postfix    parse_postfix;
+    hemp_postfix    parse_branch;
     hemp_prefix     parse_fixed;
     hemp_prefix     parse_params;
     hemp_prefix     parse_body;
@@ -165,6 +166,7 @@ HEMP_ELEMENT(hemp_element_comment);
 HEMP_PREFIX(hemp_element_space_prefix);
 HEMP_POSTFIX(hemp_element_space_postfix);
 HEMP_PREFIX(hemp_element_space_body);
+HEMP_POSTFIX(hemp_element_space_branch);
 
 hemp_bool hemp_element_terminator_matches(hemp_fragment, hemp_string);
 
@@ -422,6 +424,7 @@ HEMP_OUTPUT(hemp_element_sub_text);
 HEMP_CLEANUP(hemp_element_sub_cleanup);
 
 HEMP_ELEMENT(hemp_element_command_if);
+HEMP_ELEMENT(hemp_element_command_else);
 
 
 HEMP_ELEMENT(hemp_element_apply);

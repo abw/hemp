@@ -175,6 +175,7 @@ HEMP_ELEMENT(hemp_element_space) {
     element->parse_prefix   = &hemp_element_space_prefix;
     element->parse_postfix  = &hemp_element_space_postfix;
     element->parse_body     = &hemp_element_space_body;
+    element->parse_branch   = &hemp_element_space_branch;
     hemp_set_flag(element, HEMP_BE_WHITESPACE);
     return element;
 }
@@ -229,6 +230,15 @@ HEMP_PREFIX(hemp_element_space_body) {
 
     return hemp_advance(fragptr)
         ? hemp_parse_body(fragptr, scope, precedence, force)
+        : NULL;
+}
+
+
+HEMP_POSTFIX(hemp_element_space_branch) {
+    hemp_debug_call("hemp_element_space_branch()\n");
+
+    return hemp_advance(fragptr)
+        ? hemp_parse_branch(fragptr, scope, precedence, force, lhs)
         : NULL;
 }
 
