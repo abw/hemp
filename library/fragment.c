@@ -65,6 +65,19 @@ hemp_fragment_fragments(
 }
 
 
+HEMP_INLINE hemp_document
+hemp_fragment_document(
+    hemp_fragment fragment
+) {
+    return hemp_fragments_document(
+        hemp_fragment_fragments(
+            fragment
+        )
+    );
+}
+
+
+
 HEMP_INLINE hemp_element
 hemp_fragment_grammar_element(
     hemp_fragment fragment,

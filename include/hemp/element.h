@@ -421,6 +421,8 @@ HEMP_VALUE(hemp_element_sub_value);
 HEMP_OUTPUT(hemp_element_sub_text);
 HEMP_CLEANUP(hemp_element_sub_cleanup);
 
+HEMP_ELEMENT(hemp_element_command_if);
+
 
 HEMP_ELEMENT(hemp_element_apply);
 

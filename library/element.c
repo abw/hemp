@@ -277,7 +277,6 @@ HEMP_PREFIX(hemp_element_parse_prefix) {
 HEMP_POSTFIX(hemp_element_parse_postfix) {
     hemp_debug_call("hemp_element_parse_postfix()\n");
     hemp_fragment self = *fragptr;
-    hemp_element  type = self->type;
 
     HEMP_INFIX_LEFT_PRECEDENCE;              // is that right?
 

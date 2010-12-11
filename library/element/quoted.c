@@ -1,8 +1,5 @@
 #include <hemp/element.h>
 
-#define HEMP_THROW_UNTERM_STRING(doc, end)      \
-    hemp_document_errmsg(doc, HEMP_ERROR_UNTERM, HEMP_STR_QUOTED, end)
-
 
 
 /*--------------------------------------------------------------------------

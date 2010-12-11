@@ -82,6 +82,11 @@ hemp_fragment_fragments(
     hemp_fragment fragment
 );
 
+HEMP_INLINE hemp_document
+hemp_fragment_document(
+    hemp_fragment fragment
+);
+
 HEMP_INLINE hemp_element
 hemp_fragment_grammar_element(
     hemp_fragment fragment,
@@ -134,7 +139,6 @@ hemp_fragment_debug(
 
 #define hemp_fragment_new(element, token, position, length)     \
     hemp_fragment_init(NULL, element, token, position, length)
-
 
 #define hemp_fragment_cleanup(f)                                \
     f->type->cleanup                                            \
@@ -265,5 +269,29 @@ hemp_fragment_debug(
 
 #define hemp_parse_body(fp, ...)                                \
     hemp_parse_method(fp, body, NULL, __VA_ARGS__)
+
+#define hemp_parse_lhs_expr(fragment) ({                        \
+    hemp_fragment _hemp_expr = hemp_parse_prefix(               \
+        fragptr, scope, fragment->type->lprec, 1                \
+    );                                                          \
+    if (! _hemp_expr)                                           \
+        HEMP_THROW_NOEXPR(fragment);                            \
+    hemp_set_lhs_fragment(fragment, _hemp_expr);                \
+    _hemp_expr;                                                 \
+})
+
+#define hemp_parse_rhs_body(fragment, ...) ({                   \
+    hemp_fragment _hemp_expr = hemp_parse_body(                 \
+        fragptr, scope, fragment->type->rprec, 1                \
+    );                                                          \
+    if (! _hemp_expr)                                           \
+        HEMP_THROW_NOBODY(fragment);                            \
+    hemp_set_rhs_fragment(fragment, _hemp_expr);                \
+    _hemp_expr;                                                 \
+})
+
+
+
+
 
 #endif /* HEMP_FRAGMENT_H */

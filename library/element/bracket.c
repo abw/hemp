@@ -102,24 +102,23 @@ HEMP_ELEMENT(hemp_element_parens) {
 HEMP_POSTFIX(hemp_element_parens_postfix) {
     hemp_debug_call("hemp_element_parens_postfix()\n");
     
-    hemp_fragment  self = *fragptr;
-    hemp_element   type = self->type;
+    hemp_fragment fragment = *fragptr;
 
     HEMP_INFIX_LEFT_PRECEDENCE;
 
     /* parse the bracketed expressions */
-    self = hemp_element_brackets_parse(
+    fragment = hemp_element_brackets_parse(
         fragptr, scope, precedence, force
     );
 
-    hemp_set_flag(self, HEMP_BE_INFIX);
+    hemp_set_flag(fragment, HEMP_BE_INFIX);
 
     hemp_fragment apply = hemp_fragment_new_fragment(
-        self, "hemp.apply"
+        fragment, "hemp.apply"
     );
 
     hemp_set_lhs_fragment(apply, lhs);
-    hemp_set_rhs_fragment(apply, self);
+    hemp_set_rhs_fragment(apply, fragment);
 
     return hemp_parse_postfix(
         fragptr, scope, precedence, 0,

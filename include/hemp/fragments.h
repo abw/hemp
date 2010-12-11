@@ -61,7 +61,12 @@ hemp_bool
 hemp_fragments_free_fragment(
     hemp_memory     item
 );
-    
+
+HEMP_INLINE hemp_document
+hemp_fragments_document(
+    hemp_fragments fragments
+);
+
 void 
 hemp_fragments_dump(
     hemp_fragments  fragments

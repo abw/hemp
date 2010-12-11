@@ -1,7 +1,7 @@
 check_PROGRAMS  = hemp
 TESTS           = $(check_PROGRAMS)
-SUBDIRS         = core type language .
-#SUBDIRS         = language
+#SUBDIRS         = core type language .
+SUBDIRS         = language
 LDADD           = ../library/libhemp.la tap.o
 CFLAGS          = @CFLAGS@ \
                 -I"${top_srcdir}/include" \

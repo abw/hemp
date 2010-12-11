@@ -305,14 +305,14 @@
  * Scanning
  *--------------------------------------------------------------------------*/
 
-#define hemp_document_errmsg(document, error_no, ...) ({    \
+#define hemp_document_errmsg(doc, error_no, ...) ({         \
     hemp_error _hemp_err = hemp_error_message(              \
-        document->dialect->hemp,                            \
+        doc->dialect->hemp,                                 \
         error_no,                                           \
         __VA_ARGS__                                         \
     );                                                      \
-    _hemp_err->document = document;                         \
-    hemp_error_throw(document->dialect->hemp, _hemp_err);   \
+    _hemp_err->document = doc;                              \
+    hemp_error_throw(doc->dialect->hemp, _hemp_err);        \
 })
 
 
@@ -403,30 +403,42 @@
 
 // NOTE: this macro produces stupid debugging messages... can't be arsed to fix right now
 #define HEMP_PREFIX_PRECEDENCE                                              \
-    if (precedence && type->rprec <= precedence) {                          \
-        HEMP_PREFIX_DBG(type, precedence, "not more", "returning NULL");    \
+    if (precedence && (*fragptr)->type->rprec <= precedence) {              \
+        HEMP_PREFIX_DBG(                                                    \
+            (*fragptr)->type, precedence, "not more", "returning NULL"      \
+        );                                                                  \
         return NULL;                                                        \
     }                                                                       \
     else {                                                                  \
-        HEMP_PREFIX_DBG(type, precedence, "less", "continuing");            \
+        HEMP_PREFIX_DBG(                                                    \
+            (*fragptr)->type, precedence, "less", "continuing"              \
+        );                                                                  \
     }
 
 #define HEMP_INFIX_LEFT_PRECEDENCE                                          \
-    if (precedence && type->lprec <= precedence) {                          \
-        HEMP_LPREC_DBG(type, lhs, precedence, "not more", "returning lhs"); \
+    if (precedence && (*fragptr)->type->lprec <= precedence) {              \
+        HEMP_LPREC_DBG(                                                     \
+            (*fragptr)->type, lhs, precedence, "not more", "returning lhs"  \
+        );                                                                  \
         return lhs;                                                         \
     }                                                                       \
     else {                                                                  \
-        HEMP_LPREC_DBG(type, lhs, precedence, "less", "continuing");        \
+        HEMP_LPREC_DBG(                                                     \
+            (*fragptr)->type, lhs, precedence, "less", "continuing"         \
+        );                                                                  \
     }
 
 #define HEMP_INFIX_RIGHT_PRECEDENCE                                         \
-    if (precedence && type->lprec < precedence) {                           \
-        HEMP_LPREC_DBG(type, lhs, precedence, "less", "returning lhs");     \
+    if (precedence && (*fragptr)->type->lprec < precedence) {               \
+        HEMP_LPREC_DBG(                                                     \
+            (*fragptr)->type, lhs, precedence, "less", "returning lhs"      \
+        );                                                                  \
         return lhs;                                                         \
     }                                                                       \
     else {                                                                  \
-        HEMP_LPREC_DBG(type, lhs, precedence, "not less", "continuing");    \
+        HEMP_LPREC_DBG(                                                     \
+            (*fragptr)->type, lhs, precedence, "not less", "continuing"     \
+        );                                                                  \
     }
 
 

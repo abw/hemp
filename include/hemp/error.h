@@ -45,8 +45,11 @@ typedef enum {
     HEMP_ERROR_OVERFLOW,
     HEMP_ERROR_TOKEN,
     HEMP_ERROR_UNTERM,
+    HEMP_ERROR_NOEXPR,
+    HEMP_ERROR_NOBODY, /* 10 */
+    HEMP_ERROR_NOEND,
     HEMP_ERROR_CONVERT,
-    HEMP_ERROR_UNDEF,     /* 10 */
+    HEMP_ERROR_UNDEF,
     HEMP_ERROR_FETCH,
     HEMP_ERROR_STORE,
     HEMP_ERROR_OPTION,
@@ -212,5 +215,38 @@ void            hemp_error_throw(hemp_hemp, hemp_error);
 
 #define hemp_throw(h,...) \
     hemp_error_throw(h, hemp_error_message(h,__VA_ARGS__))
+
+
+/*--------------------------------------------------------------------------
+ * Macros of convenience
+ *--------------------------------------------------------------------------*/
+
+#define HEMP_THROW_UNTERM_STRING(doc, end)                          \
+    hemp_document_errmsg(doc, HEMP_ERROR_UNTERM, HEMP_STR_QUOTED, end)
+
+#define HEMP_THROW_FRAGMENT(fragment, ...) ({                       \
+    hemp_document _hemp_doc = hemp_fragment_document(fragment);     \
+    hemp_document_errmsg(_hemp_doc, __VA_ARGS__);                   \
+})
+
+#define HEMP_THROW_NOEXPR(fragment)             \
+    HEMP_THROW_FRAGMENT(                        \
+        fragment, HEMP_ERROR_NOEXPR,            \
+        fragment->type->start                   \
+    );             
+
+#define HEMP_THROW_NOBODY(fragment)             \
+    HEMP_THROW_FRAGMENT(                        \
+        fragment, HEMP_ERROR_NOBODY,            \
+        fragment->type->start                   \
+    );             
+
+#define HEMP_THROW_NOEND(fragment)              \
+    HEMP_THROW_FRAGMENT(                        \
+        fragment, HEMP_ERROR_NOEND,             \
+        fragment->type->start,                  \
+        fragment->type->end                     \
+    );             
+
 
 #endif /* HEMP_ERROR_H */

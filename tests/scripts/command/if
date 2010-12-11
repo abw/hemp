@@ -1,0 +1,87 @@
+-- test if True
+%% if True "Hello World"
+-- expect
+Hello World
+
+-- test if False
+Before
+%% if False "Hello World" "A"
+fter
+-- expect
+Before
+After
+
+-- test if with single expression
+%% if False "Hello World" 4 '2' "0"
+-- expect
+420
+
+-- test if with boolean ops, true
+%% if False or True "Hello World"
+-- expect
+Hello World
+
+-- test if with boolean ops, false
+Before
+%% if True and True and False "Hello World"
+After
+-- expect
+Before
+After
+
+-- test if with semi-colons and end, true
+[% if True;
+     "Hello World";
+   end
+%]
+-- expect
+Hello World
+
+-- test if with semi-colons and end, false
+Before[% if False; "Hello World"; end %]
+After
+-- expect
+Before
+After
+
+-- test if with boolean ops, false
+Before
+%% if True and True and False "Hello World"
+After
+-- expect
+Before
+After
+
+-- test if with braces
+[% if True { "Hello World" } %]
+-- expect
+Hello World
+
+-- test if with separate tags
+[% if True %]Hello World[% end %]
+-- expect
+Hello World
+
+-- test if yielding value
+%%  x = if True "Hello World";
+%%  y = (if False "Goodbye World");
+Foo
+[% x %]![% y %]
+-- expect
+Foo
+Hello World!
+
+-- test if yielding value
+%%  x = if True "Hello World";
+%%  y = (if False "Goodbye World");
+Foo
+[% x %]![% y %]
+-- expect
+Foo
+Hello World!
+
+-- test if yielding values
+%%  list = [if True "Hello"; if True "World"; if False "Blah"]
+%%  list.length " items: " list.text
+-- expect
+2 items: HelloWorld

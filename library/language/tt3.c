@@ -2,8 +2,8 @@
 
 
 static struct hemp_elements hemp_elements_tt3_command[] = {
-//    { "tt3.command.if",   &hemp_element_tt3_if   },
-    { "tt3.command.sub",  &hemp_element_sub      },
+    { "tt3.command.if",   &hemp_element_command_if  },
+    { "tt3.command.sub",  &hemp_element_sub         },
     { NULL, NULL },
 };
 
@@ -100,7 +100,7 @@ hemp_dialect_tt3_unplugged_prepare(
 HEMP_GRAMMAR(hemp_grammar_tt3_core) {
     hemp_debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_hemp_charlie(hemp, name);
-    HEMP_USE_ELEMENT1("hemp.identity.true", "True");
+    HEMP_USE_ELEMENT1("hemp.identity.true",  "True");
     HEMP_USE_ELEMENT1("hemp.identity.false", "False");
     HEMP_USE_ELEMENT2("hemp.squote", "q<<", ">>");
     HEMP_USE_OPERATOR1("hemp.terminator", "end", 0, 0);
@@ -112,8 +112,9 @@ HEMP_GRAMMAR(hemp_grammar_tt3_core) {
 HEMP_GRAMMAR(hemp_grammar_tt3_command) {
     hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_tt3_core(hemp, name);
-//    HEMP_USE_OPERATOR1("tt3.command.if", "if", 100, 100);
+    HEMP_USE_OPERATOR2("tt3.command.if",  "if",  "end", 100, 100);
     HEMP_USE_OPERATOR2("tt3.command.sub", "sub", "end", 100, 100);
+
 //    hemp_element intag = HEMP_USE_ELEMENT2("hemp.tag.inline", "[%", "%]");
 //  hemp_debug_msg("embedded tag: %p => %s\n", intag, intag->name); 
     return grammar;
@@ -146,10 +147,5 @@ HEMP_ELEMENTS(hemp_elements_tt3_command_registrar) {
 }
 
 
-HEMP_ELEMENT(hemp_element_tt3_if) {
-//    return hemp_element_tt3_TODO_symbol(hemp, symbol);
-    hemp_todo("tt3 'if' element\n");
-    return element;
-}
 
 

@@ -83,7 +83,7 @@ HEMP_PREFIX(hemp_element_sub_prefix) {
             hemp_advance(fragptr);
         }
         else {
-            hemp_fatal("missing terminator to match %s => %s\n", type->start, type->end);
+            HEMP_THROW_NOEND(self);
         }
     }
     else {

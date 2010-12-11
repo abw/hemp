@@ -113,6 +113,15 @@ hemp_fragments_add_eof(
     );
 }
 
+HEMP_INLINE hemp_document
+hemp_fragments_document(
+    hemp_fragments fragments
+) {
+    if (! fragments->document)
+        hemp_fatal("No document defined for fragments");
+    return fragments->document;
+}
+
 
 void 
 hemp_fragments_dump(
