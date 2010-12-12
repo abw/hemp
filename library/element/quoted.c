@@ -1,6 +1,10 @@
 #include <hemp/element.h>
 
 
+#define HEMP_THROW_UNTERM_STRING(doc, end)                              \
+    HEMP_SCAN_ERROR(doc, HEMP_ERROR_UNTERM, HEMP_STR_QUOTED, end)
+
+
 
 /*--------------------------------------------------------------------------
  * single quoted strings

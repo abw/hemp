@@ -415,33 +415,36 @@ hemp_string_nwords(
 };
 
 
-struct hemp_str_pos
-hemp_string_position(
-    hemp_string string,
-    hemp_string marker
+hemp_location
+hemp_string_location(
+    hemp_string     string,
+    hemp_string     marker,
+    hemp_location   location
 ) {
-    hemp_string scan = string;
-    struct hemp_str_pos str_pos;
+    hemp_string     scan = string;
 
-    str_pos.position = marker - string;
-    str_pos.extract  = string;
-    str_pos.line     = 1;
+    if (!location)
+        location = hemp_location_new();
+
+    location->position = marker - string;
+    location->extract  = string;
+    location->line     = 1;
 
 //  hemp_debug_msg("computing of position from %p to %p\n", string, marker);
 
     while ( (scan = hemp_string_next_line(scan)) && scan < marker ) {
 //      hemp_debug_msg("- line %d:\n", str_pos.line);
-        str_pos.extract = scan;
-        str_pos.line++;
+        location->extract = scan;
+        location->line++;
     }
-    str_pos.column = marker - str_pos.extract;
+    location->column = marker - location->extract;
 
 //  hemp_debug_msg(
 //      "position for string from %p to %p is pos:%ld  line:%ld  col:%ld\n", 
 //      string, marker, str_pos.position, str_pos.line, str_pos.column
 //  );
 
-    return str_pos;
+    return location;
 }
 
 

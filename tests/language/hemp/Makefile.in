@@ -33,7 +33,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = if$(EXEEXT)
+check_PROGRAMS = if$(EXEEXT) quotes$(EXEEXT)
 subdir = tests/language/hemp
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -55,6 +55,10 @@ if_SOURCES = if.c
 if_OBJECTS = if.$(OBJEXT)
 if_LDADD = $(LDADD)
 if_DEPENDENCIES = ../../../library/libhemp.la
+quotes_SOURCES = quotes.c
+quotes_OBJECTS = quotes.$(OBJEXT)
+quotes_LDADD = $(LDADD)
+quotes_DEPENDENCIES = ../../../library/libhemp.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/hemp
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -68,8 +72,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = if.c
-DIST_SOURCES = if.c
+SOURCES = if.c quotes.c
+DIST_SOURCES = if.c quotes.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -282,6 +286,9 @@ clean-checkPROGRAMS:
 if$(EXEEXT): $(if_OBJECTS) $(if_DEPENDENCIES) 
 	@rm -f if$(EXEEXT)
 	$(LINK) $(if_OBJECTS) $(if_LDADD) $(LIBS)
+quotes$(EXEEXT): $(quotes_OBJECTS) $(quotes_DEPENDENCIES) 
+	@rm -f quotes$(EXEEXT)
+	$(LINK) $(quotes_OBJECTS) $(quotes_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -290,6 +297,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/if.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/quotes.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

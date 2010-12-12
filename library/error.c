@@ -15,6 +15,7 @@ hemp_string hemp_errmsg[] = {
     "Missing expression for '%s'",
     "Missing body for '%s'",
     "Incomplete '%s' expression, missing closing '%s'",
+    "Unexpected token: %s",
     "Cannot convert %s to %s: %s",
     "%s value",
     "Cannot fetch '%s' from %s",
@@ -22,6 +23,28 @@ hemp_string hemp_errmsg[] = {
     "Invalid option: %s",
     NULL
 };
+
+hemp_location
+hemp_location_new() {
+    hemp_location location;
+    HEMP_ALLOCATE(location);
+    
+    location->position  = 0;
+    location->line      = 0;
+    location->column    = 0;
+    location->extract   = NULL;
+
+    return location;
+}
+
+
+void
+hemp_location_free(
+    hemp_location   location
+) {
+    hemp_mem_free(location);
+}
+
 
 
 hemp_error
@@ -39,6 +62,7 @@ hemp_error_new(
     error->message  = NULL;
     error->parent   = NULL;
     error->document = NULL;
+    error->location = NULL;
 
     return error;
 }
@@ -94,12 +118,40 @@ hemp_error_initfv(
 }
 
 
-hemp_error
+HEMP_INLINE hemp_error
 hemp_error_document(
     hemp_error    error,
     hemp_document document
 ) {
     error->document = document;
+    return error;
+}
+
+
+HEMP_INLINE hemp_error
+hemp_error_location(
+    hemp_error      error,
+    hemp_string     source,
+    hemp_string     marker
+) {
+    if (source && marker) {
+        /* re-use any existing location structure or creates a new one */
+        error->location = hemp_string_location(
+            source, marker, error->location
+        );
+    }
+    return error;
+}
+
+
+HEMP_INLINE hemp_error
+hemp_error_document_location(
+    hemp_error      error,
+    hemp_document   document,
+    hemp_string     marker
+) {
+    hemp_error_document(error, document);
+    hemp_error_location(error, document->source->text, marker);
     return error;
 }
 
@@ -111,8 +163,12 @@ hemp_error_free(
     /* memory allocated by vasprintf() so don't use hemp_mem_free() because 
      * we're not tracking it and it'll blow a fuse when debugging memory
      */
+    // TODO: add code to notify the memory tracker so we don't need this...
     if (error->message)
         free(error->message);
+
+    if (error->location)
+        hemp_location_free(error->location);
 
     hemp_mem_free(error);
 }

@@ -158,8 +158,12 @@ hemp_fragment_parse(
 
     hemp_fragment next_frag = *current;
     
-    if (next_frag->type != HempElementEOF)
-        hemp_fatal("Unexpected token: %s\n", next_frag->type->name);
+    if (next_frag->type != HempElementEOF) {
+        // TODO: should print token, not element type
+        HEMP_PARSE_ERROR(next_frag, HEMP_ERROR_UNEXPECTED, next_frag->type->name);
+    }
+
+    //hemp_fatal("Unexpected token: %s\n", next_frag->type->name);
 
     return block;
 }

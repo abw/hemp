@@ -425,7 +425,7 @@ HEMP_CLEANUP(hemp_element_sub_cleanup);
 
 HEMP_ELEMENT(hemp_element_command_if);
 HEMP_ELEMENT(hemp_element_command_else);
-
+HEMP_ELEMENT(hemp_element_command_elsif);
 
 HEMP_ELEMENT(hemp_element_apply);
 

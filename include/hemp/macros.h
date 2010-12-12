@@ -295,6 +295,12 @@
 #define HEMP_USE_OPERATOR2(name, start, end, lprec, rprec)          \
     hemp_grammar_add_element(grammar, name, start, end, lprec, rprec);
 
+#define HEMP_USE_COMMAND1(name, start)                              \
+    hemp_grammar_add_element(grammar, name, start, NULL, 100, 100);
+
+#define HEMP_USE_COMMAND2(name, start, end)                         \
+    hemp_grammar_add_element(grammar, name, start, end,  100, 100);
+
 #define HEMP_USE_BLOCK(name, start, prec)                           \
     hemp_grammar_add_element(grammar, name, start, NULL, prec, prec);
 

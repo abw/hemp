@@ -14,13 +14,6 @@ struct hemp_str_split {
     hemp_string     right;
 };
 
-struct hemp_str_pos {
-    hemp_pos        position;   /* byte offset 0 to n-1     */
-    hemp_pos        line;       /* line number, 1 to n      */
-    hemp_pos        column;     /* column number, 1 to n    */
-    hemp_string     extract;
-};
-
 typedef struct hemp_str_split * hemp_str_split;
 typedef struct hemp_str_pos   * hemp_str_pos;
 
@@ -126,10 +119,11 @@ hemp_string_nwords(
     hemp_size       max
 );
 
-struct hemp_str_pos
-hemp_string_position(
-    hemp_string string,
-    hemp_string marker
+hemp_location
+hemp_string_location(
+    hemp_string     string,
+    hemp_string     marker,
+    hemp_location   location
 );
 
 

@@ -1,4 +1,4 @@
-check_PROGRAMS  =    if
+check_PROGRAMS  =    if quotes
 
 #check_PROGRAMS  =   assign      \
 #                    boolops     \

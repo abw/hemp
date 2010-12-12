@@ -24,8 +24,6 @@ An incomplete list of things TODO, in no particular order.
 
 * hemp_test_plan_p vs hemp_test_plan()
 
-* hemp_string_split_p vs hemp_string_split()
-
 * hemp_element_parse_block() and various other methods need access to the 
   elements factory.  I think this should probably be encapsulated in the 
   scope object.
@@ -144,7 +142,13 @@ An incomplete list of things TODO, in no particular order.
 * Rewrite HEMP_PREFIX_PRECEDENCE, etc., so they don't rely on 'type'
 
 * Clean up scanner errors, number parse errors, etc., including quoted strings
-
+  UPDATE: scanner errors (e.g. in quoted.c) have been cleaned up, and errors
+  have been improved a little.  But there's more that can be done.  In particular
+  I want to switch to a namespace-based error type, e.g. hemp.error.scan.whatever.
+  That gives us the built-in walk-up mechanism for matching against more general
+  type handler, and it also gives us a unique id that we can use to jump with.
+  A namespace-based solution also makes it easier to render error messages from
+  templates, e.g. /path/to/hemp/templates/hemp/error/scan/whatever
 
 
 Configuration, Build and Installation
@@ -199,3 +203,5 @@ config_file reads config from document using default data dialect, e.g. json
 Let's start by making json a plugin language and have it autoload...[DONE]
 
 Then create a JSON codec to read JSON data.
+
+Rendering error messages via templates.

@@ -491,17 +491,26 @@ hemp_error_text(
 ) {
     hemp_document doc = error->document;
     hemp_text     text;
+    hemp_location location;
     hemp_string   buffer;
     
     if (doc) {
-        struct hemp_str_pos spos = hemp_string_position(
-            doc->source->text,
-            doc->scantok
-        );
+        // new way - caller sets location
+        location = error->location;
+        
+        if (! location) {
+            hemp_debug_msg("WARNING: using old-school scan position for error\n"); 
+            // old way - only works for scan time errors
+            location = error->location = hemp_string_location(
+                doc->source->text,
+                doc->scantok,
+                NULL
+            );
+        }
 
         // TODO: clean this up
         static hemp_char extract[80];
-        hemp_string s = spos.extract;
+        hemp_string s = location->extract;
         hemp_string x = (hemp_string) extract;
         hemp_pos    n = 78;
 
@@ -513,10 +522,10 @@ hemp_error_text(
         asprintf(
             &buffer, 
             "Error at line %ld, column %ld of %s:\n   Error: %s\n  Source: %s\n%*s^ here\n",
-            spos.line, spos.column,
+            location->line, location->column,
             hemp_source_name(doc->source), 
             error->message, (hemp_string) extract,
-            10 + spos.column, " "
+            10 + location->column, " "
         );
 
         text = hemp_text_from_string(buffer);

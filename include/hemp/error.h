@@ -48,6 +48,7 @@ typedef enum {
     HEMP_ERROR_NOEXPR,
     HEMP_ERROR_NOBODY, /* 10 */
     HEMP_ERROR_NOEND,
+    HEMP_ERROR_UNEXPECTED,
     HEMP_ERROR_CONVERT,
     HEMP_ERROR_UNDEF,
     HEMP_ERROR_FETCH,
@@ -67,10 +68,17 @@ extern hemp_string hemp_errmsg[];
  *--------------------------------------------------------------------------*/
 
 struct hemp_jump {
-//    hemp_jump_type  type;
+//  hemp_jump_type  type;
     hemp_jump       parent;
     hemp_jump_buf   buffer;
     hemp_pos        depth;
+};
+
+struct hemp_location {
+    hemp_pos        position;   /* byte offset 0 to n-1                     */
+    hemp_pos        line;       /* line number, 1 to n                      */
+    hemp_pos        column;     /* column number, 1 to n                    */
+    hemp_string     extract;    /* extract of source code for current line  */
 };
 
 struct hemp_error {
@@ -81,18 +89,13 @@ struct hemp_error {
     hemp_string     message;
     hemp_document   document;
     hemp_error      parent;
+    hemp_location   location;
 };
 
 
 /* this is currently in string.h as hemp_str_pos, but I think we want to 
  * make it more general...
  */
-struct hemp_location {
-    hemp_pos        position;   /* byte offset 0 to n-1     */
-    hemp_pos        line;       /* line number, 1 to n      */
-    hemp_pos        column;     /* column number, 1 to n    */
-    hemp_string     extract;
-};
 
 
 
@@ -100,6 +103,15 @@ struct hemp_location {
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
+
+hemp_location
+hemp_location_new();
+
+void
+hemp_location_free(
+    hemp_location   location
+);
+
 
 hemp_error
 hemp_error_new(
@@ -145,10 +157,33 @@ hemp_error_free(
 );
 
 
+HEMP_INLINE hemp_error
+hemp_error_document(
+    hemp_error    error,
+    hemp_document document
+);
+
+
+HEMP_INLINE hemp_error
+hemp_error_location(
+    hemp_error      error,
+    hemp_string     source,
+    hemp_string     marker
+);
+
+
+HEMP_INLINE hemp_error
+hemp_error_document_location(
+    hemp_error      error,
+    hemp_document   document,
+    hemp_string     marker
+);
+
+
 /* these are implemented in hemp.c */
 hemp_string     hemp_error_format(hemp_hemp, hemp_errno);
 //hemp_error      hemp_error_message(hemp_hemp, hemp_errno, ...);
-hemp_error      hemp_error_document(hemp_error, hemp_document);
+//hemp_error      hemp_error_document(hemp_error, hemp_document);
 void            hemp_error_throw(hemp_hemp, hemp_error);
 
 
@@ -221,32 +256,56 @@ void            hemp_error_throw(hemp_hemp, hemp_error);
  * Macros of convenience
  *--------------------------------------------------------------------------*/
 
-#define HEMP_THROW_UNTERM_STRING(doc, end)                          \
-    hemp_document_errmsg(doc, HEMP_ERROR_UNTERM, HEMP_STR_QUOTED, end)
+/* raise an error for a document at a particular source location */
 
-#define HEMP_THROW_FRAGMENT(fragment, ...) ({                       \
-    hemp_document _hemp_doc = hemp_fragment_document(fragment);     \
-    hemp_document_errmsg(_hemp_doc, __VA_ARGS__);                   \
+#define HEMP_THROW_DOCLOC(doc, loc, ...) ({                             \
+    hemp_error _hemp_err = hemp_error_message(                          \
+        doc->dialect->hemp,                                             \
+        __VA_ARGS__                                                     \
+    );                                                                  \
+    hemp_error_document_location(_hemp_err, doc, loc);                  \
+    hemp_error_throw(doc->dialect->hemp, _hemp_err);                    \
 })
+
+
+/* raise an error for a particular fragment */
+
+#define HEMP_THROW_FRAGMENT(fragment, ...) ({                           \
+    hemp_document _hemp_doc = hemp_fragment_document(fragment);         \
+    HEMP_THROW_DOCLOC(_hemp_doc, fragment->token, __VA_ARGS__);         \
+})
+
+#define HEMP_SCAN_ERROR(doc, ...)                                       \
+    HEMP_THROW_DOCLOC(doc, doc->scantok, __VA_ARGS__)
+
+#define HEMP_PARSE_ERROR(frag, ...)                                     \
+    HEMP_THROW_FRAGMENT(frag, __VA_ARGS__)
+
+
+#define HEMP_THROW_TOKEN(fragment)              \
+    HEMP_THROW_FRAGMENT(                        \
+        fragment, HEMP_ERROR_TOKEN,             \
+        fragment->type->start                   \
+    );
 
 #define HEMP_THROW_NOEXPR(fragment)             \
     HEMP_THROW_FRAGMENT(                        \
         fragment, HEMP_ERROR_NOEXPR,            \
         fragment->type->start                   \
-    );             
+    );
 
 #define HEMP_THROW_NOBODY(fragment)             \
     HEMP_THROW_FRAGMENT(                        \
         fragment, HEMP_ERROR_NOBODY,            \
         fragment->type->start                   \
-    );             
+    );
 
 #define HEMP_THROW_NOEND(fragment)              \
     HEMP_THROW_FRAGMENT(                        \
         fragment, HEMP_ERROR_NOEND,             \
         fragment->type->start,                  \
         fragment->type->end                     \
-    );             
+    );
 
 
 #endif /* HEMP_ERROR_H */
