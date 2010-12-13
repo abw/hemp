@@ -3,6 +3,7 @@
 
 HEMP_ELEMENT(hemp_element_command_if);
 HEMP_PREFIX(hemp_element_command_if_prefix);
+HEMP_POSTFIX(hemp_element_command_if_postfix);
 HEMP_VALUE(hemp_element_command_if_value);
 HEMP_OUTPUT(hemp_element_command_if_text);
 HEMP_OUTPUT(hemp_element_command_if_values);
@@ -23,6 +24,7 @@ HEMP_ELEMENT(hemp_element_command_if) {
     hemp_debug_call("hemp_element_command_if()\n");
     hemp_element_literal(hemp, element);
     element->parse_prefix    = &hemp_element_command_if_prefix;
+    element->parse_postfix   = &hemp_element_command_if_postfix;
     element->cleanup         = &hemp_element_command_if_cleanup;
     element->values          = &hemp_element_command_if_values;
     element->value           = &hemp_element_command_if_value;
@@ -40,7 +42,7 @@ HEMP_PREFIX(hemp_element_command_if_prefix) {
     hemp_fragment fragment = *fragptr;
     hemp_element  element  = fragment->type;
 
-    hemp_debug_msg("hemp_element_command_if_prefix()\n");
+    hemp_debug_call("hemp_element_command_if_prefix()\n");
 
     HEMP_PREFIX_PRECEDENCE;
 
@@ -51,29 +53,24 @@ HEMP_PREFIX(hemp_element_command_if_prefix) {
     // TODO: look for option #fragment
 
     hemp_parse_lhs_expr(fragment);
-    hemp_debug_msg("looking for block: %s\n", (*fragptr)->type->name);
+//  hemp_debug_msg("pre-body: %s\n", (*fragptr)->type->name);
     hemp_fragment block  = hemp_parse_rhs_body(fragment);
-    hemp_debug_msg("looking for branch: %s\n", (*fragptr)->type->name);
+//  hemp_debug_msg("block: %s\n", block->type->name);
     hemp_fragment branch = hemp_parse_branch(
         fragptr, scope, 0, 0, 
         fragment
     );
 
     if (branch) {
-        hemp_debug_msg(
-            "got a branch: %s (%s terminated)\n", 
-            branch->type->name,
-            hemp_has_flag(branch, HEMP_BE_TERMINATED) ? "is" : "not"
-        );
         fragment->branch = branch;
         /* set the block to reference the branch for the test below */
         block = branch;
     }
 
     if (hemp_not_flag(block, HEMP_BE_TERMINATED)) {
-        hemp_debug_msg("looking for terminator: %s\n", element->end);
+//      hemp_debug_msg("looking for terminator: %s\n", element->end);
         if (hemp_element_terminator_matches(*fragptr, element->end)) {
-            hemp_debug_msg("found matching terminator for %s => %s\n", element->start, element->end);
+//          hemp_debug_msg("found matching terminator for %s => %s\n", element->start, element->end);
             hemp_advance(fragptr);
         }
         else {
@@ -81,8 +78,35 @@ HEMP_PREFIX(hemp_element_command_if_prefix) {
         }
     }
     else {
-        hemp_debug_msg("branch/block is terminated\n");
+//      hemp_debug_msg("branch/block is terminated\n");
     }
+
+    return hemp_parse_postfix(
+        fragptr, scope, precedence, 0,
+        fragment
+    );
+}
+
+
+HEMP_POSTFIX(hemp_element_command_if_postfix) {
+    hemp_fragment fragment = *fragptr;
+
+    hemp_debug_call("hemp_element_command_if_postfix()\n");
+
+    /* This parses 'if' being used as an infix operator, aka in "side-effect"
+    ** notation, e.g. [% "Hello $user" if user %]
+    */
+
+    HEMP_INFIX_LEFT_PRECEDENCE;
+
+    /* expression on lhs becomes the body */
+    hemp_set_rhs_fragment(fragment, lhs);
+
+    /* skip past the keyword */
+    hemp_advance(fragptr);
+
+    /* expression following the keyword is the test */
+    hemp_parse_lhs_expr(fragment);
 
     return hemp_parse_postfix(
         fragptr, scope, precedence, 0,
@@ -174,7 +198,7 @@ HEMP_ELEMENT(hemp_element_command_elsif) {
     element->parse_prefix   = NULL;
     element->parse_postfix  = NULL;
     element->parse_body     = NULL;
-    element->parse_branch   = &hemp_element_command_else_branch;
+    element->parse_branch   = &hemp_element_command_elsif_branch;
     element->values         = &hemp_element_command_if_values;
     element->value          = &hemp_element_command_if_value;
     element->text           = &hemp_element_command_if_text;
@@ -187,7 +211,7 @@ HEMP_POSTFIX(hemp_element_command_elsif_branch) {
     hemp_fragment fragment = *fragptr;
     hemp_fragment block, branch;
 
-    hemp_debug_msg("hemp_element_command_elsif_branch()\n");
+    hemp_debug_call("hemp_element_command_elsif_branch()\n");
 
     /* skip the 'elsif' keyword     */
     hemp_advance(fragptr);
@@ -202,6 +226,11 @@ HEMP_POSTFIX(hemp_element_command_elsif_branch) {
     branch = hemp_parse_branch(fragptr, scope, 0, 0, fragment);
 
     if (branch) {
+//        hemp_debug_msg(
+//            "got elsif branch: %s (%s terminated)\n", 
+//            branch->type->name,
+//            hemp_has_flag(branch, HEMP_BE_TERMINATED) ? "is" : "not"
+//        );
         fragment->branch = branch;
         /* set the block to reference the branch for the test below */
         block = branch;
@@ -211,8 +240,13 @@ HEMP_POSTFIX(hemp_element_command_elsif_branch) {
      * so that the head of the branch (if) knows to look for a terminating
      * 'end' token or not
      */ 
-    if (hemp_has_flag(block, HEMP_BE_TERMINATED))
+    if (hemp_has_flag(block, HEMP_BE_TERMINATED)) {
+//        hemp_debug_msg("elsif block/branch is terminated\n");
         hemp_set_flag(fragment, HEMP_BE_TERMINATED);
+    }
+    else {
+//        hemp_debug_msg("elsif block/branch is NOT terminated\n");
+    }
 
     return fragment;
 }

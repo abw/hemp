@@ -1,18 +1,17 @@
-check_PROGRAMS  =    if quotes
-
-#check_PROGRAMS  =   assign      \
-#                    boolops     \
-#                    comments    \
-#                    functions   \
-#                    hash        \
-#                    lists       \
-#                    nested      \
-#                    numbers     \
-#                    numops      \
-#                    parens      \
-#                    quotes      \
-#                    textops     \
-#                    words
+check_PROGRAMS  =   assign      \
+                    boolops     \
+                    comments    \
+                    functions   \
+                    hash        \
+                    if          \
+                    lists       \
+                    nested      \
+                    numbers     \
+                    numops      \
+                    parens      \
+                    quotes      \
+                    textops     \
+                    words
 
 #                    unplugged
 

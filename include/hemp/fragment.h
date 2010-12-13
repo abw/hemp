@@ -287,7 +287,7 @@ hemp_fragment_debug(
 
 #define hemp_parse_rhs_body(fragment, ...) ({                   \
     hemp_fragment _hemp_expr = hemp_parse_body(                 \
-        fragptr, scope, fragment->type->rprec, 1                \
+        fragptr, scope, fragment->type->rprec, 0                \
     );                                                          \
     if (! _hemp_expr)                                           \
         HEMP_THROW_NOBODY(fragment);                            \

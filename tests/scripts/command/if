@@ -154,8 +154,6 @@ bar
 -- expect
 bar
 
--- start --
-
 -- test elsif with end
 [%  if False;
         "FAIL";
@@ -165,3 +163,123 @@ bar
 %]
 -- expect
 PASS
+
+-- test elsif with single expression
+[%  if False
+        "FAIL"
+    elsif True
+        "PASS"
+%]
+-- expect
+PASS
+
+-- test elsif with braced blocks
+[%  if False {
+        "FAIL"
+    }
+    elsif True {
+        "PASS"
+    }
+%]
+-- expect
+PASS
+
+-- test multiple elsifs with semi-colons and end
+[%  if False;
+        "FAIL";
+    elsif False and False;
+        "FAIL";
+    elsif True;
+        "PASS";
+    elsif True and False;
+        "FAIL";
+    else;
+        "FAIL";
+    end
+%]
+-- expect
+PASS
+
+
+-- test multiple elsifs with single expressions
+[%  if False
+        "FAIL"
+    elsif False and False
+        "FAIL"
+    elsif True
+        "PASS"
+    elsif True and False
+        "FAIL"
+    else
+        "FAIL"
+%]
+-- expect
+PASS
+
+-- test multiple elsifs with braced blocks
+[%  if False {
+        "FAIL"
+    }
+    elsif False and False {
+        "FAIL"
+    }
+    elsif True {
+        "PASS"
+    }
+    elsif True and False {
+        "FAIL"
+    }
+    else {
+        "FAIL"
+    }
+%]
+-- expect
+PASS
+
+-- test multiple elsifs with a bastard hybrid of styles
+[%  if False
+        "FAIL"
+    elsif False and False;
+        "FAIL";
+    elsif True {
+        "PASS"
+    }
+    elsif True and False
+        "FAIL"
+    else;
+        "FAIL"
+    end
+%]
+-- expect
+PASS
+
+
+-- test side-effect if
+%% "PASS" if True
+%% "FAIL" if False
+-- expect
+PASS
+
+-- test missing expression error
+%% if
+-- error
+Error at line 1, column 3 of text:
+   Error: Missing expression for 'if'
+  Source: %% if
+             ^ here
+
+-- test missing block
+%% if x
+-- error
+Error at line 1, column 3 of text:
+   Error: Missing body for 'if'
+  Source: %% if x
+             ^ here
+-- test unterminated block
+%% if x; y
+-- error
+Error at line 1, column 3 of text:
+   Error: Incomplete 'if' expression, missing closing 'end'
+  Source: %% if x; y
+             ^ here
+
