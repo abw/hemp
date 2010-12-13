@@ -604,13 +604,13 @@
  *--------------------------------------------------------------------------*/
 
 #define hemp_set_flag(item, flag) \
-    item->flags |= (flag)
+    ((item)->flags |= (flag))
 
 #define hemp_clear_flag(item, flag) \
-    item->flags &= ~(flag)
+    ((item)->flags &= ~(flag))
 
 #define hemp_has_flag(item, flag) \
-    item->flags & (flag)
+    ((item)->flags & (flag))
 
 #define hemp_not_flag(item, flag) \
     ! (hemp_has_flag(item, flag))

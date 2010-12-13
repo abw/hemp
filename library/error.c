@@ -15,6 +15,8 @@ hemp_string hemp_errmsg[] = {
     "Missing expression for '%s'",
     "Missing body for '%s'",
     "Incomplete '%s' expression, missing closing '%s'",
+    "Missing fragment after '%s'",
+    "Fragment mismatch: %s vs %s",
     "Unexpected token: %s",
     "Cannot convert %s to %s: %s",
     "%s value",

@@ -38,6 +38,9 @@ HEMP_ELEMENT(hemp_element_command_if) {
 }
 
 
+
+    
+
 HEMP_PREFIX(hemp_element_command_if_prefix) {
     hemp_fragment fragment = *fragptr;
     hemp_element  element  = fragment->type;
@@ -50,7 +53,13 @@ HEMP_PREFIX(hemp_element_command_if_prefix) {
     hemp_advance(fragptr);
     hemp_set_flag(fragment, HEMP_BE_PREFIX);
 
-    // TODO: look for option #fragment
+    /* Potential confusion here from different use of 'fragment'.  Here
+     * we specifically mean a URI-like #fragment suffix rather than the 
+     * more general fragment elements that constitute hemp documents.
+     */
+    if (hemp_has_flag(*fragptr, HEMP_BE_FRAGMENT)) {
+        hemp_advance(fragptr);
+    }
 
     hemp_parse_lhs_expr(fragment);
 //  hemp_debug_msg("pre-body: %s\n", (*fragptr)->type->name);
@@ -71,7 +80,7 @@ HEMP_PREFIX(hemp_element_command_if_prefix) {
 //      hemp_debug_msg("looking for terminator: %s\n", element->end);
         if (hemp_element_terminator_matches(*fragptr, element->end)) {
 //          hemp_debug_msg("found matching terminator for %s => %s\n", element->start, element->end);
-            hemp_advance(fragptr);
+            hemp_match_end_fragment(fragptr, fragment);
         }
         else {
             HEMP_THROW_NOEND(fragment);
@@ -81,10 +90,12 @@ HEMP_PREFIX(hemp_element_command_if_prefix) {
 //      hemp_debug_msg("branch/block is terminated\n");
     }
 
-    return hemp_parse_postfix(
-        fragptr, scope, precedence, 0,
-        fragment
-    );
+    return fragment;
+    // No, no, no!  We can't have postfix OPS after a prefix if
+//    return hemp_parse_postfix(
+//        fragptr, scope, precedence, 0,
+//        fragment
+//    );
 }
 
 

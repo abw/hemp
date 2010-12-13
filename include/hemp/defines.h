@@ -117,6 +117,7 @@
 #define HEMP_BE_HIDDEN      0x00010  /* generates no output                  */
 #define HEMP_BE_SOURCE      0x00020  /* source text can yield output text    */
 #define HEMP_BE_FIXED       0x00040  /* element output is pre-defined        */
+#define HEMP_BE_FRAGMENT    0x00080  /* uri-like #fragment                   */
 #define HEMP_BE_PREFIX      0x00100  /* element is a prefix operator         */
 #define HEMP_BE_INFIX       0x00200  /* element is an infix operator         */
 #define HEMP_BE_POSTFIX     0x00400  /* element is a postfix operator        */

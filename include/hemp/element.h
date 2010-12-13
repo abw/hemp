@@ -203,6 +203,11 @@ HEMP_OUTPUT(hemp_element_literal_text);
 HEMP_VALUE(hemp_element_literal_value);
 HEMP_CLEANUP(hemp_element_literal_cleanup);
 
+HEMP_ELEMENT(hemp_element_fragment);
+HEMP_SCANNER(hemp_element_fragment_scanner);
+hemp_bool hemp_match_end_fragment(hemp_fragment *fragptr, hemp_fragment start);
+
+
 
 /*--------------------------------------------------------------------------
  * text elements

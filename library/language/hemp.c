@@ -9,6 +9,7 @@ static struct hemp_elements hemp_elements_hemp_core[] = {
     { "hemp.text",                  &hemp_element_text                  },
     { "hemp.space",                 &hemp_element_space                 },
     { "hemp.comment",               &hemp_element_comment               },
+    { "hemp.fragment",              &hemp_element_fragment              },
     { "hemp.tag_start",             &hemp_element_tag_start             },
     { "hemp.tag_end",               &hemp_element_tag_end               },
     { "hemp.delimiter",             &hemp_element_delimiter             },
@@ -284,7 +285,8 @@ hemp_grammar_add_hemp_alpha(
     HEMP_USE_ELEMENT0("hemp.text");
     HEMP_USE_ELEMENT0("hemp.space");
     HEMP_USE_ELEMENT0("hemp.block");
-    HEMP_USE_ELEMENT1("hemp.comment", "#"        );
+    HEMP_USE_ELEMENT1("hemp.fragment", "#"       );
+    HEMP_USE_ELEMENT1("hemp.comment", "# "       );
     HEMP_USE_ELEMENT2("hemp.squote",  "'",  "'"  );
     HEMP_USE_ELEMENT2("hemp.dquote",  "\"", "\"" );
 }

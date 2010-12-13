@@ -129,12 +129,19 @@ HEMP_ELEMENT(hemp_element_delimiter) {
  * 
  *--------------------------------------------------------------------------*/
 
+HEMP_PREFIX(hemp_element_separator_body) {
+    hemp_debug_call("hemp_element_separator_body()\n");
+    return hemp_element_parse_body_block(fragptr, scope, 0, 0);
+}
+
 HEMP_ELEMENT(hemp_element_separator) {
     hemp_element_punctuation(hemp, element);
-    element->parse_body = &hemp_element_parse_body_block;
+//  element->parse_body = &hemp_element_parse_body_block;
+    element->parse_body = &hemp_element_separator_body;
     hemp_set_flag(element, HEMP_BE_SEPARATOR);
     return element;
 }
+
 
 
 
@@ -298,8 +305,7 @@ HEMP_ELEMENT(hemp_element_tag_start) {
  *--------------------------------------------------------------------------*/
 
 HEMP_ELEMENT(hemp_element_tag_end) {
-    hemp_element_delimiter(hemp, element);
-    element->parse_body = &hemp_element_parse_body_block;
+    hemp_element_separator(hemp, element);
     return element;
 }
 

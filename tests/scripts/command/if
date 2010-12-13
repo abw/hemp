@@ -236,8 +236,42 @@ PASS
 -- expect
 PASS
 
+-- test multiple elsifs with separate outline tags
+%%  if False
+FAIL
+%%  elsif False and False     
+FAIL
+%% elsif True  # a comment, just to confuse things
+PASS
+%% elsif True and False
+FAIL
+%% else
+FAIL
+%% end
+-- expect
+PASS
+
+-- test multiple elsifs with separate inline tags
+[%  if False %]
+FAIL
+[%  elsif False and False %]
+FAIL
+[% elsif True %]
+PASS
+[% elsif True and False %]
+FAIL
+[% else %]
+FAIL
+[% end %]
+-- expect
+
+PASS
+
 -- test multiple elsifs with a bastard hybrid of styles
-[%  if False
+[%  
+    # if you write code like this then you are a bad person
+
+    if False
         "FAIL"
     elsif False and False;
         "FAIL";
@@ -249,6 +283,35 @@ PASS
     else;
         "FAIL"
     end
+
+%]
+-- expect
+PASS
+
+-- test single expression with comments
+[%  if True 
+        # this is a comment
+        "PASS"
+    else
+        # so is this
+        "FAIL"
+%]
+-- expect
+PASS
+
+
+-- test comments in expression
+[%  
+    if          # this is a comment
+        True    # so is this
+                # and this
+        and False
+                # yet another comment
+            "FAIL"
+                # Hi-ho, hi-ho,
+    else        # it's off to hemp we go!
+        "PASS"  # you win!
+
 %]
 -- expect
 PASS
@@ -259,6 +322,109 @@ PASS
 %% "FAIL" if False
 -- expect
 PASS
+
+-- test multiple side-effect if
+%% "PASS" if True if True
+%% "FAIL" if False if True
+%% "FAIL" if True if False
+-- expect
+PASS
+
+-- test nested if
+[%  if True;
+        if True;
+            "PASS";
+        end;
+
+        if False;
+            "FAIL";
+        end;
+
+    end;
+%]
+-- expect
+PASS
+
+-- test nested if with separate tags
+%%  if True
+[%      if True;
+            "PASS";
+        end;
+%][%
+        if False;
+            "FAIL";
+        end;
+%]
+%%  end;
+-- expect
+PASS
+
+-- test nested if with braces
+[%  if True {
+        if True  { "PASS" }
+        if False { "FAIL" }
+    }
+%]
+-- expect
+PASS
+
+
+-- test if with end fragment
+[%  if True;
+        "PASS";
+    end#if;
+%]
+-- expect
+PASS
+
+-- test if with wrong fragment
+[%  if True;
+        "FAIL";
+    end#fi;
+%]
+-- error
+Error at line 3, column 7 of text:
+   Error: Fragment mismatch: if vs end#fi
+  Source:     end#fi;
+                 ^ here
+
+-- test if with start fragment only
+[%  if#foo True;
+        "PASS";
+    end;
+%]
+-- expect
+PASS
+
+
+-- test if with start and end fragments
+[%  if#foo True;
+        "PASS";
+    end#foo;
+%]
+-- expect
+PASS
+
+-- test if with nested fragments
+[%  if#outer True;
+        if#inner True;
+            "PASS";
+        end#inner;
+    end#outer;
+%]
+-- expect
+PASS
+
+-- test if with fragment mis-match
+[%  if#foo True;
+        "PASS";
+    end#bar;
+%]
+-- error
+Error at line 3, column 7 of text:
+   Error: Fragment mismatch: if#foo vs end#bar
+  Source:     end#bar;
+                 ^ here
 
 -- test missing expression error
 %% if
@@ -282,4 +448,5 @@ Error at line 1, column 3 of text:
    Error: Incomplete 'if' expression, missing closing 'end'
   Source: %% if x; y
              ^ here
+
 

@@ -58,3 +58,118 @@ HEMP_CLEANUP(hemp_element_literal_cleanup) {
     }
 }
 
+
+/*--------------------------------------------------------------------------
+ * fragment: #something
+ *--------------------------------------------------------------------------*/
+
+HEMP_ELEMENT(hemp_element_fragment) {
+    element->parse_body  = NULL;
+    element->scanner     = &hemp_element_fragment_scanner;
+    element->token       = &hemp_element_literal_text;
+    element->source      = &hemp_element_literal_text;
+    hemp_set_flag(element, HEMP_BE_FRAGMENT);
+    return element;
+}
+
+
+HEMP_SCANNER(hemp_element_fragment_scanner) {
+    hemp_debug_call("hemp_element_fragment_scanner()\n");
+
+    hemp_element element = (hemp_element) self;
+    hemp_string  src     = document->scanptr;
+
+    while (isalnum(*src) || *src == '_' || * src == '-') {
+        src++;
+    }
+
+    if (src == document->scanptr) {
+        HEMP_SCAN_ERROR(document, HEMP_ERROR_NOFRAG, element->start);
+    }
+    
+    /* add a fragment element to the list of scanned tokens */
+    hemp_document_scanned_to(
+        document, element, src
+    );
+
+    return HEMP_TRUE;
+}
+
+
+HEMP_INLINE void
+hemp_buffer_fragcpy(
+    hemp_string     buffer, 
+    hemp_fragment   fragment, 
+    hemp_size       max
+) {
+    if (fragment->length < max)
+        max = fragment->length;
+    strncpy(buffer, fragment->token, max);
+    *(buffer + max) = HEMP_NUL;
+}
+
+
+HEMP_INLINE void
+hemp_buffer_fragcat(
+    hemp_string     buffer, 
+    hemp_fragment   fragment, 
+    hemp_size       max
+) {
+    if (fragment->length < max)
+        max = fragment->length;
+    strncat(buffer, fragment->token, max);
+}
+
+
+hemp_bool
+hemp_match_end_fragment(
+    hemp_fragment * fragptr,
+    hemp_fragment   start
+) {
+    static hemp_char    error_buffer[128];
+    static hemp_string  err1 = (hemp_string) error_buffer;
+    static hemp_string  err2 = (hemp_string) error_buffer + 64;
+
+    hemp_fragment   end = *fragptr;
+    hemp_fragment   startfrag, endfrag;
+
+    hemp_advance(fragptr);
+
+    /* see if there's a fragment on the end */
+    if (hemp_not_flag(*fragptr, HEMP_BE_FRAGMENT))
+        return HEMP_FALSE;
+    
+    endfrag = *fragptr;
+    hemp_advance(fragptr);
+
+    /* The fragment for the end tag must match the start tag fragment if it
+     * has one or the start tag name if not.
+     */
+
+    if (hemp_has_flag(start->next, HEMP_BE_FRAGMENT)) {
+        startfrag = start->next;
+        if ( startfrag->length != endfrag->length 
+          || ! hemp_stringn_eq(startfrag->token, endfrag->token, startfrag->length)
+        ) {
+            hemp_buffer_fragcpy(err1, start,     31);
+            hemp_buffer_fragcat(err1, startfrag, 31);
+            hemp_buffer_fragcpy(err2, end,       31);
+            hemp_buffer_fragcat(err2, endfrag,   31);
+            HEMP_PARSE_ERROR(endfrag, HEMP_ERROR_FRAGMATCH, err1, err2);
+        }
+    }
+    else {
+        hemp_size flen = strlen(endfrag->type->start);
+        
+        if ( endfrag->length - flen != start->length 
+          || ! hemp_stringn_eq(endfrag->token + flen, start->token, start->length)
+        ) {
+            hemp_buffer_fragcpy(err1, start,     31);
+            hemp_buffer_fragcpy(err2, end,       31);
+            hemp_buffer_fragcat(err2, endfrag,   31);
+            HEMP_PARSE_ERROR(endfrag, HEMP_ERROR_FRAGMATCH, err1, err2);
+        }
+    }
+    return HEMP_TRUE;
+}
+
