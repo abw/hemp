@@ -48,14 +48,14 @@ am__aclocal_m4_deps = $(top_srcdir)/build/m4/argz.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/include/hemp/config.h
+CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 hemp_SOURCES = hemp.c
 hemp_OBJECTS = hemp.$(OBJEXT)
 hemp_LDADD = $(LDADD)
 hemp_DEPENDENCIES = ../library/libhemp.la tap.o
-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/hemp
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
@@ -258,7 +258,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 TESTS = $(check_PROGRAMS)
 #SUBDIRS         = core type language .
-SUBDIRS = language
+SUBDIRS = type core
 LDADD = ../library/libhemp.la tap.o
 all: all-recursive
 

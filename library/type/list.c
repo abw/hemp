@@ -61,7 +61,7 @@ hemp_list_free(
 
 
 hemp_size
-hemp_list_resize(
+hemp_list_grow(
     hemp_list   list, 
     hemp_size   min_size
 ) {
@@ -74,6 +74,9 @@ hemp_list_resize(
     while (min_size > new_size) {
         new_size = new_size << 1;
     }
+
+    if (new_size <= list->capacity)
+        return new_size;
 
     list->items = hemp_mem_resize(
         list->items, 
@@ -89,6 +92,48 @@ hemp_list_resize(
 }
 
 
+hemp_size
+hemp_list_resize(
+    hemp_list   list, 
+    hemp_size   new_size
+) {
+    hemp_u16    old_size = list->length;
+
+    if (new_size > old_size) {
+        hemp_list_grow(list, new_size);
+
+        while (old_size < new_size) {
+            list->items[old_size++] = HempMissing;
+        }
+    }
+
+    /* In all other cases (new_size < old_size) and (new_size == old_size)
+     * it suffices to simply reset the list length to the new value.  
+     * TODO: if the list has a cleaner then run it against truncated items.
+     */
+
+    list->length = new_size;
+
+    return new_size;
+}
+
+
+hemp_list
+hemp_list_copy(
+    hemp_list src
+) {
+    hemp_list list = hemp_list_new();
+    hemp_list_grow(list, src->length);
+//    hemp_debug_msg(
+//        "copying %d bytes from %p to $p\n", 
+//        src->length * sizeof(hemp_value),
+//        src->items, list->items
+//    );
+    hemp_mem_copy(src->items, list->items, src->length * sizeof(hemp_value));
+    list->length = src->length;
+    return list;
+}
+
 
 hemp_list
 hemp_list_push(
@@ -96,9 +141,28 @@ hemp_list_push(
     hemp_value  value
 ) {
     if (list->length == list->capacity) {
-        hemp_list_resize(list, list->capacity + 1);
+        hemp_list_grow(list, list->capacity + 1);
     }
     list->items[list->length++] = value;
+
+    return list;
+}
+
+
+hemp_list
+hemp_list_push_list(
+    hemp_list   list, 
+    hemp_list   values
+) {
+    hemp_size   length = list->length + values->length;
+    hemp_size   from   = 0;
+
+    if (length > list->capacity)
+        hemp_list_grow(list, length);
+
+    while (list->length < length) {
+        list->items[list->length++] = values->items[from++];
+    }
 
     return list;
 }
@@ -129,6 +193,17 @@ hemp_list_shift(
         );
 
     return value;
+}
+
+
+hemp_value
+hemp_list_pop(
+    hemp_list   list
+) {
+    if (list->length < 1)
+        return HempMissing;
+
+    return list->items[--list->length];
 }
 
 
@@ -281,7 +356,7 @@ HEMP_STORE_FUNC(hemp_type_list_store) {
 
     if (index >= list->capacity) {
 //      hemp_debug_msg("list index (%d) is larger than current capacity (%d)\n", index, list->capacity);
-        hemp_list_resize(list, index + 1);
+        hemp_list_grow(list, index + 1);
     }
 
     while (index > list->length) {

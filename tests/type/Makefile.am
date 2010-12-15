@@ -1,8 +1,10 @@
-check_PROGRAMS  =   code     \
-                    text     \
-                    list     \
-                    hash     \
-                    params   
+check_PROGRAMS  =   list
+
+#check_PROGRAMS  =   code     \
+#                    text     \
+#                    list     \
+#                    hash     \
+#                    params   
  
 TESTS           = $(check_PROGRAMS)
 LDADD           = ../../library/libhemp.la

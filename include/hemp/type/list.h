@@ -36,16 +36,40 @@ hemp_list_free(
     hemp_list       list
 );
 
+hemp_size
+hemp_list_resize(
+    hemp_list       list, 
+    hemp_size       new_size
+);
+
+hemp_list
+hemp_list_copy(
+    hemp_list src
+);
+
 hemp_list 
 hemp_list_push(
     hemp_list       list, 
     hemp_value      item
 );
 
+hemp_list
+hemp_list_push_list(
+    hemp_list   list, 
+    hemp_list   values
+);
+
+
 hemp_value
 hemp_list_shift(
     hemp_list       list
 );
+
+hemp_value
+hemp_list_pop(
+    hemp_list   list
+);
+    
 
 hemp_pos 
 hemp_list_each(

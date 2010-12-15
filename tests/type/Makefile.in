@@ -33,8 +33,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-check_PROGRAMS = code$(EXEEXT) text$(EXEEXT) list$(EXEEXT) \
-	hash$(EXEEXT) params$(EXEEXT)
+check_PROGRAMS = list$(EXEEXT)
 subdir = tests/type
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -49,30 +48,14 @@ am__aclocal_m4_deps = $(top_srcdir)/build/m4/argz.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/include/hemp/config.h
+CONFIG_HEADER = $(top_builddir)/include/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-code_SOURCES = code.c
-code_OBJECTS = code.$(OBJEXT)
-code_LDADD = $(LDADD)
-code_DEPENDENCIES = ../../library/libhemp.la
-hash_SOURCES = hash.c
-hash_OBJECTS = hash.$(OBJEXT)
-hash_LDADD = $(LDADD)
-hash_DEPENDENCIES = ../../library/libhemp.la
 list_SOURCES = list.c
 list_OBJECTS = list.$(OBJEXT)
 list_LDADD = $(LDADD)
 list_DEPENDENCIES = ../../library/libhemp.la
-params_SOURCES = params.c
-params_OBJECTS = params.$(OBJEXT)
-params_LDADD = $(LDADD)
-params_DEPENDENCIES = ../../library/libhemp.la
-text_SOURCES = text.c
-text_OBJECTS = text.$(OBJEXT)
-text_LDADD = $(LDADD)
-text_DEPENDENCIES = ../../library/libhemp.la
-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include/hemp
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/include
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
@@ -85,8 +68,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = code.c hash.c list.c params.c text.c
-DIST_SOURCES = code.c hash.c list.c params.c text.c
+SOURCES = list.c
+DIST_SOURCES = list.c
 ETAGS = etags
 CTAGS = ctags
 # If stdout is a non-dumb tty, use colors.  If test -t is not supported,
@@ -235,6 +218,12 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+
+#check_PROGRAMS  =   code     \
+#                    text     \
+#                    list     \
+#                    hash     \
+#                    params   
 TESTS = $(check_PROGRAMS)
 LDADD = ../../library/libhemp.la
 all: all-am
@@ -280,21 +269,9 @@ clean-checkPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-code$(EXEEXT): $(code_OBJECTS) $(code_DEPENDENCIES) 
-	@rm -f code$(EXEEXT)
-	$(LINK) $(code_OBJECTS) $(code_LDADD) $(LIBS)
-hash$(EXEEXT): $(hash_OBJECTS) $(hash_DEPENDENCIES) 
-	@rm -f hash$(EXEEXT)
-	$(LINK) $(hash_OBJECTS) $(hash_LDADD) $(LIBS)
 list$(EXEEXT): $(list_OBJECTS) $(list_DEPENDENCIES) 
 	@rm -f list$(EXEEXT)
 	$(LINK) $(list_OBJECTS) $(list_LDADD) $(LIBS)
-params$(EXEEXT): $(params_OBJECTS) $(params_DEPENDENCIES) 
-	@rm -f params$(EXEEXT)
-	$(LINK) $(params_OBJECTS) $(params_LDADD) $(LIBS)
-text$(EXEEXT): $(text_OBJECTS) $(text_DEPENDENCIES) 
-	@rm -f text$(EXEEXT)
-	$(LINK) $(text_OBJECTS) $(text_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -302,11 +279,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/code.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hash.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/params.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

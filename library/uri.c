@@ -12,6 +12,32 @@ hemp_uri_init(
 
 
 HEMP_INLINE hemp_uri
+hemp_uri_copy(
+    hemp_uri src
+) {
+    /* HMMM... no, this isn't right... not used */
+    hemp_uri uri;
+    HEMP_ALLOCATE(uri);
+    hemp_mem_copy(src, uri, sizeof(struct hemp_uri));
+
+    /* copy is *NOT* reponsible for buffer */
+    uri->buffer = NULL;
+
+    return uri;
+}
+
+
+HEMP_INLINE hemp_uri
+hemp_uri_from_string(
+    hemp_string string
+) {
+    hemp_uri uri = hemp_uri_new();
+    hemp_uri_split(uri, string);
+    return uri;
+}
+
+
+HEMP_INLINE hemp_uri
 hemp_uri_wipe(
     hemp_uri uri
 ) {
@@ -353,8 +379,17 @@ hemp_uri_split_path(
         else {
             /* NUL terminate the copy in the buffer and add to list */
             *buffer++ = HEMP_NUL;
-//          hemp_debug_msg("found path: [%s]\n", name);
+            hemp_debug_msg("found path: [%s] at %p\n", name);
+            hemp_value  v1 = hemp_str_val(name);
+            hemp_string s1 = hemp_val_str(v1);
+            hemp_debug_msg("cross-check: <%p> vs <%p>\n", name, s1);
+            hemp_debug_msg("round-trip: [%s]\n", s1);
+            
             hemp_list_push(uri->paths, hemp_str_val(name));
+            hemp_value v = hemp_list_item(uri->paths, uri->paths->length - 1);
+            hemp_dump_value(v);
+            hemp_string s = hemp_val_str(v);
+            printf("** P: %p\n", s);
         }
 
         if (*path)
@@ -420,6 +455,73 @@ hemp_uri_split_query(
 
     return HEMP_TRUE;
 }
+
+
+
+/*--------------------------------------------------------------------------
+ * relative paths
+ *--------------------------------------------------------------------------*/
+
+HEMP_INLINE hemp_uri
+hemp_uri_relative_string(
+    hemp_uri        base,
+    hemp_string     relative
+) {
+    hemp_uri        uri   = hemp_uri_from_string(relative);
+    hemp_string     path  = uri->path;
+    hemp_list       bpath = hemp_list_copy(base->paths);
+//  hemp_size       n     = 0;
+    hemp_value      nval;
+//  hemp_string     node;
+
+    if (! path || ! strlen(path)) {
+        hemp_todo("No path in relative uri");
+    }
+    
+    hemp_debug_msg("path: %s\n", path);
+    
+//    if (*path == HEMP_SLASH) {
+//        hemp_debug_msg("relative path is absolute\n");
+//        hemp_list_resize(bpath, 0);
+//        hemp_list_push_list(bpath, uri->paths);
+//        hemp_debug_msg("%d items in path\n", bpath->length);
+//    }
+//    else {
+//        hemp_debug_msg("not abs\n");
+//    }
+//
+//    hemp_debug_msg("hemp_uri_relative_string(%s, %s)\n", base->path, relative);
+
+    hemp_size n;
+    printf("PATH: ");
+
+    for (n = 0; n < bpath->length; n++) {
+        hemp_value v = hemp_list_item(bpath, n);
+        if (n || 1)
+            printf("/");
+        printf("<a>");
+
+        if (hemp_is_empty(v)) {
+            hemp_debug_msg("<EMPTY>");
+        }
+        else {
+            printf("<DEFINED>");
+            hemp_dump_value(v);
+            hemp_debug_msg("TYPE: %d\n", HEMP_TYPE_ID(v), hemp_type_name(v));
+        }
+            
+        printf("<c>");
+
+//            puts(hemp_val_str(v));
+    }
+    puts("\n");
+    
+    hemp_list_free(bpath);
+
+    return uri;
+}
+
+
 
 
 /*--------------------------------------------------------------------------

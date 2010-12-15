@@ -161,6 +161,32 @@ Configuration, Build and Installation
   
   See include/hemp/defines.h and include/hemp/config.h
 
+  UPDATE: Changed configure.ac to generate include/config.h.  Then added
+  a quick Perl script (hempify_config.pl) to generate include/hemp/config.h
+  from it with HEMP_ prefixes added to the relevant items.  This is a quick
+  hack - needs sorting out properly or building into the makefile so that
+  it's run at the right time (after configure and before make).
+
+
+Expressions
+-----------
+
+* Parameter arrow: =>
+* Function arrow: ->
+
+
+Commands
+--------
+
+* for list ...
+* for item in list ...          # issue of declaring "in" token
+* ... for list
+* ... for item in list
+
+* fill template
+* data template                 # or 'load'?
+
+
 
 Data Structures
 ---------------

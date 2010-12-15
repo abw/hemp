@@ -1,30 +1,31 @@
-#check_PROGRAMS  =   namespace
+check_PROGRAMS  =   uri
 
-check_PROGRAMS  =   action      \
-                    codec       \
-                    context     \
-                    dialect     \
-                    document    \
-                    error       \
-                    factory     \
-                    filesystem  \
-                    fragment    \
-                    fragments   \
-                    grammar     \
-                    memory      \
-                    namespace   \
-                    proto       \
-                    pool        \
-                    ptree       \
-                    slab        \
-                    source      \
-                    string      \
-                    tag         \
-                    tagset      \
-                    type        \
-                    utils       \
-                    value       \
-                    viewer
+#check_PROGRAMS  =   action      \
+#                    codec       \
+#                    context     \
+#                    dialect     \
+#                    document    \
+#                    error       \
+#                    factory     \
+#                    filesystem  \
+#                    fragment    \
+#                    fragments   \
+#                    grammar     \
+#                    memory      \
+#                    namespace   \
+#                    proto       \
+#                    pool        \
+#                    ptree       \
+#                    slab        \
+#                    source      \
+#                    string      \
+#                    tag         \
+#                    tagset      \
+#                    type        \
+#                    uri         \
+#                    utils       \
+#                    value       \
+#                    viewer
  
 TESTS           = $(check_PROGRAMS)
 LDADD           = ../../library/libhemp.la

@@ -5,7 +5,7 @@ AC_CONFIG_MACRO_DIR([build/m4])
 
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects color-tests])
 
-AC_CONFIG_HEADERS([include/hemp/config.h])
+AC_CONFIG_HEADERS([include/config.h])
 AC_CONFIG_FILES([
     Makefile 
     include/Makefile 
@@ -37,6 +37,7 @@ AC_PROG_RANLIB
 AC_HEADER_STDC
 AC_CHECK_HEADERS([argz.h limits.h stddef.h stdlib.h string.h unistd.h])
 AC_CHECK_LIB([readline], [readline], [LIBS="-lreadline $LIBS"])
+
 
 
 # Checks for typedefs, structures, and compiler characteristics.

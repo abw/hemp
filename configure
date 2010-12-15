@@ -2802,7 +2802,7 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 
 
 
-ac_config_headers="$ac_config_headers include/hemp/config.h"
+ac_config_headers="$ac_config_headers include/config.h"
 
 ac_config_files="$ac_config_files Makefile include/Makefile library/Makefile programs/Makefile tests/Makefile tests/core/Makefile tests/type/Makefile tests/language/Makefile tests/language/hemp/Makefile tests/language/json/Makefile tests/language/test/Makefile build/libltdl/Makefile"
 
@@ -11101,6 +11101,8 @@ if test "x$ac_cv_lib_readline_readline" = x""yes; then :
 fi
 
 
+ (echo "Hello world")
+
 
 # Checks for typedefs, structures, and compiler characteristics.
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for an ANSI C-conforming const" >&5
@@ -12723,7 +12725,7 @@ if test -z "${CONVENIENCE_LTDL_TRUE}" && test -z "${CONVENIENCE_LTDL_FALSE}"; th
   as_fn_error $? "conditional \"CONVENIENCE_LTDL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-LT_CONFIG_H=include/hemp/config.h
+LT_CONFIG_H=include/config.h
 
     _ltdl_libobjs=
     _ltdl_ltlibobjs=
@@ -13603,7 +13605,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "include/hemp/config.h") CONFIG_HEADERS="$CONFIG_HEADERS include/hemp/config.h" ;;
+    "include/config.h") CONFIG_HEADERS="$CONFIG_HEADERS include/config.h" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "include/Makefile") CONFIG_FILES="$CONFIG_FILES include/Makefile" ;;
     "library/Makefile") CONFIG_FILES="$CONFIG_FILES library/Makefile" ;;
@@ -14956,6 +14958,7 @@ ac_clean_files=$ac_clean_files_save
 
 test $ac_write_fail = 0 ||
   as_fn_error $? "write failure creating $CONFIG_STATUS" "$LINENO" 5
+
 
 
 # configure is writing to config.log, and then calls config.status.

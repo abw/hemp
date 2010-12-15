@@ -1,12 +1,14 @@
 #include <hemp/test.h>
 
 void test_uri();
+void test_relative();
 
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(12);
+    plan(20);
     test_uri();
+    test_relative();
     return done();
 }
 
@@ -39,4 +41,38 @@ void test_uri() {
     is( s, "there", "matched second URI path element" );
 
     hemp_uri_free(uri);
+}
+
+
+void test_relative_match(
+    hemp_uri    base,
+    hemp_string rels,
+    hemp_string expect
+) {
+    hemp_uri relu = hemp_uri_relative_string(base, rels);
+    hemp_debug_msg("new uri: %s\n", relu->uri);
+    ok( 
+        hemp_string_eq(relu->path, expect), 
+        "%s + %s = %s (expected %s)", 
+        base->path, rels, relu->path, expect
+    );
+    hemp_uri_free(relu);
+}
+
+
+void test_relative() {
+    hemp_uri base = hemp_uri_from_string("/foo/bar");
+    ok( base, "constructed new base uri" );
+
+    test_relative_match(base, "/wam/bam", "/wam/bam");
+    test_relative_match(base, "wam/bam", "/foo/bar/wam/bam");
+    test_relative_match(base, "./wam/bam", "/foo/bar/wam/bam");
+    test_relative_match(base, "../wam/bam", "/foo/wam/bam");
+    test_relative_match(base, "../../wam/bam", "/wam/bam");
+    test_relative_match(base, "../../../wam/bam", "/wam/bam");
+    test_relative_match(base, "../../../../wam/bam", "/wam/bam");
+    test_relative_match(base, "./wam/././bam", "/foo/bar/wam/bam");
+    test_relative_match(base, "./wam/oops/../mistake/../bam", "/foo/bar/wam/bam");
+    
+    hemp_uri_free(base);
 }

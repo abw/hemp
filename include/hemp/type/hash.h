@@ -45,7 +45,7 @@ hemp_hash_detach(
 );
 
 HEMP_INLINE hemp_size
-hemp_hash_resize(
+hemp_hash_grow(
     hemp_hash       hash
 );
 

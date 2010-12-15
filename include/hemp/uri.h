@@ -24,6 +24,17 @@ hemp_uri_init(
 );
 
 HEMP_INLINE hemp_uri
+hemp_uri_from_string(
+    hemp_string     string
+);
+
+HEMP_INLINE hemp_uri
+hemp_uri_relative_string(
+    hemp_uri        base,
+    hemp_string     rel
+);
+
+HEMP_INLINE hemp_uri
 hemp_uri_wipe(
     hemp_uri        uri
 );

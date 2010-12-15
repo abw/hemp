@@ -129,7 +129,7 @@
  * Thread locking.  Encapsulates a block of code with a locked mutex.
  *--------------------------------------------------------------------------*/
 
-#ifdef HAVE_LIBPTHREAD
+#ifdef HEMP_HAVE_LIBPTHREAD
     #include <pthread.h>
     static  pthread_mutex_t M = PTHREAD_MUTEX_INITIALIZER;
     #define HEMP_MUTEX_LOCK     pthread_mutex_lock(&M);

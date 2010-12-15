@@ -4,10 +4,10 @@
 
 /* package details */
 #define HEMP_AUTHOR         "Andy Wardley"
-#define HEMP_NAME           PACKAGE_NAME
-#define HEMP_VERSION        PACKAGE_VERSION
-#define HEMP_EMAIL          PACKAGE_BUGREPORT
-#define HEMP_URL            PACKAGE_URL
+#define HEMP_NAME           HEMP_PACKAGE_NAME
+#define HEMP_VERSION        HEMP_PACKAGE_VERSION
+#define HEMP_EMAIL          HEMP_PACKAGE_BUGREPORT
+#define HEMP_URL            HEMP_PACKAGE_URL
 #define HEMP_PROMPT         HEMP_NAME
 
 /* aliases for commonly used values, characters, etc */
@@ -22,6 +22,7 @@
 #define HEMP_SQUOTE         '\''
 #define HEMP_DQUOTE         '"'
 #define HEMP_COMMENT        '#'
+#define HEMP_SLASH          '/'
 #define HEMP_BACKSLASH      '\\'
 #define HEMP_UNDERSCORE     '_'
 

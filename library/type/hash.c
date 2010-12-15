@@ -133,7 +133,7 @@ hemp_hash_free(
 
 
 HEMP_INLINE hemp_size
-hemp_hash_resize(
+hemp_hash_grow(
     hemp_hash hash
 ) {
     hemp_size width, wider, index, i;
@@ -212,7 +212,7 @@ hemp_hash_store_keylen(
     hemp_slot slot;
 
     if (hash->size / hash->width > HEMP_HASH_DENSITY)
-        hemp_hash_resize(hash);
+        hemp_hash_grow(hash);
 
     column = index % hash->width;
     slot   = hash->slots[column];
