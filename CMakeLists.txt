@@ -12,6 +12,7 @@ set(HEMP_EMAIL             "hemp@wardley.org")
 set(HEMP_URL               "")
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(HEMP_TESTDIR      ${PROJECT_SOURCE_DIR}/tests)
 
 include(CheckIncludeFile)
 check_include_file(dirent.h     HEMP_HAVE_DIRENT_H)
@@ -66,3 +67,7 @@ message(STATUS "Summary of configuration:")
 message(STATUS " + Install prefix ............... : ${CMAKE_INSTALL_PREFIX}") 
 message(STATUS " + Readline library ............. : ${READLINE_LIBRARY}") 
 message(STATUS " + Ncurses library .............. : ${NCURSES_LIBRARY}") 
+
+include(MaintainerMode)
+
+
