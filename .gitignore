@@ -2,6 +2,7 @@ Makefile
 CMakeFiles
 CMakeCache.txt
 cmake_install.cmake
+CTestTestfile.cmake
 .deps
 .dirstamp
 .libs

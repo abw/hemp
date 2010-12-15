@@ -1,4 +1,4 @@
-#define HEMP_VERSION        "0.@HEMP_VERSION_MINOR"
+#define HEMP_VERSION        "0.2"
 #define HEMP_VERSION_MAJOR   0
 #define HEMP_VERSION_MINOR   2
 #define HEMP_NAME           "hemp"
@@ -8,136 +8,89 @@
 #define HEMP_PROMPT         "hemp"
 
 
-/* Define to 1 if you have the `bcopy' function. */
-#define HAVE_BCOPY 1
+/*--------------------------------------------------------------------------
+ * Header files
+ *--------------------------------------------------------------------------*/
+
+#define HEMP_HAVE_DIRENT_H
+#define HEMP_HAVE_INTTYPES_H
+#define HEMP_HAVE_MEMORY_H
+#define HEMP_HAVE_STDINT_H
+#define HEMP_HAVE_STDLIB_H
+#define HEMP_HAVE_STRING_H
+#define HEMP_HAVE_STRINGS_H
+#define HEMP_HAVE_SYS_STAT_H
+#define HEMP_HAVE_SYS_TYPES_H
+#define HEMP_HAVE_UNISTD_H
+/* #undef HEMP_HAVE_WINDOWS_H */
+
+
+/*--------------------------------------------------------------------------
+ * Library functions
+ *--------------------------------------------------------------------------*/
+
+#define HEMP_HAVE_BCOPY
+#define HEMP_HAVE_MEMMOVE
+#define HEMP_HAVE_MEMSET
+#define HEMP_HAVE_STRDUP
+#define HEMP_HAVE_STRERROR
+/* #undef HEMP_HAVE_STRSTR */
+#define HEMP_HAVE_STRTOL
+#define HEMP_HAVE_STRTOLL
+#define HEMP_HAVE_STRTOQ
+
+
+/*--------------------------------------------------------------------------
+ * Additional libraries
+ *--------------------------------------------------------------------------*/
+
+/* #undef HEMP_HAVE_READLINE */
+
+
+/*--------------------------------------------------------------------------
+ * Older stuff from autotools.
+ *--------------------------------------------------------------------------*/
 
 /* Define to 1 if you have the `closedir' function. */
-#define HAVE_CLOSEDIR 1
-
-/* Define to 1 if you have the <dirent.h> header file. */
-#define HAVE_DIRENT_H 1
+// #define HAVE_CLOSEDIR 1
 
 /* Define to 1 if you have the `dlerror' function. */
-#define HAVE_DLERROR 1
+// #define HAVE_DLERROR 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-#define HAVE_DLFCN_H 1
+// #define HAVE_DLFCN_H 1
 
 /* Define to 1 if you have the <dl.h> header file. */
 /* #undef HAVE_DL_H */
 
 /* Define to 1 if you have the `getcwd' function. */
-#define HAVE_GETCWD 1
+// #define HAVE_GETCWD 1
 
 /* Define if you have the libdl library or equivalent. */
-#define HAVE_LIBDL 1
+// #define HAVE_LIBDL 1
 
 /* Define to 1 if you have the <limits.h> header file. */
-#define HAVE_LIMITS_H 1
+// #define HAVE_LIMITS_H 1
 
 /* Define to 1 if you have the <mach-o/dyld.h> header file. */
-#define HAVE_MACH_O_DYLD_H 1
+// #define HAVE_MACH_O_DYLD_H 1
 
 /* Define to 1 if your system has a GNU libc compatible `malloc' function, and
    to 0 otherwise. */
-#define HAVE_MALLOC 1
-
-/* Define to 1 if you have the `memmove' function. */
-#define HAVE_MEMMOVE 1
-
-/* Define to 1 if you have the <memory.h> header file. */
-#define HAVE_MEMORY_H 1
-
-/* Define to 1 if you have the `memset' function. */
-#define HAVE_MEMSET 1
+// #define HAVE_MALLOC 1
 
 /* Define to 1 if you have the `opendir' function. */
-#define HAVE_OPENDIR 1
+// #define HAVE_OPENDIR 1
 
 /* Define to 1 if you have the `readdir' function. */
-#define HAVE_READDIR 1
+// #define HAVE_READDIR 1
 
 /* Define to 1 if your system has a GNU libc compatible `realloc' function,
    and to 0 otherwise. */
-#define HAVE_REALLOC 1
+// #define HAVE_REALLOC 1
 
 /* Define to 1 if you have the <stddef.h> header file. */
-#define HAVE_STDDEF_H 1
-
-/* Define to 1 if you have the <stdint.h> header file. */
-#define HAVE_STDINT_H 1
-
-/* Define to 1 if you have the <stdlib.h> header file. */
-#define HAVE_STDLIB_H 1
-
-/* Define to 1 if you have the `strchr' function. */
-#define HAVE_STRCHR 1
-
-/* Define to 1 if you have the `strdup' function. */
-#define HAVE_STRDUP 1
-
-/* Define to 1 if you have the <strings.h> header file. */
-#define HAVE_STRINGS_H 1
-
-/* Define to 1 if you have the <string.h> header file. */
-#define HAVE_STRING_H 1
-
-/* Define to 1 if you have the `strlcat' function. */
-#define HAVE_STRLCAT 1
-
-/* Define to 1 if you have the `strlcpy' function. */
-#define HAVE_STRLCPY 1
-
-/* Define to 1 if you have the `strrchr' function. */
-#define HAVE_STRRCHR 1
-
-/* Define to 1 if you have the `strstr' function. */
-#define HAVE_STRSTR 1
-
-/* Define to 1 if you have the `strtol' function. */
-#define HAVE_STRTOL 1
-
-/* Define to 1 if you have the <sys/dl.h> header file. */
-/* #undef HAVE_SYS_DL_H */
-
-/* Define to 1 if you have the <sys/stat.h> header file. */
-#define HAVE_SYS_STAT_H 1
-
-/* Define to 1 if you have the <sys/types.h> header file. */
-#define HAVE_SYS_TYPES_H 1
-
-/* Define to 1 if you have the <unistd.h> header file. */
-#define HAVE_UNISTD_H 1
+// #define HAVE_STDDEF_H 1
 
 /* Define to 1 if you have the `vprintf' function. */
-#define HAVE_VPRINTF 1
-
-/* Define to the system default library search path. */
-#define LT_DLSEARCH_PATH "/usr/local/lib:/lib:/usr/lib"
-
-/* The archive extension */
-#define LT_LIBEXT "a"
-
-/* Define to the extension used for runtime loadable modules, say, ".so". */
-#define LT_MODULE_EXT ".so"
-
-/* Define to the name of the environment variable that determines the run-time
-   module search path. */
-#define LT_MODULE_PATH_VAR "DYLD_LIBRARY_PATH"
-
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
-#define LT_OBJDIR ".libs/"
-
-/* Define to 1 if you have the ANSI C header files. */
-#define STDC_HEADERS 1
-
-/* Define so that glibc/gnulib argp.h does not typedef error_t. */
-#define __error_t_defined 1
-
-/* Define to empty if `const' does not conform to ANSI C. */
-/* #undef const */
-
-/* Define to a type to use for `error_t' if it is not otherwise available. */
-#define error_t int
-
+// #define HAVE_VPRINTF 1

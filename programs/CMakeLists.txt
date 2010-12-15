@@ -12,6 +12,7 @@ set_target_properties(
 target_link_libraries(
     hemp_program
     hemp_library
+    ${PROGRAM_LIBS}
 )
 
 install (
