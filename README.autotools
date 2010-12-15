@@ -1,0 +1,4 @@
+This branch contains the autotools configuration that I started using for the 
+project.  I'm now switching to CMake to see how that goes.
+
+-- abw 16th Dec 2010
