@@ -1,2 +1,0 @@
-Nothing much to see here.  There's only a very basic SWIG wrapper which 
-loads the hemp library as a Perl5 module.

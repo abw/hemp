@@ -1,22 +1,56 @@
-To build and install hemp:
+Fair Warning
+------------
 
-    $ ./configure
+Please be aware that hemp is still a work in progress.  I've been developing
+on 64 bit OSX (Snow Leopard) where it should compile without warnings and all
+tests usually pass (although I'm still at the stage of breaking things 
+periodically, so don't be surprised if they don't).
+
+The last time I checked it on 32 bit Linux (a few days ago at the time of 
+writing), I discovered that I had cocked up some of the macros that implement
+the NAN-boxing of values (in values.h), leading to complete failure in a 
+steaming pile of segfault FAIL.  I laugh at the idea of even trying to compile
+it on a windows box at this time.
+
+So although cross-platform support is an important goal, we're nowhere near 
+that point yet.  But don't feel too bad if it doesn't work for you - Hemp 
+doesn't even do anything practically useful right now, so you're not missing 
+out.  That said, any contributions to clean up the problems on Linux, etc., 
+would be most welcome now or at any time in the future.
+
+
+Instructions for Installing Hemp
+--------------------------------
+
+You first need to install CMake which handles the configuration, build and 
+installation process.  You can download it from here:
+
+    http://www.cmake.org/cmake/resources/software.html
+
+Or you can install it using your favourite package manager (apt, ports, etc).
+
+If you haven't already checked out the hemp source then you need to do that 
+next.
+
+    $ git clone git://github.com/abw/hemp.git
+    $ cd hemp
+
+Then run cmake in the hemp top-level directory.  Note the '.' argument at the
+end of the command.
+
+    $ cmake .
+
+Then run make, make check, and make install (for which you'll probably need 
+sudo to grant you write permission to the installation location)
+
     $ make
     $ make check
     $ sudo make install
 
-Please be aware of the fact that this is my first time using GNU autotools
-to manage the build process.  There's a fair amount of gnarly stuff going
-on that I don't fully understand.  It builds on my systems (OSX and Ubuntu
-Linux)), but I can't make any guarantees that it'll build on yours, especially
-if you're on a non-Unix/Mac platform.  Any help improving this side of things 
-would be most welcome.
-
 The commands shown above will install the hemp library, header files and the 
 hemp program on your system.  The hemp program doesn't do anything useful yet, 
 other that demonstrate that the program has compiled and linked correctly with 
-the library.  Note also that the hemp library itself doesn't yet do anything 
-particularly useful either, so most of this is academic.
+the library.  
 
     $ hemp                              # stub program for now
 
@@ -27,7 +61,7 @@ Here's a simple example as a proof of concept:
     #include <hemp.h>
 
     int main(int argc, char **argv, char **env) {
-        hemp_p hemp = hemp_init();
+        hemp_hemp hemp = hemp_new();
         printf("created a hemp engine: %p\n", hemp);
         hemp_free(hemp);
         return 0;
@@ -42,5 +76,5 @@ If the program compiles and run then you've successfully linked in the hemp
 library.  Now you just have to twiddle your thumbs for a while until I've 
 had the chance to add the functionality to makes it useful and usuable.
 
--- Andy Wardley (abw), July 2010
+-- Andy Wardley (abw), December 2010
 
