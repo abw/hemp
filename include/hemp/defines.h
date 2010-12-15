@@ -1,15 +1,6 @@
 #ifndef HEMP_DEFINES_H
 #define HEMP_DEFINES_H
 
-
-/* package details */
-#define HEMP_AUTHOR         "Andy Wardley"
-#define HEMP_NAME           HEMP_PACKAGE_NAME
-#define HEMP_VERSION        HEMP_PACKAGE_VERSION
-#define HEMP_EMAIL          HEMP_PACKAGE_BUGREPORT
-#define HEMP_URL            HEMP_PACKAGE_URL
-#define HEMP_PROMPT         HEMP_NAME
-
 /* aliases for commonly used values, characters, etc */
 #define HEMP_TRUE           1
 #define HEMP_FALSE          0
