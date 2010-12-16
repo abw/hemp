@@ -1,5 +1,4 @@
 cmake_minimum_required (VERSION 2.8)
-enable_testing()
 
 project (Hemp)
 
@@ -11,11 +10,15 @@ set(HEMP_EMAIL             "hemp@wardley.org")
 set(HEMP_URL               "")
 set(HEMP_MODULE_DIR        "modules")
 set(HEMP_MODULE_EXT        ".hso")
+set(HEMP_MODULE_PATH       ${PROJECT_BINARY_DIR}/modules)
 set(HEMP_TEST_DIR          ${PROJECT_SOURCE_DIR}/tests)
 
+set(CMAKE_CXX_FLAGS "-g -Wall")
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+set(ENV{HEMP_MODULE_PATH} ${PROJECT_BINARY_DIR}/modules)
 
 add_definitions( -DHEMP_DEBUG=4 )
+enable_testing()
 
 include(CheckIncludeFile)
 check_include_file(dirent.h     HEMP_HAVE_DIRENT_H)
@@ -42,36 +45,48 @@ check_function_exists(strtoq    HEMP_HAVE_STRTOQ)
 
 find_package( Readline REQUIRED )
 
+# do we also need dl and/or other platform-specific library?
 set(
     PROGRAM_LIBS 
     ${PROGRAM_LIBS} 
     readline
 )
 
+# doesn't do anything yet
 option (
     HEMP_DEBUG 
     "Enable debugging"
     ON
 )
 
+# Build the custom hemp/config.h header file. 
+# This feature alone makes CMake worth the price of admission.
 configure_file (
     "${PROJECT_SOURCE_DIR}/include/hemp/config.h.in"
     "${PROJECT_BINARY_DIR}/include/hemp/config.h"
 )
 
-include_directories("${PROJECT_BINARY_DIR}/include")
+# location of header files for build
+include_directories("${PROJECT_SOURCE_DIR}/include")
 
 add_subdirectory(include)
 add_subdirectory(library)
 add_subdirectory(programs)
-add_subdirectory(tests/core)
-add_subdirectory(tests/type)
 add_subdirectory(modules/codec)
 add_subdirectory(modules/language)
+
+# nothing in here yet
 #add_subdirectory(modules/tag)
 
+# disabled while testing languages
+#add_subdirectory(tests/core)
+#add_subdirectory(tests/type)
+add_subdirectory(tests/language/test)
+
 message(STATUS "Summary of configuration:") 
-message(STATUS " + Install prefix ............... : ${CMAKE_INSTALL_PREFIX}") 
+message(STATUS " + Project source dir............ : ${PROJECT_SOURCE_DIR}") 
+message(STATUS " + Project binary dir............ : ${PROJECT_BINARY_DIR}") 
+message(STATUS " + Installation prefix .......... : ${CMAKE_INSTALL_PREFIX}") 
 message(STATUS " + Readline library ............. : ${READLINE_LIBRARY}") 
 message(STATUS " + Ncurses library .............. : ${NCURSES_LIBRARY}") 
 

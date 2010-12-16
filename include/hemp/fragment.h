@@ -210,13 +210,16 @@ hemp_fragment_debug(
 #define hemp_block_exprs_list(frag)                             \
     (hemp_val_list(frag->args.block.exprs))
 
-#define hemp_expr_fragment(frag)                                 \
+#define hemp_expr_fragment(frag)                                \
     ((hemp_fragment) hemp_val_obj( hemp_expr(frag) ))
 
-#define hemp_lhs_fragment(frag)                                  \
+#define hemp_expr_args_fragment(frag)                           \
+    ((hemp_fragment) hemp_val_obj( hemp_expr_args(frag) ))
+
+#define hemp_lhs_fragment(frag)                                 \
     ((hemp_fragment) hemp_val_obj( hemp_lhs(frag) ))
 
-#define hemp_rhs_fragment(frag)                                  \
+#define hemp_rhs_fragment(frag)                                 \
     ((hemp_fragment) hemp_val_obj( hemp_rhs(frag) ))
 
 #define hemp_set_expr(frag, ex)                                 \
@@ -237,13 +240,16 @@ hemp_fragment_debug(
 #define hemp_set_block_exprs_list(frag, li)                     \
     (frag->args.block.exprs = hemp_list_val(li))
 
-#define hemp_set_expr_fragment(frag, ex)                         \
+#define hemp_set_expr_fragment(frag, ex)                        \
     (hemp_set_expr( frag, hemp_obj_val((hemp_object) ex) ))
 
-#define hemp_set_lhs_fragment(frag, ex)                          \
+#define hemp_set_expr_args_fragment(frag, a)                    \
+    (hemp_set_expr_args( frag, hemp_obj_val((hemp_object) a) ))
+
+#define hemp_set_lhs_fragment(frag, ex)                         \
     (hemp_set_lhs( frag, hemp_obj_val((hemp_object) ex) ))
 
-#define hemp_set_rhs_fragment(frag, ex)                          \
+#define hemp_set_rhs_fragment(frag, ex)                         \
     (hemp_set_rhs( frag, hemp_obj_val((hemp_object) ex) ))
 
 

@@ -274,7 +274,7 @@ HEMP_SCANNER(hemp_element_comment_scanner) {
     if (! tag->to_eol)
         hemp_fatal("No line scanner for current '%s' tag\n", tag->name);
     
-    /* update the source pointer past the text we've consumed */
+    /* scan to the end of line (or tag, whichever comes first) */
     src = tag->to_eol(tag, src);
 
     /* add a comment element to the list of scanned tokens */

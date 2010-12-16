@@ -83,11 +83,14 @@ hemp_document_data(
  * macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_document_first_fragment(t)                         \
-    t->fragments->head
+#define hemp_document_hemp(d)                                   \
+    d->dialect->hemp
 
-#define hemp_document_last_fragment(t)                          \
-    t->fragments->tail
+#define hemp_document_first_fragment(d)                         \
+    d->fragments->head
+
+#define hemp_document_last_fragment(d)                          \
+    d->fragments->tail
 
 #define hemp_document_add_fragment(document, element)           \
     hemp_fragments_add_fragment(                                \

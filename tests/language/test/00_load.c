@@ -1,39 +1,36 @@
 #include <hemp/test.h>
 
 
-int test_test_language();
+int test_language();
 
 int main(
     int argc, char **argv, char **env
 ) {
-//    plan(20);
-    return test_test_language();
+//    plan(8);
+    return test_language();
 //    return done();
 }
 
 
-int test_test_language() {
-    hemp_hemp          hemp    = hemp_new();
-    hemp_context     context = hemp_context_instance(hemp);
-    hemp_string      name    = "test1";
-    hemp_document document;
-    hemp_text     output;
+int test_language() {
+    hemp_hemp       hemp    = hemp_new();
+    hemp_context    context = hemp_context_instance(hemp);
+    hemp_string     name    = "test1";
+    hemp_document   document;
+    hemp_text       output;
 
     hemp_string  dir    = hemp_filesystem_join_path(HEMP_TEST_DIR, "scripts");
     hemp_string  file   = hemp_filesystem_join_path(dir, name);
     hemp_string  text   = hemp_filesystem_read_file(file);
 
     hemp_debug("text: %s\n", text);
-    hemp_language_instance(hemp, HEMP_TEST);
+    hemp_language_instance(hemp, "test");
 
     hemp_test_plan_p plan = hemp_test_plan(5);
 
     HEMP_TRY;
         document = hemp_document_instance(
-            hemp,
-            HEMP_TEST,
-            HEMP_TEXT, 
-            text
+            hemp, "test", HEMP_TEXT, text
         );
         output = hemp_document_render(document, context);
         ok( output, "%s rendered", name);

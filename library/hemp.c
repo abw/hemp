@@ -115,9 +115,6 @@ hemp_init_languages(
     hemp_register_language(
         hemp, HEMP_TT3, &hemp_language_tt3
     );
-    hemp_register_language(
-        hemp, "test", &hemp_language_test
-    );
 }
 
 
