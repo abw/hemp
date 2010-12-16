@@ -1,0 +1,44 @@
+This is the build directory for hemp.  You can safely delete the contents
+of this directory at any time and rebuild hemp.  See the ../INSTALL file
+for details.  Oh go on then, I'll tell you how to do it in case you're 
+the impatient type.  It goes something like this:
+
+  $ cmake ..
+  $ make
+  $ make test
+  $ sudo make install
+
+There.  Are you happy now?
+
+Don't forget to read the ../INSTALL file.  No, really.  It contains 
+some important information about the pre-alpha state of hemp which
+means that the probability of it building on your system are pretty
+slim right now (unless you happen to have a shiny Snow Leopard Mac,
+in which case, Rock On!).  But that's probably small consolation if
+you've already tried the above and found out that it doesn't even 
+compile.  Well, I warned you.  Or I would have done if you had taken
+the time to read the ../INSTALL file like I suggested.  What do you
+mean you're busy and you didn't have time to read it?  Well sure,
+that's fine, but then you can't lay the heavy guilt trip on me 
+because it doesn't build on your system.  Refund?  You want a
+refund?  Sure, I'll give you back twice what you paid for it.
+Ha.  See!  You're getting it for free.  Well, OK, maybe 
+you're not getting it at all.  Perhaps that explains 
+why you're being so edgy.  You *are* being edgy.
+I mean, you got all uptight because it didn't
+compile and just started cursing about
+stupid free software and how it
+never works out of the box 
+and why doesn't someone 
+try and do it better.
+Well that someone
+is me, or rather
+it would be me
+if I wasn't
+stuck here 
+oh shit
+I'm 
+out
+of
+s
+
