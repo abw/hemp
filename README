@@ -42,3 +42,16 @@ See the comments in include/macros.h for more information about how the
 basic parts fit together: Language > Dialect > Grammar > Symbol > Element
 
 -- abw 11th August 2010
+
+
+FURTHER UPDATE: There's been quite a lot of progress recently.  Hemp can
+now process templates reasonably well.  Most of the expression operators
+are implemented and I've started adding some high-level commands like 
+'if' (see tests/scripts/command/if).  Dynamic loading is also working 
+so that Hemp is now extensible at runtime.  There's also been a massive
+cleanup of code and a great renaming of symbols, element, fragments, and
+so on.  Unfortunately that means that the little documentation that there
+is, is now out of date.  Sorry about that.  For now, the tests are the 
+best indication of where hemp's at.
+
+-- abw 16th December 2010

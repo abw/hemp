@@ -1,0 +1,21 @@
+#!/bin/bash
+
+cat <<HereEndsLessonOne
+
+CMake or not CMake, there is no configure.
+
+To build hemp: 
+
+  0) Read the README file         # yeah, right!
+  1) Install CMake                # See http://cmake.org/
+  2) cd build
+  3) cmake ..                     # or "ccmake .." to change defaults
+  4) make
+  5) make test
+  6) sudo make install
+  7) Do the happy badger dance!   # optional
+
+See the INSTALL file for further details on building and installing hemp.
+
+HereEndsLessonOne
+

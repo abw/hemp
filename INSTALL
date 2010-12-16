@@ -35,17 +35,34 @@ next.
     $ git clone git://github.com/abw/hemp.git
     $ cd hemp
 
-Then run cmake in the hemp top-level directory.  Note the '.' argument at the
-end of the command.
+It is recommended that you use the 'build' sub-directory for building hemp.
+Run cmake in this directory, specifying '..' as an argument so that it can
+find the relevant configuration files in the top-level hemp directory.
 
-    $ cmake .
+    $ cd build
+    $ cmake ..
 
-Then run make, make check, and make install (for which you'll probably need 
+NOTE: CMake provides various different commands to use, depending on your
+operating system.  For example, on Unix-like systems you can use 'ccmake'
+instead of 'cmake' to enable the configuration manager.  On Windows there's
+the CMakeSetup.exe application which provides a point-and-clicky thing so 
+that you don't have to dirty yourself with the command line.  See this page 
+for further information:
+
+    http://www.cmake.org/cmake/help/runningcmake.html
+
+Then run make, make test, and make install (for which you'll probably need 
 sudo to grant you write permission to the installation location)
 
     $ make
-    $ make check
+    $ make test
     $ sudo make install
+
+NOTE: Hemp is not guaranteed to compile and/or pass all the tests on any
+operating system...yet.  Consider yourself warned (again) that building hemp 
+at this point in time may require a full beard, pair of sandals, an intimate
+knowledge of C, your C compiler, and a fair bit of patience.  Or you might 
+get lucky.
 
 The commands shown above will install the hemp library, header files and the 
 hemp program on your system.  The hemp program doesn't do anything useful yet, 
