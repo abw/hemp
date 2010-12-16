@@ -10,6 +10,8 @@ CTestTestfile.cmake
 *.o
 *.la
 *.lo
+
+include/hemp/config.h
 programs/hemp
 
 modules/codec/uri.hcm
@@ -55,7 +57,7 @@ tests/core/type
 tests/core/uri
 tests/core/utils
 tests/core/value
-tests/core/view
+tests/core/viewer
 
 tests/type/code
 tests/type/hash

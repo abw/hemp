@@ -19,22 +19,22 @@ void test_punctuation() {
     hemp_hemp hemp = hemp_new();
     ok( hemp, "created hemp" );
 
-    hemp_fragments fragments = hemp_fragments_new(hemp, 0);
+    hemp_fragments fragments = hemp_fragments_new(NULL, 0);
     ok( fragments, "created fragments" );
 
-    hemp_symbol space, comma, semicolon, terminator;
+    hemp_element space, comma, semicolon, terminator;
     
     HEMP_TRY;
-        space = hemp_symbol_instance(hemp, "hemp.space", " ", NULL);
+        space = hemp_element_instance(hemp, "hemp.space", " ", NULL);
         ok( space, "got %s symbol", space->name );
 
-        comma = hemp_symbol_instance(hemp, "hemp.delimiter", ",", NULL);
+        comma = hemp_element_instance(hemp, "hemp.delimiter", ",", NULL);
         ok( comma, "got %s symbol", comma->name );
 
-        semicolon = hemp_symbol_instance(hemp, "hemp.separator", ";", NULL);
+        semicolon = hemp_element_instance(hemp, "hemp.separator", ";", NULL);
         ok( semicolon, "got %s symbol", semicolon->name );
 
-        terminator = hemp_symbol_instance(hemp, "hemp.terminator", ".", NULL);
+        terminator = hemp_element_instance(hemp, "hemp.terminator", ".", NULL);
         ok( terminator, "got %s symbol", terminator->name );
 
     HEMP_CATCH_ALL;
@@ -66,22 +66,22 @@ void test_punctuation() {
     hemp_fragments_add_fragment(fragments, HempElementText,       text, 0, 0);
     hemp_fragments_add_eof(fragments, 0);
 
-    hemp_element elem = fragments->head;
+    hemp_fragment frag = fragments->head;
     
-    hemp_skip_delimiter(&elem);
-    ok( elem->type == semicolon, "blocked at semicolon separator" );
+    hemp_skip_delimiter(&frag);
+    ok( frag->type == semicolon, "blocked at semicolon separator" );
 
-    hemp_skip_separator(&elem);
-    ok( elem->type == terminator, "blocked at terminator" );
+    hemp_skip_separator(&frag);
+    ok( frag->type == terminator, "blocked at terminator" );
 
-    hemp_skip_terminator(&elem);
-    ok( elem->type == HempElementText, "blocked at text" );
+    hemp_skip_terminator(&frag);
+    ok( frag->type == HempElementText, "blocked at text" );
 
     hemp_fragments_free(fragments);
-    hemp_symbol_free(space);
-    hemp_symbol_free(comma);
-    hemp_symbol_free(semicolon);
-    hemp_symbol_free(terminator);
+    hemp_element_free(space);
+    hemp_element_free(comma);
+    hemp_element_free(semicolon);
+    hemp_element_free(terminator);
     hemp_free(hemp);    
 }
 

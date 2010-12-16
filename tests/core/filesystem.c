@@ -20,7 +20,7 @@ int main(
 void test_filesystem() {
     hemp_hemp hemp = hemp_new();
 
-    printf("TESTDIR: %s"\n, HEMP_TESTDIR);
+    printf("TESTDIR: %s\n", HEMP_TESTDIR);
 
     hemp_filesystem filesystem = hemp_filesystem_new(hemp, "/foo:/bar/:baz/blam:wam:bam/");
     ok( filesystem, "created filesystem with 5 directories in path" );

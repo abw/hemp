@@ -6,6 +6,7 @@
 #define HEMP_EMAIL          "@HEMP_EMAIL@"
 #define HEMP_URL            "@HEMP_URL@"
 #define HEMP_PROMPT         "@HEMP_NAME@"
+#define HEMP_TESTDIR        "@HEMP_TESTDIR@"
 
 
 /*--------------------------------------------------------------------------

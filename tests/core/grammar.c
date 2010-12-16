@@ -59,7 +59,7 @@ void test_grammar() {
 
 
 hemp_grammar
-hemp_grammar_test(
+hemp_grammar_test1(
     hemp_hemp     hemp,
     hemp_string name
 ) {
@@ -104,7 +104,7 @@ void test_hemp_grammar_instance() {
 
 //    hemp_language_instance(hemp, HEMP_TT3);
     hemp_register_grammar(
-        hemp, "test", (hemp_actor) &hemp_grammar_test
+        hemp, "test", (hemp_actor) &hemp_grammar_test1
     );
     
     hemp_grammar grammar = hemp_grammar_instance(hemp, "test");
