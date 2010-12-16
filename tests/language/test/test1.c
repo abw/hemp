@@ -19,7 +19,7 @@ int test_test_language() {
     hemp_document document;
     hemp_text     output;
 
-    hemp_string  dir    = hemp_filesystem_join_path(HEMP_TESTDIR, "scripts");
+    hemp_string  dir    = hemp_filesystem_join_path(HEMP_TEST_DIR, "scripts");
     hemp_string  file   = hemp_filesystem_join_path(dir, name);
     hemp_string  text   = hemp_filesystem_read_file(file);
 

@@ -1,7 +1,6 @@
 cmake_minimum_required (VERSION 2.8)
 enable_testing()
 
-
 project (Hemp)
 
 set(HEMP_VERSION_MAJOR     0)
@@ -10,9 +9,13 @@ set(HEMP_NAME              "hemp")
 set(HEMP_AUTHOR            "Andy Wardley")
 set(HEMP_EMAIL             "hemp@wardley.org")
 set(HEMP_URL               "")
+set(HEMP_MODULE_DIR        "modules")
+set(HEMP_MODULE_EXT        ".hso")
+set(HEMP_TEST_DIR          ${PROJECT_SOURCE_DIR}/tests)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-set(HEMP_TESTDIR      ${PROJECT_SOURCE_DIR}/tests)
+
+add_definitions( -DHEMP_DEBUG=4 )
 
 include(CheckIncludeFile)
 check_include_file(dirent.h     HEMP_HAVE_DIRENT_H)
@@ -62,12 +65,14 @@ add_subdirectory(include)
 add_subdirectory(library)
 add_subdirectory(programs)
 add_subdirectory(tests/core)
+add_subdirectory(tests/type)
+add_subdirectory(modules/codec)
+add_subdirectory(modules/language)
+#add_subdirectory(modules/tag)
 
 message(STATUS "Summary of configuration:") 
 message(STATUS " + Install prefix ............... : ${CMAKE_INSTALL_PREFIX}") 
 message(STATUS " + Readline library ............. : ${READLINE_LIBRARY}") 
 message(STATUS " + Ncurses library .............. : ${NCURSES_LIBRARY}") 
 
-include(MaintainerMode)
-
-
+# include(MaintainerMode)

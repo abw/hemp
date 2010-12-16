@@ -535,7 +535,7 @@ hemp_test_expect_file(
  * hemp_test_expect_script(language, dialect, name)
  *
  * Looks for a script in the hemp distribution tests/scripts directory.
- * e.g. hemp_test_expect_text("tt3", "tt3", HEMP_TESTDIR, "numops")
+ * e.g. hemp_test_expect_text("tt3", "tt3", HEMP_TEST_DIR, "numops")
  *--------------------------------------------------------------------------*/
 
 hemp_uint

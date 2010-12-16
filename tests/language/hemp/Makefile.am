@@ -1,11 +1,10 @@
-check_PROGRAMS  =   if
+check_PROGRAMS  =    if quotes
 
 #check_PROGRAMS  =   assign      \
 #                    boolops     \
 #                    comments    \
 #                    functions   \
 #                    hash        \
-#                    if          \
 #                    lists       \
 #                    nested      \
 #                    numbers     \
@@ -21,4 +20,4 @@ TESTS           = $(check_PROGRAMS)
 LDADD           = ../../../library/libhemp.la
 CFLAGS          = @CFLAGS@ \
                   -I"$(top_srcdir)/include" \
-                  -DHEMP_TESTDIR='"$(abs_top_srcdir)/tests"' 
+                  -DHEMP_TEST_DIR='"$(abs_top_srcdir)/tests"' 

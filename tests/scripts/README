@@ -8,17 +8,17 @@ A typical test program (e.g. tests/languages/hemp/numops.c) looks like this:
     ) {
         return hemp_test_expect_script(
             HEMP_TT3, HEMP_TT3, 
-            HEMP_TESTDIR, "numops"
+            HEMP_TEST_DIR, "numops"
         );
     }
 
 The first two arguments indicate the language and dialect respectively.  In 
 this case they are both set to HEMP_TT3 which is the string constant "tt3".
-HEMP_TESTDIR is a constant which contains the absolute path of the 'tests'
+HEMP_TEST_DIR is a constant which contains the absolute path of the 'tests'
 directory (i.e. the parent of this directory).  This is defined as a command 
 line option when the test is compiled (see tests/languages/hemp/Makefile.am). 
 The final argument is the name of the test script in this directory, i.e.
-"$HEMP_TESTDIR/scripts".
+"$HEMP_TEST_DIR/scripts".
 
 A test script looks like this:
 

@@ -10,7 +10,7 @@ int main(
 
     result = hemp_test_expect_script(
         HEMP_TT3, HEMP_TT3, 
-        HEMP_TESTDIR, "functions",
+        HEMP_TEST_DIR, "functions",
         context
     );
 

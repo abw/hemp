@@ -8,14 +8,11 @@ CTestTestfile.cmake
 .libs
 *.a
 *.o
-*.la
-*.lo
+*.so
+*.hso
 
 include/hemp/config.h
 programs/hemp
-
-modules/codec/uri.hcm
-modules/language/json.hcm
 
 tests/benchmark
 tests/memtrace

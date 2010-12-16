@@ -5,4 +5,4 @@ SUBDIRS         = type core
 LDADD           = ../library/libhemp.la tap.o
 CFLAGS          = @CFLAGS@ \
                 -I"${top_srcdir}/include" \
-                -DHEMP_TESTDIR='"$(abs_top_srcdir)/tests"'
+                -DHEMP_TEST_DIR='"$(abs_top_srcdir)/tests"'

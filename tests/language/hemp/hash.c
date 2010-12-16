@@ -16,7 +16,7 @@ int main(
 
     result = hemp_test_expect_script(
         HEMP_TT3, HEMP_TT3, 
-        HEMP_TESTDIR, "hash", 
+        HEMP_TEST_DIR, "hash", 
         context
     );
 

@@ -25,7 +25,7 @@ hemp_use_module(
     hemp_text_append_string(path, type);
     hemp_text_append_string(path, "/");
     hemp_text_append_string(path, name);
-    hemp_text_append_string(path, ".hcm");
+    hemp_text_append_string(path, HEMP_MODULE_EXT);
     hemp_debug_msg("constructed module path: %s\n", path->string);
 
     hemp_module module = hemp_global_module(hemp->global, path->string);
@@ -101,21 +101,22 @@ hemp_bool
 hemp_module_load(
     hemp_module     module
 ) {
-    hemp_debug_call("loading module: %s\n", module->name);
+    hemp_debug_msg("loading module: %s\n", module->name);
 
     /* just in case we've been here before */
     if (module->handle) {
-//      hemp_debug_msg("module is already loaded: %s\n", module->name);
+      hemp_debug_msg("module is already loaded: %s\n", module->name);
         return HEMP_TRUE;
     }
     else if (module->error) {
-//      hemp_debug_msg("module has already failed: %s (%s)\n", module->name, module->error);
+      hemp_debug_msg("module has already failed: %s (%s)\n", module->name, module->error);
         return HEMP_FALSE;
     }
 
     module->handle = dlopen(module->name, RTLD_NOW);
 
     if (! module->handle) {
+        hemp_debug_msg("module failed: %s\n", module->name);
         return hemp_module_failed(
             module,
             "Failed to load %s module: %s", 
@@ -123,7 +124,7 @@ hemp_module_load(
         );
     }
 
-//  hemp_debug_msg("loaded module: %s\n", module->name);
+  hemp_debug_msg("loaded module: %s\n", module->name);
 
     module->loader = (hemp_loader) dlsym(module->handle, HEMP_MODULE_LOADER);
     module->binder = (hemp_binder) dlsym(module->handle, HEMP_MODULE_BINDER);

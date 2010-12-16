@@ -14,7 +14,7 @@ int main(
     HEMP_TRY;
         result = hemp_test_expect_script(
             HEMP_TT3, HEMP_TT3, 
-            HEMP_TESTDIR, "numops",
+            HEMP_TEST_DIR, "numops",
             context
         );
 

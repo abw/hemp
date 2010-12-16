@@ -14,7 +14,7 @@ int main(
     HEMP_TRY;
         result = hemp_test_expect_script(
             HEMP_TT3, HEMP_TT3, 
-            HEMP_TESTDIR, "parens", 
+            HEMP_TEST_DIR, "parens", 
             context
             );
     HEMP_CATCH_ALL;

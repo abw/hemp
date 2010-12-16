@@ -35,7 +35,7 @@ void test_source() {
 
     hemp_source_free(source);
     
-    hemp_string path  = hemp_filesystem_join_path(HEMP_TESTDIR, "data/file1");
+    hemp_string path  = hemp_filesystem_join_path(HEMP_TEST_DIR, "data/file1");
 
     ok(
         (source = hemp_source_instance(hemp, HEMP_FILE, path)),
