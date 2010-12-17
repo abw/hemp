@@ -41,8 +41,24 @@ hemp_module_binder(
     hemp_module module,
     hemp_hemp   hemp
 ) {
-    hemp_debug_msg("MODULE name: %s\n", module->name);
+    hemp_debug_msg("Binding module: %s\n", module->name);
     hemp_register_language(hemp, "test", &hemp_language_test);
+
+    /* Fuckola!  I'm not doing this right.  My globals have got different 
+     * addresses... need to figure out the right compiler incantation and/or
+     * way to pass globals around
+     */
+
+     hemp_global hg_local = hemp_global_data();
+
+    if (&HempGlobal != hemp->global) {
+        hemp_debug_msg("hemp.global is %p (namespace: %p)\n", hemp->global, hemp->global->namespace);
+        hemp_debug_msg("HempGlobal is %p (namespace: %p)\n", &HempGlobal, HempGlobal.namespace);
+        hemp_debug_msg("hg_local is %p (namespace: %p)\n", hg_local, hg_local->namespace);
+        hemp_debug_msg("hemp_element_value_text: %p\n", &hemp_element_value_text);
+        hemp_fatal("Plugin error: HempGlobal symbol has not been resolved correctly");
+    }
+
     return HEMP_TRUE;
 }
 
@@ -52,7 +68,7 @@ hemp_module_binder(
  *--------------------------------------------------------------------------*/
 
 HEMP_LANGUAGE(hemp_language_test) {
-    hemp_debug_msg("hemp_language_test(%p, %s)\n", hemp, name);
+    hemp_debug_call("hemp_language_test(%p, %s)\n", hemp, name);
 
     hemp_language language = hemp_language_new(
         hemp, name, HEMP_TEST_VERSION
@@ -82,7 +98,7 @@ hemp_document
 hemp_dialect_test_prepare(
     hemp_document document
 ) {
-    hemp_debug("hemp_dialect_test_prepare(%p)\n", document);
+    hemp_debug_call("hemp_dialect_test_prepare(%p)\n", document);
 
     hemp_dialect dialect = document->dialect;
     hemp_debug_msg("preparing dialect: %p / %s\n", dialect, dialect->name);
@@ -90,8 +106,11 @@ hemp_dialect_test_prepare(
     hemp_hemp    hemp    = hemp_document_hemp(document);
     hemp_tagset  tagset  = hemp_tagset_prepare(document);
     hemp_grammar grammar = hemp_grammar_instance(hemp, dialect->name);
-
     hemp_tagset_new_tag(tagset, "hemp.outline", "outline", "--", NULL, grammar);
+
+    // no scanner
+
+    hemp_debug_msg("prepared document: %p\n", grammar);
 
     return document;
 }
@@ -111,11 +130,15 @@ hemp_dialect_test_cleanup(
  *--------------------------------------------------------------------------*/
 
 HEMP_GRAMMAR(hemp_grammar_test) {
-    hemp_debug("hemp_grammar_test(%p, %s)\n", hemp, name);
+    hemp_debug_msg("hemp_grammar_test(%p, %s) fetching alpha\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_hemp_alpha(hemp, name);
-    HEMP_USE_BLOCK("test.test",   "test",   11);
-    HEMP_USE_BLOCK("test.expect", "expect", 11);
+    hemp_debug_msg("hemp test grammar: %p\n", grammar);
+    HEMP_USE_BLOCK("test.input",  "test",   11);
+    hemp_debug_msg("got input\n");
+    HEMP_USE_BLOCK("test.output", "expect", 11);
+    hemp_debug_msg("got output\n");
     HEMP_USE_BLOCK("test.error",  "error",  11);
+    hemp_debug_msg("got error\n");
     return grammar;
 }
 
@@ -129,6 +152,7 @@ HEMP_ELEMENT(hemp_element_test_input) {
     element->scanner         = &hemp_element_test_input_scanner;
     element->cleanup         = &hemp_element_test_input_cleanup,
     element->value           = &hemp_element_test_input_value,
+    hemp_debug_msg("hemp_element_value_text: %p\n", &hemp_element_value_text);
     element->text            = &hemp_element_value_text,
     element->token           = &hemp_element_literal_text;
     element->source          = &hemp_element_literal_text;
@@ -219,6 +243,7 @@ HEMP_CLEANUP(hemp_element_test_input_cleanup) {
  *--------------------------------------------------------------------------*/
 
 HEMP_ELEMENT(hemp_element_test_output) {
+    hemp_debug_msg("hemp_element_test_output()\n");
     hemp_element_test_input(hemp, element);
     return element;
 }
@@ -229,6 +254,7 @@ HEMP_ELEMENT(hemp_element_test_output) {
  *--------------------------------------------------------------------------*/
 
 HEMP_ELEMENT(hemp_element_test_error) {
+    hemp_debug_msg("hemp_element_test_error()\n");
     hemp_element_test_input(hemp, element);
     return element;
 }

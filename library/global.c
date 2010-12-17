@@ -22,15 +22,19 @@ struct hemp_global HempGlobal = {
  *--------------------------------------------------------------------------*/
 
 hemp_global
+hemp_global_data() {
+    return &HempGlobal;
+}
+
+
+hemp_global
 hemp_global_init() {
     hemp_global global = &HempGlobal;
 
     if (! global->n_hemps++) {
-        hemp_debug_init("Initialising global hemp data\n");
+//      hemp_debug_msg("Initialising global hemp data: %p\n", global);
         hemp_global_init_namespaces(global);
-
         hemp_global_types_init(global);
-
         hemp_global_init_symbols(global);
         hemp_global_init_modules(global);
     }
@@ -85,6 +89,7 @@ void hemp_global_init_namespaces(
 
     global->namespace_id = 0;
     global->namespace    = hemp_namespace_init(0, "", NULL);
+    hemp_debug_msg("global namespace: %p\n", global->namespace);
 }
 
 

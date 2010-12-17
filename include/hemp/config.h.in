@@ -1,3 +1,6 @@
+#ifndef HEMP_CONFIG_H
+#define HEMP_CONFIG_H
+
 #define HEMP_VERSION        "@HEMP_VERSION_MAJOR@.@HEMP_VERSION_MINOR@"
 #define HEMP_VERSION_MAJOR   @HEMP_VERSION_MAJOR@
 #define HEMP_VERSION_MINOR   @HEMP_VERSION_MINOR@
@@ -6,9 +9,10 @@
 #define HEMP_EMAIL          "@HEMP_EMAIL@"
 #define HEMP_URL            "@HEMP_URL@"
 #define HEMP_PROMPT         "@HEMP_NAME@"
-#define HEMP_TEST_DIR       "@HEMP_TEST_DIR@"
 #define HEMP_MODULE_DIR     "@HEMP_MODULE_DIR@"
 #define HEMP_MODULE_EXT     "@HEMP_MODULE_EXT@"
+#define HEMP_SOURCE_DIR     "@HEMP_SOURCE_DIR@"
+#define HEMP_TEST_DIR       "@HEMP_TEST_DIR@"
 
 
 /*--------------------------------------------------------------------------
@@ -97,3 +101,6 @@
 
 /* Define to 1 if you have the `vprintf' function. */
 // #define HAVE_VPRINTF 1
+
+
+#endif /* HEMP_CONFIG_H */

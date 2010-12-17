@@ -10,8 +10,11 @@ file(
     viewer/*.c
 )
 
+#set(CMAKE_LIBRARY_LINKER_FLAGS "-exported_symbol HempGlobal")
+
 add_library(
     hemp_library
+#    SHARED
     ${hemp_library_SOURCES}
 )
 

@@ -43,12 +43,27 @@ void hemp_debug_col(
 ) {
 #ifdef HEMP_DEBUG
     if (hemp_debugging) {
+        /* attempt to shorten long file paths by skipping forward over
+         * the compile time source directory which is encoded in __FILE__
+         */
+        hemp_char first = *file;
+        hemp_size len   = strlen(HEMP_SOURCE_DIR);
+
+        if (hemp_stringn_eq(file, HEMP_SOURCE_DIR, len))
+            file += len + 1;
+
+        len = strlen(file);
+        if (len > 19) {
+            file += len - 19;
+            first = '~';
+        }
+
         va_list args;
         va_start(args, format);
         fprintf(
-            stderr, "%s%6ld %s%-20s %s", 
+            stderr, "%s%6ld %s%c%-20s %s", 
             HEMP_DEBUG_LINE_COL, line,
-            HEMP_DEBUG_FILE_COL, file,
+            HEMP_DEBUG_FILE_COL, first, file,
             colour
         );
         vfprintf(stderr, format, args);

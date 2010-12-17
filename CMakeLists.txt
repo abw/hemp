@@ -11,11 +11,16 @@ set(HEMP_URL               "")
 set(HEMP_MODULE_DIR        "modules")
 set(HEMP_MODULE_EXT        ".hso")
 set(HEMP_MODULE_PATH       ${PROJECT_BINARY_DIR}/modules)
+set(HEMP_SOURCE_DIR        ${PROJECT_SOURCE_DIR})
 set(HEMP_TEST_DIR          ${PROJECT_SOURCE_DIR}/tests)
 
-set(CMAKE_CXX_FLAGS "-g -Wall")
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-set(ENV{HEMP_MODULE_PATH} ${PROJECT_BINARY_DIR}/modules)
+#set(ENV{HEMP_MODULE_PATH} ${PROJECT_BINARY_DIR}/modules)
+
+set(CMAKE_MODULE_PATH       ${PROJECT_SOURCE_DIR}/cmake)
+set(CMAKE_C_FLAGS           "${CMAKE_C_FLAGS} -g -Wall")
+
+#set(CMAKE_MODULE_LINKER_FLAGS "-Wl,-undefined,dynamic_lookup")
+#set(CMAKE_SHARED_LINKER_FLAGS "-rdynamic -Wl,-undefined,error")
 
 add_definitions( -DHEMP_DEBUG=4 )
 enable_testing()
@@ -67,7 +72,10 @@ configure_file (
 )
 
 # location of header files for build
-include_directories("${PROJECT_SOURCE_DIR}/include")
+include_directories(
+    "${PROJECT_BINARY_DIR}/include"
+    "${PROJECT_SOURCE_DIR}/include"
+)
 
 add_subdirectory(include)
 add_subdirectory(library)
@@ -89,5 +97,7 @@ message(STATUS " + Project binary dir............ : ${PROJECT_BINARY_DIR}")
 message(STATUS " + Installation prefix .......... : ${CMAKE_INSTALL_PREFIX}") 
 message(STATUS " + Readline library ............. : ${READLINE_LIBRARY}") 
 message(STATUS " + Ncurses library .............. : ${NCURSES_LIBRARY}") 
+message(STATUS " + C Flags ...................... : ${CMAKE_C_FLAGS}") 
+message(STATUS " + Module link flags ............ : ${CMAKE_MODULE_LINKER_FLAGS}") 
 
 # include(MaintainerMode)

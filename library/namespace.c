@@ -60,6 +60,8 @@ hemp_namespace_child(
     hemp_namespace  child;
     hemp_value      value;
 
+    hemp_debug_call("namespace child: %p [%s] . [%s]\n", parent, parent->name, name);
+
     value = hemp_hash_fetch(parent->children, name);
 
     if (hemp_is_missing(value)) {
@@ -87,6 +89,7 @@ hemp_namespace
 hemp_resolve_namespace(
     hemp_string path
 ) {
+    hemp_debug_call("resolving namespace: %s\n", path);
     hemp_list      names = hemp_string_split(path, HEMP_STR_DOT);
     hemp_string    name  = hemp_val_str( hemp_list_item(names, 0) );
     hemp_namespace space = hemp_namespace_root(name);

@@ -11,8 +11,11 @@ CTestTestfile.cmake
 *.so
 *.hso
 
-include/hemp/config.h
-programs/hemp
+build
+!build/README
+
+#include/hemp/config.h
+#programs/hemp
 
 tests/benchmark
 tests/memtrace

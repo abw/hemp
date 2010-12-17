@@ -66,7 +66,7 @@ hemp_namespace_free_child(
 
 
 #define hemp_namespace_root(name)                               \
-    hemp_namespace_child(                                    \
+    hemp_namespace_child(                                       \
         HempGlobal.namespace, name                              \
     )
 

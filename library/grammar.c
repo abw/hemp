@@ -26,10 +26,10 @@ hemp_grammar_new_element(
     hemp_string     start,
     hemp_string     end
 ) {
-//  hemp_debug_call(
-//      "new [%s => %s] symbol\n", 
-//      token, etype
-//  );
+    hemp_debug_call(
+        "new [%s => %s] symbol\n", 
+        start ? start : "NULL", etype
+    );
 
     hemp_action constructor = hemp_factory_constructor(
         grammar->hemp->element, etype
@@ -61,10 +61,10 @@ hemp_grammar_add_element(
     hemp_oprec      lprec,
     hemp_oprec      rprec
 ) {
-//  hemp_debug_call(
-//      "adding [%s => %s] symbol to %s grammar [%d|%d]\n", 
-//      token, etype, grammar->name, lprec, rprec
-//  );
+    hemp_debug_call(
+        "adding [%s => %s] symbol to %s grammar [%d|%d]\n", 
+        start, etype, grammar->name, lprec, rprec
+    );
 
     /* Any element with a start token goes into the operator prefix tree 
      * (a modified ternary search tree) which allows the scanner to easily 
@@ -88,6 +88,8 @@ hemp_grammar_add_element(
     hemp_element element = hemp_grammar_new_element(
         grammar, etype, start, end
     );
+
+//  hemp_debug_msg("created new element: %p (%s)\n", element, element->name);
 
     element->lprec   = lprec;
     element->rprec   = rprec;

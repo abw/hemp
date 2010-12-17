@@ -11,6 +11,9 @@ struct hemp_global {
 };
 
 extern struct hemp_global HempGlobal;
+hemp_global
+hemp_global_data();
+
 
 
 hemp_global
@@ -18,6 +21,7 @@ hemp_global_init();
 
 void
 hemp_global_free();
+
 
 void 
 hemp_global_init_namespaces(
