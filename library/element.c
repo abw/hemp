@@ -279,7 +279,7 @@ HEMP_POSTFIX(hemp_element_parse_postfix) {
     hemp_debug_call("hemp_element_parse_postfix()\n");
     hemp_fragment self = *fragptr;
 
-    HEMP_INFIX_LEFT_PRECEDENCE;              // is that right?
+    HEMP_INFIX_LEFT_PRECEDENCE;
 
     hemp_set_flag(self, HEMP_BE_POSTFIX);
     hemp_set_expr_fragment(self, lhs);

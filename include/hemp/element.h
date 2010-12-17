@@ -197,10 +197,15 @@ HEMP_ELEMENT(hemp_element_identity_equal);
  * literal elements
  *--------------------------------------------------------------------------*/
 
+
+// NOTE: added the 'extern' to a handful of functions that I'm trying to 
+// use in the dynamically loaded language/test module.  It looks like these
+// have to be declared as extern (and in fact, they should all be)
+
 HEMP_ELEMENT(hemp_element_literal);
 HEMP_PREFIX(hemp_element_literal_prefix);
-HEMP_OUTPUT(hemp_element_literal_text);
-HEMP_VALUE(hemp_element_literal_value);
+extern HEMP_OUTPUT(hemp_element_literal_text);
+extern HEMP_VALUE(hemp_element_literal_value);
 HEMP_CLEANUP(hemp_element_literal_cleanup);
 
 HEMP_ELEMENT(hemp_element_fragment);
@@ -443,7 +448,7 @@ HEMP_VALUE(hemp_element_value_number);
 HEMP_VALUE(hemp_element_value_integer);
 HEMP_VALUE(hemp_element_value_boolean);
 HEMP_VALUE(hemp_element_value_compare);
-HEMP_OUTPUT(hemp_element_value_text);
+extern HEMP_OUTPUT(hemp_element_value_text);
 HEMP_OUTPUT(hemp_element_value_values);
 
 

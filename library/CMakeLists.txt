@@ -14,7 +14,7 @@ file(
 
 add_library(
     hemp_library
-#    SHARED
+    SHARED
     ${hemp_library_SOURCES}
 )
 

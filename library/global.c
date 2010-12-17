@@ -89,7 +89,8 @@ void hemp_global_init_namespaces(
 
     global->namespace_id = 0;
     global->namespace    = hemp_namespace_init(0, "", NULL);
-    hemp_debug_msg("global namespace: %p\n", global->namespace);
+
+    hemp_debug_init("global namespace: %p\n", global->namespace);
 }
 
 

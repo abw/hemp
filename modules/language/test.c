@@ -50,13 +50,15 @@ hemp_module_binder(
      */
 
      hemp_global hg_local = hemp_global_data();
+    
+    HempGlobal = *(hemp->global);
 
     if (&HempGlobal != hemp->global) {
         hemp_debug_msg("hemp.global is %p (namespace: %p)\n", hemp->global, hemp->global->namespace);
         hemp_debug_msg("HempGlobal is %p (namespace: %p)\n", &HempGlobal, HempGlobal.namespace);
         hemp_debug_msg("hg_local is %p (namespace: %p)\n", hg_local, hg_local->namespace);
-        hemp_debug_msg("hemp_element_value_text: %p\n", &hemp_element_value_text);
-        hemp_fatal("Plugin error: HempGlobal symbol has not been resolved correctly");
+//        hemp_debug_msg("hemp_element_value_text: %p\n", &hemp_element_value_text);
+//        hemp_fatal("Plugin error: HempGlobal symbol has not been resolved correctly");
     }
 
     return HEMP_TRUE;
@@ -89,7 +91,7 @@ HEMP_LANGUAGE(hemp_language_test) {
 HEMP_DIALECT(hemp_dialect_test) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
     dialect->prepare = &hemp_dialect_test_prepare;
-    dialect->cleanup = &hemp_dialect_test_cleanup;
+    dialect->cleanup = &hemp_tagset_cleanup;
     return dialect;
 }
 
@@ -101,6 +103,7 @@ hemp_dialect_test_prepare(
     hemp_debug_call("hemp_dialect_test_prepare(%p)\n", document);
 
     hemp_dialect dialect = document->dialect;
+
     hemp_debug_msg("preparing dialect: %p / %s\n", dialect, dialect->name);
     
     hemp_hemp    hemp    = hemp_document_hemp(document);
@@ -116,12 +119,12 @@ hemp_dialect_test_prepare(
 }
 
 
-void
-hemp_dialect_test_cleanup(
-    hemp_document document
-) {
-    hemp_debug_msg("hemp_dialect_test_cleanup(%p)\n", document);
-}
+//void
+//hemp_dialect_test_cleanup(
+//    hemp_document document
+//) {
+//    hemp_debug_msg("hemp_dialect_test_cleanup(%p)\n", document);
+//}
 
 
 
@@ -132,13 +135,9 @@ hemp_dialect_test_cleanup(
 HEMP_GRAMMAR(hemp_grammar_test) {
     hemp_debug_msg("hemp_grammar_test(%p, %s) fetching alpha\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_hemp_alpha(hemp, name);
-    hemp_debug_msg("hemp test grammar: %p\n", grammar);
-    HEMP_USE_BLOCK("test.input",  "test",   11);
-    hemp_debug_msg("got input\n");
-    HEMP_USE_BLOCK("test.output", "expect", 11);
-    hemp_debug_msg("got output\n");
-    HEMP_USE_BLOCK("test.error",  "error",  11);
-    hemp_debug_msg("got error\n");
+    HEMP_USE_BLOCK("hemp.test.input",  "test",   11);
+    HEMP_USE_BLOCK("hemp.test.output", "expect", 11);
+    HEMP_USE_BLOCK("hemp.test.error",  "error",  11);
     return grammar;
 }
 
@@ -152,8 +151,7 @@ HEMP_ELEMENT(hemp_element_test_input) {
     element->scanner         = &hemp_element_test_input_scanner;
     element->cleanup         = &hemp_element_test_input_cleanup,
     element->value           = &hemp_element_test_input_value,
-    hemp_debug_msg("hemp_element_value_text: %p\n", &hemp_element_value_text);
-    element->text            = &hemp_element_value_text,
+    element->text            = &hemp_element_value_text;
     element->token           = &hemp_element_literal_text;
     element->source          = &hemp_element_literal_text;
     element->flags           = HEMP_BE_SOURCE | HEMP_BE_FIXED;
@@ -235,6 +233,9 @@ HEMP_VALUE(hemp_element_test_input_value) {
 
 HEMP_CLEANUP(hemp_element_test_input_cleanup) {
     hemp_debug_msg("hemp_element_test_input_cleanup()\n");
+//    hemp_element_block_cleanup(
+//        hemp_rhs_fragment(fragment)
+//    );
 }
 
 

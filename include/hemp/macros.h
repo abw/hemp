@@ -406,46 +406,51 @@
 #define HEMP_RPREC_DBG(type, lhs, prec, compare, action)                    \
     HEMP_PREC_DBG(type, type->rprec, lhs, prec, compare, action)
 
+#define HEMP_FPTYPE ((*fragptr)->type)
+
 
 // NOTE: this macro produces stupid debugging messages... can't be arsed to fix right now
-#define HEMP_PREFIX_PRECEDENCE                                              \
-    if (precedence && (*fragptr)->type->rprec <= precedence) {              \
+#define HEMP_PREFIX_PRECEDENCE ({                                           \
+    if (precedence && HEMP_FPTYPE->rprec <= precedence) {                   \
         HEMP_PREFIX_DBG(                                                    \
-            (*fragptr)->type, precedence, "not more", "returning NULL"      \
+            HEMP_FPTYPE, precedence, "not more", "returning NULL"           \
         );                                                                  \
         return NULL;                                                        \
     }                                                                       \
     else {                                                                  \
         HEMP_PREFIX_DBG(                                                    \
-            (*fragptr)->type, precedence, "less", "continuing"              \
+            HEMP_FPTYPE, precedence, "less", "continuing"                   \
         );                                                                  \
-    }
+    }                                                                       \
+})
 
-#define HEMP_INFIX_LEFT_PRECEDENCE                                          \
-    if (precedence && (*fragptr)->type->lprec <= precedence) {              \
+#define HEMP_INFIX_LEFT_PRECEDENCE ({                                       \
+    if (precedence && HEMP_FPTYPE->lprec <= precedence) {                   \
         HEMP_LPREC_DBG(                                                     \
-            (*fragptr)->type, lhs, precedence, "not more", "returning lhs"  \
+            HEMP_FPTYPE, lhs, precedence, "not more", "returning lhs"       \
         );                                                                  \
         return lhs;                                                         \
     }                                                                       \
     else {                                                                  \
         HEMP_LPREC_DBG(                                                     \
-            (*fragptr)->type, lhs, precedence, "less", "continuing"         \
+            HEMP_FPTYPE, lhs, precedence, "less", "continuing"              \
         );                                                                  \
-    }
+    }                                                                       \
+})
 
-#define HEMP_INFIX_RIGHT_PRECEDENCE                                         \
-    if (precedence && (*fragptr)->type->lprec < precedence) {               \
+#define HEMP_INFIX_RIGHT_PRECEDENCE ({                                      \
+    if (precedence && HEMP_FPTYPE->lprec < precedence) {                    \
         HEMP_LPREC_DBG(                                                     \
-            (*fragptr)->type, lhs, precedence, "less", "returning lhs"      \
+            HEMP_FPTYPE, lhs, precedence, "less", "returning lhs"           \
         );                                                                  \
         return lhs;                                                         \
     }                                                                       \
     else {                                                                  \
         HEMP_LPREC_DBG(                                                     \
-            (*fragptr)->type, lhs, precedence, "not less", "continuing"     \
+            HEMP_FPTYPE, lhs, precedence, "not less", "continuing"          \
         );                                                                  \
-    }
+    }                                                                       \
+})
 
 
 /*--------------------------------------------------------------------------
@@ -481,20 +486,20 @@
  * the function to append the value onto.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_VALUE(f)                  \
+#define HEMP_VALUE(f)                       \
     HEMP_INLINE hemp_value f(               \
         hemp_value      value,              \
         hemp_context    context             \
     )
 
-#define HEMP_INPUT(f)                  \
+#define HEMP_INPUT(f)                       \
     HEMP_INLINE hemp_value f(               \
         hemp_value      value,              \
         hemp_context    context,            \
         hemp_value      input               \
     )
 
-#define HEMP_OUTPUT(f)                 \
+#define HEMP_OUTPUT(f)                      \
     HEMP_INLINE hemp_value f(               \
         hemp_value      value,              \
         hemp_context    context,            \

@@ -23,15 +23,11 @@ int test_language() {
     hemp_string  file   = hemp_filesystem_join_path(dir, name);
     hemp_string  text   = hemp_filesystem_read_file(file);
 
-    hemp_debug_msg("HempGlobal is %p (%p)\n", &HempGlobal, HempGlobal.namespace);
+//  hemp_debug_msg("HempGlobal is %p (%p)\n", &HempGlobal, HempGlobal.namespace);
 
     hemp_debug("text: %s\n", text);
 
-    hemp_debug_msg("HempGlobal is %p (%p)\n", &HempGlobal, HempGlobal.namespace);
-
     hemp_language_instance(hemp, "test");
-
-    hemp_debug_msg("HempGlobal is %p (%p)\n", &HempGlobal, HempGlobal.namespace);
 
     hemp_test_plan_p plan = hemp_test_plan(5);
 
@@ -56,6 +52,5 @@ int test_language() {
 
     HEMP_END;
 
-    return hemp_test_done(plan);
-//    return 0;
+    return hemp_test_all_done(plan);
 }

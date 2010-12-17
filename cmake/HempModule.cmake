@@ -1,7 +1,7 @@
 macro(hemp_module type name)
     add_library(
         hemp_${type}_${name}
-        SHARED
+        MODULE
         ${name}.c
     )
     set_target_properties(
