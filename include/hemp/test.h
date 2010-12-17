@@ -55,6 +55,7 @@ struct hemp_test_plan_s {
 };
 
 typedef struct hemp_test_plan_s *hemp_test_plan_p;
+typedef struct hemp_test *hemp_test;
 
 void
 hemp_test_global_setup();

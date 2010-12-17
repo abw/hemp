@@ -79,6 +79,13 @@ hemp_text_replace_string(
     hemp_string     replace
 );
 
+hemp_text
+hemp_text_truncate(
+    hemp_text       text, 
+    hemp_pos        length
+);
+
+
 void     
 hemp_text_release(
     hemp_text       text

@@ -386,69 +386,42 @@
 
 /* operator precedence */
 
-#define HEMP_PREC_DBG(type, tprec, lhs, prec, compare, action)              \
-    hemp_debug_parse(                                                       \
-        "precedence of %s (%d) is %s than %s (%d), %s\n",                   \
-        type->name, tprec, compare,                                         \
-        lhs->type->name, prec, action                                       \
-    )
-
-#define HEMP_PREFIX_DBG(type, prec, compare, action)                        \
-    hemp_debug_parse(                                                       \
-        "precedence of %s (%d) is %s than %d, %s\n",                        \
-        type->name, type->rprec, compare,                                   \
-        prec, action                                                        \
-    )
-
-#define HEMP_LPREC_DBG(type, lhs, prec, compare, action)                    \
-    HEMP_PREC_DBG(type, type->lprec, lhs, prec, compare, action)
-
-#define HEMP_RPREC_DBG(type, lhs, prec, compare, action)                    \
-    HEMP_PREC_DBG(type, type->rprec, lhs, prec, compare, action)
-
 #define HEMP_FPTYPE ((*fragptr)->type)
+
+#define HEMP_PREFIX_DEBUG                                                   \
+    hemp_debug_parse(                                                       \
+        "prefix precedence reqd is %d  OP:%s is %d\n",                      \
+        precedence,                                                         \
+        (*fragptr)->type->name, (*fragptr)->type->rprec                     \
+    )
+
+#define HEMP_INFIX_DEBUG                                                    \
+    hemp_debug_parse(                                                       \
+        "infix precedence LHS:%s is %d  OP:%s is %d\n",                     \
+        lhs->type->name, precedence,                                        \
+        (*fragptr)->type->name, (*fragptr)->type->lprec                     \
+    )
 
 
 // NOTE: this macro produces stupid debugging messages... can't be arsed to fix right now
 #define HEMP_PREFIX_PRECEDENCE ({                                           \
     if (precedence && HEMP_FPTYPE->rprec <= precedence) {                   \
-        HEMP_PREFIX_DBG(                                                    \
-            HEMP_FPTYPE, precedence, "not more", "returning NULL"           \
-        );                                                                  \
+        HEMP_PREFIX_DEBUG;                                                  \
         return NULL;                                                        \
-    }                                                                       \
-    else {                                                                  \
-        HEMP_PREFIX_DBG(                                                    \
-            HEMP_FPTYPE, precedence, "less", "continuing"                   \
-        );                                                                  \
     }                                                                       \
 })
 
 #define HEMP_INFIX_LEFT_PRECEDENCE ({                                       \
     if (precedence && HEMP_FPTYPE->lprec <= precedence) {                   \
-        HEMP_LPREC_DBG(                                                     \
-            HEMP_FPTYPE, lhs, precedence, "not more", "returning lhs"       \
-        );                                                                  \
+        HEMP_INFIX_DEBUG;                                                   \
         return lhs;                                                         \
-    }                                                                       \
-    else {                                                                  \
-        HEMP_LPREC_DBG(                                                     \
-            HEMP_FPTYPE, lhs, precedence, "less", "continuing"              \
-        );                                                                  \
     }                                                                       \
 })
 
 #define HEMP_INFIX_RIGHT_PRECEDENCE ({                                      \
     if (precedence && HEMP_FPTYPE->lprec < precedence) {                    \
-        HEMP_LPREC_DBG(                                                     \
-            HEMP_FPTYPE, lhs, precedence, "less", "returning lhs"           \
-        );                                                                  \
+        HEMP_INFIX_DEBUG;                                                   \
         return lhs;                                                         \
-    }                                                                       \
-    else {                                                                  \
-        HEMP_LPREC_DBG(                                                     \
-            HEMP_FPTYPE, lhs, precedence, "not less", "continuing"          \
-        );                                                                  \
     }                                                                       \
 })
 

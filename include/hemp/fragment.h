@@ -281,6 +281,8 @@ hemp_fragment_debug(
 #define hemp_parse_body(fp, ...)                                \
     hemp_parse_method(fp, body, NULL, __VA_ARGS__)
 
+// TODO: should this be rprec?  Hmm... maybe not.
+
 #define hemp_parse_lhs_expr(fragment) ({                        \
     hemp_fragment _hemp_expr = hemp_parse_prefix(               \
         fragptr, scope, fragment->type->lprec, 1                \
@@ -288,6 +290,16 @@ hemp_fragment_debug(
     if (! _hemp_expr)                                           \
         HEMP_THROW_NOEXPR(fragment);                            \
     hemp_set_lhs_fragment(fragment, _hemp_expr);                \
+    _hemp_expr;                                                 \
+})
+
+#define hemp_parse_rhs_expr(fragment) ({                        \
+    hemp_fragment _hemp_expr = hemp_parse_prefix(               \
+        fragptr, scope, fragment->type->rprec, 1                \
+    );                                                          \
+    if (! _hemp_expr)                                           \
+        HEMP_THROW_NOEXPR(fragment);                            \
+    hemp_set_rhs_fragment(fragment, _hemp_expr);                \
     _hemp_expr;                                                 \
 })
 

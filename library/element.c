@@ -294,58 +294,48 @@ HEMP_POSTFIX(hemp_element_parse_postfix) {
 
 HEMP_POSTFIX(hemp_element_parse_infix_left) {
     hemp_debug_call("hemp_element_parse_infix_left()\n");
-    hemp_fragment self = *fragptr;
-    hemp_element  type = self->type;
+    hemp_fragment fragment = *fragptr;
     hemp_fragment rhs;
 
     HEMP_INFIX_LEFT_PRECEDENCE;
 
-    hemp_set_flag(self, HEMP_BE_INFIX);
-    hemp_set_lhs_fragment(self, lhs);
+    hemp_set_flag(fragment, HEMP_BE_INFIX);
+    hemp_set_lhs_fragment(fragment, lhs);
     hemp_advance(fragptr);
-    rhs = hemp_parse_prefix(fragptr, scope, type->lprec, 1);
 
-    if (! rhs)
-        hemp_fatal("missing expression on rhs of %s\n", type->start);
-
-    hemp_set_rhs_fragment(self, rhs);
+    rhs = hemp_parse_rhs_expr(fragment);
 
     hemp_debug_parse(
         "parsed infix [%s] [%s] [%s]\n", 
-        lhs->type->name, self->type->start, rhs->type->name
+        lhs->type->name, fragment->type->start, rhs->type->name
     );
 
     hemp_debug_parse("next fragment is %s:\n", (*fragptr)->type->name);
 
+    // TODO: convince myself that we shouldn't be passing self->rprec
+    // instead of precedence
     return hemp_parse_postfix(
         fragptr, scope, precedence, 0,
-        self
+        fragment
     );
 }
 
 
 HEMP_POSTFIX(hemp_element_parse_infix_right) {
-    hemp_fragment self = *fragptr;
-    hemp_element  type = self->type;
-    hemp_fragment rhs;
+    hemp_fragment fragment = *fragptr;
 
     hemp_debug_call("hemp_element_parse_infix_right()\n");
 
     HEMP_INFIX_RIGHT_PRECEDENCE;
 
-    hemp_set_flag(self, HEMP_BE_INFIX);
-    hemp_set_lhs_fragment(self, lhs);
+    hemp_set_flag(fragment, HEMP_BE_INFIX);
+    hemp_set_lhs_fragment(fragment, lhs);
     hemp_advance(fragptr);
-    rhs = hemp_parse_prefix(fragptr, scope, type->lprec, 1);
-
-    if (! rhs)
-        hemp_fatal("missing expression on rhs of %s\n", type->start);
-    
-    hemp_set_rhs_fragment(self, rhs);
+    hemp_parse_rhs_expr(fragment);
 
     return hemp_parse_postfix(
         fragptr, scope, precedence, 0,
-        self
+        fragment
     );
 }
 

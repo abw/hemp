@@ -58,6 +58,21 @@ hemp_scan_number(
 }
 
 
+HEMP_INLINE void
+hemp_scan_whitespace(
+    hemp_document   document
+) {
+    hemp_string     src = document->scanptr;
+
+    if (isspace(*src)) {
+        /* whitespace */
+        hemp_scan_while(src, isspace);
+        hemp_document_scanned_to(
+            document, HempElementSpace, src
+        );
+    }
+}
+
 
 /*
 hemp_bool

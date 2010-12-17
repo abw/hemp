@@ -1,8 +1,8 @@
 #include <hemp/test.h>
 
 /*--------------------------------------------------------------------------
- * This file defines functions for testing hemp using the Test Anything 
- * Prototcol (TAP).  It is based on the C TAP library by Nik Clayton:
+ * This file include functions for testing hemp using the Test Anything 
+ * Prototcol (TAP).  They are based on the C TAP library by Nik Clayton:
  *--------------------------------------------------------------------------
  * Copyright (c) 2004 Nik Clayton
  * All rights reserved.
@@ -390,18 +390,18 @@ hemp_mem_trace_ok(void)
 
 hemp_uint
 hemp_test_expect_text(
-    hemp_string      language,
-    hemp_string      dialect,
-    hemp_string      text,
-    hemp_string      alias,
-    hemp_context  context
+    hemp_string     language,
+    hemp_string     dialect,
+    hemp_string     text,
+    hemp_string     alias,
+    hemp_context    context
 ) {
-    hemp_hemp          hemp = hemp_new();
-    hemp_string      test, name, expect, error, end;
-    hemp_list     list;
-    hemp_document document;
-    hemp_text     output;
-    hemp_size     n;
+    hemp_hemp       hemp = hemp_new();
+    hemp_string     test, name, expect, error, end;
+    hemp_list       list;
+    hemp_document   document;
+    hemp_text       output;
+    hemp_size       n;
 
     HEMP_TRY;
         hemp_language_instance(hemp, language);

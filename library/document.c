@@ -119,12 +119,19 @@ hemp_document_render(
     hemp_context  context
 ) {
     hemp_debug_call("hemp_document_render(%p)\n", document);
-//    hemp_hemp hemp = document->dialect->hemp;
-    hemp_bool my_context = HEMP_FALSE;
-    hemp_value v;
-    hemp_text output;
+    return hemp_document_process(document, context, NULL);
+}
 
-    hemp_fragment root = hemp_document_tree(document);
+
+hemp_text
+hemp_document_process(
+    hemp_document document,
+    hemp_context  context,
+    hemp_text     output
+) {
+    hemp_debug_call("hemp_document_process(%p)\n", document);
+    hemp_bool       my_context  = HEMP_FALSE;
+    hemp_fragment   root        = hemp_document_tree(document);
 
     if (! context) {
         my_context = HEMP_TRUE;
@@ -133,19 +140,15 @@ hemp_document_render(
 
     if (! root)
         hemp_fatal("document does not have a root element");
-    
-//    hemp_debug("root type: %s\n", root->type->name);
 
-//    HEMP_TRY;
-        v = root->type->text(hemp_frag_val(root), context, HempNothing);
+    if (! output)
+        output = hemp_text_new();
+
+    root->type->text(hemp_frag_val(root), context, hemp_text_val(output));
+
 //    HEMP_CATCH_ALL;
 //       hemp_fatal("Error processing document: %s", hemp->error->message);
 //    HEMP_END;
-
-    /* v is a temporary value which will be freed by the context */
-//  hemp_debug_mem("making return value mortal: %p\n", v);
-    
-    output = hemp_text_from_text( hemp_val_text(v) );
 
     if (my_context)
         hemp_context_free(context);

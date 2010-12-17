@@ -25,7 +25,7 @@ int test_language() {
 
 //  hemp_debug_msg("HempGlobal is %p (%p)\n", &HempGlobal, HempGlobal.namespace);
 
-    hemp_debug("text: %s\n", text);
+//    hemp_debug("text: %s\n", text);
 
     hemp_language_instance(hemp, "test");
 
@@ -45,7 +45,7 @@ int test_language() {
         hemp_mem_free(dir);
         hemp_context_free(context);
         hemp_free(hemp);
-        hemp_mem_trace_ok();
+//        hemp_mem_trace_ok();
 
     HEMP_CATCH_ALL;
         fprintf(stderr, "Hemp error: %s", hemp->error->message);

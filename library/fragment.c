@@ -183,7 +183,7 @@ hemp_fragment_parse_exprs(
         hemp_skip_separator(fragptr);
 
         /* ask the next token to return an expression */
-         hemp_debug_parse("%s parse_prefix: %p\n", (*fragptr)->type->name, (*fragptr)->type->parse_prefix);
+        hemp_debug_parse("%s parse_prefix: %p\n", (*fragptr)->type->name, (*fragptr)->type->parse_prefix);
         expr = hemp_parse_prefix(fragptr, scope, precedence, HEMP_FALSE);
 
         /* if it's not an expression (e.g. a terminator) then we're done */

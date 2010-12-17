@@ -382,7 +382,7 @@ hemp_register_elements(
 
 hemp_document
 hemp_document_instance(
-    hemp_hemp     hemp,
+    hemp_hemp   hemp,
     hemp_string dialect,
     hemp_string scheme,
     hemp_string source
@@ -412,8 +412,13 @@ hemp_document_instance(
         }
     }
 
+    /* NOTE: do this first - otherwise there's a potential memory leak 
+     * in the instantiated source instance.
+     */
+    hemp_dialect dialect_inst = hemp_dialect_instance(hemp, dialect);
+
     document = hemp_dialect_document(
-        hemp_dialect_instance(hemp, dialect),
+        dialect_inst,
         hemp_source_instance(hemp, scheme, source)
     );
 

@@ -12,7 +12,6 @@ hemp_source_new(
 ) {
     hemp_source source;
     HEMP_ALLOCATE(source);
-
     source->name   = hemp_string_clone(name, "source name");
     source->scheme = scheme;
     source->md5    = 

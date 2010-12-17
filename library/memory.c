@@ -147,10 +147,23 @@ hemp_mem_trace_malloc(
 
     hmt->status = HEMP_MEM_MALLOC;
     hmt->size = size;
-    hmt->file = file;
     hmt->line = line;
+    hmt->file = NULL;
 
-//    hemp_debug("memory tracing %p via record at %p\n", hmt->ptr, hmt);
+    if (file) {
+        /* Sigh.  We have to copy this now that we're using dynamically 
+         * loaded modules because the memory containing the file name (from
+         * __FILE__) may have become inaccessible by the time we run a 
+         * memory trace report (I suspect because we've unloaded the modules
+         * by the time the trace report happens.
+         */
+        hmt->file = malloc(strlen(file) + 1);
+        strcpy(hmt->file, file);
+    }
+        
+
+//  hemp_debug("%d: memory tracing %p via record at %p\n", hmt->id, hmt->ptr, hmt);
+//  hemp_debug("  FILE: (%p) %s  LINE: %d\n", hmt->file, hmt->file ? hmt->file : "-", line);
     
     return hmt->ptr;
 }

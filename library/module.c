@@ -131,7 +131,7 @@ hemp_module_load(
 
     /* customer loader can augment module and/or perform initialisation */    
     if (module->loader) {
-        hemp_debug_msg("calling module loader: %s", HEMP_MODULE_LOADER);
+        hemp_debug_call("calling module loader: %s", HEMP_MODULE_LOADER);
         if (! module->loader(module)) {
             return HEMP_FALSE;
         }
@@ -157,7 +157,9 @@ hemp_module_unload(
 ) {
     if (! module->handle)
         return HEMP_TRUE;
-    
+
+    // TODO: add unloader
+
     if (dlclose(module->handle) == 0) {
         hemp_debug_init("closed '%s' module library\n", module->name);
         module->handle = NULL;

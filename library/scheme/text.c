@@ -29,3 +29,13 @@ hemp_scheme_text_checker(
 }
 
 
+//void
+//hemp_scheme_text_cleaner(
+//    hemp_source source 
+//) {
+//    if (source->text) {
+//        hemp_debug_msg("cleaning file source: %s\n%s\n", source->name, source->text);
+//        hemp_mem_free(source->text);
+//    }
+//}
+

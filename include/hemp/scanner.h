@@ -35,6 +35,11 @@ hemp_scan_number(
     hemp_document   document
 );
 
+HEMP_INLINE void
+hemp_scan_whitespace(
+    hemp_document   document
+);
+
 //hemp_bool
 //hemp_scan_unplugged(
 //    hemp_document   document

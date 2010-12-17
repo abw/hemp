@@ -296,6 +296,7 @@ extern const hemp_value HempAfter;
 #define hemp_to_text(v,c)       (hemp_is_text(v)    ? v : hemp_vtext(v,c,HempNothing))
 #define hemp_to_string(v,c)     hemp_value_to_string(v,c)
 #define hemp_onto_text(v,c,o)   hemp_vtext(v,c,o)
+#define hemp_blank()            hemp_str_val(HEMP_STR_BLANK)
 
 /*
 #define hemp_to_string(v,c) ({  \                       

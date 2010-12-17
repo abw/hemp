@@ -71,6 +71,14 @@ hemp_document_render(
     hemp_context    context
 );
 
+// quick hack - need to sort out names properly before going too far
+hemp_text
+hemp_document_process(
+    hemp_document document,
+    hemp_context  context,
+    hemp_text     output
+);
+
 
 hemp_value
 hemp_document_data(

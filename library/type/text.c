@@ -225,6 +225,20 @@ hemp_text_replace_string(
 }
 
 
+hemp_text
+hemp_text_truncate(
+    hemp_text       text, 
+    hemp_pos        length
+) {
+    if (text->length > length) {
+        text->length = length;
+        *(text->string + length) = HEMP_NUL;
+    }
+    return text;
+}
+
+
+
 
 /*--------------------------------------------------------------------------
  * Runtime text evaluation methods
