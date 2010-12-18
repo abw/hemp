@@ -37,7 +37,7 @@ hemp_identity_name(
 
 HEMP_OUTPUT(hemp_type_identity_text) {
     if (hemp_is_undefined(value)) {
-        hemp_debug("throwing undefined entity error\n");
+        hemp_debug("identity(%s) text throwing undefined entity error\n", hemp_identity_name(value));
         HEMP_UNDEF_ERROR(
             context, 
             hemp_identity_name(value)

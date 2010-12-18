@@ -19,7 +19,7 @@ hemp_string hemp_errmsg[] = {
     "Fragment mismatch: %s vs %s",
     "Unexpected token: %s",
     "Cannot convert %s to %s: %s",
-    "%s value",
+    "Undefined value",
     "Cannot fetch '%s' from %s",
     "Cannot store '%s' in %s",
     "Invalid option: %s",

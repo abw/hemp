@@ -309,5 +309,10 @@ void            hemp_error_throw(hemp_hemp, hemp_error);
         fragment->type->end                     \
     );
 
+#define HEMP_THROW_UNDEF(fragment)              \
+    HEMP_THROW_FRAGMENT(                        \
+        fragment, HEMP_ERROR_UNDEF              \
+    );
+
 
 #endif /* HEMP_ERROR_H */

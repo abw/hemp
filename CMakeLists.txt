@@ -86,9 +86,8 @@ add_subdirectory(modules/language)
 # nothing in here yet
 #add_subdirectory(modules/tag)
 
-# disabled while testing languages
-#add_subdirectory(tests/core)
-#add_subdirectory(tests/type)
+add_subdirectory(tests/core)
+add_subdirectory(tests/type)
 add_subdirectory(tests/language/test)
 
 message(STATUS "Summary of configuration:") 
