@@ -5,6 +5,8 @@
  * This header file includes all the other core header files that are 
  * required by most, if not all of the library source files.
  *--------------------------------------------------------------------------*/
+
+#define _GNU_SOURCE
  
 #include <assert.h>
 #include <ctype.h>

@@ -471,7 +471,7 @@ hemp_uri_relative_string(
     hemp_string     path  = uri->path;
     hemp_list       bpath = hemp_list_copy(base->paths);
 //  hemp_size       n     = 0;
-    hemp_value      nval;
+//  hemp_value      nval;
 //  hemp_string     node;
 
     if (! path || ! strlen(path)) {

@@ -527,7 +527,7 @@ hemp_error_text(
             location->line, location->column,
             hemp_source_name(doc->source), 
             error->message, (hemp_string) extract,
-            10 + location->column, " "
+            (int) (10 + location->column), " "
         );
 
         text = hemp_text_from_string(buffer);
