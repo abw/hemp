@@ -38,10 +38,6 @@ An incomplete list of things TODO, in no particular order.
 * Figure out what needs to go into the element data structure value union
   to represent all the various different element types.
 
-* This is my first time using autotools, and I'm sure I've made plenty of
-  nooby mistakes.  The whole autoconf/automake/libtool setup needs cleaning
-  up, ideally by someone more familiar with the tools than me
-
 * filesystem is a quick hack... needs doing properly
 
 * Factory used named passed as argument to cache instance in hash.  We
@@ -120,12 +116,6 @@ An incomplete list of things TODO, in no particular order.
   robust.  Also need to figure out how to construct the Makefiles using 
   autotools or by rolling yer own.
 
-* MD5 implementation is broken.  It broke after changing hemp_char from 
-  'unsigned char' to 'char' but I think it was broken before that as it was
-  generating different results to other implementations.  Try Peter Deutsch's
-  implementation.  NOTE: I changed hemp_char back to unsigned char because
-  I originally set it that way for a reason (the reason being utf8).
-
 * Improve URI parsing to handle incremental matching during scanning phase.
   UPDATE: nah, that's not going to work - see NOTES in uri.c
 
@@ -138,8 +128,6 @@ An incomplete list of things TODO, in no particular order.
   names that it registers are supposed to be namespaced and unique. Hmm.
 
 * HEMP_ACTION
-
-* Rewrite HEMP_PREFIX_PRECEDENCE, etc., so they don't rely on 'type'
 
 * Clean up scanner errors, number parse errors, etc., including quoted strings
   UPDATE: scanner errors (e.g. in quoted.c) have been cleaned up, and errors
