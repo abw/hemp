@@ -54,7 +54,7 @@ find_package( ReadLine REQUIRED )
 set(
     PROGRAM_LIBS 
     ${PROGRAM_LIBS} 
-    readline
+    readline m
 )
 
 # doesn't do anything yet
@@ -87,8 +87,9 @@ add_subdirectory(modules/language)
 #add_subdirectory(modules/tag)
 
 # disabled while testing languages
-#add_subdirectory(tests/core)
-#add_subdirectory(tests/type)
+#add_subdirectory(tests)
+add_subdirectory(tests/core)
+add_subdirectory(tests/type)
 add_subdirectory(tests/language/test)
 
 message(STATUS "Summary of configuration:") 
