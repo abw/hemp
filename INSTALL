@@ -2,10 +2,11 @@ Fair Warning
 ------------
 
 Please be aware that hemp is still a work in progress.  I've been developing
-on 64 bit OSX (Snow Leopard) and also testing on a 32 bit Linux machine 
-(Ubuntu 10.04).  On these platforms it should compile without warning and all
-tests should pass (although I'm still at the stage of adding, removing and 
-changing things, so don't be surprised if they don't). 
+on 64 bit OSX (Snow Leopard) and also testing on a 32 bit OSX machine (also
+Snow Leopard, Intel Core Duo processor) and a 32 bit Linux machine (Ubuntu 
+10.04).  On these platforms it should compile without warning and all but a
+couple of tests should pass (although I'm still at the stage of adding, 
+removing and changing things, so don't be surprised if they changes). 
 
 I haven't tried compiling it on a windows machine yet.  At the very least
 the dynamic loading code (dlopen(), etc) will need to be ported to the 

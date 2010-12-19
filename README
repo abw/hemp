@@ -21,7 +21,7 @@ concepts implemented therein.  Hemp will also provide support for version 2
 of the Template Toolkit language (TT2) for the sake of backward compatibility.  
 
 This is made possible by the fact that the Hemp document processing framework 
-simultaneously supports any number of different markup languages.  Hemp 
+simultaneously supports any number of different document languages.  Hemp 
 supports dynamic loading of different template, markup and data languages,
 providing great flexibility and infinite extensibility.  Hemp's document
 parsing tools make it easy to implement document processing languages, or 
