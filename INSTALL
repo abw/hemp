@@ -117,6 +117,19 @@ You'll need to install the developer tools that come on the operating
 system DVD provided with your machine (or download them from Apple's web 
 site).
 
+It is also recommended that you install macports.  See:
+
+    http://macports.org
+
+With macports installed you can then install the readline library and 
+cmake like so:
+
+    $ sudo port install readline cmake
+
+If you've already got readline installed, or if you're using some other
+package manager (e.g. fink/apt) then you don't need macports.
+
+Then you should be good to go.
 
 
 -- Andy Wardley (abw), December 2010

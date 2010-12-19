@@ -19,9 +19,6 @@ set(HEMP_TEST_DIR          ${PROJECT_SOURCE_DIR}/tests)
 set(CMAKE_MODULE_PATH       ${PROJECT_SOURCE_DIR}/cmake)
 set(CMAKE_C_FLAGS           "${CMAKE_C_FLAGS} -g -Wall")
 
-#set(CMAKE_MODULE_LINKER_FLAGS "-Wl,-undefined,dynamic_lookup")
-#set(CMAKE_SHARED_LINKER_FLAGS "-rdynamic -Wl,-undefined,error")
-
 add_definitions( -DHEMP_DEBUG=4 )
 enable_testing()
 
