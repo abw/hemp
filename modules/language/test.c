@@ -406,8 +406,8 @@ HEMP_VALUE(hemp_element_test_input_value) {
             HEMP_TEXT, 
             test->input->string
         );
-//        hemp_document_process(document, context, test->output);
-        hemp_text_append_string(test->output, "<TODO>");
+        hemp_document_process(document, context, test->output);
+	//        hemp_text_append_string(test->output, "<TODO>");
         test->status = HEMP_TEST_RUN_OK;
 
     HEMP_CATCH_ALL;
