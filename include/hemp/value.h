@@ -378,48 +378,48 @@ hemp_string hemp_identity_name(
 
 
 /* generic value evalaution */
-HEMP_VALUE(hemp_value_no_op);
-HEMP_VALUE(hemp_value_self);
-HEMP_VALUE(hemp_value_true);
-HEMP_VALUE(hemp_value_false);
-HEMP_FETCH_FUNC(hemp_value_dot);
+extern HEMP_VALUE(hemp_value_no_op);
+extern HEMP_VALUE(hemp_value_self);
+extern HEMP_VALUE(hemp_value_true);
+extern HEMP_VALUE(hemp_value_false);
+extern HEMP_FETCH_FUNC(hemp_value_dot);
 
-HEMP_INPUT(hemp_value_apply);
+extern HEMP_INPUT(hemp_value_apply);
 
-HEMP_OUTPUT(hemp_value_values);
-HEMP_OUTPUT(hemp_value_params);
+extern HEMP_OUTPUT(hemp_value_values);
+extern HEMP_OUTPUT(hemp_value_params);
 
 /* default "cannot convert to X" function */
-HEMP_OUTPUT(hemp_value_not_text);
-HEMP_OUTPUT(hemp_value_not_pairs);
-HEMP_VALUE(hemp_value_not_number);
-HEMP_VALUE(hemp_value_not_integer);
-HEMP_VALUE(hemp_value_not_boolean);
-HEMP_VALUE(hemp_value_not_compare);
-HEMP_VALUE(hemp_value_not_defined);
-HEMP_FETCH_FUNC(hemp_value_not_fetch);
-HEMP_STORE_FUNC(hemp_value_not_store);
-HEMP_FETCH_FUNC(hemp_value_not_dot);
+extern HEMP_OUTPUT(hemp_value_not_text);
+extern HEMP_OUTPUT(hemp_value_not_pairs);
+extern HEMP_VALUE(hemp_value_not_number);
+extern HEMP_VALUE(hemp_value_not_integer);
+extern HEMP_VALUE(hemp_value_not_boolean);
+extern HEMP_VALUE(hemp_value_not_compare);
+extern HEMP_VALUE(hemp_value_not_defined);
+extern HEMP_FETCH_FUNC(hemp_value_not_fetch);
+extern HEMP_STORE_FUNC(hemp_value_not_store);
+extern HEMP_FETCH_FUNC(hemp_value_not_dot);
 
 /* number -> xxx conversion */
-HEMP_OUTPUT(hemp_type_number_text);
-HEMP_VALUE(hemp_type_number_integer);
-HEMP_VALUE(hemp_type_number_boolean);
-HEMP_VALUE(hemp_type_number_compare);
+extern HEMP_OUTPUT(hemp_type_number_text);
+extern HEMP_VALUE(hemp_type_number_integer);
+extern HEMP_VALUE(hemp_type_number_boolean);
+extern HEMP_VALUE(hemp_type_number_compare);
 
 /* integer -> xxx conversion */
-HEMP_OUTPUT(hemp_type_integer_text);
-HEMP_VALUE(hemp_type_integer_number);
-HEMP_VALUE(hemp_type_integer_boolean);
-HEMP_VALUE(hemp_type_integer_compare);
+extern HEMP_OUTPUT(hemp_type_integer_text);
+extern HEMP_VALUE(hemp_type_integer_number);
+extern HEMP_VALUE(hemp_type_integer_boolean);
+extern HEMP_VALUE(hemp_type_integer_compare);
 
 /* identity -> xxx conversions */
-HEMP_OUTPUT(hemp_type_identity_text);
-HEMP_VALUE(hemp_type_identity_number);
-HEMP_VALUE(hemp_type_identity_integer);
-HEMP_VALUE(hemp_type_identity_defined);
-HEMP_VALUE(hemp_type_identity_boolean);
-HEMP_VALUE(hemp_type_identity_compare);
+extern HEMP_OUTPUT(hemp_type_identity_text);
+extern HEMP_VALUE(hemp_type_identity_number);
+extern HEMP_VALUE(hemp_type_identity_integer);
+extern HEMP_VALUE(hemp_type_identity_defined);
+extern HEMP_VALUE(hemp_type_identity_boolean);
+extern HEMP_VALUE(hemp_type_identity_compare);
 
 /* prototypes for text, list and hash are in the respective type/XXX.h files */
 
