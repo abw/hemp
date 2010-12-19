@@ -93,5 +93,26 @@ If the program compiles and run then you've successfully linked in the hemp
 library.  Now you just have to twiddle your thumbs for a while until I've 
 had the chance to add the functionality to makes it useful and usuable.
 
+Platform-Specific Notes
+-----------------------
+
+Linux
+-----
+
+If you get a CMake error saying something like this:
+
+  your CXX compiler: "CMAKE_CXX_COMPILER-NOTFOUND" was not found.
+
+Then it probably means you haven't got the C++ compiler extensions
+for gcc installed.  We're not using C++, but I haven't figured out
+how to tell CMake that.  For now, just do this (or equivalent)
+
+  $ sudo apt-get install g++
+
+You'll also need the readline library and development header files
+
+  $ sudo apt-get install libreadline-dev
+
+
 -- Andy Wardley (abw), December 2010
 

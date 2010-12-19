@@ -48,7 +48,7 @@ check_function_exists(strtol    HEMP_HAVE_STRTOL)
 check_function_exists(strtoll   HEMP_HAVE_STRTOLL)
 check_function_exists(strtoq    HEMP_HAVE_STRTOQ)
 
-find_package( Readline REQUIRED )
+find_package( ReadLine REQUIRED )
 
 # do we also need dl and/or other platform-specific library?
 set(

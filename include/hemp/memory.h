@@ -15,6 +15,12 @@ void hemp_mem_fail(hemp_string);
  * Macro to patch in memmove(), bcopy() or a hand-rolled memory copy function
  *--------------------------------------------------------------------------*/
 
+/* gcc 4.4 doesn't like empty values in #elif */
+#ifdef  HEMP_HAVE_BCOPY
+#undef  HEMP_HAVE_BCOPY
+#define HEMP_HAVE_BCOPY 1
+#endif
+
 #ifdef  HEMP_HAVE_MEMMOVE
 #   define hemp_mem_copy(src, dest, len) memmove(dest, src, len)
 #elif   HEMP_HAVE_BCOPY

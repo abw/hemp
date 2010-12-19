@@ -268,7 +268,7 @@ HEMP_URI_MATCHER(hemp_uri_match_port) {
     if (*source && *source == ':') {
         source++;
         
-        while (*source && isnumber(*source)) {
+        while (*source && isdigit(*source)) {
             *buffer++ = *source++;
         }
     }
