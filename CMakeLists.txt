@@ -48,13 +48,13 @@ check_function_exists(strtol    HEMP_HAVE_STRTOL)
 check_function_exists(strtoll   HEMP_HAVE_STRTOLL)
 check_function_exists(strtoq    HEMP_HAVE_STRTOQ)
 
-find_package( Readline REQUIRED )
+find_package( ReadLine REQUIRED )
 
 # do we also need dl and/or other platform-specific library?
 set(
     PROGRAM_LIBS 
     ${PROGRAM_LIBS} 
-    readline
+    readline m
 )
 
 # doesn't do anything yet
@@ -86,6 +86,8 @@ add_subdirectory(modules/language)
 # nothing in here yet
 #add_subdirectory(modules/tag)
 
+# disabled while testing languages
+#add_subdirectory(tests)
 add_subdirectory(tests/core)
 add_subdirectory(tests/type)
 add_subdirectory(tests/language/test)

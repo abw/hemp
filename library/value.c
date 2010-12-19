@@ -37,7 +37,7 @@ hemp_int_val(hemp_int i) {
 HEMP_INLINE hemp_value
 hemp_ptr_val(hemp_memory p) {
     hemp_value v;
-    v.bits = HEMP_POINTER_TAG | ((hemp_u64) p & HEMP_POINTER_MASK);
+    v.bits = HEMP_POINTER_TAG | HEMP_POINTER_UP(p);
     return v;
 }
 
@@ -45,7 +45,7 @@ hemp_ptr_val(hemp_memory p) {
 HEMP_INLINE hemp_value
 hemp_str_val(hemp_string s) {
     hemp_value v;
-    v.bits = HEMP_STRING_TAG | ((hemp_u64) s & HEMP_POINTER_MASK);
+    v.bits = HEMP_STRING_TAG | HEMP_POINTER_UP(s);
     return v;
 }
 
@@ -53,7 +53,7 @@ hemp_str_val(hemp_string s) {
 HEMP_INLINE hemp_value
 hemp_text_val(hemp_text t) {
     hemp_value v;
-    v.bits = HEMP_TEXT_TAG | ((hemp_u64) t & HEMP_POINTER_MASK);
+    v.bits = HEMP_TEXT_TAG | HEMP_POINTER_UP(t);
     return v;
 }
 
@@ -61,7 +61,7 @@ hemp_text_val(hemp_text t) {
 HEMP_INLINE hemp_value
 hemp_list_val(hemp_list t) {
     hemp_value v;
-    v.bits = HEMP_LIST_TAG | ((hemp_u64) t & HEMP_POINTER_MASK);
+    v.bits = HEMP_LIST_TAG | HEMP_POINTER_UP(t);
     return v;
 }
 
@@ -69,7 +69,7 @@ hemp_list_val(hemp_list t) {
 HEMP_INLINE hemp_value
 hemp_hash_val(hemp_hash t) {
     hemp_value v;
-    v.bits = HEMP_HASH_TAG | ((hemp_u64) t & HEMP_POINTER_MASK);
+    v.bits = HEMP_HASH_TAG | HEMP_POINTER_UP(t);
     return v;
 }
 
@@ -77,7 +77,7 @@ hemp_hash_val(hemp_hash t) {
 HEMP_INLINE hemp_value
 hemp_code_val(hemp_code c) {
     hemp_value v;
-    v.bits = HEMP_CODE_TAG | ((hemp_u64) c & HEMP_POINTER_MASK);
+    v.bits = HEMP_CODE_TAG | HEMP_POINTER_UP(c);
     return v;
 }
 
@@ -85,7 +85,7 @@ hemp_code_val(hemp_code c) {
 HEMP_INLINE hemp_value
 hemp_params_val(hemp_params p) {
     hemp_value v;
-    v.bits = HEMP_PARAMS_TAG | ((hemp_u64) p & HEMP_POINTER_MASK);
+    v.bits = HEMP_PARAMS_TAG | HEMP_POINTER_UP(p);
     return v;
 }
 
@@ -93,7 +93,7 @@ hemp_params_val(hemp_params p) {
 HEMP_INLINE hemp_value
 hemp_obj_val(hemp_object t) {
     hemp_value v;
-    v.bits = HEMP_OBJECT_TAG | ((hemp_u64) t & HEMP_POINTER_MASK);
+    v.bits = HEMP_OBJECT_TAG | HEMP_POINTER_UP(t);
     return v;
 }
 
@@ -126,7 +126,7 @@ hemp_type_val(
     hemp_memory  ptr
 ) {
     hemp_value v;
-    v.bits = HEMP_TAG_MAKE(type->id) | ((hemp_u64) ptr & HEMP_POINTER_MASK);
+    v.bits = HEMP_TAG_MAKE(type->id) | HEMP_POINTER_UP(ptr);
     return v;
 }
 
@@ -457,6 +457,7 @@ void hemp_dump_value(
     hemp_value value
 ) {
     hemp_dump_u64(value.bits);
+    /*
     printf("TYPE: %s\n", hemp_type_name(value));
     if (hemp_is_text(value)) {
         printf("TEXT: %s\n", hemp_val_text(value)->string);
@@ -464,6 +465,7 @@ void hemp_dump_value(
     else if (hemp_is_string(value)) {
         printf("TEXT: %s\n", hemp_val_str(value));
     }
+    */
 }
 
 

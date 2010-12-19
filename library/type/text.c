@@ -86,7 +86,7 @@ hemp_text_release(
     hemp_text text
 ) {
     if (text->string) {
-//      hemp_debug_mem("releasing text string at %p -> %p\n", text, text->string);
+	// hemp_debug_mem("releasing text string at %p -> %p: %s\n", text, text->string, text->string);
         hemp_mem_free(text->string);
         text->string = NULL;
     }
@@ -214,12 +214,12 @@ hemp_text_insert_string(
 hemp_text
 hemp_text_replace_string(
     hemp_text     text, 
-    hemp_string      replace
+    hemp_string   replace
 ) {
     hemp_size length = strlen(replace);
     hemp_text_capacity(text, length);
     strcpy(text->string, replace);
-    text->string[length + 1] = HEMP_NUL;
+    text->string[length] = HEMP_NUL;
     text->length = length;
     return text;
 }

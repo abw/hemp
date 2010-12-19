@@ -201,12 +201,14 @@ extern const hemp_value HempAfter;
 /* Pointers use the lower 32 bits on 32 bit machines, 47 bits on 64 bit */
 #if HEMP_WORD_LENGTH == 32
     #define HEMP_POINTER_BITS   32
-    #define HEMP_POINTER_MASK   0x00000000FFFFFFFFLL
-    #define HEMP_POINTER(v)     ((hemp_memory)(v.bits >> HEMP_POINTER_BITS))
+    #define HEMP_POINTER_MASK   0xFFFFFFFFL
+    #define HEMP_POINTER(v)     ((hemp_memory)((hemp_u32) v.bits))
+    #define HEMP_POINTER_UP(p)  ((hemp_u64) ((hemp_u32) p & HEMP_POINTER_MASK));
 #elif HEMP_WORD_LENGTH == 64
     #define HEMP_POINTER_BITS   47
     #define HEMP_POINTER_MASK   0x00007FFFFFFFFFFFLL
     #define HEMP_POINTER(v)     ((hemp_memory)(v.bits & HEMP_POINTER_MASK))
+    #define HEMP_POINTER_UP(p)  ((hemp_u64) p & HEMP_POINTER_MASK);
 #else
     #error "Invalid word length"
 #endif

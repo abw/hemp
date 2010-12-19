@@ -150,6 +150,8 @@ hemp_hash_grow(
     slots = (hemp_slot *) hemp_mem_alloc(
         wider * sizeof(hemp_slot)
     );
+    // TODO: macro this and test HEMP_HAVE_MEMSET
+    memset(slots, 0, wider * sizeof(hemp_slot));
 
     for (i = 0; i < hash->width; i++) {
         slot = hash->slots[i];

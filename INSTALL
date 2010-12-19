@@ -2,21 +2,16 @@ Fair Warning
 ------------
 
 Please be aware that hemp is still a work in progress.  I've been developing
-on 64 bit OSX (Snow Leopard) where it should compile without warnings and all
-tests usually pass (although I'm still at the stage of breaking things 
-periodically, so don't be surprised if they don't).
+on 64 bit OSX (Snow Leopard) and also testing on a 32 bit Linux machine 
+(Ubuntu 10.04).  On these platforms it should compile without warning and all
+tests should pass (although I'm still at the stage of adding, removing and 
+changing things, so don't be surprised if they don't). 
 
-The last time I checked it on 32 bit Linux (a few days ago at the time of 
-writing), I discovered that I had cocked up some of the macros that implement
-the NAN-boxing of values (in values.h), leading to complete failure in a 
-steaming pile of segfault FAIL.  I laugh at the idea of even trying to compile
-it on a windows box at this time.
+I haven't tried compiling it on a windows machine yet.  At the very least
+the dynamic loading code (dlopen(), etc) will need to be ported to the 
+Windows equivalent.  I can't think of anything else off the top of my head
+which I know will be broken, but there will undoubtedly be other things.
 
-So although cross-platform support is an important goal, we're nowhere near 
-that point yet.  But don't feel too bad if it doesn't work for you - Hemp 
-doesn't even do anything practically useful right now, so you're not missing 
-out.  That said, any contributions to clean up the problems on Linux, etc., 
-would be most welcome now or at any time in the future.
 
 
 Instructions for Installing Hemp
@@ -92,6 +87,37 @@ using a command something like this:
 If the program compiles and run then you've successfully linked in the hemp
 library.  Now you just have to twiddle your thumbs for a while until I've 
 had the chance to add the functionality to makes it useful and usuable.
+
+
+Platform-Specific Notes
+-----------------------
+
+Linux
+-----
+
+If you get a CMake error saying something like this:
+
+  your CXX compiler: "CMAKE_CXX_COMPILER-NOTFOUND" was not found.
+
+Then it probably means you haven't got the C++ compiler extensions
+for gcc installed.  We're not using C++, but I haven't figured out
+how to tell CMake that.  For now, just do this (or equivalent)
+
+  $ sudo apt-get install g++
+
+You'll also need the readline library and development header files
+
+  $ sudo apt-get install libreadline-dev
+
+
+OSX
+---
+
+You'll need to install the developer tools that come on the operating
+system DVD provided with your machine (or download them from Apple's web 
+site).
+
+
 
 -- Andy Wardley (abw), December 2010
 
