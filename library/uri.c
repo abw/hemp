@@ -379,17 +379,7 @@ hemp_uri_split_path(
         else {
             /* NUL terminate the copy in the buffer and add to list */
             *buffer++ = HEMP_NUL;
-            hemp_debug_msg("found path: [%s] at %p\n", name);
-            hemp_value  v1 = hemp_str_val(name);
-            hemp_string s1 = hemp_val_str(v1);
-            hemp_debug_msg("cross-check: <%p> vs <%p>\n", name, s1);
-            hemp_debug_msg("round-trip: [%s]\n", s1);
-            
             hemp_list_push(uri->paths, hemp_str_val(name));
-            hemp_value v = hemp_list_item(uri->paths, uri->paths->length - 1);
-            hemp_dump_value(v);
-            hemp_string s = hemp_val_str(v);
-            printf("** P: %p\n", s);
         }
 
         if (*path)
@@ -493,13 +483,11 @@ hemp_uri_relative_string(
 //    hemp_debug_msg("hemp_uri_relative_string(%s, %s)\n", base->path, relative);
 
     hemp_size n;
-    printf("PATH: ");
 
     for (n = 0; n < bpath->length; n++) {
         hemp_value v = hemp_list_item(bpath, n);
         if (n || 1)
             printf("/");
-        printf("<a>");
 
         if (hemp_is_empty(v)) {
             hemp_debug_msg("<EMPTY>");
@@ -507,14 +495,10 @@ hemp_uri_relative_string(
         else {
             printf("<DEFINED>");
             hemp_dump_value(v);
-            hemp_debug_msg("TYPE: %d\n", HEMP_TYPE_ID(v), hemp_type_name(v));
+            hemp_debug_msg("TYPE: %d\n", HEMP_TYPE_ID(v)); //, hemp_type_name(v));
+	    puts(hemp_val_str(v));
         }
-            
-        printf("<c>");
-
-//            puts(hemp_val_str(v));
     }
-    puts("\n");
     
     hemp_list_free(bpath);
 

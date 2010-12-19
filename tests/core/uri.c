@@ -6,7 +6,7 @@ void test_relative();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(20);
+    plan(22);
     test_uri();
     test_relative();
     return done();

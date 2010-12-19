@@ -457,6 +457,7 @@ void hemp_dump_value(
     hemp_value value
 ) {
     hemp_dump_u64(value.bits);
+    /*
     printf("TYPE: %s\n", hemp_type_name(value));
     if (hemp_is_text(value)) {
         printf("TEXT: %s\n", hemp_val_text(value)->string);
@@ -464,6 +465,7 @@ void hemp_dump_value(
     else if (hemp_is_string(value)) {
         printf("TEXT: %s\n", hemp_val_str(value));
     }
+    */
 }
 
 
