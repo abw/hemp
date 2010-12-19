@@ -1,57 +1,125 @@
-Hemp is a template processing toolkit/framework written in C.  Or will be, 
-one day.  Maybe.
+Hemp Weaves Data Into Text
+--------------------------
 
-The aim is to implement a similar framework to TT3 (of which a prototype
-written in Perl already exists) and provide a default implementation of 
-the TT3 template language.  However, the framework should also be extensible 
-and allow other template langauges (aka "dialects") to be plugged in.  
+Hemp is a C library implementing a fast, flexible and extensible framework
+for parsing, representing, manipulating and rendering document-based
+languages.  These include traditional template languages (TT2, TT3, etc), 
+mini-markup languages (Pod, Markdown, Textile, etc), declarative document
+langauges (HAML, SASS, etc.) and data languages (JSON, YAML, etc).  (Note
+that this is speaking hypothetically - Hemp *can* support these kinds of 
+languages, but doesn't necessarily do so yet).
 
-Library wrappers will eventually (maybe) provide access to it from Perl, and 
-perhaps other languages like Python, Ruby, Javascript and even PHP (gak!).  
-Well, that's if it ever gets anywhere.  If it does, there's a good chance 
-it'll end up being re-written on top of Parrot, or something else that's 
-better than the hodge-podge of code I've thrown together to get things 
-working.  But that's a long way off yet.  It still might come to nothing. 
+Hemp exists to provide an implementation platform for TT3.  This is the 
+long-awaited version 3 of the Perl Template Toolkit (TT).  Version 2 (TT2)
+is widely used in the Perl community, and as one of the more "mature"
+templating solutions, it has influenced (for better or worse) numerous other 
+templating languages written in Perl and other programming languages.
 
-Development is at a very early "playground" stage.  At present it is focussed 
-on tokenising and parsing templates into an element tree (a cross between a 
-document object model as used in HTML/XML) and an opcode tree (as used to 
-implement various programming languages).  There are a few tests, but nothing 
-really worth looking at just yet, unless perhaps if you've got a particular 
-interest in implementing mini-languages or the challenges of parsing templates.
-If that's not you then please move along now.  There's nothing to see. 
+A working prototype of TT3 exists in Perl (Template::TT3 - see 
+http://github.com/abw/Template-TT3).  Hemp is a rough translation to C of the 
+concepts implemented therein.  Hemp will also provide support for version 2 
+of the Template Toolkit language (TT2) for the sake of backward compatibility.  
 
-You still here?  Oh, right.  Well if you're really keen then you could have 
-a look at the INSTALL file for instructions on building the hemp library and 
-test programs.  But don't blame me if it doesn't work, or when you realise 
-that it doesn't do anything useful yet.
+This is made possible by the fact that the Hemp document processing framework 
+simultaneously supports any number of different markup languages.  Hemp 
+supports dynamic loading of different template, markup and data languages,
+providing great flexibility and infinite extensibility.  Hemp's document
+parsing tools make it easy to implement document processing languages, or 
+compose, configure and extend features from existing languages to tailor
+them for your specific needs.  The benefit of using Hemp is (or will be)
+that you only need to write the code to parse a language into an internal
+representation that Hemp can understand (and Hemp provides numerous tools
+to help do this).  Once a document has been converted to Hemp's internal
+document model it can then be inspected, manipulated and processed using
+all of the standard Hemp tools and techniques.  This allows you to freely
+intermix different languages in a project.  e.g. using JSON to define all 
+your static data, Markdown for all your static content, and a mixture of 
+older TT2 templates and newer TT3 templates to render dynamic HTML pages 
+for your web applications.  Hemp can handle all these different languages,
+all at the same time.  You can, for example, 'include' a TT2 header into a 
+TT3 page template, while loading in some data from a JSON file.  Hemp 
+understands these different formats, and ultimately, treats them equally.
 
--- Andy Wardley (abw), July 2010
+Basic library wrappers are provided for using Hemp from Perl.  Writing 
+wrappers for other languages (Python, Ruby, PHP, etc) should be a relatively 
+simple task for anyone with experience in writing interfaces to C libraries 
+in those languages (that's not me, so contributions are most welcome).
+
+Hemp is still very much in development and should be considered a working
+proof of concept at this stage.  Things are starting to fall into shape,
+to the point where it is now possible to process some fairly basic templates.
+However, nothing is guaranteed to work and you SHOULD NOT use Hemp for 
+anything even remotely important.
+
+Latest Updates: 
+
+- Compiling cleanly on 64 bit OSX (Snow Leopard) and 32 bit Linux (Ubuntu
+  10.04 LTS Lucid Lynx).  Most tests pass (tag, uri and 00_load fail at
+  the time of writing, but that's ok - they're reminders of TODO items
+  or things I've broken that need to be fixed).
+
+- Most of the expression operators are implemented and I've started adding 
+  some high-level commands like 'if' (see tests/scripts/command/if).  
+
+- Dynamic loading of languages, codecs, etc., is also working so that Hemp 
+  is now extensible at runtime.
+
+- TT3 is the language I'm concentrating on.
+
+- JSON language works. It's little more than a re-configuration of existing 
+  template elements to define the basic syntax for JSON.  It's a nice little
+  proof of concept that we can treat data languages more-or-less the same as
+  template languages.  For example, there's little difference between the
+  following, except for a bit of syntax:
+
+  # JSON                # Perl/TT2/TT3         # TT2/3 ('>' is optional)
+  { language: 'json' } 	{ language => 'JSON' } { language = 'json' }
+
+  I think this is useful for 2 reasons (talking out loud here, feel free to
+  skip).  Firstly, it allows us to load, parse and instantiate Hemp data from
+  JSON files (or, theoretically, any other data language) with minimal effort.
+  We already have support for data defined in TT2/3 style, and hemp allows 
+  us to redefine operator tokens (e.g. ':' instead of '=>'), so we effectively
+  get JSON support for free.  We could add a template directive to load data
+  in from an external file, e.g.
+
+    [% load /path/to/data.json %]  # load data definitions
+
+  Or perhaps from the command line, we could load up some data and then 
+  process a template.
+
+    $ hemp data /path/to/data.json file /path/to/template.tt3
+
+  We can also support configuration of Hemp itself from JSON files (or any
+  other data format that hemp can be programmed to read).  e.g.
+
+    $ hemp -f /path/to/hemp/config.json ...
+
+  See modules/language/json.c for the implementation and tests/language/hemp
+  for tests.
+
+- I've also been working on Hemp's internal test language.  It's based on the
+  mini-markup language that I've been using in TT3/3 for as long as I can
+  remember.  It looks something like this:
+
+  -- test This is the name of the test
+  This is some template markup, [% msg %]
+  -- expect
+  This is some template markup, Hello World!
+
+  The 'test' section defines a fragment of template markup which is processed
+  and compared to the expect output in the 'expect' section.  It can also be
+  used to test error reporting.
+
+  -- test This test is expected to fail
+  Hello [% 'worl
+  -- error
+  Error at line 1 of test... etc...
+
+  This test language is typical of the kind of mini-languages that people
+  often knock up to perform a specific task.  Implementing it in Hemp is
+  a good exercise in eating your own dog food.
 
 
-UPDATE: Hemp can now process templates for some very loose definition of 
-processing templates.  It's still very incomplete, incorrect and buggy, so
-don't go expecting anything too good just yet.  See tests/scanner.c for an
-example.  This runs the template test/expect scripts in tests/scripts.
-Languages, dialects, grammars, tags and elements are all dynamically
-configurable.  Everything seems to be fitting together nicely.  Given that
-this started off as a proof-of-concept project, I think it's safe to say
-(tenatively) that the concept has been proved.
-
-See the comments in include/macros.h for more information about how the
-basic parts fit together: Language > Dialect > Grammar > Symbol > Element
-
--- abw 11th August 2010
-
-
-FURTHER UPDATE: There's been quite a lot of progress recently.  Hemp can
-now process templates reasonably well.  Most of the expression operators
-are implemented and I've started adding some high-level commands like 
-'if' (see tests/scripts/command/if).  Dynamic loading is also working 
-so that Hemp is now extensible at runtime.  There's also been a massive
-cleanup of code and a great renaming of symbols, element, fragments, and
-so on.  Unfortunately that means that the little documentation that there
-is, is now out of date.  Sorry about that.  For now, the tests are the 
-best indication of where hemp's at.
-
--- abw 16th December 2010
+-- Andy Wardley (abw)
+   December 2010
