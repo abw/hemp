@@ -27,6 +27,18 @@ hemp_uri_copy(
 }
 
 
+HEMP_INLINE void
+hemp_uri_copy_authority(
+    hemp_uri from,
+    hemp_uri to
+) {
+    to->authority   = from->authority;
+    to->user        = from->user;
+    to->host        = from->host;
+    to->port        = from->port;
+}
+
+
 HEMP_INLINE hemp_uri
 hemp_uri_from_string(
     hemp_string string
@@ -44,6 +56,7 @@ hemp_uri_wipe(
     uri->uri        = NULL;
     uri->buffer     = NULL;
     uri->scheme     = NULL;
+    uri->authority  = NULL;
     uri->user       = NULL;
     uri->host       = NULL;
     uri->port       = NULL;
@@ -83,6 +96,8 @@ hemp_uri_free(
     hemp_uri_release(uri);
     hemp_mem_free(uri);
 }
+
+
 
 
 /*--------------------------------------------------------------------------
@@ -212,6 +227,7 @@ HEMP_URI_MATCHER(hemp_uri_match_authority) {
 
     if (strncmp(source, "//", 2) == 0) {
         *srcpos = source + 2;
+        uri->authority = *srcpos;       // FIXME
         hemp_uri_match_user(uri, srcpos, bufpos);
         hemp_uri_match_host(uri, srcpos, bufpos);
         hemp_uri_match_port(uri, srcpos, bufpos);
@@ -449,63 +465,418 @@ hemp_uri_split_query(
 
 
 /*--------------------------------------------------------------------------
- * relative paths
+ * Join
  *--------------------------------------------------------------------------*/
+
+#define hemp_uri_strcpy(src, srcpos, endpos) ({     \
+    srcpos = src;                                   \
+    while (*srcpos)                                 \
+        *endpos++ = *srcpos++;                      \
+})
+
+#define hemp_uri_bufsave(dest, bufpos, endpos) ({   \
+    *endpos++ = HEMP_NUL;                           \
+    dest = bufpos;                                  \
+    bufpos = endpos;                                \
+})
+
+
+hemp_string 
+hemp_uri_join(
+    hemp_uri uri
+) {
+    hemp_string buffer;
+    hemp_string endpos;
+    hemp_string srcpos;
+    hemp_string bufpos;
+    hemp_size   len = 0;
+
+    len += uri->scheme ? strlen(uri->scheme)     + 1 : 0;   /* +1 for ':'   */
+
+    if (uri->authority) {
+        len += 2;                                           /* +2 for '//'  */
+        len += uri->user ? strlen(uri->user)     + 1 : 0;   /* +1 for '@'   */
+        len += uri->host ? strlen(uri->host)         : 0;
+        len += uri->port ? strlen(uri->port)     + 1 : 0;   /* +1 for ':'   */
+    }
+
+    len += uri->path     ? strlen(uri->path)         : 0;
+    len += uri->query    ? strlen(uri->query)    + 1 : 0;   /* +1 for '?'   */
+    len += uri->fragment ? strlen(uri->fragment) + 1 : 0;   /* +1 for '#'   */
+
+    len++;      /* don't forget the terminating NUL */
+
+//  hemp_debug_msg("computed length: %d\n", len);
+
+    buffer = hemp_mem_alloc(len);
+    endpos = buffer;
+
+    if (! buffer)
+        hemp_mem_fail("URI buffer");
+
+    if (uri->scheme) {
+        hemp_uri_strcpy(uri->scheme, srcpos, endpos);
+        *endpos++ = ':';
+    }
+
+    if (uri->authority) {
+        hemp_uri_strcpy("//", srcpos, endpos);
+
+        if (uri->user) {
+            hemp_uri_strcpy(uri->user, srcpos, endpos);
+            *endpos++ = '@';
+        }
+        if (uri->host) {
+            hemp_uri_strcpy(uri->host, srcpos, endpos);
+        }
+        if (uri->port) {
+            *endpos++ = ':';
+            hemp_uri_strcpy(uri->port, srcpos, endpos);
+        }
+    }
+
+    /* there should always be a path, even if it's zero length, but let's
+     * play it safe, just in case....
+     */
+    if (uri->path) {
+        hemp_uri_strcpy(uri->path, srcpos, endpos);
+    }
+
+    if (uri->query) {
+        *endpos++ = '?';
+        hemp_uri_strcpy(uri->query, srcpos, endpos);
+    }
+
+    if (uri->fragment) {
+        *endpos++ = '#';
+        hemp_uri_strcpy(uri->fragment, srcpos, endpos);
+    }
+
+    if (uri->uri)
+        hemp_mem_free(uri->uri);
+
+    *endpos++ = HEMP_NUL;
+    uri->uri  = buffer;
+
+    /* Now do it all over again to generate the individual components. */
+    /* This is possibly silly, but I'm relying on it for testing ATM   */
+    buffer = hemp_mem_alloc(len);
+    endpos = buffer;
+    bufpos = buffer;
+
+    if (! buffer)
+        hemp_mem_fail("URI buffer");
+
+    if (uri->scheme) {
+        hemp_uri_strcpy(uri->scheme, srcpos, endpos);
+        hemp_uri_bufsave(uri->scheme, bufpos, endpos);
+    }
+
+    if (uri->authority) {
+        if (uri->user) {
+            hemp_uri_strcpy(uri->user, srcpos, endpos);
+            hemp_uri_bufsave(uri->user, bufpos, endpos);
+        }
+        if (uri->host) {
+            hemp_uri_strcpy(uri->host, srcpos, endpos);
+            hemp_uri_bufsave(uri->host, bufpos, endpos);
+        }
+        if (uri->port) {
+            hemp_uri_strcpy(uri->port, srcpos, endpos);
+            hemp_uri_bufsave(uri->port, bufpos, endpos);
+        }
+    }
+
+    if (uri->path) {
+        hemp_uri_strcpy(uri->path, srcpos, endpos);
+        hemp_uri_bufsave(uri->path, bufpos, endpos);
+    }
+
+    if (uri->query) {
+        hemp_uri_strcpy(uri->query, srcpos, endpos);
+        hemp_uri_bufsave(uri->query, bufpos, endpos);
+    }
+
+    if (uri->fragment) {
+        hemp_uri_strcpy(uri->fragment, srcpos, endpos);
+        hemp_uri_bufsave(uri->fragment, bufpos, endpos);
+    }
+
+    if (uri->buffer)
+        hemp_mem_free(uri->buffer);
+
+    *endpos++   = HEMP_NUL;
+    uri->buffer = buffer;
+
+    return uri->uri;
+}
+
+
+
+/*--------------------------------------------------------------------------
+ * relative paths
+ *
+ * This is a big hack, thrown together quickly to get something working.
+ * Needs a proper clean up.
+ *--------------------------------------------------------------------------*/
+
+
 
 HEMP_INLINE hemp_uri
 hemp_uri_relative_string(
     hemp_uri        base,
-    hemp_string     relative
+    hemp_string     relstr
 ) {
-    hemp_uri        uri   = hemp_uri_from_string(relative);
-    hemp_string     path  = uri->path;
-    hemp_list       bpath = hemp_list_copy(base->paths);
-//  hemp_size       n     = 0;
-//  hemp_value      nval;
-//  hemp_string     node;
+    hemp_uri        rel   = hemp_uri_from_string(relstr);
+    hemp_uri        uri   = hemp_uri_relative_uri(base, rel);
+    hemp_uri_free(rel);
+    return uri;
+}
 
-    if (! path || ! strlen(path)) {
-        hemp_todo("No path in relative uri");
+
+HEMP_INLINE hemp_uri
+hemp_uri_relative_uri(
+    hemp_uri        base,
+    hemp_uri        rel
+) {
+    hemp_uri        uri    = hemp_uri_new();
+    hemp_string     scheme = NULL;
+    hemp_string     path   = NULL;
+
+    if (! hemp_uri_schemes_equal(base, rel)) {
+        scheme = rel->scheme;
     }
-    
-    hemp_debug_msg("path: %s\n", path);
-    
-//    if (*path == HEMP_SLASH) {
-//        hemp_debug_msg("relative path is absolute\n");
-//        hemp_list_resize(bpath, 0);
-//        hemp_list_push_list(bpath, uri->paths);
-//        hemp_debug_msg("%d items in path\n", bpath->length);
-//    }
-//    else {
-//        hemp_debug_msg("not abs\n");
-//    }
-//
-//    hemp_debug_msg("hemp_uri_relative_string(%s, %s)\n", base->path, relative);
 
-    hemp_size n;
-
-    for (n = 0; n < bpath->length; n++) {
-        hemp_value v = hemp_list_item(bpath, n);
-        if (n || 1)
-            printf("/");
-
-        if (hemp_is_empty(v)) {
-            hemp_debug_msg("<EMPTY>");
+    if (scheme) {
+        hemp_uri_copy_authority(rel, uri);
+        uri->scheme = scheme;
+        uri->path   = path = hemp_uri_collapse_path(rel->path);
+        uri->query  = rel->query;
+    }
+    else {
+        if (rel->authority) {
+            hemp_uri_copy_authority(rel, uri);
+            uri->path   = path = hemp_uri_collapse_path(rel->path);
+            uri->query  = rel->query;
         }
         else {
-            printf("<DEFINED>");
-            hemp_dump_value(v);
-            hemp_debug_msg("TYPE: %d\n", HEMP_TYPE_ID(v)); //, hemp_type_name(v));
-	    puts(hemp_val_str(v));
+            if (hemp_uri_no_path(rel)) {
+                uri->path  = base->path;  
+                uri->query = rel->query
+                    ? rel->query
+                    : base->query;
+            }
+            else {
+                if (hemp_uri_path_is_absolute(rel)) {
+                    uri->path = path = hemp_uri_collapse_path(rel->path);
+                }
+                else {
+                    uri->path = path = hemp_uri_merge_paths(base, rel);
+                    uri->path = hemp_uri_collapse_path(uri->path);
+                    hemp_mem_free(path);
+                    path = uri->path;
+                }
+                uri->query = rel->query;
+            }
+            hemp_uri_copy_authority(base, uri);
+            // uri->authority = base->authority;
         }
+        uri->scheme = base->scheme;
     }
-    
-    hemp_list_free(bpath);
+    uri->fragment = rel->fragment;
+
+    /* we now need to create a new memory buffer into which we can copy
+     * the various elements, most of which are pointers to elements in the
+     * base or relative uris that we don't own
+     */
+    hemp_uri_join(uri);
+
+    if (path) {
+        hemp_mem_free(path);
+    }
 
     return uri;
 }
 
 
+HEMP_INLINE hemp_bool
+hemp_uri_schemes_equal(
+    hemp_uri base,
+    hemp_uri rel
+) {
+    if (base->scheme && rel->scheme) {
+        /* if both are defined then the string values should match */
+        return hemp_string_eq(base->scheme, rel->scheme);
+    }
+    else if (base->scheme || rel->scheme) {
+        /* if only one is defined then they're different */
+        return HEMP_FALSE;
+    }
+    else {
+        /* if both are undefined then they're the same */
+        return HEMP_TRUE;
+    }
+}
+
+hemp_string
+hemp_uri_merge_paths(
+    hemp_uri    base,
+    hemp_uri    rel
+) {
+    hemp_string merged  = NULL;
+    hemp_size   baselen = 0;
+    hemp_string slash;
+
+    /* From rfc 3986:
+     *
+     * If the base URI has a defined authority component and an empty path, 
+     * then return a string consisting of "/" concatenated with the 
+     * reference's path; 
+     * 
+     * Otherwise, return a string consisting of the reference's path 
+     * component appended to all but the last segment of the base URI's path 
+     * (i.e., excluding any characters after the right-most "/" in the base 
+     * URI path, or excluding the entire base URI path if it does not contain 
+     * any "/" characters). 
+     */
+
+//  hemp_debug_msg("[%s] + [%s]\n", base->path, rel->path);
+
+    if (base->authority && hemp_uri_no_path(base)) {
+        merged = hemp_mem_alloc(strlen(rel->path) + 2);
+        if (! merged) 
+            hemp_mem_fail("URI path");
+
+        strcpy(merged, "/");
+        strcat(merged, rel->path);
+    }
+    else {
+        slash = strrchr(base->path, '/');
+
+        if (slash) {
+            slash++;
+            baselen = slash - base->path;
+        }
+        
+        merged = hemp_mem_alloc(baselen + strlen(rel->path) + 1);
+        if (! merged) 
+            hemp_mem_fail("URI path");
+
+        if (baselen) {
+            strncpy(merged, base->path, baselen);
+            strcpy(merged + baselen, rel->path);
+        }
+        else {
+            strcpy(merged, rel->path);
+        }
+    }
+
+    return merged;
+}
+
+
+hemp_string
+hemp_uri_collapse_path(
+    hemp_string path
+) {
+    hemp_string collapsed = hemp_mem_alloc(strlen(path) + 1);
+    hemp_string src       = path;
+    hemp_string dst       = collapsed;
+    hemp_string slash     = NULL;
+    
+    if (! collapsed)
+        hemp_mem_fail("URI path");
+
+//  hemp_debug_msg("collapsing: %s\n", path);
+
+    /* From rfc 3986:
+     *
+     * While the input buffer is not empty, loop as follows:
+     * A If the input buffer begins with a prefix of "../" or "./",
+     *   then remove that prefix from the input buffer; otherwise,
+     * B if the input buffer begins with a prefix of "/./" or "/.",
+     *   where "." is a complete path segment, then replace that prefix 
+     *   with "/" in the input buffer; otherwise,
+     * C if the input buffer begins with a prefix of "/../" or "/..",
+     *   where ".." is a complete path segment, then replace that prefix 
+     *   with "/" in the input buffer and remove the last segment and 
+     *   its preceding "/" (if any) from the output buffer; otherwise,
+     * D if the input buffer consists only of "." or "..", then remove
+     *   that from the input buffer; otherwise,
+     * E move the first path segment in the input buffer to the end of
+     *   the output buffer, including the initial "/" character (if any) 
+     *   and any subsequent characters up to, but not including, the next
+     *   "/" character or the end of the input buffer.
+     */
+    while (*src) {
+        if (strncmp(src, "./",  2) == 0) {
+//          hemp_debug_msg("skipping ./\n");
+            src += 2;
+        }
+        else if (strncmp(src, "../", 3) == 0) {
+//          hemp_debug_msg("skipping ../\n");
+            src += 3;
+        }
+        else if (strncmp(src, "/./", 3) == 0) {
+//          hemp_debug_msg("munging /./ => /\n");
+            src += 2;       /* move onto second slash */
+        }
+        else if (strcmp(src, "/.") == 0) {
+//          hemp_debug_msg("munging /. => /\n");
+            src += 2;
+            *dst++ = '/';
+        }
+        else if (strncmp(src, "/../", 4) == 0) {
+//          hemp_debug_msg("upping /../\n");
+            src += 3;
+            /* remove last element and '/' on output buffer */
+            /* arse... must walk back to find preceding slash */
+            if (slash) {
+                dst   = slash;
+                *dst  = HEMP_NUL;
+                slash = strrchr(collapsed, '/');
+            }
+            else {
+                dst = collapsed;
+            }
+        }
+        else if (strcmp(src, "/..") == 0) {
+//          hemp_debug_msg("upping /..\n");
+            src += 3;
+            /* remove last element and add traing slash */
+            dst = slash
+                ? slash
+                : collapsed;
+            *dst++ = '/';
+        }
+        else if (strcmp(src, ".") == 0) {
+//          hemp_debug_msg("skipping .\n");
+            src += 1;
+        }
+        else if (strcmp(src, "..") == 0) {
+//          hemp_debug_msg("skipping ..\n");
+            src += 2;
+        }
+        else {
+//          hemp_debug_msg("copy next segment: %s\n", src);
+            if (*src == '/') {
+                slash  = dst;
+                *dst++ = *src++;
+            }
+            while (*src && *src != '/') {
+                *dst++ = *src++;
+            }
+        }
+//        *dst = HEMP_NUL;
+//        hemp_debug_msg("<< SRC: %s\n", src);
+//        hemp_debug_msg(">> DST: %s\n", collapsed);
+    }
+    *dst = HEMP_NUL;
+
+//  hemp_debug_msg("collapsed: %s\n", collapsed);
+    
+    return collapsed;
+}
 
 
 /*--------------------------------------------------------------------------

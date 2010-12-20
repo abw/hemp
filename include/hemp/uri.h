@@ -7,6 +7,7 @@ struct hemp_uri {
     hemp_string     uri;
     hemp_string     buffer;
     hemp_string     scheme;
+    hemp_string     authority;
     hemp_string     user;
     hemp_string     host;
     hemp_string     port;
@@ -28,10 +29,27 @@ hemp_uri_from_string(
     hemp_string     string
 );
 
+HEMP_INLINE void
+hemp_uri_copy_authority(
+    hemp_uri from,
+    hemp_uri to
+);
+
 HEMP_INLINE hemp_uri
 hemp_uri_relative_string(
     hemp_uri        base,
     hemp_string     rel
+);
+
+HEMP_INLINE hemp_uri
+hemp_uri_relative_uri(
+    hemp_uri        base,
+    hemp_uri        rel
+);
+
+void 
+hemp_uri_buffer(
+    hemp_uri uri
 );
 
 HEMP_INLINE hemp_uri
@@ -67,6 +85,30 @@ hemp_uri_split_query(
     hemp_string   * bufpos
 );
 
+hemp_string
+hemp_uri_join(
+    hemp_uri uri
+);
+
+
+HEMP_INLINE hemp_bool
+hemp_uri_schemes_equal(
+    hemp_uri base,
+    hemp_uri rel
+);
+
+hemp_string
+hemp_uri_merge_paths(
+    hemp_uri    base,
+    hemp_uri    rel
+);
+
+hemp_string
+hemp_uri_collapse_path(
+    hemp_string path
+);
+
+
 
 #define HEMP_URI_MATCHER(f)         \
     HEMP_INLINE hemp_bool f(        \
@@ -92,10 +134,20 @@ HEMP_URI_MATCHER(hemp_uri_match_query);
 HEMP_URI_MATCHER(hemp_uri_match_fragment);
 
 
-#define hemp_uri_new()  \
+#define hemp_uri_new()                  \
     hemp_uri_init(NULL)
 
-#define hemp_uri_string(s)  \
+#define hemp_uri_string(s)              \
     hemp_uri_split( hemp_uri_init(NULL), s )
+
+#define hemp_uri_has_path(u)            \
+    (u->path && *(u->path))
+
+#define hemp_uri_no_path(u)             \
+    (! hemp_uri_has_path(u))
+
+#define hemp_uri_path_is_absolute(u)    \
+    (u->path && *(u->path) == '/')
+
 
 #endif /* HEMP_URI_H */
