@@ -9,12 +9,8 @@ hemp_context
 hemp_context_new(
     hemp_hemp hemp
 ) {
-    hemp_context context = (hemp_context) hemp_mem_alloc(
-        sizeof(struct hemp_context)
-    );
-    
-    if (! context)
-        hemp_mem_fail("context");
+    hemp_context context;
+    HEMP_ALLOCATE(context);
 
     context->hemp      = hemp;
     context->frame     = NULL;

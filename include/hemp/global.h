@@ -6,6 +6,7 @@ struct hemp_global {
     hemp_u16        namespace_id;
     hemp_namespace  namespace;
     hemp_hash       modules;
+    hemp_hash       config;
     /* shortcut to hemp.element namespace which gets used often */
     hemp_namespace  elements;
 };
@@ -66,6 +67,14 @@ hemp_global_free_module(
     hemp_slot       item
 );
 
+void hemp_global_init_config(
+    hemp_global     global
+);
+
+void 
+hemp_global_free_config(
+    hemp_global     global
+);
 
 
 

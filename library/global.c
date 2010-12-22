@@ -13,6 +13,7 @@ struct hemp_global HempGlobal = {
     0,          /* namespaces allocated (+1 for next id)  */
     NULL,       /* root namespace                         */
     NULL,       /* module hash                            */
+    NULL,       /* config hash                            */
     NULL        /* element namespace                      */
 };
 
@@ -37,6 +38,7 @@ hemp_global_init() {
         hemp_global_types_init(global);
         hemp_global_init_symbols(global);
         hemp_global_init_modules(global);
+        hemp_global_init_config(global);
     }
     
     hemp_debug_init(
@@ -63,14 +65,13 @@ hemp_global_free() {
 
     if (! --global->n_hemps) {
         hemp_debug_init("Releasing global hemp data\n");
+        hemp_global_free_config(global);
         hemp_global_free_modules(global);
 
         hemp_global_types_free(global);
 
         hemp_global_free_symbols(global);
         hemp_global_free_namespaces(global);
-
-
     }
 }
 
@@ -220,3 +221,50 @@ hemp_global_free_module(
 }
 
 
+
+/*--------------------------------------------------------------------------
+ * Configuration
+ *--------------------------------------------------------------------------*/
+
+void hemp_global_init_config(
+    hemp_global global
+) {
+    hemp_debug_init("initialising config\n");
+
+    /* return silently if we've already done this */
+    if (global->config)
+        return;
+
+    global->config = hemp_hash_new();
+
+    /* set up the global 'hemp' configuration hash */
+    hemp_hash hemp = hemp_hash_new();
+    hemp_hash_store_hash(global->config, HEMP_NAME, hemp);
+
+    /* add the global hemp.XXX items */
+    hemp_hash_store_string(hemp, "version",     HEMP_VERSION);
+    hemp_hash_store_string(hemp, "root",        HEMP_ROOT);
+    hemp_hash_store_string(hemp, "module_dir",  HEMP_MODULE_DIR);
+    hemp_hash_store_string(hemp, "module_ext",  HEMP_MODULE_EXT);
+}
+
+
+void hemp_global_free_config(
+    hemp_global global
+) {
+    hemp_debug_init("freeing config\n");
+
+    /* return silently if this has already been done */
+    if (! global->config)
+        return;
+
+    /* free the global 'hemp' configuration hash we created earlier */
+    hemp_hash hemp = hemp_hash_fetch_hash(global->config, HEMP_NAME);
+
+    if (hemp)
+        hemp_hash_free(hemp);
+
+    /* free the config hash itself */
+    hemp_hash_free(global->config);
+    global->config = NULL;
+}

@@ -35,7 +35,7 @@ hemp_hash_free(
 
 HEMP_INLINE void
 hemp_hash_attach(
-    hemp_hash       child, 
+    hemp_hash       child,
     hemp_hash       parent
 );
 
@@ -52,7 +52,7 @@ hemp_hash_grow(
 HEMP_INLINE hemp_slot
 hemp_hash_store_keylen(
     hemp_hash       hash,
-    hemp_string     key, 
+    hemp_string     key,
     hemp_value      value,
     hemp_size       length
 );
@@ -60,7 +60,7 @@ hemp_hash_store_keylen(
 hemp_slot
 hemp_hash_store(
     hemp_hash       hash,
-    hemp_string     key, 
+    hemp_string     key,
     hemp_value      value
 );
 
@@ -115,6 +115,25 @@ hemp_hash_fetch_text(
     hemp_string     key
 );
 
+HEMP_INLINE hemp_list
+hemp_hash_fetch_list(
+    hemp_hash       hash,
+    hemp_string     name
+);
+
+HEMP_INLINE hemp_hash
+hemp_hash_fetch_hash(
+    hemp_hash       hash,
+    hemp_string     name
+);
+
+hemp_value
+hemp_hash_find(
+    hemp_hash       hash,
+    hemp_string     key,
+    hemp_context    context
+);
+
 hemp_string
 hemp_hash_as_string(
     hemp_hash       hash
@@ -133,7 +152,7 @@ hemp_hash_function_jenkins32(
 
 void
 hemp_hash_each(
-    hemp_hash       table, 
+    hemp_hash       hash,
     hemp_hash_iter  func
 );
 
@@ -154,6 +173,7 @@ HEMP_OUTPUT(hemp_type_hash_text);
 HEMP_FETCH_FUNC(hemp_type_hash_fetch);
 HEMP_STORE_FUNC(hemp_type_hash_store);
 HEMP_FETCH_FUNC(hemp_type_hash_dot);
+HEMP_OUTPUT(hemp_type_hash_pairs);
 HEMP_VALUE(hemp_method_hash_length);
 
 

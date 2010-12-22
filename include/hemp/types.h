@@ -16,9 +16,9 @@ typedef u_int32_t               hemp_flags;     /* bitmask                  */
 typedef int32_t                 hemp_offset;    /* -ve/+ve offset           */
 typedef int32_t                 hemp_int;       /* generic integer          */
 typedef double                  hemp_num;       /* generic fp number        */
-typedef unsigned long           hemp_uint;      /* generic unsigned int     */
-typedef unsigned long           hemp_size;      /* +ve size of list         */
-typedef unsigned long           hemp_pos;       /* +ve posn. in string/list */
+typedef unsigned long int       hemp_uint;      /* generic unsigned int     */
+typedef unsigned long int       hemp_size;      /* +ve size of list         */
+typedef unsigned long int       hemp_pos;       /* +ve posn. in string/list */
 typedef unsigned short int      hemp_oprec;     /* operator precedence      */
 typedef unsigned char           hemp_bool;      /* boolean true/false       */
 typedef unsigned char           hemp_char;      /* single character         */
@@ -103,6 +103,7 @@ struct hemp_hemp {
     hemp_factory    viewer;
                     
     hemp_context    context;
+    hemp_hash       config;
 
 //  hemp_hash       tags;
     hemp_hash       documents;

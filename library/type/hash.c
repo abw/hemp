@@ -45,6 +45,7 @@ HEMP_TYPE_FUNC(hemp_type_hash) {
     type->fetch      = &hemp_type_hash_fetch;
     type->store      = &hemp_type_hash_store;
     type->dot        = &hemp_type_hash_dot;
+    type->pairs      = &hemp_type_hash_pairs;
     type->boolean    = &hemp_value_true;            /* hash is always true or use hash size? */
     type->defined    = &hemp_value_true;
 
@@ -174,9 +175,9 @@ hemp_hash_grow(
 
 HEMP_INLINE hemp_bool 
 hemp_hash_key_match(
-    hemp_string  key1,
-    hemp_string  key2,
-    hemp_size length
+    hemp_string key1,
+    hemp_string key2,
+    hemp_size   length
 ) {
     /* We allow hash keys to be looked up using an unterminated C string
      * (with length specified explicitly) so that we can use an element's
@@ -204,10 +205,10 @@ hemp_hash_key_match(
 
 HEMP_INLINE hemp_slot
 hemp_hash_store_keylen(
-    hemp_hash  hash,
-    hemp_string   name,
-    hemp_value value,
-    hemp_size  length
+    hemp_hash   hash,
+    hemp_string name,
+    hemp_value  value,
+    hemp_size   length
 ) {
     hemp_size index  = hemp_hash_function(name, length);
     hemp_size column;
@@ -247,9 +248,9 @@ hemp_hash_store_keylen(
 
 hemp_slot
 hemp_hash_store(
-    hemp_hash  hash,
-    hemp_string   name,
-    hemp_value value
+    hemp_hash   hash,
+    hemp_string name,
+    hemp_value  value
 ) {
     return hemp_hash_store_keylen(
         hash, name, value, strlen(name)
@@ -259,9 +260,9 @@ hemp_hash_store(
 
 HEMP_INLINE hemp_value
 hemp_hash_fetch_keylen(
-    hemp_hash hash, 
-    hemp_string  name,
-    hemp_size length
+    hemp_hash   hash,
+    hemp_string name,
+    hemp_size   length
 ) {
     hemp_debug_call("hemp_hash_fetch_keylen(%p, %s, %d)\n", hash, name, length);
     hemp_slot slot  = NULL;
@@ -299,8 +300,8 @@ hemp_hash_fetch_keylen(
 
 HEMP_INLINE hemp_value
 hemp_hash_fetch(
-    hemp_hash hash, 
-    hemp_string  name
+    hemp_hash   hash,
+    hemp_string name
 ) {
     return hemp_hash_fetch_keylen(
         hash, name, strlen(name)
@@ -308,10 +309,10 @@ hemp_hash_fetch(
 }
 
 
-hemp_num
+HEMP_INLINE hemp_num
 hemp_hash_fetch_number(
-    hemp_hash hash, 
-    hemp_string  name
+    hemp_hash   hash,
+    hemp_string name
 ) {
     hemp_value value = hemp_hash_fetch(hash, name);
 
@@ -324,10 +325,10 @@ hemp_hash_fetch_number(
 }
 
 
-hemp_int
+HEMP_INLINE hemp_int
 hemp_hash_fetch_integer(
-    hemp_hash hash, 
-    hemp_string  name
+    hemp_hash   hash,
+    hemp_string name
 ) {
     hemp_value value = hemp_hash_fetch(hash, name);
 
@@ -340,10 +341,10 @@ hemp_hash_fetch_integer(
 }
 
 
-hemp_memory
+HEMP_INLINE hemp_memory
 hemp_hash_fetch_pointer(
-    hemp_hash hash, 
-    hemp_string  name
+    hemp_hash   hash,
+    hemp_string name
 ) {
     hemp_value value = hemp_hash_fetch(hash, name);
 
@@ -353,10 +354,10 @@ hemp_hash_fetch_pointer(
 }
 
 
-hemp_string
+HEMP_INLINE hemp_string
 hemp_hash_fetch_string(
-    hemp_hash hash, 
-    hemp_string  name
+    hemp_hash   hash,
+    hemp_string name
 ) {
     hemp_value value = hemp_hash_fetch(hash, name);
 
@@ -366,10 +367,10 @@ hemp_hash_fetch_string(
 }
 
 
-hemp_text
+HEMP_INLINE hemp_text
 hemp_hash_fetch_text(
-    hemp_hash hash, 
-    hemp_string  name
+    hemp_hash   hash,
+    hemp_string name
 ) {
     hemp_value value = hemp_hash_fetch(hash, name);
 
@@ -378,6 +379,76 @@ hemp_hash_fetch_text(
         : NULL;
 }
 
+
+HEMP_INLINE hemp_list
+hemp_hash_fetch_list(
+    hemp_hash   hash,
+    hemp_string name
+) {
+    hemp_value value = hemp_hash_fetch(hash, name);
+
+    return hemp_is_list(value)
+        ? hemp_val_list(value)
+        : NULL;
+}
+
+
+HEMP_INLINE hemp_hash
+hemp_hash_fetch_hash(
+    hemp_hash   hash,
+    hemp_string name
+) {
+    hemp_value value = hemp_hash_fetch(hash, name);
+
+    return hemp_is_hash(value)
+        ? hemp_val_hash(value)
+        : NULL;
+}
+
+
+hemp_value
+hemp_hash_find(
+    hemp_hash       hash,
+    hemp_string     name,
+    hemp_context    context
+) {
+    /* if the name doesn't have a dot in it, then a simple fetch will do */
+    if (! strchr(name, HEMP_DOT))
+        return hemp_hash_fetch(hash, name);
+
+    /* function to find a dotted value rooted in a hash, e.g. foo.bar.baz
+     * which might be represented as foo => { bar => { baz => 10 } }
+     */
+    hemp_list       nodes  = hemp_string_split(name, HEMP_STR_DOT);
+    hemp_value      result = HempMissing;
+    hemp_value      node, value;
+    hemp_size       n;
+
+    // TODO: this could be optimised, perhaps by pre-calculating the length
+    // and hash value for each successively longer section of the path,
+    // e.g. for foo.bar.baz, pre-compute foo, foo.bar and foo.bar.baz.
+    while (hash) {                      /* walk up the parents */
+        n     = 0;
+        node  = hemp_list_item(nodes, n);
+        value = hemp_hash_fetch(hash, hemp_val_str(node));
+
+        while (hemp_is_found(value) && ++n < nodes->length) {
+            node  = hemp_list_item(nodes, n);
+            value = hemp_call(value, fetch, context, node);
+        }
+
+        if (hemp_is_found(value) && n == nodes->length) {
+            result = value;
+            break;
+        }
+
+        hash = hash->parent;
+    }
+
+    hemp_list_free(nodes);
+
+    return result;
+}
 
 
 HEMP_INLINE void 
@@ -402,10 +473,9 @@ hemp_hash_each(
     hemp_hash      hash,
     hemp_hash_iter func
 ) {
-    hemp_size i;
-    hemp_slot slot;
-    hemp_pos n = 0;
-
+    hemp_size   i;
+    hemp_slot   slot;
+    hemp_pos    n = 0;
 
     for (i = 0; i < hash->width; i++) {
         slot = hash->slots[i];
@@ -470,8 +540,8 @@ typedef  unsigned     char  u1;
 
 HEMP_INLINE hemp_size
 hemp_hash_function_jenkins32(
-    register hemp_string  key,
-    register hemp_size length
+    register hemp_string key,
+    register hemp_size   length
 ) {
     register u4 a, b, c;
     register hemp_size remain = length;
@@ -617,6 +687,27 @@ HEMP_FETCH_FUNC(hemp_type_hash_dot) {
     return result;
 }
 
+
+HEMP_OUTPUT(hemp_type_hash_pairs) {
+    hemp_debug_call("hemp_type_hash_pairs()\n");
+
+    hemp_hash   hash    = hemp_val_hash(value);
+    hemp_hash   pairs;
+    hemp_slot   slot;
+    hemp_size   i;
+
+    hemp_prepare_pairs(context, output, pairs);
+
+    for (i = 0; i < hash->width; i++) {
+        slot = hash->slots[i];
+        while (slot) {
+            hemp_hash_store(pairs, slot->name, slot->value);
+            slot = slot->next;
+        }
+    }
+
+    return output;
+}
 
 
 /*--------------------------------------------------------------------------

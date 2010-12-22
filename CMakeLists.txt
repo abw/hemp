@@ -1,26 +1,26 @@
 cmake_minimum_required (VERSION 2.8)
 
 project (Hemp)
-
-set(HEMP_VERSION_MAJOR     0)
-set(HEMP_VERSION_MINOR     2)
-set(HEMP_NAME              "hemp")
-set(HEMP_AUTHOR            "Andy Wardley")
-set(HEMP_EMAIL             "hemp@wardley.org")
-set(HEMP_URL               "")
-set(HEMP_MODULE_DIR        "modules")
-set(HEMP_MODULE_EXT        ".hso")
-set(HEMP_MODULE_PATH       ${PROJECT_BINARY_DIR}/modules)
-set(HEMP_SOURCE_DIR        ${PROJECT_SOURCE_DIR})
-set(HEMP_TEST_DIR          ${PROJECT_SOURCE_DIR}/tests)
-
-#set(ENV{HEMP_MODULE_PATH} ${PROJECT_BINARY_DIR}/modules)
-
-set(CMAKE_MODULE_PATH       ${PROJECT_SOURCE_DIR}/cmake)
-set(CMAKE_C_FLAGS           "${CMAKE_C_FLAGS} -g -Wall")
-
-add_definitions( -DHEMP_DEBUG=4 )
 enable_testing()
+
+set(HEMP_VERSION_MAJOR          0)
+set(HEMP_VERSION_MINOR          2)
+set(HEMP_NAME                   "hemp")
+set(HEMP_AUTHOR                 "Andy Wardley")
+set(HEMP_EMAIL                  "hemp@wardley.org")
+set(HEMP_URL                    "")
+set(HEMP_ROOT                   ${CMAKE_INSTALL_PREFIX}/${HEMP_NAME})
+set(HEMP_MODULE_DIR             "modules")
+set(HEMP_MODULE_EXT             ".hso")
+
+# these are currently required for testing, but should eventually be 
+# deprecated in favour of paths resolved relative to HEMP_ROOT
+set(HEMP_MODULE_PATH            ${PROJECT_BINARY_DIR}/modules)
+set(HEMP_SOURCE_DIR             ${PROJECT_SOURCE_DIR})
+set(HEMP_TEST_DIR               ${PROJECT_SOURCE_DIR}/tests)
+
+set(CMAKE_MODULE_PATH           ${PROJECT_SOURCE_DIR}/cmake)
+set(CMAKE_C_FLAGS               "${CMAKE_C_FLAGS} -g -Wall")
 
 include(CheckIncludeFile)
 check_include_file(dirent.h     HEMP_HAVE_DIRENT_H)
@@ -54,12 +54,16 @@ set(
     readline m
 )
 
-# doesn't do anything yet
+
+# doesn't do anything yet...
 option (
     HEMP_DEBUG 
     "Enable debugging"
     ON
 )
+
+# ...but should control this
+add_definitions( -DHEMP_DEBUG=4 )
 
 # Build the custom hemp/config.h header file. 
 # This feature alone makes CMake worth the price of admission.
@@ -90,12 +94,20 @@ add_subdirectory(tests/type)
 add_subdirectory(tests/language/test)
 
 message(STATUS "Summary of configuration:") 
-message(STATUS " + Project source dir............ : ${PROJECT_SOURCE_DIR}") 
-message(STATUS " + Project binary dir............ : ${PROJECT_BINARY_DIR}") 
+message(STATUS " + Project source dir ........... : ${PROJECT_SOURCE_DIR}") 
+message(STATUS " + Project build dir ............ : ${PROJECT_BINARY_DIR}") 
 message(STATUS " + Installation prefix .......... : ${CMAKE_INSTALL_PREFIX}") 
+message(STATUS " + Hemp root dir ................ : ${HEMP_ROOT}") 
 message(STATUS " + Readline library ............. : ${READLINE_LIBRARY}") 
 message(STATUS " + Ncurses library .............. : ${NCURSES_LIBRARY}") 
-message(STATUS " + C Flags ...................... : ${CMAKE_C_FLAGS}") 
-message(STATUS " + Module link flags ............ : ${CMAKE_MODULE_LINKER_FLAGS}") 
+message(STATUS " + Compile flags ................ : ${CMAKE_C_FLAGS}") 
+#message(STATUS " + Module link flags ............ : ${CMAKE_MODULE_LINKER_FLAGS}") 
 
 # include(MaintainerMode)
+
+# build a CPack driven installer package
+include (InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")
+set(CPACK_PACKAGE_VERSION_MAJOR "${HEMP_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${HEMP_VERSION_MINOR}")
+include (CPack)

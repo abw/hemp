@@ -10,6 +10,7 @@
 #define HEMP_EXPR_PROMPT    HEMP_ANSI_CYAN "expr> " HEMP_ANSI_RESET
 
 void         hemp_banner();
+void         hemp_info();
 void         hemp_help();
 void         hemp_say(char *format, ...);
 void         hemp_warn(char *format, ...);
@@ -82,10 +83,10 @@ int main(
     char **argv, 
     char **env
 ) {
-    hemp_hemp          hemp = hemp_new();
-    hemp_string      filename;
-    hemp_document document;
-    hemp_text     input, output;
+    hemp_hemp       hemp = hemp_new();
+    hemp_string     filename;
+    hemp_document   document;
+    hemp_text       input, output;
     
     hemp_language_instance(hemp, "tt3");
     hemp_prompt_init();
@@ -93,6 +94,9 @@ int main(
 
     if (! be_quiet)
         hemp_banner();
+    
+    if (hemp->verbose)
+        hemp_info();
 
     if (optind < argc) {
         if (read_text) {
@@ -236,6 +240,16 @@ void hemp_banner() {
         HEMP_ARCHITECTURE,
         HEMP_AUTHOR,
         HEMP_EMAIL,
+        HEMP_ANSI_RESET
+    );
+}
+
+void hemp_info() {
+    fprintf(
+        stderr, "%sRoot: %s%s%s\n",
+        HEMP_ANSI_YELLOW,
+        HEMP_ANSI_CYAN,
+        HEMP_ROOT,
         HEMP_ANSI_RESET
     );
 }

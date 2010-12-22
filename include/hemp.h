@@ -51,6 +51,7 @@ extern "C" {
 /* hemp initialisation and cleanup functions */
 hemp_hemp       hemp_new();
 void            hemp_init_errors(hemp_hemp);
+void            hemp_init_config(hemp_hemp);
 void            hemp_init_factories(hemp_hemp);
 void            hemp_init_schemes(hemp_hemp);
 void            hemp_init_languages(hemp_hemp);
@@ -60,6 +61,7 @@ void            hemp_init_viewers(hemp_hemp);
 void            hemp_free(hemp_hemp);
 void            hemp_free_documents(hemp_hemp);
 void            hemp_free_factories(hemp_hemp);
+void            hemp_free_config(hemp_hemp);
 void            hemp_free_errors(hemp_hemp);
 
 hemp_bool       hemp_free_codec   ( hemp_hash, hemp_pos, hemp_slot );
@@ -78,11 +80,12 @@ hemp_document   hemp_document_instance(hemp_hemp, hemp_string, hemp_string, hemp
 void            hemp_register_dialects(hemp_hemp, hemp_dialects);
 void            hemp_register_tags(hemp_hemp, hemp_tags);
 void            hemp_register_grammars(hemp_hemp, hemp_grammars);
+void            hemp_register_elements(hemp_hemp, hemp_elements);
 
-
+void            hemp_configure(hemp_hemp, hemp_value);
+hemp_value      hemp_config_value(hemp_hemp, hemp_string);
 hemp_string     hemp_version();
 
-void hemp_register_elements(hemp_hemp, hemp_elements);
 
 HEMP_INLINE hemp_text
 hemp_encode(

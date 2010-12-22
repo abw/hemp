@@ -15,4 +15,8 @@ macro(hemp_module type name)
         hemp_${type}_${name}
         hemp_library
     )
+    install (
+        TARGETS     hemp_${type}_${name}
+        DESTINATION ${HEMP_MODULE_DIR}/${type}
+    )
 endmacro(hemp_module)

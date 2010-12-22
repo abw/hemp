@@ -58,31 +58,6 @@ hemp_string_sprintf(
 
 
 hemp_string
-OLD_hemp_string_sprintf(
-    const hemp_string format,
-    ...
-) {
-    hemp_string  string;
-
-    va_list args;
-    va_start(args, format);
-    vasprintf(&string, format, args);
-    va_end(args);
-
-    if (! string)
-        hemp_mem_fail("string sprintf");
-
-#if HEMP_DEBUG & HEMP_DEBUG_MEM
-    /* tell the memory trace debugging code that we know about this memory */
-    hemp_mem_trace_external(string, strlen(string) + 1, __FILE__, __LINE__);
-#endif
-
-    return string;
-}
-
-
-
-hemp_string
 hemp_string_extract(
     hemp_string from,
     hemp_string to
@@ -105,12 +80,23 @@ hemp_string_split(
     hemp_string source,
     hemp_string split
 ) {
-    hemp_list list = hemp_list_new();
-    hemp_string  from = source, to;
-    hemp_size slen = strlen(split);
-    hemp_string  item;
-    
-    /* we're dynamically allocating memory for each directory so we must
+    hemp_list   list = hemp_list_new();
+    hemp_string from = source, to;
+    hemp_size   slen = strlen(split);
+    hemp_string item;
+
+    // TODO: if the split character has a finite length then we can dup the
+    // string once and replace the start of each delimiter with NUL.  Then
+    // each list element can point to the start of each item in the dup buffer.
+    // The slightly ugly part would be the list cleaner which would have to
+    // free the memory pointed to by the first item.  That would require the
+    // list to be immutable.  Otherwise the user could push an item onto the
+    // front and the wrong piece of memory could be freed.  Another approach
+    // might be to make the list cleaner an action that can encapsulate the
+    // memory pointer as an argument.  Although that means we then have an
+    // action to clean up as well...
+
+    /* we're dynamically allocating memory for each item so we must
      * ensure that the list has a cleaner function associated with it that
      * will free the memory for each item when the list is destroyed
      */

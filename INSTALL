@@ -47,8 +47,13 @@ for further information:
 
     http://www.cmake.org/cmake/help/runningcmake.html
 
+One useful option you might want to know about is the one to specify a 
+different installation path:
+
+    $ cmake -DCMAKE_INSTALL_PREFIX:PATH=/installation/path
+
 Then run make, make test, and make install (for which you'll probably need 
-sudo to grant you write permission to the installation location)
+sudo to grant you write permission to the installation location).
 
     $ make
     $ make test
@@ -60,7 +65,13 @@ at this point in time may require a full beard, pair of sandals, an intimate
 knowledge of C, your C compiler, and a fair bit of patience.  Or you might 
 get lucky.
 
-The commands shown above will install the hemp library, header files and the 
+ANOTHER NOTE: Before you run 'make test' you should set the HEMP_MODULE_PATH
+environment variable to the full path to the 'modules' sub-directory under the
+hemp build directory.
+
+    $ export HEMP_MODULE_PATH=/path/to/hemp/build/modules
+
+Running 'make install' will install the hemp library, header files and the 
 hemp program on your system.  The hemp program doesn't do anything useful yet, 
 other that demonstrate that the program has compiled and linked correctly with 
 the library.  

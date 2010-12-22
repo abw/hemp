@@ -468,6 +468,37 @@ hemp_uri_split_query(
  * Join
  *--------------------------------------------------------------------------*/
 
+hemp_string
+hemp_uri_path_relative(
+    hemp_string base,
+    hemp_string rel
+) {
+    hemp_string merged  = NULL;
+    hemp_size   baselen = 0;
+    hemp_string slash   = strrchr(base, '/');
+
+    if (slash) {
+        slash++;
+        baselen = slash - base;
+    }
+
+    merged = hemp_mem_alloc(baselen + strlen(rel) + 1);
+
+    if (! merged)
+        hemp_mem_fail("URI path");
+
+    if (baselen) {
+        strncpy(merged, base, baselen);
+        strcpy(merged + baselen, rel);
+    }
+    else {
+        strcpy(merged, rel);
+    }
+
+    return merged;
+}
+
+
 #define hemp_uri_strcpy(src, srcpos, endpos) ({     \
     srcpos = src;                                   \
     while (*srcpos)                                 \

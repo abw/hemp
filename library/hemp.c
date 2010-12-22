@@ -11,16 +11,17 @@ hemp_new() {
 
     HEMP_ALLOCATE(hemp);
 
-    hemp->global = hemp_global_init();
+    hemp->global  = hemp_global_init();
+    hemp->context = hemp_context_new(hemp);
 
     hemp_init_errors(hemp);
+    hemp_init_config(hemp);
     hemp_init_factories(hemp);
     hemp_init_schemes(hemp);
     hemp_init_languages(hemp);
     hemp_init_documents(hemp);
     hemp_init_viewers(hemp);
 
-    hemp->context = hemp_context_new(hemp);
 
     // YUK.  We have to do this to force all the hemp stuff to be loaded.
     // Needs work to make this more auto-load on demand.
@@ -56,6 +57,15 @@ hemp_init_errors(
         // because we've lost the hemp reference.
         hemp_fatal("uncaught error code: %d", e);
     }
+}
+
+
+void
+hemp_init_config(
+    hemp_hemp   hemp
+) {
+    hemp->config            = hemp_hash_new();
+    hemp->config->parent    = hemp->global->config;
 }
 
 
@@ -152,6 +162,7 @@ hemp_free(
     /* free all the components */
     hemp_free_documents(hemp);
     hemp_free_factories(hemp);
+    hemp_free_config(hemp);
     hemp_free_errors(hemp);
 
     /* tags */
@@ -187,6 +198,14 @@ hemp_free_factories(
     hemp_factory_free(hemp->language);
     hemp_factory_free(hemp->scheme);
     hemp_factory_free(hemp->codec);
+}
+
+
+void
+hemp_free_config(
+    hemp_hemp hemp
+) {
+    hemp_hash_free(hemp->config);
 }
 
 
@@ -289,18 +308,6 @@ hemp_free_grammar(
     hemp_grammar_free( (hemp_grammar) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
-
-
-//hemp_bool
-//hemp_free_element(
-//    hemp_hash elements,
-//    hemp_pos  position,
-//    hemp_slot item
-//) {
-//    hemp_debug_init("cleaning %s element\n", ((hemp_etype_p) item->value)->name);
-////  hemp_element_free( (hemp_element) item->value );        // no, that's not right
-//    return HEMP_TRUE;
-//}
 
 
 hemp_bool
@@ -441,6 +448,32 @@ hemp_context_instance(
     hemp_hemp   hemp
 ) {
     return hemp_context_new(hemp);
+}
+
+
+
+/*--------------------------------------------------------------------------
+ * configuration values
+ *--------------------------------------------------------------------------*/
+
+void
+hemp_configure(
+    hemp_hemp   hemp,
+    hemp_value  config
+) {
+    /* ask the config value to yield pairs (x => y) into the config hash */
+    hemp_call(config, pairs, hemp->context, hemp_hash_val(hemp->config));
+}
+
+
+// TODO: this could be a macro, I don't think we ever need to reference it?
+
+hemp_value
+hemp_config_value(
+    hemp_hemp   hemp,
+    hemp_string name
+) {
+    return hemp_hash_find(hemp->config, name, hemp->context);
 }
 
 
