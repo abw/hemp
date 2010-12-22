@@ -43,7 +43,7 @@ hemp_source_free(
         hemp_mem_free(source->md5);
 
     if (source->scheme->cleaner) {
-        hemp_debug_mem("calling %s source cleaner\n", source->scheme->name);
+//      hemp_debug_mem("calling %s source cleaner\n", source->scheme->name);
         source->scheme->cleaner(source);
     }
 

@@ -1,0 +1,9 @@
+{
+    hemp: {
+        dir: '/dir/from/config1',
+        animal: "badger"
+    },
+    extra: {
+        cheese: "please"
+    }
+}

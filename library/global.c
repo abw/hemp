@@ -243,7 +243,7 @@ void hemp_global_init_config(
 
     /* add the global hemp.XXX items */
     hemp_hash_store_string(hemp, "version",     HEMP_VERSION);
-    hemp_hash_store_string(hemp, "root",        HEMP_ROOT);
+    hemp_hash_store_string(hemp, "dir",         HEMP_DIR);
     hemp_hash_store_string(hemp, "module_dir",  HEMP_MODULE_DIR);
     hemp_hash_store_string(hemp, "module_ext",  HEMP_MODULE_EXT);
 }

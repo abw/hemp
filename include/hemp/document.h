@@ -86,6 +86,8 @@ hemp_document_data(
     hemp_context    context
 );
 
+HEMP_OUTPUT(hemp_document_pairs);
+
 
 /*--------------------------------------------------------------------------
  * macros

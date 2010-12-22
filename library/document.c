@@ -164,7 +164,6 @@ hemp_document_data(
     hemp_context  context
 ) {
     hemp_debug_call("hemp_document_data(%p)\n", document);
-//    hemp_hemp       hemp        = document->dialect->hemp;
     hemp_bool       my_context  = HEMP_FALSE;
     hemp_fragment   root        = hemp_document_tree(document);
     hemp_value      values;
@@ -196,3 +195,27 @@ hemp_document_data(
 }
 
 
+
+/*--------------------------------------------------------------------------
+ * Hmmm... here's a thought... why don't we just make document a data type
+ * have have it forward text, values, pairs, etc, to its children.  Then 
+ * we can treat other documents as data types directly instead of having to
+ * pre-load their data.
+ *--------------------------------------------------------------------------*/
+
+HEMP_OUTPUT(hemp_document_pairs) {
+    hemp_document   document = hemp_val_ptr(value);
+    hemp_fragment   root     = hemp_document_tree(document);
+
+    hemp_debug_call("hemp_document_pairs(%p)\n", document);
+
+    if (! root)
+        hemp_fatal("document does not have a root element");
+
+    if (! root->type->pairs)
+        hemp_fatal("root element (%s) does not yield pairs", root->type->name);
+
+    root->type->pairs(hemp_frag_val(root), context, output);
+
+    return output;
+}

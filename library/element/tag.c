@@ -132,7 +132,7 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
 
             if (element->scanner) {
                 hemp_debug_msg("%s element has dedicated scanner\n", element->name);
-                element->scanner(element, document); //, tag, from, pos, &src, element);
+                element->scanner(element, document);
             }
             else {
                 hemp_fragments_add_fragment(

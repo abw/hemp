@@ -246,10 +246,10 @@ void hemp_banner() {
 
 void hemp_info() {
     fprintf(
-        stderr, "%sRoot: %s%s%s\n",
+        stderr, "%shemp.dir: %s%s%s\n",
         HEMP_ANSI_YELLOW,
         HEMP_ANSI_CYAN,
-        HEMP_ROOT,
+        HEMP_DIR,
         HEMP_ANSI_RESET
     );
 }

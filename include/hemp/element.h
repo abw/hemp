@@ -273,6 +273,7 @@ extern HEMP_OUTPUT(hemp_element_block_source);
 extern HEMP_OUTPUT(hemp_element_block_text);
 extern HEMP_OUTPUT(hemp_element_block_values);
 extern HEMP_OUTPUT(hemp_element_block_params);
+extern HEMP_OUTPUT(hemp_element_block_pairs);
 extern HEMP_CLEANUP(hemp_element_block_cleanup);
 
 

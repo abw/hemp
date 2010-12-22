@@ -388,6 +388,7 @@ extern HEMP_INPUT(hemp_value_apply);
 
 extern HEMP_OUTPUT(hemp_value_values);
 extern HEMP_OUTPUT(hemp_value_params);
+extern HEMP_OUTPUT(hemp_value_pairs);
 
 /* default "cannot convert to X" function */
 extern HEMP_OUTPUT(hemp_value_not_text);

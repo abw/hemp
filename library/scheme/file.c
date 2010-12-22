@@ -39,10 +39,7 @@ hemp_scheme_file_reader(
 ) {
     source->text = hemp_filesystem_read_file(source->name);
 
-    if (source->text) {
-        hemp_debug("read text from file: %s\n", source->name);
-    }
-    else {
+    if (! source->text) {
         hemp_fatal("failed to read file: %s\n", source->name);          // fixme
     }
     
@@ -55,7 +52,7 @@ hemp_scheme_file_cleaner(
     hemp_source source 
 ) {
     if (source->text) {
-        hemp_debug_msg("cleaning file source: %s\n%s\n", source->name, source->text);
+        hemp_debug_call("cleaning file source: %s\n%s\n", source->name, source->text);
         hemp_mem_free(source->text);
     }
 }

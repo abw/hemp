@@ -83,6 +83,7 @@ void            hemp_register_grammars(hemp_hemp, hemp_grammars);
 void            hemp_register_elements(hemp_hemp, hemp_elements);
 
 void            hemp_configure(hemp_hemp, hemp_value);
+void            hemp_configure_from(hemp_hemp, hemp_string, hemp_string, hemp_string);
 hemp_value      hemp_config_value(hemp_hemp, hemp_string);
 hemp_string     hemp_version();
 

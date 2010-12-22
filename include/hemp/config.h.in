@@ -9,11 +9,11 @@
 #define HEMP_EMAIL          "@HEMP_EMAIL@"
 #define HEMP_URL            "@HEMP_URL@"
 #define HEMP_PROMPT         "@HEMP_NAME@"
-#define HEMP_ROOT           "@HEMP_ROOT@"
-#define HEMP_MODULE_DIR     "@HEMP_MODULE_DIR@"
-#define HEMP_MODULE_EXT     "@HEMP_MODULE_EXT@"
+#define HEMP_DIR            "@HEMP_DIR@"
 #define HEMP_SOURCE_DIR     "@HEMP_SOURCE_DIR@"
 #define HEMP_TEST_DIR       "@HEMP_TEST_DIR@"
+#define HEMP_MODULE_DIR     "@HEMP_MODULE_DIR@"
+#define HEMP_MODULE_EXT     "@HEMP_MODULE_EXT@"
 
 
 /*--------------------------------------------------------------------------

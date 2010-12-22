@@ -6,6 +6,7 @@ HEMP_LANGUAGE(hemp_language_json);
 HEMP_DIALECT(hemp_dialect_json);
 HEMP_GRAMMAR(hemp_grammar_json);
 HEMP_PREPARE(hemp_dialect_json_prepare);
+void hemp_dialect_json_cleanup(hemp_document);
 
 
 /*--------------------------------------------------------------------------
@@ -38,8 +39,7 @@ HEMP_LANGUAGE(hemp_language_json) {
 HEMP_DIALECT(hemp_dialect_json) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
     dialect->prepare = &hemp_dialect_json_prepare;
-//  dialect->scanner = &hemp_scan_unplugged;
-    dialect->cleanup = NULL;
+    dialect->cleanup = &hemp_dialect_json_cleanup;
     return dialect;
 }
 
@@ -60,6 +60,7 @@ HEMP_GRAMMAR(hemp_grammar_json) {
     HEMP_USE_ELEMENT2("hemp.bracket.list",             "[", "]"   );
     HEMP_USE_ELEMENT2("hemp.bracket.hash",             "{", "}"   );
     HEMP_USE_ELEMENT2("hemp.dquote",                   "\"", "\"" );
+    HEMP_USE_ELEMENT2("hemp.squote",                   "'",  "'"  );
 
     return grammar;
 }
@@ -77,3 +78,13 @@ HEMP_PREPARE(hemp_dialect_json_prepare) {
     return document;
 }
 
+
+void
+hemp_dialect_json_cleanup(
+    hemp_document document
+) {
+    if (document->scanner) {
+//      hemp_debug_msg("json scanner cleanup\n");
+        hemp_action_free(document->scanner);
+    }
+}

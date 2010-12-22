@@ -100,8 +100,6 @@ bareword:
             hemp_throw(document->dialect->hemp, HEMP_ERROR_TOKEN, src);
             break;
         }
-
-//        document->scantok = src;
     }
     
     document->scanptr = src;

@@ -39,6 +39,7 @@ hemp_element_new(
 
     /* it's safe to use these defaults as they all call element->value */
     element->values          = &hemp_value_values;
+    element->pairs           = &hemp_value_pairs;
     element->params          = &hemp_value_params;
     element->apply           = &hemp_value_apply;
 

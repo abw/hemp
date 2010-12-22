@@ -25,6 +25,8 @@ HEMP_ELEMENT(hemp_element_block) {
     element->value   = &hemp_element_block_value;
     element->text    = &hemp_element_block_text;
     element->values  = &hemp_element_block_values;
+    element->pairs   = &hemp_element_block_pairs;
+    element->params  = &hemp_element_block_params;
     element->cleanup = &hemp_element_block_cleanup;
     return element;
 }
@@ -109,6 +111,25 @@ HEMP_OUTPUT(hemp_element_block_params) {
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
         hemp_call(item, params, context, output);
+    }
+
+    return output;
+}
+
+
+HEMP_OUTPUT(hemp_element_block_pairs) {
+    hemp_debug_call("hemp_element_block_pairs()\n");
+    hemp_fragment fragment = hemp_val_frag(value);
+    hemp_list     exprs    = hemp_block_exprs_list(fragment);
+    hemp_hash     pairs;
+    hemp_value    item;
+    hemp_size     n;
+    hemp_prepare_pairs(context, output, pairs);
+    
+    for (n = 0; n < exprs->length; n++) {
+        item = hemp_list_item(exprs, n);
+//      hemp_debug_msg("block calling pairs on %s\n", hemp_type_name(item));
+        hemp_call(item, pairs, context, output);
     }
 
     return output;

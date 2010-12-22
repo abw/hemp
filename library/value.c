@@ -281,6 +281,21 @@ HEMP_OUTPUT(hemp_value_params) {
     return output;
 }
 
+// This looks wrong.  In fact all these are wrong - they should be specific
+// to elements, rather than for generic values.  Also there's the chance
+// of an infinite loop if a value's value() method returns itself.  The 
+// function below then calls params() on it again...
+// 
+
+HEMP_OUTPUT(hemp_value_pairs) {
+    hemp_debug_call("hemp_value_pairs()\n");
+    hemp_value  result = hemp_call(value, value, context);
+    hemp_call(result, pairs, context, output);
+    return output;
+}
+
+
+
 
 HEMP_FETCH_FUNC(hemp_value_dot) {
     hemp_debug_call("hemp_value_dot(%s)\n", hemp_type_name(container));

@@ -113,8 +113,7 @@ An incomplete list of things TODO, in no particular order.
 
 * Dynamic module loading.  Got a basic working implementation using dlopen(),
   and friends, but it needs generalising for other platforms and making more
-  robust.  Also need to figure out how to construct the Makefiles using 
-  autotools or by rolling yer own.
+  robust.
 
 * Improve URI parsing to handle incremental matching during scanning phase.
   UPDATE: nah, that's not going to work - see NOTES in uri.c
@@ -216,6 +215,6 @@ config_file reads config from document using default data dialect, e.g. json
 
 Let's start by making json a plugin language and have it autoload...[DONE]
 
-Then create a JSON codec to read JSON data.
+Then create a JSON codec to read JSON data [DONE]
 
 Rendering error messages via templates.

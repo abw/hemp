@@ -395,7 +395,7 @@ hemp_document_instance(
     hemp_string source
 ) {
     hemp_document     document;
-    static hemp_md5_t   md5;
+    static hemp_md5_t md5;
 
     hemp_md5_init(&md5);
     hemp_md5_update_string(&md5, scheme);
@@ -405,7 +405,7 @@ hemp_document_instance(
 //  hemp_debug("MD5 for %s document [%s] is %s\n", scheme, source, md5.output);
 
     document = hemp_hash_fetch_pointer(hemp->documents, (hemp_string) md5.output);
-    
+
     if (document) {
         if (hemp_string_eq(document->source->scheme->name, scheme)
         &&  hemp_string_eq(document->source->name, source)) {
@@ -463,6 +463,26 @@ hemp_configure(
 ) {
     /* ask the config value to yield pairs (x => y) into the config hash */
     hemp_call(config, pairs, hemp->context, hemp_hash_val(hemp->config));
+}
+
+
+void
+hemp_configure_from(
+    hemp_hemp   hemp,
+    hemp_string dialect,
+    hemp_string scheme,
+    hemp_string source
+) {
+    hemp_document document = hemp_document_instance(
+        hemp, dialect, scheme, source
+    );
+
+    /* ask the document to yield pairs (x => y) into the config hash */
+    hemp_document_pairs(
+        hemp_ptr_val(document),
+        hemp->context,
+        hemp_hash_val(hemp->config)
+    );
 }
 
 
