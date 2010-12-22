@@ -2,13 +2,15 @@
 
 
 void test_hemp();
+void test_hemp_text_config();
 
 
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(14);
+    plan(17);
     test_hemp();
+    test_hemp_text_config();
     return done();
 }
 
@@ -18,7 +20,7 @@ void test_hemp_config(
     hemp_string name,
     hemp_string expect
 ) {
-    hemp_value  value = hemp_config_value(hemp, name);
+    hemp_value  value = hemp_config_get(hemp, name);
     hemp_string string;
 
     if (hemp_is_string(value)) {
@@ -47,7 +49,7 @@ void test_hemp() {
         ok( version, "got hemp version: %s", version );
 
         /* test the global configuration */
-        hemp_value cfghemp = hemp_config_value(hemp, "hemp");
+        hemp_value cfghemp = hemp_config_get(hemp, "hemp");
         ok( hemp_is_defined(cfghemp), "fetched hemp config" );
 
         test_hemp_config(hemp, "hemp.version",    version);
@@ -95,3 +97,29 @@ void test_hemp() {
 }
 
 
+void test_hemp_text_config() {
+    hemp_hemp hemp = hemp_new();
+    ok( hemp, "created hemp object" );
+
+    hemp_language_instance(hemp, "json");
+
+    HEMP_TRY;
+        hemp_configure_from(
+            hemp, "json", "text", 
+            "{ hemp: { dir: '/else/where', path: ['here', '/there'] } }"
+        );
+        pass("configured from text");
+        test_hemp_config(hemp, "hemp.dir",  "/else/where");
+        //test_hemp_config(hemp, "hemp.path", "here/there");
+        hemp_codec_instance(hemp, "uri");
+
+    HEMP_CATCH_ALL;
+        fail("caught error: %s", hemp->error->message);
+        hemp_text error = hemp_error_text(hemp->error);
+        printf("%s", error->string);
+        hemp_text_free(error);
+
+    HEMP_END;
+    
+    hemp_free(hemp);
+}

@@ -407,7 +407,7 @@ hemp_hash_fetch_hash(
 
 
 hemp_value
-hemp_hash_find(
+hemp_hash_fetch_dotted(
     hemp_hash       hash,
     hemp_string     name,
     hemp_context    context
@@ -448,6 +448,56 @@ hemp_hash_find(
     hemp_list_free(nodes);
 
     return result;
+}
+
+
+hemp_slot
+hemp_hash_store_dotted(
+    hemp_hash       hash,
+    hemp_string     name,
+    hemp_value      value,
+    hemp_context    context
+) {
+    hemp_debug_call("hemp_hash_store_dotted()\n");
+
+    /* if the name doesn't have a dot in it, then a simple store will do */
+    if (! strchr(name, HEMP_DOT))
+        return hemp_hash_store(hash, name, value);
+
+    hemp_list   nodes  = hemp_string_split(name, HEMP_STR_DOT);
+    hemp_value  parent = hemp_hash_val(hash);
+    hemp_size   max    = nodes->length - 1;
+    hemp_value  node, child;
+    hemp_size   n;
+
+//  hemp_debug_msg("%d nodes in %s\n", nodes->length, name);
+
+    for (n = 0; n < max; n++) {
+        node  = hemp_list_item(nodes, n);
+        child = hemp_fetch(parent, context, node);
+
+//      hemp_string tmp_node = hemp_to_string(node, context);
+//      hemp_debug_msg("[%d] %s => %s\n", n, tmp_node, hemp_type_name(child));
+
+        if (hemp_is_undef(child)) {
+//          hemp_debug_msg("adding auto-vivifed hash\n");
+            hemp_hash autoviv = hemp_context_tmp_hash(context);
+            child = hemp_hash_val(autoviv);
+            hemp_store(parent, context, node, child);
+        }
+        parent = child;
+    }
+
+    node = hemp_list_item(nodes, max);
+    hemp_store(parent, context, node, value);
+
+    hemp_list_free(nodes);
+
+    /* Ah. We don't always have a slot because we're not making the assumption
+     * that the config always contains hemp hashes.  It might also contain
+     * other hemp-like object which implement fetch/store methods.
+     */
+    return NULL;
 }
 
 
@@ -631,8 +681,16 @@ HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
 
 
 HEMP_STORE_FUNC(hemp_type_hash_store) {
-    hemp_todo("hemp_type_hash_store()\n");
-    return HempMissing;
+    hemp_debug_call("hemp_type_hash_store()\n");
+    hemp_string keystr  = hemp_to_string(key, context);
+    hemp_slot   slot    = hemp_hash_store(
+        hemp_val_hash(container),
+        keystr,
+        value
+    );
+    
+    /* should we have a dedicated slot type? */
+    return hemp_ptr_val(slot);
 }
 
 

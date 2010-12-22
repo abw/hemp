@@ -3,17 +3,16 @@
 
 hemp_filesystem
 hemp_filesystem_new(
-    hemp_hemp   hemp,
-    hemp_string path
+    hemp_hemp   hemp
 ) {
     hemp_filesystem filesystem; 
     HEMP_ALLOCATE(filesystem);
 
-    filesystem->hemp = hemp;
-    filesystem->path = NULL;
+    filesystem->hemp  = hemp;
+    filesystem->roots = hemp_list_new();
 
-    if (path)
-        hemp_filesystem_set_path(filesystem, path);
+//    if (path)
+//        hemp_filesystem_set_path(filesystem, path);
     
     return filesystem;
 }
@@ -23,8 +22,26 @@ void
 hemp_filesystem_free(
     hemp_filesystem filesystem
 ) {
-    hemp_filesystem_clear_path(filesystem);
+    hemp_list_free(filesystem->roots);
     hemp_mem_free(filesystem);
+}
+
+
+void 
+hemp_filesystem_roots(
+    hemp_filesystem filesystem,
+    hemp_list       roots
+) {
+    hemp_list_push_list(filesystem->roots, roots);
+}
+
+
+void 
+hemp_filesystem_add_root(
+    hemp_filesystem filesystem,
+    hemp_string     root
+) {
+    hemp_list_push(filesystem->roots, hemp_str_val(root));
 }
 
 
@@ -43,16 +60,16 @@ hemp_filesystem_free(
  */
 
 void
-hemp_filesystem_set_path(
+OLD_hemp_filesystem_set_path(
     hemp_filesystem filesystem,
     hemp_string     path
 ) {
-    hemp_filesystem_clear_path(filesystem);             // TODO: free strings
-    hemp_debug_file("setting filesystem path to %s\n", path);
-    filesystem->path = hemp_string_split(path, HEMP_PATH_SEPARATOR);      // TODO: handle errors?
-    // TODO: the following now leaks memory as the text object returned by 
-    // hemp_list_dump() is never freed.
-    hemp_debug_file("filesystem path is now %s\n", hemp_list_dump(filesystem->path));
+//    hemp_filesystem_clear_path(filesystem);             // TODO: free strings
+//    hemp_debug_file("setting filesystem path to %s\n", path);
+//    filesystem->path = hemp_string_split(path, HEMP_PATH_SEPARATOR);      // TODO: handle errors?
+//    // TODO: the following now leaks memory as the text object returned by 
+//    // hemp_list_dump() is never freed.
+//    hemp_debug_file("filesystem path is now %s\n", hemp_list_dump(filesystem->path));
 }
 
 
@@ -135,8 +152,8 @@ hemp_filesystem_readable_path(
     hemp_string root;
     hemp_string full = NULL;
     
-    for (n = 0; n < filesystem->path->length; n++) {
-        root = hemp_val_str( hemp_list_item(filesystem->path, n) );
+    for (n = 0; n < filesystem->roots->length; n++) {
+        root = hemp_val_str( hemp_list_item(filesystem->roots, n) );
         full = hemp_filesystem_join_path(root, path);
 //      hemp_debug("full path: %s\n", full);
         hemp_mem_free(full);

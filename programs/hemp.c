@@ -4,31 +4,34 @@
 #include <readline/history.h>
 
 
-#define HEMP_OPTION_SIG     "vdhtqf:"
+#define HEMP_OPTION_SIG     "vdhtqr:f:"
 #define HEMP_QUIT           "quit"
 #define HEMP_EXIT           "exit"
 #define HEMP_EXPR_PROMPT    HEMP_ANSI_CYAN "expr> " HEMP_ANSI_RESET
 
-void         hemp_banner();
-void         hemp_info();
-void         hemp_help();
-void         hemp_say(char *format, ...);
-void         hemp_warn(char *format, ...);
-void         hemp_getopt(hemp_hemp hemp, int argc, char **argv);
-void         hemp_interactive(hemp_hemp hemp);
-hemp_string   hemp_prompt_init();
-void         hemp_prompt_free();
-hemp_string   hemp_input_read(hemp_string prompt);
-void         hemp_input_free();
-char **      hemp_completion(const char *, int, int);
-char *       hemp_command_generator(const char *, int);
+void        hemp_banner();
+void        hemp_info(hemp_hemp);
+void        hemp_help();
+void        hemp_say(char *format, ...);
+void        hemp_warn(char *format, ...);
+void        hemp_error_report(hemp_hemp);
+void        hemp_getopt(hemp_hemp hemp, int argc, char **argv);
+void        hemp_interactive(hemp_hemp hemp);
+hemp_string hemp_prompt_init();
+void        hemp_prompt_free();
+hemp_string hemp_input_read(hemp_string prompt);
+void        hemp_input_free();
+char **     hemp_completion(const char *, int, int);
+char *      hemp_command_generator(const char *, int);
 
 
-hemp_bool  hemp_cmd_todo(hemp_hemp, hemp_string);
-hemp_bool  hemp_cmd_exprs(hemp_hemp, hemp_string);
-hemp_bool  hemp_cmd_expr(hemp_hemp, hemp_string);
-hemp_bool  hemp_cmd_help(hemp_hemp, hemp_string);
-hemp_bool  hemp_cmd_quit(hemp_hemp, hemp_string);
+hemp_bool   hemp_cmd_todo(hemp_hemp, hemp_string);
+hemp_bool   hemp_cmd_exprs(hemp_hemp, hemp_string);
+hemp_bool   hemp_cmd_expr(hemp_hemp, hemp_string);
+hemp_bool   hemp_cmd_help(hemp_hemp, hemp_string);
+hemp_bool   hemp_cmd_quit(hemp_hemp, hemp_string);
+
+hemp_string tmp_root = NULL;
 
 static int be_quiet  = 0;
 static int read_text = 0;
@@ -43,6 +46,7 @@ static struct option hemp_options[] = {
     {"help",    no_argument,        NULL, 'h' },
     {"file",    required_argument,  NULL, 'f' },
     {"text",    no_argument,        NULL, 't' },
+    {"root",    required_argument,  NULL, 'r' },
     {0, 0, 0, 0}
 };
 
@@ -96,7 +100,7 @@ int main(
         hemp_banner();
     
     if (hemp->verbose)
-        hemp_info();
+        hemp_info(hemp);
 
     if (optind < argc) {
         if (read_text) {
@@ -244,12 +248,19 @@ void hemp_banner() {
     );
 }
 
-void hemp_info() {
+void hemp_info(
+    hemp_hemp hemp
+) {
+    hemp_string dir = hemp_config_get_string(hemp, HEMP_CONFIG_DIR);
+    
+    if (! dir)
+        dir = HEMP_DIR;
+
     fprintf(
         stderr, "%shemp.dir: %s%s%s\n",
         HEMP_ANSI_YELLOW,
         HEMP_ANSI_CYAN,
-        HEMP_DIR,
+        dir,
         HEMP_ANSI_RESET
     );
 }
@@ -366,6 +377,14 @@ void hemp_warn(
     vfprintf(stderr, format, args);
     fprintf(stderr, "%s\n", HEMP_ANSI_RESET);
     va_end(args);
+}
+
+void hemp_error_report(
+    hemp_hemp hemp
+) {
+    hemp_text error = hemp_error_text(hemp->error);
+    fprintf(stderr, "%s", error->string);
+    hemp_text_free(error);
 }
 
 
@@ -502,9 +521,9 @@ hemp_cmd_quit(
 
 void
 hemp_getopt(
-    hemp_hemp  hemp,
-    int     argc,
-    char    **argv
+    hemp_hemp   hemp,
+    int         argc,
+    char        **argv
 ) {
     int opt;
     int ndx = 0;
@@ -540,7 +559,18 @@ hemp_getopt(
                 break;
 
             case 'f':
-                hemp_todo("option -f %s", optarg);
+                HEMP_TRY;
+                    /* TODO: make config dialect configurable */
+                    hemp_language_instance(hemp, "json");
+                    hemp_configure_from(hemp, "json", "file", optarg);
+                HEMP_CATCH_ALL;
+                    hemp_error_report(hemp);
+                    exit(1);
+                HEMP_END;
+                break;
+
+            case 'r':
+                hemp_config_set(hemp, HEMP_CONFIG_DIR, hemp_str_val(optarg));
                 break;
 
             case 'h':
@@ -572,8 +602,10 @@ void hemp_help() {
         "    -t      --text              read text from comment line arguments\n"
         "    -q      --quiet             quiet mode - no messages\n"
         "    -v      --verbose           enable verbose messages\n"
+        "    -r      --root              hemp root directory (default: %s)\n"
         "    -d      --debug             enable debugging messages\n"
-        "    -h      --help              this help\n"
+        "    -h      --help              this help\n",
+        HEMP_DIR
     );
 }
 

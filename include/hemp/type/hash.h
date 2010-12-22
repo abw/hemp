@@ -128,9 +128,17 @@ hemp_hash_fetch_hash(
 );
 
 hemp_value
-hemp_hash_find(
+hemp_hash_fetch_dotted(
     hemp_hash       hash,
     hemp_string     key,
+    hemp_context    context
+);
+
+hemp_slot
+hemp_hash_store_dotted(
+    hemp_hash       hash,
+    hemp_string     name,
+    hemp_value      value,
     hemp_context    context
 );
 

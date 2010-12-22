@@ -72,6 +72,16 @@
 #define HEMP_NS_ELEMENT     "hemp.element"
 #define HEMP_NS_ERROR       "hemp.error"
 
+/* 
+ * Configuration options
+ */
+#define HEMP_CONFIG_DIR     "hemp.dir"
+#define HEMP_CONFIG_PATH    "hemp.path"
+#define HEMP_CONFIG_MODDIR  "hemp.module_dir"
+#define HEMP_CONFIG_MODEXT  "hemp.module_ext"
+#define HEMP_CONFIG_MODPATH "hemp.module_path"
+
+
 /* dummy arguments(s) as a fallback for generating error messages */
 #define HEMP_WTF            "<?>"
 #define HEMP_WTFS           HEMP_WTF, HEMP_WTF, HEMP_WTF, HEMP_WTF, HEMP_WTF

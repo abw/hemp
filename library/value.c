@@ -327,25 +327,25 @@ HEMP_FETCH_FUNC(hemp_value_dot) {
 }
 
 
-HEMP_INLINE hemp_value
+HEMP_INLINE hemp_string
 hemp_value_to_string(
     hemp_value      value,
     hemp_context    context
 ) {
-    hemp_value      string;
+    hemp_string     string;
 
     if (hemp_is_string(value)) {
-        string = value;
+        string = hemp_val_str(value);
 //      hemp_debug_msg("input is a string: %s\n", hemp_val_str(string));
     }
     else if (hemp_is_text(value)) {
-        string = hemp_str_val(hemp_val_text(value)->string);
+        string = hemp_val_text(value)->string;
 //      hemp_debug_msg("input is text: %s\n", hemp_val_str(string));
     }
     else {
 //      hemp_debug_msg("input is %s\n", hemp_type_name(value));
         hemp_value text = hemp_to_text(value, context);
-        string = hemp_str_val(hemp_val_text(text)->string);
+        string = hemp_val_text(text)->string;
 //      hemp_debug_msg("converted to text: %s\n", hemp_val_str(string));
     }
     return string;

@@ -104,6 +104,7 @@ struct hemp_hemp {
                     
     hemp_context    context;
     hemp_hash       config;
+    hemp_filesystem filesystem;
 
 //  hemp_hash       tags;
     hemp_hash       documents;

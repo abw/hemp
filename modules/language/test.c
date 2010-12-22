@@ -379,7 +379,8 @@ HEMP_VALUE(hemp_element_test_input_value) {
     hemp_value      block    = hemp_rhs(fragment);
     hemp_test       test     = hemp_test_new();
     hemp_hemp       hemp     = context->hemp;
-    hemp_value      dialect;
+    hemp_value      dvalue;
+    hemp_string     dialect;
     
     /* render the name */
     hemp_call(name, text, context, hemp_text_val(test->name));
@@ -388,21 +389,21 @@ HEMP_VALUE(hemp_element_test_input_value) {
     hemp_call(block, text, context, hemp_text_val(test->input));
 
     /* look for the current dialect, specified in a dialect variable */
-    dialect = hemp_hash_fetch(context->vars, "dialect");
+    dvalue = hemp_hash_fetch(context->vars, "dialect");
 
-    if (hemp_is_missing(dialect))
+    if (hemp_is_missing(dvalue))
         hemp_fatal("No dialect defined");
 
-    dialect = hemp_to_string(dialect, context);
+    dialect = hemp_to_string(dvalue, context);
 
-    hemp_debug_msg("USING DIALECT: %s\n", hemp_val_str(dialect));
+    hemp_debug_msg("USING DIALECT: %s\n", dialect);
 
     test->status = HEMP_TEST_READY;
 
     HEMP_TRY;
         hemp_document document = hemp_document_instance(
             context->hemp,
-            hemp_val_str(dialect),
+            dialect,
             HEMP_TEXT, 
             test->input->string
         );

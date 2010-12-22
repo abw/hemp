@@ -104,6 +104,13 @@ hemp_uri_path_relative(
 );
 
 hemp_string
+hemp_uri_path_join(
+    hemp_string base,
+    hemp_string rel,
+    hemp_bool   is_dir
+);
+
+hemp_string
 hemp_uri_merge_paths(
     hemp_uri    base,
     hemp_uri    rel

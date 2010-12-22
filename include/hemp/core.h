@@ -31,4 +31,11 @@
 #include <hemp/macros.h>            /* macros sprinkling syntactic sugar    */
 #include <hemp/type/string.h>       /* functions for handling C strings     */
 
+
+/* This is defined in hemp.c, but we don't want to put it in hemp.h because
+ * a number of internal modules use it and don't want to include hemp.h.
+ * TODO: find somewhere to put this and various other config functions
+ */
+hemp_string hemp_config_get_string(hemp_hemp, hemp_string);
+
 #endif /* HEMP_CORE_H */

@@ -35,7 +35,7 @@ HEMP_CODEC(hemp_codec_uri) {
 HEMP_ENCODER(hemp_codec_uri_encoder) {
     hemp_debug_msg("hemp_codec_uri_encoder()\n");
 
-    hemp_string string  = hemp_val_str(hemp_to_string(input, context));
+    hemp_string string  = hemp_to_string(input, context);
     hemp_text   output  = hemp_context_tmp_text_size(context, strlen(string) + 1);
     hemp_text_append_string(output, "TODO: uri encode: ");
     hemp_text_append_string(output, string);

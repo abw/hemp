@@ -57,12 +57,14 @@ void            hemp_init_schemes(hemp_hemp);
 void            hemp_init_languages(hemp_hemp);
 void            hemp_init_documents(hemp_hemp);
 void            hemp_init_viewers(hemp_hemp);
+void            hemp_init_filesystem(hemp_hemp);
 
 void            hemp_free(hemp_hemp);
 void            hemp_free_documents(hemp_hemp);
 void            hemp_free_factories(hemp_hemp);
 void            hemp_free_config(hemp_hemp);
 void            hemp_free_errors(hemp_hemp);
+void            hemp_free_filesystem(hemp_hemp);
 
 hemp_bool       hemp_free_codec   ( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_dialect ( hemp_hash, hemp_pos, hemp_slot );
@@ -76,6 +78,7 @@ hemp_bool       hemp_free_viewer  ( hemp_hash, hemp_pos, hemp_slot );
 
 hemp_context    hemp_context_instance(hemp_hemp);
 hemp_document   hemp_document_instance(hemp_hemp, hemp_string, hemp_string, hemp_string);
+hemp_filesystem hemp_filesystem_instance(hemp_hemp);
 
 void            hemp_register_dialects(hemp_hemp, hemp_dialects);
 void            hemp_register_tags(hemp_hemp, hemp_tags);
@@ -84,7 +87,7 @@ void            hemp_register_elements(hemp_hemp, hemp_elements);
 
 void            hemp_configure(hemp_hemp, hemp_value);
 void            hemp_configure_from(hemp_hemp, hemp_string, hemp_string, hemp_string);
-hemp_value      hemp_config_value(hemp_hemp, hemp_string);
+void            hemp_ready(hemp_hemp);
 hemp_string     hemp_version();
 
 

@@ -364,7 +364,7 @@ extern HEMP_INLINE hemp_fragment  hemp_val_frag(hemp_value v);
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_value
+HEMP_INLINE hemp_string
 hemp_value_to_string(
     hemp_value      value,
     hemp_context    context

@@ -126,6 +126,17 @@
 
 
 /*--------------------------------------------------------------------------
+ * Macros for getting and setting configuration values
+ *--------------------------------------------------------------------------*/
+
+#define hemp_config_get(hemp, name)         \
+    hemp_hash_fetch_dotted(hemp->config, name, hemp->context)
+
+#define hemp_config_set(hemp, name, value)  \
+    hemp_hash_store_dotted(hemp->config, name, value, hemp->context)
+
+
+/*--------------------------------------------------------------------------
  * Thread locking.  Encapsulates a block of code with a locked mutex.
  *--------------------------------------------------------------------------*/
 

@@ -473,10 +473,21 @@ hemp_uri_path_relative(
     hemp_string base,
     hemp_string rel
 ) {
-    hemp_size   baselen = 0;
-    hemp_string merged  = NULL;
-    hemp_string slash   = NULL;
-    hemp_string src     = rel;
+    return hemp_uri_path_join(base, rel, 0);
+}
+
+
+hemp_string
+hemp_uri_path_join(
+    hemp_string base,
+    hemp_string rel,
+    hemp_bool   is_dir
+) {
+    hemp_size   baselen  = 0;
+    hemp_string merged   = NULL;
+    hemp_string slash    = NULL;
+    hemp_string src      = rel;
+    hemp_bool   dirslash = HEMP_FALSE;
     hemp_string dst;
     hemp_char   next;
 
@@ -484,12 +495,25 @@ hemp_uri_path_relative(
      * base path altogether.  Otherwise we can ignore everything after the
      * final slash in the base path
      */
-    if (*rel != '/' && (slash = strrchr(base, '/'))) {
-        slash++;
-        baselen = slash - base;
+    if (*base && *rel && *rel != '/') {
+        if (is_dir) {
+            /* must add a trailing slash if the base path doesn't have one */
+            baselen = strlen(base);
+            slash   = base + baselen;
+
+            if (*(slash - 1) != '/')
+                dirslash = HEMP_TRUE;
+        }
+        else if ((slash = strrchr(base, '/'))) {
+            slash++;
+            baselen = slash - base;
+        }
     }
 
-    merged  = hemp_mem_alloc(baselen + strlen(rel) + 1);
+    /* allocate one extra in case we're adding trailing '/' to base, and 
+     * another for the terminating NUL
+     */
+    merged  = hemp_mem_alloc(baselen + strlen(rel) + 2);
     *merged = HEMP_NUL;     /* for debugging, so we can print string */
 
     if (! merged)
@@ -498,6 +522,11 @@ hemp_uri_path_relative(
     if (baselen) {
         strncpy(merged, base, baselen);
         dst = merged + baselen;
+
+        /* add the trailing slash to force the base to be a directory */
+        if (dirslash)
+            *dst++ = '/';
+
         *dst = HEMP_NUL;
     }
     else {
@@ -507,9 +536,9 @@ hemp_uri_path_relative(
     while (*src) {
         switch (*src) {
             case '/':
-                dst = merged;
-                *dst++ = *src++;
-                *dst = HEMP_NUL;
+                dst     = merged;
+                *dst++  = *src++;
+                *dst    = HEMP_NUL;
                 break;
 
             case '.':

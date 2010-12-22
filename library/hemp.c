@@ -11,8 +11,9 @@ hemp_new() {
 
     HEMP_ALLOCATE(hemp);
 
-    hemp->global  = hemp_global_init();
-    hemp->context = hemp_context_new(hemp);
+    hemp->global     = hemp_global_init();
+    hemp->context    = hemp_context_new(hemp);
+    hemp->filesystem = NULL;    /* prepared on demand, after configuration */
 
     hemp_init_errors(hemp);
     hemp_init_config(hemp);
@@ -22,13 +23,21 @@ hemp_new() {
     hemp_init_documents(hemp);
     hemp_init_viewers(hemp);
 
-
     // YUK.  We have to do this to force all the hemp stuff to be loaded.
     // Needs work to make this more auto-load on demand.
     hemp_language_instance(hemp, "hemp");
 //  hemp_debug_msg("LANGUAGE: %s v%0.2f\n", language->name, language->version);
 
     return hemp;
+}
+
+
+void 
+hemp_ready(
+    hemp_hemp hemp
+) {
+    hemp_debug_msg("hemp_ready()\n");
+    hemp_init_filesystem(hemp);
 }
 
 
@@ -146,6 +155,44 @@ hemp_init_viewers(
 }
 
 
+void
+hemp_init_filesystem(
+    hemp_hemp hemp
+) {
+    hemp_debug_msg("hemp_init_filesystem()\n");
+    hemp_value  dir   = hemp_config_get(hemp, HEMP_CONFIG_DIR);
+    hemp_value  path  = hemp_config_get(hemp, HEMP_CONFIG_PATH);
+    hemp_list   paths = hemp_list_new();
+    hemp_string base  = hemp_to_string(dir, hemp->context);
+
+    if (hemp->filesystem)
+        hemp_filesystem_free(hemp->filesystem);
+
+    hemp->filesystem = hemp_filesystem_new(hemp);
+
+    hemp_debug_msg("base dir: %s\n", base);
+
+    if (hemp_is_defined(path)) {
+        hemp_debug_msg("looking for paths\n");
+        hemp_values(path, hemp->context, hemp_list_val(paths));
+        hemp_debug_msg("got %d paths\n", paths->length);
+        
+        // I think these should be relative to cwd rather than base
+        
+        int n;
+        for (n = 0; n < paths->length; n++) {
+            hemp_value  v = hemp_list_item(paths, n);
+            hemp_string s = hemp_to_string(v, hemp->context);
+            hemp_string p = hemp_uri_path_join(base, s, 1);
+            printf("%d: %s    [%s] + [%s] = [%s]\n", n, s, base, s, p);
+            hemp_mem_free(p);
+        }
+    }
+
+    hemp_list_free(paths);
+}
+
+
 
 /*--------------------------------------------------------------------------
  * hemp object cleanup functions
@@ -160,6 +207,7 @@ hemp_free(
     hemp_context_free(hemp->context);
 
     /* free all the components */
+    hemp_free_filesystem(hemp);
     hemp_free_documents(hemp);
     hemp_free_factories(hemp);
     hemp_free_config(hemp);
@@ -231,6 +279,14 @@ hemp_free_errors(
     }
 }
 
+
+void
+hemp_free_filesystem(
+    hemp_hemp hemp
+) {
+    if (hemp->filesystem)
+        hemp_filesystem_free(hemp->filesystem);
+}
 
 
 /*--------------------------------------------------------------------------
@@ -486,14 +542,29 @@ hemp_configure_from(
 }
 
 
-// TODO: this could be a macro, I don't think we ever need to reference it?
-
-hemp_value
-hemp_config_value(
+hemp_string
+hemp_config_get_string(
     hemp_hemp   hemp,
     hemp_string name
 ) {
-    return hemp_hash_find(hemp->config, name, hemp->context);
+    hemp_value  value  = hemp_config_get(hemp, name);
+    hemp_string string = NULL;
+
+    if (hemp_is_defined(value))
+        string = hemp_to_string(value, hemp->context);
+
+    return string;
+}
+
+
+hemp_filesystem
+hemp_filesystem_instance(
+    hemp_hemp   hemp
+) {
+    if (! hemp->filesystem)
+        hemp_init_filesystem(hemp);
+
+    return hemp->filesystem;
 }
 
 

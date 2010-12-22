@@ -21,7 +21,7 @@
 struct hemp_filesystem {
     hemp_type       type;
     hemp_hemp       hemp;
-    hemp_list       path;
+    hemp_list       roots;
 };
 
 struct hemp_path {
@@ -39,13 +39,24 @@ struct hemp_path {
 
 hemp_filesystem
 hemp_filesystem_new(
-    hemp_hemp       hemp,
-    hemp_string     path
+    hemp_hemp       hemp
 );
 
 void
 hemp_filesystem_free(
     hemp_filesystem filesystem
+);
+
+void 
+hemp_filesystem_roots(
+    hemp_filesystem filesystem,
+    hemp_list       roots
+);
+
+void 
+hemp_filesystem_add_root(
+    hemp_filesystem filesystem,
+    hemp_string     root
 );
 
 void
