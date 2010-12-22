@@ -50,16 +50,14 @@ set(
     readline m
 )
 
+# CMAKE_BUILD_TYPE
 
-# doesn't do anything yet...
-option (
-    HEMP_DEBUG 
-    "Enable debugging"
-    ON
-)
 
-# ...but should control this
-add_definitions( -DHEMP_DEBUG=4 )
+set(HEMP_DEBUG "" CACHE STRING "Set the debugging level")
+
+if(HEMP_DEBUG)
+    add_definitions( -DHEMP_DEBUG=${HEMP_DEBUG} )
+endif(HEMP_DEBUG)
 
 # Build the custom hemp/config.h header file. 
 # This feature alone makes CMake worth the price of admission.
@@ -97,6 +95,7 @@ message(STATUS " + Hemp root dir ................ : ${HEMP_DIR}")
 message(STATUS " + Readline library ............. : ${READLINE_LIBRARY}") 
 message(STATUS " + Ncurses library .............. : ${NCURSES_LIBRARY}") 
 message(STATUS " + Compile flags ................ : ${CMAKE_C_FLAGS}") 
+message(STATUS " + Debug level .................. : ${HEMP_DEBUG}") 
 #message(STATUS " + Module link flags ............ : ${CMAKE_MODULE_LINKER_FLAGS}") 
 
 # include(MaintainerMode)

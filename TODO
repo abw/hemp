@@ -1,5 +1,15 @@
 An incomplete list of things TODO, in no particular order.
 
+* Clean up all the include declaration and definitions.  According to the
+  C99 and GNU99 standards, they probably shouldn't work because of the 
+  extern inline on both the declarations and definitions.  The compiler 
+  complains and fails if -pedantic is enabled, but it seems to work OK 
+  on the platforms I've tested it on (OSX/Linux).  In fact, the combination
+  of extern and inline was the only way to prevent duplicate symbols and all
+  sorts of other problems.  So it's good enough for now, but needs to be 
+  done properly.  I need to go back and read this page again in detail:
+  http://www.greenend.org.uk/rjk/2003/03/inline.html
+
 * decide on a _FUNC suffix or otherwise and apply consistently, e.g.
   HEMP_GRAMMAR() vs HEMP_PREFIX()
 
