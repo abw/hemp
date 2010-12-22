@@ -473,30 +473,104 @@ hemp_uri_path_relative(
     hemp_string base,
     hemp_string rel
 ) {
-    hemp_string merged  = NULL;
     hemp_size   baselen = 0;
-    hemp_string slash   = strrchr(base, '/');
+    hemp_string merged  = NULL;
+    hemp_string slash   = NULL;
+    hemp_string src     = rel;
+    hemp_string dst;
+    hemp_char   next;
 
-    if (slash) {
+    /* If the relative path is absolute (starts: /) then we can ignore the
+     * base path altogether.  Otherwise we can ignore everything after the
+     * final slash in the base path
+     */
+    if (*rel != '/' && (slash = strrchr(base, '/'))) {
         slash++;
         baselen = slash - base;
     }
 
-    merged = hemp_mem_alloc(baselen + strlen(rel) + 1);
+    merged  = hemp_mem_alloc(baselen + strlen(rel) + 1);
+    *merged = HEMP_NUL;     /* for debugging, so we can print string */
 
     if (! merged)
         hemp_mem_fail("URI path");
 
     if (baselen) {
         strncpy(merged, base, baselen);
-        strcpy(merged + baselen, rel);
+        dst = merged + baselen;
+        *dst = HEMP_NUL;
     }
     else {
-        strcpy(merged, rel);
+        dst = merged;
     }
+
+    while (*src) {
+        switch (*src) {
+            case '/':
+                dst = merged;
+                *dst++ = *src++;
+                *dst = HEMP_NUL;
+                break;
+
+            case '.':
+                next = *(src + 1);
+
+                if (next == HEMP_NUL || next == '/') {
+                    /* ignore './' or final '.' */
+                    src += next ? 2 : 1;
+                    break;
+                }
+                else if (next == '.') {
+                    next = *(src + 2);
+
+                    if (next == HEMP_NUL || next == '/') {
+                        /* found '../' or final '..' */
+                        src += next ? 3 : 2;
+
+                        /* rewind to find the last slash in the destination */
+                        while (dst > merged && *dst != '/') {
+                            dst--;
+                        }
+
+                        /* if the last slash is the final character and not
+                         * also the first (i.e. not '/') then walk back to
+                         * the previous '/'
+                         */
+                        if (dst > merged && *dst == '/' && ! *(dst + 1)) {
+                            do {
+                                dst--;
+                            }
+                            while (dst > merged && *dst != '/');
+
+                            /* start copying again after the slash */
+                            if (*dst == '/')
+                                dst++;
+                            *dst = HEMP_NUL;
+                        }
+                        else {
+                            dst++;
+                            *dst = HEMP_NUL;
+                        }
+                        break;
+                    }
+                }
+
+                /* drop through to default case */
+
+            default:
+                /* copy everything up to and including the next '/' (or NUL) */
+                do {
+                    *dst++ = *src;
+                }
+                while (*src && *src++ != '/');
+                *dst = HEMP_NUL;
+        }
+    }
+    *dst = HEMP_NUL;
 
     return merged;
 }
+
 
 
 #define hemp_uri_strcpy(src, srcpos, endpos) ({     \
@@ -748,6 +822,7 @@ hemp_uri_schemes_equal(
         return HEMP_TRUE;
     }
 }
+
 
 hemp_string
 hemp_uri_merge_paths(

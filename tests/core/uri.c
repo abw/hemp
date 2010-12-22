@@ -1,18 +1,62 @@
 #include <hemp/test.h>
 
 void test_uri();
+void test_path();
 void test_relative_path();
 void test_relative_paths();
 
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(43);
+    plan(63);
+    test_path();
     test_uri();
     test_relative_path();
     test_relative_paths();
     return done();
 }
+
+
+void test_path_match(
+    hemp_string base,
+    hemp_string rel,
+    hemp_string expect
+) {
+    hemp_string result = hemp_uri_path_relative(base, rel);
+    ok( 
+        hemp_string_eq(result, expect), 
+        "path %s + %s = %s", 
+        base, rel, result
+    );
+    hemp_mem_free(result);
+}
+
+void test_path() {
+    hemp_string base = "/foo/bar/baz";
+    test_path_match(base, "/wam/bam", "/wam/bam");
+    test_path_match(base, "wam/bam", "/foo/bar/wam/bam");
+    test_path_match(base, "./wam/bam", "/foo/bar/wam/bam");
+    test_path_match(base, "../wam/bam", "/foo/wam/bam");
+    test_path_match(base, "../../wam/bam", "/wam/bam");
+    test_path_match(base, "../../../wam/bam", "/wam/bam");
+    test_path_match(base, "../../../../wam/bam", "/wam/bam");
+    test_path_match(base, "./wam/././bam", "/foo/bar/wam/bam");
+    test_path_match(base, "./wam/oops/../mistake/../bam", "/foo/bar/wam/bam");
+    test_path_match(base, ".wam/..bam/...mam", "/foo/bar/.wam/..bam/...mam");
+
+    base = "/foo/bar/";
+    test_path_match(base, "/wam/bam", "/wam/bam");
+    test_path_match(base, "wam/bam", "/foo/bar/wam/bam");
+    test_path_match(base, "./wam/bam", "/foo/bar/wam/bam");
+    test_path_match(base, "../wam/bam", "/foo/wam/bam");
+    test_path_match(base, "../../wam/bam", "/wam/bam");
+    test_path_match(base, "../../../wam/bam", "/wam/bam");
+    test_path_match(base, "../../../../wam/bam", "/wam/bam");
+    test_path_match(base, "./wam/././bam", "/foo/bar/wam/bam");
+    test_path_match(base, "./wam/oops/../mistake/../bam", "/foo/bar/wam/bam");
+    test_path_match(base, ".wam/..bam/...mam", "/foo/bar/.wam/..bam/...mam");
+}
+
 
 
 void test_uri() {
@@ -76,7 +120,7 @@ void test_relative_match(
 //    hemp_debug_msg("new uri: %p\n", relu->uri);
     ok( 
         hemp_string_eq(relu->path, expect), 
-        "%s + %s = %s", 
+        "uri %s + %s = %s", 
         base->path, rels, relu->path
     );
     hemp_uri_free(relu);

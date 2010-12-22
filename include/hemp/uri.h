@@ -98,6 +98,12 @@ hemp_uri_schemes_equal(
 );
 
 hemp_string
+hemp_uri_path_relative(
+    hemp_string base,
+    hemp_string rel
+);
+
+hemp_string
 hemp_uri_merge_paths(
     hemp_uri    base,
     hemp_uri    rel
