@@ -68,6 +68,9 @@
 #define hemp_register_element(hemp, name, constructor)                      \
     hemp_register(hemp, element, name, constructor)
 
+#define hemp_register_feature(hemp, name, constructor)                      \
+    hemp_register(hemp, feature, name, constructor)
+
 #define hemp_register_grammar(hemp, name, constructor)                      \
     hemp_register(hemp, grammar, name, constructor)
 
@@ -102,6 +105,10 @@
 #define hemp_viewer_instance(hemp, name)                                    \
     hemp_instance(hemp, viewer, name)
 
+#define hemp_grammar_feature(hemp, grammar, name) ({                        \
+    hemp_action _cons = hemp_constructor(hemp, feature, name);              \
+    hemp_action_run(_cons, grammar);                                        \
+})
 
 #define hemp_element_instance(hemp,type,start,end) ({                       \
         hemp_action _cons = (hemp_action) hemp_factory_constructor(         \
@@ -123,6 +130,10 @@
 #define hemp_tag_construct(hemp, type, name, start, end, grammar) (         \
     (hemp_tag) hemp_construct(hemp, tag, type, name, start, end, grammar)   \
 )
+
+
+
+
 
 
 /*--------------------------------------------------------------------------
@@ -211,6 +222,12 @@
     hemp_grammar f(                             \
         hemp_hemp       hemp,                   \
         hemp_string     name                    \
+    )
+
+#define HEMP_FEATURE(f)                         \
+    hemp_grammar f(                             \
+        hemp_hemp       hemp,                   \
+        hemp_grammar    grammar                 \
     )
 
 #define HEMP_LANGUAGE(f)                        \

@@ -34,3 +34,12 @@ World!
 Hello World!
 
 
+-- test ansi feature
+%% green "green" red { "r" 'e' "d" }
+%% n = red { 99 }; blue { n + 1 }
+[% yellow %]
+Hello World!
+This is yellow
+%% end
+-- expect
+???

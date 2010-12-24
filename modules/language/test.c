@@ -23,10 +23,11 @@ HEMP_VALUE(hemp_element_test_dialect_value);
 
 HEMP_SCANNER(hemp_element_test_input_scanner);
 HEMP_PREFIX(hemp_element_test_input_prefix);
-HEMP_VALUE(hemp_element_test_input_value);
+HEMP_OUTPUT(hemp_element_test_input_text);
 HEMP_CLEANUP(hemp_element_test_input_cleanup);
 
 HEMP_POSTFIX(hemp_element_test_output_branch);
+HEMP_OUTPUT(hemp_element_test_output_text);
 
 hemp_document hemp_dialect_test_prepare(hemp_document doc);
 void hemp_dialect_test_cleanup(hemp_document doc);
@@ -254,7 +255,7 @@ HEMP_VALUE(hemp_element_test_language_value) {
     hemp_value      name        = hemp_lhs(fragment);
     hemp_text       text        = hemp_text_new();
     hemp_call(name, text, context, hemp_text_val(text));
-    hemp_debug_msg("LANGUAGE: [%s]\n", text->string);
+//  hemp_debug_msg("LANGUAGE: [%s]\n", text->string);
     hemp_language_instance(context->hemp, text->string);
     hemp_text_free(text);
     return hemp_blank();
@@ -277,8 +278,8 @@ HEMP_VALUE(hemp_element_test_dialect_value) {
     hemp_fragment   fragment    = hemp_val_frag(value);
     hemp_value      name        = hemp_lhs(fragment);
     hemp_value      result      = hemp_call(name, text, context, HempNothing);
-    hemp_text       text        = hemp_val_text(result);
-    hemp_debug_msg("DIALECT: [%s]\n", text->string);
+//  hemp_text       text        = hemp_val_text(result);
+//  hemp_debug_msg("DIALECT: [%s]\n", text->string);
     hemp_hash_store(context->vars, "dialect", result);
     return hemp_blank();
 }
@@ -293,8 +294,8 @@ HEMP_ELEMENT(hemp_element_test_input) {
     element->parse_prefix    = &hemp_element_test_input_prefix;
     element->scanner         = &hemp_element_test_input_scanner;
 //  element->cleanup         = &hemp_element_test_input_cleanup,
-    element->value           = &hemp_element_test_input_value,
-    element->text            = &hemp_element_value_text;
+    element->text            = &hemp_element_test_input_text,
+    element->value           = &hemp_element_text_value;
     element->token           = &hemp_element_literal_text;
     element->source          = &hemp_element_literal_text;
     element->flags           = HEMP_BE_SOURCE | HEMP_BE_FIXED;
@@ -371,7 +372,7 @@ HEMP_PREFIX(hemp_element_test_input_prefix) {
 }
 
 
-HEMP_VALUE(hemp_element_test_input_value) {
+HEMP_OUTPUT(hemp_element_test_input_text) {
     hemp_debug_call("hemp_element_test_input_value()\n");
 
     hemp_fragment   fragment = hemp_val_frag(value);
@@ -379,14 +380,17 @@ HEMP_VALUE(hemp_element_test_input_value) {
     hemp_value      block    = hemp_rhs(fragment);
     hemp_test       test     = hemp_test_new();
     hemp_hemp       hemp     = context->hemp;
+    hemp_text       text;
     hemp_value      dvalue;
     hemp_string     dialect;
-    
+
+    hemp_prepare_text(context, output, text);
+
     /* render the name */
-    hemp_call(name, text, context, hemp_text_val(test->name));
+    hemp_vtext(name, context, hemp_text_val(test->name));
 
     /* then the input block */
-    hemp_call(block, text, context, hemp_text_val(test->input));
+    hemp_vtext(block, context, hemp_text_val(test->input));
 
     /* look for the current dialect, specified in a dialect variable */
     dvalue = hemp_hash_fetch(context->vars, "dialect");
@@ -396,11 +400,10 @@ HEMP_VALUE(hemp_element_test_input_value) {
 
     dialect = hemp_to_string(dvalue, context);
 
-    hemp_debug_msg("USING DIALECT: %s\n", dialect);
-
     test->status = HEMP_TEST_READY;
 
     HEMP_TRY;
+        /* render the input block as a document */
         hemp_document document = hemp_document_instance(
             context->hemp,
             dialect,
@@ -408,12 +411,11 @@ HEMP_VALUE(hemp_element_test_input_value) {
             test->input->string
         );
         hemp_document_process(document, context, test->output);
-	//        hemp_text_append_string(test->output, "<TODO>");
         test->status = HEMP_TEST_RUN_OK;
 
     HEMP_CATCH_ALL;
+        /* store error text in the output and set status accordingly */
         hemp_text error = hemp_error_text(hemp->error);
-        hemp_debug_msg("ERROR: %s\n", error->string);
         hemp_text_truncate(test->output, 0);
         hemp_text_append_text(test->output, error);
         hemp_text_free(error);
@@ -421,37 +423,36 @@ HEMP_VALUE(hemp_element_test_input_value) {
 
     HEMP_END;
 
-    /* TODO: render the fragment block if there is one, or generate a 
-     * pass/fail result if not.
-     */
-
     if (fragment->branch) {
-        hemp_debug_msg("TODO: render branch\n");
-
-        hemp_hash_store(context->vars, "test", hemp_obj_val((hemp_object) test));
-
-        // TODO
-
+        /* render the dangling expect/error block, with a ref to this test */
+        hemp_hash_store(context->vars, "test", hemp_ptr_val(test));
+        hemp_vtext(hemp_frag_val(fragment->branch), context, output);
         hemp_hash_store(context->vars, "test", HempMissing);
     }
     else if (test->status == HEMP_TEST_RUN_OK) {
-        printf("TODO: OK %s\n", test->name->string);
+        /* generate a simple OK message */
+        hemp_text_append_string(text, "ok ");
+        hemp_text_append_text(text, test->name);
+        hemp_text_append_string(text, "\n");
     }
     else {
-        printf("TODO: NOT OK %s\n", test->name->string);
+        /* generate a simple NOT OK message */
+        hemp_text_append_string(text, "not ok ");
+        hemp_text_append_text(text, test->name);
+        hemp_text_append_string(text, "\n");
     }
 
-    hemp_debug_msg(
-        "TEST (%d:%s): %s\n------\n%s\n=====\n%s\n-----\n", 
-        test->status, hemp_test_status_names[test->status],
-        test->name->string,
-        test->input->string,
-        test->output->string
-    );
+//    hemp_debug_msg(
+//        "TEST (%d:%s): %s\n------\n%s\n=====\n%s\n-----\n", 
+//        test->status, hemp_test_status_names[test->status],
+//        test->name->string,
+//        test->input->string,
+//        test->output->string
+//    );
 
     hemp_test_free(test);
 
-    return hemp_str_val("TODO: report test success/fail\n");
+    return output;
 }
 
 
@@ -472,6 +473,8 @@ HEMP_ELEMENT(hemp_element_test_output) {
     hemp_element_test_input(hemp, element);
     element->parse_prefix = NULL;
     element->parse_branch = &hemp_element_test_output_branch;
+    element->text         = &hemp_element_test_output_text;
+    element->value        = &hemp_element_text_value;
     return element;
 }
 
@@ -495,6 +498,56 @@ HEMP_POSTFIX(hemp_element_test_output_branch) {
     hemp_set_rhs_fragment(fragment, block);
 
     return fragment;
+}
+
+
+HEMP_OUTPUT(hemp_element_test_output_text) {
+    hemp_debug_call("hemp_element_test_output_text()\n");
+
+    hemp_fragment   fragment = hemp_val_frag(value);
+    hemp_value      block    = hemp_rhs(fragment);
+    hemp_text       text;
+    hemp_test       test;
+
+    hemp_prepare_text(context, output, text);
+
+    test = (hemp_test) hemp_hash_fetch_pointer(context->vars, "test");
+
+    if (! test)
+        hemp_fatal("test is not defined in %s", hemp_type_name(value));
+
+    if (test->status != HEMP_TEST_RUN_OK) {
+        // return fail
+        hemp_debug_msg("TODO: test failed: %s\n", test->name->string);
+        return output;
+    }
+
+    hemp_vtext(block, context, hemp_text_val(test->expect));
+    hemp_string_chomp(test->output->string);
+    hemp_string_chomp(test->expect->string);
+
+    if (hemp_string_eq(test->output->string, test->expect->string)) {
+//      printf("EXPECT: [%s%s%s]\n", HEMP_ANSI_YELLOW, expect, HEMP_ANSI_RESET);
+//      printf("OUTPUT: [%s%s%s]\n", HEMP_ANSI_GREEN, output->string, HEMP_ANSI_RESET);
+//        hemp_debug_msg("TODO: ok %s matches output\n", test->name->string);
+        hemp_text_append_string(text, HEMP_ANSI_GREEN);
+        hemp_text_append_string(text, "ok (output) ");
+        hemp_text_append_text(text, test->name);
+        hemp_text_append_string(text, HEMP_ANSI_RESET);
+        hemp_text_append_string(text, "\n");
+    }
+    else {
+//        hemp_debug_msg("TODO: not ok %s (output mismatch)\n", test->name->string);
+//        printf("EXPECT: [%s%s%s]\n", HEMP_ANSI_YELLOW, test->expect->string, HEMP_ANSI_RESET);
+//        printf("OUTPUT: [%s%s%s]\n", HEMP_ANSI_RED, test->output->string, HEMP_ANSI_RESET);
+        hemp_text_append_string(text, HEMP_ANSI_RED);
+        hemp_text_append_string(text, "NOT ok (output) ");
+        hemp_text_append_text(text, test->name);
+        hemp_text_append_string(text, HEMP_ANSI_RESET);
+        hemp_text_append_string(text, "\n");
+    }
+
+    return output;
 }
 
 

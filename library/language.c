@@ -32,3 +32,8 @@ HEMP_AUTOLOAD(hemp_language_autoload) {
         : HEMP_FALSE;
 }
 
+HEMP_AUTOLOAD(hemp_feature_autoload) {
+    return hemp_use_module(factory->hemp, "feature", name)
+        ? HEMP_TRUE
+        : HEMP_FALSE;
+}

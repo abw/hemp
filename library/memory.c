@@ -263,8 +263,12 @@ hemp_mem_trace_report(
     hemp_size count = 0, total = 0;
 
     if (verbose) {
-        hemp_debug_cyan("\nID   STATUS      SIZE       LOCATION\n");
-        hemp_debug_cyan(HEMP_MEM_DASHES);
+        hemp_debug(
+            "\n%sID   STATUS      SIZE         MEMORY  SOURCE LOCATION%s\n"
+            "%s%s%s\n", 
+            HEMP_ANSI_CYAN, HEMP_ANSI_RESET,
+            HEMP_ANSI_CYAN, HEMP_MEM_DASHES, HEMP_ANSI_RESET
+        );
     }
 
     for(r = 0; r < hemp_mem_used; r++) {
@@ -313,9 +317,9 @@ hemp_mem_trace_report(
     }
 
     if (verbose) {
-        hemp_debug_cyan(HEMP_MEM_DASHES);
-        hemp_debug_yellow("Memory used: %8lu\n", total);
-        hemp_debug_red("Memory wild: %8lu\n", count);
+        hemp_debug("%s%s%s\n", HEMP_ANSI_CYAN, HEMP_MEM_DASHES, HEMP_ANSI_RESET);
+        hemp_debug("%sMemory used: %8lu%s\n", HEMP_ANSI_YELLOW, total, HEMP_ANSI_RESET);
+        hemp_debug("%sMemory wild: %8lu%s\n", HEMP_ANSI_RED, count, HEMP_ANSI_RESET);
     }
     
     return count;

@@ -4,10 +4,12 @@
 #include <readline/history.h>
 
 
-#define HEMP_OPTION_SIG     "vdhtqr:f:"
+#define HEMP_OPTION_SIG     "vdhtqr:f:e:"
 #define HEMP_QUIT           "quit"
 #define HEMP_EXIT           "exit"
 #define HEMP_EXPR_PROMPT    HEMP_ANSI_CYAN "expr> " HEMP_ANSI_RESET
+#define HEMP_TEST_PROMPT    HEMP_ANSI_CYAN "test> " HEMP_ANSI_RESET
+#define HEMP_BAD_COMMAND    "Unknown command: %s     (type 'help' for help)"
 
 void        hemp_banner();
 void        hemp_info(hemp_hemp);
@@ -24,14 +26,12 @@ void        hemp_input_free();
 char **     hemp_completion(const char *, int, int);
 char *      hemp_command_generator(const char *, int);
 
-
 hemp_bool   hemp_cmd_todo(hemp_hemp, hemp_string);
 hemp_bool   hemp_cmd_exprs(hemp_hemp, hemp_string);
 hemp_bool   hemp_cmd_expr(hemp_hemp, hemp_string);
+hemp_bool   hemp_cmd_test(hemp_hemp, hemp_string);
 hemp_bool   hemp_cmd_help(hemp_hemp, hemp_string);
 hemp_bool   hemp_cmd_quit(hemp_hemp, hemp_string);
-
-hemp_string tmp_root = NULL;
 
 static int be_quiet  = 0;
 static int read_text = 0;
@@ -40,6 +40,7 @@ static hemp_string hemp_prompt = NULL;      /* old way */
 
 
 static struct option hemp_options[] = {
+    {"execute", required_argument,  NULL, 'e' },
     {"quiet",   no_argument,        NULL, 'q' },
     {"verbose", no_argument,        NULL, 'v' },
     {"debug",   no_argument,        NULL, 'd' },
@@ -61,11 +62,18 @@ hemp_command hemp_commands[] = {
     { &hemp_cmd_exprs,  "exprs",  "Evaluate hemp expressions, line by line" },
     { &hemp_cmd_todo,   "data",   "Load data definitions from a file"       },
     { &hemp_cmd_todo,   "text",   "Process some document text"              },
+    { &hemp_cmd_test,   "test",   "Run a hemp test script"                  },
     { &hemp_cmd_todo,   "file",   "Process a document file"                 },
     { &hemp_cmd_help,   "help",   "Help on using hemp"                      },
     { &hemp_cmd_quit,   "quit",   "Quit using hemp"                         },
     { NULL, NULL, NULL }
 };
+
+hemp_command * execute = NULL;
+int exit_val = 0;
+
+hemp_command *hemp_command_lookup_or_die(hemp_string name);
+hemp_command *hemp_command_lookup(hemp_string name);
 
 
 
@@ -91,6 +99,7 @@ int main(
     hemp_string     filename;
     hemp_document   document;
     hemp_text       input, output;
+    int             result = 0;
     
     hemp_language_instance(hemp, "tt3");
     hemp_prompt_init();
@@ -102,7 +111,12 @@ int main(
     if (hemp->verbose)
         hemp_info(hemp);
 
-    if (optind < argc) {
+    if (execute) {
+        // hemp_debug_msg("run %s command with arg: %s\n", execute->name, optind < argc ? argv[optind] : "NULL");
+        execute->func(hemp, optind < argc ? argv[optind++] : NULL);
+        result = exit_val;   /* hack to allow tests to define exit value */
+    }
+    else if (optind < argc) {
         if (read_text) {
             filename = "input text";
             input    = hemp_text_new_size(80);
@@ -159,7 +173,7 @@ int main(
     hemp_prompt_free();
     hemp_free(hemp);
 
-    return 0;
+    return result;
 }
 
 
@@ -167,6 +181,20 @@ int main(
 /*--------------------------------------------------------------------------
  * interactive mode
  *--------------------------------------------------------------------------*/
+
+hemp_command *
+hemp_command_lookup_or_die(
+    hemp_string name
+) {
+    hemp_command * cmd = hemp_command_lookup(name);
+    if (! cmd) {
+        hemp_warn(HEMP_BAD_COMMAND, name);
+        exit(1);
+    }
+    return cmd;
+}
+
+
 
 hemp_command *
 hemp_command_lookup(
@@ -187,14 +215,13 @@ hemp_command_lookup(
 void hemp_interactive(
     hemp_hemp hemp
 ) {
-    hemp_string  prompt = hemp_prompt;
-    hemp_bool done   = HEMP_FALSE;
-    hemp_list words;
-    hemp_string  input, word, args;
+    hemp_string prompt = hemp_prompt;
+    hemp_bool   done   = HEMP_FALSE;
+    hemp_string input, word, args;
+    hemp_list   words;
     hemp_command *cmd;
 
     rl_readline_name = HEMP_STR_HEMP;
-//  rl_attempted_completion_function = hemp_completion;
     rl_completion_entry_function = (Function *) &hemp_command_generator;
 
     while(! done) {
@@ -213,14 +240,8 @@ void hemp_interactive(
                 ? hemp_val_str( hemp_list_item(words, 1) )
                 : NULL;
             
-            cmd = hemp_command_lookup(word);
-            
-            if (cmd) {
-                done = cmd->func(hemp, args);
-            }
-            else {
-                hemp_warn("Unknown command: %s     (type 'help' for help)", word);
-            }
+            cmd  = hemp_command_lookup_or_die(word);
+            done = cmd->func(hemp, args);
 
             hemp_list_free(words);
         }
@@ -404,7 +425,7 @@ hemp_cmd_todo(
 
 hemp_bool 
 hemp_cmd_exprs(
-    hemp_hemp     hemp, 
+    hemp_hemp   hemp, 
     hemp_string text
 ) {
     /* pass text along as first expression */
@@ -424,7 +445,7 @@ hemp_cmd_exprs(
 
 hemp_bool 
 hemp_cmd_expr(
-    hemp_hemp     hemp, 
+    hemp_hemp   hemp, 
     hemp_string text
 ) {
     hemp_text     input, output;
@@ -455,10 +476,15 @@ hemp_cmd_expr(
         if (! hemplate)
             hemp_fatal("failed to create document... I think this should never happen, but need to check\n");
 
-        output = hemp_document_render(hemplate, NULL);
+// TODO: this is a temporary hack... might want to use a temporary context
+// managed by exprs command.
+        output = hemp_document_render(hemplate, hemp->context);
 
-        if (output)
-            puts(output->string);
+        if (output) {
+            if (output->string) {
+                puts(output->string);
+            }
+        }
         else 
             hemp_fatal("could not render document output");
 
@@ -478,6 +504,55 @@ hemp_cmd_expr(
 //        hemp_document_free(hemplate);
 
 
+    return HEMP_FALSE;
+}
+
+
+hemp_bool 
+hemp_cmd_test(
+    hemp_hemp   hemp, 
+    hemp_string test
+) {
+    hemp_document document;
+    hemp_text     output;
+
+    if (test)
+        hemp_debug_msg("test: %s\n", test);
+
+    if (! test)
+        test = hemp_input_read(HEMP_TEST_PROMPT);
+    
+    if (! test)
+        return HEMP_FALSE;
+    
+    hemp_string_trim(test);
+
+    if (! *test)
+        return HEMP_FALSE;
+
+    hemp_language_instance(hemp, "test");
+
+    HEMP_TRY;
+        document = hemp_document_instance(
+            hemp, "test", HEMP_FILE, test
+        );
+        // TODO: create child context
+        output = hemp_document_render(document, hemp->context);
+
+        fprintf(stderr, "OUTPUT:\n%s\n/OUTPUT\n", output->string);
+
+        hemp_text_free(output);
+
+    HEMP_CATCH_ALL;
+        hemp_text error = hemp_error_text(hemp->error);
+        hemp_warn(error->string);
+        hemp_text_free(error);
+
+    HEMP_END;
+
+    // hack: set this value to indicate test passed/failed
+    // exit_val = 1;
+    
     return HEMP_FALSE;
 }
 
@@ -536,6 +611,7 @@ hemp_getopt(
 
         switch (opt) {
             case 0:
+                /* currently not used */
                 printf ("option %s", hemp_options[ndx].name);
                 if (optarg)
                     printf (" with arg %s", optarg);
@@ -548,6 +624,10 @@ hemp_getopt(
 
             case 'd':
                 hemp->debug = HEMP_TRUE;
+                break;
+
+            case 'e':
+                execute = hemp_command_lookup_or_die(optarg);
                 break;
 
             case 't':
@@ -599,6 +679,7 @@ void hemp_help() {
     fprintf(
         stderr,
         "\nOptions:\n"
+        "    -e cmd  --execute cmd       execute command\n"
         "    -t      --text              read text from comment line arguments\n"
         "    -q      --quiet             quiet mode - no messages\n"
         "    -v      --verbose           enable verbose messages\n"

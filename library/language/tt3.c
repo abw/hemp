@@ -107,6 +107,8 @@ HEMP_GRAMMAR(hemp_grammar_tt3_core) {
     HEMP_USE_ELEMENT1("hemp.identity.false", "False");
     HEMP_USE_ELEMENT2("hemp.squote", "q<<", ">>");
     HEMP_USE_OPERATOR1("hemp.terminator", "end", 0, 0);
+    
+    hemp_grammar_feature(hemp, grammar, "ansi");
 
     return grammar;
 }

@@ -86,6 +86,7 @@ hemp_init_factories(
     hemp->codec             = hemp_factory_new(hemp);
     hemp->dialect           = hemp_factory_new(hemp);
     hemp->element           = hemp_factory_new(hemp);
+    hemp->feature           = hemp_factory_new(hemp);
     hemp->grammar           = hemp_factory_new(hemp);
     hemp->language          = hemp_factory_new(hemp);
     hemp->scheme            = hemp_factory_new(hemp);
@@ -95,11 +96,13 @@ hemp_init_factories(
     hemp->scheme->autoload      = &hemp_scheme_autoload;
     hemp->codec->autoload       = &hemp_codec_autoload;
     hemp->language->autoload    = &hemp_language_autoload;
+    hemp->feature->autoload     = &hemp_feature_autoload;
     hemp->tag->autoload         = &hemp_tag_autoload;
 
     /* install the cleaners to automatically tidy up */
-    hemp->dialect->cleaner  = &hemp_free_dialect;
     hemp->codec->cleaner    = &hemp_free_codec;
+    hemp->dialect->cleaner  = &hemp_free_dialect;
+//  hemp->feature->cleaner  = &hemp_free_feature;
 //  hemp->element->cleaner  = &hemp_free_element;
     hemp->grammar->cleaner  = &hemp_free_grammar;
     hemp->language->cleaner = &hemp_free_language;
@@ -241,6 +244,7 @@ hemp_free_factories(
     hemp_factory_free(hemp->viewer);
     hemp_factory_free(hemp->element);
     hemp_factory_free(hemp->grammar);
+    hemp_factory_free(hemp->feature);
     hemp_factory_free(hemp->tag);
     hemp_factory_free(hemp->dialect);
     hemp_factory_free(hemp->language);

@@ -177,6 +177,7 @@ hemp_fragment_parse_exprs(
 
     hemp_fragment   expr;
     hemp_list       exprs = hemp_list_new();
+//  hemp_debug_msg("hemp_fragment_parse_exprs() LIST: %p\n", exprs);
 
     while (1) {
         /* skip whitespace, delimiters (commas) and separators (semi-colons) */

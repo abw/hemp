@@ -211,16 +211,16 @@ hemp_fragment_debug(
     (hemp_val_list(frag->args.block.exprs))
 
 #define hemp_expr_fragment(frag)                                \
-    ((hemp_fragment) hemp_val_obj( hemp_expr(frag) ))
+    (hemp_val_frag( hemp_expr(frag)) )
 
 #define hemp_expr_args_fragment(frag)                           \
-    ((hemp_fragment) hemp_val_obj( hemp_expr_args(frag) ))
+    (hemp_val_frag( hemp_expr_args(frag) ))
 
 #define hemp_lhs_fragment(frag)                                 \
-    ((hemp_fragment) hemp_val_obj( hemp_lhs(frag) ))
+    (hemp_val_frag( hemp_lhs(frag) ))
 
 #define hemp_rhs_fragment(frag)                                 \
-    ((hemp_fragment) hemp_val_obj( hemp_rhs(frag) ))
+    (hemp_val_frag( hemp_rhs(frag) ))
 
 #define hemp_set_expr(frag, ex)                                 \
     (frag->args.unary.expr = ex)
@@ -241,16 +241,16 @@ hemp_fragment_debug(
     (frag->args.block.exprs = hemp_list_val(li))
 
 #define hemp_set_expr_fragment(frag, ex)                        \
-    (hemp_set_expr( frag, hemp_obj_val((hemp_object) ex) ))
+    (hemp_set_expr( frag, hemp_frag_val(ex) ))
 
 #define hemp_set_expr_args_fragment(frag, a)                    \
-    (hemp_set_expr_args( frag, hemp_obj_val((hemp_object) a) ))
+    (hemp_set_expr_args( frag, hemp_frag_val(a) ))
 
 #define hemp_set_lhs_fragment(frag, ex)                         \
-    (hemp_set_lhs( frag, hemp_obj_val((hemp_object) ex) ))
+    (hemp_set_lhs( frag, hemp_frag_val(ex) ))
 
 #define hemp_set_rhs_fragment(frag, ex)                         \
-    (hemp_set_rhs( frag, hemp_obj_val((hemp_object) ex) ))
+    (hemp_set_rhs( frag, hemp_frag_val(ex) ))
 
 
 /*--------------------------------------------------------------------------
@@ -303,7 +303,7 @@ hemp_fragment_debug(
     _hemp_expr;                                                 \
 })
 
-#define hemp_parse_rhs_body(fragment, ...) ({                   \
+#define hemp_parse_rhs_body(fragment) ({                        \
     hemp_fragment _hemp_expr = hemp_parse_body(                 \
         fragptr, scope, fragment->type->rprec, 0                \
     );                                                          \
@@ -312,6 +312,21 @@ hemp_fragment_debug(
     hemp_set_rhs_fragment(fragment, _hemp_expr);                \
     _hemp_expr;                                                 \
 })
+
+#define hemp_parse_body_terminator(fragment, block) ({          \
+    if (hemp_not_flag(block, HEMP_BE_TERMINATED)) {             \
+        if (hemp_element_terminator_matches(                    \
+            *fragptr, fragment->type->end)                      \
+        ) {                                                     \
+            hemp_advance(fragptr);                              \
+        }                                                       \
+        else {                                                  \
+            HEMP_THROW_NOEND(fragment);                         \
+        }                                                       \
+    }                                                           \
+})
+
+
 
 
 

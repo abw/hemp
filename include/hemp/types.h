@@ -96,6 +96,7 @@ struct hemp_hemp {
     hemp_factory    codec;
     hemp_factory    dialect;
     hemp_factory    element;
+    hemp_factory    feature;
     hemp_factory    grammar;
     hemp_factory    language;
     hemp_factory    scheme;

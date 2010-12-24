@@ -34,6 +34,7 @@ hemp_language_free(
 );
 
 HEMP_AUTOLOAD(hemp_language_autoload);
+HEMP_AUTOLOAD(hemp_feature_autoload);
 
 
 #endif /* HEMP_LANGUAGE_H */

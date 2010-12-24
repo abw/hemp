@@ -14,14 +14,14 @@ x: [% 10 %]
 -- expect blah blah text is allowed here but ignored to the end of line
 x: 10
 
--- test expecting an error
-%% if x and; oops 
--- error --
-TODO
-
--- dialect tt99
--- test Invalid dialect
-
--- error
-Invalid dialect: tt99
+#-- test expecting an error
+#%% if x and; oops 
+#-- error --
+#TODO
+#
+#-- dialect tt99
+#-- test Invalid dialect
+#
+#-- error
+#Invalid dialect: tt99
 

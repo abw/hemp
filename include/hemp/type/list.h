@@ -25,6 +25,16 @@ hemp_list
 hemp_list_init(
     hemp_list       list
 );
+/*
+#define hemp_list_init(list) ({             \
+    hemp_list _l = hemp_list_init_(list);   \
+    hemp_debug_msg(                         \
+        "LIST: :%p at line %d of %s\n",     \
+        _l, __LINE__, __FILE__              \
+    );                                      \
+    _l;                                     \
+})
+*/
 
 HEMP_INLINE void
 hemp_list_release(

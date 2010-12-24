@@ -222,7 +222,7 @@ HEMP_VALUE(hemp_value_no_op) {
 
 
 HEMP_VALUE(hemp_value_self) {
-    hemp_debug_msg("hemp_value_self(%s)\n", hemp_type_name(value));
+    hemp_debug_call("hemp_value_self(%s)\n", hemp_type_name(value));
     return value;
 }
 

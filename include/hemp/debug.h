@@ -42,6 +42,7 @@ void hemp_debug_off();
 #define HEMP_ANSI_BLUE          "\e[34m"
 #define HEMP_ANSI_MAGENTA       "\e[35m"
 #define HEMP_ANSI_CYAN          "\e[36m"
+#define HEMP_ANSI_WHITE         "\e[37m"
 #define HEMP_ANSI_RESET         "\e[0m"
 #define HEMP_ANSI_NONE          ""
 

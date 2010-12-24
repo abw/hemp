@@ -76,6 +76,7 @@ add_subdirectory(include)
 add_subdirectory(library)
 add_subdirectory(programs)
 add_subdirectory(modules/codec)
+add_subdirectory(modules/feature)
 add_subdirectory(modules/language)
 
 # nothing in here yet
@@ -85,6 +86,7 @@ add_subdirectory(modules/language)
 #add_subdirectory(tests)
 add_subdirectory(tests/core)
 add_subdirectory(tests/type)
+add_subdirectory(tests/language/hemp)
 add_subdirectory(tests/language/test)
 
 message(STATUS "Summary of configuration:") 
