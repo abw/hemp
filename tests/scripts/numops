@@ -23,12 +23,6 @@
 -- expect
 420
 
--- test complex number expression
-[% 20 + 40 * 10 + 20 / 5 - 2 * 2 %]
-
--- expect
-420
-
 -- test integer division
 [% 10 / 4 %]
 -- expect
@@ -210,7 +204,6 @@ Equal
 -- expect
 After
 
--- start
 -- test answer + 1
 answer: [% answer + 1 %]
 -- expect
@@ -220,5 +213,25 @@ answer: 43
 result: [% n + 20 %]
 -- expect
 result: 420
+
+-- test operator precedence
+[% 20 + 40 * 10 %]
+-- expect
+420
+
+-- test decreasing operator precedence
+[% 8 + 40 * 10 + 12 %]
+-- expect
+420
+
+-- test leftward similar precedence
+[% 440 - 15 - 5 %]
+-- expect
+420
+
+-- test complex number expression
+[% 20 + 40 * 10 + 20 / 5 - 2 * 2 %]
+-- expect
+420
 
 

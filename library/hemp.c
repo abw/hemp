@@ -315,7 +315,7 @@ hemp_free_language(
     hemp_pos  position,
     hemp_slot item
 ) {
-    hemp_debug_init("cleaning %s language\n", ((hemp_dialect) item->value)->name);
+    hemp_debug_init("cleaning %s language\n", ((hemp_dialect) hemp_val_ptr(item->value))->name);
     hemp_language_free( (hemp_language) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
@@ -340,7 +340,7 @@ hemp_free_dialect(
     hemp_pos  position,
     hemp_slot item
 ) {
-    hemp_debug_init("cleaning %s dialect\n", ((hemp_dialect) item->value)->name);
+    hemp_debug_init("cleaning %s dialect\n", ((hemp_dialect) hemp_val_ptr(item->value))->name);
     hemp_dialect_free( (hemp_dialect) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
@@ -352,7 +352,7 @@ hemp_free_tag(
     hemp_pos  position,
     hemp_slot item
 ) {
-    hemp_debug_init("cleaning %s tag\n", ((hemp_tag) item->value)->name);
+    hemp_debug_init("cleaning %s tag\n", ((hemp_tag) hemp_val_ptr(item->value))->name);
 //    hemp_tag_free( (hemp_tag) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
@@ -364,7 +364,7 @@ hemp_free_grammar(
     hemp_pos  position,
     hemp_slot item
 ) {
-    hemp_debug_init("cleaning %s grammar\n", ((hemp_grammar) item->value)->name);
+    hemp_debug_init("cleaning %s grammar\n", ((hemp_grammar) hemp_val_ptr(item->value))->name);
     hemp_grammar_free( (hemp_grammar) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
@@ -388,7 +388,7 @@ hemp_free_viewer(
     hemp_pos  position,
     hemp_slot item
 ) {
-    hemp_debug_init("cleaning %s viewer\n", ((hemp_eviewer) item->value)->name);
+    hemp_debug_init("cleaning %s viewer\n", ((hemp_viewer) hemp_val_ptr(item->value))->name);
     hemp_viewer_free( (hemp_viewer) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }

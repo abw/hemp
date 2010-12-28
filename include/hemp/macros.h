@@ -433,22 +433,22 @@
 
 // NOTE: this macro produces stupid debugging messages... can't be arsed to fix right now
 #define HEMP_PREFIX_PRECEDENCE ({                                           \
+    HEMP_PREFIX_DEBUG;                                                      \
     if (precedence && HEMP_FPTYPE->rprec <= precedence) {                   \
-        HEMP_PREFIX_DEBUG;                                                  \
         return NULL;                                                        \
     }                                                                       \
 })
 
 #define HEMP_INFIX_LEFT_PRECEDENCE ({                                       \
+    HEMP_INFIX_DEBUG;                                                       \
     if (precedence && HEMP_FPTYPE->lprec <= precedence) {                   \
-        HEMP_INFIX_DEBUG;                                                   \
         return lhs;                                                         \
     }                                                                       \
 })
 
 #define HEMP_INFIX_RIGHT_PRECEDENCE ({                                      \
+    HEMP_INFIX_DEBUG;                                                       \
     if (precedence && HEMP_FPTYPE->lprec < precedence) {                    \
-        HEMP_INFIX_DEBUG;                                                   \
         return lhs;                                                         \
     }                                                                       \
 })

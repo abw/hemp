@@ -44,7 +44,7 @@ hemp_module_binder(
  *--------------------------------------------------------------------------*/
 
 HEMP_FEATURE(hemp_feature_ansi) {
-    hemp_debug_msg("hemp_feature_ansi()\n");
+    hemp_debug_call("hemp_feature_ansi()\n");
     
     // TODO: nice idea, but this doesn't work... well, it does work, but 
     // stashing the ANSI escape code in the end slot doesn't.  We need that
@@ -67,7 +67,7 @@ HEMP_FEATURE(hemp_feature_ansi) {
  *--------------------------------------------------------------------------*/
 
 HEMP_ELEMENT(hemp_element_ansi) {
-    hemp_debug_msg("hemp_element_ansi()\n");
+    hemp_debug_call("hemp_element_ansi()\n");
     element->parse_prefix    = &hemp_element_ansi_prefix;
     element->token           = &hemp_element_literal_text;
     element->source          = &hemp_element_literal_text;
@@ -97,7 +97,7 @@ HEMP_PREFIX(hemp_element_ansi_prefix) {
     /* skip past the keyword */
     hemp_advance(fragptr);
 
-    block = hemp_parse_rhs_body(fragment);
+    block = hemp_parse_rhs_body(fragment, rprec);
     hemp_debug_msg("AAA\n");
     hemp_parse_body_terminator(fragment, block);
     hemp_debug_msg("BBB\n");

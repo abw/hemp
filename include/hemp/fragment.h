@@ -281,11 +281,11 @@ hemp_fragment_debug(
 #define hemp_parse_body(fp, ...)                                \
     hemp_parse_method(fp, body, NULL, __VA_ARGS__)
 
-// TODO: should this be rprec?  Hmm... maybe not.
+/* NOTE: use of lrpec (for postfix/infix exprs), NOT rprec (for prefix) */
 
-#define hemp_parse_lhs_expr(fragment) ({                        \
+#define hemp_parse_lhs_expr(fragment, ftprec) ({                \
     hemp_fragment _hemp_expr = hemp_parse_prefix(               \
-        fragptr, scope, fragment->type->lprec, 1                \
+        fragptr, scope, fragment->type->ftprec, 1               \
     );                                                          \
     if (! _hemp_expr)                                           \
         HEMP_THROW_NOEXPR(fragment);                            \
@@ -293,9 +293,9 @@ hemp_fragment_debug(
     _hemp_expr;                                                 \
 })
 
-#define hemp_parse_rhs_expr(fragment) ({                        \
+#define hemp_parse_rhs_expr(fragment, ftprec) ({                \
     hemp_fragment _hemp_expr = hemp_parse_prefix(               \
-        fragptr, scope, fragment->type->rprec, 1                \
+        fragptr, scope, fragment->type->ftprec, 1               \
     );                                                          \
     if (! _hemp_expr)                                           \
         HEMP_THROW_NOEXPR(fragment);                            \
@@ -303,9 +303,9 @@ hemp_fragment_debug(
     _hemp_expr;                                                 \
 })
 
-#define hemp_parse_rhs_body(fragment) ({                        \
+#define hemp_parse_rhs_body(fragment, ftprec) ({                \
     hemp_fragment _hemp_expr = hemp_parse_body(                 \
-        fragptr, scope, fragment->type->rprec, 0                \
+        fragptr, scope, fragment->type->ftprec, 0               \
     );                                                          \
     if (! _hemp_expr)                                           \
         HEMP_THROW_NOBODY(fragment);                            \

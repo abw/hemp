@@ -34,6 +34,8 @@ World!
 Hello World!
 
 
+-- stop
+# This shouldn't be here - just quickly testing the ansi feature
 -- test ansi feature
 %% green "green" red { "r" 'e' "d" }
 %% n = red { 99 }; blue { n + 1 }
