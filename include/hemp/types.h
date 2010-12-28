@@ -61,6 +61,7 @@ typedef struct hemp_jump        * hemp_jump;
 typedef struct hemp_language    * hemp_language;
 typedef struct hemp_list        * hemp_list;
 typedef struct hemp_location    * hemp_location;
+typedef struct hemp_md5         * hemp_md5;
 typedef struct hemp_module      * hemp_module;
 typedef struct hemp_namespace   * hemp_namespace;
 typedef struct hemp_object      * hemp_object;
@@ -264,13 +265,6 @@ typedef void
 /*--------------------------------------------------------------------------
  * TODO: in the process of cleaning up everything below this line.
  *--------------------------------------------------------------------------*/
-
-//
-//typedef void
-//    (* hemp_dclean_f)(
-//        hemp_dialect  dialect     /* pointer to dialect to clean          */
-//    );
-//
 
 
 /*--------------------------------------------------------------------------

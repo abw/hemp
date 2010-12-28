@@ -454,8 +454,8 @@ hemp_document_instance(
     hemp_string scheme,
     hemp_string source
 ) {
-    hemp_document     document;
-    static hemp_md5_t md5;
+    hemp_document document;
+    static struct hemp_md5 md5;
 
     hemp_md5_init(&md5);
     hemp_md5_update_string(&md5, scheme);

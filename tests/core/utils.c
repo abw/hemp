@@ -16,7 +16,7 @@ int main(
 
 
 void test_md5_dynamic() {
-    hemp_md5_p md5 = hemp_md5_init(NULL);
+    hemp_md5 md5 = hemp_md5_init(NULL);
     ok( md5, "created dynamic md5 object: %p", md5 );
 
     hemp_md5_update(md5, "hello ", 6);
@@ -41,7 +41,7 @@ void test_md5_dynamic() {
 
 
 void test_md5_static() {
-    hemp_md5_t md5;
+    struct hemp_md5 md5;
 
     hemp_md5_init(&md5);
     pass( "using static md5 object" );
