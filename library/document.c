@@ -140,7 +140,7 @@ hemp_document_process(
 
     if (! context) {
         my_context = HEMP_TRUE;
-        context = hemp_context_new(document->dialect->hemp);
+        context = hemp_context_new(document->hemp);
     }
 
     if (! root)
@@ -179,7 +179,7 @@ hemp_document_data(
     
     if (! context) {
         my_context  = HEMP_TRUE;
-        context     = hemp_context_new(document->dialect->hemp);
+        context     = hemp_context_new(document->hemp);
     }
 
     values  = root->type->values(hemp_frag_val(root), context, HempNothing);

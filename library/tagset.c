@@ -87,27 +87,10 @@ hemp_tagset_new_tag(
     hemp_string     end,
     hemp_grammar    grammar
 ) {
-//    hemp_debug("tagset: %p  document: %p\n", tagset, tagset->document);
-//    hemp_dialect d = tagset->document->dialect;
-//    hemp_debug("dialect: %p  hemp: %p\n", d, d->hemp);
-//    hemp_debug("type: %s  name: %s   start: %s   end: %s  grammar: %p\n", type, name, start, end ? end : "", grammar);
-//
-//
-//    hemp_action _cons = hemp_constructor(d->hemp, tag, type);
-//    hemp_debug("calling constructor action: %p => [%p, %p]\n", _cons, _cons->actor, _cons->script);
-//    hemp_action_run(_cons, type, name, start, grammar);
-//    hemp_debug("called constructor\n");
-//
-//    hemp_tag tag = hemp_tag_construct(
-//        tagset->document->dialect->hemp,        // a rather tenuous link
-//        type, name, start, end, grammar
-//    );
-//    hemp_debug("created tag: %p\n", tag);
-//    
     return hemp_tagset_add_tag(
         tagset,
         hemp_tag_construct(
-            tagset->document->dialect->hemp,        // a rather tenuous link
+            tagset->document->hemp,
             type, name, start, end, grammar
         )
     );

@@ -207,7 +207,7 @@ bareword:
             );
         }
         else {
-            hemp_throw(document->dialect->hemp, HEMP_ERROR_TOKEN, src);
+            hemp_throw(document->hemp, HEMP_ERROR_TOKEN, src);
             break;
         }
     }

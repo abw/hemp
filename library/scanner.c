@@ -34,7 +34,7 @@ hemp_scan_number(
 
     if (errno == ERANGE) {
         /* TODO: trim next token out of text */
-        hemp_throw(document->dialect->hemp, HEMP_ERROR_OVERFLOW, document->scanptr);
+        hemp_throw(document->hemp, HEMP_ERROR_OVERFLOW, document->scanptr);
     }
     else if (errno) {
         /* should never happen (famous last words) as we pre-check 

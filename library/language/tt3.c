@@ -46,7 +46,7 @@ HEMP_DIALECT(hemp_dialect_tt3) {
 HEMP_DOC_SCAN(hemp_dialect_tt3_scanner) {
     hemp_debug_msg("hemp_dialect_tt3_scanner(%p)\n", document);
 
-    hemp_hemp    hemp    = document->dialect->hemp;
+    hemp_hemp    hemp    = document->hemp;
     hemp_tagset  tagset  = hemp_tagset_new(document);
     hemp_grammar command = hemp_grammar_instance(hemp, "tt3.command");
     hemp_grammar control = hemp_grammar_instance(hemp, "tt3.control");

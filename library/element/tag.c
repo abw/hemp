@@ -83,7 +83,7 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
 
             if (errno == ERANGE) {
                 /* TODO: trim next token out of text */
-                hemp_throw(document->dialect->hemp, HEMP_ERROR_OVERFLOW, from);
+                hemp_throw(document->hemp, HEMP_ERROR_OVERFLOW, from);
             }
             else if (errno) {
                 /* should never happen (famous last words) as we pre-check 
@@ -153,7 +153,7 @@ bareword:
             );
         }
         else {
-            hemp_throw(document->dialect->hemp, HEMP_ERROR_TOKEN, src);
+            hemp_throw(document->hemp, HEMP_ERROR_TOKEN, src);
             break;
         }
 
