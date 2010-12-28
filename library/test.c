@@ -212,8 +212,7 @@ hemp_test_result(
 
     if (! plan)
         hemp_fatal("No test plan");
-        
-    
+
     plan->tested++;
 
     /* Start by taking the test name and performing any printf()

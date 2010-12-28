@@ -13,6 +13,8 @@ CTestTestfile.cmake
 
 build
 !build/README
+tmp
+hgdb
 
 #include/hemp/config.h
 #programs/hemp

@@ -41,10 +41,10 @@
 
 
 struct hemp_test_plan_s {
-    hemp_uint       skip_all;
-    hemp_uint       skip_some;
+//  hemp_uint       skip_all;
+//  hemp_uint       skip_some;
     hemp_uint       planned;
-    hemp_uint       expected;
+//  hemp_uint       expected;
     hemp_uint       tested;
     hemp_uint       passed;
     hemp_uint       failed;
@@ -90,7 +90,7 @@ hemp_test_plan_cleanup(
 
 hemp_test_plan_p 
 hemp_test_plan(
-    hemp_uint planned
+    hemp_uint       planned
 );
 
 hemp_uint
@@ -106,16 +106,16 @@ hemp_test_result(
 
 void 
 hemp_test_output(
-    hemp_string  name,
-    hemp_text output,
-    hemp_string  expect
+    hemp_string     name,
+    hemp_text       output,
+    hemp_string     expect
 );
 
 void 
 hemp_test_error(
-    hemp_string name,
-    hemp_string error,
-    hemp_string expect
+    hemp_string     name,
+    hemp_string     error,
+    hemp_string     expect
 );
 
 void
@@ -146,7 +146,7 @@ hemp_test_expect_file(
     hemp_string     language,
     hemp_string     dialect,
     hemp_string     file,
-    hemp_context context
+    hemp_context    context
 );
 
 hemp_uint
@@ -155,7 +155,7 @@ hemp_test_expect_script(
     hemp_string     dialect,
     hemp_string     testdir,
     hemp_string     name,
-    hemp_context context
+    hemp_context    context
 );
 
 

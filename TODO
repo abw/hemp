@@ -30,7 +30,7 @@ An incomplete list of things TODO, in no particular order.
 
 * Add @list and %hash items to prototypes.
 
-* Add arrows.  a => 10, b -> 10
+* Add arrows.  a => 10, b -> 10, list.each <- block(x) { ...x... }
 
 * hemp_test_plan_p vs hemp_test_plan()
 
