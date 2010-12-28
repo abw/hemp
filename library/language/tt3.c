@@ -40,10 +40,6 @@ HEMP_LANGUAGE(hemp_language_tt3) {
 HEMP_DIALECT(hemp_dialect_tt3) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
     dialect->scanner = &hemp_dialect_tt3_scanner;
-    
-//    dialect->prepare = &hemp_dialect_tt3_prepare;
-//    dialect->cleanup = &hemp_tagset_cleanup;
-
     return dialect;
 }
 
@@ -55,11 +51,6 @@ HEMP_DOC_SCAN(hemp_dialect_tt3_scanner) {
     hemp_grammar command = hemp_grammar_instance(hemp, "tt3.command");
     hemp_grammar control = hemp_grammar_instance(hemp, "tt3.control");
     hemp_bool    result;
-
-//    document->scanner  = hemp_action_new(
-//        (hemp_actor) &hemp_tagset_scanner, 
-//        (hemp_memory) tagset
-//    );
 
     hemp_tagset_new_tag(tagset, "hemp.comment",  "comment",  "[#",   "#]", NULL);
     hemp_tagset_new_tag(tagset, "hemp.control",  "control",  "[?",   "?]", control);
@@ -75,24 +66,6 @@ HEMP_DOC_SCAN(hemp_dialect_tt3_scanner) {
     return result;
 }
 
-
-//HEMP_DOC_PREP(hemp_dialect_tt3_prepare_OLD) {
-//    hemp_debug_call("hemp_dialect_tt3_prepare(%p)\n", document);
-//
-//    hemp_hemp    hemp    = document->dialect->hemp;
-//    hemp_tagset  tagset  = hemp_tagset_prepare(document);
-//    hemp_grammar command = hemp_grammar_instance(hemp, "tt3.command");
-//    hemp_grammar control = hemp_grammar_instance(hemp, "tt3.control");
-//
-//    hemp_tagset_new_tag(tagset, "hemp.comment",  "comment",  "[#",   "#]", NULL);
-//    hemp_tagset_new_tag(tagset, "hemp.control",  "control",  "[?",   "?]", control);
-//    hemp_tagset_new_tag(tagset, "hemp.outline",  "outline",  "%%",   NULL, command);
-//    hemp_tagset_new_tag(tagset, "hemp.inline",   "inline",   "[%",   "%]", command);
-//
-//    return document;
-//}
-
-
 /*--------------------------------------------------------------------------
  * Unplugged
  *--------------------------------------------------------------------------*/
@@ -100,8 +73,6 @@ HEMP_DOC_SCAN(hemp_dialect_tt3_scanner) {
 HEMP_DIALECT(hemp_dialect_tt3_unplugged) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
     dialect->scanner = &hemp_dialect_tt3_unplugged_scanner;
-//    dialect->prepare = &hemp_dialect_tt3_unplugged_prepare;
-//    dialect->cleanup = &hemp_tagset_cleanup;
     return dialect;
 }
 
@@ -109,11 +80,9 @@ HEMP_DIALECT(hemp_dialect_tt3_unplugged) {
 HEMP_DOC_SCAN(hemp_dialect_tt3_unplugged_scanner) {
     hemp_debug_msg("hemp_dialect_tt3_unplugged_scanner(%p)\n", document);
 
-    hemp_hemp    hemp    = document->dialect->hemp;
-    hemp_grammar grammar = hemp_grammar_instance(hemp, "tt3.command");
-
     return hemp_grammar_scanner(
-        (hemp_memory) grammar, document
+        hemp_grammar_instance(document->hemp, "tt3.command"),
+        document
     );
 }
 

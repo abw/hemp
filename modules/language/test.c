@@ -144,8 +144,6 @@ HEMP_LANGUAGE(hemp_language_test) {
 HEMP_DIALECT(hemp_dialect_test) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
     dialect->scanner = &hemp_dialect_test_scanner;
-//    dialect->prepare = &hemp_dialect_test_prepare;
-//    dialect->cleanup = &hemp_tagset_cleanup;
     return dialect;
 }
 

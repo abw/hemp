@@ -57,17 +57,11 @@ hemp_tagset_free_tag(
     hemp_slot       item
 );
 
-hemp_tagset
-hemp_tagset_prepare(
+hemp_bool
+hemp_tagset_scanner(
+    hemp_tagset     tagset,
     hemp_document   document
 );
 
-void
-hemp_tagset_cleanup(
-    hemp_document document
-);
 
-HEMP_SCANNER(hemp_tagset_scanner);
-
-
-#endif /* HEMP_TAGS_H */
+#endif /* HEMP_TAGSET_H */

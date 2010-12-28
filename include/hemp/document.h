@@ -13,6 +13,7 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_document {
+    hemp_hemp       hemp;
     hemp_dialect    dialect;
     hemp_source     source;
     hemp_scope      scope;

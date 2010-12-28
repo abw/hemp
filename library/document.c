@@ -9,6 +9,7 @@ hemp_document_new(
     hemp_document document;
     HEMP_ALLOCATE(document);
 
+    document->hemp      = dialect->hemp;
     document->dialect   = dialect;
     document->source    = source;
     document->scope     = hemp_scope_new(dialect->hemp);

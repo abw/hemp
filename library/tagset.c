@@ -135,45 +135,14 @@ hemp_tagset_dump(
 }
 
 
-/*
-hemp_tagset
-hemp_tagset_prepare(
+
+hemp_bool
+hemp_tagset_scanner(
+    hemp_tagset     tagset,
     hemp_document   document
 ) {
-    hemp_debug_call("hemp_tagset_prepare(%p)\n", document);
-    hemp_tagset tagset = hemp_tagset_new(document);
-    document->scanner  = hemp_action_new(
-        (hemp_actor) &hemp_tagset_scanner, 
-        (hemp_memory) tagset
-    );
-//    hemp_debug_msg(
-//        "scanner: %p = [%p, %p]\n", 
-//        document->scanner, 
-//        document->scanner->actor,
-//        document->scanner->script
-//    );
+    hemp_debug_msg("hemp_tagset_scanner()\n");
 
-    return tagset;
-}
-
-*/
-
-//void
-//hemp_tagset_cleanup(
-//    hemp_document document
-//) {
-//    if (document->scanner) {
-//        hemp_debug_init("tagset scanner cleanup\n");
-//        hemp_tagset_free((hemp_tagset) document->scanner->script);
-//        hemp_action_free(document->scanner);
-//    }
-//}
-
-
-HEMP_SCANNER(hemp_tagset_scanner) {
-    hemp_debug_call("hemp_tagset_scanner()\n");
-
-    hemp_tagset     tagset   = (hemp_tagset) self;
     hemp_string     src      = document->scanptr,
                     from     = document->scantok,
                     tagstr;
