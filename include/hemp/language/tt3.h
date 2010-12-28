@@ -18,12 +18,14 @@ HEMP_ELEMENTS(hemp_elements_tt3_command_registrar);
 HEMP_ELEMENT(hemp_element_tt3_if);
 HEMP_ELEMENT(hemp_element_tt3_TODO);
 
+HEMP_DOC_SCAN(hemp_dialect_tt3_scanner);
+//HEMP_DOC_PREP(hemp_dialect_tt3_prepare);
+//HEMP_DOC_CLEAN(hemp_dialect_tt3_cleanup);
 
-hemp_document   hemp_dialect_tt3_prepare(hemp_document document);
-void            hemp_dialect_tt3_cleanup(hemp_document document);
+HEMP_DOC_SCAN(hemp_dialect_tt3_unplugged_scanner);
 
-hemp_document   hemp_dialect_tt3_unplugged_prepare(hemp_document document);
-void            hemp_dialect_tt3_unplugged_cleanup(hemp_document document);
+//hemp_document   hemp_dialect_tt3_unplugged_prepare(hemp_document document);
+//void            hemp_dialect_tt3_unplugged_cleanup(hemp_document document);
 
 
 #endif /* HEMP_LANGUAGE_TT3_H */

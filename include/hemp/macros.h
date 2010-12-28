@@ -133,9 +133,6 @@
 
 
 
-
-
-
 /*--------------------------------------------------------------------------
  * Macros for getting and setting configuration values
  *--------------------------------------------------------------------------*/
@@ -149,6 +146,8 @@
 
 /*--------------------------------------------------------------------------
  * Thread locking.  Encapsulates a block of code with a locked mutex.
+ * Cargo-culto from Nik Clayton's TAP library, but not really used.  Thread
+ * safety is something that (will|may) come later.
  *--------------------------------------------------------------------------*/
 
 #ifdef HEMP_HAVE_LIBPTHREAD
@@ -272,10 +271,21 @@
         hemp_value      output                  \
     )
 
-#define HEMP_PREPARE(f)                         \
+#define HEMP_DOC_PREP(f)                        \
     hemp_document f(                            \
         hemp_document   document                \
     )
+
+#define HEMP_DOC_SCAN(f)                        \
+    hemp_bool f(                                \
+        hemp_document   document                \
+    )
+
+#define HEMP_DOC_CLEAN(f)                       \
+    void f(                                     \
+        hemp_document   document                \
+    )
+
 
 /*--------------------------------------------------------------------------
  * Elements

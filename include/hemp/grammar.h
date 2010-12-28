@@ -25,8 +25,8 @@ struct hemp_grammar {
     hemp_hemp       hemp;
     hemp_string     name;
     hemp_hash       elements;
-    hemp_hash       keywords;
     hemp_ptree      operators;
+//  hemp_hash       keywords;
 };
 
 struct hemp_grammars {
@@ -81,9 +81,9 @@ hemp_grammar_free_element(
     hemp_slot       item
 );
 
-hemp_memory
+hemp_bool
 hemp_grammar_scanner(
-    hemp_actor      self,
+    hemp_grammar    grammar,
     hemp_document   document
 );
 

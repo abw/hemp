@@ -14,7 +14,7 @@ hemp_document_new(
     document->scope     = hemp_scope_new(dialect->hemp);
     document->fragments = hemp_fragments_new(document, 0);
     document->tree      = NULL;
-    document->scanner   = NULL;
+//  document->scanner   = NULL;
     document->scantags  = NULL;
 
 //  document->tagset   = hemp_tagset_new(document);
@@ -65,7 +65,7 @@ hemp_document_scan(
 ) {
     hemp_debug_call("hemp_document_scan(%p)\n", document);
 
-    if (! document->scanner)
+    if (! document->dialect->scanner)
         hemp_fatal("No scanner defined for %s document\n", document->dialect->name);
 
     if (! document->source->text)
@@ -78,9 +78,13 @@ hemp_document_scan(
     if (! document->scantags)
         document->scantags = hemp_stack_new(HEMP_SCANTAGS_SIZE);
 
-    return hemp_action_run(document->scanner, document)
+    return document->dialect->scanner(document)
         ? HEMP_TRUE
         : HEMP_FALSE;
+
+//    return hemp_action_run(document->scanner, document)
+//        ? HEMP_TRUE
+//        : HEMP_FALSE;
 }
 
 

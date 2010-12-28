@@ -11,9 +11,9 @@ hemp_grammar_new(
 
     grammar->hemp      = hemp;
     grammar->elements  = hemp_hash_new();
-//  grammar->keywords  = hemp_hash_new();
     grammar->operators = hemp_ptree_new(HEMP_OPERATORS_SIZE);
     grammar->name      = hemp_string_clone(name, "grammar name");
+//  grammar->keywords  = hemp_hash_new();
 
     return grammar;
 }
@@ -150,16 +150,20 @@ hemp_grammar_free_element(
 }
 
 
-// unplugged scanner
-hemp_memory
+/*--------------------------------------------------------------------------
+ * "Unplugged" scanner for scanning a "naked" grammar-based language that 
+ * is literally written in a document rather than being embedded in tags in
+ * a text document.
+ *--------------------------------------------------------------------------*/
+
+hemp_bool
 hemp_grammar_scanner(
-    hemp_actor      self,
+    hemp_grammar    grammar,
     hemp_document   document
 ) {
     hemp_debug_call("hemp_grammar_scanner()\n");
 
-    hemp_grammar    grammar  = (hemp_grammar) self;
-    hemp_string     src      = document->scanptr;
+    hemp_string     src = document->scanptr;
     hemp_pnode      pnode;
     hemp_element    element;
 
@@ -212,5 +216,5 @@ bareword:
     
     hemp_fragments_add_eof(document->fragments, document->scanpos);
 
-    return (hemp_memory) document;
+    return HEMP_TRUE;
 }

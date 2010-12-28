@@ -18,10 +18,10 @@ typedef hemp_dialect
 struct hemp_dialect {
     hemp_hemp       hemp;
     hemp_string     name;
-    hemp_hash       tags;
-    hemp_prep_f     prepare;
-//  hemp_scan_f     scanner;
-    hemp_clean_f    cleanup;
+    hemp_doc_prep   prepare;
+    hemp_doc_scan   scanner;
+    hemp_doc_clean  cleanup;
+//  hemp_hash       tags;
 //  hemp_tagset_t   tagset;
 };
 

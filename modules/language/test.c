@@ -15,6 +15,8 @@ HEMP_ELEMENT(hemp_element_test_input);
 HEMP_ELEMENT(hemp_element_test_output);
 HEMP_ELEMENT(hemp_element_test_error);
 
+HEMP_DOC_SCAN(hemp_dialect_test_scanner);
+
 HEMP_SCANNER(hemp_element_test_language_scanner);
 HEMP_PREFIX(hemp_element_test_language_prefix);
 HEMP_VALUE(hemp_element_test_language_value);
@@ -141,28 +143,33 @@ HEMP_LANGUAGE(hemp_language_test) {
 
 HEMP_DIALECT(hemp_dialect_test) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
-    dialect->prepare = &hemp_dialect_test_prepare;
-    dialect->cleanup = &hemp_tagset_cleanup;
+    dialect->scanner = &hemp_dialect_test_scanner;
+//    dialect->prepare = &hemp_dialect_test_prepare;
+//    dialect->cleanup = &hemp_tagset_cleanup;
     return dialect;
 }
 
 
-hemp_document
-hemp_dialect_test_prepare(
-    hemp_document document
-) {
-    hemp_debug_call("hemp_dialect_test_prepare(%p)\n", document);
+HEMP_DOC_SCAN(hemp_dialect_test_scanner) {
+    hemp_debug_msg("hemp_dialect_test_scanner(%p)\n", document);
 
     hemp_dialect dialect = document->dialect;
 
     hemp_hemp    hemp    = hemp_document_hemp(document);
-    hemp_tagset  tagset  = hemp_tagset_prepare(document);
+    hemp_tagset  tagset  = hemp_tagset_new(document);
     hemp_grammar grammar = hemp_grammar_instance(hemp, dialect->name);
+    hemp_bool    result;
+
     hemp_tagset_new_tag(tagset, "hemp.outline", "outline", "--", NULL, grammar);
 
-    return document;
-}
+    result = hemp_tagset_scanner(
+        tagset, document
+    );
 
+    hemp_tagset_free(tagset);
+
+    return result;
+}
 
 
 /*--------------------------------------------------------------------------

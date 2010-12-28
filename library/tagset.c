@@ -135,6 +135,7 @@ hemp_tagset_dump(
 }
 
 
+/*
 hemp_tagset
 hemp_tagset_prepare(
     hemp_document   document
@@ -155,17 +156,18 @@ hemp_tagset_prepare(
     return tagset;
 }
 
+*/
 
-void
-hemp_tagset_cleanup(
-    hemp_document document
-) {
-    if (document->scanner) {
-        hemp_debug_init("tagset scanner cleanup\n");
-        hemp_tagset_free((hemp_tagset) document->scanner->script);
-        hemp_action_free(document->scanner);
-    }
-}
+//void
+//hemp_tagset_cleanup(
+//    hemp_document document
+//) {
+//    if (document->scanner) {
+//        hemp_debug_init("tagset scanner cleanup\n");
+//        hemp_tagset_free((hemp_tagset) document->scanner->script);
+//        hemp_action_free(document->scanner);
+//    }
+//}
 
 
 HEMP_SCANNER(hemp_tagset_scanner) {

@@ -141,6 +141,11 @@ typedef hemp_memory
     ...
 );
 
+
+/*--------------------------------------------------------------------------
+ * Module loading and binding function pointers
+ *--------------------------------------------------------------------------*/
+
 typedef hemp_bool
 (* hemp_binder)(
     hemp_module     module,
@@ -152,6 +157,34 @@ typedef hemp_bool
     hemp_module     module
 );
 
+
+
+/*--------------------------------------------------------------------------
+ * Dialect/document function pointers
+ *--------------------------------------------------------------------------*/
+
+typedef hemp_document 
+    (* hemp_doc_prep)(
+        hemp_document document    /* pointer to document to prepare       */
+    );
+
+typedef hemp_bool
+    (* hemp_doc_scan)(
+        hemp_document document    /* pointer to document to scan          */
+    );
+
+typedef void
+    (* hemp_doc_clean)(
+        hemp_document document    /* pointer to document to clean         */
+    );
+
+
+
+
+/*--------------------------------------------------------------------------
+ * Scanning function pointers.
+ *--------------------------------------------------------------------------*/
+
 typedef hemp_bool
 (* hemp_scanner)(
     hemp_memory     self,
@@ -162,32 +195,6 @@ typedef hemp_string
 (* hemp_skipper)(
     hemp_tag        tag,
     hemp_string     src
-);
-
-
-
-
-/*--------------------------------------------------------------------------
- * Iterator functions
- *--------------------------------------------------------------------------*/
-
-typedef hemp_bool     
-(* hemp_hash_iter)(                 /* iterator over hash items             */
-    hemp_hash       hash,           /* pointer to hash                      */
-    hemp_pos        index,          /* 0-based index of item in hash        */
-    hemp_slot       item            /* pointer to hash item entry           */
-);
-
-typedef hemp_bool     
-(* hemp_list_iter)(                 /* iterator over list items             */
-    hemp_list       list,           /* pointer to list                      */
-    hemp_pos        index,          /* 0-based index of item in list        */
-    hemp_value      item            /* item value                           */
-);
-
-typedef hemp_bool     
-(* hemp_pool_iter)(                 /* iterate over pool items              */
-    hemp_memory     item            /* pointer to memory                    */
 );
 
 
@@ -221,6 +228,30 @@ typedef hemp_fragment
 
 
 /*--------------------------------------------------------------------------
+ * Iterator functions
+ *--------------------------------------------------------------------------*/
+
+typedef hemp_bool     
+(* hemp_hash_iter)(                 /* iterator over hash items             */
+    hemp_hash       hash,           /* pointer to hash                      */
+    hemp_pos        index,          /* 0-based index of item in hash        */
+    hemp_slot       item            /* pointer to hash item entry           */
+);
+
+typedef hemp_bool     
+(* hemp_list_iter)(                 /* iterator over list items             */
+    hemp_list       list,           /* pointer to list                      */
+    hemp_pos        index,          /* 0-based index of item in list        */
+    hemp_value      item            /* item value                           */
+);
+
+typedef hemp_bool     
+(* hemp_pool_iter)(                 /* iterate over pool items              */
+    hemp_memory     item            /* pointer to memory                    */
+);
+
+
+/*--------------------------------------------------------------------------
  * cleanup functions
  *--------------------------------------------------------------------------*/
 
@@ -234,28 +265,12 @@ typedef void
  * TODO: in the process of cleaning up everything below this line.
  *--------------------------------------------------------------------------*/
 
-// TODO: rename this to hemp_document_f
-typedef hemp_document 
-    (* hemp_prep_f)(
-        hemp_document document    /* pointer to document to prepare       */
-    );
-
-typedef hemp_bool 
-    (* hemp_scan_f)(
-        hemp_document document    /* pointer to document to scan          */
-    );
-
-typedef void
-    (* hemp_clean_f)(
-        hemp_document document    /* pointer to document to clean         */
-    );
-
-
-typedef void
-    (* hemp_dclean_f)(
-        hemp_dialect  dialect     /* pointer to dialect to clean          */
-    );
-
+//
+//typedef void
+//    (* hemp_dclean_f)(
+//        hemp_dialect  dialect     /* pointer to dialect to clean          */
+//    );
+//
 
 
 /*--------------------------------------------------------------------------

@@ -15,11 +15,11 @@
 struct hemp_document {
     hemp_dialect    dialect;
     hemp_source     source;
-//    hemp_tagset     tagset;
     hemp_scope      scope;
     hemp_fragments  fragments;
     hemp_fragment   tree;
-    hemp_action     scanner;
+//  hemp_action     scanner;
+//  hemp_tagset     tagset;
 
     /* these don't really belong here but it'll do for now */
     hemp_string     scanptr;    /* position in source string during scanning */

@@ -5,8 +5,9 @@
 HEMP_LANGUAGE(hemp_language_json);
 HEMP_DIALECT(hemp_dialect_json);
 HEMP_GRAMMAR(hemp_grammar_json);
-HEMP_PREPARE(hemp_dialect_json_prepare);
-void hemp_dialect_json_cleanup(hemp_document);
+HEMP_DOC_SCAN(hemp_dialect_json_scanner);
+//HEMP_DOC_PREP(hemp_dialect_json_prepare);
+//HEMP_DOC_CLEAN(hemp_dialect_json_cleanup);
 
 
 /*--------------------------------------------------------------------------
@@ -38,8 +39,9 @@ HEMP_LANGUAGE(hemp_language_json) {
 
 HEMP_DIALECT(hemp_dialect_json) {
     hemp_dialect dialect = hemp_dialect_new(hemp, name);
-    dialect->prepare = &hemp_dialect_json_prepare;
-    dialect->cleanup = &hemp_dialect_json_cleanup;
+    dialect->scanner = &hemp_dialect_json_scanner;
+//  dialect->prepare = &hemp_dialect_json_prepare;
+//  dialect->cleanup = &hemp_dialect_json_cleanup;
     return dialect;
 }
 
@@ -66,25 +68,12 @@ HEMP_GRAMMAR(hemp_grammar_json) {
 }
 
 
-HEMP_PREPARE(hemp_dialect_json_prepare) {
+HEMP_DOC_SCAN(hemp_dialect_json_scanner) {
     hemp_hemp    hemp    = document->dialect->hemp;
     hemp_grammar grammar = hemp_grammar_instance(hemp, "json");
 
-    document->scanner = hemp_action_new(
-        (hemp_actor)    &hemp_grammar_scanner, 
-        (hemp_memory)   grammar
+    return hemp_grammar_scanner(
+        grammar, document
     );
-
-    return document;
 }
 
-
-void
-hemp_dialect_json_cleanup(
-    hemp_document document
-) {
-    if (document->scanner) {
-//      hemp_debug_msg("json scanner cleanup\n");
-        hemp_action_free(document->scanner);
-    }
-}
