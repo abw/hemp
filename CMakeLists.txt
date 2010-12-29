@@ -87,7 +87,7 @@ add_subdirectory(modules/language)
 add_subdirectory(tests/core)
 add_subdirectory(tests/type)
 add_subdirectory(tests/language/hemp)
-add_subdirectory(tests/language/test)
+#add_subdirectory(tests/language/test)
 
 message(STATUS "Summary of configuration:") 
 message(STATUS " + Project source dir ........... : ${PROJECT_SOURCE_DIR}") 

@@ -233,6 +233,10 @@ void            hemp_error_throw(hemp_hemp, hemp_error);
 #define HEMP_THROW(type)                            \
                 longjmp(hemp->jump->buffer, type);
 
+#define HEMP_RETHROW                                \
+                hemp->jump = hemp->jump->parent;    \
+                longjmp(hemp->jump->buffer, hemp->error->number)
+
 #define HEMP_CATCH(e)                               \
                 break;                              \
             case e:                                 \
@@ -252,6 +256,7 @@ void            hemp_error_throw(hemp_hemp, hemp_error);
 
 #define hemp_throw(h,...) \
     hemp_error_throw(h, hemp_error_message(h,__VA_ARGS__))
+
 
 
 /*--------------------------------------------------------------------------

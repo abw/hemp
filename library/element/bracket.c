@@ -89,6 +89,7 @@ HEMP_CLEANUP(hemp_element_brackets_clean) {
 HEMP_ELEMENT(hemp_element_parens) {
     hemp_element_brackets(hemp, element);
     element->parse_params    = &hemp_element_brackets_parse;
+    element->parse_pair      = &hemp_element_brackets_parse;
     element->parse_postfix   = &hemp_element_parens_postfix;
     element->parse_proto     = &hemp_element_parens_proto;
     element->value           = &hemp_element_parens_value;
@@ -202,12 +203,9 @@ HEMP_ELEMENT(hemp_element_hash) {
 
 
 HEMP_PREFIX(hemp_element_hash_prefix) {
-    hemp_debug_call("hemp_element_hash_prefix()\n");
+    hemp_debug_msg("hemp_element_hash_prefix()  precedence: %d  force: %s\n", precedence, force ? "true" : "false");
 
-
-    /* TODO : should test prefix precedence */
-    HEMP_PREFIX_PRECEDENCE;
-
+//  HEMP_PREFIX_PRECEDENCE;
 
     hemp_fragment fragment = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
     hemp_list     exprs    = hemp_block_exprs_list(fragment);
@@ -215,6 +213,7 @@ HEMP_PREFIX(hemp_element_hash_prefix) {
     hemp_value    item;
     hemp_size     n;
     
+    /* TODO: this should be merged in with newer code in hemp_parse_pairs() */
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
         expr = hemp_val_frag(item);

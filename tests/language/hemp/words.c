@@ -4,11 +4,11 @@
 int main(
     int argc, char **argv, char **env
 ) {
-    hemp_hemp      hemp    = hemp_new();
-    hemp_list list    = hemp_list_new();
-    hemp_hash hash    = hemp_hash_new();
-    hemp_context context = hemp_context_instance(hemp);
-    int         result;
+    hemp_hemp       hemp    = hemp_new();
+    hemp_list       list    = hemp_list_new();
+    hemp_hash       hash    = hemp_hash_new();
+    hemp_context    context = hemp_context_instance(hemp);
+    int             result;
 
     hemp_text message = hemp_text_from_string("Hello World!");
     

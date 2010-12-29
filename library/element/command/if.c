@@ -38,9 +38,6 @@ HEMP_ELEMENT(hemp_element_command_if) {
 }
 
 
-
-    
-
 HEMP_PREFIX(hemp_element_command_if_prefix) {
     hemp_fragment fragment = *fragptr;
     hemp_element  element  = fragment->type;

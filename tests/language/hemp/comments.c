@@ -4,9 +4,11 @@
 int main(
     int argc, char **argv, char **env
 ) {
-    return hemp_test_expect_script(
+    int result = hemp_test_expect_script(
         HEMP_TT3, HEMP_TT3, 
         HEMP_TEST_DIR, "comments",
         NULL
     );
+    hemp_mem_trace_ok();
+    return result;
 }

@@ -75,31 +75,22 @@ hemp_parse_pairs(
 ) {
     hemp_debug_call("hemp_parse_pairs()\n");
 
-    hemp_fragment   expr, save;
+    hemp_fragment   expr;
     hemp_list       exprs = hemp_list_new();
 
     while (1) {
         /* skip whitespace and delimiters (commas) */
         hemp_skip_delimiter(fragptr);
 
-        /* ask the next token to return an expression */
-        
-        save = *fragptr;
-//      hemp_debug_parse("%s parse_prefix: %p\n", save->type->name, save->type->parse_prefix);
-        expr = hemp_parse_prefix(fragptr, scope, precedence, HEMP_FALSE);
+//      hemp_debug_msg("%s parse_prefix (prec: %d): %p\n", save->type->name, precedence, save->type->parse_pair);
+        expr = hemp_parse_pair(fragptr, scope, precedence, HEMP_FALSE);
 
-        /* if it's not an expression (e.g. a terminator) then we're done */
-        if (! expr)
-            break;
-
-        /* if the expression doesn't yield a pair, then backtrack to it */
-        if (hemp_not_flag(expr, HEMP_BE_PAIRS)) {
-//          hemp_debug_msg("expression does not yield pairs: %s\n", expr->type->name);
-            *fragptr = save;
-//          hemp_debug_msg("rewound to: %s\n", (*fragptr)->type->name);
+        /* if it's not a pairable expression then we're done */
+        if (! expr) {
+//          hemp_debug_msg("expression does not yield pairs: %s (%p vs %p)\n", save->type->name, save, *fragptr);
             break;
         }
-        
+            
 //      hemp_debug_msg("expression yields pairs: %s\n", expr->type->name);
         hemp_list_push(exprs, hemp_frag_val(expr));
     }

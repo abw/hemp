@@ -23,6 +23,7 @@ HEMP_ELEMENT(hemp_element_word) {
     element->parse_fixed     = &hemp_element_parse_fixed;
     element->parse_proto     = &hemp_element_word_proto;
     element->parse_lvalue    = &hemp_element_word_lvalue;
+    element->parse_pair      = &hemp_element_parse_prefix_pair;
     element->value           = &hemp_element_word_value;
     element->text            = &hemp_element_value_text;
     element->number          = &hemp_element_value_number;

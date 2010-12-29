@@ -516,13 +516,13 @@ hemp_test_expect_text(
 
 hemp_uint
 hemp_test_expect_file(
-    hemp_string     language,
-    hemp_string     dialect,
-    hemp_string     file,
+    hemp_string  language,
+    hemp_string  dialect,
+    hemp_string  file,
     hemp_context context
 ) {
-    hemp_string  text   = hemp_filesystem_read_file(file);
-    hemp_uint result = hemp_test_expect_text(language, dialect, text, file, context);
+    hemp_string text   = hemp_filesystem_read_file(file);
+    hemp_uint   result = hemp_test_expect_text(language, dialect, text, file, context);
     hemp_mem_free(text);
     return result;
 }
@@ -537,17 +537,17 @@ hemp_test_expect_file(
 
 hemp_uint
 hemp_test_expect_script(
-    hemp_string     language,
-    hemp_string     dialect,
-    hemp_string     testdir,
-    hemp_string     name,
+    hemp_string  language,
+    hemp_string  dialect,
+    hemp_string  testdir,
+    hemp_string  name,
     hemp_context context
 ) {
 //    hemp_mem_trace_reset();
-    hemp_string  dir    = hemp_filesystem_join_path(testdir, "scripts");
-    hemp_string  file   = hemp_filesystem_join_path(dir, name);
-    hemp_string  text   = hemp_filesystem_read_file(file);
-    hemp_uint result = hemp_test_expect_text(language, dialect, text, name, context);
+    hemp_string dir    = hemp_filesystem_join_path(testdir, "scripts");
+    hemp_string file   = hemp_filesystem_join_path(dir, name);
+    hemp_string text   = hemp_filesystem_read_file(file);
+    hemp_uint   result = hemp_test_expect_text(language, dialect, text, name, context);
     hemp_mem_free(text);
     hemp_mem_free(file);
     hemp_mem_free(dir);

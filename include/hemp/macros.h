@@ -441,10 +441,9 @@
     )
 
 
-// NOTE: this macro produces stupid debugging messages... can't be arsed to fix right now
 #define HEMP_PREFIX_PRECEDENCE ({                                           \
     HEMP_PREFIX_DEBUG;                                                      \
-    if (precedence && HEMP_FPTYPE->rprec <= precedence) {                   \
+    if (precedence && HEMP_FPTYPE->lprec <= precedence && ! force) {        \
         return NULL;                                                        \
     }                                                                       \
 })

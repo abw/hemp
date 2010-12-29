@@ -58,9 +58,14 @@ HEMP_DOC_SCAN(hemp_dialect_tt3_scanner) {
     hemp_tagset_new_tag(tagset, "hemp.outline",  "outline",  "%%",   NULL, command);
     hemp_tagset_new_tag(tagset, "hemp.inline",   "inline",   "[%",   "%]", command);
 
-    result = hemp_tagset_scanner(
-        tagset, document
-    );
+    HEMP_TRY;
+        result = hemp_tagset_scanner(
+            tagset, document
+        );
+    HEMP_CATCH_ALL;
+        hemp_tagset_free(tagset);
+        HEMP_RETHROW;
+    HEMP_END;
 
     hemp_tagset_free(tagset);
 

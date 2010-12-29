@@ -49,6 +49,7 @@ hemp_element_new(
     element->parse_branch    = NULL;
     element->parse_fixed     = NULL;
     element->parse_params    = NULL;
+    element->parse_pair      = NULL;
     element->parse_lvalue    = NULL; //&hemp_element_not_lvalue;
     element->parse_proto     = &hemp_element_not_proto;
     element->parse_body      = &hemp_element_parse_body;     // default to NULL?
@@ -245,6 +246,31 @@ HEMP_PREFIX(hemp_element_parse_body_block) {
     return hemp_parse_block(fragptr, scope, precedence, force);
 }
 
+
+HEMP_PREFIX(hemp_element_parse_prefix_pair) {
+    hemp_debug_call("hemp_element_parse_expr_pair(%s)\n", (*fragptr)->type->name);
+
+    /* Default function for element that may start an expression that yields
+     * one or more pairs.  For example, a word may be the LHS of an assignment
+     * expression, e.g. [% foo = 10 %].  The word element maps parse_pair() 
+     * to this function which calls the parse_prefix() function to parse a 
+     * complete expression.  It then checks that the expression has the 
+     * HEMP_BE_PAIRS flag set, returning it if it does, or rewinding to the 
+     * start of the expression and returning NULL if not.
+     */
+
+    hemp_fragment fragment = *fragptr;
+    hemp_fragment expr     = hemp_parse_prefix(fragptr, scope, precedence, force);
+
+    if (expr && hemp_not_flag(expr, HEMP_BE_PAIRS)) {
+        *fragptr = fragment;
+        hemp_debug_parse("expression does not yield pairs: %s\n", expr->type->name);
+        hemp_debug_parse("rewound to: %s\n", (*fragptr)->type->name);
+        expr = NULL;
+    }
+
+    return expr;
+}
 
 
 

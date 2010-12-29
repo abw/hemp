@@ -38,6 +38,7 @@ struct hemp_element {
     hemp_postfix    parse_branch;
     hemp_prefix     parse_fixed;
     hemp_prefix     parse_params;
+    hemp_prefix     parse_pair;
     hemp_prefix     parse_body;
     hemp_fixup      parse_lvalue;
     hemp_fixup      parse_proto;
@@ -134,6 +135,7 @@ extern HEMP_PREFIX(hemp_element_parse_fixed);
 extern HEMP_PREFIX(hemp_element_parse_body);
 extern HEMP_PREFIX(hemp_element_parse_body_block);
 extern HEMP_PREFIX(hemp_element_parse_prefix);
+extern HEMP_PREFIX(hemp_element_parse_prefix_pair);
 extern HEMP_POSTFIX(hemp_element_parse_postfix);
 extern HEMP_POSTFIX(hemp_element_parse_infix_left);
 extern HEMP_POSTFIX(hemp_element_parse_infix_right);

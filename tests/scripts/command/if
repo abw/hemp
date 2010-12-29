@@ -71,15 +71,6 @@ Foo
 Foo
 Hello World!
 
--- test if yielding value
-%%  x = if True "Hello World";
-%%  y = (if False "Goodbye World");
-Foo
-[% x %]![% y %]
--- expect
-Foo
-Hello World!
-
 -- test if yielding values
 %%  list = [if True "Hello"; if True "World"; if False "Blah"]
 %%  list.length " items: " list.text

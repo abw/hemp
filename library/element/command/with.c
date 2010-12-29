@@ -5,6 +5,7 @@ HEMP_ELEMENT(hemp_element_command_with);
 HEMP_PREFIX(hemp_element_command_with_prefix);
 HEMP_POSTFIX(hemp_element_command_with_postfix);
 HEMP_OUTPUT(hemp_element_command_with_text);
+HEMP_CLEANUP(hemp_element_command_with_cleanup);
 
 
 /*--------------------------------------------------------------------------
@@ -17,6 +18,7 @@ HEMP_ELEMENT(hemp_element_command_with) {
     element->parse_prefix    = &hemp_element_command_with_prefix;
     element->parse_postfix   = &hemp_element_command_with_postfix;
     element->text            = &hemp_element_command_with_text;
+    element->cleanup         = &hemp_element_command_with_cleanup;
     element->value           = &hemp_element_text_value;
     element->number          = &hemp_element_value_number;
     element->integer         = &hemp_element_value_integer;
@@ -99,3 +101,11 @@ HEMP_OUTPUT(hemp_element_command_with_text) {
 
 
 /* TODO: separate methods for value/values */
+
+
+HEMP_CLEANUP(hemp_element_command_with_cleanup) {
+    hemp_debug_msg("hemp_element_command_with_clean(%p)\n", fragment);
+
+    hemp_list params = hemp_val_list(hemp_lhs(fragment));
+    hemp_list_free(params);
+}

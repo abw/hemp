@@ -147,29 +147,36 @@ An incomplete list of things TODO, in no particular order.
   A namespace-based solution also makes it easier to render error messages from
   templates, e.g. /path/to/hemp/templates/hemp/error/scan/whatever
 
+* Operator precedence.  Various commands (e.g. with), do this in postfix mode
 
-Configuration, Build and Installation
--------------------------------------
+    return hemp_parse_postfix(
+        fragptr, scope, precedence, 0,
+        fragment
+    );
 
-* Find some way to generate the relevant items hard-coded package details
-  without referencing the values defined in config.h.  We don't want to 
-  install the generated config.h with hemp or require end users to use it.
-  But we need some of the definitions contained therein.
-  
-  See include/hemp/defines.h and include/hemp/config.h
+  I'm fairly certain that forwarding the passed precedence, rather than 
+  type->rprec is the correct thing to do.  But I need to convince myself
+  again...
 
-  UPDATE: Changed configure.ac to generate include/config.h.  Then added
-  a quick Perl script (hempify_config.pl) to generate include/hemp/config.h
-  from it with HEMP_ prefixes added to the relevant items.  This is a quick
-  hack - needs sorting out properly or building into the makefile so that
-  it's run at the right time (after configure and before make).
+* Boolean and/or ops should short-circuit.  This also implies that they 
+  should be able to return values other than booleans.
 
+* Memory leaks:
+  - tests/language/hemp/assign shows a memory leak.  Looks like the proto
+    created for a sub isn't being cleaned up (probably just needs a cleanup
+    function).
+  - tests/language/hemp/list shows a leak.  Looks like a value list that 
+    isn't being freed (probably needs to switch from a hemp_list_new() to 
+    a hemp_context_tmp_list() to have context manage the memory)
+  - /tests/language/hemp/with shows a leak, but it looks like it's the 
+    fixed pair names (x, y) that aren't being freed.
 
 Expressions
 -----------
 
 * Parameter arrow: =>
 * Function arrow: ->
+* Applicative arrow: <-
 
 
 Commands
@@ -182,6 +189,11 @@ Commands
 
 * fill template
 * data template                 # or 'load'?
+* into
+* layout
+* with                          # in progress
+
+* block/slot
 
 
 
@@ -207,6 +219,10 @@ Hot Stack
 ---------
 
 A reminder of what I'm working towards right now...
+
+Finish off test dialect.  Depends on merging/refactoring current test plan
+and figuring out how to generate output in a generic and extensible way
+(e.g. to enable colour, switch between text and html, and so on).
 
 Hemp config.  Any value with fetch() method.
 

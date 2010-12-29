@@ -150,6 +150,9 @@ HEMP_PREFIX(hemp_parse_block);
 #define hemp_parse_params(fp, ...)                              \
     hemp_parse_method(fp, params, NULL, __VA_ARGS__)
 
+#define hemp_parse_pair(fp, ...)                                \
+    hemp_parse_method(fp, pair, NULL, __VA_ARGS__)
+
 #define hemp_parse_body(fp, ...)                                \
     hemp_parse_method(fp, body, NULL, __VA_ARGS__)
 

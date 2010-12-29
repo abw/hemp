@@ -97,7 +97,7 @@ HEMP_PREFIX(hemp_element_ansi_prefix) {
     /* skip past the keyword */
     hemp_advance(fragptr);
 
-    block = hemp_parse_rhs_body(fragment, rprec);
+    block = hemp_parse_rhs_body(fragment);
     hemp_debug_msg("AAA\n");
     hemp_parse_body_terminator(fragment, block);
     hemp_debug_msg("BBB\n");
