@@ -142,6 +142,12 @@ hemp_hash_store_dotted(
     hemp_context    context
 );
 
+HEMP_INLINE hemp_value
+hemp_hash_delete(
+    hemp_hash       hash,
+    hemp_string     key
+);
+
 hemp_string
 hemp_hash_as_string(
     hemp_hash       hash

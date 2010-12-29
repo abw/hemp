@@ -1,6 +1,7 @@
 include(TestProgram)
 
 test_program(action)
+test_program(cache)
 test_program(codec)
 test_program(context)
 test_program(dialect)

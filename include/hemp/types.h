@@ -39,6 +39,7 @@ typedef union hemp_value          hemp_value;
 /* pointers */
 typedef struct hemp_hemp        * hemp_hemp;
 typedef struct hemp_action      * hemp_action;
+typedef struct hemp_cache       * hemp_cache;
 typedef struct hemp_code        * hemp_code;
 typedef struct hemp_codec       * hemp_codec;
 typedef struct hemp_context     * hemp_context;

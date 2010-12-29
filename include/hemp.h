@@ -7,6 +7,7 @@ extern "C" {
 
 #include <hemp/core.h>
 #include <hemp/action.h>
+#include <hemp/cache.h>
 #include <hemp/codec.h>
 #include <hemp/context.h>
 #include <hemp/dialect.h>

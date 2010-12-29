@@ -501,6 +501,48 @@ hemp_hash_store_dotted(
 }
 
 
+hemp_value
+hemp_hash_delete(
+    hemp_hash       hash,
+    hemp_string     name
+) {
+    hemp_debug_msg("hemp_hash_delete(%p, %s)\n", hash, name);
+    hemp_size   length = strlen(name);
+    hemp_size   index  = hemp_hash_function(name, length);
+    hemp_slot   slot   = NULL;
+    hemp_slot   prev   = NULL;
+    hemp_value  result = HempMissing;
+    hemp_size   column;
+    
+    column = index % hash->width;
+    slot   = hash->slots[column];
+
+    /* look for an entry in this hash table */
+    while (slot 
+      &&  (index != slot->index) 
+      &&  ! hemp_hash_key_match(slot->name, name, length) ) {
+        prev = slot;
+        slot = slot->next;
+    }
+
+    if (slot) {
+//      hemp_debug_msg("found slot at %p with key: %s\n", slot, slot->name);
+        if (prev) {
+//          hemp_debug_msg("previous slot found\n");
+            prev->next = slot->next;
+        }
+        else {
+//          hemp_debug_msg("slot is first in column\n");
+            hash->slots[column] = slot->next;
+        }
+        result = slot->value;
+        hemp_slot_free(slot);
+    }
+
+    return result;
+}
+
+
 HEMP_INLINE void 
 hemp_hash_attach(
     hemp_hash child, 
