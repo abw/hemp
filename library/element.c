@@ -242,7 +242,7 @@ HEMP_PREFIX(hemp_element_parse_body) {
 
 HEMP_PREFIX(hemp_element_parse_body_block) {
     hemp_debug_call("hemp_element_parse_body_block(%s)\n", (*fragptr)->type->name);
-    return hemp_fragment_parse_block(fragptr, scope, precedence, force);
+    return hemp_parse_block(fragptr, scope, precedence, force);
 }
 
 

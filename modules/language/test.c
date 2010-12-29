@@ -355,7 +355,7 @@ HEMP_PREFIX(hemp_element_test_input_prefix) {
      * on the next text, because the test will have a lower precedence, as
      * implemented by the HEMP_PREFIX_PRECEDENCE above.
      */
-    block = hemp_fragment_parse_block(fragptr, scope, type->rprec + 1, 1);
+    block = hemp_parse_block(fragptr, scope, type->rprec + 1, 1);
 
     if (! block)
         hemp_fatal("missing block for %s\n", type->start);
@@ -495,7 +495,7 @@ HEMP_POSTFIX(hemp_element_test_output_branch) {
     hemp_advance(fragptr);      /* skip keyword */
     hemp_advance(fragptr);      /* skip name - not interested */
 
-    block = hemp_fragment_parse_block(fragptr, scope, type->rprec + 1, 1);
+    block = hemp_parse_block(fragptr, scope, type->rprec + 1, 1);
 
     if (! block)
         hemp_fatal("missing block for %s\n", type->start);

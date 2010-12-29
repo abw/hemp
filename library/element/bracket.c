@@ -35,7 +35,7 @@ HEMP_PREFIX(hemp_element_brackets_parse) {
      * no forwarded precedence level, second number (1) forces an empty list 
      * to be returned if no expressions are found
      */
-    exprs = hemp_fragment_parse_exprs(fragptr, scope, 0, 1);
+    exprs = hemp_parse_exprs(fragptr, scope, 0, 1);
 
     /* skip any whitespace then check for closing parenthesis */
     hemp_skip_whitespace(fragptr);

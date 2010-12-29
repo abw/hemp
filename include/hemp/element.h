@@ -4,18 +4,9 @@
 #include <hemp/core.h>
 #include <hemp/fragment.h>
 #include <hemp/namespace.h>
+#include <hemp/parser.h>
 #include <hemp/type.h>
 #include <hemp/type/text.h>
-
-//#include <hemp/type.h>
-//#include <hemp/tag.h>
-//#include <hemp/document.h>
-//#include <hemp/context.h>
-//#include <hemp/value.h>
-//#include <hemp/macros.h>
-//#include <hemp/proto.h>
-//// #include <hemp/grammar.h>
-//#include <hemp/type/text.h>
 
 
 

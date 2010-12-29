@@ -192,7 +192,7 @@ hemp_test_plan_cleanup(
 
 hemp_uint
 hemp_test_result(
-    hemp_test_plan_p    plan,
+    hemp_test_plan_p  plan,
     hemp_bool         ok,         /* true=pass false=fail */
     hemp_name         func,        
     hemp_name         file,       /* source file          */
