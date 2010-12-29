@@ -124,7 +124,7 @@ hemp_tagset_scanner(
     hemp_tagset     tagset,
     hemp_document   document
 ) {
-    hemp_debug_msg("hemp_tagset_scanner()\n");
+    hemp_debug_call("hemp_tagset_scanner()\n");
 
     hemp_string     src      = document->scanptr,
                     from     = document->scantok,

@@ -61,9 +61,9 @@ HEMP_PREFIX(hemp_element_command_if_prefix) {
         hemp_advance(fragptr);
     }
 
-    hemp_parse_lhs_expr(fragment, rprec);
+    hemp_parse_lhs_expr_rprec(fragment);
 //  hemp_debug_msg("pre-body: %s\n", (*fragptr)->type->name);
-    hemp_fragment block  = hemp_parse_rhs_body(fragment, rprec);
+    hemp_fragment block  = hemp_parse_rhs_body(fragment);
 //  hemp_debug_msg("block: %s\n", block->type->name);
     hemp_fragment branch = hemp_parse_branch(
         fragptr, scope, 0, 0, 
@@ -117,7 +117,7 @@ HEMP_POSTFIX(hemp_element_command_if_postfix) {
     hemp_advance(fragptr);
 
     /* expression following the keyword is the test */
-    hemp_parse_lhs_expr(fragment, lprec);
+    hemp_parse_lhs_expr_rprec(fragment);
 
     return hemp_parse_postfix(
         fragptr, scope, precedence, 0,
@@ -228,10 +228,10 @@ HEMP_POSTFIX(hemp_element_command_elsif_branch) {
     hemp_advance(fragptr);
 
     /* parse an expression          */
-    hemp_parse_lhs_expr(fragment, rprec);
+    hemp_parse_lhs_expr_rprec(fragment);
     
     /* parse the body expr/block    */
-    block  = hemp_parse_rhs_body(fragment, rprec);
+    block  = hemp_parse_rhs_body(fragment);
 
     /* look for any other dangling branches */
     branch = hemp_parse_branch(fragptr, scope, 0, 0, fragment);

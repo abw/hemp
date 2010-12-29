@@ -304,7 +304,7 @@ HEMP_POSTFIX(hemp_element_parse_infix_left) {
     hemp_set_lhs_fragment(fragment, lhs);
     hemp_advance(fragptr);
 
-    rhs = hemp_parse_rhs_expr(fragment, lprec);
+    rhs = hemp_parse_rhs_expr_lprec(fragment);
 
     hemp_debug_parse(
         "parsed infix [%s] [%s] [%s]\n", 
@@ -332,7 +332,7 @@ HEMP_POSTFIX(hemp_element_parse_infix_right) {
     hemp_set_flag(fragment, HEMP_BE_INFIX);
     hemp_set_lhs_fragment(fragment, lhs);
     hemp_advance(fragptr);
-    hemp_parse_rhs_expr(fragment, lprec);
+    hemp_parse_rhs_expr_lprec(fragment);
 
     return hemp_parse_postfix(
         fragptr, scope, precedence, 0,

@@ -6,6 +6,7 @@ static struct hemp_elements hemp_elements_tt3_command[] = {
     { "tt3.command.else",   &hemp_element_command_else    },
     { "tt3.command.elsif",  &hemp_element_command_elsif   },
     { "tt3.command.sub",    &hemp_element_sub             },
+    { "tt3.command.with",   &hemp_element_command_with    },
     { NULL, NULL },
 };
 
@@ -44,7 +45,7 @@ HEMP_DIALECT(hemp_dialect_tt3) {
 }
 
 HEMP_DOC_SCAN(hemp_dialect_tt3_scanner) {
-    hemp_debug_msg("hemp_dialect_tt3_scanner(%p)\n", document);
+    hemp_debug_call("hemp_dialect_tt3_scanner(%p)\n", document);
 
     hemp_hemp    hemp    = document->hemp;
     hemp_tagset  tagset  = hemp_tagset_new(document);
@@ -112,10 +113,11 @@ HEMP_GRAMMAR(hemp_grammar_tt3_command) {
     hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     hemp_grammar grammar = hemp_grammar_tt3_core(hemp, name);
 
-    HEMP_USE_COMMAND2("tt3.command.sub",   "sub",  "end");
     HEMP_USE_COMMAND2("tt3.command.if",    "if",   "end");
     HEMP_USE_COMMAND1("tt3.command.elsif", "elsif");
     HEMP_USE_COMMAND1("tt3.command.else",  "else");
+    HEMP_USE_COMMAND2("tt3.command.sub",   "sub",  "end");
+    HEMP_USE_COMMAND2("tt3.command.with",  "with", "end");
 
 //    hemp_element intag = HEMP_USE_ELEMENT2("hemp.tag.inline", "[%", "%]");
 //  hemp_debug_msg("embedded tag: %p => %s\n", intag, intag->name); 

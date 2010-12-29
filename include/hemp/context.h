@@ -122,6 +122,17 @@ hemp_context_blur_params(
     hemp_context    context
 );
 
+hemp_hash
+hemp_context_within(
+    hemp_context    context,
+    hemp_hash       vars
+);
+
+hemp_hash
+hemp_context_without(
+    hemp_context    context
+);
+
 
 /*--------------------------------------------------------------------------
  * macros

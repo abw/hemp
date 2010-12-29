@@ -12,6 +12,11 @@ hemp_parse_exprs(
     HEMP_PREFIX_ARGS
 );
 
+hemp_list
+hemp_parse_pairs(
+    HEMP_PREFIX_ARGS
+);
+
 HEMP_PREFIX(hemp_parse_block);
 
 
@@ -148,11 +153,14 @@ HEMP_PREFIX(hemp_parse_block);
 #define hemp_parse_body(fp, ...)                                \
     hemp_parse_method(fp, body, NULL, __VA_ARGS__)
 
-/* NOTE: use of lrpec (for postfix/infix exprs), NOT rprec (for prefix) */
 
-#define hemp_parse_lhs_expr(fragment, ftprec) ({                \
+/*--------------------------------------------------------------------------
+ * More syntactic sugar for parsing something and stashing it in the fragment
+ *--------------------------------------------------------------------------*/
+
+#define hemp_parse_lhs_expr(fragment, precedence) ({            \
     hemp_fragment _hemp_expr = hemp_parse_prefix(               \
-        fragptr, scope, fragment->type->ftprec, 1               \
+        fragptr, scope, precedence, 1                           \
     );                                                          \
     if (! _hemp_expr)                                           \
         HEMP_THROW_NOEXPR(fragment);                            \
@@ -160,9 +168,16 @@ HEMP_PREFIX(hemp_parse_block);
     _hemp_expr;                                                 \
 })
 
-#define hemp_parse_rhs_expr(fragment, ftprec) ({                \
+#define hemp_parse_lhs_expr_lprec(fragment)                     \
+    hemp_parse_lhs_expr(fragment, fragment->type->lprec)
+
+#define hemp_parse_lhs_expr_rprec(fragment)                     \
+    hemp_parse_lhs_expr(fragment, fragment->type->rprec)
+
+
+#define hemp_parse_rhs_expr(fragment, precedence) ({            \
     hemp_fragment _hemp_expr = hemp_parse_prefix(               \
-        fragptr, scope, fragment->type->ftprec, 1               \
+        fragptr, scope, precedence, 1                           \
     );                                                          \
     if (! _hemp_expr)                                           \
         HEMP_THROW_NOEXPR(fragment);                            \
@@ -170,9 +185,33 @@ HEMP_PREFIX(hemp_parse_block);
     _hemp_expr;                                                 \
 })
 
-#define hemp_parse_rhs_body(fragment, ftprec) ({                \
+#define hemp_parse_rhs_expr_lprec(fragment)                     \
+    hemp_parse_rhs_expr(fragment, fragment->type->lprec)
+
+#define hemp_parse_rhs_expr_rprec(fragment)                     \
+    hemp_parse_rhs_expr(fragment, fragment->type->rprec)
+
+
+#define hemp_parse_lhs_pairs(fragment, precedence) ({           \
+    hemp_list _hemp_pairs = hemp_parse_pairs(                   \
+        fragptr, scope, precedence, 1                           \
+    );                                                          \
+    hemp_set_lhs(fragment, hemp_list_val(_hemp_pairs));         \
+    _hemp_pairs;                                                \
+})
+
+#define hemp_parse_lhs_pairs_lprec(fragment)                    \
+    hemp_parse_lhs_pairs(fragment, fragment->type->lprec)
+
+#define hemp_parse_lhs_pairs_rprec(fragment)                    \
+    hemp_parse_lhs_pairs(fragment, fragment->type->rprec)
+
+
+/* TODO: check that rhs body always uses rprec */
+
+#define hemp_parse_rhs_body(fragment) ({                        \
     hemp_fragment _hemp_expr = hemp_parse_body(                 \
-        fragptr, scope, fragment->type->ftprec, 0               \
+        fragptr, scope, fragment->type->rprec, 0                \
     );                                                          \
     if (! _hemp_expr)                                           \
         HEMP_THROW_NOBODY(fragment);                            \
@@ -191,6 +230,12 @@ HEMP_PREFIX(hemp_parse_block);
             HEMP_THROW_NOEND(fragment);                         \
         }                                                       \
     }                                                           \
+})
+
+#define hemp_parse_rhs_body_terminated(fragment) ({             \
+    hemp_fragment _hemp_body = hemp_parse_rhs_body(fragment);   \
+    hemp_parse_body_terminator(fragment, _hemp_body);           \
+    _hemp_body;                                                 \
 })
 
 

@@ -21,10 +21,10 @@ HEMP_ELEMENT(hemp_element_sub) {
 HEMP_PREFIX(hemp_element_sub_prefix) {
     hemp_debug_call("hemp_element_sub_prefix()\n");
 
-    hemp_fragment self   = *fragptr;
-    hemp_element  type   = self->type;
-    hemp_fragment name   = NULL;
-    hemp_fragment params = NULL;
+    hemp_fragment fragment = *fragptr;
+    hemp_element  type     = fragment->type;
+    hemp_fragment name     = NULL;
+    hemp_fragment params   = NULL;
 
     /* skip past the 'block' keyword */
     hemp_advance(fragptr);
@@ -40,7 +40,7 @@ HEMP_PREFIX(hemp_element_sub_prefix) {
 
     /* ...which can be followed by args */
     if (name) {
-        hemp_set_flag(self, HEMP_BE_NAMED);
+        hemp_set_flag(fragment, HEMP_BE_NAMED);
         params = hemp_parse_params(fragptr, scope, 0, 1);
     }
 
@@ -57,40 +57,25 @@ HEMP_PREFIX(hemp_element_sub_prefix) {
     if (! block)
         hemp_fatal("missing block for %s\n", type->start);
 
-    hemp_set_lhs_fragment(self, name);
+    hemp_set_lhs_fragment(fragment, name);
 
     if (params) {
         /* construct a code value to wrap around the block and handle params */
-        hemp_set_flag(self, HEMP_BE_ARGS);
+        hemp_set_flag(fragment, HEMP_BE_ARGS);
         hemp_code   code    = hemp_code_new();
         hemp_proto  proto   = hemp_code_proto(code);
         hemp_value  protov  = hemp_ptr_val(proto);
         code->body          = hemp_frag_val(block);
         params->type->parse_proto(params, scope, protov);
-        hemp_set_rhs(self, hemp_code_val(code));
+        hemp_set_rhs(fragment, hemp_code_val(code));
     }
     else {
-        hemp_set_rhs_fragment(self, block);
+        hemp_set_rhs_fragment(fragment, block);
     }
 
-    if (hemp_not_flag(block, HEMP_BE_TERMINATED)) {
-        /* We need to look for a terminating token (e.g. 'end') unless the 
-         * block body is self-terminated (e.g. { ... } or a single expression
-         */
-        // hemp_debug_msg("looking for terminator: %s\n", type->end);
-        if (hemp_element_terminator_matches(*fragptr, type->end)) {
-            // hemp_debug_msg("found matching terminator for %s => %s\n", type->start, type->end);
-            hemp_advance(fragptr);
-        }
-        else {
-            HEMP_THROW_NOEND(self);
-        }
-    }
-    else {
-        // hemp_debug_msg("body is self-terminated: %s\n", block->type->name);
-    }
+    hemp_parse_body_terminator(fragment, block);
 
-    return self;
+    return fragment;
 }
 
 

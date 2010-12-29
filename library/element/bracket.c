@@ -203,6 +203,12 @@ HEMP_ELEMENT(hemp_element_hash) {
 
 HEMP_PREFIX(hemp_element_hash_prefix) {
     hemp_debug_call("hemp_element_hash_prefix()\n");
+
+
+    /* TODO : should test prefix precedence */
+    HEMP_PREFIX_PRECEDENCE;
+
+
     hemp_fragment fragment = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
     hemp_list     exprs    = hemp_block_exprs_list(fragment);
     hemp_fragment expr;

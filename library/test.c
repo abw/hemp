@@ -34,8 +34,6 @@
  * - colour output
  *--------------------------------------------------------------------------*/
 
-#include <hemp/test.h>
-
 
 hemp_test_plan_p hemp_global_test_plan = NULL;
 

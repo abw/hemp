@@ -131,6 +131,28 @@ hemp_context_leave(
     return fragment;
 }
 
+hemp_hash
+hemp_context_within(
+    hemp_context    context,
+    hemp_hash       vars
+) {
+    hemp_hash old = context->vars;
+    vars->parent  = old;
+    context->vars = vars;
+    return old;
+}
+
+
+hemp_hash
+hemp_context_without(
+    hemp_context    context
+) {
+    hemp_hash vars = context->vars;
+    context->vars  = vars->parent;
+    vars->parent   = NULL;
+    return vars;
+}
+
 
 /*--------------------------------------------------------------------------
  * Shoot me now. This is an ugly hack to temporarily patch the named

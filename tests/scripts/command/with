@@ -1,0 +1,64 @@
+-- test without params
+[%  x = 0;
+    with;
+        x = 10;
+        "x is " x "\n"
+    end;
+    "x is " x "\n"
+%]
+-- expect
+x is 10
+x is 0
+
+-- test with single param
+[%  x = 20;
+    with x = 4;
+        "x is " x "\n"
+    end;
+    "x is " x "\n"
+%]
+-- expect
+x is 4
+x is 20
+
+-- test with multiple params
+[%  x = 20; y = 0;
+    with x = 10, y = 20 + 400;
+        "x is " x "\n"
+        "y is " y "\n"
+    end;
+    "x is " x "\n"
+    "y is " y "\n"
+%]
+-- expect
+x is 10
+y is 420
+x is 20
+y is 0
+
+-- test with params and braced block
+[%  x = 0;
+    with x = 10 {
+        "x is " x "\n"
+    }
+    "x is " x "\n"
+%]
+-- expect
+x is 10
+x is 0
+
+-- test with params and single expression
+[%  x = 0;
+    with x = 10
+        "x is " ~ x ~ "\n";
+
+    "x is " x "\n"
+%]
+-- expect
+x is 10
+x is 0
+
+-- test with in side-effect
+%%  "x is " ~ x with x = 10
+-- expect
+x is 10

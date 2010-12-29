@@ -118,7 +118,7 @@ void hemp_debug_off();
         #define hemp_debug_parse(format, ...)
     #endif
 #else
-    #define hemp_assert
+    #define hemp_assert             (void)
     #define hemp_debug_msg(...)
     #define hemp_debug_red(...)
     #define hemp_debug_green(...)

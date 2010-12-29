@@ -429,6 +429,8 @@ extern HEMP_ELEMENT(hemp_element_command_if);
 extern HEMP_ELEMENT(hemp_element_command_else);
 extern HEMP_ELEMENT(hemp_element_command_elsif);
 
+extern HEMP_ELEMENT(hemp_element_command_with);
+
 extern HEMP_ELEMENT(hemp_element_apply);
 
 /*--------------------------------------------------------------------------

@@ -8,7 +8,8 @@
  * Function prototypes - more below in "Memory Debugging"
  *--------------------------------------------------------------------------*/
 
-void hemp_mem_fail(hemp_string);
+void        hemp_mem_fail(hemp_string);
+hemp_size   hemp_mem_trace_report(hemp_bool);
 
 
 /*--------------------------------------------------------------------------
@@ -65,7 +66,6 @@ void hemp_mem_fail(hemp_string);
 
     hemp_mem_trace  hemp_mem_new_trace();
     hemp_mem_trace  hemp_mem_get_trace(hemp_memory, hemp_string, hemp_pos);
-    hemp_size       hemp_mem_trace_report(hemp_bool);
     void            hemp_mem_trace_reset();
 
     hemp_memory     hemp_mem_trace_malloc(hemp_size, hemp_string, hemp_pos);
@@ -86,7 +86,6 @@ void hemp_mem_fail(hemp_string);
     #define hemp_mem_free(memory)           free(memory)
     #define hemp_string_copy(src)           strdup(src)
     #define hemp_mem_trace_external(m,s,f,l)
-//    #define hemp_mem_trace_report(verbose) -1
     #define hemp_mem_trace_reset()
 #endif
 

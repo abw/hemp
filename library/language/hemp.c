@@ -388,7 +388,7 @@ hemp_grammar_add_hemp_charlie(
     HEMP_USE_OPERATOR1("hemp.number.autodec",       "--",       195,  195);
 
     /* binary assignment operators */
-    HEMP_USE_OPERATOR1("hemp.operator.assign.equals",  "=",      0,  130);
+    HEMP_USE_OPERATOR1("hemp.operator.assign.equals",  "=",     130,  130);
 //    [ '='       => op_assign        => 200,   0 ],      # foo = bar
 
 //    [ '=>'      => op_pair          => 200,   0 ],      # foo => bar
