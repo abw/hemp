@@ -231,6 +231,10 @@ Hot Stack
 
 A reminder of what I'm working towards right now...
 
+LRU cache.  Needs hash delete (working but not thoroughly tested) and 
+re-freshening of used items (also implemented but barely tested).  Also
+needs delete/empty methods.
+
 Finish off test dialect.  Depends on merging/refactoring current test plan
 and figuring out how to generate output in a generic and extensible way
 (e.g. to enable colour, switch between text and html, and so on).
