@@ -165,11 +165,22 @@ An incomplete list of things TODO, in no particular order.
   - tests/language/hemp/assign shows a memory leak.  Looks like the proto
     created for a sub isn't being cleaned up (probably just needs a cleanup
     function).
+
   - tests/language/hemp/list shows a leak.  Looks like a value list that 
     isn't being freed (probably needs to switch from a hemp_list_new() to 
     a hemp_context_tmp_list() to have context manage the memory)
+
   - /tests/language/hemp/with shows a leak, but it looks like it's the 
-    fixed pair names (x, y) that aren't being freed.
+    fixed pair names (x, y) that aren't being freed.  Also 'just' test.
+    UPDATE: looks like the problem is in hemp_element_word_prefix().  
+    The backtracking caused by word->parse_pair() failing means that 
+    hemp_element_word_prefix() can get called multiple times.  Worse still,
+    there could be other expression elements that allocate memory.
+    It suggests that backtracking should be avoided wherever possible.
+    Either that or we need to explicitly call cleanup() for any and all
+    elements between the backtrack and current points that define them.
+
+
 
 Expressions
 -----------

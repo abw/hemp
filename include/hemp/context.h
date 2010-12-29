@@ -123,14 +123,21 @@ hemp_context_blur_params(
 );
 
 hemp_hash
-hemp_context_within(
+hemp_context_with(
+    hemp_context    context,
+    hemp_hash       vars
+);
+
+hemp_hash
+hemp_context_just(
     hemp_context    context,
     hemp_hash       vars
 );
 
 hemp_hash
 hemp_context_without(
-    hemp_context    context
+    hemp_context    context,
+    hemp_hash       vars
 );
 
 

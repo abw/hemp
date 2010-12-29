@@ -132,7 +132,7 @@ hemp_context_leave(
 }
 
 hemp_hash
-hemp_context_within(
+hemp_context_with(
     hemp_context    context,
     hemp_hash       vars
 ) {
@@ -144,13 +144,31 @@ hemp_context_within(
 
 
 hemp_hash
-hemp_context_without(
-    hemp_context    context
+hemp_context_just(
+    hemp_context    context,
+    hemp_hash       vars
 ) {
-    hemp_hash vars = context->vars;
-    context->vars  = vars->parent;
-    vars->parent   = NULL;
-    return vars;
+    hemp_hash old = context->vars;
+    context->vars = vars;
+    vars->parent  = NULL;
+    return old;
+}
+
+
+hemp_hash
+hemp_context_without(
+    hemp_context    context,
+    hemp_hash       vars
+) {
+    hemp_hash old = context->vars;
+
+    if (! vars)
+        vars = old->parent;
+
+    context->vars = vars;
+    old->parent   = NULL;
+
+    return old;
 }
 
 

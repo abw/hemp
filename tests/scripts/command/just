@@ -1,0 +1,99 @@
+-- test masking param
+[%  x = 0;
+    just x = 10;
+        "x is " x "\n"
+    end;
+    "x is " x "\n"
+%]
+-- expect
+x is 10
+x is 0
+
+-- test with single param
+[%  x = 10;
+    just y = 20;
+        "y is " y "\n";
+        if x {
+            "x is " x "\n"
+        }
+        else {
+            "x is undefined\n"
+        }
+    end;
+    "x is " x "\n"
+%]
+-- expect
+y is 20
+x is undefined
+x is 10
+
+-- test with multiple params
+[%  x = 10; y = 20;
+    just a = 10, b = 8 + 4 * 3;
+        "a is " a "\n"
+        "b is " b "\n"
+        x = 99;
+        y = 100;
+    end;
+    "x is " x "\n"
+    "y is " y "\n"
+%]
+-- expect
+a is 10
+b is 20
+x is 10
+y is 20
+
+
+-- test with params and braced block
+[%  x = 10;
+    just y = 20 {
+        "y is " y "\n";
+        if x "oops!\n";
+    }
+    "x is " x "\n"
+%]
+-- expect
+y is 20
+x is 10
+
+
+-- test with parenthesised params and braced block
+[%  x = 10;
+    just (y = 20) {
+        "y is " y "\n";
+        if x "oops!\n";
+    }
+    "x is " x "\n"
+%]
+-- expect
+y is 20
+x is 10
+
+-- test with params and single expression
+[%  x = 0;
+    with y = 20
+        "y is " ~ y ~ "\n";
+
+    "x is " x "\n"
+%]
+-- expect
+y is 20
+x is 0
+
+-- test with single param and single expression
+%%  just x = 10 x 
+-- expect
+10
+
+-- test with parenthesised params and single expression
+[%  just (x = 10, y = 20)
+        x + y
+%]
+-- expect
+30
+
+-- test with in side-effect
+%%  "x is " ~ x just x = 10
+-- expect
+x is 10

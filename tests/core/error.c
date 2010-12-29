@@ -3,30 +3,33 @@
 jmp_buf state;
 
 
-void test_error1();
-void test_error3();
+void test_error_jump();
+void test_error_macros();
 void test_error4();
 void test_error_object();
 void test_hemp_throw();
+void test_error_finally();
 void thrower(hemp_errno, char *msg);
 
 
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(9);
+    plan(13);
 
-    test_error1();
+    test_error_jump();
     /* test_error2() has been deprecated */
-    test_error3();
+    test_error_macros();
     test_error_object();
     test_hemp_throw();
+
+    test_error_finally();
 
     return done();
 }
 
 
-void test_error1() {
+void test_error_jump() {
     int exception;
     
     if((exception = setjmp(state)) == 0) {              // try
@@ -49,7 +52,7 @@ void test_error1() {
 
 
 
-void test_error3() {
+void test_error_macros() {
     hemp_hemp hemp = hemp_new();
 
     /* better version with error stack local to hemp interpreter, 
@@ -160,4 +163,33 @@ void thrower(hemp_errno type, char *msg) {
     // hemp_debug("throwing %d: %s\n", type, msg);
     longjmp(state, type);
     hemp_debug("not reachhed\n");
+}
+
+
+void test_error_finally() {
+    hemp_hemp hemp = hemp_new();
+    int n = 0;
+
+    HEMP_TRY
+        HEMP_THROW(HEMP_ERROR_INVALID);
+        fail("returned from thrower (this should not happen)");
+    HEMP_CATCH(HEMP_ERROR_INVALID);
+        pass("caught HEMP_ERROR_INVALID");
+    HEMP_FINALLY;
+        n++;
+    HEMP_END;
+    
+    ok( n == 1, "finally block was run" );
+
+    HEMP_TRY
+        pass("not throwing an error");
+    HEMP_CATCH_ALL;
+        fail("caught hemp error");
+    HEMP_FINALLY;
+        n++;
+    HEMP_END;
+
+    ok( n == 2, "finally block was run again" );
+
+    hemp_free(hemp);
 }

@@ -7,6 +7,12 @@ HEMP_POSTFIX(hemp_element_command_with_postfix);
 HEMP_OUTPUT(hemp_element_command_with_text);
 HEMP_CLEANUP(hemp_element_command_with_cleanup);
 
+hemp_hash
+hemp_element_command_with_params_hash(
+    hemp_fragment   fragment,
+    hemp_context    context
+);
+
 
 /*--------------------------------------------------------------------------
  * with <params> <expr>
@@ -76,9 +82,42 @@ HEMP_POSTFIX(hemp_element_command_with_postfix) {
 
 HEMP_OUTPUT(hemp_element_command_with_text) {
     hemp_debug_call("hemp_element_with_text()\n");
+    hemp_hemp     hemp     = context->hemp;
     hemp_fragment fragment = hemp_val_frag(value);
-    hemp_list     params   = hemp_val_list(hemp_lhs(fragment));
+    hemp_hash     params   = hemp_element_command_with_params_hash(fragment, context);
     hemp_value    body     = hemp_rhs(fragment);
+
+    hemp_context_with(context, params);
+    
+    HEMP_TRY;
+        output = hemp_vtext(body, context, output);
+    HEMP_CATCH_ALL;
+        hemp_context_without(context, NULL);
+        HEMP_RETHROW;
+    HEMP_END;
+
+    hemp_context_without(context, NULL);
+
+    return output;
+}
+
+
+/* TODO: separate methods for value/values */
+
+
+HEMP_CLEANUP(hemp_element_command_with_cleanup) {
+    hemp_debug_call("hemp_element_command_with_clean(%p)\n", fragment);
+    hemp_list params = hemp_val_list(hemp_lhs(fragment));
+    hemp_list_free(params);
+}
+
+
+hemp_hash
+hemp_element_command_with_params_hash(
+    hemp_fragment   fragment,
+    hemp_context    context
+) {
+    hemp_list     params   = hemp_val_list(hemp_lhs(fragment));
     hemp_hash     hash     = hemp_context_tmp_hash(context);
     hemp_value    vars     = hemp_hash_val(hash);
     hemp_value    param;
@@ -89,23 +128,5 @@ HEMP_OUTPUT(hemp_element_command_with_text) {
         hemp_call(param, pairs, context, vars);
     }
 
-//  hemp_debug_msg("'with' has %d runtime params\n", hash->size);
-
-    /* TODO: wrap in HEMP_TRY to always ensure context is restored? */
-    hemp_context_within(context, hash);
-    output = hemp_vtext(body, context, output);
-    hemp_context_without(context);
-
-    return output;
-}
-
-
-/* TODO: separate methods for value/values */
-
-
-HEMP_CLEANUP(hemp_element_command_with_cleanup) {
-    hemp_debug_msg("hemp_element_command_with_clean(%p)\n", fragment);
-
-    hemp_list params = hemp_val_list(hemp_lhs(fragment));
-    hemp_list_free(params);
+    return hash;
 }

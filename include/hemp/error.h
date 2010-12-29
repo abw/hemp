@@ -189,66 +189,50 @@ hemp_string     hemp_error_format(hemp_hemp, hemp_errno);
 void            hemp_error_throw(hemp_hemp, hemp_error);
 
 
-/* these macros are for testing */
-
-#define _HEMP_TRY                           \
-    do {                                    \
-        jmp_buf __jump;                     \
-        switch ( setjmp(__jump) ) {         \
-            case 0:                         \
-                /* unsafe code goes here */
-#define _HEMP_THROW(e)                      \
-            longjmp(__jump, e);
-#define _HEMP_CATCH(e)                      \
-                break;                      \
-            case e:                         \
-                /* exception handling code goes here */
-#define _HEMP_END                           \
-                break;                      \
-        }                                   \
-    } while (0);
-
-
-
 /* these macros assume the presence of a visible hemp symbol */
 
 #define HEMP_TRY                                    \
     do {                                            \
         struct hemp_jump jump;                      \
+        volatile int _hemp_errno;                   \
         jump.parent = hemp->jump;                   \
         jump.depth  = hemp->jump                    \
             ? hemp->jump->depth + 1                 \
             : 0;                                    \
         hemp->jump  = &jump;                        \
                                                     \
-        switch ( setjmp(jump.buffer) ) {            \
-            case HEMP_JUMP_NONE:                    \
-                /* unsafe code goes here */
+        _hemp_errno = setjmp(jump.buffer);          \
+        if (_hemp_errno == HEMP_JUMP_NONE) {        \
+            /* unsafe code goes here */
 
 // new version
 #define HEMP_JUMP(type)                             \
-                longjmp(hemp->jump->buffer, type);
+            longjmp(hemp->jump->buffer, type);
 
 // old version, being replaced/changed
 #define HEMP_THROW(type)                            \
-                longjmp(hemp->jump->buffer, type);
+            longjmp(hemp->jump->buffer, type);
 
 #define HEMP_RETHROW                                \
-                hemp->jump = hemp->jump->parent;    \
-                longjmp(hemp->jump->buffer, hemp->error->number)
+            hemp->jump = hemp->jump->parent;        \
+            longjmp(hemp->jump->buffer, hemp->error->number)
 
 #define HEMP_CATCH(e)                               \
-                break;                              \
-            case e:                                 \
-                /* exception handling code goes here */
+        }                                           \
+        else if (_hemp_errno == e) {                \
+            /* exception handling code goes here */
 
 #define HEMP_CATCH_ALL                              \
-                break;                              \
-            default:                                \
-                /* default exception handling code goes here */
+        }                                           \
+        else {                                      \
+            /* default exception handling code goes here */
+
+#define HEMP_FINALLY                                \
+        }                                           \
+        if (1) {                                    \
+            /* code to be run regardless goes here */
 
 #define HEMP_END                                    \
-                break;                              \
         }                                           \
         hemp->jump = hemp->jump->parent;            \
     } while (0);

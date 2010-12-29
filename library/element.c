@@ -198,10 +198,20 @@ HEMP_OUTPUT(hemp_element_not_source) {
 HEMP_PREFIX(hemp_element_parse_fixed) {
     hemp_debug_call("hemp_element_parse_fixed()\n");
     hemp_fragment fragment = *fragptr;
+
+    /* temporary hack to catch cases where parser backtracks and this function
+     * gets called multiple times for an element.
+     */
+    if (hemp_has_flag(fragment, HEMP_BE_ALLOCATED)) {
+        hemp_advance(fragptr);
+        return fragment;
+    }
+
     hemp_string   string   = hemp_string_extract(
         fragment->token,
         fragment->token + fragment->length
     );
+//  hemp_debug_msg("hemp_element_parse_fixed(%p:%s) string extract: %p\n", fragment, fragment->type->name, string);
 
 //  hemp_debug_msg("extracted word token string: %s\n", string);
     hemp_set_flag(fragment, HEMP_BE_FIXED | HEMP_BE_ALLOCATED);

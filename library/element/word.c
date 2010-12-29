@@ -117,7 +117,7 @@ HEMP_INPUT(hemp_element_word_assign) {
 
 
 HEMP_CLEANUP(hemp_element_word_cleanup) {
-    hemp_debug_call("hemp_element_word_cleanup()\n");
+    hemp_debug_call("hemp_element_word_cleanup(%p)\n", fragment);
 
     /* memory should always be allocated via hemp_element_parse_fixed() which
      * gets called regardless of how the word is being used (either way
@@ -125,11 +125,15 @@ HEMP_CLEANUP(hemp_element_word_cleanup) {
      * value or to use as a variable hash key
      */
     if (hemp_has_flag(fragment, HEMP_BE_ALLOCATED)) {
+//      hemp_debug_msg("freeing allocated memory: %p\n", hemp_val_ptr(hemp_expr(fragment)));
         hemp_mem_free(
             hemp_val_str( 
                 hemp_expr(fragment)
             )
         );
+    }
+    else {
+//      hemp_debug_msg("memory not allocated memory\n");
     }
 }
 
