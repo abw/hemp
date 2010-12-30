@@ -160,7 +160,6 @@ typedef hemp_bool
 );
 
 
-
 /*--------------------------------------------------------------------------
  * Dialect/document function pointers
  *--------------------------------------------------------------------------*/
@@ -179,8 +178,6 @@ typedef void
     (* hemp_doc_clean)(
         hemp_document document    /* pointer to document to clean         */
     );
-
-
 
 
 /*--------------------------------------------------------------------------
@@ -264,86 +261,69 @@ typedef void
 
 
 /*--------------------------------------------------------------------------
- * TODO: in the process of cleaning up everything below this line.
- *--------------------------------------------------------------------------*/
-
-
-/*--------------------------------------------------------------------------
  * value functions
  *--------------------------------------------------------------------------*/
 
 typedef hemp_value
-    (* hemp_value_f)(
-        hemp_value    value,
-        hemp_context  context
-    );
+(* hemp_value_f)(
+    hemp_value      value,
+    hemp_context    context
+);
 
 typedef hemp_value 
-    (* hemp_input_f)(
-        hemp_value    value,
-        hemp_context  context,
-        hemp_value    input
-    );
+(* hemp_input_f)(
+    hemp_value      value,
+    hemp_context    context,
+    hemp_value      input
+);
 
 typedef hemp_value 
-    (* hemp_output_f)(
-        hemp_value    value,
-        hemp_context  context,
-        hemp_value    output
-    );
-
-
-
-
-
+(* hemp_output_f)(
+    hemp_value      value,
+    hemp_context    context,
+    hemp_value      output
+);
 
 typedef hemp_value 
-    (* hemp_view_f)(
-        hemp_viewer   view,       /* pointer to viewer                    */
-        hemp_fragment fragment,   /* pointer to element                   */
-        hemp_context  context,    /* runtime context                      */
-        hemp_value    output      /* optional output buffer               */
-    );
+(* hemp_view_f)(
+    hemp_viewer     view,           /* pointer to viewer                    */
+    hemp_fragment   fragment,       /* pointer to element                   */
+    hemp_context    context,        /* runtime context                      */
+    hemp_value      output          /* optional output buffer               */
+);
 
 typedef hemp_value
-    (* hemp_fetch_f)(
-        hemp_value    container,  /* value to operate on                  */
-        hemp_context  context,    /* runtime context                      */
-        hemp_value    key         /* key of item to fetch                 */
-    );
+(* hemp_fetch_f)(
+    hemp_value      container,      /* value to operate on                  */
+    hemp_context    context,        /* runtime context                      */
+    hemp_value      key             /* key of item to fetch                 */
+);
 
 typedef hemp_value
-    (* hemp_store_f)(
-        hemp_value    container,  /* value to operate on                  */
-        hemp_context  context,    /* runtime context                      */
-        hemp_value    key,        /* key to store item under              */
-        hemp_value    value       /* value to store                       */
-    );
-
-typedef hemp_value
-    (* hemp_unop_f)(
-        hemp_context  context,    /* runtime context                      */
-        hemp_value    expr        /* single value                         */
-    );
-
-typedef hemp_value
-    (* hemp_binop_f)(
-        hemp_context  context,    /* runtime context                      */
-        hemp_value    lhs,        /* expression on left hand side         */
-        hemp_value    rhs         /* expression on right hand side        */
-    );
+(* hemp_store_f)(
+    hemp_value      container,      /* value to operate on                  */
+    hemp_context    context,        /* runtime context                      */
+    hemp_value      key,            /* key to store item under              */
+    hemp_value      value           /* value to store                       */
+);
 
 typedef hemp_type 
-    (* hemp_type_f)(
-        hemp_int      id,         /* numerical id                         */
-        hemp_string      name        /* unique type name                     */
-    );
+(* hemp_type_f)(
+    hemp_int        id,             /* numerical id                         */
+    hemp_string     name            /* unique type name                     */
+);
 
 typedef hemp_memory 
-    (* hemp_method_f)(
-        hemp_type     type,       /* pointer to type                      */
-        hemp_string      name        /* method name                          */
-    );
+(* hemp_method_f)(
+    hemp_type       type,           /* pointer to type                      */
+    hemp_string     name            /* method name                          */
+);
+
+typedef void
+(* hemp_clean_f)(
+    hemp_value      value
+);
+
 
 
 #endif /* HEMP_TYPES_H */

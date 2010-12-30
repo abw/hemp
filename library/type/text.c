@@ -11,6 +11,7 @@ HEMP_TYPE_FUNC(hemp_type_text) {
     type->boolean    = &hemp_type_text_boolean;     /* text -> boolean      */
     type->compare    = &hemp_value_not_compare;     /* can't compare        */
     type->defined    = &hemp_value_true;            /* always defined       */
+    type->clean      = &hemp_text_clean;
 
     hemp_type_extend(type, "length", &hemp_method_text_length);
 
@@ -86,20 +87,29 @@ hemp_text_release(
     hemp_text text
 ) {
     if (text->string) {
-	// hemp_debug_mem("releasing text string at %p -> %p: %s\n", text, text->string, text->string);
+//      hemp_debug_mem("releasing text string at %p -> %p: %s\n", text, text->string, text->string);
         hemp_mem_free(text->string);
         text->string = NULL;
     }
 }
 
 
-void
+HEMP_INLINE void
 hemp_text_free(
     hemp_text text
 ) {
     hemp_text_release(text);
-//  hemp_debug_mem("freeing text at %p\n", text);
     hemp_mem_free(text);
+}
+
+
+HEMP_INLINE void
+hemp_text_clean(
+    hemp_value value
+) {
+    hemp_text text = hemp_val_text(value);
+//  hemp_debug_msg("releasing text @ %p: %s\n", text, text->string) ;
+    hemp_text_free(text);
 }
 
 

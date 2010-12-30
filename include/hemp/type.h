@@ -25,7 +25,8 @@
     hemp_output_f   params;         \
     hemp_fetch_f    dot;            \
     hemp_fetch_f    fetch;          \
-    hemp_store_f    store;          
+    hemp_store_f    store;          \
+    hemp_clean_f    clean;
 
 //  hemp_output_f       list;       \   /* superfluous? */
 //  hemp_method_f       method;         /* TODO: method auto-generator */

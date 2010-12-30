@@ -364,12 +364,16 @@ extern HEMP_INLINE hemp_fragment  hemp_val_frag(hemp_value v);
  * function prototypes
  *--------------------------------------------------------------------------*/
 
+void
+hemp_value_free(
+    hemp_value  value
+);
+
 HEMP_INLINE hemp_string
 hemp_value_to_string(
     hemp_value      value,
     hemp_context    context
 );
-
 
 HEMP_INLINE 
 hemp_string hemp_identity_name(

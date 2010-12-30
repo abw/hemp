@@ -506,7 +506,7 @@ hemp_hash_delete(
     hemp_hash       hash,
     hemp_string     name
 ) {
-    hemp_debug_msg("hemp_hash_delete(%p, %s)\n", hash, name);
+    hemp_debug_call("hemp_hash_delete(%p, %s)\n", hash, name);
     hemp_size   length = strlen(name);
     hemp_size   index  = hemp_hash_function(name, length);
     hemp_slot   slot   = NULL;

@@ -93,7 +93,7 @@ hemp_cache_no_empty(
  * Default LRU cache.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_CACHE_LRU_POOL_SIZE     16
+#define HEMP_CACHE_LRU_SIZE         16
 
 typedef struct hemp_cache_lru      * hemp_cache_lru;
 typedef struct hemp_cache_lru_slot * hemp_cache_lru_slot;
@@ -102,15 +102,16 @@ struct hemp_cache_lru {
     hemp_size           size;
     hemp_hash           index;
     hemp_pool           pool;
-    hemp_cache_lru_slot fresh;
-    hemp_cache_lru_slot stale;
+    hemp_cache_lru_slot fresh;      /* freshest (most recently used) slot   */
+    hemp_cache_lru_slot stale;      /* stalest (least recently used) slot   */
+    hemp_cache_lru_slot unused;     /* unused slots (typically post-delete) */
 };
 
 struct hemp_cache_lru_slot {
     hemp_string         key;
     hemp_value          value;
-    hemp_cache_lru_slot fresher;
-    hemp_cache_lru_slot staler;
+    hemp_cache_lru_slot fresher;    /* previous (more recently used) slot   */
+    hemp_cache_lru_slot staler;     /* next (less recently used) slot       */
 };
 
 
@@ -120,14 +121,10 @@ hemp_cache_lru_new(
     hemp_size   size
 );
 
-void
-hemp_cache_lru_cleanup(
-    hemp_cache  cache
-);
-
-hemp_bool
-hemp_cache_lru_pool_cleaner(
-    hemp_memory item
+hemp_value 
+hemp_cache_lru_fetch(
+    hemp_cache  cache,
+    hemp_string key
 );
 
 void
@@ -137,10 +134,20 @@ hemp_cache_lru_store(
     hemp_value  value
 );
 
-hemp_value 
-hemp_cache_lru_fetch(
+void
+hemp_cache_lru_delete(
     hemp_cache  cache,
     hemp_string key
+);
+
+void
+hemp_cache_lru_empty(
+    hemp_cache  cache
+);
+
+void
+hemp_cache_lru_cleanup(
+    hemp_cache  cache
 );
 
 void
@@ -160,7 +167,13 @@ hemp_cache_lru_reuse_slot(
 );
 
 void
-hemp_cache_lru_fresh_slot(
+hemp_cache_lru_unused_slot(
+    hemp_cache_lru      lru,
+    hemp_cache_lru_slot slot
+);
+
+void
+hemp_cache_lru_freshen_slot(
     hemp_cache_lru      lru,
     hemp_cache_lru_slot slot
 );

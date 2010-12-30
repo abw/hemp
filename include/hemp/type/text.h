@@ -91,6 +91,11 @@ hemp_text_release(
     hemp_text       text
 );
 
+HEMP_INLINE void
+hemp_text_clean(
+    hemp_value value
+);
+
 
 /*--------------------------------------------------------------------------
  * type functions and methods

@@ -30,7 +30,7 @@ struct hemp_element {
 
     /* intialisation (on scan) and cleanup methods */
     hemp_scanner    scanner;
-    hemp_cleanup    cleanup;
+    hemp_cleanup    cleanup;            /* NOTE: being replaced by clean */
 
     /* parsing methods */
     hemp_prefix     parse_prefix;

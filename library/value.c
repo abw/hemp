@@ -15,6 +15,24 @@ const hemp_value  HempEqual   = HEMP_IDENT_MAKE(HEMP_IDENT_EQUAL);
 
 
 /*--------------------------------------------------------------------------
+ * Destructor function
+ *--------------------------------------------------------------------------*/
+
+HEMP_INLINE void
+hemp_value_free(
+    hemp_value  value
+) {
+    hemp_debug_call("hemp_value_free()\n");
+    hemp_clean_f cleaner = hemp_tfunc(value, clean);
+
+    if (cleaner) {
+//      hemp_debug_msg("calling cleaner function for %s: %p\n", hemp_type_name(value), cleaner);
+        cleaner(value);
+    }
+}
+
+
+/*--------------------------------------------------------------------------
  * inline functions to encode native values as tagged values
  *--------------------------------------------------------------------------*/
 
@@ -194,6 +212,7 @@ hemp_val_obj(hemp_value v) {
     return (hemp_object) HEMP_POINTER(v);
 }
 
+
 HEMP_INLINE hemp_fragment
 hemp_val_frag(hemp_value v) {
     return (hemp_fragment) HEMP_POINTER(v);
@@ -234,12 +253,6 @@ HEMP_VALUE(hemp_value_true) {
 
 HEMP_VALUE(hemp_value_false) {
     return HempFalse;
-}
-
-
-HEMP_INPUT(hemp_value_input_self) {
-    hemp_debug_call("hemp_value_input_self()\n");
-    return value;
 }
 
 
@@ -293,8 +306,6 @@ HEMP_OUTPUT(hemp_value_pairs) {
     hemp_call(result, pairs, context, output);
     return output;
 }
-
-
 
 
 HEMP_FETCH_FUNC(hemp_value_dot) {

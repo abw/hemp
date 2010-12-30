@@ -8,7 +8,7 @@ void test_cache_lru();
 int main(
     int argc, char **argv, char **env
 ) {
-    plan(14);
+    plan(19);
     test_cache();
     test_cache_lru();
     return done();
@@ -60,15 +60,20 @@ void test_cache_lru() {
     hemp_cache cache = hemp_cache_lru_new(hemp, 4);
     ok( cache, "created LRU cache" );
     
-    cache->store(cache, "foo", hemp_int_val(42));
-    cache->store(cache, "bar", hemp_int_val(43));
+    hemp_text one = hemp_text_from_string("text chunk #1");
+    hemp_text two = hemp_text_from_string("text chunk #2");
+    hemp_text tre = hemp_text_from_string("text chunk #3");
+    hemp_text qua = hemp_text_from_string("text chunk #4");
+    
+    cache->store(cache, "foo", hemp_text_val(one));
+    cache->store(cache, "bar", hemp_text_val(two));
     check_lru_order(cache, "bar, foo");
 
     cache->fetch(cache, "foo");
     check_lru_order(cache, "foo, bar");
 
-    cache->store(cache, "baz", hemp_int_val(56));
-    cache->store(cache, "bam", hemp_int_val(57));
+    cache->store(cache, "baz", hemp_text_val(tre));
+    cache->store(cache, "bam", hemp_int_val(56));
     check_lru_order(cache, "bam, baz, foo, bar");
 
     cache->store(cache, "wam", hemp_int_val(58));
@@ -91,6 +96,24 @@ void test_cache_lru() {
 
     cache->store(cache, "wim", hemp_int_val(55));
     check_lru_order(cache, "wim, bam, baz, foo");
+
+    cache->delete(cache, "foo");
+    check_lru_order(cache, "wim, bam, baz");
+
+    cache->delete(cache, "bam");
+    cache->delete(cache, "zip");
+    cache->delete(cache, "pip");
+    cache->fetch(cache, "lip");
+    check_lru_order(cache, "wim, baz");
+
+    cache->store(cache, "mam", hemp_text_val(qua));
+    check_lru_order(cache, "mam, wim, baz");
+
+    cache->store(cache, "zam", hemp_int_val(10));
+    check_lru_order(cache, "zam, mam, wim, baz");
+
+    cache->store(cache, "ham", hemp_int_val(11));
+    check_lru_order(cache, "ham, zam, mam, wim");
 
     hemp_cache_free(cache);
     hemp_free(hemp);
