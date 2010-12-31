@@ -214,6 +214,12 @@
         hemp_string     name                    \
     )
 
+#define HEMP_FACTORY(f)                         \
+    hemp_factory f(                             \
+        hemp_hemp       hemp,                   \
+        hemp_string     name                    \
+    )
+
 #define HEMP_GLOBAL_ELEMENT(f)                  \
     hemp_element f()
 
@@ -285,6 +291,14 @@
     void f(                                     \
         hemp_document   document                \
     )
+
+#define HEMP_HASH_ITERATOR(f)                   \
+    hemp_bool f(                                \
+        hemp_hash hash,                         \
+        hemp_pos  position,                     \
+        hemp_slot item                          \
+    )
+
 
 
 /*--------------------------------------------------------------------------

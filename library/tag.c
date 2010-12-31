@@ -1,5 +1,22 @@
 #include <hemp/tag.h>
 
+
+HEMP_FACTORY(hemp_tag_factory) {
+    hemp_debug_init("instantiating tag factory: %s\n", name);
+    hemp_factory factory = hemp_factory_new(hemp, name);
+    factory->cleaner     = hemp_tag_cleaner;
+    return factory;
+}
+
+
+HEMP_HASH_ITERATOR(hemp_tag_cleaner) {
+    hemp_tag tag = (hemp_tag) hemp_val_ptr(item->value);
+    hemp_debug_init("cleaning tag: %s\n", tag->name);
+    hemp_tag_free(tag);
+    return HEMP_TRUE;
+}
+
+
 hemp_tag
 hemp_tag_new(
     hemp_string     type,

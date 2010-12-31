@@ -68,15 +68,8 @@ void            hemp_free_config(hemp_hemp);
 void            hemp_free_errors(hemp_hemp);
 void            hemp_free_filesystem(hemp_hemp);
 
-hemp_bool       hemp_free_codec   ( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_dialect ( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool       hemp_free_element ( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool       hemp_free_grammar ( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool       hemp_free_language( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool       hemp_free_scheme  ( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool       hemp_free_tag     ( hemp_hash, hemp_pos, hemp_slot );
 hemp_bool       hemp_free_document( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool       hemp_free_viewer  ( hemp_hash, hemp_pos, hemp_slot );
 
 hemp_context    hemp_context_instance(hemp_hemp);
 hemp_document   hemp_document_instance(hemp_hemp, hemp_string, hemp_string, hemp_string);

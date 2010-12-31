@@ -82,33 +82,23 @@ void
 hemp_init_factories(
     hemp_hemp   hemp
 ) {
+    /* create new meta-factory to manage factory objects that in turn manage
+     * different hemp resources: codecs, dialects, elements, grammars, etc.
+     * This is NEW code.
+     */
+    hemp->factory   = hemp_meta_factory(hemp, "factory");
+
     /* create new factory objects to manage resources */
-    hemp->codec             = hemp_factory_new(hemp);
-    hemp->dialect           = hemp_factory_new(hemp);
-    hemp->element           = hemp_factory_new(hemp);
-    hemp->feature           = hemp_factory_new(hemp);
-    hemp->grammar           = hemp_factory_new(hemp);
-    hemp->language          = hemp_factory_new(hemp);
-    hemp->scheme            = hemp_factory_new(hemp);
-    hemp->tag               = hemp_factory_new(hemp);
-    hemp->viewer            = hemp_factory_new(hemp);
-
-    hemp->scheme->autoload      = &hemp_scheme_autoload;
-    hemp->codec->autoload       = &hemp_codec_autoload;
-    hemp->language->autoload    = &hemp_language_autoload;
-    hemp->feature->autoload     = &hemp_feature_autoload;
-    hemp->tag->autoload         = &hemp_tag_autoload;
-
-    /* install the cleaners to automatically tidy up */
-    hemp->codec->cleaner    = &hemp_free_codec;
-    hemp->dialect->cleaner  = &hemp_free_dialect;
-//  hemp->feature->cleaner  = &hemp_free_feature;
-//  hemp->element->cleaner  = &hemp_free_element;
-    hemp->grammar->cleaner  = &hemp_free_grammar;
-    hemp->language->cleaner = &hemp_free_language;
-    hemp->scheme->cleaner   = &hemp_free_scheme;
-    hemp->tag->cleaner      = &hemp_free_tag;
-    hemp->viewer->cleaner   = &hemp_free_viewer;
+    /* This is OLD code */
+    hemp->codec     = hemp_codec_factory    (hemp, "codec");
+    hemp->dialect   = hemp_dialect_factory  (hemp, "dialect");
+    hemp->element   = hemp_element_factory  (hemp, "element");
+    hemp->feature   = hemp_feature_factory  (hemp, "feature");
+    hemp->grammar   = hemp_grammar_factory  (hemp, "grammar");
+    hemp->language  = hemp_language_factory (hemp, "language");
+    hemp->scheme    = hemp_scheme_factory   (hemp, "scheme");
+    hemp->tag       = hemp_tag_factory      (hemp, "tag");
+    hemp->viewer    = hemp_viewer_factory   (hemp, "viewer");
 }
 
 
@@ -196,7 +186,6 @@ hemp_init_filesystem(
 }
 
 
-
 /*--------------------------------------------------------------------------
  * hemp object cleanup functions
  *--------------------------------------------------------------------------*/
@@ -241,6 +230,7 @@ void
 hemp_free_factories(
     hemp_hemp hemp
 ) {
+    hemp_factory_free(hemp->factory);
     hemp_factory_free(hemp->viewer);
     hemp_factory_free(hemp->element);
     hemp_factory_free(hemp->grammar);
@@ -297,99 +287,10 @@ hemp_free_filesystem(
  * Cleanup functions for individual component instances
  *--------------------------------------------------------------------------*/
 
-hemp_bool
-hemp_free_scheme(
-    hemp_hash schemes,
-    hemp_pos  position,
-    hemp_slot item
-) {
-    hemp_debug_init("cleaning %s scheme\n", ((hemp_scheme) hemp_val_ptr(item->value))->name);
-    hemp_scheme_free( (hemp_scheme) hemp_val_ptr(item->value) );
-    return HEMP_TRUE;
-}
 
-
-hemp_bool
-hemp_free_language(
-    hemp_hash languages,
-    hemp_pos  position,
-    hemp_slot item
-) {
-    hemp_debug_init("cleaning %s language\n", ((hemp_dialect) hemp_val_ptr(item->value))->name);
-    hemp_language_free( (hemp_language) hemp_val_ptr(item->value) );
-    return HEMP_TRUE;
-}
-
-
-hemp_bool
-hemp_free_codec(
-    hemp_hash codecs,
-    hemp_pos  position,
-    hemp_slot item
-) {
-    hemp_codec codec = (hemp_codec) hemp_val_ptr(item->value);
-    hemp_debug_msg("cleaning %s codec\n", codec->name);
-    hemp_codec_free(codec);
-    return HEMP_TRUE;
-}
-
-
-hemp_bool
-hemp_free_dialect(
-    hemp_hash dialects,
-    hemp_pos  position,
-    hemp_slot item
-) {
-    hemp_debug_init("cleaning %s dialect\n", ((hemp_dialect) hemp_val_ptr(item->value))->name);
-    hemp_dialect_free( (hemp_dialect) hemp_val_ptr(item->value) );
-    return HEMP_TRUE;
-}
-
-
-hemp_bool
-hemp_free_tag(
-    hemp_hash tags,
-    hemp_pos  position,
-    hemp_slot item
-) {
-    hemp_debug_init("cleaning %s tag\n", ((hemp_tag) hemp_val_ptr(item->value))->name);
-//    hemp_tag_free( (hemp_tag) hemp_val_ptr(item->value) );
-    return HEMP_TRUE;
-}
-
-
-hemp_bool
-hemp_free_grammar(
-    hemp_hash grammars,
-    hemp_pos  position,
-    hemp_slot item
-) {
-    hemp_debug_init("cleaning %s grammar\n", ((hemp_grammar) hemp_val_ptr(item->value))->name);
-    hemp_grammar_free( (hemp_grammar) hemp_val_ptr(item->value) );
-    return HEMP_TRUE;
-}
-
-
-hemp_bool
-hemp_free_document(
-    hemp_hash documents,
-    hemp_pos  position,
-    hemp_slot item
-) {
+HEMP_HASH_ITERATOR(hemp_free_document) {
     hemp_debug_init("cleaning document\n");
     hemp_document_free( (hemp_document) hemp_val_ptr(item->value) );
-    return HEMP_TRUE;
-}
-
-
-hemp_bool
-hemp_free_viewer(
-    hemp_hash viewers,
-    hemp_pos  position,
-    hemp_slot item
-) {
-    hemp_debug_init("cleaning %s viewer\n", ((hemp_viewer) hemp_val_ptr(item->value))->name);
-    hemp_viewer_free( (hemp_viewer) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 

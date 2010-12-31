@@ -58,6 +58,9 @@ struct hemp_codec {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
+HEMP_FACTORY(hemp_codec_factory);
+HEMP_HASH_ITERATOR(hemp_codec_cleaner);
+
 hemp_codec
 hemp_codec_new(
     hemp_hemp       hemp,
@@ -71,7 +74,6 @@ hemp_codec_free(
 
 HEMP_ENCODER(hemp_codec_no_encoder);
 HEMP_DECODER(hemp_codec_no_decoder);
-HEMP_AUTOLOAD(hemp_codec_autoload);
 
 
 

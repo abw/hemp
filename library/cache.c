@@ -97,12 +97,12 @@ hemp_cache_lru_new(
         hemp_mem_fail("LRU cache");
 
     if (size) {
-        min_size = size < HEMP_CACHE_LRU_SIZE
+        min_size = size < HEMP_CACHE_SIZE
             ? size
-            : HEMP_CACHE_LRU_SIZE;
+            : HEMP_CACHE_SIZE;
     }
     else {
-        min_size = HEMP_CACHE_LRU_SIZE;
+        min_size = HEMP_CACHE_SIZE;
     }
 
     lru->size   = size;

@@ -2,6 +2,26 @@
 
 
 /*--------------------------------------------------------------------------
+ * Factory functions for loading viewers
+ *--------------------------------------------------------------------------*/
+
+HEMP_FACTORY(hemp_viewer_factory) {
+    hemp_debug_init("instantiating viewer factory\n");
+    hemp_factory factory = hemp_factory_new(hemp, name);
+    factory->cleaner     = hemp_viewer_cleaner;
+    return factory;
+}
+
+
+HEMP_HASH_ITERATOR(hemp_viewer_cleaner) {
+    hemp_viewer viewer = (hemp_viewer) hemp_val_ptr(item->value);
+    hemp_debug_init("cleaning viewer: %s\n", viewer->name);
+    hemp_viewer_free(viewer);
+    return HEMP_TRUE;
+}
+
+
+/*--------------------------------------------------------------------------
  * viewer initialisation and cleanup functions 
  *-------------------------------------------------------------------------*/
 

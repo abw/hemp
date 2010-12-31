@@ -40,6 +40,7 @@ typedef void
 
 struct hemp_cache {
     hemp_hemp           hemp;
+    hemp_string         name;
     hemp_cache_fetch    fetch;
     hemp_cache_store    store;
     hemp_cache_delete   delete;
@@ -90,10 +91,20 @@ hemp_cache_no_empty(
 
 
 /*--------------------------------------------------------------------------
- * Default LRU cache.
+ * Macros
  *--------------------------------------------------------------------------*/
 
-#define HEMP_CACHE_LRU_SIZE         16
+#define HEMP_CACHE(f)                               \
+    hemp_cache f(                                   \
+        hemp_hemp   hemp,                           \
+        hemp_string name                            \
+    )
+
+
+
+/*--------------------------------------------------------------------------
+ * Default LRU cache.
+ *--------------------------------------------------------------------------*/
 
 typedef struct hemp_cache_lru      * hemp_cache_lru;
 typedef struct hemp_cache_lru_slot * hemp_cache_lru_slot;
@@ -179,9 +190,6 @@ hemp_cache_lru_freshen_slot(
 );
 
 
-/*--------------------------------------------------------------------------
- * macros
- *--------------------------------------------------------------------------*/
-
 
 #endif /* HEMP_CACHE_H */
+  

@@ -1,6 +1,22 @@
 #include <hemp/scheme.h>
 
 
+HEMP_FACTORY(hemp_scheme_factory) {
+    hemp_debug_init("instantiating scheme factory: %s\n", name);
+    hemp_factory factory = hemp_factory_new(hemp, name);
+    factory->cleaner     = hemp_scheme_cleaner;
+    return factory;
+}
+
+
+HEMP_HASH_ITERATOR(hemp_scheme_cleaner) {
+    hemp_scheme scheme = (hemp_scheme) hemp_val_ptr(item->value);
+    hemp_debug_init("cleaning scheme: %s\n", scheme->name);
+    hemp_scheme_free(scheme);
+    return HEMP_TRUE;
+}
+
+
 hemp_scheme
 hemp_scheme_new(
     hemp_hemp       hemp,
@@ -38,10 +54,4 @@ hemp_scheme_namer(
     return source->scheme->name;
 }
 
-
-HEMP_AUTOLOAD(hemp_scheme_autoload) {
-    return hemp_use_module(factory->hemp, "scheme", name)
-        ? HEMP_TRUE
-        : HEMP_FALSE;
-}
 

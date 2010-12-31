@@ -43,7 +43,7 @@ wildcard(
 
 void test_factory() {
     hemp_hemp hemp = hemp_new();
-    hemp_factory factory = hemp_factory_new(hemp);
+    hemp_factory factory = hemp_factory_new(hemp, "test");
     ok( factory, "created factory" );
 
     hemp_factory_register(
@@ -70,7 +70,7 @@ void test_factory() {
 
 void test_factory_wildcard() {
     hemp_hemp hemp = hemp_new();
-    hemp_factory factory = hemp_factory_new(hemp);
+    hemp_factory factory = hemp_factory_new(hemp, "test");
     ok( factory, "created wildcard factory" );
 
     hemp_factory_register(

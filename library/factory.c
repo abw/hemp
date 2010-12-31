@@ -1,19 +1,38 @@
 #include <hemp/factory.h>
 
-hemp_char _hemp_factory_name_buffer[HEMP_BUFFER_SIZE];
 
+/*--------------------------------------------------------------------------
+ * The meta-factory, responsible for managing singleton instances of 
+ * other factories, e.g. for codecs, elements, grammars, languages, etc.
+ *--------------------------------------------------------------------------*/
+
+HEMP_FACTORY(hemp_meta_factory) {
+    hemp_debug_msg("instantiating meta factory\n");
+    hemp_factory factory = hemp_factory_new(hemp, name);
+    factory->cleaner     = hemp_meta_factory_cleaner;
+    return factory;
+}
+
+
+
+/*--------------------------------------------------------------------------
+ * Constructor and destructor functions for creating factory objects.
+ *--------------------------------------------------------------------------*/
 
 hemp_factory
 hemp_factory_new(
-    hemp_hemp   hemp
+    hemp_hemp   hemp,
+    hemp_string name
 ) {
     hemp_factory factory;
     HEMP_ALLOCATE(factory);
     factory->hemp         = hemp;
+    factory->name         = hemp_string_clone(name, "factory name");
     factory->instances    = hemp_hash_new();
     factory->constructors = hemp_hash_new();
     factory->cleaner      = NULL;
-    factory->autoload     = NULL;
+//  factory->autoload     = NULL;
+    factory->autoload     = &hemp_factory_autoload;
     return factory;
 }
 
@@ -30,9 +49,15 @@ hemp_factory_free(
     hemp_hash_free(factory->instances);
     hemp_hash_each(factory->constructors, &hemp_factory_free_constructor);
     hemp_hash_free(factory->constructors);
+    hemp_mem_free(factory->name);
     hemp_mem_free(factory);
 }
 
+
+
+/*--------------------------------------------------------------------------
+ * Function for registering a constructor function for an entity.
+ *--------------------------------------------------------------------------*/
 
 hemp_action
 hemp_factory_register(
@@ -61,6 +86,10 @@ hemp_factory_register(
     return action;
 }
 
+
+/*--------------------------------------------------------------------------
+ * Fetch a constructor for an entity.
+ *--------------------------------------------------------------------------*/
 
 hemp_action
 hemp_factory_constructor(
@@ -150,9 +179,14 @@ lookup:
 }
 
 
+/*--------------------------------------------------------------------------
+ * Return a singleton instance of an entity.  If one doesn't already exist
+ * then the constructor function is located and called to create one.
+ *--------------------------------------------------------------------------*/
+
 hemp_memory
 hemp_factory_instance(
-    hemp_factory factory,
+    hemp_factory    factory,
     hemp_string     name
 ) {
     hemp_debug_factory("hemp_factory_instance(%p, %s)\n", factory, name);
@@ -183,6 +217,10 @@ hemp_factory_instance(
 }
 
 
+/*--------------------------------------------------------------------------
+ * Cleanup function called by hash iterator to free each constructor action.
+ *--------------------------------------------------------------------------*/
+
 hemp_bool
 hemp_factory_free_constructor(
     hemp_hash     constructors,
@@ -192,5 +230,36 @@ hemp_factory_free_constructor(
     hemp_action_free( (hemp_action) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
+
+
+/*--------------------------------------------------------------------------
+ * Generic autoload function for dynamically loading extension modules.
+ *--------------------------------------------------------------------------*/
+
+HEMP_AUTOLOAD(hemp_factory_autoload) {
+    hemp_debug_init("%s autoload: %s\n", factory->name, name);
+    return hemp_use_module(factory->hemp, factory->name, name)
+        ? HEMP_TRUE
+        : HEMP_FALSE;
+}
+
+
+/*--------------------------------------------------------------------------
+ * Cleanup iterator function to call the hemp_factory_free() function for 
+ * each factory instance stored in the meta-factory.
+ *--------------------------------------------------------------------------*/
+
+hemp_bool
+hemp_meta_factory_cleaner(
+    hemp_hash factories,
+    hemp_pos  position,
+    hemp_slot item
+) {
+    hemp_factory factory = (hemp_factory) hemp_val_ptr(item->value);
+    hemp_debug_msg("cleaning %s factory\n", factory->name);
+    hemp_factory_free(factory);
+    return HEMP_TRUE;
+}
+
 
 

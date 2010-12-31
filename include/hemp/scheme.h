@@ -36,6 +36,9 @@ struct hemp_scheme {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
+HEMP_FACTORY(hemp_scheme_factory);
+HEMP_HASH_ITERATOR(hemp_scheme_cleaner);
+
 hemp_scheme
 hemp_scheme_new(
     hemp_hemp       hemp,

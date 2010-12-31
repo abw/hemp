@@ -1,6 +1,31 @@
 #include <hemp/dialect.h>
 
 
+/*--------------------------------------------------------------------------
+ * Factory functions for loading dialects
+ *--------------------------------------------------------------------------*/
+
+HEMP_FACTORY(hemp_dialect_factory) {
+    hemp_debug_init("instantiating dialect factory\n");
+    hemp_factory factory = hemp_factory_new(hemp, name);
+    factory->cleaner     = &hemp_dialect_cleaner;
+    factory->autoload    = NULL;        // TODO: load language
+    return factory;
+}
+
+
+HEMP_HASH_ITERATOR(hemp_dialect_cleaner) {
+    hemp_dialect dialect = (hemp_dialect) hemp_val_ptr(item->value);
+    hemp_debug_init("cleaning dialect: %s\n", dialect->name);
+    hemp_dialect_free(dialect);
+    return HEMP_TRUE;
+}
+
+
+/*--------------------------------------------------------------------------
+ * Dialect constructor/destructor functions.
+ *--------------------------------------------------------------------------*/
+
 hemp_dialect
 hemp_dialect_new(
     hemp_hemp   hemp,

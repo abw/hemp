@@ -2,8 +2,8 @@
 #define HEMP_FACTORY_H
 
 #include <hemp/action.h>
+#include <hemp/module.h>
 #include <hemp/type/hash.h>
-
 
 
 /*--------------------------------------------------------------------------
@@ -18,6 +18,7 @@ typedef hemp_bool
 
 struct hemp_factory {
     hemp_hemp       hemp;
+    hemp_string     name;
     hemp_hash       instances;
     hemp_hash       constructors;
     hemp_hash_iter  cleaner;
@@ -29,9 +30,13 @@ struct hemp_factory {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
+HEMP_FACTORY(hemp_meta_factory);
+HEMP_AUTOLOAD(hemp_factory_autoload);
+
 hemp_factory 
 hemp_factory_new(
-    hemp_hemp       hemp
+    hemp_hemp       hemp,
+    hemp_string     name
 );
 
 void
@@ -65,6 +70,15 @@ hemp_factory_instance(
     hemp_factory    factory,
     hemp_string     name
 );
+
+hemp_bool
+hemp_meta_factory_cleaner(
+    hemp_hash       factories,
+    hemp_pos        position,
+    hemp_slot       item
+);
+
+
 
 
 #endif /* HEMP_FACTORY_H */

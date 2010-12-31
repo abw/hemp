@@ -94,6 +94,7 @@ typedef struct hemp_viewer      * hemp_viewer;
 
 struct hemp_hemp {
     hemp_global     global;
+    hemp_factory    factory;
 
     hemp_factory    codec;
     hemp_factory    dialect;
@@ -108,6 +109,8 @@ struct hemp_hemp {
     hemp_context    context;
     hemp_hash       config;
     hemp_filesystem filesystem;
+
+    hemp_cache      cache;
 
 //  hemp_hash       tags;
     hemp_hash       documents;
