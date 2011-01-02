@@ -24,9 +24,9 @@ HEMP_ELEMENT(hemp_element_brackets) {
 
 HEMP_PREFIX(hemp_element_brackets_parse) {
     hemp_debug_call("hemp_element_brackets_parse()\n");
-    hemp_fragment self = *fragptr;
-    hemp_element  type = self->type;
-    hemp_list     exprs;
+    HempFragment self = *fragptr;
+    HempElement  type = self->type;
+    HempList     exprs;
 
     /* skip opening bracket */
     hemp_advance(fragptr);
@@ -58,7 +58,7 @@ HEMP_PREFIX(hemp_element_brackets_prefix) {
     hemp_debug_call("hemp_element_brackets_prefix()\n");
 
     /* parse the bracketed expressions */
-    hemp_fragment self = hemp_element_brackets_parse(
+    HempFragment self = hemp_element_brackets_parse(
         fragptr, scope, precedence, force
     );
 
@@ -103,7 +103,7 @@ HEMP_ELEMENT(hemp_element_parens) {
 HEMP_POSTFIX(hemp_element_parens_postfix) {
     hemp_debug_call("hemp_element_parens_postfix()\n");
     
-    hemp_fragment fragment = *fragptr;
+    HempFragment fragment = *fragptr;
 
     HEMP_INFIX_LEFT_PRECEDENCE;
 
@@ -114,7 +114,7 @@ HEMP_POSTFIX(hemp_element_parens_postfix) {
 
     hemp_set_flag(fragment, HEMP_BE_INFIX);
 
-    hemp_fragment apply = hemp_fragment_new_fragment(
+    HempFragment apply = hemp_fragment_new_fragment(
         fragment, "hemp.apply"
     );
 
@@ -130,10 +130,10 @@ HEMP_POSTFIX(hemp_element_parens_postfix) {
 
 HEMP_FIXUP(hemp_element_parens_proto) {
     hemp_debug_call("hemp_element_parens_proto(%p)\n", fragment);
-    hemp_list     exprs = hemp_block_exprs_list(fragment);
-    hemp_fragment expr;
-    hemp_value    item;
-    hemp_size     n;
+    HempList     exprs = hemp_block_exprs_list(fragment);
+    HempFragment expr;
+    HempValue    item;
+    HempSize     n;
 
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
@@ -147,8 +147,8 @@ HEMP_FIXUP(hemp_element_parens_proto) {
 
 HEMP_VALUE(hemp_element_parens_value) {
     hemp_debug_call("hemp_element_parens_value()\n");
-    hemp_value values  = hemp_obcall(value, values, context, HempNothing);
-    hemp_list  list    = hemp_val_list(values);
+    HempValue values  = hemp_obcall(value, values, context, HempNothing);
+    HempList  list    = hemp_val_list(values);
 
     if (list->length > 1) {
 //      hemp_debug_msg("squishing list of %d items to text\n", list->length);
@@ -207,11 +207,11 @@ HEMP_PREFIX(hemp_element_hash_prefix) {
 
 //  HEMP_PREFIX_PRECEDENCE;
 
-    hemp_fragment fragment = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
-    hemp_list     exprs    = hemp_block_exprs_list(fragment);
-    hemp_fragment expr;
-    hemp_value    item;
-    hemp_size     n;
+    HempFragment fragment = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
+    HempList     exprs    = hemp_block_exprs_list(fragment);
+    HempFragment expr;
+    HempValue    item;
+    HempSize     n;
     
     /* TODO: this should be merged in with newer code in hemp_parse_pairs() */
     for (n = 0; n < exprs->length; n++) {
@@ -232,7 +232,7 @@ HEMP_PREFIX(hemp_element_hash_prefix) {
 
 HEMP_PREFIX(hemp_element_hash_body) {
     hemp_debug_call("hemp_element_hash_body()\n");
-    hemp_fragment fragment = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
+    HempFragment fragment = hemp_element_brackets_parse(HEMP_PREFIX_ARG_NAMES);
     hemp_set_flag(fragment, HEMP_BE_BODY|HEMP_BE_TERMINATED);
     return fragment;
 }
@@ -240,16 +240,16 @@ HEMP_PREFIX(hemp_element_hash_body) {
 
 HEMP_VALUE(hemp_element_hash_value) {
     hemp_debug_call("hemp_element_hash_value()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
+    HempFragment fragment = hemp_val_frag(value);
 
     if (hemp_has_flag(fragment, HEMP_BE_BODY))
         return hemp_element_block_value(value, context);
     
-    hemp_list   exprs = hemp_block_exprs_list(fragment);
-    hemp_hash   hash  = hemp_context_tmp_hash(context);
-    hemp_value  hashv = hemp_hash_val(hash);
-    hemp_value  item;
-    hemp_size   n;
+    HempList   exprs = hemp_block_exprs_list(fragment);
+    HempHash   hash  = hemp_context_tmp_hash(context);
+    HempValue  hashv = hemp_hash_val(hash);
+    HempValue  item;
+    HempSize   n;
 
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);

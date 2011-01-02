@@ -11,7 +11,7 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_library {
-    hemp_string     name;
+    HempString     name;
     
 };
 
@@ -22,7 +22,7 @@ struct hemp_library {
 
 hemp_library
 hemp_library_new(
-    hemp_string     name
+    HempString     name
 );
 
 

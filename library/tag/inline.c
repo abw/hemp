@@ -8,7 +8,7 @@ HEMP_TAG(hemp_tag_inline) {
 //      grammar ? grammar->name : "no grammar"
 //  );
 
-    hemp_tag tag = hemp_tag_new(
+    HempTag tag = hemp_tag_new(
         type, name, start, end, grammar
     );
     tag->style   = HEMP_INLINE_TAG;
@@ -19,18 +19,18 @@ HEMP_TAG(hemp_tag_inline) {
 }
 
 
-hemp_bool
+HempBool
 hemp_tag_inline_scanner(
-    hemp_memory     self,
-    hemp_document   document
+    HempMemory     self,
+    HempDocument   document
 ) {
-    hemp_tag        tag     = (hemp_tag) self;
-    hemp_string     src     = document->scanptr;
-    hemp_string     tagend  = tag->end;
-    hemp_size       endlen  = strlen(tagend);
-    hemp_bool       closed  = HEMP_FALSE;
-    hemp_pnode      pnode;
-    hemp_element    element;
+    HempTag        tag     = (HempTag) self;
+    HempString     src     = document->scanptr;
+    HempString     tagend  = tag->end;
+    HempSize       endlen  = strlen(tagend);
+    HempBool       closed  = HEMP_FALSE;
+    HempPnode      pnode;
+    HempElement    element;
 
     hemp_document_enter_tag(document, tag);
 
@@ -58,7 +58,7 @@ hemp_tag_inline_scanner(
         }
         else if (
             (pnode   = hemp_ptree_root(tag->grammar->operators, src))
-        &&  (element = (hemp_element) hemp_pnode_match_more(pnode, &src))
+        &&  (element = (HempElement) hemp_pnode_match_more(pnode, &src))
         ) {
             /* We have to be check that we haven't matched the first part of
              * a longer word, e.g. matching 'le' at the start of 'length'.
@@ -116,8 +116,8 @@ bareword:
 
 HEMP_SKIPPER(hemp_tag_inline_to_eol) {
     hemp_debug_call("hemp_tag_inline_to_eol()\n");
-    hemp_string tag_end = tag->end;
-    hemp_size   tag_len = strlen(tag->end);
+    HempString tag_end = tag->end;
+    HempSize   tag_len = strlen(tag->end);
 
     /* walk to the end of line or end of tag */
     while ( *src

@@ -14,15 +14,15 @@ int main(
 
 
 void test_punctuation() {
-    hemp_string text = "DUMMY TEXT";
+    HempString text = "DUMMY TEXT";
 
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp" );
 
-    hemp_fragments fragments = hemp_fragments_new(NULL, 0);
+    HempFragments fragments = hemp_fragments_new(NULL, 0);
     ok( fragments, "created fragments" );
 
-    hemp_element space, comma, semicolon, terminator;
+    HempElement space, comma, semicolon, terminator;
     
     HEMP_TRY;
         space = hemp_element_instance(hemp, "hemp.space", " ", NULL);
@@ -66,7 +66,7 @@ void test_punctuation() {
     hemp_fragments_add_fragment(fragments, HempElementText,       text, 0, 0);
     hemp_fragments_add_eof(fragments, 0);
 
-    hemp_fragment frag = fragments->head;
+    HempFragment frag = fragments->head;
     
     hemp_skip_delimiter(&frag);
     ok( frag->type == semicolon, "blocked at semicolon separator" );

@@ -4,32 +4,32 @@
 #define HEMP_ONLOAD "hemp_onload"
 
 
-hemp_module
+HempModule
 hemp_use_module(
-    hemp_hemp       hemp,
-    hemp_string     type,
-    hemp_string     name
+    Hemp       hemp,
+    HempString     type,
+    HempString     name
 ) {
     hemp_debug_call("hemp_use_module(%s => %s)\n", type, name);
 
-    hemp_value  path = hemp_config_get(hemp, HEMP_CONFIG_MODPATH);
-    hemp_string string;
+    HempValue  path = hemp_config_get(hemp, HEMP_CONFIG_MODPATH);
+    HempString string;
 
     if (hemp_is_defined(path)) {
         string = hemp_to_string(path, hemp->context);
 //      hemp_debug_msg("already got %s: %s\n", HEMP_CONFIG_MODPATH, string);
     }
     else {
-        hemp_value  dir  = hemp_config_get(hemp, HEMP_CONFIG_DIR);
-        hemp_value  mod  = hemp_config_get(hemp, HEMP_CONFIG_MODDIR);
-        hemp_string dstr = hemp_to_string(dir, hemp->context);
-        hemp_string mstr = hemp_to_string(mod, hemp->context);
+        HempValue  dir  = hemp_config_get(hemp, HEMP_CONFIG_DIR);
+        HempValue  mod  = hemp_config_get(hemp, HEMP_CONFIG_MODDIR);
+        HempString dstr = hemp_to_string(dir, hemp->context);
+        HempString mstr = hemp_to_string(mod, hemp->context);
 
         string = hemp_uri_path_join(dstr, mstr, 1);
 //      hemp_debug_msg("constructed %s: %s\n", HEMP_CONFIG_MODPATH, string);
 
         /* ugly work-around so we can get the context to manage memory */
-        hemp_text text = hemp_context_tmp_text_size(hemp->context, strlen(string) + 1);
+        HempText text = hemp_context_tmp_text_size(hemp->context, strlen(string) + 1);
         hemp_text_append_string(text, string);
         hemp_mem_free(string);
         string = text->string;
@@ -39,7 +39,7 @@ hemp_use_module(
     // TODO: need a way to save dotted path (hemp.module_path) back into config
 
     /* quick hack to get something working */
-    hemp_string modpath = getenv("HEMP_MODULE_PATH");
+    HempString modpath = getenv("HEMP_MODULE_PATH");
 
     if (! modpath || ! *modpath) {
         modpath = string;
@@ -48,15 +48,15 @@ hemp_use_module(
     }
 
     /* TODO: sort this mess out */
-    hemp_string tpath = hemp_uri_path_join(modpath, type, 1);
-    hemp_string mpath = hemp_uri_path_join(tpath, name, 1);
-    hemp_text   mtext = hemp_text_from_string(mpath);
+    HempString tpath = hemp_uri_path_join(modpath, type, 1);
+    HempString mpath = hemp_uri_path_join(tpath, name, 1);
+    HempText   mtext = hemp_text_from_string(mpath);
     hemp_text_append_string(mtext, HEMP_MODULE_EXT);
     hemp_mem_free(mpath);
     hemp_mem_free(tpath);
 //  hemp_debug_msg("constructed module path: %s\n", mtext->string);
 
-    hemp_module module = hemp_global_module(hemp->global, mtext->string);
+    HempModule module = hemp_global_module(hemp->global, mtext->string);
 
     if (module->binder) {
         module->binder(module, hemp);
@@ -75,11 +75,11 @@ hemp_use_module(
 
 
 
-hemp_module
+HempModule
 hemp_module_new(
-    hemp_string     name
+    HempString     name
 ) {
-    hemp_module module;
+    HempModule module;
     HEMP_ALLOCATE(module);
     module->name   = hemp_string_clone(name, "module name");
     module->error  = NULL;
@@ -92,7 +92,7 @@ hemp_module_new(
 
 void
 hemp_module_free(
-    hemp_module     module
+    HempModule     module
 ) {
     if (module->handle)
         hemp_module_unload(module);
@@ -105,10 +105,10 @@ hemp_module_free(
 }
 
 
-HEMP_INLINE hemp_bool
+HEMP_INLINE HempBool
 hemp_module_failed(
-    hemp_module     module,
-    hemp_string     error,
+    HempModule     module,
+    HempString     error,
     ...
 ) {
     if (module->error)
@@ -125,9 +125,9 @@ hemp_module_failed(
 }
 
 
-hemp_bool
+HempBool
 hemp_module_load(
-    hemp_module     module
+    HempModule     module
 ) {
     hemp_debug_call("loading module: %s\n", module->name);
 
@@ -179,9 +179,9 @@ hemp_module_load(
 }
 
 
-hemp_bool
+HempBool
 hemp_module_unload(
-    hemp_module     module
+    HempModule     module
 ) {
     if (! module->handle)
         return HEMP_TRUE;

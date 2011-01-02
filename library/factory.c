@@ -8,7 +8,7 @@
 
 HEMP_FACTORY(hemp_meta_factory) {
     hemp_debug_msg("instantiating meta factory\n");
-    hemp_factory factory = hemp_factory_new(hemp, name);
+    HempFactory factory = hemp_factory_new(hemp, name);
     factory->cleaner     = hemp_meta_factory_cleaner;
     return factory;
 }
@@ -19,12 +19,12 @@ HEMP_FACTORY(hemp_meta_factory) {
  * Constructor and destructor functions for creating factory objects.
  *--------------------------------------------------------------------------*/
 
-hemp_factory
+HempFactory
 hemp_factory_new(
-    hemp_hemp   hemp,
-    hemp_string name
+    Hemp   hemp,
+    HempString name
 ) {
-    hemp_factory factory;
+    HempFactory factory;
     HEMP_ALLOCATE(factory);
     factory->hemp         = hemp;
     factory->name         = hemp_string_clone(name, "factory name");
@@ -39,7 +39,7 @@ hemp_factory_new(
 
 void
 hemp_factory_free(
-    hemp_factory factory
+    HempFactory factory
 ) {
     /* run any custom instance cleaner */
     if (factory->cleaner)
@@ -59,14 +59,14 @@ hemp_factory_free(
  * Function for registering a constructor function for an entity.
  *--------------------------------------------------------------------------*/
 
-hemp_action
+HempAction
 hemp_factory_register(
-    hemp_factory    factory,
-    hemp_string     name,
-    hemp_actor      actor,
-    hemp_memory     script
+    HempFactory    factory,
+    HempString     name,
+    HempActor      actor,
+    HempMemory     script
 ) {
-    hemp_action action = (hemp_action) hemp_hash_fetch_pointer(
+    HempAction action = (HempAction) hemp_hash_fetch_pointer(
         factory->constructors, name
     );
 
@@ -91,18 +91,18 @@ hemp_factory_register(
  * Fetch a constructor for an entity.
  *--------------------------------------------------------------------------*/
 
-hemp_action
+HempAction
 hemp_factory_constructor(
-    hemp_factory    factory,
-    hemp_string     name
+    HempFactory    factory,
+    HempString     name
 ) {
     hemp_debug_factory("hemp_factory_constructor(%p, %s)\n", factory, name);
     
-    static hemp_char    wildname[HEMP_BUFFER_SIZE];
-    hemp_list           splits;
+    static HempChar    wildname[HEMP_BUFFER_SIZE];
+    HempList           splits;
     hemp_autoload       autoload;
     
-    hemp_action constructor = (hemp_action) hemp_hash_fetch_pointer(
+    HempAction constructor = (HempAction) hemp_hash_fetch_pointer(
         factory->constructors, name
     );
 
@@ -122,7 +122,7 @@ lookup:
     if (splits) {
         int n;
         hemp_str_split split;
-        hemp_action wildcard;
+        HempAction wildcard;
             
         for (n = splits->length - 1; n >= 0; n--) {
             split = (hemp_str_split) hemp_val_ptr( hemp_list_item(splits, n) );
@@ -131,8 +131,8 @@ lookup:
             hemp_debug_factory("factory looking for [%s]\n", wildname);
 
             /* look for a wildcard meta-constructor */
-            wildcard = (hemp_action) hemp_hash_fetch_pointer(
-                factory->constructors, (hemp_string) wildname
+            wildcard = (HempAction) hemp_hash_fetch_pointer(
+                factory->constructors, (HempString) wildname
             );
             if (! wildcard)
                 continue;               /* no dice, try again               */
@@ -160,7 +160,7 @@ lookup:
         if (autoload(factory, name)) {
             hemp_debug_factory("factory autoload returned true\n");
             /* autoload worked so look to see if our item is now available */
-            constructor = (hemp_action) hemp_hash_fetch_pointer(
+            constructor = (HempAction) hemp_hash_fetch_pointer(
                 factory->constructors, name
             );
             /* fall back to a wildcard provider that may have been installed */
@@ -184,21 +184,21 @@ lookup:
  * then the constructor function is located and called to create one.
  *--------------------------------------------------------------------------*/
 
-hemp_memory
+HempMemory
 hemp_factory_instance(
-    hemp_factory    factory,
-    hemp_string     name
+    HempFactory    factory,
+    HempString     name
 ) {
     hemp_debug_factory("hemp_factory_instance(%p, %s)\n", factory, name);
     
-    hemp_memory instance = hemp_hash_fetch_pointer(
+    HempMemory instance = hemp_hash_fetch_pointer(
         factory->instances, name
     );
 
     if (instance)
         return instance;
 
-    hemp_action constructor = hemp_factory_constructor(
+    HempAction constructor = hemp_factory_constructor(
         factory, name
     );
 
@@ -221,13 +221,13 @@ hemp_factory_instance(
  * Cleanup function called by hash iterator to free each constructor action.
  *--------------------------------------------------------------------------*/
 
-hemp_bool
+HempBool
 hemp_factory_free_constructor(
-    hemp_hash     constructors,
-    hemp_pos      position,
-    hemp_slot     item
+    HempHash     constructors,
+    HempPos      position,
+    HempSlot     item
 ) {
-    hemp_action_free( (hemp_action) hemp_val_ptr(item->value) );
+    hemp_action_free( (HempAction) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
@@ -249,13 +249,13 @@ HEMP_AUTOLOAD(hemp_factory_autoload) {
  * each factory instance stored in the meta-factory.
  *--------------------------------------------------------------------------*/
 
-hemp_bool
+HempBool
 hemp_meta_factory_cleaner(
-    hemp_hash factories,
-    hemp_pos  position,
-    hemp_slot item
+    HempHash factories,
+    HempPos  position,
+    HempSlot item
 ) {
-    hemp_factory factory = (hemp_factory) hemp_val_ptr(item->value);
+    HempFactory factory = (HempFactory) hemp_val_ptr(item->value);
     hemp_debug_msg("cleaning %s factory\n", factory->name);
     hemp_factory_free(factory);
     return HEMP_TRUE;

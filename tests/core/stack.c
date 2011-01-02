@@ -1,9 +1,9 @@
 #include <hemp/test.h>
 
 void test_stack();
-void test_stack_pop(hemp_stack, hemp_string);
-void test_stack_top(hemp_stack, hemp_string);
-void test_stack_item(hemp_string, hemp_string, hemp_string, hemp_string, hemp_string);
+void test_stack_pop(HempStack, HempString);
+void test_stack_top(HempStack, HempString);
+void test_stack_item(HempString, HempString, HempString, HempString, HempString);
 
 
 int main(
@@ -16,7 +16,7 @@ int main(
 
 
 void test_stack() {
-    hemp_stack stack = hemp_stack_new(4);
+    HempStack stack = hemp_stack_new(4);
     ok( stack, "created stack" );
 
     /* push a couple of items */
@@ -85,11 +85,11 @@ void test_stack() {
 
 
 void test_stack_item(
-    hemp_string item,
-    hemp_string expect,
-    hemp_string match,
-    hemp_string mismatch,
-    hemp_string nothing
+    HempString item,
+    HempString expect,
+    HempString match,
+    HempString mismatch,
+    HempString nothing
 ) {
     if (item) {
         if (hemp_string_eq(item, expect)) {
@@ -106,8 +106,8 @@ void test_stack_item(
 
 
 void test_stack_pop(
-    hemp_stack  stack,
-    hemp_string expect
+    HempStack  stack,
+    HempString expect
 ) {
     test_stack_item(
         hemp_stack_pop(stack),
@@ -120,8 +120,8 @@ void test_stack_pop(
 
 
 void test_stack_top(
-    hemp_stack  stack,
-    hemp_string expect
+    HempStack  stack,
+    HempString expect
 ) {
     test_stack_item(
         hemp_stack_top(stack),

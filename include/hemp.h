@@ -51,59 +51,57 @@ extern "C" {
 
 
 /* hemp initialisation and cleanup functions */
-hemp_hemp       hemp_new();
-void            hemp_init_errors(hemp_hemp);
-void            hemp_init_config(hemp_hemp);
-void            hemp_init_factories(hemp_hemp);
-void            hemp_init_schemes(hemp_hemp);
-void            hemp_init_languages(hemp_hemp);
-void            hemp_init_documents(hemp_hemp);
-void            hemp_init_viewers(hemp_hemp);
-void            hemp_init_filesystem(hemp_hemp);
+Hemp            hemp_new();
+void            hemp_init_errors(Hemp);
+void            hemp_init_config(Hemp);
+void            hemp_init_factories(Hemp);
+void            hemp_init_schemes(Hemp);
+void            hemp_init_languages(Hemp);
+void            hemp_init_documents(Hemp);
+void            hemp_init_viewers(Hemp);
+void            hemp_init_filesystem(Hemp);
 
-void            hemp_free(hemp_hemp);
-void            hemp_free_documents(hemp_hemp);
-void            hemp_free_factories(hemp_hemp);
-void            hemp_free_config(hemp_hemp);
-void            hemp_free_errors(hemp_hemp);
-void            hemp_free_filesystem(hemp_hemp);
+void            hemp_free(Hemp);
+void            hemp_free_documents(Hemp);
+void            hemp_free_factories(Hemp);
+void            hemp_free_config(Hemp);
+void            hemp_free_errors(Hemp);
+void            hemp_free_filesystem(Hemp);
 
-hemp_bool       hemp_free_dialect ( hemp_hash, hemp_pos, hemp_slot );
-hemp_bool       hemp_free_document( hemp_hash, hemp_pos, hemp_slot );
+HempBool        hemp_free_dialect (HempHash, HempPos, HempSlot);
+HempBool        hemp_free_document(HempHash, HempPos, HempSlot);
 
-hemp_context    hemp_context_instance(hemp_hemp);
-hemp_document   hemp_document_instance(hemp_hemp, hemp_string, hemp_string, hemp_string);
-hemp_filesystem hemp_filesystem_instance(hemp_hemp);
+HempContext     hemp_context_instance(Hemp);
+HempDocument    hemp_document_instance(Hemp, HempString, HempString, HempString);
+HempFilesystem  hemp_filesystem_instance(Hemp);
 
-void            hemp_register_dialects(hemp_hemp, hemp_dialects);
-void            hemp_register_tags(hemp_hemp, hemp_tags);
-void            hemp_register_grammars(hemp_hemp, hemp_grammars);
-void            hemp_register_elements(hemp_hemp, hemp_elements);
+void            hemp_register_dialects(Hemp, HempDialects);
+void            hemp_register_tags(Hemp, HempTags);
+void            hemp_register_grammars(Hemp, HempGrammars);
+void            hemp_register_elements(Hemp, HempElements);
 
-void            hemp_configure(hemp_hemp, hemp_value);
-void            hemp_configure_from(hemp_hemp, hemp_string, hemp_string, hemp_string);
-void            hemp_ready(hemp_hemp);
-hemp_string     hemp_version();
+void            hemp_configure(Hemp, HempValue);
+void            hemp_configure_from(Hemp, HempString, HempString, HempString);
+void            hemp_ready(Hemp);
+HempString      hemp_version();
 
 
-HEMP_INLINE hemp_text
+HEMP_INLINE HempText
 hemp_encode(
-    hemp_hemp       hemp,
-    hemp_string     name,
-    hemp_value      input,
-    hemp_context    context
+    Hemp            hemp,
+    HempString      name,
+    HempValue       input,
+    HempContext     context
 );
 
 
-HEMP_INLINE hemp_value
+HEMP_INLINE HempValue
 hemp_decode(
-    hemp_hemp       hemp,
-    hemp_string     name,
-    hemp_text       input,
-    hemp_context    context
+    Hemp            hemp,
+    HempString      name,
+    HempText        input,
+    HempContext     context
 );
-
-
 
 
 #if defined(__cplusplus)

@@ -15,18 +15,18 @@
 #endif
  
 
-hemp_ptree
+HempPtree
 hemp_ptree_new(
-    hemp_size capacity
+    HempSize capacity
 ) {
-    hemp_ptree ptree;
+    HempPtree ptree;
     HEMP_ALLOCATE(ptree);
     int i;
 
-    hemp_size width = HEMP_PTREE_SIZE;
+    HempSize width = HEMP_PTREE_SIZE;
 
     /* allocate memory for pointers to tree heads (er... roots) */
-    ptree->roots = (hemp_pnode *) hemp_mem_alloc(
+    ptree->roots = (HempPnode *) hemp_mem_alloc(
         width * sizeof(struct hemp_pnode)
     );
     if (! ptree->roots)
@@ -49,7 +49,7 @@ hemp_ptree_new(
 
 void
 hemp_ptree_free(
-    hemp_ptree ptree
+    HempPtree ptree
 ) {
     if (ptree->roots)
         hemp_mem_free(ptree->roots);
@@ -61,13 +61,13 @@ hemp_ptree_free(
 }
 
 
-HEMP_INLINE hemp_pnode
+HEMP_INLINE HempPnode
 hemp_ptree_node(
-    hemp_ptree  ptree, 
-    hemp_string key, 
-    hemp_memory value
+    HempPtree  ptree, 
+    HempString key, 
+    HempMemory value
 ) {
-    hemp_pnode pnode = (hemp_pnode) hemp_pool_take(ptree->pool);
+    HempPnode pnode = (HempPnode) hemp_pool_take(ptree->pool);
     pnode->key       = key;
     pnode->value     = value;
     pnode->before    = 
@@ -77,17 +77,17 @@ hemp_ptree_node(
 }
 
 
-hemp_pnode
+HempPnode
 hemp_ptree_store(
-    hemp_ptree  ptree, 
-    hemp_string key, 
-    hemp_memory value
+    HempPtree  ptree, 
+    HempString key, 
+    HempMemory value
 ) {
-    hemp_pos    position = *key % HEMP_PTREE_SIZE;
-    hemp_pnode  pnode    = ptree->roots[position];
-    hemp_string keyptr   = key;
-    hemp_string cmptr;
-    hemp_pnode  new_node;
+    HempPos    position = *key % HEMP_PTREE_SIZE;
+    HempPnode  pnode    = ptree->roots[position];
+    HempString keyptr   = key;
+    HempString cmptr;
+    HempPnode  new_node;
 
     if (! pnode)
         return (
@@ -173,15 +173,15 @@ hemp_ptree_store(
 
 
 
-hemp_memory
+HempMemory
 hemp_ptree_fetch(
-    hemp_ptree  ptree,
-    hemp_string key
+    HempPtree  ptree,
+    HempString key
 ) {
-    hemp_pos    position = *key % HEMP_PTREE_SIZE;
-    hemp_pnode  pnode    = ptree->roots[position];
-    hemp_string src      = key;
-    hemp_string cmptr    = pnode ? pnode->key : NULL;
+    HempPos    position = *key % HEMP_PTREE_SIZE;
+    HempPnode  pnode    = ptree->roots[position];
+    HempString src      = key;
+    HempString cmptr    = pnode ? pnode->key : NULL;
 
     hemp_debug_find("hemp_ptree_fetch(%p, %s)\n", ptree, key);
 
@@ -234,14 +234,14 @@ hemp_ptree_fetch(
 
 
 
-hemp_memory
+HempMemory
 hemp_pnode_match_more(
-    hemp_pnode  pnode, 
-    hemp_string *srcptr
+    HempPnode  pnode, 
+    HempString *srcptr
 ) {
-    hemp_string cmptr  = pnode->key;
-    hemp_string src    = *srcptr;
-    hemp_memory value  = NULL;
+    HempString cmptr  = pnode->key;
+    HempString src    = *srcptr;
+    HempMemory value  = NULL;
 
     hemp_debug_find("hemp_ptree_match_more()\n");
 
@@ -287,7 +287,7 @@ hemp_pnode_match_more(
 
 void
 hemp_pnode_dump(
-    hemp_pnode  pnode, 
+    HempPnode  pnode, 
     int indent
 ) {
     char pad[100];
@@ -315,7 +315,7 @@ hemp_pnode_dump(
 
 void
 hemp_ptree_dump(
-    hemp_ptree  ptree
+    HempPtree  ptree
 ) {
     int i;
     
@@ -329,7 +329,7 @@ hemp_ptree_dump(
 
 int
 hemp_pnode_max_depth(
-    hemp_pnode  pnode,
+    HempPnode  pnode,
     int         depth
 ) {
     int before = pnode->before 
@@ -353,7 +353,7 @@ hemp_pnode_max_depth(
 
 int
 hemp_ptree_max_depth(
-    hemp_ptree ptree
+    HempPtree ptree
 ) {
     int i;
     int depth;
@@ -372,7 +372,7 @@ hemp_ptree_max_depth(
 
 int
 hemp_pnode_count_nodes(
-    hemp_pnode pnode
+    HempPnode pnode
 ) {
     int n = 1;
     if (pnode->before)
@@ -387,7 +387,7 @@ hemp_pnode_count_nodes(
 
 int
 hemp_ptree_count_nodes(
-    hemp_ptree ptree
+    HempPtree ptree
 ) {
     int i;
     int n = 0;

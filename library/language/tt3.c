@@ -15,7 +15,7 @@ static struct hemp_elements hemp_elements_tt3_command[] = {
 HEMP_LANGUAGE(hemp_language_tt3) {
     hemp_debug_call("hemp_language_tt3_new(%p, %s)\n", hemp, name);
 
-    hemp_language language = hemp_language_new(
+    HempLanguage language = hemp_language_new(
         hemp, name, HEMP_LANGUAGE_TT3_VERSION
     );
     
@@ -40,7 +40,7 @@ HEMP_LANGUAGE(hemp_language_tt3) {
  *--------------------------------------------------------------------------*/
 
 HEMP_DIALECT(hemp_dialect_tt3) {
-    hemp_dialect dialect = hemp_dialect_new(hemp, name);
+    HempDialect dialect = hemp_dialect_new(hemp, name);
     dialect->scanner = &hemp_dialect_tt3_scanner;
     return dialect;
 }
@@ -48,11 +48,11 @@ HEMP_DIALECT(hemp_dialect_tt3) {
 HEMP_DOC_SCAN(hemp_dialect_tt3_scanner) {
     hemp_debug_call("hemp_dialect_tt3_scanner(%p)\n", document);
 
-    hemp_hemp    hemp    = document->hemp;
-    hemp_tagset  tagset  = hemp_tagset_new(document);
-    hemp_grammar command = hemp_grammar_instance(hemp, "tt3.command");
-    hemp_grammar control = hemp_grammar_instance(hemp, "tt3.control");
-    hemp_bool    result;
+    Hemp    hemp    = document->hemp;
+    HempTagset  tagset  = hemp_tagset_new(document);
+    HempGrammar command = hemp_grammar_instance(hemp, "tt3.command");
+    HempGrammar control = hemp_grammar_instance(hemp, "tt3.control");
+    HempBool    result;
 
     hemp_tagset_new_tag(tagset, "hemp.comment",  "comment",  "[#",   "#]", NULL);
     hemp_tagset_new_tag(tagset, "hemp.control",  "control",  "[?",   "?]", control);
@@ -78,7 +78,7 @@ HEMP_DOC_SCAN(hemp_dialect_tt3_scanner) {
  *--------------------------------------------------------------------------*/
 
 HEMP_DIALECT(hemp_dialect_tt3_unplugged) {
-    hemp_dialect dialect = hemp_dialect_new(hemp, name);
+    HempDialect dialect = hemp_dialect_new(hemp, name);
     dialect->scanner = &hemp_dialect_tt3_unplugged_scanner;
     return dialect;
 }
@@ -100,7 +100,7 @@ HEMP_DOC_SCAN(hemp_dialect_tt3_unplugged_scanner) {
 
 HEMP_GRAMMAR(hemp_grammar_tt3_core) {
     hemp_debug_call("hemp_grammar_tt3_core(%p, %s)\n", hemp, name);
-    hemp_grammar grammar = hemp_grammar_hemp_charlie(hemp, name);
+    HempGrammar grammar = hemp_grammar_hemp_charlie(hemp, name);
 
     HEMP_USE_ELEMENT1("hemp.identity.true",  "True");
     HEMP_USE_ELEMENT1("hemp.identity.false", "False");
@@ -117,7 +117,7 @@ HEMP_GRAMMAR(hemp_grammar_tt3_core) {
 
 HEMP_GRAMMAR(hemp_grammar_tt3_command) {
     hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
-    hemp_grammar grammar = hemp_grammar_tt3_core(hemp, name);
+    HempGrammar grammar = hemp_grammar_tt3_core(hemp, name);
 
     HEMP_USE_COMMAND2("tt3.command.if",    "if",   "end");
     HEMP_USE_COMMAND1("tt3.command.elsif", "elsif");
@@ -126,7 +126,7 @@ HEMP_GRAMMAR(hemp_grammar_tt3_command) {
     HEMP_USE_COMMAND2("tt3.command.just",  "just", "end");
     HEMP_USE_COMMAND2("tt3.command.with",  "with", "end");
 
-//    hemp_element intag = HEMP_USE_ELEMENT2("hemp.tag.inline", "[%", "%]");
+//    HempElement intag = HEMP_USE_ELEMENT2("hemp.tag.inline", "[%", "%]");
 //  hemp_debug_msg("embedded tag: %p => %s\n", intag, intag->name); 
     return grammar;
 }
@@ -134,7 +134,7 @@ HEMP_GRAMMAR(hemp_grammar_tt3_command) {
 
 HEMP_GRAMMAR(hemp_grammar_tt3_control) {
     hemp_debug_call("hemp_grammar_tt3_control(%p, %s)\n", hemp, name);
-    hemp_grammar grammar = hemp_grammar_tt3_core(hemp, name);
+    HempGrammar grammar = hemp_grammar_tt3_core(hemp, name);
     return grammar;
 }
 
@@ -152,7 +152,7 @@ HEMP_ELEMENTS(hemp_elements_tt3_command_registrar) {
     hemp_register_elements(hemp, hemp_elements_tt3_command);
 
     /* now try again */
-    return (hemp_action) hemp_hash_fetch_pointer(
+    return (HempAction) hemp_hash_fetch_pointer(
         hemp->element->constructors, name
     );
 }

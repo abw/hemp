@@ -9,11 +9,11 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_pool {
-    hemp_slab       slab;           /* pointer to slab(s) of memory         */
-    hemp_memory     next;           /* next available memory record         */
-    hemp_size       size;           /* size of each memory record           */
-    hemp_size       used;           /* number of records in use             */
-    hemp_size       capacity;       /* allocated storage capacity           */
+    HempSlab       slab;           /* pointer to slab(s) of memory         */
+    HempMemory     next;           /* next available memory record         */
+    HempSize       size;           /* size of each memory record           */
+    HempSize       used;           /* number of records in use             */
+    HempSize       capacity;       /* allocated storage capacity           */
     hemp_pool_iter  cleaner;        /* memory cleanup function              */
 };
 
@@ -22,38 +22,38 @@ struct hemp_pool {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_pool
+HempPool
 hemp_pool_init(
-    hemp_pool       pool,
-    hemp_size       size,
-    hemp_size       capacity,
+    HempPool       pool,
+    HempSize       size,
+    HempSize       capacity,
     hemp_pool_iter  cleaner
 );
 
-HEMP_INLINE hemp_memory
+HEMP_INLINE HempMemory
 hemp_pool_take(
-    hemp_pool       pool
+    HempPool       pool
 );
 
 HEMP_INLINE void
 hemp_pool_give(
-    hemp_pool       pool,
-    hemp_memory     item
+    HempPool       pool,
+    HempMemory     item
 );
 
 HEMP_INLINE void 
 hemp_pool_grow(
-    hemp_pool       pool
+    HempPool       pool
 );
 
 void 
 hemp_pool_free(
-    hemp_pool       pool
+    HempPool       pool
 );
 
 void
 hemp_pool_each(
-    hemp_pool       pool,
+    HempPool       pool,
     hemp_pool_iter  func
 );
 

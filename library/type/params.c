@@ -2,16 +2,10 @@
 
 
 HEMP_TYPE_FUNC(hemp_type_params) {
-    hemp_type type  = hemp_type_subtype(HempValue, id, name);
+    HempType type   = hemp_type_subtype(HempTypeValue, id, name);
     type->fetch     = &hemp_type_params_fetch;
     type->store     = &hemp_type_params_store;
-//    type->text      = &hemp_type_params_text;
-//    type->boolean   = &hemp_type_params_true;
     type->defined   = &hemp_value_true;
-
-//    hemp_type_extend(type, "length", &hemp_method_list_length);
-//    hemp_type_extend(type, "text",   &hemp_method_list_text);
-
     return type;
 };
 
@@ -20,9 +14,9 @@ HEMP_TYPE_FUNC(hemp_type_params) {
  * General purpose list functions
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_params
+HEMP_INLINE HempParams
 hemp_params_init(
-    hemp_params params
+    HempParams params
 ) {
     HEMP_INSTANCE(params);
     params->ordinals = hemp_list_new();
@@ -33,7 +27,7 @@ hemp_params_init(
 
 HEMP_INLINE void
 hemp_params_release(
-    hemp_params params
+    HempParams params
 ) {
     hemp_list_free(params->ordinals);
     hemp_hash_free(params->nominals);
@@ -44,7 +38,7 @@ hemp_params_release(
 
 void
 hemp_params_free(
-    hemp_params params
+    HempParams params
 ) {
     hemp_params_release(params);
     hemp_mem_free(params);
@@ -58,9 +52,9 @@ hemp_params_free(
 HEMP_FETCH_FUNC(hemp_type_params_fetch) {
     hemp_debug_msg("hemp_type_params_fetch()\n");
 
-    hemp_int    index;
-    hemp_params params  = hemp_val_params(container);
-    hemp_bool   found   = hemp_list_index(context, key, &index);
+    HempInt    index;
+    HempParams params  = hemp_val_params(container);
+    HempBool   found   = hemp_list_index(context, key, &index);
 
     if (found) {
         return hemp_type_list_fetch(
@@ -79,9 +73,9 @@ HEMP_FETCH_FUNC(hemp_type_params_fetch) {
 HEMP_STORE_FUNC(hemp_type_params_store) {
     hemp_debug_msg("hemp_type_params_store()\n");
 
-    hemp_int    index;
-    hemp_params params  = hemp_val_params(container);
-    hemp_bool   found   = hemp_list_index(context, key, &index);
+    HempInt    index;
+    HempParams params  = hemp_val_params(container);
+    HempBool   found   = hemp_list_index(context, key, &index);
 
     if (found) {
         return hemp_type_list_store(
@@ -98,12 +92,12 @@ HEMP_STORE_FUNC(hemp_type_params_store) {
 
 void 
 hemp_params_dump(
-    hemp_params params
+    HempParams params
 ) {
     hemp_debug_msg("hemp params at %p:\n", params);
     if (params->ordinals) {
         hemp_debug("%d ordinals:\n", params->ordinals->length);
-        hemp_text text = hemp_list_dump(params->ordinals);
+        HempText text = hemp_list_dump(params->ordinals);
         hemp_debug(text->string);
         hemp_text_free(text);
     }
@@ -112,7 +106,7 @@ hemp_params_dump(
     }
     if (params->nominals) {
         hemp_debug("%d nominals:\n", params->nominals->size);
-        hemp_text text = hemp_hash_dump(params->nominals);
+        HempText text = hemp_hash_dump(params->nominals);
         hemp_debug(text->string);
         hemp_text_free(text);
     }

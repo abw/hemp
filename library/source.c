@@ -5,12 +5,12 @@
  * source initialisation and cleanup functions 
  *-------------------------------------------------------------------------*/
 
-hemp_source
+HempSource
 hemp_source_new(
-    hemp_scheme scheme,
-    hemp_string name
+    HempScheme scheme,
+    HempString name
 ) {
-    hemp_source source;
+    HempSource source;
     HEMP_ALLOCATE(source);
     source->name   = hemp_string_clone(name, "source name");
     source->scheme = scheme;
@@ -23,8 +23,8 @@ hemp_source_new(
 
 void
 hemp_source_md5(
-    hemp_source source,
-    hemp_string md5
+    HempSource source,
+    HempString md5
 ) {
     if (source->md5)
         hemp_mem_free(source->md5);
@@ -35,7 +35,7 @@ hemp_source_md5(
 
 void
 hemp_source_free(
-    hemp_source source
+    HempSource source
 ) {
     /* hemp_debug_mem("Releasing %s source at %p\n", source->scheme->name, source); */
 

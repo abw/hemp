@@ -5,11 +5,13 @@
  * hemp object initialisation functions
  *--------------------------------------------------------------------------*/
 
-hemp_hemp
+Hemp
 hemp_new() {
-    hemp_hemp hemp;         /* So good they named it thrice! */
-
-    HEMP_ALLOCATE(hemp);
+    Hemp hemp = (Hemp) hemp_mem_alloc(
+        sizeof(struct hemp)
+    );
+    if (! hemp)
+        hemp_mem_fail("Hemp");
 
     hemp->global     = hemp_global_init();
     hemp->context    = hemp_context_new(hemp);
@@ -34,7 +36,7 @@ hemp_new() {
 
 void 
 hemp_ready(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     hemp_debug_msg("hemp_ready()\n");
     hemp_init_filesystem(hemp);
@@ -43,14 +45,14 @@ hemp_ready(
 
 void
 hemp_init_errors(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     /* install error messages - may want to localise these one day */
     hemp->errmsg = hemp_errmsg;
     hemp->error  = NULL;
 
     /* define parent longjmp buffer for error handling */
-    hemp->jump = (hemp_jump) hemp_mem_alloc(
+    hemp->jump = (HempJump) hemp_mem_alloc(
         sizeof(struct hemp_jump)
     );
     if (! hemp->jump)
@@ -71,7 +73,7 @@ hemp_init_errors(
 
 void
 hemp_init_config(
-    hemp_hemp   hemp
+    Hemp   hemp
 ) {
     hemp->config            = hemp_hash_new();
     hemp->config->parent    = hemp->global->config;
@@ -80,7 +82,7 @@ hemp_init_config(
 
 void
 hemp_init_factories(
-    hemp_hemp   hemp
+    Hemp   hemp
 ) {
     /* create new meta-factory to manage factory objects that in turn manage
      * different hemp resources: codecs, dialects, elements, grammars, etc.
@@ -104,7 +106,7 @@ hemp_init_factories(
 
 void
 hemp_init_schemes(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     hemp_register_scheme(
         hemp, HEMP_TEXT, &hemp_scheme_text_new
@@ -117,7 +119,7 @@ hemp_init_schemes(
 
 void
 hemp_init_languages(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     // TODO: languages should be loaded on demand from modules
     // UPDATE: json is now.
@@ -132,7 +134,7 @@ hemp_init_languages(
 
 void
 hemp_init_documents(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     hemp->documents = hemp_hash_new();
 }
@@ -140,7 +142,7 @@ hemp_init_documents(
 
 void
 hemp_init_viewers(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     hemp_register_viewer(
         hemp, HEMP_TEXT, &hemp_viewer_text
@@ -150,13 +152,13 @@ hemp_init_viewers(
 
 void
 hemp_init_filesystem(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     hemp_debug_msg("hemp_init_filesystem()\n");
-    hemp_value  dir   = hemp_config_get(hemp, HEMP_CONFIG_DIR);
-    hemp_value  path  = hemp_config_get(hemp, HEMP_CONFIG_PATH);
-    hemp_list   paths = hemp_list_new();
-    hemp_string base  = hemp_to_string(dir, hemp->context);
+    HempValue  dir   = hemp_config_get(hemp, HEMP_CONFIG_DIR);
+    HempValue  path  = hemp_config_get(hemp, HEMP_CONFIG_PATH);
+    HempList   paths = hemp_list_new();
+    HempString base  = hemp_to_string(dir, hemp->context);
 
     if (hemp->filesystem)
         hemp_filesystem_free(hemp->filesystem);
@@ -174,9 +176,9 @@ hemp_init_filesystem(
         
         int n;
         for (n = 0; n < paths->length; n++) {
-            hemp_value  v = hemp_list_item(paths, n);
-            hemp_string s = hemp_to_string(v, hemp->context);
-            hemp_string p = hemp_uri_path_join(base, s, 1);
+            HempValue  v = hemp_list_item(paths, n);
+            HempString s = hemp_to_string(v, hemp->context);
+            HempString p = hemp_uri_path_join(base, s, 1);
             printf("%d: %s    [%s] + [%s] = [%s]\n", n, s, base, s, p);
             hemp_mem_free(p);
         }
@@ -192,7 +194,7 @@ hemp_init_filesystem(
 
 void
 hemp_free(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     hemp_debug_call("hemp_free()\n");
 
@@ -219,7 +221,7 @@ hemp_free(
 
 void
 hemp_free_documents(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     hemp_hash_each(hemp->documents, &hemp_free_document);
     hemp_hash_free(hemp->documents);
@@ -228,7 +230,7 @@ hemp_free_documents(
 
 void
 hemp_free_factories(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     hemp_factory_free(hemp->factory);
     hemp_factory_free(hemp->viewer);
@@ -245,7 +247,7 @@ hemp_free_factories(
 
 void
 hemp_free_config(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     hemp_hash_free(hemp->config);
 }
@@ -253,18 +255,18 @@ hemp_free_config(
 
 void
 hemp_free_errors(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     /* free parent jump buffer, discard all others (statically allocated) */
-    hemp_jump j = hemp->jump;
+    HempJump j = hemp->jump;
     while (j->parent && j->parent != j) {
         j = j->parent;
     }
     hemp_mem_free(j);
 
     /* free errors */
-    hemp_error error = hemp->error;
-    hemp_error next;
+    HempError error = hemp->error;
+    HempError next;
 
     while (error) {
         next = error->parent;
@@ -276,7 +278,7 @@ hemp_free_errors(
 
 void
 hemp_free_filesystem(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
     if (hemp->filesystem)
         hemp_filesystem_free(hemp->filesystem);
@@ -290,7 +292,7 @@ hemp_free_filesystem(
 
 HEMP_HASH_ITERATOR(hemp_free_document) {
     hemp_debug_init("cleaning document\n");
-    hemp_document_free( (hemp_document) hemp_val_ptr(item->value) );
+    hemp_document_free( (HempDocument) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
@@ -303,8 +305,8 @@ HEMP_HASH_ITERATOR(hemp_free_document) {
 
 void 
 hemp_register_dialects(
-    hemp_hemp       hemp,
-    hemp_dialects   dialect
+    Hemp       hemp,
+    HempDialects   dialect
 ) {
     hemp_register_all(hemp, dialect, dialect);
 }
@@ -312,8 +314,8 @@ hemp_register_dialects(
 
 void 
 hemp_register_tags(
-    hemp_hemp   hemp,
-    hemp_tags   tag
+    Hemp   hemp,
+    HempTags   tag
 ) {
     hemp_register_all(hemp, tag, tag);
 }
@@ -321,8 +323,8 @@ hemp_register_tags(
 
 void 
 hemp_register_grammars(
-    hemp_hemp       hemp,
-    hemp_grammars   grammar
+    Hemp       hemp,
+    HempGrammars   grammar
 ) {
     hemp_register_all(hemp, grammar, grammar);
 }
@@ -331,12 +333,12 @@ hemp_register_grammars(
 /* TODO: sort out the names: element/symbols */
 void 
 hemp_register_elements(
-    hemp_hemp       hemp,
-    hemp_elements   elements
+    Hemp       hemp,
+    HempElements   elements
 ) {
     while (elements && elements->name) {
         hemp_factory_register(
-            hemp->element, elements->name, (hemp_actor) elements->ctor, hemp
+            hemp->element, elements->name, (HempActor) elements->ctor, hemp
         );
         elements++;
     }
@@ -348,14 +350,14 @@ hemp_register_elements(
  * document functions
  *--------------------------------------------------------------------------*/
 
-hemp_document
+HempDocument
 hemp_document_instance(
-    hemp_hemp   hemp,
-    hemp_string dialect,
-    hemp_string scheme,
-    hemp_string source
+    Hemp   hemp,
+    HempString dialect,
+    HempString scheme,
+    HempString source
 ) {
-    hemp_document document;
+    HempDocument document;
     static struct hemp_md5 md5;
 
     hemp_md5_init(&md5);
@@ -365,7 +367,7 @@ hemp_document_instance(
     
 //  hemp_debug("MD5 for %s document [%s] is %s\n", scheme, source, md5.output);
 
-    document = hemp_hash_fetch_pointer(hemp->documents, (hemp_string) md5.output);
+    document = hemp_hash_fetch_pointer(hemp->documents, (HempString) md5.output);
 
     if (document) {
         if (hemp_string_eq(document->source->scheme->name, scheme)
@@ -383,7 +385,7 @@ hemp_document_instance(
     /* NOTE: do this first - otherwise there's a potential memory leak 
      * in the instantiated source instance.
      */
-    hemp_dialect dialect_inst = hemp_dialect_instance(hemp, dialect);
+    HempDialect dialect_inst = hemp_dialect_instance(hemp, dialect);
 
     document = hemp_dialect_document(
         dialect_inst,
@@ -393,7 +395,7 @@ hemp_document_instance(
 //  hemp_debug("caching new document\n");
 
     /* let the source allocate memory for storing md5 permanently */
-    hemp_source_md5(document->source, (hemp_string) md5.output);
+    hemp_source_md5(document->source, (HempString) md5.output);
     hemp_hash_store_pointer(hemp->documents, document->source->md5, document);
     
     return document;
@@ -404,9 +406,9 @@ hemp_document_instance(
  * runtime context
  *--------------------------------------------------------------------------*/
 
-hemp_context
+HempContext
 hemp_context_instance(
-    hemp_hemp   hemp
+    Hemp   hemp
 ) {
     return hemp_context_new(hemp);
 }
@@ -419,8 +421,8 @@ hemp_context_instance(
 
 void
 hemp_configure(
-    hemp_hemp   hemp,
-    hemp_value  config
+    Hemp   hemp,
+    HempValue  config
 ) {
     /* ask the config value to yield pairs (x => y) into the config hash */
     hemp_call(config, pairs, hemp->context, hemp_hash_val(hemp->config));
@@ -429,12 +431,12 @@ hemp_configure(
 
 void
 hemp_configure_from(
-    hemp_hemp   hemp,
-    hemp_string dialect,
-    hemp_string scheme,
-    hemp_string source
+    Hemp   hemp,
+    HempString dialect,
+    HempString scheme,
+    HempString source
 ) {
-    hemp_document document = hemp_document_instance(
+    HempDocument document = hemp_document_instance(
         hemp, dialect, scheme, source
     );
 
@@ -447,13 +449,13 @@ hemp_configure_from(
 }
 
 
-hemp_string
+HempString
 hemp_config_get_string(
-    hemp_hemp   hemp,
-    hemp_string name
+    Hemp   hemp,
+    HempString name
 ) {
-    hemp_value  value  = hemp_config_get(hemp, name);
-    hemp_string string = NULL;
+    HempValue  value  = hemp_config_get(hemp, name);
+    HempString string = NULL;
 
     if (hemp_is_defined(value))
         string = hemp_to_string(value, hemp->context);
@@ -462,9 +464,9 @@ hemp_config_get_string(
 }
 
 
-hemp_filesystem
+HempFilesystem
 hemp_filesystem_instance(
-    hemp_hemp   hemp
+    Hemp   hemp
 ) {
     if (! hemp->filesystem)
         hemp_init_filesystem(hemp);
@@ -477,15 +479,15 @@ hemp_filesystem_instance(
  * error handling
  *--------------------------------------------------------------------------*/
 
-hemp_string
+HempString
 hemp_error_format(
-    hemp_hemp   hemp,
+    Hemp   hemp,
     hemp_errno  number
 ) {
     if (number < 0 || number >= HEMP_ERROR_MAX) 
         hemp_fatal("Invalid error number: %d", number);
 
-    hemp_string format = hemp->errmsg[number];
+    HempString format = hemp->errmsg[number];
 
     /* Should we ever have NULL message entries? */
     if (! format)
@@ -498,32 +500,32 @@ hemp_error_format(
 }
 
 
-hemp_error
+HempError
 hemp_error_message(
-    hemp_hemp   hemp,
+    Hemp   hemp,
     hemp_errno  number,
     ...
 ) {
     hemp_debug_call("hemp_error_message()\n");
-    hemp_string format = hemp_error_format(hemp, number);
+    HempString format = hemp_error_format(hemp, number);
 
     va_list args;
     va_start(args, number);
-    hemp_error error = hemp_error_initfv(number, format, args);
+    HempError error = hemp_error_initfv(number, format, args);
     va_end(args);
 
     return error;
 }
 
 
-hemp_text
+HempText
 hemp_error_text(
-    hemp_error error
+    HempError error
 ) {
-    hemp_document doc = error->document;
-    hemp_text     text;
-    hemp_location location;
-    hemp_string   buffer;
+    HempDocument doc = error->document;
+    HempText     text;
+    HempLocation location;
+    HempString   buffer;
     
     if (doc) {
         // new way - caller sets location
@@ -540,10 +542,10 @@ hemp_error_text(
         }
 
         // TODO: clean this up
-        static hemp_char extract[80];
-        hemp_string s = location->extract;
-        hemp_string x = (hemp_string) extract;
-        hemp_pos    n = 78;
+        static HempChar extract[80];
+        HempString s = location->extract;
+        HempString x = (HempString) extract;
+        HempPos    n = 78;
 
         while (n-- && *s && *s != HEMP_LF && *s != HEMP_CR) {
             *x++ = *s++;
@@ -555,7 +557,7 @@ hemp_error_text(
             "Error at line %ld, column %ld of %s:\n   Error: %s\n  Source: %s\n%*s^ here\n",
             location->line, location->column,
             hemp_source_name(doc->source), 
-            error->message, (hemp_string) extract,
+            error->message, (HempString) extract,
             (int) (10 + location->column), " "
         );
 
@@ -571,8 +573,8 @@ hemp_error_text(
 
 void 
 hemp_error_throw(
-    hemp_hemp   hemp,
-    hemp_error  error
+    Hemp   hemp,
+    HempError  error
 ) {
     hemp_debug_call("hemp_error_throw()\n");
     error->parent = hemp->error;
@@ -587,14 +589,14 @@ hemp_error_throw(
  * Codecs 
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_text
+HEMP_INLINE HempText
 hemp_encode(
-    hemp_hemp       hemp,
-    hemp_string     name,
-    hemp_value      input,
-    hemp_context    context
+    Hemp       hemp,
+    HempString     name,
+    HempValue      input,
+    HempContext    context
 ) {
-    hemp_codec      codec = hemp_codec_instance(hemp, name);
+    HempCodec      codec = hemp_codec_instance(hemp, name);
 
     return hemp_codec_encode(
         codec,
@@ -604,14 +606,14 @@ hemp_encode(
 }
 
 
-HEMP_INLINE hemp_value
+HEMP_INLINE HempValue
 hemp_decode(
-    hemp_hemp       hemp,
-    hemp_string     name,
-    hemp_text       input,
-    hemp_context    context
+    Hemp       hemp,
+    HempString     name,
+    HempText       input,
+    HempContext    context
 ) {
-    hemp_codec      codec = hemp_codec_instance(hemp, name);
+    HempCodec      codec = hemp_codec_instance(hemp, name);
 
     return hemp_codec_decode(
         codec,
@@ -629,7 +631,7 @@ hemp_decode(
  *--------------------------------------------------------------------------*/
 
 
-hemp_string
+HempString
 hemp_version() {
     return HEMP_VERSION;
 }

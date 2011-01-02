@@ -5,11 +5,11 @@
 #include <hemp.h>
 #include "types.h"
 
-hemp_type HempPerlScalar  = NULL;
-hemp_type HempPerlArray   = NULL;
-hemp_type HempPerlHash    = NULL;
-hemp_type HempPerlCode    = NULL;
-hemp_type HempPerlObject  = NULL;
+HempType HempPerlScalar  = NULL;
+HempType HempPerlArray   = NULL;
+HempType HempPerlHash    = NULL;
+HempType HempPerlCode    = NULL;
+HempType HempPerlObject  = NULL;
 
 
 /*--------------------------------------------------------------------------
@@ -27,7 +27,7 @@ hemp_perl_init() {
 }
 
 
-HEMP_INLINE hemp_value
+HEMP_INLINE HempValue
 hemp_perl_value(
     SV * sv
 ) {
@@ -74,7 +74,7 @@ hemp_perl_value(
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_perl_scalar) {
-    hemp_type type = hemp_type_subtype(HempValue, id, name);
+    HempType type = hemp_type_subtype(HempValue, id, name);
     type->text    = &hemp_perl_scalar_text;      /* perl -> text         */
     type->number  = &hemp_perl_scalar_number;    /* perl -> number       */
     type->integer = &hemp_perl_scalar_integer;   /* perl -> integer      */
@@ -90,9 +90,9 @@ HEMP_TYPE_FUNC(hemp_type_perl_scalar) {
 HEMP_OUTPUT(hemp_perl_scalar_text) {
     hemp_debug_call("hemp_perl_scalar_text()\n");
 
-    hemp_string  string;
-    hemp_size length;
-    hemp_text text;
+    HempString  string;
+    HempSize length;
+    HempText text;
 
     string = SvPV( hemp_perl_val_sv(value), length );
     hemp_prepare_text_size(context, output, text, length);
@@ -153,7 +153,7 @@ HEMP_VALUE(hemp_perl_scalar_length) {
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_perl_array) {
-    hemp_type type = hemp_type_subtype(HempValue, id, name);
+    HempType type = hemp_type_subtype(HempValue, id, name);
     type->text    = &hemp_perl_scalar_text;      /* perl -> text         */
     type->boolean = &hemp_perl_array_boolean;    /* false if empty       */
     type->defined = &hemp_perl_true;             /* implicitly defined   */
@@ -184,8 +184,8 @@ HEMP_VALUE(hemp_perl_array_length) {
 HEMP_FETCH_FUNC(hemp_perl_array_fetch) {
     hemp_debug_perl("hemp_perl_array_fetch()\n");
 
-    hemp_uint index;
-    hemp_bool found = HEMP_FALSE;
+    HempUint index;
+    HempBool found = HEMP_FALSE;
     SV **       result;
 
     if (hemp_is_integer(key)) {
@@ -194,8 +194,8 @@ HEMP_FETCH_FUNC(hemp_perl_array_fetch) {
         found = HEMP_TRUE;
     }
     else {
-        hemp_text ktext;
-        hemp_bool kmine  = HEMP_FALSE;
+        HempText ktext;
+        HempBool kmine  = HEMP_FALSE;
 
         /* TODO: this has been cut-n-pasted... needs moving out */
         if (hemp_is_text(key)) {
@@ -253,7 +253,7 @@ HEMP_FETCH_FUNC(hemp_perl_array_fetch) {
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_perl_hash) {
-    hemp_type type = hemp_type_subtype(HempValue, id, name);
+    HempType type = hemp_type_subtype(HempValue, id, name);
     type->text    = &hemp_perl_scalar_text;      /* perl -> text         */
     type->boolean = &hemp_perl_hash_boolean;     /* false if empty       */
     type->defined = &hemp_perl_true;             /* implicitly defined   */
@@ -282,8 +282,8 @@ HEMP_VALUE(hemp_perl_hash_length) {
 
 
 HEMP_FETCH_FUNC(hemp_perl_hash_fetch) {
-    hemp_bool kmine  = HEMP_FALSE;
-    hemp_text ktext;
+    HempBool kmine  = HEMP_FALSE;
+    HempText ktext;
     SV **       result;
 
     if (hemp_is_text(key)) {
@@ -327,7 +327,7 @@ HEMP_FETCH_FUNC(hemp_perl_hash_fetch) {
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_perl_code) {
-    hemp_type type = hemp_type_subtype(HempValue, id, name);
+    HempType type = hemp_type_subtype(HempValue, id, name);
     type->apply   = &hemp_perl_code_apply;          /* call a function      */
     type->text    = &hemp_perl_code_text;           /* perl -> text         */
     type->boolean = &hemp_perl_true;                /* implicitly true      */
@@ -339,7 +339,7 @@ HEMP_TYPE_FUNC(hemp_type_perl_code) {
 HEMP_OUTPUT(hemp_perl_code_text) {
     hemp_debug_call("hemp_perl_code_text()\n");
     hemp_debug("hemp_perl_code_text() calling hemp_perl_code_apply()\n");
-    hemp_value result = hemp_perl_code_apply(value, context);
+    HempValue result = hemp_perl_code_apply(value, context);
     hemp_debug("got %s result: \n", hemp_type_name(result)); hemp_dump_value(result);
     return hemp_vtext(result, context, output);
 }
@@ -367,7 +367,7 @@ HEMP_VALUE(hemp_perl_code_apply) {
  *--------------------------------------------------------------------------*/
 
 HEMP_TYPE_FUNC(hemp_type_perl_object) {
-    hemp_type type = hemp_type_subtype(HempValue, id, name);
+    HempType type = hemp_type_subtype(HempValue, id, name);
     type->text    = &hemp_perl_scalar_text;      /* perl -> text         */
     type->boolean = &hemp_perl_true;             /* implicitly true      */
     type->defined = &hemp_perl_true;             /* implicitly defined   */

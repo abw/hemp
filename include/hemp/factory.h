@@ -10,17 +10,17 @@
  * type definitions
  *--------------------------------------------------------------------------*/
 
-typedef hemp_bool 
+typedef HempBool 
 (* hemp_autoload)(
-    hemp_factory    factory,
-    hemp_string     name
+    HempFactory    factory,
+    HempString     name
 );
 
 struct hemp_factory {
-    hemp_hemp       hemp;
-    hemp_string     name;
-    hemp_hash       instances;
-    hemp_hash       constructors;
+    Hemp       hemp;
+    HempString     name;
+    HempHash       instances;
+    HempHash       constructors;
     hemp_hash_iter  cleaner;
     hemp_autoload   autoload;
 }; 
@@ -33,49 +33,49 @@ struct hemp_factory {
 HEMP_FACTORY(hemp_meta_factory);
 HEMP_AUTOLOAD(hemp_factory_autoload);
 
-hemp_factory 
+HempFactory 
 hemp_factory_new(
-    hemp_hemp       hemp,
-    hemp_string     name
+    Hemp       hemp,
+    HempString     name
 );
 
 void
 hemp_factory_free(
-    hemp_factory    factory
+    HempFactory    factory
 );
 
-hemp_bool
+HempBool
 hemp_factory_free_constructor(
-    hemp_hash       constructors,
-    hemp_pos        position,
-    hemp_slot       slot
+    HempHash       constructors,
+    HempPos        position,
+    HempSlot       slot
 );
 
-hemp_action
+HempAction
 hemp_factory_register(
-    hemp_factory    factory,
-    hemp_string     name,
-    hemp_actor      actor,
-    hemp_memory     script
+    HempFactory    factory,
+    HempString     name,
+    HempActor      actor,
+    HempMemory     script
 );
 
-hemp_action
+HempAction
 hemp_factory_constructor(
-    hemp_factory    factory,
-    hemp_string     name
+    HempFactory    factory,
+    HempString     name
 );
 
-hemp_memory
+HempMemory
 hemp_factory_instance(
-    hemp_factory    factory,
-    hemp_string     name
+    HempFactory    factory,
+    HempString     name
 );
 
-hemp_bool
+HempBool
 hemp_meta_factory_cleaner(
-    hemp_hash       factories,
-    hemp_pos        position,
-    hemp_slot       item
+    HempHash       factories,
+    HempPos        position,
+    HempSlot       item
 );
 
 

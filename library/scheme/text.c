@@ -1,29 +1,29 @@
 #include <hemp/scheme/text.h>
 
 
-hemp_scheme
+HempScheme
 hemp_scheme_text_new(
-    hemp_hemp   hemp,
-    hemp_string name
+    Hemp   hemp,
+    HempString name
 ) {
-    hemp_scheme scheme  = hemp_scheme_new(hemp, name);
+    HempScheme scheme  = hemp_scheme_new(hemp, name);
     scheme->checker     = &hemp_scheme_text_checker;
     scheme->reader      = &hemp_scheme_text_reader;
     return scheme;
 }
 
     
-hemp_string
+HempString
 hemp_scheme_text_reader(
-    hemp_source source
+    HempSource source
 ) {
     return (source->text = source->name);
 }
 
 
-hemp_bool
+HempBool
 hemp_scheme_text_checker(
-    hemp_source source
+    HempSource source
 ) {
     return HEMP_TRUE;
 }
@@ -31,7 +31,7 @@ hemp_scheme_text_checker(
 
 //void
 //hemp_scheme_text_cleaner(
-//    hemp_source source 
+//    HempSource source 
 //) {
 //    if (source->text) {
 //        hemp_debug_msg("cleaning file source: %s\n%s\n", source->name, source->text);

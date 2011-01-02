@@ -1,13 +1,13 @@
 #include <hemp.h>
 
-extern hemp_type HempPerlScalar;
-extern hemp_type HempPerlArray;
-extern hemp_type HempPerlHash;
-extern hemp_type HempPerlCode;
-extern hemp_type HempPerlObject;
+extern HempType HempPerlScalar;
+extern HempType HempPerlArray;
+extern HempType HempPerlHash;
+extern HempType HempPerlCode;
+extern HempType HempPerlObject;
 
 void            hemp_perl_init();
-hemp_value    hemp_perl_value(SV *);
+HempValue    hemp_perl_value(SV *);
 
 #define hemp_debug_perl(format, ...)    \
         hemp_debug_col(HEMP_ANSI_CYAN, format, ##__VA_ARGS__)

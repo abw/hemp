@@ -51,7 +51,7 @@ void hemp_fatal(char *format, ...) {
  **********************************************************************
  */
 
-static hemp_char HEMP_MD5_PADDING[64] = {
+static HempChar HEMP_MD5_PADDING[64] = {
   0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -74,38 +74,38 @@ static hemp_char HEMP_MD5_PADDING[64] = {
 /* FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4 */
 /* Rotation is separate from addition to prevent recomputation */
 #define FF(a, b, c, d, x, s, ac) \
-  {(a) += F ((b), (c), (d)) + (x) + (hemp_u32)(ac); \
+  {(a) += F ((b), (c), (d)) + (x) + (HempU32)(ac); \
    (a) = ROTATE_LEFT ((a), (s)); \
    (a) += (b); \
   }
 #define GG(a, b, c, d, x, s, ac) \
-  {(a) += G ((b), (c), (d)) + (x) + (hemp_u32)(ac); \
+  {(a) += G ((b), (c), (d)) + (x) + (HempU32)(ac); \
    (a) = ROTATE_LEFT ((a), (s)); \
    (a) += (b); \
   }
 #define HH(a, b, c, d, x, s, ac) \
-  {(a) += H ((b), (c), (d)) + (x) + (hemp_u32)(ac); \
+  {(a) += H ((b), (c), (d)) + (x) + (HempU32)(ac); \
    (a) = ROTATE_LEFT ((a), (s)); \
    (a) += (b); \
   }
 #define II(a, b, c, d, x, s, ac) \
-  {(a) += I ((b), (c), (d)) + (x) + (hemp_u32)(ac); \
+  {(a) += I ((b), (c), (d)) + (x) + (HempU32)(ac); \
    (a) = ROTATE_LEFT ((a), (s)); \
    (a) += (b); \
   }
 
 static void 
 hemp_md5_transform(
-    hemp_u32 *buffer,
-    hemp_u32 *input
+    HempU32 *buffer,
+    HempU32 *input
 );
 
 
 /* Initialise an MD5 data structure */
 
-hemp_md5
+HempMD5
 hemp_md5_init(
-    hemp_md5 md5
+    HempMD5 md5
 ) {
     if (! md5) {
         md5 = hemp_mem_alloc( sizeof(struct hemp_md5) );
@@ -113,13 +113,13 @@ hemp_md5_init(
             hemp_mem_fail("MD5");
     }
     
-    md5->i[0] = md5->i[1] = (hemp_u32) 0;
+    md5->i[0] = md5->i[1] = (HempU32) 0;
 
     /* Load magic initialization constants */
-    md5->buffer[0] = (hemp_u32) 0x67452301;
-    md5->buffer[1] = (hemp_u32) 0xefcdab89;
-    md5->buffer[2] = (hemp_u32) 0x98badcfe;
-    md5->buffer[3] = (hemp_u32) 0x10325476;
+    md5->buffer[0] = (HempU32) 0x67452301;
+    md5->buffer[1] = (HempU32) 0xefcdab89;
+    md5->buffer[2] = (HempU32) 0x98badcfe;
+    md5->buffer[3] = (HempU32) 0x10325476;
     
     return md5;
 }
@@ -129,11 +129,11 @@ hemp_md5_init(
 
 void 
 hemp_md5_update(
-    hemp_md5     md5,
-    hemp_string  input,
-    hemp_size    length
+    HempMD5     md5,
+    HempString  input,
+    HempSize    length
 ) {
-    hemp_u32 in[16];
+    HempU32 in[16];
     int mdi;
     unsigned int i, ii;
 
@@ -141,11 +141,11 @@ hemp_md5_update(
     mdi = (int)((md5->i[0] >> 3) & 0x3F);
 
     /* update number of bits */
-    if ((md5->i[0] + ((hemp_u32) length << 3)) < md5->i[0])
+    if ((md5->i[0] + ((HempU32) length << 3)) < md5->i[0])
         md5->i[1]++;
 
-    md5->i[0] += ((hemp_u32) length << 3);
-    md5->i[1] += ((hemp_u32) length >> 29);
+    md5->i[0] += ((HempU32) length << 3);
+    md5->i[1] += ((HempU32) length >> 29);
 
     while (length--) {
         /* add new character to buffer, increment mdi */
@@ -154,10 +154,10 @@ hemp_md5_update(
         /* transform if necessary */
         if (mdi == 0x40) {
             for (i = 0, ii = 0; i < 16; i++, ii += 4)
-                in[i] = (((hemp_u32) md5->input[ii+3]) << 24) |
-                        (((hemp_u32) md5->input[ii+2]) << 16) |
-                        (((hemp_u32) md5->input[ii+1]) << 8 ) |
-                         ((hemp_u32) md5->input[ii]);
+                in[i] = (((HempU32) md5->input[ii+3]) << 24) |
+                        (((HempU32) md5->input[ii+2]) << 16) |
+                        (((HempU32) md5->input[ii+1]) << 8 ) |
+                         ((HempU32) md5->input[ii]);
 
             hemp_md5_transform(md5->buffer, in);
             mdi = 0;
@@ -170,10 +170,10 @@ hemp_md5_update(
 
 void 
 hemp_md5_final(
-    hemp_md5 md5
+    HempMD5 md5
 ) {
-    hemp_u32 in[16];
-    hemp_string str = (hemp_string) md5->output;
+    HempU32 in[16];
+    HempString str = (HempString) md5->output;
     int mdi;
     unsigned int i, ii;
     unsigned int padlen;
@@ -187,22 +187,22 @@ hemp_md5_final(
 
     /* pad out to 56 mod 64 */
     padlen = (mdi < 56) ? (56 - mdi) : (120 - mdi);
-    hemp_md5_update(md5, (hemp_string) HEMP_MD5_PADDING, padlen);
+    hemp_md5_update(md5, (HempString) HEMP_MD5_PADDING, padlen);
 
     /* append length in bits and transform */
     for (i = 0, ii = 0; i < 14; i++, ii += 4)
-        in[i] = (((hemp_u32) md5->input[ii+3]) << 24) |
-                (((hemp_u32) md5->input[ii+2]) << 16) |
-                (((hemp_u32) md5->input[ii+1]) << 8 ) |
-                 ((hemp_u32) md5->input[ii]);
+        in[i] = (((HempU32) md5->input[ii+3]) << 24) |
+                (((HempU32) md5->input[ii+2]) << 16) |
+                (((HempU32) md5->input[ii+1]) << 8 ) |
+                 ((HempU32) md5->input[ii]);
         hemp_md5_transform(md5->buffer, in);
 
     /* store buffer in digest */
     for (i = 0, ii = 0; i < 4; i++, ii += 4) {
-        md5->digest[ii  ] = (hemp_char) ( md5->buffer[i]        & 0xFF);
-        md5->digest[ii+1] = (hemp_char) ((md5->buffer[i] >> 8 ) & 0xFF);
-        md5->digest[ii+2] = (hemp_char) ((md5->buffer[i] >> 16) & 0xFF);
-        md5->digest[ii+3] = (hemp_char) ((md5->buffer[i] >> 24) & 0xFF);
+        md5->digest[ii  ] = (HempChar) ( md5->buffer[i]        & 0xFF);
+        md5->digest[ii+1] = (HempChar) ((md5->buffer[i] >> 8 ) & 0xFF);
+        md5->digest[ii+2] = (HempChar) ((md5->buffer[i] >> 16) & 0xFF);
+        md5->digest[ii+3] = (HempChar) ((md5->buffer[i] >> 24) & 0xFF);
     }
 
     for (i = 0; i < 16; i++) {
@@ -217,10 +217,10 @@ hemp_md5_final(
 
 static void 
 hemp_md5_transform(
-    hemp_u32 *buffer,
-    hemp_u32 *input
+    HempU32 *buffer,
+    HempU32 *input
 ) {
-    hemp_u32 a = buffer[0], 
+    HempU32 a = buffer[0], 
               b = buffer[1], 
               c = buffer[2], 
               d = buffer[3];
@@ -325,7 +325,7 @@ hemp_md5_transform(
 
 void
 hemp_md5_free(
-    hemp_md5 md5
+    HempMD5 md5
 ) {
     hemp_mem_free(md5);
 }

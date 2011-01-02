@@ -11,10 +11,10 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_proto {
-    hemp_hash       name;
-    hemp_list       item;
-    hemp_string     list;
-    hemp_string     hash;
+    HempHash       name;
+    HempList       item;
+    HempString     list;
+    HempString     hash;
 };
 
 
@@ -22,37 +22,37 @@ struct hemp_proto {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_proto
+HempProto
 hemp_proto_init(
-    hemp_proto     params
+    HempProto     params
 );
 
 void
 hemp_proto_free(
-    hemp_proto     params
+    HempProto     params
 );
 
-hemp_bool
+HempBool
 hemp_proto_add_item(
-    hemp_proto     params,
-    hemp_string     name
+    HempProto     params,
+    HempString     name
 );
 
-hemp_bool
+HempBool
 hemp_proto_add_list(
-    hemp_proto     params,
-    hemp_string     name
+    HempProto     params,
+    HempString     name
 );
 
-hemp_bool
+HempBool
 hemp_proto_add_hash(
-    hemp_proto     params,
-    hemp_string     name
+    HempProto     params,
+    HempString     name
 );
 
 void 
 hemp_proto_dump(
-    hemp_proto proto
+    HempProto proto
 );
 
 

@@ -23,9 +23,9 @@
 //};
 
 struct hemp_module {
-    hemp_string         name;
-    hemp_string         error;
-    hemp_memory         handle;
+    HempString         name;
+    HempString         error;
+    HempMemory         handle;
     hemp_loader         loader;
     hemp_binder         binder;
 //  hemp_module_status  status;
@@ -36,40 +36,40 @@ struct hemp_module {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_module
+HempModule
 hemp_use_module(
-    hemp_hemp       hemp,
-    hemp_string     type,
-    hemp_string     name
+    Hemp       hemp,
+    HempString     type,
+    HempString     name
 );
 
 
-hemp_module
+HempModule
 hemp_module_new(
-    hemp_string     name
+    HempString     name
 );
 
 
 void
 hemp_module_free(
-    hemp_module     module
+    HempModule     module
 );
 
 
-hemp_bool
+HempBool
 hemp_module_load(
-    hemp_module     module
+    HempModule     module
 );
 
-hemp_bool
+HempBool
 hemp_module_unload(
-    hemp_module     module
+    HempModule     module
 );
 
-HEMP_INLINE hemp_bool
+HEMP_INLINE HempBool
 hemp_module_failed(
-    hemp_module     module,
-    hemp_string     error,
+    HempModule     module,
+    HempString     error,
     ...
 );
 

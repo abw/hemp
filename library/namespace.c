@@ -1,15 +1,15 @@
 #include <hemp/namespace.h>
 
 
-hemp_namespace
+HempNamespace
 hemp_namespace_init(
-    hemp_u16        id,
-    hemp_string     name,
-    hemp_namespace  parent
+    HempU16        id,
+    HempString     name,
+    HempNamespace  parent
 ) {
-    hemp_namespace  namespace;
-    hemp_string     path;
-    hemp_size       blen, plen, slen;
+    HempNamespace  namespace;
+    HempString     path;
+    HempSize       blen, plen, slen;
     HEMP_ALLOCATE(namespace);
 
     /* better to create a blank name for root N/S rather than leave it NULL */
@@ -52,13 +52,13 @@ hemp_namespace_init(
 }
 
 
-hemp_namespace
+HempNamespace
 hemp_namespace_child(
-    hemp_namespace  parent,
-    hemp_string     name
+    HempNamespace  parent,
+    HempString     name
 ) {
-    hemp_namespace  child;
-    hemp_value      value;
+    HempNamespace  child;
+    HempValue      value;
 
     hemp_debug_call("namespace child: %p [%s] . [%s]\n", parent, parent->name, name);
 
@@ -78,22 +78,22 @@ hemp_namespace_child(
         );
     }
     else {
-        child = (hemp_namespace) hemp_val_ptr(value);
+        child = (HempNamespace) hemp_val_ptr(value);
     }
 
     return child;
 }
 
 
-hemp_namespace
+HempNamespace
 hemp_resolve_namespace(
-    hemp_string path
+    HempString path
 ) {
     hemp_debug_call("resolving namespace: %s\n", path);
-    hemp_list      names = hemp_string_split(path, HEMP_STR_DOT);
-    hemp_string    name  = hemp_val_str( hemp_list_item(names, 0) );
-    hemp_namespace space = hemp_namespace_root(name);
-    hemp_size      n;
+    HempList      names = hemp_string_split(path, HEMP_STR_DOT);
+    HempString    name  = hemp_val_str( hemp_list_item(names, 0) );
+    HempNamespace space = hemp_namespace_root(name);
+    HempSize      n;
     
     for (n = 1; n < names->length; n++) {
         name  = hemp_val_str( hemp_list_item(names, n) );
@@ -108,7 +108,7 @@ hemp_resolve_namespace(
 
 void
 hemp_namespace_free(
-    hemp_namespace namespace
+    HempNamespace namespace
 ) {
     hemp_mem_free(namespace->path);
     hemp_hash_each(namespace->children, &hemp_namespace_free_child);
@@ -117,12 +117,12 @@ hemp_namespace_free(
 }
 
 
-hemp_bool
+HempBool
 hemp_namespace_free_child(
-    hemp_hash     namespaces,
-    hemp_pos      position,
-    hemp_slot     item
+    HempHash     namespaces,
+    HempPos      position,
+    HempSlot     item
 ) {
-    hemp_namespace_free( (hemp_namespace) hemp_val_ptr(item->value) );
+    hemp_namespace_free( (HempNamespace) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }

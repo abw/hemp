@@ -2,7 +2,7 @@
 
 
 void hemp_mem_fail(
-    hemp_string type
+    HempString type
 ) {
     hemp_fatal(hemp_errmsg[HEMP_ERROR_MEMORY], type);
 }
@@ -10,15 +10,15 @@ void hemp_mem_fail(
 
 #ifdef HEMP_ADD_MEM_COPY
 
-hemp_memory
+HempMemory
 hemp_mem_copy(
-    hemp_memory src,
-    hemp_memory dest,
-    hemp_size   len
+    HempMemory src,
+    HempMemory dest,
+    HempSize   len
 ) {
-    hemp_size   i;
-    hemp_string s = (hemp_string) src;
-    hemp_string d = (hemp_string) dest;
+    HempSize   i;
+    HempString s = (HempString) src;
+    HempString d = (HempString) dest;
 
 //  hemp_debug("copying %d bytes of memory from %p to %p\n", len, src, dest);
     if (d > s) {
@@ -45,8 +45,8 @@ hemp_mem_copy(
 #if HEMP_DEBUG & HEMP_DEBUG_MEM
 
 hemp_mem_trace hemp_mem_traces   = NULL;
-hemp_size      hemp_mem_used     = 0;
-hemp_size      hemp_mem_capacity = 0;
+HempSize      hemp_mem_used     = 0;
+HempSize      hemp_mem_capacity = 0;
 
 
 hemp_mem_trace
@@ -105,9 +105,9 @@ hemp_mem_trace_new() {
 
 hemp_mem_trace
 hemp_mem_trace_record(
-    hemp_memory ptr,
-    hemp_string file,
-    hemp_pos    line
+    HempMemory ptr,
+    HempString file,
+    HempPos    line
 ) {
     int r = hemp_mem_used;
 
@@ -133,11 +133,11 @@ hemp_mem_trace_record(
 
 
 
-hemp_memory
+HempMemory
 hemp_mem_trace_malloc(
-    hemp_size   size,
-    hemp_string file,
-    hemp_pos    line
+    HempSize   size,
+    HempString file,
+    HempPos    line
 ) {
     hemp_mem_trace hmt = hemp_mem_trace_new();
     hmt->ptr = malloc(size);
@@ -169,12 +169,12 @@ hemp_mem_trace_malloc(
 }
 
 
-hemp_memory
+HempMemory
 hemp_mem_trace_external(
-    hemp_memory ptr,
-    hemp_size   size,
-    hemp_string file,
-    hemp_pos    line
+    HempMemory ptr,
+    HempSize   size,
+    HempString file,
+    HempPos    line
 ) {
     hemp_mem_trace hmt  = hemp_mem_trace_new();
     hmt->ptr            = ptr;
@@ -186,12 +186,12 @@ hemp_mem_trace_external(
 }
 
 
-hemp_memory
+HempMemory
 hemp_mem_trace_realloc(
-    hemp_memory ptr, 
-    hemp_size   size,
-    hemp_string file,
-    hemp_pos    line
+    HempMemory ptr, 
+    HempSize   size,
+    HempString file,
+    HempPos    line
 ) {
     hemp_mem_trace hmt;
 
@@ -226,13 +226,13 @@ hemp_mem_trace_realloc(
 }
 
 
-hemp_string
+HempString
 hemp_mem_trace_strdup(
-    hemp_string str,
-    hemp_string file,
-    hemp_pos    line
+    HempString str,
+    HempString file,
+    HempPos    line
 ) {
-    hemp_string dup = (hemp_string) hemp_mem_trace_malloc(strlen(str) + 1, file, line);
+    HempString dup = (HempString) hemp_mem_trace_malloc(strlen(str) + 1, file, line);
     strcpy(dup, str);
     return dup;
 }
@@ -240,9 +240,9 @@ hemp_mem_trace_strdup(
 
 void 
 hemp_mem_trace_free(
-    hemp_memory ptr,
-    hemp_string file,
-    hemp_pos    line
+    HempMemory ptr,
+    HempString file,
+    HempPos    line
 ) {
     hemp_mem_trace hmt = hemp_mem_trace_record(ptr, file, line);
     free(hmt->ptr);
@@ -252,15 +252,15 @@ hemp_mem_trace_free(
 }
 
 
-hemp_size
+HempSize
 hemp_mem_trace_report(
-    hemp_bool verbose
+    HempBool verbose
 ) {
     hemp_mem_trace hmt;
     int r, i;
     char *status, *cptr, c;
     char buffer[HEMP_MEM_PEEKLEN + 1];
-    hemp_size count = 0, total = 0;
+    HempSize count = 0, total = 0;
 
     if (verbose) {
         hemp_debug(
@@ -339,9 +339,9 @@ hemp_mem_trace_reset() {
 
 #else  /* HEMP_DEBUG & HEMP_DEBUG_MEM */
 
-hemp_size
+HempSize
 hemp_mem_trace_report(
-    hemp_bool verbose
+    HempBool verbose
 ) {
     return -1;
 }

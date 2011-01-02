@@ -8,7 +8,7 @@
  * Global data structure for managing hemp instances and other shared data.
  *--------------------------------------------------------------------------*/
 
-struct hemp_global HempGlobal = {
+struct hemp_global HempGlobalData = {
     0,          /* nhemps - number of live hemp objects   */
     0,          /* namespaces allocated (+1 for next id)  */
     NULL,       /* root namespace                         */
@@ -22,15 +22,15 @@ struct hemp_global HempGlobal = {
  * Global initialisation and cleanup functions
  *--------------------------------------------------------------------------*/
 
-hemp_global
+HempGlobal
 hemp_global_data() {
-    return &HempGlobal;
+    return &HempGlobalData;
 }
 
 
-hemp_global
+HempGlobal
 hemp_global_init() {
-    hemp_global global = &HempGlobal;
+    HempGlobal global = &HempGlobalData;
 
     if (! global->n_hemps++) {
 //      hemp_debug_msg("Initialising global hemp data: %p\n", global);
@@ -56,7 +56,7 @@ hemp_global_init() {
 
 void
 hemp_global_free() {
-    hemp_global global = &HempGlobal;
+    HempGlobal global = &HempGlobalData;
 
     hemp_debug_init(
         "Releasing local hemp interpreter #%d\n", 
@@ -82,7 +82,7 @@ hemp_global_free() {
  *--------------------------------------------------------------------------*/
 
 void hemp_global_init_namespaces(
-    hemp_global global
+    HempGlobal global
 ) {
     /* return silently if we've already done this */
     if (global->namespace)
@@ -96,7 +96,7 @@ void hemp_global_init_namespaces(
 
 
 void hemp_global_free_namespaces(
-    hemp_global global
+    HempGlobal global
 ) {
     /* return silently if this has already been done */
     if (! global->namespace)
@@ -116,7 +116,7 @@ void hemp_global_free_namespaces(
 
 void
 hemp_global_init_symbols(
-    hemp_global   global
+    HempGlobal   global
 ) {
     hemp_debug_init("hemp_global_init_symbols()\n");
 
@@ -140,7 +140,7 @@ hemp_global_init_symbols(
 
 void
 hemp_global_free_symbols(
-    hemp_global global
+    HempGlobal global
 ) {
     hemp_debug_init("hemp_global_free_symbols()\n");
     hemp_element_free(HempElementSpace);      HempElementSpace     = NULL;
@@ -162,7 +162,7 @@ hemp_global_free_symbols(
  *--------------------------------------------------------------------------*/
 
 void hemp_global_init_modules(
-    hemp_global global
+    HempGlobal global
 ) {
     hemp_debug_init("initialising modules\n");
 
@@ -174,19 +174,19 @@ void hemp_global_init_modules(
 }
 
 
-hemp_module
+HempModule
 hemp_global_module(
-    hemp_global     global,
-    hemp_string     name
+    HempGlobal     global,
+    HempString     name
 ) {
     /* see if the module is already defined */
-    hemp_value modval = hemp_hash_fetch(global->modules, name);
+    HempValue modval = hemp_hash_fetch(global->modules, name);
 
     if (hemp_is_defined(modval))
-        return (hemp_module) hemp_val_ptr(modval);
+        return (HempModule) hemp_val_ptr(modval);
 
     /* otherwise create and cache a module record... */
-    hemp_module module = hemp_module_new(name);
+    HempModule module = hemp_module_new(name);
     hemp_hash_store(global->modules, name, hemp_ptr_val(module));
 
     /* ...and attempt to load it (errors are stored inside module) */
@@ -197,7 +197,7 @@ hemp_global_module(
 
 
 void hemp_global_free_modules(
-    hemp_global global
+    HempGlobal global
 ) {
     hemp_debug_init("freeing modules\n");
     /* return silently if this has already been done */
@@ -210,13 +210,13 @@ void hemp_global_free_modules(
 }
 
 
-hemp_bool
+HempBool
 hemp_global_free_module(
-    hemp_hash       modules,
-    hemp_pos        position,
-    hemp_slot       item
+    HempHash       modules,
+    HempPos        position,
+    HempSlot       item
 ) {
-    hemp_module_free((hemp_module) hemp_val_ptr(item->value));
+    hemp_module_free((HempModule) hemp_val_ptr(item->value));
     return HEMP_TRUE;
 }
 
@@ -227,7 +227,7 @@ hemp_global_free_module(
  *--------------------------------------------------------------------------*/
 
 void hemp_global_init_config(
-    hemp_global global
+    HempGlobal global
 ) {
     hemp_debug_init("initialising config\n");
 
@@ -238,7 +238,7 @@ void hemp_global_init_config(
     global->config = hemp_hash_new();
 
     /* set up the global 'hemp' configuration hash */
-    hemp_hash hemp = hemp_hash_new();
+    HempHash hemp = hemp_hash_new();
     hemp_hash_store_hash(global->config, HEMP_NAME, hemp);
 
     /* add the global hemp.XXX items */
@@ -250,7 +250,7 @@ void hemp_global_init_config(
 
 
 void hemp_global_free_config(
-    hemp_global global
+    HempGlobal global
 ) {
     hemp_debug_init("freeing config\n");
 
@@ -259,7 +259,7 @@ void hemp_global_free_config(
         return;
 
     /* free the global 'hemp' configuration hash we created earlier */
-    hemp_hash hemp = hemp_hash_fetch_hash(global->config, HEMP_NAME);
+    HempHash hemp = hemp_hash_fetch_hash(global->config, HEMP_NAME);
 
     if (hemp)
         hemp_hash_free(hemp);

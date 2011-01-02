@@ -35,10 +35,10 @@ void hemp_debug(char *format, ...)
 
 
 void hemp_debug_col(
-    hemp_string file, 
-    hemp_pos    line,
-    hemp_string colour,
-    hemp_string format, 
+    HempString file, 
+    HempPos    line,
+    HempString colour,
+    HempString format, 
     ...
 ) {
 #ifdef HEMP_DEBUG
@@ -46,8 +46,8 @@ void hemp_debug_col(
         /* attempt to shorten long file paths by skipping forward over
          * the compile time source directory which is encoded in __FILE__
          */
-        hemp_char first = *file;
-        hemp_size len   = strlen(HEMP_SOURCE_DIR);
+        HempChar first = *file;
+        HempSize len   = strlen(HEMP_SOURCE_DIR);
 
         if (hemp_stringn_eq(file, HEMP_SOURCE_DIR, len))
             file += len + 1;
@@ -76,9 +76,9 @@ void hemp_debug_col(
 
 void 
 hemp_debug_token(
-    hemp_string type,
-    hemp_string str,
-    hemp_pos    len
+    HempString type,
+    HempString str,
+    HempPos    len
 ) {
     static char buffer[80];
     if (len > 79)

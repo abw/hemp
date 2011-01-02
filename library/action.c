@@ -1,11 +1,11 @@
 #include <hemp/action.h>
 
 
-hemp_action
+HempAction
 hemp_action_init(
-    hemp_action     action,
-    hemp_actor      actor,
-    hemp_memory     script
+    HempAction      action,
+    HempActor       actor,
+    HempMemory      script
 ) {
     HEMP_ALLOCATE(action);
     action->actor  = actor;
@@ -16,7 +16,7 @@ hemp_action_init(
 
 void
 hemp_action_free(
-    hemp_action action
+    HempAction action
 ) {
     /* TODO: add a cleaner for any dynamically allocated memory */
     hemp_mem_free(action);

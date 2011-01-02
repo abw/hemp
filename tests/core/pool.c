@@ -13,8 +13,8 @@ int main(
 
 
 void test_pool() {
-    hemp_pool pool = hemp_pool_new(4, 2, NULL);
-    hemp_memory item;
+    HempPool pool = hemp_pool_new(4, 2, NULL);
+    HempMemory item;
 
     ok( 
         pool, 

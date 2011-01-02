@@ -1,14 +1,14 @@
 #include <hemp/parser.h>
 
 
-hemp_list
+HempList
 hemp_parse_exprs(
     HEMP_PREFIX_ARGS
 ) {
     hemp_debug_call("hemp_parse_exprs( precedence => %d )\n", precedence);
 
-    hemp_fragment   expr;
-    hemp_list       exprs = hemp_list_new();
+    HempFragment   expr;
+    HempList       exprs = hemp_list_new();
 //  hemp_debug_msg("hemp_parse_exprs() LIST: %p\n", exprs);
 
     while (1) {
@@ -52,9 +52,9 @@ hemp_parse_exprs(
 
 HEMP_PREFIX(hemp_parse_block) {
     hemp_debug_call("hemp_parse_block()\n");
-    hemp_fragment   fragment    = *fragptr;
-    hemp_list       list        = hemp_parse_exprs(HEMP_PREFIX_ARG_NAMES);
-    hemp_fragment   block       = NULL;
+    HempFragment   fragment    = *fragptr;
+    HempList       list        = hemp_parse_exprs(HEMP_PREFIX_ARG_NAMES);
+    HempFragment   block       = NULL;
 
     if (list) {
         block = hemp_fragments_add_fragment(
@@ -69,14 +69,14 @@ HEMP_PREFIX(hemp_parse_block) {
 }
 
 
-hemp_list
+HempList
 hemp_parse_pairs(
     HEMP_PREFIX_ARGS
 ) {
     hemp_debug_call("hemp_parse_pairs()\n");
 
-    hemp_fragment   expr;
-    hemp_list       exprs = hemp_list_new();
+    HempFragment   expr;
+    HempList       exprs = hemp_list_new();
 
     while (1) {
         /* skip whitespace and delimiters (commas) */

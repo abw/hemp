@@ -5,12 +5,12 @@
 
 
 #define HEMP_TYPE_BASE              \
-    hemp_type       type;           \
-    hemp_type       base;           \
-    hemp_int        id;             \
-    hemp_string     name;           \
-    hemp_namespace  namespace;      \
-    hemp_hash       methods;        \
+    HempType        type;           \
+    HempType        base;           \
+    HempInt         id;             \
+    HempString      name;           \
+    HempNamespace   namespace;      \
+    HempHash        methods;        \
     hemp_value_f    value;          \
     hemp_value_f    number;         \
     hemp_value_f    integer;        \
@@ -47,7 +47,7 @@ struct hemp_type {
 };
 
 struct hemp_object {
-    hemp_type       type;
+    HempType       type;
 };
 
 /* other stuff to think about adding:
@@ -67,59 +67,59 @@ struct hemp_object {
  * core types
  *--------------------------------------------------------------------------*/
  
-extern hemp_type HempType;
-extern hemp_type HempValue;
-extern hemp_type HempNumber;
-extern hemp_type HempInteger;
-extern hemp_type HempPointer;
-extern hemp_type HempString;
-extern hemp_type HempText;
-extern hemp_type HempList;
-extern hemp_type HempHash;
-extern hemp_type HempObject;
-extern hemp_type HempIdentity;
-extern hemp_type HempReserved;
-extern hemp_type HempUnused;
-extern hemp_type hemp_global_types[HEMP_TYPES_SIZE];
+extern HempType HempTypeType;
+extern HempType HempTypeValue;
+extern HempType HempTypeNumber;
+extern HempType HempTypeInteger;
+extern HempType HempTypePointer;
+extern HempType HempTypeString;
+extern HempType HempTypeText;
+extern HempType HempTypeList;
+extern HempType HempTypeHash;
+extern HempType HempTypeObject;
+extern HempType HempTypeIdentity;
+extern HempType HempTypeReserved;
+extern HempType HempTypeUnused;
+extern HempType hemp_global_types[HEMP_TYPES_SIZE];
 
 
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_type
+HempType
 hemp_type_new(
-    hemp_int        id,
-    hemp_string     name
+    HempInt         id,
+    HempString      name
 );
 
-hemp_type 
+HempType 
 hemp_type_subtype(
-    hemp_type       base,
-    hemp_int        id,
-    hemp_string     name
+    HempType        base,
+    HempInt         id,
+    HempString      name
 );
 
 void
 hemp_type_free(
-    hemp_type       type
+    HempType        type
 );
 
-hemp_type
+HempType
 hemp_use_type(
-    hemp_string     name,
+    HempString      name,
     hemp_type_f     constructor
 );
 
 
 void 
 hemp_global_types_init(
-    hemp_global     global
+    HempGlobal      global
 );
 
 void 
 hemp_global_types_free(
-    hemp_global     global
+    HempGlobal      global
 );
 
 

@@ -8,7 +8,7 @@
 /* NOT USED */
 
 struct hemp_symbols {
-    hemp_string     name;
+    HempString     name;
     hemp_symbol_f   ctor;
 };
 
@@ -18,9 +18,9 @@ struct hemp_symbols {
 
 hemp_symbol
 hemp_symbol_new(
-    hemp_string     name,
-    hemp_string     start,
-    hemp_string     end
+    HempString     name,
+    HempString     start,
+    HempString     end
 );
 
 

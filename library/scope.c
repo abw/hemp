@@ -1,11 +1,11 @@
 #include <hemp/scope.h>
 
 
-hemp_scope
+HempScope
 hemp_scope_new(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
-    hemp_scope scope;
+    HempScope scope;
     HEMP_ALLOCATE(scope);
 
     scope->hemp    = hemp;
@@ -18,7 +18,7 @@ hemp_scope_new(
 
 void
 hemp_scope_free(
-    hemp_scope scope
+    HempScope scope
 ) {
     // TODO: worry about cleanup
     hemp_context_free(scope->context);

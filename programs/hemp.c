@@ -12,31 +12,31 @@
 #define HEMP_BAD_COMMAND    "Unknown command: %s     (type 'help' for help)"
 
 void        hemp_banner();
-void        hemp_info(hemp_hemp);
+void        hemp_info(Hemp);
 void        hemp_help();
 void        hemp_say(char *format, ...);
 void        hemp_warn(char *format, ...);
-void        hemp_error_report(hemp_hemp);
-void        hemp_getopt(hemp_hemp hemp, int argc, char **argv);
-void        hemp_interactive(hemp_hemp hemp);
-hemp_string hemp_prompt_init();
+void        hemp_error_report(Hemp);
+void        hemp_getopt(Hemp hemp, int argc, char **argv);
+void        hemp_interactive(Hemp hemp);
+HempString hemp_prompt_init();
 void        hemp_prompt_free();
-hemp_string hemp_input_read(hemp_string prompt);
+HempString hemp_input_read(HempString prompt);
 void        hemp_input_free();
 char **     hemp_completion(const char *, int, int);
 char *      hemp_command_generator(const char *, int);
 
-hemp_bool   hemp_cmd_todo(hemp_hemp, hemp_string);
-hemp_bool   hemp_cmd_exprs(hemp_hemp, hemp_string);
-hemp_bool   hemp_cmd_expr(hemp_hemp, hemp_string);
-hemp_bool   hemp_cmd_test(hemp_hemp, hemp_string);
-hemp_bool   hemp_cmd_help(hemp_hemp, hemp_string);
-hemp_bool   hemp_cmd_quit(hemp_hemp, hemp_string);
+HempBool   hemp_cmd_todo(Hemp, HempString);
+HempBool   hemp_cmd_exprs(Hemp, HempString);
+HempBool   hemp_cmd_expr(Hemp, HempString);
+HempBool   hemp_cmd_test(Hemp, HempString);
+HempBool   hemp_cmd_help(Hemp, HempString);
+HempBool   hemp_cmd_quit(Hemp, HempString);
 
 static int be_quiet  = 0;
 static int read_text = 0;
-static hemp_string hemp_input  = NULL;
-static hemp_string hemp_prompt = NULL;      /* old way */
+static HempString hemp_input  = NULL;
+static HempString hemp_prompt = NULL;      /* old way */
 
 
 static struct option hemp_options[] = {
@@ -52,9 +52,9 @@ static struct option hemp_options[] = {
 };
 
 typedef struct {
-    hemp_bool   (*func)(hemp_hemp, hemp_string);
-    hemp_string    name;
-    hemp_string    about;
+    HempBool   (*func)(Hemp, HempString);
+    HempString    name;
+    HempString    about;
 } hemp_command;
 
 hemp_command hemp_commands[] = {
@@ -72,8 +72,8 @@ hemp_command hemp_commands[] = {
 hemp_command * execute = NULL;
 int exit_val = 0;
 
-hemp_command *hemp_command_lookup_or_die(hemp_string name);
-hemp_command *hemp_command_lookup(hemp_string name);
+hemp_command *hemp_command_lookup_or_die(HempString name);
+hemp_command *hemp_command_lookup(HempString name);
 
 
 
@@ -95,10 +95,10 @@ int main(
     char **argv, 
     char **env
 ) {
-    hemp_hemp       hemp = hemp_new();
-    hemp_string     filename;
-    hemp_document   document;
-    hemp_text       input, output;
+    Hemp       hemp = hemp_new();
+    HempString     filename;
+    HempDocument   document;
+    HempText       input, output;
     int             result = 0;
     
     hemp_language_instance(hemp, "tt3");
@@ -184,7 +184,7 @@ int main(
 
 hemp_command *
 hemp_command_lookup_or_die(
-    hemp_string name
+    HempString name
 ) {
     hemp_command * cmd = hemp_command_lookup(name);
     if (! cmd) {
@@ -198,7 +198,7 @@ hemp_command_lookup_or_die(
 
 hemp_command *
 hemp_command_lookup(
-    hemp_string name
+    HempString name
 ) {
     int i;
     
@@ -213,12 +213,12 @@ hemp_command_lookup(
 
 
 void hemp_interactive(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
-    hemp_string prompt = hemp_prompt;
-    hemp_bool   done   = HEMP_FALSE;
-    hemp_string input, word, args;
-    hemp_list   words;
+    HempString prompt = hemp_prompt;
+    HempBool   done   = HEMP_FALSE;
+    HempString input, word, args;
+    HempList   words;
     hemp_command *cmd;
 
     rl_readline_name = HEMP_STR_HEMP;
@@ -270,9 +270,9 @@ void hemp_banner() {
 }
 
 void hemp_info(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
-    hemp_string dir = hemp_config_get_string(hemp, HEMP_CONFIG_DIR);
+    HempString dir = hemp_config_get_string(hemp, HEMP_CONFIG_DIR);
     
     if (! dir)
         dir = HEMP_DIR;
@@ -291,7 +291,7 @@ void hemp_info(
  * input
  *--------------------------------------------------------------------------*/
 
-hemp_string
+HempString
 hemp_prompt_init() {
     if (! hemp_prompt) {
         asprintf(
@@ -311,9 +311,9 @@ hemp_prompt_free() {
 }
 
 
-hemp_string
+HempString
 hemp_input_read(
-    hemp_string prompt
+    HempString prompt
 ) {
     hemp_input_free();
 
@@ -336,7 +336,7 @@ hemp_completion(
     int end
 ) {
     return rl_completion_matches(text, &hemp_command_generator);
-//    hemp_string *matches = NULL;
+//    HempString *matches = NULL;
 ////    if (start == 0)
 //    matches = rl_completion_matches(text, &hemp_command_generator);
 }
@@ -401,9 +401,9 @@ void hemp_warn(
 }
 
 void hemp_error_report(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
-    hemp_text error = hemp_error_text(hemp->error);
+    HempText error = hemp_error_text(hemp->error);
     fprintf(stderr, "%s", error->string);
     hemp_text_free(error);
 }
@@ -413,20 +413,20 @@ void hemp_error_report(
  * commands
  *--------------------------------------------------------------------------*/
 
-hemp_bool 
+HempBool 
 hemp_cmd_todo(
-    hemp_hemp     hemp, 
-    hemp_string input
+    Hemp     hemp, 
+    HempString input
 ) {
     hemp_warn("Sorry, that functionality is still TODO");
     return HEMP_FALSE;
 }
 
 
-hemp_bool 
+HempBool 
 hemp_cmd_exprs(
-    hemp_hemp   hemp, 
-    hemp_string text
+    Hemp   hemp, 
+    HempString text
 ) {
     /* pass text along as first expression */
     if (text) {
@@ -443,13 +443,13 @@ hemp_cmd_exprs(
 }
 
 
-hemp_bool 
+HempBool 
 hemp_cmd_expr(
-    hemp_hemp   hemp, 
-    hemp_string text
+    Hemp   hemp, 
+    HempString text
 ) {
-    hemp_text     input, output;
-    hemp_document hemplate;
+    HempText     input, output;
+    HempDocument hemplate;
 
     if (! text)
         text = hemp_input_read(HEMP_EXPR_PROMPT);
@@ -508,13 +508,13 @@ hemp_cmd_expr(
 }
 
 
-hemp_bool 
+HempBool 
 hemp_cmd_test(
-    hemp_hemp   hemp, 
-    hemp_string test
+    Hemp   hemp, 
+    HempString test
 ) {
-    hemp_document document;
-    hemp_text     output;
+    HempDocument document;
+    HempText     output;
 
     if (test)
         hemp_debug_msg("test: %s\n", test);
@@ -544,7 +544,7 @@ hemp_cmd_test(
         hemp_text_free(output);
 
     HEMP_CATCH_ALL;
-        hemp_text error = hemp_error_text(hemp->error);
+        HempText error = hemp_error_text(hemp->error);
         hemp_warn(error->string);
         hemp_text_free(error);
 
@@ -557,10 +557,10 @@ hemp_cmd_test(
 }
 
 
-hemp_bool 
+HempBool 
 hemp_cmd_help(
-    hemp_hemp     hemp, 
-    hemp_string input
+    Hemp     hemp, 
+    HempString input
 ) {
     int i;
     hemp_command cmd;
@@ -581,10 +581,10 @@ hemp_cmd_help(
 }
 
 
-hemp_bool 
+HempBool 
 hemp_cmd_quit(
-    hemp_hemp     hemp, 
-    hemp_string input
+    Hemp     hemp, 
+    HempString input
 ) {
     return HEMP_TRUE;
 }
@@ -596,7 +596,7 @@ hemp_cmd_quit(
 
 void
 hemp_getopt(
-    hemp_hemp   hemp,
+    Hemp   hemp,
     int         argc,
     char        **argv
 ) {

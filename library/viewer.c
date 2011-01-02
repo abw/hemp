@@ -7,14 +7,14 @@
 
 HEMP_FACTORY(hemp_viewer_factory) {
     hemp_debug_init("instantiating viewer factory\n");
-    hemp_factory factory = hemp_factory_new(hemp, name);
+    HempFactory factory = hemp_factory_new(hemp, name);
     factory->cleaner     = hemp_viewer_cleaner;
     return factory;
 }
 
 
 HEMP_HASH_ITERATOR(hemp_viewer_cleaner) {
-    hemp_viewer viewer = (hemp_viewer) hemp_val_ptr(item->value);
+    HempViewer viewer = (HempViewer) hemp_val_ptr(item->value);
     hemp_debug_init("cleaning viewer: %s\n", viewer->name);
     hemp_viewer_free(viewer);
     return HEMP_TRUE;
@@ -25,12 +25,12 @@ HEMP_HASH_ITERATOR(hemp_viewer_cleaner) {
  * viewer initialisation and cleanup functions 
  *-------------------------------------------------------------------------*/
 
-hemp_viewer
+HempViewer
 hemp_viewer_new(
-    hemp_hemp   hemp,
-    hemp_string name
+    Hemp   hemp,
+    HempString name
 ) {
-    hemp_viewer viewer;
+    HempViewer viewer;
     HEMP_ALLOCATE(viewer);
 
     viewer->hemp   = hemp;
@@ -45,7 +45,7 @@ hemp_viewer_new(
 
 void
 hemp_viewer_free(
-    hemp_viewer viewer
+    HempViewer viewer
 ) {
     if (viewer->view)
         hemp_mem_free(viewer->view);
@@ -57,14 +57,14 @@ hemp_viewer_free(
 
 void
 hemp_viewer_resize(
-    hemp_viewer viewer,
-    hemp_u16    min_size
+    HempViewer viewer,
+    HempU16    min_size
 ) {
     hemp_debug_call("hemp_viewer_resize(%s, %d)\n", viewer->name, min_size);
-    hemp_u16    old_size = viewer->size;
-    hemp_u16    new_size = old_size;
-    hemp_memory buffer;
-    hemp_u16    size;
+    HempU16    old_size = viewer->size;
+    HempU16    new_size = old_size;
+    HempMemory buffer;
+    HempU16    size;
 
     if (! new_size)
         new_size = HEMP_VIEW_SIZE;
@@ -94,14 +94,14 @@ hemp_viewer_resize(
 }
 
 
-hemp_bool
+HempBool
 hemp_viewer_add_view(
-    hemp_viewer viewer,
-    hemp_string name,
+    HempViewer viewer,
+    HempString name,
     hemp_view_f view
 ) {
     hemp_debug_call("hemp_viewer_add_view(%s:%s => %p)\n", viewer->name, name, view);
-    hemp_u16 id = hemp_namespace_id(name);
+    HempU16 id = hemp_namespace_id(name);
     hemp_debug("%s ID: %d\n", name, id);
     
     if (id >= viewer->size)
@@ -121,7 +121,7 @@ hemp_viewer_add_view(
 
 HEMP_VIEW(hemp_viewer_fragment) {
     hemp_debug("hemp_viewer_fragment(%s, %s)\n", viewer->name, fragment->type->name);
-    hemp_namespace namespace = fragment->type->namespace;
+    HempNamespace namespace = fragment->type->namespace;
     hemp_view_f view;
     
     while (namespace) {

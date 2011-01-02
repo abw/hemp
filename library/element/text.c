@@ -5,7 +5,7 @@
  * global element types
  *--------------------------------------------------------------------------*/
 
-hemp_element HempElementText = NULL;
+HempElement HempElementText = NULL;
 
 
 /*--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ HEMP_PREFIX(hemp_element_text_prefix) {
     /* Advance the pointer to the next element after this one and return the 
      * current element as the yielded expression.
      */
-    hemp_fragment fragment = *fragptr;
+    HempFragment fragment = *fragptr;
     hemp_advance(fragptr);
     return fragment;
 }
@@ -62,7 +62,7 @@ HEMP_CLEANUP(hemp_element_text_cleanup) {
      */
 
     if (hemp_not_flag(fragment, HEMP_BE_SOURCE)) {
-        hemp_mem_free((hemp_memory) hemp_val_str(fragment->args.value));
+        hemp_mem_free((HempMemory) hemp_val_str(fragment->args.value));
     }
 }
 
@@ -81,12 +81,12 @@ HEMP_ELEMENT(hemp_element_text_concat) {
 
 HEMP_OUTPUT(hemp_element_text_concat_value) {
     hemp_debug_call("hemp_element_text_concat_value()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
+    HempFragment fragment = hemp_val_frag(value);
 
-    hemp_text text;
+    HempText text;
     hemp_prepare_text(context, output, text);
-    hemp_value lhs = hemp_lhs(fragment);
-    hemp_value rhs = hemp_rhs(fragment);
+    HempValue lhs = hemp_lhs(fragment);
+    HempValue rhs = hemp_rhs(fragment);
     hemp_obcall(lhs, text, context, output);
     hemp_obcall(rhs, text, context, output);
 
@@ -108,12 +108,12 @@ HEMP_ELEMENT(hemp_element_text_compare) {
 HEMP_VALUE(hemp_element_text_compare_value) {
     hemp_debug_call("hemp_element_text_compare_value()\n");
 
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    lhs      = hemp_lhs(fragment);
-    hemp_value    rhs      = hemp_rhs(fragment);
-    hemp_value    lval     = hemp_obcall(lhs, text, context, HempNothing);
-    hemp_value    rval     = hemp_obcall(rhs, text, context, HempNothing);
-    hemp_int      compare  = strcmp( 
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    lhs      = hemp_lhs(fragment);
+    HempValue    rhs      = hemp_rhs(fragment);
+    HempValue    lval     = hemp_obcall(lhs, text, context, HempNothing);
+    HempValue    rval     = hemp_obcall(rhs, text, context, HempNothing);
+    HempInt      compare  = strcmp( 
         hemp_val_text(lval)->string,
         hemp_val_text(rval)->string
     );

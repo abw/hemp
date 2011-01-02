@@ -6,17 +6,17 @@
 
 
 struct hemp_namespace {
-    hemp_u16        id;
-    hemp_string     path;
-    hemp_string     name;
-    hemp_namespace  parent;
-    hemp_hash       children;
+    HempU16        id;
+    HempString     path;
+    HempString     name;
+    HempNamespace  parent;
+    HempHash       children;
 };
 
 //struct hemp_namespaces {
-//    hemp_u16        next_id;
-//    hemp_string     name;
-//    hemp_hash       namespaces;
+//    HempU16        next_id;
+//    HempString     name;
+//    HempHash       namespaces;
 //};
 
 
@@ -24,34 +24,34 @@ struct hemp_namespace {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_namespace
+HempNamespace
 hemp_namespace_init(
-    hemp_u16        id,
-    hemp_string     name,
-    hemp_namespace  parent
+    HempU16        id,
+    HempString     name,
+    HempNamespace  parent
 );
 
-hemp_namespace
+HempNamespace
 hemp_namespace_child(
-    hemp_namespace  namespace,
-    hemp_string     name
+    HempNamespace  namespace,
+    HempString     name
 );
 
-hemp_namespace
+HempNamespace
 hemp_resolve_namespace(
-    hemp_string     path
+    HempString     path
 );
 
 void
 hemp_namespace_free(
-    hemp_namespace  namespace
+    HempNamespace  namespace
 );
 
-hemp_bool
+HempBool
 hemp_namespace_free_child(
-    hemp_hash       namespaces,
-    hemp_pos        position,
-    hemp_slot       item
+    HempHash       namespaces,
+    HempPos        position,
+    HempSlot       item
 );
 
 
@@ -62,12 +62,12 @@ hemp_namespace_free_child(
  *--------------------------------------------------------------------------*/
 
 #define hemp_namespace_next_id()                                \
-    (++HempGlobal.namespace_id)
+    (++HempGlobalData.namespace_id)
 
 
 #define hemp_namespace_root(name)                               \
     hemp_namespace_child(                                       \
-        HempGlobal.namespace, name                              \
+        HempGlobalData.namespace, name                          \
     )
 
 #define hemp_namespace_instance(name) (                         \

@@ -13,12 +13,12 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_tagset {
-   hemp_document    document;
-   hemp_element     text_element;
-   hemp_hash        tags;
-   hemp_ptree       inline_tags;
-   hemp_ptree       outline_tags;
-   hemp_tag         unplugged_tag;
+   HempDocument    document;
+   HempElement     text_element;
+   HempHash        tags;
+   HempPtree       inline_tags;
+   HempPtree       outline_tags;
+   HempTag         unplugged_tag;
 };
 
 
@@ -26,41 +26,41 @@ struct hemp_tagset {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_tagset
+HempTagset
 hemp_tagset_new(
-    hemp_document   document
+    HempDocument   document
 );
     
 void
 hemp_tagset_free();
 
-hemp_tag
+HempTag
 hemp_tagset_add_tag(
-    hemp_tagset     tagset, 
-    hemp_tag        tag
+    HempTagset     tagset, 
+    HempTag        tag
 );
 
-hemp_tag
+HempTag
 hemp_tagset_new_tag(
-    hemp_tagset     tagset, 
-    hemp_string     type,
-    hemp_string     name,
-    hemp_string     start,
-    hemp_string     end,
-    hemp_grammar    grammar
+    HempTagset     tagset, 
+    HempString     type,
+    HempString     name,
+    HempString     start,
+    HempString     end,
+    HempGrammar    grammar
 );
 
-hemp_bool
+HempBool
 hemp_tagset_free_tag(
-    hemp_hash       tags,
-    hemp_pos        index,
-    hemp_slot       item
+    HempHash       tags,
+    HempPos        index,
+    HempSlot       item
 );
 
-hemp_bool
+HempBool
 hemp_tagset_scanner(
-    hemp_tagset     tagset,
-    hemp_document   document
+    HempTagset     tagset,
+    HempDocument   document
 );
 
 

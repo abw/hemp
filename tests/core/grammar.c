@@ -19,11 +19,11 @@ int main(
 
 
 void test_grammar() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
     
     hemp_language_instance(hemp, HEMP_TT3);
-    hemp_grammar grammar;
+    HempGrammar grammar;
 
     /* calling this multiple times has no effect */
     hemp_language_instance(hemp, HEMP_TT3);
@@ -36,7 +36,7 @@ void test_grammar() {
         grammar = hemp_grammar_instance(hemp, "tt3.core");
         ok( grammar, "got grammar" );
         is( grammar->name, "tt3.core", "grammar name is tt3.core" );
-        hemp_element space = hemp_grammar_element(grammar, "hemp.space");
+        HempElement space = hemp_grammar_element(grammar, "hemp.space");
         ok( space, "got space symbol" );
     HEMP_CATCH_ALL;
         fail("eek! caught error: %s", hemp->error->message);
@@ -58,13 +58,13 @@ void test_grammar() {
 
 
 
-hemp_grammar
+HempGrammar
 hemp_grammar_test1(
-    hemp_hemp     hemp,
-    hemp_string name
+    Hemp     hemp,
+    HempString name
 ) {
     hemp_debug("constructing test grammar\n");
-    hemp_grammar grammar = (hemp_grammar) hemp_grammar_new(hemp, name);
+    HempGrammar grammar = (HempGrammar) hemp_grammar_new(hemp, name);
 
     HEMP_TRY;
         hemp_grammar_add_element(
@@ -99,29 +99,29 @@ hemp_grammar_test1(
 
 
 void test_hemp_grammar_instance() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object at %p", hemp );
 
 //    hemp_language_instance(hemp, HEMP_TT3);
     hemp_register_grammar(
-        hemp, "test", (hemp_actor) &hemp_grammar_test1
+        hemp, "test", (HempActor) &hemp_grammar_test1
     );
     
-    hemp_grammar grammar = hemp_grammar_instance(hemp, "test");
+    HempGrammar grammar = hemp_grammar_instance(hemp, "test");
     ok( grammar, "got grammar" );
 
     hemp_free(hemp);
 }
 
 void test_hemp_grammar_hemp() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object at %p", hemp );
 
     HEMP_TRY;
-        hemp_grammar grammar_a = hemp_grammar_instance(hemp, "hemp.alpha");
+        HempGrammar grammar_a = hemp_grammar_instance(hemp, "hemp.alpha");
         ok( grammar_a, "got hemp.alpha grammar" );
 
-        hemp_grammar grammar_b = hemp_grammar_instance(hemp, "hemp.bravo");
+        HempGrammar grammar_b = hemp_grammar_instance(hemp, "hemp.bravo");
         ok( grammar_b, "got hemp.bravo grammar" );
 
     HEMP_CATCH_ALL;

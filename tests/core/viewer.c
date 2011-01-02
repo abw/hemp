@@ -14,28 +14,28 @@ int main(
 
 
 void test_viewer() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
     hemp_language_instance(hemp, "tt3");
 
-    hemp_document document = hemp_document_instance(
+    HempDocument document = hemp_document_instance(
         hemp, HEMP_TT3, HEMP_TEXT, "Hello [% name %]!"
     );
     ok( document , "created document" );
     
-    hemp_context context = hemp_context_instance(hemp);
+    HempContext context = hemp_context_instance(hemp);
     ok( context, "created hemp context" );
     ok( hemp_context_set_string(context, "name", "World"), "set name" );
 
-    hemp_viewer text = hemp_viewer_instance(hemp, "text");
+    HempViewer text = hemp_viewer_instance(hemp, "text");
     ok( text, "created text view" );
     is( text->name, "text", "name is set: text" );
 
     text = hemp_viewer_instance(hemp, "text");
     ok( text, "fetched text view again" );
 
-    hemp_text output;
+    HempText output;
 
     HEMP_TRY;
         output = hemp_document_render(document, context);
@@ -47,10 +47,10 @@ void test_viewer() {
     printf("** OUTPUT ** : %s\n", output->string);
     hemp_text_free(output);
 
-    hemp_fragment root = hemp_document_tree(document);
+    HempFragment root = hemp_document_tree(document);
     ok( root, "got root element: %p", root);
 
-    hemp_value result = hemp_viewer_fragment(text, root, context, HempNothing);
+    HempValue result = hemp_viewer_fragment(text, root, context, HempNothing);
     HEMP_UNUSED(result);
 
     hemp_context_free(context);

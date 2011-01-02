@@ -1,12 +1,12 @@
 #include <hemp/fragments.h>
 
 
-hemp_fragments
+HempFragments
 hemp_fragments_new(
-    hemp_document   document,
-    hemp_size       capacity
+    HempDocument   document,
+    HempSize       capacity
 ) {
-    hemp_fragments  fragments;
+    HempFragments  fragments;
     HEMP_ALLOCATE(fragments);
 
     if (! capacity)
@@ -29,33 +29,33 @@ hemp_fragments_new(
 
 void
 hemp_fragments_free(
-    hemp_fragments fragments
+    HempFragments fragments
 ) {
     hemp_pool_free(fragments->pool);
     hemp_mem_free(fragments);
 }
 
 
-hemp_bool
+HempBool
 hemp_fragments_free_fragment(
-    hemp_memory item
+    HempMemory item
 ) {
-    hemp_fragment f = (hemp_fragment) item;
+    HempFragment f = (HempFragment) item;
     hemp_fragment_cleanup(f);
     
     return HEMP_TRUE;
 }
 
 
-hemp_fragment
+HempFragment
 hemp_fragments_new_fragment(
-    hemp_fragments  fragments,
-    hemp_element    type,
-    hemp_string     token,
-    hemp_pos        position,
-    hemp_size       length
+    HempFragments  fragments,
+    HempElement    type,
+    HempString     token,
+    HempPos        position,
+    HempSize       length
 ) {
-    hemp_fragment fragment = (hemp_fragment) hemp_pool_take(
+    HempFragment fragment = (HempFragment) hemp_pool_take(
         fragments->pool
     );
 
@@ -74,17 +74,17 @@ hemp_fragments_new_fragment(
 }
 
 
-hemp_fragment
+HempFragment
 hemp_fragments_add_fragment(
-    hemp_fragments  fragments,
-    hemp_element    type,
-    hemp_string     token,
-    hemp_pos        position,
-    hemp_size       length
+    HempFragments  fragments,
+    HempElement    type,
+    HempString     token,
+    HempPos        position,
+    HempSize       length
 ) {
     hemp_debug_call("hemp_fragments_add_fragment()\n");
 
-    hemp_fragment fragment = hemp_fragments_new_fragment(
+    HempFragment fragment = hemp_fragments_new_fragment(
         fragments, type, token, position, length
     );
 
@@ -103,10 +103,10 @@ hemp_fragments_add_fragment(
 }
 
 
-hemp_fragment
+HempFragment
 hemp_fragments_add_eof(
-    hemp_fragments  fragments,
-    hemp_pos        position
+    HempFragments  fragments,
+    HempPos        position
 ) {
     return hemp_fragments_add_fragment(
         fragments, HempElementEOF,
@@ -114,9 +114,9 @@ hemp_fragments_add_eof(
     );
 }
 
-HEMP_INLINE hemp_document
+HEMP_INLINE HempDocument
 hemp_fragments_document(
-    hemp_fragments fragments
+    HempFragments fragments
 ) {
     if (! fragments->document)
         hemp_fatal("No document defined for fragments");
@@ -126,10 +126,10 @@ hemp_fragments_document(
 
 void 
 hemp_fragments_dump(
-    hemp_fragments   fragments
+    HempFragments   fragments
 ) {
     hemp_debug("\n-- frags --\n");
-    hemp_fragment f = fragments->head;
+    HempFragment f = fragments->head;
 
     while (f) {
         hemp_fragment_debug(f);

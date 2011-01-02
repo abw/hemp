@@ -4,7 +4,7 @@ void test_list();
 void test_list_copy();
 void test_list_resize();
 void test_list_push();
-hemp_string list_as_text(hemp_list);
+HempString list_as_text(HempList);
 
 
 int
@@ -19,8 +19,8 @@ main(int argc, char **argv, char **env) {
 
 
 void test_list() {
-    hemp_hemp      hemp = hemp_new();
-    hemp_list list = hemp_list_new();
+    Hemp      hemp = hemp_new();
+    HempList list = hemp_list_new();
     
     pass("created list");
 
@@ -44,18 +44,18 @@ void test_list() {
     );
 
     /* test methods */
-    hemp_context context = hemp_context_instance(hemp);
-    hemp_value   value   = hemp_list_val(list);
+    HempContext context = hemp_context_instance(hemp);
+    HempValue   value   = hemp_list_val(list);
     ok( hemp_is_list(value), "value is a list" );
     
-    hemp_value   length  = hemp_send(value, "length", context);
+    HempValue   length  = hemp_send(value, "length", context);
     ok( hemp_is_defined(length), "got define length" );
     ok( hemp_is_integer(length), "got an integer length" );
     eq( hemp_val_int(length), 2, "list length is 2" );
 
     hemp_list_push_integer(list, 10);
     eq( list->length, 3, "three items in list" );
-    hemp_value ten = hemp_list_pop(list);
+    HempValue ten = hemp_list_pop(list);
     ok( hemp_is_integer(ten), "popped ten" );
     eq( hemp_val_int(ten), 10, "got correct value for ten" );
     
@@ -65,12 +65,12 @@ void test_list() {
 }
 
 void test_list_push() {
-    hemp_list list1 = hemp_list_new();
+    HempList list1 = hemp_list_new();
     hemp_list_push_integer(list1, 10);
     hemp_list_push_integer(list1, 20);
     eq( list1->length, 2, "first list has two items" );
 
-    hemp_list list2 = hemp_list_new();
+    HempList list2 = hemp_list_new();
     hemp_list_push_integer(list2, 30);
     hemp_list_push_integer(list2, 40);
     hemp_list_push_integer(list2, 50);
@@ -79,7 +79,7 @@ void test_list_push() {
     hemp_list_push_list(list1, list2);
     eq( list1->length, 5, "combined list has five items" );
 
-    hemp_value value = hemp_list_item(list1, 0);
+    HempValue value = hemp_list_item(list1, 0);
     eq( hemp_val_int(value), 10, "item zero is 10" );
 
     value = hemp_list_item(list1, 1);
@@ -94,11 +94,11 @@ void test_list_push() {
     value = hemp_list_item(list1, 4);
     eq( hemp_val_int(value), 50, "item four is 40" );
 
-    hemp_string foos = "Hello World";
-    hemp_value  foov = hemp_str_val(foos);
+    HempString foos = "Hello World";
+    HempValue  foov = hemp_str_val(foos);
     hemp_list_push(list1, foov);
-    hemp_value  barv = hemp_list_item(list1, list1->length - 1);
-    hemp_string bars = hemp_val_str(barv);
+    HempValue  barv = hemp_list_item(list1, list1->length - 1);
+    HempString bars = hemp_val_str(barv);
     is( foos, bars, "round-trip string value push" );
     
     
@@ -109,16 +109,16 @@ void test_list_push() {
 
 
 void test_list_copy() {
-    hemp_list list = hemp_list_new();
+    HempList list = hemp_list_new();
     hemp_list_push_integer(list, 10);
     hemp_list_push_number(list, 1.23);
     hemp_list_push_string(list, "Hello World!");
     
-    hemp_list copy = hemp_list_copy(list);
+    HempList copy = hemp_list_copy(list);
     ok( copy, "copied list: %p", copy );
     eq( copy->length, 3, "three items in copy" );
     
-    hemp_value value = hemp_list_item(copy, 0);
+    HempValue value = hemp_list_item(copy, 0);
     ok( hemp_is_integer(value), "item zero is integer" );
 
     value = hemp_list_item(copy, 1);
@@ -133,16 +133,16 @@ void test_list_copy() {
 
 
 void test_list_resize() {
-    hemp_list list = hemp_list_new();
+    HempList list = hemp_list_new();
     hemp_list_push_integer(list, 10);
     hemp_list_push_number(list, 1.23);
     hemp_list_push_string(list, "Hello World!");
     
-    hemp_size new_size = hemp_list_resize(list, 6);
+    HempSize new_size = hemp_list_resize(list, 6);
     eq( new_size, 6, "expanded list to 6 items" );
     eq( list->length, 6, "six items in list" );
     
-    hemp_value value = hemp_list_item(list, 0);
+    HempValue value = hemp_list_item(list, 0);
     ok( hemp_is_integer(value), "item zero is integer" );
 
     value = hemp_list_item(list, 1);
@@ -171,11 +171,11 @@ void test_list_resize() {
 
 char buffer[255];
 
-hemp_bool 
+HempBool 
 hemp_text_append(
-    hemp_list  list, 
-    hemp_pos   pos, 
-    hemp_value value
+    HempList  list, 
+    HempPos   pos, 
+    HempValue value
 ) {
     if (buffer[0])
         strcat(buffer, ", ");
@@ -184,9 +184,9 @@ hemp_text_append(
 }
 
 
-hemp_string
+HempString
 list_as_text(
-    hemp_list list
+    HempList list
 ) {
     buffer[0] = '\0';
     hemp_list_each(list, &hemp_text_append);

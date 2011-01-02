@@ -2,16 +2,16 @@
 
 void test_hash();
 void test_hash_methods();
-void hash_get(hemp_hash, char *);
-void hash_set(hemp_hash table, hemp_string, hemp_string);
-void hash_has(hemp_hash table, hemp_string, hemp_string);
-void hash_hasnt(hemp_hash table, hemp_string);
-void hash_has_keylen(hemp_hash table, hemp_string, hemp_size, hemp_string);
-void hash_hasnt_keylen(hemp_hash table, hemp_string, hemp_size);
-void hash_index_same(hemp_string, hemp_size, hemp_string, hemp_size);
-void hash_index_different(hemp_string, hemp_size, hemp_string, hemp_size);
-void hash_keys_do_match(hemp_string, hemp_string, hemp_size);
-void hash_keys_no_match(hemp_string, hemp_string, hemp_size);
+void hash_get(HempHash, char *);
+void hash_set(HempHash table, HempString, HempString);
+void hash_has(HempHash table, HempString, HempString);
+void hash_hasnt(HempHash table, HempString);
+void hash_has_keylen(HempHash table, HempString, HempSize, HempString);
+void hash_hasnt_keylen(HempHash table, HempString, HempSize);
+void hash_index_same(HempString, HempSize, HempString, HempSize);
+void hash_index_different(HempString, HempSize, HempString, HempSize);
+void hash_keys_do_match(HempString, HempString, HempSize);
+void hash_keys_no_match(HempString, HempString, HempSize);
 
 
 int main(
@@ -25,8 +25,8 @@ int main(
 
 
 void test_hash() {
-    hemp_hash table = hemp_hash_new();
-    hemp_hash child = hemp_hash_new();
+    HempHash table = hemp_hash_new();
+    HempHash child = hemp_hash_new();
     
 
     hash_index_same(
@@ -93,9 +93,9 @@ void test_hash() {
 
 
 void hash_keys_do_match(
-    hemp_string  hash_key,
-    hemp_string  search_key,
-    hemp_size length
+    HempString  hash_key,
+    HempString  search_key,
+    HempSize length
 ) {
     ok(
         hemp_hash_key_match(hash_key, search_key, length),
@@ -106,9 +106,9 @@ void hash_keys_do_match(
 
 
 void hash_keys_no_match(
-    hemp_string  hash_key,
-    hemp_string  search_key,
-    hemp_size length
+    HempString  hash_key,
+    HempString  search_key,
+    HempSize length
 ) {
     ok(
         ! hemp_hash_key_match(hash_key, search_key, length),
@@ -118,36 +118,36 @@ void hash_keys_no_match(
 }
 
 void hash_index_same(
-    hemp_string  key1,
-    hemp_size len1,
-    hemp_string  key2,
-    hemp_size len2
+    HempString  key1,
+    HempSize len1,
+    HempString  key2,
+    HempSize len2
 ) {
-    hemp_size hash1 = hemp_hash_function(key1, len1);
-    hemp_size hash2 = hemp_hash_function(key2, len2);
+    HempSize hash1 = hemp_hash_function(key1, len1);
+    HempSize hash2 = hemp_hash_function(key2, len2);
     ok( hash1 == hash2, "hash(%s[%d]) == hash(%s[%d])", key1, len1, key2, len2); 
 }
 
 
 void hash_index_different(
-    hemp_string  key1,
-    hemp_size len1,
-    hemp_string  key2,
-    hemp_size len2
+    HempString  key1,
+    HempSize len1,
+    HempString  key2,
+    HempSize len2
 ) {
-    hemp_size hash1 = hemp_hash_function(key1, len1);
-    hemp_size hash2 = hemp_hash_function(key2, len2);
+    HempSize hash1 = hemp_hash_function(key1, len1);
+    HempSize hash2 = hemp_hash_function(key2, len2);
     ok( hash1 != hash2, "hash(%s[%d]) != hash(%s[%d])", key1, len1, key2, len2); 
 }
 
 
 void 
 hash_has(
-    hemp_hash table, 
-    hemp_string  key, 
-    hemp_string  expect
+    HempHash table, 
+    HempString  key, 
+    HempString  expect
 ) {
-    hemp_string value = hemp_hash_fetch_string(table, key);
+    HempString value = hemp_hash_fetch_string(table, key);
     ok( 
         value && hemp_string_eq(value, expect),
         "found %s => %s", key, value
@@ -157,28 +157,28 @@ hash_has(
 
 void 
 hash_hasnt(
-    hemp_hash table, 
-    hemp_string  key
+    HempHash table, 
+    HempString  key
 ) {
-    hemp_string value = hemp_hash_fetch_string(table, key);
+    HempString value = hemp_hash_fetch_string(table, key);
     ok( ! value, "no entry for %s", key);
 }
 
 
 void 
 hash_has_keylen(
-    hemp_hash table, 
-    hemp_string  key, 
-    hemp_size length,
-    hemp_string  expect
+    HempHash table, 
+    HempString  key, 
+    HempSize length,
+    HempString  expect
 ) {
-    hemp_value value = hemp_hash_fetch_keylen(table, key, length);
+    HempValue value = hemp_hash_fetch_keylen(table, key, length);
 
     if (hemp_is_missing(value)) {
         fail("not found: %s (length:%d)", key, length);
     }
     else {
-        hemp_string str = hemp_val_str(value); 
+        HempString str = hemp_val_str(value); 
         ok( 
             str && hemp_string_eq(str, expect),
             "found %s (length: %d) => %s", key, length, str
@@ -188,20 +188,20 @@ hash_has_keylen(
 
 void 
 hash_hasnt_keylen(
-    hemp_hash table, 
-    hemp_string  key,
-    hemp_size length
+    HempHash table, 
+    HempString  key,
+    HempSize length
 ) {
-    hemp_value value = hemp_hash_fetch_keylen(table, key, length);
+    HempValue value = hemp_hash_fetch_keylen(table, key, length);
     ok( hemp_is_missing(value), "no entry for %s (length: %d)", key, length);
 }
 
 
 void 
 hash_set(
-    hemp_hash table, 
-    hemp_string  key, 
-    hemp_string  value
+    HempHash table, 
+    HempString  key, 
+    HempString  value
 ) {
     ok(
         hemp_hash_store_string(table, key, value),
@@ -211,11 +211,11 @@ hash_set(
 
 
 void test_hash_methods() {
-    hemp_hemp       hemp    = hemp_new();
-    hemp_hash  hash    = hemp_hash_new();
-//  hemp_text  text    = hemp_text_from_string("Hello World!");
-    hemp_value value   = hemp_hash_val(hash);
-    hemp_context  context = hemp_context_instance(hemp); 
+    Hemp       hemp    = hemp_new();
+    HempHash  hash    = hemp_hash_new();
+//  HempText  text    = hemp_text_from_string("Hello World!");
+    HempValue value   = hemp_hash_val(hash);
+    HempContext  context = hemp_context_instance(hemp); 
     
     hemp_hash_store_string(hash, "message", "Hello World");
     hemp_hash_store_integer(hash, "answer", 42);
@@ -223,12 +223,12 @@ void test_hash_methods() {
     
     ok( hemp_is_hash(value), "value is a hash" );
     
-    hemp_value length = hemp_send(value, "length", context);
+    HempValue length = hemp_send(value, "length", context);
     ok( hemp_is_defined(length), "got defined length" );
     ok( hemp_is_integer(length), "got an integer length" );
     eq( hemp_val_int(length), 3, "hash length is 3" );
 
-    hemp_value htext = hemp_send(value, "text", context);
+    HempValue htext = hemp_send(value, "text", context);
     ok( hemp_is_text(htext), "got hash as text" );
 
     hemp_context_free(context);

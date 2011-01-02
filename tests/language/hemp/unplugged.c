@@ -16,10 +16,10 @@ main(
 
 
 void test_unplugged() {
-    hemp_hemp       hemp = hemp_new();
-    hemp_document   document;
-    hemp_context    context;
-    hemp_text       output;
+    Hemp       hemp = hemp_new();
+    HempDocument   document;
+    HempContext    context;
+    HempText       output;
     ok( hemp, "created hemp object" );
 
     hemp_language_instance(hemp, "tt3");

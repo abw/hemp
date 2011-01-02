@@ -39,8 +39,8 @@ HEMP_ELEMENT(hemp_element_command_if) {
 
 
 HEMP_PREFIX(hemp_element_command_if_prefix) {
-    hemp_fragment fragment = *fragptr;
-    hemp_element  element  = fragment->type;
+    HempFragment fragment = *fragptr;
+    HempElement  element  = fragment->type;
 
     hemp_debug_call("hemp_element_command_if_prefix()\n");
 
@@ -60,9 +60,9 @@ HEMP_PREFIX(hemp_element_command_if_prefix) {
 
     hemp_parse_lhs_expr_rprec(fragment);
 //  hemp_debug_msg("pre-body: %s\n", (*fragptr)->type->name);
-    hemp_fragment block  = hemp_parse_rhs_body(fragment);
+    HempFragment block  = hemp_parse_rhs_body(fragment);
 //  hemp_debug_msg("block: %s\n", block->type->name);
-    hemp_fragment branch = hemp_parse_branch(
+    HempFragment branch = hemp_parse_branch(
         fragptr, scope, 0, 0, 
         fragment
     );
@@ -97,7 +97,7 @@ HEMP_PREFIX(hemp_element_command_if_prefix) {
 
 
 HEMP_POSTFIX(hemp_element_command_if_postfix) {
-    hemp_fragment fragment = *fragptr;
+    HempFragment fragment = *fragptr;
 
     hemp_debug_call("hemp_element_command_if_postfix()\n");
 
@@ -126,11 +126,11 @@ HEMP_POSTFIX(hemp_element_command_if_postfix) {
 HEMP_VALUE(hemp_element_command_if_value) {
     hemp_debug_call("hemp_element_command_if_value()\n");
 
-    hemp_fragment   fragment = hemp_val_frag(value);
-    hemp_value      test     = hemp_lhs(fragment);
-    hemp_value      block    = hemp_rhs(fragment);
-    hemp_value      truth    = hemp_obcall(test, boolean, context);
-    hemp_value      result   = HempNothing;
+    HempFragment   fragment = hemp_val_frag(value);
+    HempValue      test     = hemp_lhs(fragment);
+    HempValue      block    = hemp_rhs(fragment);
+    HempValue      truth    = hemp_obcall(test, boolean, context);
+    HempValue      result   = HempNothing;
 
     if (hemp_is_true(truth)) {
         result = hemp_obcall(block, value, context);
@@ -148,11 +148,11 @@ HEMP_VALUE(hemp_element_command_if_value) {
 HEMP_OUTPUT(hemp_element_command_if_values) {
     hemp_debug_call("hemp_element_command_if_values()\n");
 
-    hemp_fragment   fragment = hemp_val_frag(value);
-    hemp_value      test     = hemp_lhs(fragment);
-    hemp_value      block    = hemp_rhs(fragment);
-    hemp_value      truth    = hemp_call(test, boolean, context);
-    hemp_list       values;
+    HempFragment   fragment = hemp_val_frag(value);
+    HempValue      test     = hemp_lhs(fragment);
+    HempValue      block    = hemp_rhs(fragment);
+    HempValue      truth    = hemp_call(test, boolean, context);
+    HempList       values;
 
     hemp_prepare_values(context, output, values);
 
@@ -171,11 +171,11 @@ HEMP_OUTPUT(hemp_element_command_if_values) {
 HEMP_OUTPUT(hemp_element_command_if_text) {
     hemp_debug_call("hemp_element_command_if_text()\n");
 
-    hemp_fragment   fragment = hemp_val_frag(value);
-    hemp_value      test     = hemp_lhs(fragment);
-    hemp_value      block    = hemp_rhs(fragment);
-    hemp_value      truth    = hemp_call(test, boolean, context);
-    hemp_text       text;
+    HempFragment   fragment = hemp_val_frag(value);
+    HempValue      test     = hemp_lhs(fragment);
+    HempValue      block    = hemp_rhs(fragment);
+    HempValue      truth    = hemp_call(test, boolean, context);
+    HempText       text;
 
     hemp_prepare_text(context, output, text);
 
@@ -216,8 +216,8 @@ HEMP_ELEMENT(hemp_element_command_elsif) {
 
 
 HEMP_POSTFIX(hemp_element_command_elsif_branch) {
-    hemp_fragment fragment = *fragptr;
-    hemp_fragment block, branch;
+    HempFragment fragment = *fragptr;
+    HempFragment block, branch;
 
     hemp_debug_call("hemp_element_command_elsif_branch()\n");
 
@@ -277,13 +277,13 @@ HEMP_ELEMENT(hemp_element_command_else) {
 
 
 HEMP_POSTFIX(hemp_element_command_else_branch) {
-    hemp_fragment fragment = *fragptr;
+    HempFragment fragment = *fragptr;
 
     hemp_debug_call("hemp_element_command_else_branch()\n");
 
     /* Skip past the keyword then return the next expression or block */
     hemp_advance(fragptr);
-    hemp_fragment body = hemp_parse_body(fragptr, scope, 0, 1);
+    HempFragment body = hemp_parse_body(fragptr, scope, 0, 1);
 
     if (! body)
         HEMP_THROW_NOBODY(fragment);

@@ -13,15 +13,15 @@ int main(
 
 
 int test_language() {
-    hemp_hemp       hemp    = hemp_new();
-    hemp_context    context = hemp_context_instance(hemp);
-    hemp_string     name    = "test1";
-    hemp_document   document;
-    hemp_text       output;
+    Hemp       hemp    = hemp_new();
+    HempContext    context = hemp_context_instance(hemp);
+    HempString     name    = "test1";
+    HempDocument   document;
+    HempText       output;
 
-    hemp_string  dir    = hemp_filesystem_join_path(HEMP_TEST_DIR, "scripts");
-    hemp_string  file   = hemp_filesystem_join_path(dir, name);
-    hemp_string  text   = hemp_filesystem_read_file(file);
+    HempString  dir    = hemp_filesystem_join_path(HEMP_TEST_DIR, "scripts");
+    HempString  file   = hemp_filesystem_join_path(dir, name);
+    HempString  text   = hemp_filesystem_read_file(file);
 
 //  hemp_debug_msg("HempGlobal is %p (%p)\n", &HempGlobal, HempGlobal.namespace);
 

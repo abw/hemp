@@ -8,45 +8,45 @@
  * type definitions
  *--------------------------------------------------------------------------*/
 
-typedef hemp_value
-(* hemp_cache_fetch)(
-    hemp_cache  cache,
-    hemp_string key
+typedef HempValue
+(* HempCacheFetch)(
+    HempCache       cache,
+    HempString      key
 );
 
 typedef void
-(* hemp_cache_store)(
-    hemp_cache  cache,
-    hemp_string key,
-    hemp_value  value
+(* HempCacheStore)(
+    HempCache       cache,
+    HempString      key,
+    HempValue       value
 );
 
 typedef void
-(* hemp_cache_delete)(
-    hemp_cache  cache,
-    hemp_string key
+(* HempCacheDelete)(
+    HempCache       cache,
+    HempString      key
 );
 
 typedef void
-(* hemp_cache_empty)(
-    hemp_cache  cache
+(* HempCacheEmpty)(
+    HempCache       cache
 );
 
 typedef void
-(* hemp_cache_cleanup)(
-    hemp_cache  cache
+(* HempCacheClean)(
+    HempCache       cache
 );
 
 
 struct hemp_cache {
-    hemp_hemp           hemp;
-    hemp_string         name;
-    hemp_cache_fetch    fetch;
-    hemp_cache_store    store;
-    hemp_cache_delete   delete;
-    hemp_cache_empty    empty;
-    hemp_cache_cleanup  cleanup;
-    hemp_memory         instance;
+    Hemp            hemp;
+    HempString      name;
+    HempCacheFetch  fetch;
+    HempCacheStore  store;
+    HempCacheDelete delete;
+    HempCacheEmpty  empty;
+    HempCacheClean  clean;
+    HempMemory      instance;
 };
 
 
@@ -54,51 +54,40 @@ struct hemp_cache {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_cache
+HempCache
 hemp_cache_new(
-    hemp_hemp       hemp
+    Hemp            hemp
 );
 
 void
 hemp_cache_free(
-    hemp_cache      cache
+    HempCache       cache
 );
 
 
-hemp_value 
+HempValue 
 hemp_cache_no_fetch(
-    hemp_cache  cache,
-    hemp_string key
+    HempCache       cache,
+    HempString      key
 );
 
 void
 hemp_cache_no_store(
-    hemp_cache  cache,
-    hemp_string key,
-    hemp_value  value
+    HempCache       cache,
+    HempString      key,
+    HempValue       value
 );
 
 void
 hemp_cache_no_delete(
-    hemp_cache  cache,
-    hemp_string key
+    HempCache       cache,
+    HempString      key
 );
 
 void
 hemp_cache_no_empty(
-    hemp_cache  cache
+    HempCache       cache
 );
-
-
-/*--------------------------------------------------------------------------
- * Macros
- *--------------------------------------------------------------------------*/
-
-#define HEMP_CACHE(f)                               \
-    hemp_cache f(                                   \
-        hemp_hemp   hemp,                           \
-        hemp_string name                            \
-    )
 
 
 
@@ -110,55 +99,55 @@ typedef struct hemp_cache_lru      * hemp_cache_lru;
 typedef struct hemp_cache_lru_slot * hemp_cache_lru_slot;
 
 struct hemp_cache_lru {
-    hemp_size           size;
-    hemp_hash           index;
-    hemp_pool           pool;
+    HempSize           size;
+    HempHash           index;
+    HempPool           pool;
     hemp_cache_lru_slot fresh;      /* freshest (most recently used) slot   */
     hemp_cache_lru_slot stale;      /* stalest (least recently used) slot   */
     hemp_cache_lru_slot unused;     /* unused slots (typically post-delete) */
 };
 
 struct hemp_cache_lru_slot {
-    hemp_string         key;
-    hemp_value          value;
+    HempString         key;
+    HempValue          value;
     hemp_cache_lru_slot fresher;    /* previous (more recently used) slot   */
     hemp_cache_lru_slot staler;     /* next (less recently used) slot       */
 };
 
 
-hemp_cache
+HempCache
 hemp_cache_lru_new(
-    hemp_hemp   hemp,
-    hemp_size   size
+    Hemp   hemp,
+    HempSize   size
 );
 
-hemp_value 
+HempValue 
 hemp_cache_lru_fetch(
-    hemp_cache  cache,
-    hemp_string key
+    HempCache  cache,
+    HempString key
 );
 
 void
 hemp_cache_lru_store(
-    hemp_cache  cache,
-    hemp_string key,
-    hemp_value  value
+    HempCache  cache,
+    HempString key,
+    HempValue  value
 );
 
 void
 hemp_cache_lru_delete(
-    hemp_cache  cache,
-    hemp_string key
+    HempCache  cache,
+    HempString key
 );
 
 void
 hemp_cache_lru_empty(
-    hemp_cache  cache
+    HempCache  cache
 );
 
 void
-hemp_cache_lru_cleanup(
-    hemp_cache  cache
+hemp_cache_lru_clean(
+    HempCache  cache
 );
 
 void

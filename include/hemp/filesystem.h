@@ -19,15 +19,15 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_filesystem {
-    hemp_type       type;
-    hemp_hemp       hemp;
-    hemp_list       roots;
+    HempType       type;
+    Hemp       hemp;
+    HempList       roots;
 };
 
 struct hemp_path {
-    hemp_type       type;
-    hemp_uri        uri;
-    hemp_filesystem hemp;
+    HempType       type;
+    HempUri        uri;
+    HempFilesystem hemp;
 };
 
 
@@ -37,49 +37,49 @@ struct hemp_path {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_filesystem
+HempFilesystem
 hemp_filesystem_new(
-    hemp_hemp       hemp
+    Hemp       hemp
 );
 
 void
 hemp_filesystem_free(
-    hemp_filesystem filesystem
+    HempFilesystem filesystem
 );
 
 void 
 hemp_filesystem_roots(
-    hemp_filesystem filesystem,
-    hemp_list       roots
+    HempFilesystem filesystem,
+    HempList       roots
 );
 
 void 
 hemp_filesystem_add_root(
-    hemp_filesystem filesystem,
-    hemp_string     root
+    HempFilesystem filesystem,
+    HempString     root
 );
 
 void
 hemp_filesystem_set_path(
-    hemp_filesystem filesystem, 
-    hemp_string     path
+    HempFilesystem filesystem, 
+    HempString     path
 );
 
-hemp_string
+HempString
 hemp_filesystem_join_path(
-    hemp_string     base,
-    hemp_string     path
+    HempString     base,
+    HempString     path
 );
 
-hemp_string
+HempString
 hemp_filesystem_readable_path(
-    hemp_filesystem filesystem,
-    hemp_string     path
+    HempFilesystem filesystem,
+    HempString     path
 );
     
-hemp_string 
+HempString 
 hemp_filesystem_read_file(
-    hemp_string     path
+    HempString     path
 );
 
 

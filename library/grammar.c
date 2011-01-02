@@ -7,7 +7,7 @@
 
 HEMP_FACTORY(hemp_grammar_factory) {
     hemp_debug_init("instantiating grammar factory\n");
-    hemp_factory factory = hemp_factory_new(hemp, name);
+    HempFactory factory = hemp_factory_new(hemp, name);
     factory->cleaner     = &hemp_grammar_cleaner;
     factory->autoload    = NULL;        // TODO: load language
     return factory;
@@ -15,7 +15,7 @@ HEMP_FACTORY(hemp_grammar_factory) {
 
 
 HEMP_HASH_ITERATOR(hemp_grammar_cleaner) {
-    hemp_grammar grammar = (hemp_grammar) hemp_val_ptr(item->value);
+    HempGrammar grammar = (HempGrammar) hemp_val_ptr(item->value);
     hemp_debug_init("cleaning grammar: %s\n", grammar->name);
     hemp_grammar_free(grammar);
     return HEMP_TRUE;
@@ -26,12 +26,12 @@ HEMP_HASH_ITERATOR(hemp_grammar_cleaner) {
  * Grammar functions
  *--------------------------------------------------------------------------*/
 
-hemp_grammar
+HempGrammar
 hemp_grammar_new(
-    hemp_hemp   hemp,
-    hemp_string name
+    Hemp   hemp,
+    HempString name
 ) {
-    hemp_grammar grammar;
+    HempGrammar grammar;
     HEMP_ALLOCATE(grammar);
 
     grammar->hemp      = hemp;
@@ -44,29 +44,29 @@ hemp_grammar_new(
 }
 
 
-hemp_element
+HempElement
 hemp_grammar_new_element(
-    hemp_grammar    grammar,
-    hemp_string     etype,
-    hemp_string     start,
-    hemp_string     end
+    HempGrammar    grammar,
+    HempString     etype,
+    HempString     start,
+    HempString     end
 ) {
     hemp_debug_call(
         "new [%s => %s] symbol\n", 
         start ? start : "NULL", etype
     );
 
-    hemp_action constructor = hemp_factory_constructor(
+    HempAction constructor = hemp_factory_constructor(
         grammar->hemp->element, etype
     );
     if (! constructor)
         hemp_throw(grammar->hemp, HEMP_ERROR_INVALID, "element", etype);
 
-    hemp_element element = hemp_element_new(
+    HempElement element = hemp_element_new(
         etype, start, end
     );
 
-    element = (hemp_element) hemp_action_run(
+    element = (HempElement) hemp_action_run(
         constructor, element 
     );
 
@@ -77,14 +77,14 @@ hemp_grammar_new_element(
 }
 
 
-hemp_element
+HempElement
 hemp_grammar_add_element(
-    hemp_grammar    grammar,
-    hemp_string     etype,
-    hemp_string     start,
-    hemp_string     end,
-    hemp_oprec      lprec,
-    hemp_oprec      rprec
+    HempGrammar    grammar,
+    HempString     etype,
+    HempString     start,
+    HempString     end,
+    HempPrec      lprec,
+    HempPrec      rprec
 ) {
     hemp_debug_call(
         "adding [%s => %s] symbol to %s grammar [%d|%d]\n", 
@@ -105,12 +105,12 @@ hemp_grammar_add_element(
      *
      * Either way, the element type name must be unique for a grammar.
      */
-    hemp_string name = start ? start : etype;
+    HempString name = start ? start : etype;
 
     if (hemp_hash_fetch_pointer(grammar->elements, name))
         hemp_throw(grammar->hemp, HEMP_ERROR_DUPLICATE, "element", name);
 
-    hemp_element element = hemp_grammar_new_element(
+    HempElement element = hemp_grammar_new_element(
         grammar, etype, start, end
     );
 
@@ -122,7 +122,7 @@ hemp_grammar_add_element(
 
     if (start) {
         hemp_ptree_store(
-            grammar->operators, start, (hemp_memory) element
+            grammar->operators, start, (HempMemory) element
         );
     }
 
@@ -132,12 +132,12 @@ hemp_grammar_add_element(
 }
 
 
-HEMP_INLINE hemp_element
+HEMP_INLINE HempElement
 hemp_grammar_element(
-    hemp_grammar  grammar,
-    hemp_string   name
+    HempGrammar  grammar,
+    HempString   name
 ) {
-    hemp_element element = (hemp_element) hemp_hash_fetch_pointer(
+    HempElement element = (HempElement) hemp_hash_fetch_pointer(
         grammar->elements, name
     );
 
@@ -154,7 +154,7 @@ hemp_grammar_element(
 
 void
 hemp_grammar_free(
-    hemp_grammar grammar
+    HempGrammar grammar
 ) {
     hemp_hash_each(grammar->elements, &hemp_grammar_free_element);
     hemp_hash_free(grammar->elements);
@@ -164,13 +164,13 @@ hemp_grammar_free(
 }
 
 
-hemp_bool
+HempBool
 hemp_grammar_free_element(
-    hemp_hash     grammars,
-    hemp_pos      position,
-    hemp_slot     item
+    HempHash     grammars,
+    HempPos      position,
+    HempSlot     item
 ) {
-    hemp_element_free( (hemp_element) hemp_val_ptr(item->value) );
+    hemp_element_free( (HempElement) hemp_val_ptr(item->value) );
     return HEMP_TRUE;
 }
 
@@ -181,16 +181,16 @@ hemp_grammar_free_element(
  * a text document.
  *--------------------------------------------------------------------------*/
 
-hemp_bool
+HempBool
 hemp_grammar_scanner(
-    hemp_grammar    grammar,
-    hemp_document   document
+    HempGrammar    grammar,
+    HempDocument   document
 ) {
     hemp_debug_call("hemp_grammar_scanner()\n");
 
-    hemp_string     src = document->scanptr;
-    hemp_pnode      pnode;
-    hemp_element    element;
+    HempString     src = document->scanptr;
+    HempPnode      pnode;
+    HempElement    element;
 
     while (*src) {
         if (isspace(*src)) {
@@ -205,7 +205,7 @@ hemp_grammar_scanner(
         }
         else if (
             (pnode   = hemp_ptree_root(grammar->operators, src))
-        &&  (element = (hemp_element) hemp_pnode_match_more(pnode, &src))
+        &&  (element = (HempElement) hemp_pnode_match_more(pnode, &src))
         ) {
             /* keyword/operator */
             if (isalpha(*src) && isalpha(*(src - 1)))

@@ -9,7 +9,7 @@ HEMP_VIEW(hemp_viewer_text_view_hemp_block);
 HEMP_VIEWER(hemp_viewer_text) {
     hemp_debug("hemp_viewer_text(%p, %s)\n", hemp, name);
 
-    hemp_viewer viewer = hemp_viewer_new(
+    HempViewer viewer = hemp_viewer_new(
         hemp, name
     );
     
@@ -22,15 +22,15 @@ HEMP_VIEWER(hemp_viewer_text) {
 
 HEMP_VIEW(hemp_viewer_text_view_hemp_block) {
     hemp_debug_call("hemp_viewer_text_view_hemp_block()\n");
-    hemp_list     exprs = hemp_block_exprs_list(fragment);
-    hemp_fragment expr;
-    hemp_size     n;
+    HempList     exprs = hemp_block_exprs_list(fragment);
+    HempFragment expr;
+    HempSize     n;
 
-    hemp_text text;
+    HempText text;
     hemp_prepare_text(context, output, text);
     
     for (n = 0; n < exprs->length; n++) {
-        expr = (hemp_fragment) hemp_val_ptr( hemp_list_item(exprs, n) );
+        expr = (HempFragment) hemp_val_ptr( hemp_list_item(exprs, n) );
         hemp_viewer_fragment(viewer, expr, context, output);
     }
 

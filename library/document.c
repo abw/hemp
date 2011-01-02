@@ -1,12 +1,12 @@
 #include <hemp/document.h>
 
 
-hemp_document
+HempDocument
 hemp_document_new(
-    hemp_dialect dialect,
-    hemp_source  source
+    HempDialect dialect,
+    HempSource  source
 ) {
-    hemp_document document;
+    HempDocument document;
     HEMP_ALLOCATE(document);
 
     document->hemp      = dialect->hemp;
@@ -26,7 +26,7 @@ hemp_document_new(
 
 void
 hemp_document_free(
-    hemp_document document
+    HempDocument document
 ) {
     /* First call any custom cleanup code for the dialect */
     if (document->dialect->cleanup)
@@ -47,9 +47,9 @@ hemp_document_free(
 }
 
 
-hemp_fragment
+HempFragment
 hemp_document_tokens(
-    hemp_document document
+    HempDocument document
 ) {
     hemp_debug_call("hemp_document_tokens(%p)\n", document);
 
@@ -60,9 +60,9 @@ hemp_document_tokens(
 }
 
 
-hemp_bool
+HempBool
 hemp_document_scan(
-    hemp_document document
+    HempDocument document
 ) {
     hemp_debug_call("hemp_document_scan(%p)\n", document);
 
@@ -89,9 +89,9 @@ hemp_document_scan(
 }
 
 
-hemp_bool
+HempBool
 hemp_document_compile(
-    hemp_document document
+    HempDocument document
 ) {
     hemp_debug_call("hemp_document_compile(%p)\n", document);
     
@@ -105,9 +105,9 @@ hemp_document_compile(
 }
 
 
-hemp_fragment
+HempFragment
 hemp_document_tree(
-    hemp_document document
+    HempDocument document
 ) {
     hemp_debug_call("hemp_document_tree(%p)\n", document);
 
@@ -118,25 +118,25 @@ hemp_document_tree(
 }
 
 
-hemp_text
+HempText
 hemp_document_render(
-    hemp_document document,
-    hemp_context  context
+    HempDocument document,
+    HempContext  context
 ) {
     hemp_debug_call("hemp_document_render(%p)\n", document);
     return hemp_document_process(document, context, NULL);
 }
 
 
-hemp_text
+HempText
 hemp_document_process(
-    hemp_document document,
-    hemp_context  context,
-    hemp_text     output
+    HempDocument document,
+    HempContext  context,
+    HempText     output
 ) {
     hemp_debug_call("hemp_document_process(%p)\n", document);
-    hemp_bool       my_context  = HEMP_FALSE;
-    hemp_fragment   root        = hemp_document_tree(document);
+    HempBool       my_context  = HEMP_FALSE;
+    HempFragment   root        = hemp_document_tree(document);
 
     if (! context) {
         my_context = HEMP_TRUE;
@@ -163,16 +163,16 @@ hemp_document_process(
 
 
 
-hemp_value
+HempValue
 hemp_document_data(
-    hemp_document document,
-    hemp_context  context
+    HempDocument document,
+    HempContext  context
 ) {
     hemp_debug_call("hemp_document_data(%p)\n", document);
-    hemp_bool       my_context  = HEMP_FALSE;
-    hemp_fragment   root        = hemp_document_tree(document);
-    hemp_value      values;
-    hemp_list       results;
+    HempBool       my_context  = HEMP_FALSE;
+    HempFragment   root        = hemp_document_tree(document);
+    HempValue      values;
+    HempList       results;
 
     if (! root)
         hemp_fatal("document does not have a root element");
@@ -209,8 +209,8 @@ hemp_document_data(
  *--------------------------------------------------------------------------*/
 
 HEMP_OUTPUT(hemp_document_pairs) {
-    hemp_document   document = hemp_val_ptr(value);
-    hemp_fragment   root     = hemp_document_tree(document);
+    HempDocument   document = hemp_val_ptr(value);
+    HempFragment   root     = hemp_document_tree(document);
 
     hemp_debug_call("hemp_document_pairs(%p)\n", document);
 

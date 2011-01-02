@@ -3,21 +3,21 @@
 
 
 HEMP_TYPE_FUNC(hemp_type_identity) {
-    hemp_type type = hemp_type_subtype(HempValue, id, name);
-    type->text       = &hemp_type_identity_text;    /* identity -> text    */
-    type->number     = &hemp_type_identity_number;  /* identity -> number  */
-    type->integer    = &hemp_type_identity_integer; /* identity -> integer */
-    type->boolean    = &hemp_type_identity_boolean; /* identity -> boolean */
-    type->compare    = &hemp_type_identity_compare; /* identity -> compare */
-    type->defined    = &hemp_type_identity_defined; /* identity -> defined */
+    HempType type   = hemp_type_subtype(HempTypeValue, id, name);
+    type->text      = &hemp_type_identity_text;    /* identity -> text    */
+    type->number    = &hemp_type_identity_number;  /* identity -> number  */
+    type->integer   = &hemp_type_identity_integer; /* identity -> integer */
+    type->boolean   = &hemp_type_identity_boolean; /* identity -> boolean */
+    type->compare   = &hemp_type_identity_compare; /* identity -> compare */
+    type->defined   = &hemp_type_identity_defined; /* identity -> defined */
     return type;
 };
 
 
 
-HEMP_DO_INLINE hemp_string
+HEMP_DO_INLINE HempString
 hemp_identity_name(
-    hemp_value value
+    HempValue value
 ) {
     switch (HEMP_IDENT_ID(value)) {
         case 0:                     return HEMP_STR_INFINITY;
@@ -43,8 +43,8 @@ HEMP_OUTPUT(hemp_type_identity_text) {
             hemp_identity_name(value)
         );
     }
-    hemp_text text;
-    hemp_string name = hemp_identity_name(value);
+    HempText text;
+    HempString name = hemp_identity_name(value);
     hemp_prepare_text_size(context, output, text, strlen(name));
 
     /* HempEmpty silently bypassed generating any text output */

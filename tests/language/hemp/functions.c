@@ -4,8 +4,8 @@
 int main(
     int argc, char **argv, char **env
 ) {
-    hemp_hemp      hemp    = hemp_new();
-    hemp_context context = hemp_context_instance(hemp);
+    Hemp      hemp    = hemp_new();
+    HempContext context = hemp_context_instance(hemp);
     int         result;
 
     result = hemp_test_expect_script(

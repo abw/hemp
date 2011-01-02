@@ -1,6 +1,6 @@
 #include <hemp/test.h>
 
-hemp_char buffer[1024];
+HempChar buffer[1024];
 
 void test_cache();
 void test_cache_lru();
@@ -16,10 +16,10 @@ int main(
 
 
 void test_cache() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
-    hemp_cache cache = hemp_cache_new(hemp);
+    HempCache cache = hemp_cache_new(hemp);
     ok( cache, "created hemp cache" );
 
     hemp_cache_free(cache);
@@ -27,11 +27,11 @@ void test_cache() {
 }
 
 
-hemp_string lru_order(
+HempString lru_order(
     hemp_cache_lru lru
 ) {
     hemp_cache_lru_slot fresh = lru->fresh;
-    hemp_string string = (hemp_string) buffer;
+    HempString string = (HempString) buffer;
     *string = HEMP_NUL;
 
     while (fresh) {
@@ -45,25 +45,25 @@ hemp_string lru_order(
 
 
 void check_lru_order(
-    hemp_cache  cache,
-    hemp_string expect
+    HempCache  cache,
+    HempString expect
 ) {
-    hemp_string order = lru_order((hemp_cache_lru) cache->instance);
+    HempString order = lru_order((hemp_cache_lru) cache->instance);
     is( order, expect, expect );
 }
 
 
 void test_cache_lru() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
-    hemp_cache cache = hemp_cache_lru_new(hemp, 4);
+    HempCache cache = hemp_cache_lru_new(hemp, 4);
     ok( cache, "created LRU cache" );
     
-    hemp_text one = hemp_text_from_string("text chunk #1");
-    hemp_text two = hemp_text_from_string("text chunk #2");
-    hemp_text tre = hemp_text_from_string("text chunk #3");
-    hemp_text qua = hemp_text_from_string("text chunk #4");
+    HempText one = hemp_text_from_string("text chunk #1");
+    HempText two = hemp_text_from_string("text chunk #2");
+    HempText tre = hemp_text_from_string("text chunk #3");
+    HempText qua = hemp_text_from_string("text chunk #4");
     
     cache->store(cache, "foo", hemp_text_val(one));
     cache->store(cache, "bar", hemp_text_val(two));

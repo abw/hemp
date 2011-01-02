@@ -5,13 +5,13 @@
  * initialisation and cleanup functions
  *--------------------------------------------------------------------------*/
 
-hemp_fragment
+HempFragment
 hemp_fragment_init(
-    hemp_fragment   fragment,
-    hemp_element    type, 
-    hemp_string     token, 
-    hemp_pos        position, 
-    hemp_size       length
+    HempFragment   fragment,
+    HempElement    type, 
+    HempString     token, 
+    HempPos        position, 
+    HempSize       length
 ) {
     HEMP_INSTANCE(fragment);
 
@@ -35,15 +35,15 @@ hemp_fragment_init(
 
 void
 hemp_fragment_free(
-    hemp_fragment fragment
+    HempFragment fragment
 ) {
     hemp_mem_free(fragment);
 }
 
 
-HEMP_INLINE hemp_grammar
+HEMP_INLINE HempGrammar
 hemp_fragment_grammar(
-    hemp_fragment fragment
+    HempFragment fragment
 ) {
     if (! fragment->type->grammar)
         hemp_fatal(
@@ -55,9 +55,9 @@ hemp_fragment_grammar(
 }
 
 
-HEMP_INLINE hemp_fragments
+HEMP_INLINE HempFragments
 hemp_fragment_fragments(
-    hemp_fragment fragment
+    HempFragment fragment
 ) {
     if (! fragment->fragments)
         hemp_fatal(
@@ -69,9 +69,9 @@ hemp_fragment_fragments(
 }
 
 
-HEMP_INLINE hemp_document
+HEMP_INLINE HempDocument
 hemp_fragment_document(
-    hemp_fragment fragment
+    HempFragment fragment
 ) {
     return hemp_fragments_document(
         hemp_fragment_fragments(
@@ -82,10 +82,10 @@ hemp_fragment_document(
 
 
 
-HEMP_INLINE hemp_element
+HEMP_INLINE HempElement
 hemp_fragment_grammar_element(
-    hemp_fragment fragment,
-    hemp_string   name
+    HempFragment fragment,
+    HempString   name
 ) {
     return hemp_grammar_element(
         hemp_fragment_grammar(fragment),
@@ -94,10 +94,10 @@ hemp_fragment_grammar_element(
 }
 
 
-HEMP_INLINE hemp_fragment
+HEMP_INLINE HempFragment
 hemp_fragment_new_fragment(
-    hemp_fragment fragment,
-    hemp_string   typename
+    HempFragment fragment,
+    HempString   typename
 ) {
     return hemp_fragments_add_fragment(
         hemp_fragment_fragments(fragment),
@@ -107,13 +107,13 @@ hemp_fragment_new_fragment(
 }
 
 
-hemp_element 
+HempElement 
 hemp_fragment_retype(
-    hemp_fragment fragment,
-    hemp_string   typename
+    HempFragment fragment,
+    HempString   typename
 ) {
-    hemp_element type    = fragment->type;
-    hemp_grammar grammar = type->grammar;
+    HempElement type    = fragment->type;
+    HempGrammar grammar = type->grammar;
 
     if (grammar) {
         hemp_debug("found fragment grammar\n");
@@ -141,22 +141,22 @@ hemp_fragment_retype(
  * parsing functions
  *--------------------------------------------------------------------------*/
 
-hemp_fragment
+HempFragment
 hemp_fragment_parse(
-    hemp_fragment fragment,
-    hemp_scope    scope
+    HempFragment fragment,
+    HempScope    scope
 ) {
     hemp_debug_call("hemp_fragment_parse()\n");
-    hemp_fragment *current = &fragment;
+    HempFragment *current = &fragment;
 
-    hemp_fragment block = hemp_parse_block(
+    HempFragment block = hemp_parse_block(
         current,
         scope,
         0, 
         HEMP_FALSE
     );
 
-    hemp_fragment next_frag = *current;
+    HempFragment next_frag = *current;
     
     if (next_frag->type != HempElementEOF) {
         // TODO: should print token, not element type
@@ -174,22 +174,22 @@ hemp_fragment_parse(
  * debugging functions
  *--------------------------------------------------------------------------*/
 
-hemp_bool
+HempBool
 hemp_fragment_dump(
-    hemp_fragment f
+    HempFragment f
 ) {
-    hemp_context context = hemp_context_new(NULL);       // tmp ugly hack
+    HempContext context = hemp_context_new(NULL);       // tmp ugly hack
 
     if (! f->type->text)
         hemp_fatal("%s type does not define a text() method", f->type->name);
 
-    hemp_value output = f->type->token
+    HempValue output = f->type->token
         ? f->type->token(hemp_frag_val(f), context, HempNothing)
         : f->type->text(hemp_frag_val(f), context, HempNothing);
 
 
-    hemp_text text  = hemp_val_text(output);
-    hemp_string string = text ? text->string : "-- NO OUTPUT --";
+    HempText text  = hemp_val_text(output);
+    HempString string = text ? text->string : "-- NO OUTPUT --";
     
     hemp_debug(
         "%p %03d:%02d %-20s %s[%s%s%s]%s\n", f,
@@ -206,15 +206,15 @@ hemp_fragment_dump(
 
 
 void hemp_fragment_dump_exprs(
-    hemp_list exprs
+    HempList exprs
 ) {
-    hemp_size n;
+    HempSize n;
     
     hemp_debug("\n-- exprs --\n");
 
     for (n = 0; n < exprs->length; n++) {
-        hemp_value    v = hemp_list_item(exprs, n);
-        hemp_fragment f = hemp_val_frag(v);
+        HempValue    v = hemp_list_item(exprs, n);
+        HempFragment f = hemp_val_frag(v);
         hemp_fragment_debug(f);
     }
 
@@ -224,10 +224,10 @@ void hemp_fragment_dump_exprs(
 
 void
 hemp_fragment_debug(
-    hemp_fragment f
+    HempFragment f
 ) {
     static char buffer[80];
-    hemp_pos len = f->length;
+    HempPos len = f->length;
     if (len > 79) len = 79;
     strncpy(buffer, f->token, len);
     buffer[len] = '\0';

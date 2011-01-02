@@ -1,11 +1,11 @@
 #include <hemp/filesystem.h>
 
 
-hemp_filesystem
+HempFilesystem
 hemp_filesystem_new(
-    hemp_hemp   hemp
+    Hemp   hemp
 ) {
-    hemp_filesystem filesystem; 
+    HempFilesystem filesystem; 
     HEMP_ALLOCATE(filesystem);
 
     filesystem->hemp  = hemp;
@@ -20,7 +20,7 @@ hemp_filesystem_new(
 
 void
 hemp_filesystem_free(
-    hemp_filesystem filesystem
+    HempFilesystem filesystem
 ) {
     hemp_list_free(filesystem->roots);
     hemp_mem_free(filesystem);
@@ -29,8 +29,8 @@ hemp_filesystem_free(
 
 void 
 hemp_filesystem_roots(
-    hemp_filesystem filesystem,
-    hemp_list       roots
+    HempFilesystem filesystem,
+    HempList       roots
 ) {
     hemp_list_push_list(filesystem->roots, roots);
 }
@@ -38,8 +38,8 @@ hemp_filesystem_roots(
 
 void 
 hemp_filesystem_add_root(
-    hemp_filesystem filesystem,
-    hemp_string     root
+    HempFilesystem filesystem,
+    HempString     root
 ) {
     hemp_list_push(filesystem->roots, hemp_str_val(root));
 }
@@ -55,14 +55,14 @@ hemp_filesystem_add_root(
  * a volume, directory and file, e.g. C:\BLAH\BLAH
  * I think we should refer to anything like file:/blah/blah or C:\BLAH\BLAH 
  * as a URI.... but that makes me think I should be writing the path splitting
- * and merging code in uri.c / hemp_uri
+ * and merging code in uri.c / HempUri
  *
  */
 
 void
 OLD_hemp_filesystem_set_path(
-    hemp_filesystem filesystem,
-    hemp_string     path
+    HempFilesystem filesystem,
+    HempString     path
 ) {
 //    hemp_filesystem_clear_path(filesystem);             // TODO: free strings
 //    hemp_debug_file("setting filesystem path to %s\n", path);
@@ -73,32 +73,32 @@ OLD_hemp_filesystem_set_path(
 }
 
 
-hemp_string
+HempString
 hemp_filesystem_cwd(
-    hemp_filesystem filesystem
+    HempFilesystem filesystem
 ) {
     // HMM... not sure about this - see comments on cwd in 
     // Badger::Filesystem::Virtual... it doesn't really make sense in the 
     // context of a virtual filesystem
-    hemp_string cwd = getcwd(NULL, 0);
+    HempString cwd = getcwd(NULL, 0);
     if (! cwd)
         hemp_fatal("Can't read current working directory");     // TODO: proper error
     return cwd;
 }
 
 
-hemp_string
+HempString
 hemp_filesystem_join_path(
-    hemp_string base,
-    hemp_string path
+    HempString base,
+    HempString path
 ) {
     // quick hack to get something working - this needs doing properly to
     // clean up the generated path to make it canonical (e.g. collapse 
     // multiple slashes, resolve /./ and /../ elements, and so on)
-    hemp_size baselen = strlen(base);
-    hemp_bool slashb  = baselen && base[baselen - 1] == *HEMP_DIR_SEPARATOR;
-    hemp_bool slashp  = *path == *HEMP_DIR_SEPARATOR;
-    hemp_string  joined  = hemp_mem_alloc(
+    HempSize baselen = strlen(base);
+    HempBool slashb  = baselen && base[baselen - 1] == *HEMP_DIR_SEPARATOR;
+    HempBool slashp  = *path == *HEMP_DIR_SEPARATOR;
+    HempString  joined  = hemp_mem_alloc(
         baselen + strlen(path) + 3              /* terminating NUL and extra slashes */
     );
     if (! joined)
@@ -129,10 +129,10 @@ hemp_filesystem_join_path(
 }
 
 
-hemp_string
+HempString
 hemp_filesystem_absolute_path(
-    hemp_filesystem filesystem,
-    hemp_string     path
+    HempFilesystem filesystem,
+    HempString     path
 ) {
     return hemp_filesystem_is_path_absolute(filesystem, path)
         ? path                              // bugger!  can't do this - don't know what we can free
@@ -143,14 +143,14 @@ hemp_filesystem_absolute_path(
 }
 
 
-hemp_string
+HempString
 hemp_filesystem_readable_path(
-    hemp_filesystem filesystem,
-    hemp_string     path
+    HempFilesystem filesystem,
+    HempString     path
 ) {
     int n;
-    hemp_string root;
-    hemp_string full = NULL;
+    HempString root;
+    HempString full = NULL;
     
     for (n = 0; n < filesystem->roots->length; n++) {
         root = hemp_val_str( hemp_list_item(filesystem->roots, n) );
@@ -164,12 +164,12 @@ hemp_filesystem_readable_path(
         
 
 
-hemp_string
+HempString
 hemp_filesystem_read_file(
-    hemp_string path
+    HempString path
 ) {
-    hemp_string text = NULL;
-    hemp_size   size = 0;
+    HempString text = NULL;
+    HempSize   size = 0;
     FILE *fp = fopen(path,"r");
 
     if (fp) {

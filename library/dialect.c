@@ -7,7 +7,7 @@
 
 HEMP_FACTORY(hemp_dialect_factory) {
     hemp_debug_init("instantiating dialect factory\n");
-    hemp_factory factory = hemp_factory_new(hemp, name);
+    HempFactory factory = hemp_factory_new(hemp, name);
     factory->cleaner     = &hemp_dialect_cleaner;
     factory->autoload    = NULL;        // TODO: load language
     return factory;
@@ -15,7 +15,7 @@ HEMP_FACTORY(hemp_dialect_factory) {
 
 
 HEMP_HASH_ITERATOR(hemp_dialect_cleaner) {
-    hemp_dialect dialect = (hemp_dialect) hemp_val_ptr(item->value);
+    HempDialect dialect = (HempDialect) hemp_val_ptr(item->value);
     hemp_debug_init("cleaning dialect: %s\n", dialect->name);
     hemp_dialect_free(dialect);
     return HEMP_TRUE;
@@ -26,12 +26,12 @@ HEMP_HASH_ITERATOR(hemp_dialect_cleaner) {
  * Dialect constructor/destructor functions.
  *--------------------------------------------------------------------------*/
 
-hemp_dialect
+HempDialect
 hemp_dialect_new(
-    hemp_hemp   hemp,
-    hemp_string name
+    Hemp   hemp,
+    HempString name
 ) {
-    hemp_dialect dialect;
+    HempDialect dialect;
     HEMP_ALLOCATE(dialect);
     dialect->prepare = NULL;
 //  dialect->scanner = NULL;
@@ -47,7 +47,7 @@ hemp_dialect_new(
 
 void
 hemp_dialect_free(
-    hemp_dialect dialect
+    HempDialect dialect
 ) {
     hemp_mem_free(dialect->name);
 //  hemp_hash_free(dialect->tags);
@@ -56,12 +56,12 @@ hemp_dialect_free(
 }
 
 
-hemp_document
+HempDocument
 hemp_dialect_document(
-    hemp_dialect    dialect,
-    hemp_source     source
+    HempDialect    dialect,
+    HempSource     source
 ) {
-    hemp_document document = hemp_document_new(
+    HempDocument document = hemp_document_new(
         dialect, source
     );
     

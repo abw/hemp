@@ -13,9 +13,9 @@ int main(
 
 
 void test_source() {
-    hemp_hemp hemp = hemp_new();
-    hemp_source source;
-    hemp_string text;
+    Hemp hemp = hemp_new();
+    HempSource source;
+    HempString text;
 
     ok( hemp, "created hemp object" );
 
@@ -35,7 +35,7 @@ void test_source() {
 
     hemp_source_free(source);
     
-    hemp_string path  = hemp_filesystem_join_path(HEMP_TEST_DIR, "data/file1");
+    HempString path  = hemp_filesystem_join_path(HEMP_TEST_DIR, "data/file1");
 
     ok(
         (source = hemp_source_instance(hemp, HEMP_FILE, path)),

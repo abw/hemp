@@ -1,12 +1,12 @@
 #include <hemp/scheme/file.h>
 
 
-hemp_scheme
+HempScheme
 hemp_scheme_file_new(
-    hemp_hemp   hemp,
-    hemp_string name
+    Hemp   hemp,
+    HempString name
 ) {
-    hemp_scheme scheme  = hemp_scheme_new(hemp, name);
+    HempScheme scheme  = hemp_scheme_new(hemp, name);
     scheme->namer       = &hemp_scheme_file_namer;
     scheme->checker     = &hemp_scheme_file_checker;
     scheme->reader      = &hemp_scheme_file_reader;
@@ -15,17 +15,17 @@ hemp_scheme_file_new(
 }
 
 
-hemp_string
+HempString
 hemp_scheme_file_namer(
-    hemp_source source 
+    HempSource source 
 ) {
     return source->name;
 }
 
 
-hemp_bool
+HempBool
 hemp_scheme_file_checker(
-    hemp_source source
+    HempSource source
 ) {
     // TODO: check file exists and is readable
     hemp_debug_red("TODO: hemp_scheme_file_checker()\n");
@@ -33,9 +33,9 @@ hemp_scheme_file_checker(
 }
 
 
-hemp_string
+HempString
 hemp_scheme_file_reader(
-    hemp_source source 
+    HempSource source 
 ) {
     source->text = hemp_filesystem_read_file(source->name);
 
@@ -49,7 +49,7 @@ hemp_scheme_file_reader(
 
 void
 hemp_scheme_file_cleaner(
-    hemp_source source 
+    HempSource source 
 ) {
     if (source->text) {
         hemp_debug_call("cleaning file source: %s\n%s\n", source->name, source->text);

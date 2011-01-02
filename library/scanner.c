@@ -3,13 +3,13 @@
 
 HEMP_INLINE void
 hemp_scan_number(
-    hemp_document   document
+    HempDocument   document
 ) {
-    hemp_string     src     = document->scanptr;
-    hemp_num        num_val = 0;
-    hemp_int        int_val = 0;
-    hemp_bool       is_int  = HEMP_FALSE;
-    hemp_fragment   fragment;
+    HempString     src     = document->scanptr;
+    HempNum        num_val = 0;
+    HempInt        int_val = 0;
+    HempBool       is_int  = HEMP_FALSE;
+    HempFragment   fragment;
 
 //  hemp_debug_scan("scanning number: %s\n", document->scanptr);
 
@@ -60,9 +60,9 @@ hemp_scan_number(
 
 HEMP_INLINE void
 hemp_scan_whitespace(
-    hemp_document   document
+    HempDocument   document
 ) {
-    hemp_string     src = document->scanptr;
+    HempString     src = document->scanptr;
 
     if (isspace(*src)) {
         /* whitespace */

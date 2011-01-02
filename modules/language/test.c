@@ -31,8 +31,8 @@ HEMP_CLEANUP(hemp_element_test_input_cleanup);
 HEMP_POSTFIX(hemp_element_test_output_branch);
 HEMP_OUTPUT(hemp_element_test_output_text);
 
-hemp_document hemp_dialect_test_prepare(hemp_document doc);
-void hemp_dialect_test_cleanup(hemp_document doc);
+HempDocument hemp_dialect_test_prepare(HempDocument doc);
+void hemp_dialect_test_cleanup(HempDocument doc);
 
 typedef enum { 
     HEMP_TEST_INIT = 0,
@@ -41,7 +41,7 @@ typedef enum {
     HEMP_TEST_RUN_ERROR
 }   hemp_test_status;
 
-hemp_string hemp_test_status_names[] = {
+HempString hemp_test_status_names[] = {
     "Not ready",
     "Ready",
     "Run OK",
@@ -50,11 +50,11 @@ hemp_string hemp_test_status_names[] = {
 
 
 struct hemp_test {
-    hemp_type           type;
-    hemp_text           name;
-    hemp_text           input;
-    hemp_text           output;
-    hemp_text           expect;
+    HempType           type;
+    HempText           name;
+    HempText           input;
+    HempText           output;
+    HempText           expect;
     hemp_test_status    status;
 };
 
@@ -77,9 +77,9 @@ void        hemp_test_free(hemp_test);
  * Loader function called once when the module is loader
  *--------------------------------------------------------------------------*/
 
-hemp_bool
+HempBool
 hemp_module_loader(
-    hemp_module module
+    HempModule module
 ) {
 //  hemp_debug_msg("loading hemp.test language module\n");
     return HEMP_TRUE;
@@ -91,10 +91,10 @@ hemp_module_loader(
  *--------------------------------------------------------------------------*/
 
 
-hemp_bool
+HempBool
 hemp_module_binder(
-    hemp_module module,
-    hemp_hemp   hemp
+    HempModule module,
+    Hemp   hemp
 ) {
 //  hemp_debug_msg("Binding module: %s\n", module->name);
     hemp_register_language(hemp, "test", &hemp_language_test);
@@ -108,9 +108,9 @@ hemp_module_binder(
      * convinced myself it's working OK on other platforms.
      */
 
-    if (&HempGlobal != hemp->global) {
+    if (&HempGlobalData != hemp->global) {
         hemp_debug_msg("hemp.global is %p (namespace: %p)\n", hemp->global, hemp->global->namespace);
-        hemp_debug_msg("HempGlobal is %p (namespace: %p)\n", &HempGlobal, HempGlobal.namespace);
+        hemp_debug_msg("HempGlobal is %p (namespace: %p)\n", &HempGlobalData, HempGlobalData.namespace);
         hemp_fatal("Plugin error: HempGlobal symbol has not been resolved correctly");
     }
 
@@ -125,7 +125,7 @@ hemp_module_binder(
 HEMP_LANGUAGE(hemp_language_test) {
     hemp_debug_call("hemp_language_test(%p, %s)\n", hemp, name);
 
-    hemp_language language = hemp_language_new(
+    HempLanguage language = hemp_language_new(
         hemp, name, HEMP_TEST_VERSION
     );
 
@@ -142,7 +142,7 @@ HEMP_LANGUAGE(hemp_language_test) {
  *--------------------------------------------------------------------------*/
 
 HEMP_DIALECT(hemp_dialect_test) {
-    hemp_dialect dialect = hemp_dialect_new(hemp, name);
+    HempDialect dialect = hemp_dialect_new(hemp, name);
     dialect->scanner = &hemp_dialect_test_scanner;
     return dialect;
 }
@@ -151,12 +151,12 @@ HEMP_DIALECT(hemp_dialect_test) {
 HEMP_DOC_SCAN(hemp_dialect_test_scanner) {
     hemp_debug_msg("hemp_dialect_test_scanner(%p)\n", document);
 
-    hemp_dialect dialect = document->dialect;
+    HempDialect dialect = document->dialect;
 
-    hemp_hemp    hemp    = hemp_document_hemp(document);
-    hemp_tagset  tagset  = hemp_tagset_new(document);
-    hemp_grammar grammar = hemp_grammar_instance(hemp, dialect->name);
-    hemp_bool    result;
+    Hemp    hemp    = hemp_document_hemp(document);
+    HempTagset  tagset  = hemp_tagset_new(document);
+    HempGrammar grammar = hemp_grammar_instance(hemp, dialect->name);
+    HempBool    result;
 
     hemp_tagset_new_tag(tagset, "hemp.outline", "outline", "--", NULL, grammar);
 
@@ -175,7 +175,7 @@ HEMP_DOC_SCAN(hemp_dialect_test_scanner) {
  *--------------------------------------------------------------------------*/
 
 HEMP_GRAMMAR(hemp_grammar_test) {
-    hemp_grammar grammar = hemp_grammar_hemp_alpha(hemp, name);
+    HempGrammar grammar = hemp_grammar_hemp_alpha(hemp, name);
     HEMP_USE_BLOCK("hemp.test.language",    "language",     11);
     HEMP_USE_BLOCK("hemp.test.dialect",     "dialect",      11);
     HEMP_USE_BLOCK("hemp.test.input",       "test",         11);
@@ -203,9 +203,9 @@ HEMP_ELEMENT(hemp_element_test_language) {
 
 
 HEMP_SCANNER(hemp_element_test_language_scanner) {
-    hemp_element element = (hemp_element) self;
-    hemp_string  src     = document->scanptr;
-    hemp_tag     tag     = hemp_document_current_tag(document);
+    HempElement element = (HempElement) self;
+    HempString  src     = document->scanptr;
+    HempTag     tag     = hemp_document_current_tag(document);
 
     hemp_debug_call("hemp_element_test_language_scanner(%s)\n", element->name);
 
@@ -235,8 +235,8 @@ HEMP_SCANNER(hemp_element_test_language_scanner) {
 
 
 HEMP_PREFIX(hemp_element_test_language_prefix) {
-    hemp_fragment fragment = *fragptr;
-    hemp_fragment name;
+    HempFragment fragment = *fragptr;
+    HempFragment name;
 
     hemp_debug_call("hemp_element_test_language_prefix(%s)\n", fragment->type->name);
 
@@ -256,9 +256,9 @@ HEMP_PREFIX(hemp_element_test_language_prefix) {
 
 
 HEMP_VALUE(hemp_element_test_language_value) {
-    hemp_fragment   fragment    = hemp_val_frag(value);
-    hemp_value      name        = hemp_lhs(fragment);
-    hemp_text       text        = hemp_text_new();
+    HempFragment   fragment    = hemp_val_frag(value);
+    HempValue      name        = hemp_lhs(fragment);
+    HempText       text        = hemp_text_new();
     hemp_call(name, text, context, hemp_text_val(text));
 //  hemp_debug_msg("LANGUAGE: [%s]\n", text->string);
     hemp_language_instance(context->hemp, text->string);
@@ -280,10 +280,10 @@ HEMP_ELEMENT(hemp_element_test_dialect) {
 
 
 HEMP_VALUE(hemp_element_test_dialect_value) {
-    hemp_fragment   fragment    = hemp_val_frag(value);
-    hemp_value      name        = hemp_lhs(fragment);
-    hemp_value      result      = hemp_call(name, text, context, HempNothing);
-//  hemp_text       text        = hemp_val_text(result);
+    HempFragment   fragment    = hemp_val_frag(value);
+    HempValue      name        = hemp_lhs(fragment);
+    HempValue      result      = hemp_call(name, text, context, HempNothing);
+//  HempText       text        = hemp_val_text(result);
 //  hemp_debug_msg("DIALECT: [%s]\n", text->string);
     hemp_hash_store(context->vars, "dialect", result);
     return hemp_blank();
@@ -309,9 +309,9 @@ HEMP_ELEMENT(hemp_element_test_input) {
 
 
 HEMP_SCANNER(hemp_element_test_input_scanner) {
-    hemp_element element = (hemp_element) self;
-    hemp_string  src     = document->scanptr;
-    hemp_tag     tag     = hemp_document_current_tag(document);
+    HempElement element = (HempElement) self;
+    HempString  src     = document->scanptr;
+    HempTag     tag     = hemp_document_current_tag(document);
 
     hemp_debug_call("hemp_element_test_input_scanner(%s)\n", element->name);
 
@@ -339,9 +339,9 @@ HEMP_SCANNER(hemp_element_test_input_scanner) {
 
 
 HEMP_PREFIX(hemp_element_test_input_prefix) {
-    hemp_fragment fragment = *fragptr;
-    hemp_element  type     = fragment->type;
-    hemp_fragment name, block, branch;
+    HempFragment fragment = *fragptr;
+    HempElement  type     = fragment->type;
+    HempFragment name, block, branch;
 
     hemp_debug_call("hemp_element_test_input_prefix()\n");
 
@@ -380,14 +380,14 @@ HEMP_PREFIX(hemp_element_test_input_prefix) {
 HEMP_OUTPUT(hemp_element_test_input_text) {
     hemp_debug_call("hemp_element_test_input_value()\n");
 
-    hemp_fragment   fragment = hemp_val_frag(value);
-    hemp_value      name     = hemp_lhs(fragment);
-    hemp_value      block    = hemp_rhs(fragment);
+    HempFragment   fragment = hemp_val_frag(value);
+    HempValue      name     = hemp_lhs(fragment);
+    HempValue      block    = hemp_rhs(fragment);
     hemp_test       test     = hemp_test_new();
-    hemp_hemp       hemp     = context->hemp;
-    hemp_text       text;
-    hemp_value      dvalue;
-    hemp_string     dialect;
+    Hemp       hemp     = context->hemp;
+    HempText       text;
+    HempValue      dvalue;
+    HempString     dialect;
 
     hemp_prepare_text(context, output, text);
 
@@ -409,7 +409,7 @@ HEMP_OUTPUT(hemp_element_test_input_text) {
 
     HEMP_TRY;
         /* render the input block as a document */
-        hemp_document document = hemp_document_instance(
+        HempDocument document = hemp_document_instance(
             context->hemp,
             dialect,
             HEMP_TEXT, 
@@ -420,7 +420,7 @@ HEMP_OUTPUT(hemp_element_test_input_text) {
 
     HEMP_CATCH_ALL;
         /* store error text in the output and set status accordingly */
-        hemp_text error = hemp_error_text(hemp->error);
+        HempText error = hemp_error_text(hemp->error);
         hemp_text_truncate(test->output, 0);
         hemp_text_append_text(test->output, error);
         hemp_text_free(error);
@@ -485,9 +485,9 @@ HEMP_ELEMENT(hemp_element_test_output) {
 
 
 HEMP_POSTFIX(hemp_element_test_output_branch) {
-    hemp_fragment fragment = *fragptr;
-    hemp_element  type     = fragment->type;
-    hemp_fragment block;
+    HempFragment fragment = *fragptr;
+    HempElement  type     = fragment->type;
+    HempFragment block;
 
     hemp_debug_call("hemp_element_test_output_branch(%s)\n", type->name);
 
@@ -509,9 +509,9 @@ HEMP_POSTFIX(hemp_element_test_output_branch) {
 HEMP_OUTPUT(hemp_element_test_output_text) {
     hemp_debug_call("hemp_element_test_output_text()\n");
 
-    hemp_fragment   fragment = hemp_val_frag(value);
-    hemp_value      block    = hemp_rhs(fragment);
-    hemp_text       text;
+    HempFragment   fragment = hemp_val_frag(value);
+    HempValue      block    = hemp_rhs(fragment);
+    HempText       text;
     hemp_test       test;
 
     hemp_prepare_text(context, output, text);

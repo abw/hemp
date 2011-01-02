@@ -36,6 +36,6 @@
  * a number of internal modules use it and don't want to include hemp.h.
  * TODO: find somewhere to put this and various other config functions
  */
-hemp_string hemp_config_get_string(hemp_hemp, hemp_string);
+HempString hemp_config_get_string(Hemp, HempString);
 
 #endif /* HEMP_CORE_H */

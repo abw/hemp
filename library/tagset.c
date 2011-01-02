@@ -1,11 +1,11 @@
 #include <hemp/tagset.h>
 
 
-hemp_tagset
+HempTagset
 hemp_tagset_new(
-    hemp_document   document
+    HempDocument   document
 ) {
-    hemp_tagset tagset;
+    HempTagset tagset;
     HEMP_ALLOCATE(tagset);
 
     tagset->document      = document;
@@ -21,7 +21,7 @@ hemp_tagset_new(
 
 void
 hemp_tagset_free(
-    hemp_tagset tagset
+    HempTagset tagset
 ) {
     hemp_hash_each(tagset->tags, &hemp_tagset_free_tag);
     hemp_hash_free(tagset->tags);
@@ -32,12 +32,12 @@ hemp_tagset_free(
 }
 
 
-hemp_tag
+HempTag
 hemp_tagset_add_tag(
-    hemp_tagset   tagset, 
-    hemp_tag      tag
+    HempTagset   tagset, 
+    HempTag      tag
 ) {
-    hemp_ptree ptree = NULL;
+    HempPtree ptree = NULL;
 
     if (hemp_hash_fetch_pointer(tagset->tags, tag->name))
         hemp_fatal("Duplicate tag in tagset: %s", tag->name);
@@ -72,20 +72,20 @@ hemp_tagset_add_tag(
     hemp_hash_store_pointer(tagset->tags, tag->name, tag);
 
     if (ptree)
-        hemp_ptree_store(ptree, tag->start, (hemp_memory) tag);
+        hemp_ptree_store(ptree, tag->start, (HempMemory) tag);
     
     return tag;
 }
 
 
-hemp_tag
+HempTag
 hemp_tagset_new_tag(
-    hemp_tagset     tagset, 
-    hemp_string     type,
-    hemp_string     name,
-    hemp_string     start,
-    hemp_string     end,
-    hemp_grammar    grammar
+    HempTagset     tagset, 
+    HempString     type,
+    HempString     name,
+    HempString     start,
+    HempString     end,
+    HempGrammar    grammar
 ) {
     return hemp_tagset_add_tag(
         tagset,
@@ -97,13 +97,13 @@ hemp_tagset_new_tag(
 }
 
 
-hemp_bool
+HempBool
 hemp_tagset_free_tag(
-    hemp_hash tags,
-    hemp_pos  index,
-    hemp_slot item
+    HempHash tags,
+    HempPos  index,
+    HempSlot item
 ) {
-    hemp_tag_free((hemp_tag) hemp_val_ptr(item->value));
+    hemp_tag_free((HempTag) hemp_val_ptr(item->value));
     return HEMP_TRUE;
 }
 
@@ -111,7 +111,7 @@ hemp_tagset_free_tag(
 
 void
 hemp_tagset_dump(
-    hemp_tagset tagset
+    HempTagset tagset
 ) {
     hemp_ptree_dump(tagset->inline_tags);
     hemp_ptree_dump(tagset->outline_tags);
@@ -119,18 +119,18 @@ hemp_tagset_dump(
 
 
 
-hemp_bool
+HempBool
 hemp_tagset_scanner(
-    hemp_tagset     tagset,
-    hemp_document   document
+    HempTagset     tagset,
+    HempDocument   document
 ) {
     hemp_debug_call("hemp_tagset_scanner()\n");
 
-    hemp_string     src      = document->scanptr,
+    HempString     src      = document->scanptr,
                     from     = document->scantok,
                     tagstr;
-    hemp_pnode      pnode;
-    hemp_tag        tag;
+    HempPnode      pnode;
+    HempTag        tag;
 
 //    hemp_debug_msg("POS [%d] TEXT [%s]\n", document->scanpos, document->scantok);
 
@@ -149,7 +149,7 @@ hemp_tagset_scanner(
                 break;              /* didn't match first character of tag */
                 
             tagstr = src;
-            tag    = (hemp_tag) hemp_pnode_match_more(pnode, &src);
+            tag    = (HempTag) hemp_pnode_match_more(pnode, &src);
     
             if (! tag)
                 break;              /* didn't match remaining characters */
@@ -189,7 +189,7 @@ hemp_tagset_scanner(
             }
 
             tagstr = src;
-            tag    = (hemp_tag) hemp_pnode_match_more(pnode, &src);
+            tag    = (HempTag) hemp_pnode_match_more(pnode, &src);
 
             if (! tag) {
                 src++;

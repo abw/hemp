@@ -14,17 +14,17 @@ int main(
 
 
 void test1_scan(
-    hemp_tag  tag,
-    hemp_string  start, 
-    hemp_pos  pos, 
-    hemp_string *src
+    HempTag  tag,
+    HempString  start, 
+    HempPos  pos, 
+    HempString *src
 ) {
     hemp_debug("custom scanner");
 }
 
 
 void test_tag() {
-    hemp_tag tag, copy;
+    HempTag tag, copy;
 
     tag = hemp_tag_new(
         "test1", "test1", "[%", "%]", NULL
@@ -60,10 +60,10 @@ void test_tag() {
 
 
 //void test_hemp_tags() {
-//    hemp_hemp hemp = hemp_new();
+//    Hemp hemp = hemp_new();
 //    ok( hemp, "got hemp object" );
 //
-//    hemp_tag comment_tag = hemp_tag(hemp, "comment");
+//    HempTag comment_tag = HempTag(hemp, "comment");
 //    ok( comment_tag, "got comment tag" );
 //    
 //    hemp_free(hemp);

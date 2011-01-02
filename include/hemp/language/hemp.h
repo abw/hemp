@@ -20,9 +20,9 @@ HEMP_ELEMENTS(hemp_element_text_elements);
 
 HEMP_ELEMENT(hemp_element_sub_symbol);
 
-void hemp_grammar_add_hemp_alpha(hemp_grammar);
-void hemp_grammar_add_hemp_bravo(hemp_grammar);
-void hemp_grammar_add_hemp_charlie(hemp_grammar);
+void hemp_grammar_add_hemp_alpha(HempGrammar);
+void hemp_grammar_add_hemp_bravo(HempGrammar);
+void hemp_grammar_add_hemp_charlie(HempGrammar);
 
 
 #endif /* HEMP_LANGUAGE_HEMP_H */

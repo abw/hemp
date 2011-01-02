@@ -9,8 +9,8 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_action {
-    hemp_actor      actor;
-    hemp_memory     script;
+    HempActor       actor;
+    HempMemory      script;
 }; 
 
 
@@ -18,16 +18,16 @@ struct hemp_action {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_action
+HempAction
 hemp_action_init(
-    hemp_action     action,
-    hemp_actor      actor,
-    hemp_memory     script
+    HempAction      action,
+    HempActor       actor,
+    HempMemory      script
 );
 
 void
 hemp_action_free(
-    hemp_action     action
+    HempAction      action
 );
 
 
@@ -35,10 +35,10 @@ hemp_action_free(
  * macro definitions
  *--------------------------------------------------------------------------*/
 
-#define hemp_action_new(actor, script) \
+#define hemp_action_new(actor, script)          \
     hemp_action_init(NULL, actor, script)
 
-#define hemp_action_run(action, ...) \
+#define hemp_action_run(action, ...)            \
     action->actor(action->script, __VA_ARGS__)
 
 

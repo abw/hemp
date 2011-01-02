@@ -3,7 +3,7 @@
 
 
 HEMP_TYPE_FUNC(hemp_type_object) {
-    hemp_type type = hemp_type_subtype(HempValue, id, name);
+    HempType type = hemp_type_subtype(HempTypeValue, id, name);
     return type;
 };
 

@@ -13,8 +13,8 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_params {
-    hemp_list       ordinals;
-    hemp_hash       nominals;
+    HempList       ordinals;
+    HempHash       nominals;
 }; 
 
 
@@ -22,19 +22,19 @@ struct hemp_params {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_params
+HempParams
 hemp_params_init(
-    hemp_params     params
+    HempParams     params
 );
 
 HEMP_INLINE void
 hemp_params_release(
-    hemp_params params
+    HempParams params
 );
 
 void
 hemp_params_free(
-    hemp_params     params
+    HempParams     params
 );
 
 

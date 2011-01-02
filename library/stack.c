@@ -1,16 +1,16 @@
 #include "hemp/stack.h"
 
 
-HEMP_INLINE hemp_stack
+HEMP_INLINE HempStack
 hemp_stack_init(
-    hemp_stack      stack,
-    hemp_size       capacity
+    HempStack      stack,
+    HempSize       capacity
 ) {
     HEMP_INSTANCE(stack);
 
     stack->depth    = 0;
     stack->capacity = capacity;
-    stack->items    = hemp_mem_alloc(capacity * sizeof(hemp_memory));
+    stack->items    = hemp_mem_alloc(capacity * sizeof(HempMemory));
     
     if (! stack->items)
         hemp_mem_fail("stack items");
@@ -21,16 +21,16 @@ hemp_stack_init(
 
 HEMP_INLINE void
 hemp_stack_grow(
-    hemp_stack  stack
+    HempStack  stack
 ) {
-    hemp_size   capacity = stack->capacity * 2;
+    HempSize   capacity = stack->capacity * 2;
 
     if (! capacity)
         capacity = HEMP_STACK_SIZE;
 
     stack->items = hemp_mem_resize(
         stack->items, 
-        capacity * sizeof(hemp_memory)
+        capacity * sizeof(HempMemory)
     );
     if (! stack->items)
         hemp_mem_fail("stack items");
@@ -43,8 +43,8 @@ hemp_stack_grow(
 
 HEMP_INLINE void
 hemp_stack_push(
-    hemp_stack  stack,
-    hemp_memory item
+    HempStack  stack,
+    HempMemory item
 ) {
     hemp_debug_call("hemp_stack_push(%p, %p)\n", stack, item);
 
@@ -55,9 +55,9 @@ hemp_stack_push(
 }
 
 
-HEMP_INLINE hemp_memory
+HEMP_INLINE HempMemory
 hemp_stack_pop(
-    hemp_stack  stack
+    HempStack  stack
 ) {
     hemp_debug_call("hemp_stack_pop(%p)\n", stack);
 
@@ -72,7 +72,7 @@ hemp_stack_pop(
 
 HEMP_INLINE void
 hemp_stack_free(
-    hemp_stack stack
+    HempStack stack
 ) {
     hemp_mem_free(stack->items);
     hemp_mem_free(stack);

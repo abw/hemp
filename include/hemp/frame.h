@@ -10,12 +10,12 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_frame {
-    hemp_context    context;
-    hemp_frame      parent;
-    hemp_fragment   fragment;
-    hemp_params     params;
-    hemp_hash       vars;
-//    hemp_list       args;
+    HempContext    context;
+    HempFrame      parent;
+    HempFragment   fragment;
+    HempParams     params;
+    HempHash       vars;
+//    HempList       args;
 };
 
 
@@ -23,14 +23,14 @@ struct hemp_frame {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_frame
+HempFrame
 hemp_frame_init(
-    hemp_frame      frame
+    HempFrame      frame
 );
 
 void
 hemp_frame_free(
-    hemp_frame      frame
+    HempFrame      frame
 );
 
 

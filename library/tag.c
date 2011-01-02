@@ -3,29 +3,29 @@
 
 HEMP_FACTORY(hemp_tag_factory) {
     hemp_debug_init("instantiating tag factory: %s\n", name);
-    hemp_factory factory = hemp_factory_new(hemp, name);
+    HempFactory factory = hemp_factory_new(hemp, name);
     factory->cleaner     = hemp_tag_cleaner;
     return factory;
 }
 
 
 HEMP_HASH_ITERATOR(hemp_tag_cleaner) {
-    hemp_tag tag = (hemp_tag) hemp_val_ptr(item->value);
+    HempTag tag = (HempTag) hemp_val_ptr(item->value);
     hemp_debug_init("cleaning tag: %s\n", tag->name);
     hemp_tag_free(tag);
     return HEMP_TRUE;
 }
 
 
-hemp_tag
+HempTag
 hemp_tag_new(
-    hemp_string     type,
-    hemp_string     name,
-    hemp_string     start,
-    hemp_string     end,
-    hemp_grammar    grammar
+    HempString     type,
+    HempString     name,
+    HempString     start,
+    HempString     end,
+    HempGrammar    grammar
 ) {
-    hemp_tag tag;
+    HempTag tag;
     HEMP_ALLOCATE(tag);
     
     /* Some code assumes that all tags always have a start tag, but that's
@@ -52,11 +52,11 @@ hemp_tag_new(
 }
 
 
-hemp_tag
+HempTag
 hemp_tag_copy(
-    hemp_tag tag
+    HempTag tag
 ) {
-    hemp_tag copy = hemp_tag_new(
+    HempTag copy = hemp_tag_new(
         tag->type,
         tag->name,
         tag->start,
@@ -72,8 +72,8 @@ hemp_tag_copy(
 
 void
 hemp_tag_set_name(
-    hemp_tag    tag,
-    hemp_string name
+    HempTag    tag,
+    HempString name
 ) {
     hemp_mem_free(tag->name);
     tag->name = hemp_string_clone(name, "tag name");
@@ -82,8 +82,8 @@ hemp_tag_set_name(
 
 void
 hemp_tag_set_start(
-    hemp_tag tag,
-    hemp_string start
+    HempTag tag,
+    HempString start
 ) {
     hemp_mem_free(tag->start);
     tag->start = hemp_string_clone(start, "tag start");
@@ -92,8 +92,8 @@ hemp_tag_set_start(
 
 void
 hemp_tag_set_end(
-    hemp_tag tag,
-    hemp_string end
+    HempTag tag,
+    HempString end
 ) {
     if (tag->end)
         hemp_mem_free(tag->end);
@@ -110,9 +110,9 @@ hemp_tag_set_end(
 
 void
 hemp_tag_set_start_end(
-    hemp_tag tag,
-    hemp_string start,
-    hemp_string end
+    HempTag tag,
+    HempString start,
+    HempString end
 ) {
     hemp_tag_set_start(tag, start);
     hemp_tag_set_end(tag, end);
@@ -121,7 +121,7 @@ hemp_tag_set_start_end(
 
 void
 hemp_tag_free(
-    hemp_tag tag
+    HempTag tag
 ) {
     hemp_mem_free(tag->type);
     hemp_mem_free(tag->name);

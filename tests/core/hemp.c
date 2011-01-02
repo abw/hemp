@@ -16,12 +16,12 @@ int main(
 
 
 void test_hemp_config(
-    hemp_hemp   hemp,
-    hemp_string name,
-    hemp_string expect
+    Hemp   hemp,
+    HempString name,
+    HempString expect
 ) {
-    hemp_value  value = hemp_config_get(hemp, name);
-    hemp_string string;
+    HempValue  value = hemp_config_get(hemp, name);
+    HempString string;
 
     if (hemp_is_string(value)) {
         string = hemp_val_str(value);
@@ -41,15 +41,15 @@ void test_hemp_config(
 
 
 void test_hemp() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
     HEMP_TRY;
-        hemp_string version = hemp_version();
+        HempString version = hemp_version();
         ok( version, "got hemp version: %s", version );
 
         /* test the global configuration */
-        hemp_value cfghemp = hemp_config_get(hemp, "hemp");
+        HempValue cfghemp = hemp_config_get(hemp, "hemp");
         ok( hemp_is_defined(cfghemp), "fetched hemp config" );
 
         test_hemp_config(hemp, "hemp.version",    version);
@@ -58,13 +58,13 @@ void test_hemp() {
         test_hemp_config(hemp, "hemp.module_ext", HEMP_MODULE_EXT);
 
         /* add some extra configuration values from a hash */
-        hemp_hash config = hemp_hash_new();
+        HempHash config = hemp_hash_new();
         hemp_hash_store_string(config, "foo",       "Hello");
         hemp_hash_store_string(config, "bar",       "World");
         hemp_hash_store_string(config, "hemp.dir",  "/some/where/else");
 
         /* add a nested hemp.root value to mask the global config value */
-        hemp_hash hconf = hemp_hash_new();
+        HempHash hconf = hemp_hash_new();
         hemp_hash_store_hash(config, "hemp", hconf);
         hemp_hash_store_string(hconf, "dir", "/some/where/else");
 
@@ -87,7 +87,7 @@ void test_hemp() {
 
     HEMP_CATCH_ALL;
         fail("caught error: %s", hemp->error->message);
-        hemp_text error = hemp_error_text(hemp->error);
+        HempText error = hemp_error_text(hemp->error);
         printf("%s", error->string);
         hemp_text_free(error);
 
@@ -98,7 +98,7 @@ void test_hemp() {
 
 
 void test_hemp_text_config() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
     hemp_language_instance(hemp, "json");
@@ -115,7 +115,7 @@ void test_hemp_text_config() {
 
     HEMP_CATCH_ALL;
         fail("caught error: %s", hemp->error->message);
-        hemp_text error = hemp_error_text(hemp->error);
+        HempText error = hemp_error_text(hemp->error);
         printf("%s", error->string);
         hemp_text_free(error);
 

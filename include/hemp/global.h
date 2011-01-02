@@ -1,81 +1,88 @@
 #ifndef HEMP_GLOBAL_H
 #define HEMP_GLOBAL_H
 
+
+/*--------------------------------------------------------------------------
+ * Type definitions.
+ *--------------------------------------------------------------------------*/
+
 struct hemp_global {
-    hemp_size       n_hemps;
-    hemp_u16        namespace_id;
-    hemp_namespace  namespace;
-    hemp_hash       modules;
-    hemp_hash       config;
+    HempSize        n_hemps;
+    HempU16         namespace_id;
+    HempNamespace   namespace;
+    HempHash        modules;
+    HempHash        config;
     /* shortcut to hemp.element namespace which gets used often */
-    hemp_namespace  elements;
+    HempNamespace   elements;
 };
 
-extern struct hemp_global HempGlobal;
-hemp_global
+extern struct hemp_global HempGlobalData;
+
+
+/*--------------------------------------------------------------------------
+ * Function prototypes
+ *--------------------------------------------------------------------------*/
+
+HempGlobal
 hemp_global_data();
 
-
-
-hemp_global
+HempGlobal
 hemp_global_init();
 
 void
 hemp_global_free();
 
-
 void 
 hemp_global_init_namespaces(
-    hemp_global     global
+    HempGlobal      global
 );
 
 void 
 hemp_global_free_namespaces(
-    hemp_global     global
+    HempGlobal      global
 );
 
 void
 hemp_global_init_symbols(
-    hemp_global     global
+    HempGlobal      global
 );
 
 void 
 hemp_global_free_symbols(
-    hemp_global     global
+    HempGlobal      global
 );
 
 void 
 hemp_global_init_modules(
-    hemp_global     global
+    HempGlobal      global
 );
 
-hemp_module
+HempModule
 hemp_global_module(
-    hemp_global     global,
-    hemp_string     name
+    HempGlobal      global,
+    HempString      name
 );
 
 void 
 hemp_global_free_modules(
-    hemp_global     global
+    HempGlobal      global
 );
 
-hemp_bool
+HempBool
 hemp_global_free_module(
-    hemp_hash       modules,
-    hemp_pos        position,
-    hemp_slot       item
+    HempHash        modules,
+    HempPos         position,
+    HempSlot        item
 );
 
 void hemp_global_init_config(
-    hemp_global     global
+    HempGlobal      global
 );
 
 void 
 hemp_global_free_config(
-    hemp_global     global
+    HempGlobal      global
 );
-
 
 
 #endif /* HEMP_GLOBAL_H */

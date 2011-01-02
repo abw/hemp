@@ -13,20 +13,20 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_document {
-    hemp_hemp       hemp;
-    hemp_dialect    dialect;
-    hemp_source     source;
-    hemp_scope      scope;
-    hemp_fragments  fragments;
-    hemp_fragment   tree;
-//  hemp_action     scanner;
-//  hemp_tagset     tagset;
+    Hemp       hemp;
+    HempDialect    dialect;
+    HempSource     source;
+    HempScope      scope;
+    HempFragments  fragments;
+    HempFragment   tree;
+//  HempAction     scanner;
+//  HempTagset     tagset;
 
     /* these don't really belong here but it'll do for now */
-    hemp_string     scanptr;    /* position in source string during scanning */
-    hemp_string     scantok;    /* start of current token being scanned      */
-    hemp_pos        scanpos;    /* byte position of scanptr (can we compute this?) */
-    hemp_stack      scantags;   /* stack of nested tags                 */
+    HempString     scanptr;    /* position in source string during scanning */
+    HempString     scantok;    /* start of current token being scanned      */
+    HempPos        scanpos;    /* byte position of scanptr (can we compute this?) */
+    HempStack      scantags;   /* stack of nested tags                 */
 };
 
 
@@ -34,57 +34,57 @@ struct hemp_document {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_document
+HempDocument
 hemp_document_new(
-    hemp_dialect    dialect,
-    hemp_source     source
+    HempDialect    dialect,
+    HempSource     source
 );
 
 void    
 hemp_document_free(
-    hemp_document   document
+    HempDocument   document
 );
 
-hemp_fragment
+HempFragment
 hemp_document_tokens(
-    hemp_document   document
+    HempDocument   document
 );
 
-hemp_bool
+HempBool
 hemp_document_scan(
-    hemp_document   document
+    HempDocument   document
 );
 
-hemp_bool
+HempBool
 hemp_document_compile(
-    hemp_document   document
+    HempDocument   document
 );
     
-hemp_fragment
+HempFragment
 hemp_document_tree(
-    hemp_document   document
+    HempDocument   document
 );
 
 
-hemp_text
+HempText
 hemp_document_render(
-    hemp_document   document,
-    hemp_context    context
+    HempDocument   document,
+    HempContext    context
 );
 
 // quick hack - need to sort out names properly before going too far
-hemp_text
+HempText
 hemp_document_process(
-    hemp_document document,
-    hemp_context  context,
-    hemp_text     output
+    HempDocument document,
+    HempContext  context,
+    HempText     output
 );
 
 
-hemp_value
+HempValue
 hemp_document_data(
-    hemp_document   document,
-    hemp_context    context
+    HempDocument   document,
+    HempContext    context
 );
 
 HEMP_OUTPUT(hemp_document_pairs);
@@ -111,7 +111,7 @@ HEMP_OUTPUT(hemp_document_pairs);
     )
 
 #define hemp_document_scanned(document, element) ({             \
-    hemp_fragment _hemp_frag = hemp_document_add_fragment(      \
+    HempFragment _hemp_frag = hemp_document_add_fragment(      \
         document, element                                       \
     );                                                          \
     document->scantok  = document->scanptr;                     \
@@ -121,7 +121,7 @@ HEMP_OUTPUT(hemp_document_pairs);
 
 #define hemp_document_scanned_to(document, element, src) ({     \
     document->scanptr = src;                                    \
-    hemp_fragment _hemp_frag = hemp_document_add_fragment(      \
+    HempFragment _hemp_frag = hemp_document_add_fragment(      \
         document, element                                       \
     );                                                          \
     document->scantok  = src;                                   \
@@ -136,7 +136,7 @@ HEMP_OUTPUT(hemp_document_pairs);
     hemp_stack_pop(document->scantags)
 
 #define hemp_document_current_tag(document)                     \
-    ((hemp_tag) hemp_stack_top(document->scantags))
+    ((HempTag) hemp_stack_top(document->scantags))
 
 
 #endif /* HEMP_DOCUMENT_H */

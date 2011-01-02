@@ -13,19 +13,19 @@ HEMP_ELEMENT(hemp_element_tag_inline) {
 
 
 HEMP_SCANNER(hemp_element_tag_inline_scanner) {
-    hemp_tag        tag     = (hemp_tag) self;
-    hemp_string     tagtok  = document->scantok;
-    hemp_pos        pos     = document->scanpos;
-    hemp_string     src     = document->scanptr,
+    HempTag        tag     = (HempTag) self;
+    HempString     tagtok  = document->scantok;
+    HempPos        pos     = document->scanpos;
+    HempString     src     = document->scanptr,
                     from    = document->scanptr;
-    hemp_string     tagend  = tag->end;
-    hemp_size       endlen  = strlen(tagend);
-    hemp_num        num_val = 0;
-    hemp_int        int_val = 0;
-    hemp_fragment   fragment;
-    hemp_bool       is_int, is_word;
-    hemp_pnode      pnode;
-    hemp_element    element;
+    HempString     tagend  = tag->end;
+    HempSize       endlen  = strlen(tagend);
+    HempNum        num_val = 0;
+    HempInt        int_val = 0;
+    HempFragment   fragment;
+    HempBool       is_int, is_word;
+    HempPnode      pnode;
+    HempElement    element;
 
     hemp_debug_msg("hemp_element_tag_inline_scanner()\n");
 
@@ -111,7 +111,7 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
         }
         else if (
             (pnode   = hemp_ptree_root(tag->grammar->operators, src))
-        &&  (element = (hemp_element) hemp_pnode_match_more(pnode, &src))
+        &&  (element = (HempElement) hemp_pnode_match_more(pnode, &src))
         ) {
             hemp_debug_token("OPERATOR", from, src-from);
 

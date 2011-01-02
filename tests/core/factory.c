@@ -18,10 +18,10 @@ int main(
 }
 
 
-hemp_memory
+HempMemory
 constructor(
-    hemp_memory msg,
-    hemp_memory name
+    HempMemory msg,
+    HempMemory name
 ) {
     sprintf(result, "[%s] constructor for %s", (char *) msg, (char *) name);
     n++;
@@ -29,27 +29,27 @@ constructor(
 }
 
 
-hemp_action
+HempAction
 wildcard(
-    hemp_memory msg,
-    hemp_string name
+    HempMemory msg,
+    HempString name
 ) {
     hemp_debug_cyan("wildcard action for %s\n", name);
     return hemp_action_new(
-        (hemp_actor) constructor, msg
+        (HempActor) constructor, msg
     );
 }
 
 
 void test_factory() {
-    hemp_hemp hemp = hemp_new();
-    hemp_factory factory = hemp_factory_new(hemp, "test");
+    Hemp hemp = hemp_new();
+    HempFactory factory = hemp_factory_new(hemp, "test");
     ok( factory, "created factory" );
 
     hemp_factory_register(
-        factory, "foo", (hemp_actor) &constructor, "FOO"
+        factory, "foo", (HempActor) &constructor, "FOO"
     );
-    hemp_memory instance = hemp_factory_instance(
+    HempMemory instance = hemp_factory_instance(
         factory, "foo"
     );
     ok( instance, "got a foo instance" );
@@ -69,21 +69,21 @@ void test_factory() {
 
 
 void test_factory_wildcard() {
-    hemp_hemp hemp = hemp_new();
-    hemp_factory factory = hemp_factory_new(hemp, "test");
+    Hemp hemp = hemp_new();
+    HempFactory factory = hemp_factory_new(hemp, "test");
     ok( factory, "created wildcard factory" );
 
     hemp_factory_register(
-        factory, "foo.*", (hemp_actor) &wildcard, "FOO"
+        factory, "foo.*", (HempActor) &wildcard, "FOO"
     );
     hemp_factory_register(
-        factory, "bar.*", (hemp_actor) &wildcard, "BAR"
+        factory, "bar.*", (HempActor) &wildcard, "BAR"
     );
     hemp_factory_register(
-        factory, "foo.bar.*", (hemp_actor) &wildcard, "FOO.BAR"
+        factory, "foo.bar.*", (HempActor) &wildcard, "FOO.BAR"
     );
 
-    hemp_memory instance = hemp_factory_instance(factory, "foo.splat");
+    HempMemory instance = hemp_factory_instance(factory, "foo.splat");
     ok( instance, "got foo.splat instance" );
     is( instance, "[FOO] constructor for foo.splat", "constructed foo.splat" );
     ok( n == 2, "made two constructor calls" );

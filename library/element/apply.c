@@ -43,10 +43,10 @@ HEMP_FIXUP(hemp_element_apply_lvalue) {
      *   e.g. foo(a,b) = a ~ b  
      *    =>  [assign, [apply,foo,(a,b)], [code,(a,b),[concat,a,b]]
      */
-    hemp_fragment parens = hemp_rhs_fragment(fragment);
-    hemp_fragment assign = hemp_val_frag(fixative);
-    hemp_code    code    = hemp_code_new();
-    hemp_proto   proto   = hemp_code_proto(code);
+    HempFragment parens = hemp_rhs_fragment(fragment);
+    HempFragment assign = hemp_val_frag(fixative);
+    HempCode    code    = hemp_code_new();
+    HempProto   proto   = hemp_code_proto(code);
     code->body           = hemp_rhs(assign);
 
     parens->type->parse_proto(parens, scope, hemp_ptr_val(proto));
@@ -58,18 +58,18 @@ HEMP_FIXUP(hemp_element_apply_lvalue) {
 
 HEMP_VALUE(hemp_element_apply_value) {
     hemp_debug_call("hemp_element_apply_value()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
+    HempFragment fragment = hemp_val_frag(value);
     
     if (hemp_has_flag(fragment, HEMP_BE_LVALUE)) {
         // TODO
         hemp_fatal("Attempt to directly apply lvalue function declaration\n");
     }
 
-    hemp_value    lhs     = hemp_lhs(fragment);
-    hemp_value    parens  = hemp_rhs(fragment);
-    hemp_frame    frame   = hemp_context_enter(context, fragment);
-    hemp_value    params  = hemp_params_val(frame->params);
-    hemp_value    result;
+    HempValue    lhs     = hemp_lhs(fragment);
+    HempValue    parens  = hemp_rhs(fragment);
+    HempFrame    frame   = hemp_context_enter(context, fragment);
+    HempValue    params  = hemp_params_val(frame->params);
+    HempValue    result;
 
     /* Evaluate the parenthesised arguments in the new frame */
     hemp_context_focus_params(context);
@@ -95,8 +95,8 @@ HEMP_VALUE(hemp_element_apply_value) {
 
 HEMP_INPUT(hemp_element_apply_assign) {
     hemp_debug_call("hemp_element_apply_assign()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    lhs      = hemp_lhs(fragment);
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    lhs      = hemp_lhs(fragment);
 
     /* TODO: there's an iffy cross-dependence with hemp_element_apply_lvalue()
      * that could do with being cleaned up

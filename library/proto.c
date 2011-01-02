@@ -1,9 +1,9 @@
 #include <hemp/proto.h>
 
 
-hemp_proto
+HempProto
 hemp_proto_init(
-    hemp_proto proto
+    HempProto proto
 ) {
     HEMP_ALLOCATE(proto);
 
@@ -18,7 +18,7 @@ hemp_proto_init(
 
 void
 hemp_proto_free(
-    hemp_proto proto
+    HempProto proto
 ) {
     hemp_list_each(proto->item, &hemp_list_each_free);
 
@@ -34,10 +34,10 @@ hemp_proto_free(
 }
 
 
-hemp_bool
+HempBool
 hemp_proto_add_item(
-    hemp_proto   proto,
-    hemp_string      name
+    HempProto   proto,
+    HempString      name
 ) {
     hemp_debug_call("hemp_proto_add_item(%s)\n", name);
 
@@ -60,10 +60,10 @@ hemp_proto_add_item(
 }
 
 
-hemp_bool
+HempBool
 hemp_proto_add_list(
-    hemp_proto   proto,
-    hemp_string      name
+    HempProto   proto,
+    HempString      name
 ) {
     hemp_debug_call("hemp_proto_add_list(%s)\n", name);
 
@@ -91,10 +91,10 @@ hemp_proto_add_list(
 }
 
 
-hemp_bool
+HempBool
 hemp_proto_add_hash(
-    hemp_proto   proto,
-    hemp_string      name
+    HempProto   proto,
+    HempString      name
 ) {
     hemp_debug_call("hemp_proto_add_hash(%s)\n", name);
 
@@ -124,7 +124,7 @@ hemp_proto_add_hash(
 
 void 
 hemp_proto_dump(
-    hemp_proto proto
+    HempProto proto
 ) {
     hemp_debug_msg("hemp proto at %p:\n", proto);
 
@@ -138,7 +138,7 @@ hemp_proto_dump(
     
     if (proto->item) {
         hemp_debug("%d items:\n", proto->item->length);
-        hemp_text text = hemp_list_dump(proto->item);
+        HempText text = hemp_list_dump(proto->item);
         hemp_debug(text->string);
         hemp_text_free(text);
     }
@@ -148,7 +148,7 @@ hemp_proto_dump(
 
     if (proto->name) {
         hemp_debug("%d named items:\n", proto->name->size);
-        hemp_text text = hemp_hash_dump(proto->name);
+        HempText text = hemp_hash_dump(proto->name);
         hemp_debug(text->string);
         hemp_text_free(text);
     }

@@ -5,7 +5,7 @@
  * global element type
  *--------------------------------------------------------------------------*/
 
-hemp_element HempElementWord = NULL;
+HempElement HempElementWord = NULL;
 
 
 HEMP_GLOBAL_ELEMENT(hemp_global_element_word) {
@@ -39,7 +39,7 @@ HEMP_ELEMENT(hemp_element_word) {
 HEMP_PREFIX(hemp_element_word_prefix) {
     hemp_debug_call("hemp_element_word_prefix()\n");
     
-    hemp_fragment fragment = hemp_element_parse_fixed(
+    HempFragment fragment = hemp_element_parse_fixed(
         fragptr, scope, precedence, force
     );
     hemp_clear_flag(fragment, HEMP_BE_FIXED);
@@ -57,8 +57,8 @@ HEMP_FIXUP(hemp_element_word_lvalue) {
 
 HEMP_FIXUP(hemp_element_word_proto) {
     hemp_debug_call("hemp_element_word_proto()\n");
-    hemp_proto  proto   = (hemp_proto) hemp_val_ptr(fixative);
-    hemp_string name    = hemp_string_extract(
+    HempProto  proto   = (HempProto) hemp_val_ptr(fixative);
+    HempString name    = hemp_string_extract(
         fragment->token, 
         fragment->token + fragment->length
     );
@@ -69,8 +69,8 @@ HEMP_FIXUP(hemp_element_word_proto) {
 
 HEMP_VALUE(hemp_element_word_value) {
     hemp_debug_call("hemp_element_word_value()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    word     = hemp_expr(fragment);
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    word     = hemp_expr(fragment);
 
     /* Words can be used in two different contexts.  When they appear at the
      * start of an expression (prefix) they represent a variable.  However,
@@ -92,8 +92,8 @@ HEMP_VALUE(hemp_element_word_value) {
 
 
 HEMP_INPUT(hemp_element_word_assign) {
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    word     = hemp_expr(fragment);
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    word     = hemp_expr(fragment);
 
     hemp_debug_call(
         "hemp_element_word_assign() %s <- %s\n", 

@@ -3,7 +3,7 @@
 #define HEMP_FS_DIR  HEMP_TEST_DIR "/data/filesystem"
 
 
-void test_hemp_filesystem();
+void test_HempFilesystem();
 void test_filesystem();
 void test_file1();
 
@@ -13,15 +13,15 @@ int main(
 ) {
     plan(7);
 
-    test_hemp_filesystem();
+    test_HempFilesystem();
     test_filesystem();
     test_file1();
     return done();
 }
 
 
-void test_hemp_filesystem() {
-    hemp_hemp hemp = hemp_new();
+void test_HempFilesystem() {
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp" );
 
     hemp_language_instance(hemp, "json");
@@ -36,7 +36,7 @@ void test_hemp_filesystem() {
     
     HEMP_CATCH_ALL;
         fail("caught error: %s", hemp->error->message);
-        hemp_text error = hemp_error_text(hemp->error);
+        HempText error = hemp_error_text(hemp->error);
         printf("%s", error->string);
         hemp_text_free(error);
 
@@ -47,17 +47,17 @@ void test_hemp_filesystem() {
 
 
 void test_filesystem() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
 
     printf("TESTDIR: %s\n", HEMP_TEST_DIR);
-    hemp_string fsdir = HEMP_FS_DIR;
-    hemp_string a     = HEMP_FS_DIR "/alpha";
-    hemp_string bc    = HEMP_FS_DIR "/bravo/charlie";
-    hemp_string def   = HEMP_FS_DIR "/delta/echo/foxtrot/";
+    HempString fsdir = HEMP_FS_DIR;
+    HempString a     = HEMP_FS_DIR "/alpha";
+    HempString bc    = HEMP_FS_DIR "/bravo/charlie";
+    HempString def   = HEMP_FS_DIR "/delta/echo/foxtrot/";
 
     printf("fsdir...%s\na.......%s\nbc......%s\ndef.....%s\n", fsdir, a, bc, def);
 
-    hemp_filesystem filesystem = hemp_filesystem_new(hemp);
+    HempFilesystem filesystem = hemp_filesystem_new(hemp);
     ok( filesystem, "created filesystem" );
     hemp_filesystem_add_root(filesystem, a);
     hemp_filesystem_add_root(filesystem, bc);
@@ -80,10 +80,10 @@ void test_filesystem() {
 
 
 void test_file1() {
-    hemp_hemp       hemp        = hemp_new();
-    hemp_filesystem filesystem  = hemp_filesystem_new(hemp);
-    hemp_string path  = hemp_filesystem_join_path(HEMP_TEST_DIR, "data/file1");
-    hemp_string text  = hemp_filesystem_read_file(path);
+    Hemp       hemp        = hemp_new();
+    HempFilesystem filesystem  = hemp_filesystem_new(hemp);
+    HempString path  = hemp_filesystem_join_path(HEMP_TEST_DIR, "data/file1");
+    HempString text  = hemp_filesystem_read_file(path);
     ok( text, "read text from foobar: %s", text );
     hemp_mem_free(text);
     hemp_mem_free(path);

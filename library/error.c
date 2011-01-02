@@ -2,7 +2,7 @@
 #include <hemp/scanner.h>
 
 
-hemp_string hemp_errmsg[] = {
+HempString hemp_errmsg[] = {
     "No error",
     "Unknown error",
     "Failed to allocate memory for a new %s",
@@ -26,9 +26,9 @@ hemp_string hemp_errmsg[] = {
     NULL
 };
 
-hemp_location
+HempLocation
 hemp_location_new() {
-    hemp_location location;
+    HempLocation location;
     HEMP_ALLOCATE(location);
     
     location->position  = 0;
@@ -42,18 +42,18 @@ hemp_location_new() {
 
 void
 hemp_location_free(
-    hemp_location   location
+    HempLocation   location
 ) {
     hemp_mem_free(location);
 }
 
 
 
-hemp_error
+HempError
 hemp_error_new(
     hemp_errno number
 ) {
-    hemp_error error;
+    HempError error;
     
     if (number < 0 || number >= HEMP_ERROR_MAX) 
         hemp_fatal("Invalid error number: %d", number);
@@ -70,12 +70,12 @@ hemp_error_new(
 }
 
 
-hemp_error
+HempError
 hemp_error_init(
     hemp_errno  number,
-    hemp_string message
+    HempString message
 ) {
-    hemp_error error = hemp_error_new(number);
+    HempError error = hemp_error_new(number);
 
     /* We use strdup() to deliberately avoid the memory trace that is wrapped 
      * around mem_string_copy() and friend when memory debugging is enabled.
@@ -92,13 +92,13 @@ hemp_error_init(
 }
 
 
-hemp_error
+HempError
 hemp_error_initf(
     hemp_errno  number,
-    hemp_string format,
+    HempString format,
     ...
 ) {
-    hemp_error error = hemp_error_new(number);
+    HempError error = hemp_error_new(number);
 
     va_list args;
     va_start(args, format);
@@ -108,33 +108,33 @@ hemp_error_initf(
 }
 
 
-hemp_error
+HempError
 hemp_error_initfv(
     hemp_errno  number,
-    hemp_string format,
+    HempString format,
     va_list     args
 ) {
-    hemp_error error = hemp_error_new(number);
+    HempError error = hemp_error_new(number);
     vasprintf(&error->message, format, args);
     return error;
 }
 
 
-HEMP_INLINE hemp_error
+HEMP_INLINE HempError
 hemp_error_document(
-    hemp_error    error,
-    hemp_document document
+    HempError    error,
+    HempDocument document
 ) {
     error->document = document;
     return error;
 }
 
 
-HEMP_INLINE hemp_error
+HEMP_INLINE HempError
 hemp_error_location(
-    hemp_error      error,
-    hemp_string     source,
-    hemp_string     marker
+    HempError      error,
+    HempString     source,
+    HempString     marker
 ) {
     if (source && marker) {
         /* re-use any existing location structure or creates a new one */
@@ -146,11 +146,11 @@ hemp_error_location(
 }
 
 
-HEMP_INLINE hemp_error
+HEMP_INLINE HempError
 hemp_error_document_location(
-    hemp_error      error,
-    hemp_document   document,
-    hemp_string     marker
+    HempError      error,
+    HempDocument   document,
+    HempString     marker
 ) {
     hemp_error_document(error, document);
     hemp_error_location(error, document->source->text, marker);
@@ -160,7 +160,7 @@ hemp_error_document_location(
 
 void
 hemp_error_free(
-    hemp_error error
+    HempError error
 ) {
     /* memory allocated by vasprintf() so don't use hemp_mem_free() because 
      * we're not tracking it and it'll blow a fuse when debugging memory

@@ -4,130 +4,130 @@
 #include <hemp/core.h>
 
 struct hemp_uri {
-    hemp_string     uri;
-    hemp_string     buffer;
-    hemp_string     scheme;
-    hemp_string     authority;
-    hemp_string     user;
-    hemp_string     host;
-    hemp_string     port;
-    hemp_string     path;
-    hemp_string     query;
-    hemp_string     fragment;
-    hemp_list       paths;
-    hemp_hash       params;
+    HempString     uri;
+    HempString     buffer;
+    HempString     scheme;
+    HempString     authority;
+    HempString     user;
+    HempString     host;
+    HempString     port;
+    HempString     path;
+    HempString     query;
+    HempString     fragment;
+    HempList       paths;
+    HempHash       params;
 };
 
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_init(
-    hemp_uri        uri
+    HempUri        uri
 );
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_from_string(
-    hemp_string     string
+    HempString     string
 );
 
 HEMP_INLINE void
 hemp_uri_copy_authority(
-    hemp_uri from,
-    hemp_uri to
+    HempUri from,
+    HempUri to
 );
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_relative_string(
-    hemp_uri        base,
-    hemp_string     rel
+    HempUri        base,
+    HempString     rel
 );
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_relative_uri(
-    hemp_uri        base,
-    hemp_uri        rel
+    HempUri        base,
+    HempUri        rel
 );
 
 void 
 hemp_uri_buffer(
-    hemp_uri uri
+    HempUri uri
 );
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_wipe(
-    hemp_uri        uri
+    HempUri        uri
 );
 
 HEMP_INLINE void
 hemp_uri_release(
-    hemp_uri        uri
+    HempUri        uri
 );
 
 HEMP_INLINE void
 hemp_uri_free(
-    hemp_uri        uri
+    HempUri        uri
 );
 
-hemp_bool
+HempBool
 hemp_uri_split(
-    hemp_uri        uri,
-    hemp_string     text
+    HempUri        uri,
+    HempString     text
 );
 
-hemp_bool
+HempBool
 hemp_uri_split_path(
-    hemp_uri        uri,
-    hemp_string   * bufpos
+    HempUri        uri,
+    HempString   * bufpos
 );
 
-hemp_bool
+HempBool
 hemp_uri_split_query(
-    hemp_uri        uri,
-    hemp_string   * bufpos
+    HempUri        uri,
+    HempString   * bufpos
 );
 
-hemp_string
+HempString
 hemp_uri_join(
-    hemp_uri uri
+    HempUri uri
 );
 
 
-HEMP_INLINE hemp_bool
+HEMP_INLINE HempBool
 hemp_uri_schemes_equal(
-    hemp_uri base,
-    hemp_uri rel
+    HempUri base,
+    HempUri rel
 );
 
-hemp_string
+HempString
 hemp_uri_path_relative(
-    hemp_string base,
-    hemp_string rel
+    HempString base,
+    HempString rel
 );
 
-hemp_string
+HempString
 hemp_uri_path_join(
-    hemp_string base,
-    hemp_string rel,
-    hemp_bool   is_dir
+    HempString base,
+    HempString rel,
+    HempBool   is_dir
 );
 
-hemp_string
+HempString
 hemp_uri_merge_paths(
-    hemp_uri    base,
-    hemp_uri    rel
+    HempUri    base,
+    HempUri    rel
 );
 
-hemp_string
+HempString
 hemp_uri_collapse_path(
-    hemp_string path
+    HempString path
 );
 
 
 
 #define HEMP_URI_MATCHER(f)         \
-    HEMP_INLINE hemp_bool f(        \
-        hemp_uri        uri,        \
-        hemp_string   * srcpos,     \
-        hemp_string   * bufpos      \
+    HEMP_INLINE HempBool f(        \
+        HempUri        uri,        \
+        HempString   * srcpos,     \
+        HempString   * bufpos      \
     )
 
 #define HEMP_URI_MATCHED(item)      \

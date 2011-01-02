@@ -10,9 +10,9 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_list {
-    hemp_value    * items;
-    hemp_size       capacity;
-    hemp_size       length;
+    HempValue    * items;
+    HempSize       capacity;
+    HempSize       length;
     hemp_list_iter  cleaner;
 }; 
 
@@ -21,13 +21,13 @@ struct hemp_list {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_list 
+HempList 
 hemp_list_init(
-    hemp_list       list
+    HempList       list
 );
 /*
 #define hemp_list_init(list) ({             \
-    hemp_list _l = hemp_list_init_(list);   \
+    HempList _l = hemp_list_init_(list);   \
     hemp_debug_msg(                         \
         "LIST: :%p at line %d of %s\n",     \
         _l, __LINE__, __FILE__              \
@@ -38,74 +38,74 @@ hemp_list_init(
 
 HEMP_INLINE void
 hemp_list_release(
-    hemp_list       list
+    HempList       list
 );
 
 void
 hemp_list_free(
-    hemp_list       list
+    HempList       list
 );
 
-hemp_size
+HempSize
 hemp_list_resize(
-    hemp_list       list, 
-    hemp_size       new_size
+    HempList       list, 
+    HempSize       new_size
 );
 
-hemp_list
+HempList
 hemp_list_copy(
-    hemp_list src
+    HempList src
 );
 
-hemp_list 
+HempList 
 hemp_list_push(
-    hemp_list       list, 
-    hemp_value      item
+    HempList       list, 
+    HempValue      item
 );
 
-hemp_list
+HempList
 hemp_list_push_list(
-    hemp_list   list, 
-    hemp_list   values
+    HempList   list, 
+    HempList   values
 );
 
 
-hemp_value
+HempValue
 hemp_list_shift(
-    hemp_list       list
+    HempList       list
 );
 
-hemp_value
+HempValue
 hemp_list_pop(
-    hemp_list   list
+    HempList   list
 );
     
 
-hemp_pos 
+HempPos 
 hemp_list_each(
-    hemp_list       list,
+    HempList       list,
     hemp_list_iter  func
 );
 
-hemp_bool
+HempBool
 hemp_list_each_free(
-    hemp_list       list, 
-    hemp_pos        index,
-    hemp_value      value
+    HempList       list, 
+    HempPos        index,
+    HempValue      value
 );
 
-HEMP_INLINE hemp_bool 
+HEMP_INLINE HempBool 
 hemp_list_index(
-    hemp_context  context,
-    hemp_value    key,
-    hemp_int     *index
+    HempContext  context,
+    HempValue    key,
+    HempInt     *index
 );
     
 
 // tmp hack for debugging
-hemp_text
+HempText
 hemp_list_dump(
-    hemp_list       list
+    HempList       list
 );
 
 

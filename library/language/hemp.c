@@ -81,7 +81,7 @@ static struct hemp_elements hemp_elements_hemp_number[] = {
     { NULL, NULL },
 };
 
-static struct hemp_elements hemp_elements_hemp_text[] = {
+static struct hemp_elements hemp_elements_HempText[] = {
     { "hemp.text.concat",           &hemp_element_text_concat           },
     { "hemp.text.compare",          &hemp_element_text_compare          },
     { "hemp.text.equal",            &hemp_element_text_equal            },
@@ -120,7 +120,7 @@ static struct hemp_tags hemp_tags_hemp[] = {
 HEMP_LANGUAGE(hemp_language_hemp_new) {
     hemp_debug_call("hemp_language_hemp_new(%p, %s)\n", hemp, name);
 
-    hemp_language language = hemp_language_new(
+    HempLanguage language = hemp_language_new(
         hemp, name, HEMP_LANGUAGE_HEMP_VERSION
     );
 
@@ -157,7 +157,7 @@ HEMP_ELEMENTS(hemp_element_identity_elements) {
     );
 
     /* now try again */
-    return (hemp_action) hemp_hash_fetch_pointer(
+    return (HempAction) hemp_hash_fetch_pointer(
         hemp->element->constructors, name
     );
 }
@@ -174,7 +174,7 @@ HEMP_ELEMENTS(hemp_element_bracket_elements) {
     );
 
     /* now try again */
-    return (hemp_action) hemp_hash_fetch_pointer(
+    return (HempAction) hemp_hash_fetch_pointer(
         hemp->element->constructors, name
     );
 }
@@ -191,7 +191,7 @@ HEMP_ELEMENTS(hemp_element_boolean_elements) {
     );
 
     /* now try again */
-    return (hemp_action) hemp_hash_fetch_pointer(
+    return (HempAction) hemp_hash_fetch_pointer(
         hemp->element->constructors, name
     );
 }
@@ -208,7 +208,7 @@ HEMP_ELEMENTS(hemp_element_number_elements) {
     );
 
     /* now try again */
-    return (hemp_action) hemp_hash_fetch_pointer(
+    return (HempAction) hemp_hash_fetch_pointer(
         hemp->element->constructors, name
     );
 }
@@ -221,11 +221,11 @@ HEMP_ELEMENTS(hemp_element_number_elements) {
 HEMP_ELEMENTS(hemp_element_text_elements) {
     /* we should detect if we've done this already and skip it */
     hemp_register_elements(
-        hemp, hemp_elements_hemp_text
+        hemp, hemp_elements_HempText
     );
 
     /* now try again */
-    return (hemp_action) hemp_hash_fetch_pointer(
+    return (HempAction) hemp_hash_fetch_pointer(
         hemp->element->constructors, name
     );
 }
@@ -243,7 +243,7 @@ HEMP_ELEMENTS(hemp_element_assign_elements) {
         hemp, hemp_elements_hemp_assign
     );
 
-    return (hemp_action) hemp_hash_fetch_pointer(
+    return (HempAction) hemp_hash_fetch_pointer(
         hemp->element->constructors, name
     );
 }
@@ -255,7 +255,7 @@ HEMP_ELEMENTS(hemp_element_assign_elements) {
 
 HEMP_GRAMMAR(hemp_grammar_hemp_alpha) {
     hemp_debug_call("hemp_grammar_hemp_alpha(%p, %s)\n", hemp, name);
-    hemp_grammar grammar = (hemp_grammar) hemp_grammar_new(hemp, name);
+    HempGrammar grammar = (HempGrammar) hemp_grammar_new(hemp, name);
     hemp_grammar_add_hemp_alpha(grammar);
     return grammar;
 }
@@ -263,7 +263,7 @@ HEMP_GRAMMAR(hemp_grammar_hemp_alpha) {
 
 HEMP_GRAMMAR(hemp_grammar_hemp_bravo) {
     hemp_debug_call("hemp_grammar_hemp_bravo(%p, %s)\n", hemp, name);
-    hemp_grammar grammar = hemp_grammar_hemp_alpha(hemp, name);
+    HempGrammar grammar = hemp_grammar_hemp_alpha(hemp, name);
     hemp_grammar_add_hemp_bravo(grammar);
     return grammar;
 }
@@ -271,7 +271,7 @@ HEMP_GRAMMAR(hemp_grammar_hemp_bravo) {
 
 HEMP_GRAMMAR(hemp_grammar_hemp_charlie) {
     hemp_debug_call("hemp_grammar_hemp_charlie(%p, %s)\n", hemp, name);
-    hemp_grammar grammar = hemp_grammar_hemp_bravo(hemp, name);
+    HempGrammar grammar = hemp_grammar_hemp_bravo(hemp, name);
     hemp_grammar_add_hemp_charlie(grammar);
     return grammar;
 }
@@ -279,7 +279,7 @@ HEMP_GRAMMAR(hemp_grammar_hemp_charlie) {
 
 void
 hemp_grammar_add_hemp_alpha(
-    hemp_grammar grammar
+    HempGrammar grammar
 ) {
     hemp_debug_call("hemp_grammar_add_hemp_alpha(%p)\n", grammar);
     HEMP_USE_ELEMENT0("hemp.text");
@@ -294,7 +294,7 @@ hemp_grammar_add_hemp_alpha(
 
 void
 hemp_grammar_add_hemp_bravo(
-    hemp_grammar grammar
+    HempGrammar grammar
 ) {
     hemp_debug_call("hemp_grammar_add_hemp_bravo(%p)\n", grammar);
 
@@ -380,7 +380,7 @@ hemp_grammar_add_hemp_bravo(
 
 void
 hemp_grammar_add_hemp_charlie(
-    hemp_grammar grammar
+    HempGrammar grammar
 ) {
     hemp_debug_call("hemp_grammar_add_hemp_charlie(%p)\n", grammar);
 

@@ -12,7 +12,7 @@ int main(
 
 
 void test_proto() {
-    hemp_proto proto = hemp_proto_new();
+    HempProto proto = hemp_proto_new();
     ok( proto, "got proto" );
 
     hemp_proto_add_item(proto, hemp_string_copy("foo"));
@@ -20,7 +20,7 @@ void test_proto() {
     hemp_proto_add_list(proto, hemp_string_copy("baz"));
     hemp_proto_add_hash(proto, hemp_string_copy("bop"));
 
-    hemp_string i = hemp_proto_item(proto, "foo");
+    HempString i = hemp_proto_item(proto, "foo");
     HEMP_UNUSED(i);
 
     is( hemp_proto_item(proto, "foo"), "item", "foo is an item" );

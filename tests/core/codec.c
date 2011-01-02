@@ -13,12 +13,12 @@ int main(
 
 
 void test_codec() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
     HEMP_TRY;
 
-        hemp_codec codec = hemp_codec_new(hemp, "hemp.codec.test");
+        HempCodec codec = hemp_codec_new(hemp, "hemp.codec.test");
         ok( codec, "created test codec" );
         is( codec->name, "hemp.codec.test", "codec name" );
         hemp_codec_free(codec);
@@ -27,12 +27,12 @@ void test_codec() {
         ok( codec, "fetched uri codec" );
         is( codec->name, "uri", "codec name" );
 
-        hemp_text text = hemp_encode(
+        HempText text = hemp_encode(
             hemp, "uri", hemp_str_val("blah blah"), NULL
         );
         hemp_debug_msg("output: %s\n", text->string);
 
-        hemp_text t2 = hemp_encode(
+        HempText t2 = hemp_encode(
             hemp, "uri", hemp_text_val(text), NULL
         );
         hemp_debug_msg("output: %s\n", t2->string);
@@ -44,7 +44,7 @@ void test_codec() {
 
     printf("*** tests done, freeing hemp\n");
 /*
-    hemp_text t3;
+    HempText t3;
 
         t3 = hemp_encode(
             hemp, "wibble", hemp_text_val(text), NULL

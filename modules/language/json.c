@@ -12,10 +12,10 @@ HEMP_DOC_SCAN(hemp_dialect_json_scanner);
  * Binder function registers the json dialect with the hemp instance
  *--------------------------------------------------------------------------*/
 
-hemp_bool
+HempBool
 hemp_module_binder(
-    hemp_module module,
-    hemp_hemp   hemp
+    HempModule module,
+    Hemp   hemp
 ) {
     hemp_register_language( hemp, "json", &hemp_language_json );
     hemp_register_grammar ( hemp, "json", &hemp_grammar_json  );
@@ -36,14 +36,14 @@ HEMP_LANGUAGE(hemp_language_json) {
 
 
 HEMP_DIALECT(hemp_dialect_json) {
-    hemp_dialect dialect = hemp_dialect_new(hemp, name);
+    HempDialect dialect = hemp_dialect_new(hemp, name);
     dialect->scanner = &hemp_dialect_json_scanner;
     return dialect;
 }
 
 
 HEMP_GRAMMAR(hemp_grammar_json) {
-    hemp_grammar grammar = (hemp_grammar) hemp_grammar_new(hemp, name);
+    HempGrammar grammar = (HempGrammar) hemp_grammar_new(hemp, name);
 
     HEMP_USE_ELEMENT0("hemp.text");
     HEMP_USE_ELEMENT0("hemp.space");

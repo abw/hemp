@@ -61,7 +61,7 @@ typedef enum {
 } hemp_errno;
 
 
-extern hemp_string hemp_errmsg[];
+extern HempString hemp_errmsg[];
 
 
 
@@ -71,16 +71,16 @@ extern hemp_string hemp_errmsg[];
 
 struct hemp_jump {
 //  hemp_jump_type  type;
-    hemp_jump       parent;
-    hemp_jump_buf   buffer;
-    hemp_pos        depth;
+    HempJump       parent;
+    HempJumpBuf   buffer;
+    HempPos        depth;
 };
 
 struct hemp_location {
-    hemp_pos        position;   /* byte offset 0 to n-1                     */
-    hemp_pos        line;       /* line number, 1 to n                      */
-    hemp_pos        column;     /* column number, 1 to n                    */
-    hemp_string     extract;    /* extract of source code for current line  */
+    HempPos        position;   /* byte offset 0 to n-1                     */
+    HempPos        line;       /* line number, 1 to n                      */
+    HempPos        column;     /* column number, 1 to n                    */
+    HempString     extract;    /* extract of source code for current line  */
 };
 
 struct hemp_error {
@@ -88,10 +88,10 @@ struct hemp_error {
      * templates to render different error types
      */
     hemp_errno      number;
-    hemp_string     message;
-    hemp_document   document;
-    hemp_error      parent;
-    hemp_location   location;
+    HempString     message;
+    HempDocument   document;
+    HempError      parent;
+    HempLocation   location;
 };
 
 
@@ -106,87 +106,87 @@ struct hemp_error {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_location
+HempLocation
 hemp_location_new();
 
 void
 hemp_location_free(
-    hemp_location   location
+    HempLocation   location
 );
 
 
-hemp_error
+HempError
 hemp_error_new(
     hemp_errno      number
 );
 
 
-hemp_error
+HempError
 hemp_error_init(
     hemp_errno      number,
-    hemp_string     message
+    HempString     message
 );
 
-hemp_error
+HempError
 hemp_error_initf(
     hemp_errno      number,
-    hemp_string     format,
+    HempString     format,
     ...
 );
 
-hemp_error
+HempError
 hemp_error_initfv(
     hemp_errno      number,
-    hemp_string     format,
+    HempString     format,
     va_list         args
 );
 
-hemp_text
+HempText
 hemp_error_text(
-    hemp_error      error
+    HempError      error
 );
 
-hemp_error    
+HempError    
 hemp_error_message(
-    hemp_hemp, 
+    Hemp, 
     hemp_errno, 
     ...
 );
 
 void
 hemp_error_free(
-    hemp_error      error
+    HempError      error
 );
 
 
-HEMP_INLINE hemp_error
+HEMP_INLINE HempError
 hemp_error_document(
-    hemp_error    error,
-    hemp_document document
+    HempError    error,
+    HempDocument document
 );
 
 
-HEMP_INLINE hemp_error
+HEMP_INLINE HempError
 hemp_error_location(
-    hemp_error      error,
-    hemp_string     source,
-    hemp_string     marker
+    HempError      error,
+    HempString     source,
+    HempString     marker
 );
 
 
-HEMP_INLINE hemp_error
+HEMP_INLINE HempError
 hemp_error_document_location(
-    hemp_error      error,
-    hemp_document   document,
-    hemp_string     marker
+    HempError      error,
+    HempDocument   document,
+    HempString     marker
 );
 
 
 /* these are implemented in hemp.c */
-hemp_string     hemp_error_format(hemp_hemp, hemp_errno);
-//hemp_error      hemp_error_message(hemp_hemp, hemp_errno, ...);
-//hemp_error      hemp_error_document(hemp_error, hemp_document);
-void            hemp_error_throw(hemp_hemp, hemp_error);
+HempString     hemp_error_format(Hemp, hemp_errno);
+//HempError      hemp_error_message(Hemp, hemp_errno, ...);
+//HempError      hemp_error_document(HempError, HempDocument);
+void            hemp_error_throw(Hemp, HempError);
 
 
 /* these macros assume the presence of a visible hemp symbol */
@@ -250,7 +250,7 @@ void            hemp_error_throw(hemp_hemp, hemp_error);
 /* raise an error for a document at a particular source location */
 
 #define HEMP_THROW_DOCLOC(doc, loc, ...) ({                             \
-    hemp_error _hemp_err = hemp_error_message(                          \
+    HempError _hemp_err = hemp_error_message(                          \
         doc->dialect->hemp,                                             \
         __VA_ARGS__                                                     \
     );                                                                  \
@@ -262,7 +262,7 @@ void            hemp_error_throw(hemp_hemp, hemp_error);
 /* raise an error for a particular fragment */
 
 #define HEMP_THROW_FRAGMENT(fragment, ...) ({                           \
-    hemp_document _hemp_doc = hemp_fragment_document(fragment);         \
+    HempDocument _hemp_doc = hemp_fragment_document(fragment);         \
     HEMP_THROW_DOCLOC(_hemp_doc, fragment->token, __VA_ARGS__);         \
 })
 

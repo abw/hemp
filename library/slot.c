@@ -1,15 +1,15 @@
 #include <hemp/slot.h>
 
 
-HEMP_INLINE hemp_slot
+HEMP_INLINE HempSlot
 hemp_slot_init(
-    hemp_value      parent,
-    hemp_size       index,
-    hemp_string     name,
-    hemp_value      value,
-    hemp_slot       next
+    HempValue      parent,
+    HempSize       index,
+    HempString     name,
+    HempValue      value,
+    HempSlot       next
 ) {
-    hemp_slot slot;
+    HempSlot slot;
     HEMP_ALLOCATE(slot);
 
     slot->parent = parent;
@@ -24,7 +24,7 @@ hemp_slot_init(
 
 HEMP_INLINE void
 hemp_slot_free(
-    hemp_slot slot
+    HempSlot slot
 ) {
     // TODO: maybe free name
     // TODO: maybe free value

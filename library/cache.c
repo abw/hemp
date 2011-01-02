@@ -6,11 +6,11 @@
  * constructor/destructor functions
  *--------------------------------------------------------------------------*/
 
-hemp_cache
+HempCache
 hemp_cache_new(
-    hemp_hemp hemp
+    Hemp hemp
 ) {
-    hemp_cache cache;
+    HempCache cache;
     HEMP_ALLOCATE(cache);
 
     cache->hemp     = hemp;
@@ -18,7 +18,7 @@ hemp_cache_new(
     cache->store    = &hemp_cache_no_store;
     cache->delete   = &hemp_cache_no_delete;
     cache->empty    = &hemp_cache_no_empty;
-    cache->cleanup  = NULL;
+    cache->clean    = NULL;
     cache->instance = NULL;
 
     return cache;
@@ -27,10 +27,10 @@ hemp_cache_new(
 
 void
 hemp_cache_free(
-    hemp_cache cache
+    HempCache cache
 ) {
-    if (cache->cleanup)
-        cache->cleanup(cache);
+    if (cache->clean)
+        cache->clean(cache);
 
     hemp_mem_free(cache);
 }
@@ -40,10 +40,10 @@ hemp_cache_free(
  * Default handler methods that silently do nothing
  *--------------------------------------------------------------------------*/
 
-hemp_value 
+HempValue 
 hemp_cache_no_fetch(
-    hemp_cache  cache,
-    hemp_string key
+    HempCache  cache,
+    HempString key
 ) {
     hemp_fatal("fetch method is not defined for this cache\n");
     return HempMissing;
@@ -51,9 +51,9 @@ hemp_cache_no_fetch(
 
 void
 hemp_cache_no_store(
-    hemp_cache  cache,
-    hemp_string key,
-    hemp_value  value
+    HempCache  cache,
+    HempString key,
+    HempValue  value
 ) {
     hemp_fatal("store method is not defined for this cache\n");
     /* do nothing */
@@ -62,8 +62,8 @@ hemp_cache_no_store(
 
 void
 hemp_cache_no_delete(
-    hemp_cache  cache,
-    hemp_string key
+    HempCache  cache,
+    HempString key
 ) {
     hemp_fatal("delete method is not defined for this cache\n");
     /* do nothing */
@@ -71,7 +71,7 @@ hemp_cache_no_delete(
 
 void
 hemp_cache_no_empty(
-    hemp_cache  cache
+    HempCache  cache
 ) {
     hemp_fatal("empty method is not defined for this cache\n");
     /* do nothing */
@@ -84,14 +84,14 @@ hemp_cache_no_empty(
  *--------------------------------------------------------------------------*/
 
 
-hemp_cache
+HempCache
 hemp_cache_lru_new(
-    hemp_hemp   hemp,
-    hemp_size   size
+    Hemp   hemp,
+    HempSize   size
 ) {
-    hemp_cache      cache = hemp_cache_new(hemp);
+    HempCache      cache = hemp_cache_new(hemp);
     hemp_cache_lru  lru   = hemp_mem_alloc( sizeof(struct hemp_cache_lru) );
-    hemp_size       min_size;
+    HempSize       min_size;
 
     if (! lru)
         hemp_mem_fail("LRU cache");
@@ -121,20 +121,20 @@ hemp_cache_lru_new(
     cache->store    = &hemp_cache_lru_store;
     cache->delete   = &hemp_cache_lru_delete;
     cache->empty    = &hemp_cache_lru_empty;
-    cache->cleanup  = &hemp_cache_lru_cleanup;
+    cache->clean    = &hemp_cache_lru_clean;
 
     return cache;
 
 }
 
-hemp_value
+HempValue
 hemp_cache_lru_fetch(
-    hemp_cache  cache,
-    hemp_string key
+    HempCache  cache,
+    HempString key
 ) {
     hemp_debug_call("LRU fetch: %s\n", key);
     hemp_cache_lru  lru = (hemp_cache_lru) cache->instance;
-    hemp_value      lookup;
+    HempValue      lookup;
     hemp_cache_lru_slot slot = NULL;
 
     lookup = hemp_hash_fetch(lru->index, key);
@@ -153,13 +153,13 @@ hemp_cache_lru_fetch(
 
 void
 hemp_cache_lru_store(
-    hemp_cache  cache,
-    hemp_string key,
-    hemp_value  value
+    HempCache  cache,
+    HempString key,
+    HempValue  value
 ) {
     hemp_debug_call("LRU store: %p\n", cache);
     hemp_cache_lru  lru = (hemp_cache_lru) cache->instance;
-    hemp_value      lookup;
+    HempValue      lookup;
     hemp_cache_lru_slot slot;
 
     lookup = hemp_hash_fetch(lru->index, key);
@@ -185,13 +185,13 @@ hemp_cache_lru_store(
 
 void
 hemp_cache_lru_delete(
-    hemp_cache  cache,
-    hemp_string key
+    HempCache  cache,
+    HempString key
 ) {
     hemp_debug_call("LRU delete: %s\n", key);
     hemp_cache_lru      lru = (hemp_cache_lru) cache->instance;
     hemp_cache_lru_slot slot;
-    hemp_value          value;
+    HempValue          value;
 
     value = hemp_hash_delete(lru->index, key);
 
@@ -206,7 +206,7 @@ hemp_cache_lru_delete(
 
 void
 hemp_cache_lru_empty(
-    hemp_cache  cache
+    HempCache  cache
 ) {
     hemp_debug_call("LRU empty\n");
     hemp_cache_lru      lru  = (hemp_cache_lru) cache->instance;
@@ -231,8 +231,8 @@ hemp_cache_lru_empty(
 
 
 void
-hemp_cache_lru_cleanup(
-    hemp_cache  cache
+hemp_cache_lru_clean(
+    HempCache  cache
 ) {
     hemp_cache_lru lru = (hemp_cache_lru) cache->instance;
 
@@ -252,7 +252,7 @@ hemp_cache_lru_debug(
     hemp_cache_lru_slot fresh = lru->fresh;
     hemp_cache_lru_slot stale = lru->stale;
 
-    hemp_size n = 1;
+    HempSize n = 1;
     printf("LRU freshest to stalest / stalest to freshest\n");
     while (fresh && stale) {
         printf("%3ld: %-10s  %3ld: %-10s\n", n, fresh->key, -n, stale->key);

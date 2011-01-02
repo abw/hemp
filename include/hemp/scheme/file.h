@@ -5,30 +5,30 @@
 #include <hemp/filesystem.h>
 
 
-hemp_scheme
+HempScheme
 hemp_scheme_file_new(
-    hemp_hemp       hemp,
-    hemp_string     name
+    Hemp       hemp,
+    HempString     name
 );
 
-hemp_string
+HempString
 hemp_scheme_file_namer(
-    hemp_source     source
+    HempSource     source
 );
 
-hemp_string
+HempString
 hemp_scheme_file_reader(
-    hemp_source     source
+    HempSource     source
 );
 
-hemp_bool
+HempBool
 hemp_scheme_file_checker(
-    hemp_source     source
+    HempSource     source
 );
 
 void
 hemp_scheme_file_cleaner(
-    hemp_source     source
+    HempSource     source
 );
 
 

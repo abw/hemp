@@ -10,8 +10,8 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_str_split {
-    hemp_string     left;
-    hemp_string     right;
+    HempString     left;
+    HempString     right;
 };
 
 typedef struct hemp_str_split * hemp_str_split;
@@ -23,107 +23,107 @@ typedef struct hemp_str_pos   * hemp_str_pos;
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_string
+HempString
 hemp_string_vprintf(
-    const hemp_string format,
+    const HempString format,
     va_list args
 );
 
-hemp_string
+HempString
 hemp_string_sprintf(
-    const hemp_string format,
+    const HempString format,
     ...
 );
 
-hemp_string
+HempString
 hemp_string_extract(
-    hemp_string     from,
-    hemp_string     to
+    HempString     from,
+    HempString     to
 );
 
-hemp_list
+HempList
 hemp_string_split(
-    hemp_string     source,
-    hemp_string     split
+    HempString     source,
+    HempString     split
 );
 
-hemp_list
+HempList
 hemp_string_splits(
-    hemp_string     source,
-    hemp_string     token
+    HempString     source,
+    HempString     token
 );
 
 void
 hemp_string_trim(
-    hemp_string     string
+    HempString     string
 );
 
 HEMP_INLINE void
 hemp_string_chomp(
-    hemp_string     src
+    HempString     src
 );
 
-HEMP_INLINE hemp_bool
+HEMP_INLINE HempBool
 hemp_string_wordlike(
-    hemp_string     str
+    HempString     str
 );
 
-HEMP_INLINE hemp_bool
+HEMP_INLINE HempBool
 hemp_string_intlike(
-    hemp_string     string
+    HempString     string
 );
 
-HEMP_INLINE hemp_bool
+HEMP_INLINE HempBool
 hemp_string_numlike(
-    hemp_string     string
+    HempString     string
 );
 
-HEMP_INLINE hemp_string
+HEMP_INLINE HempString
 hemp_string_next_space(
-    hemp_string     string
+    HempString     string
 );
 
-HEMP_INLINE hemp_bool
+HEMP_INLINE HempBool
 hemp_string_to_next_space(
-    hemp_string   * string
+    HempString   * string
 );
 
-HEMP_INLINE hemp_string
+HEMP_INLINE HempString
 hemp_string_next_nonspace(
-    hemp_string     string
+    HempString     string
 );
 
-HEMP_INLINE hemp_bool
+HEMP_INLINE HempBool
 hemp_string_to_next_nonspace(
-    hemp_string   * string
+    HempString   * string
 );
 
-HEMP_INLINE hemp_string
+HEMP_INLINE HempString
 hemp_string_next_line(
-    hemp_string     string
+    HempString     string
 );
 
-HEMP_INLINE hemp_bool
+HEMP_INLINE HempBool
 hemp_string_to_next_line(
-    hemp_string   * string
+    HempString   * string
 );
 
-HEMP_INLINE hemp_list
+HEMP_INLINE HempList
 hemp_string_words(
-    hemp_string     string
+    HempString     string
 );
 
-hemp_list
+HempList
 hemp_string_nwords(
-    hemp_string     string,
-    hemp_size       max
+    HempString     string,
+    HempSize       max
 );
 
-hemp_location
+HempLocation
 hemp_string_location(
-    hemp_string     string,
-    hemp_string     marker,
-    hemp_location   location
+    HempString     string,
+    HempString     marker,
+    HempLocation   location
 );
 
 
@@ -148,7 +148,7 @@ HEMP_VALUE(hemp_method_string_length);
 )
 
 #define hemp_string_clone(s,n) ({               \
-    hemp_string _clone = hemp_string_copy(s);   \
+    HempString _clone = hemp_string_copy(s);   \
     if (! _clone) hemp_mem_fail(n);             \
     _clone;                                     \
 })

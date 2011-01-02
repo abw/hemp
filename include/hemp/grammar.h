@@ -15,22 +15,22 @@
  * type definitions
  *--------------------------------------------------------------------------*/
 
-typedef hemp_grammar 
+typedef HempGrammar 
 (*  hemp_grammar_f) (
-    hemp_hemp       hemp,
-    hemp_string     name
+    Hemp       hemp,
+    HempString     name
 );
 
 struct hemp_grammar {
-    hemp_hemp       hemp;
-    hemp_string     name;
-    hemp_hash       elements;
-    hemp_ptree      operators;
-//  hemp_hash       keywords;
+    Hemp       hemp;
+    HempString     name;
+    HempHash       elements;
+    HempPtree      operators;
+//  HempHash       keywords;
 };
 
 struct hemp_grammars {
-    hemp_string     name;
+    HempString     name;
     hemp_grammar_f  ctor;
 };
 
@@ -48,52 +48,52 @@ HEMP_HASH_ITERATOR(hemp_grammar_cleaner);
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_grammar
+HempGrammar
 hemp_grammar_new(
-    hemp_hemp       hemp,
-    hemp_string     name
+    Hemp       hemp,
+    HempString     name
 );
 
-hemp_element
+HempElement
 hemp_grammar_new_element(
-    hemp_grammar    grammar,
-    hemp_string     element,
-    hemp_string     start,
-    hemp_string     end
+    HempGrammar    grammar,
+    HempString     element,
+    HempString     start,
+    HempString     end
 );
 
-hemp_element
+HempElement
 hemp_grammar_add_element(
-    hemp_grammar    grammar,
-    hemp_string     element,
-    hemp_string     start,
-    hemp_string     end,
-    hemp_oprec      lprec,
-    hemp_oprec      rprec
+    HempGrammar    grammar,
+    HempString     element,
+    HempString     start,
+    HempString     end,
+    HempPrec      lprec,
+    HempPrec      rprec
 );
 
-HEMP_INLINE hemp_element
+HEMP_INLINE HempElement
 hemp_grammar_element(
-    hemp_grammar    grammar,
-    hemp_string     name
+    HempGrammar    grammar,
+    HempString     name
 );
 
 void
 hemp_grammar_free(
-    hemp_grammar    grammar
+    HempGrammar    grammar
 );
 
-hemp_bool
+HempBool
 hemp_grammar_free_element(
-    hemp_hash       grammars,
-    hemp_pos        position,
-    hemp_slot       item
+    HempHash       grammars,
+    HempPos        position,
+    HempSlot       item
 );
 
-hemp_bool
+HempBool
 hemp_grammar_scanner(
-    hemp_grammar    grammar,
-    hemp_document   document
+    HempGrammar    grammar,
+    HempDocument   document
 );
 
 

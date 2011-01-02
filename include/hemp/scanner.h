@@ -25,24 +25,24 @@
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_bool
+HempBool
 hemp_scan_text(
-    hemp_document   document
+    HempDocument   document
 );
 
 HEMP_INLINE void
 hemp_scan_number(
-    hemp_document   document
+    HempDocument   document
 );
 
 HEMP_INLINE void
 hemp_scan_whitespace(
-    hemp_document   document
+    HempDocument   document
 );
 
-//hemp_bool
+//HempBool
 //hemp_scan_unplugged(
-//    hemp_document   document
+//    HempDocument   document
 //);
 
 

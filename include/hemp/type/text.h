@@ -9,9 +9,9 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_text {
-    hemp_string     string;
-    hemp_size       capacity;
-    hemp_size       length;
+    HempString     string;
+    HempSize       capacity;
+    HempSize       length;
 }; 
 
 
@@ -19,81 +19,81 @@ struct hemp_text {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_text 
+HempText 
 hemp_text_init_size(
-    hemp_text       text, 
-    hemp_size       capacity
+    HempText       text, 
+    HempSize       capacity
 );
 
-hemp_text 
+HempText 
 hemp_text_init_format(
-    hemp_text       text, 
-    hemp_string     format, 
+    HempText       text, 
+    HempString     format, 
     ...
 );
 
 void
 hemp_text_free(
-    hemp_text       text
+    HempText       text
 );
 
-hemp_text
+HempText
 hemp_text_from_text(
-    hemp_text       text
+    HempText       text
 );
 
-hemp_text
+HempText
 hemp_text_from_string(
-    hemp_string     string
+    HempString     string
 );
 
-hemp_text
+HempText
 hemp_text_append_text(
-    hemp_text       text, 
-    hemp_text       append
+    HempText       text, 
+    HempText       append
 );
 
-hemp_text
+HempText
 hemp_text_append_string(
-    hemp_text       text, 
-    hemp_string     append
+    HempText       text, 
+    HempString     append
 );
 
-hemp_text
+HempText
 hemp_text_append_stringn(
-    hemp_text       text, 
-    hemp_string     append, 
-    hemp_size       length
+    HempText       text, 
+    HempString     append, 
+    HempSize       length
 );
 
-hemp_text
+HempText
 hemp_text_insert_string(
-    hemp_text       text, 
-    hemp_offset     position, 
-    hemp_string     insert
+    HempText       text, 
+    HempOffset     position, 
+    HempString     insert
 );
 
-hemp_text
+HempText
 hemp_text_replace_string(
-    hemp_text       text, 
-    hemp_string     replace
+    HempText       text, 
+    HempString     replace
 );
 
-hemp_text
+HempText
 hemp_text_truncate(
-    hemp_text       text, 
-    hemp_pos        length
+    HempText       text, 
+    HempPos        length
 );
 
 
 void     
 hemp_text_release(
-    hemp_text       text
+    HempText       text
 );
 
 HEMP_INLINE void
 hemp_text_clean(
-    hemp_value value
+    HempValue value
 );
 
 

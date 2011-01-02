@@ -11,9 +11,9 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_code {
-    hemp_value      body;
-    hemp_proto      proto;
-//    hemp_value      args;
+    HempValue      body;
+    HempProto      proto;
+//    HempValue      args;
 //  hemp_scope_t    scope;
 //  hemp_element_t  source;
 }; 
@@ -24,22 +24,22 @@ struct hemp_code {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_code
+HEMP_INLINE HempCode
 hemp_code_init();
 
 HEMP_INLINE void
 hemp_code_release(
-    hemp_code       code
+    HempCode       code
 );
 
 HEMP_INLINE void
 hemp_code_free(
-    hemp_code       code
+    HempCode       code
 );
 
-HEMP_INLINE hemp_proto
+HEMP_INLINE HempProto
 hemp_code_proto(
-    hemp_code       code
+    HempCode       code
 );
 
 /*--------------------------------------------------------------------------

@@ -12,16 +12,16 @@ void hemp_debug(
     ...
 );
 void hemp_debug_col(
-    hemp_string file, 
-    hemp_pos    line,
-    hemp_string colour,
-    hemp_string format, 
+    HempString file, 
+    HempPos    line,
+    HempString colour,
+    HempString format, 
     ...
 );
 void hemp_debug_token(
-    hemp_string type, 
-    hemp_string str, 
-    hemp_pos    len
+    HempString type, 
+    HempString str, 
+    HempPos    len
 );
 void hemp_debug_on();
 void hemp_debug_off();

@@ -12,14 +12,14 @@
  * global identity (singleton) values
  *--------------------------------------------------------------------------*/
 
-extern const hemp_value HempMissing;
-extern const hemp_value HempNothing;
-extern const hemp_value HempEmpty;
-extern const hemp_value HempFalse;
-extern const hemp_value HempTrue;
-extern const hemp_value HempBefore;
-extern const hemp_value HempEqual;
-extern const hemp_value HempAfter;
+extern const HempValue HempMissing;
+extern const HempValue HempNothing;
+extern const HempValue HempEmpty;
+extern const HempValue HempFalse;
+extern const HempValue HempTrue;
+extern const HempValue HempBefore;
+extern const HempValue HempEqual;
+extern const HempValue HempAfter;
 
 
 
@@ -122,12 +122,12 @@ extern const hemp_value HempAfter;
 #define HEMP_INTEGER_ID         0x01        /* 32 bit integer               */
 #define HEMP_POINTER_ID         0x02        /* memory pointer/string        */
 #define HEMP_STRING_ID          0x03        /* memory pointer/string        */
-#define HEMP_TEXT_ID            0x04        /* hemp_text pointer            */
-#define HEMP_LIST_ID            0x05        /* hemp_list pointer            */
-#define HEMP_HASH_ID            0x06        /* hemp_hash pointer            */
-#define HEMP_CODE_ID            0x07        /* hemp_code pointer            */
-#define HEMP_PARAMS_ID          0x08        /* hemp_params pointer          */
-#define HEMP_OBJECT_ID          0x0F        /* hemp_object pointer          */
+#define HEMP_TEXT_ID            0x04        /* HempText pointer            */
+#define HEMP_LIST_ID            0x05        /* HempList pointer            */
+#define HEMP_HASH_ID            0x06        /* HempHash pointer            */
+#define HEMP_CODE_ID            0x07        /* HempCode pointer            */
+#define HEMP_PARAMS_ID          0x08        /* HempParams pointer          */
+#define HEMP_OBJECT_ID          0x0F        /* HempObject pointer          */
 #define HEMP_IDENTITY_ID        0x10        /* identity values (NaN + n)    */
 
 /* out-of-band values used to mark unused/reserved type slots */
@@ -165,11 +165,11 @@ extern const hemp_value HempAfter;
 /* The type tag is 5 bits wide, offset 47 bits from the LSB */
 #define HEMP_TAG_SHIFT          47
 #define HEMP_TAG_MASK           0x1F
-#define HEMP_TAG_UP(t)          ((hemp_u64) (t & HEMP_TAG_MASK) << HEMP_TAG_SHIFT)
-#define HEMP_TAG_DOWN(v)        ((hemp_u8)  (v >> HEMP_TAG_SHIFT) & HEMP_TAG_MASK)
+#define HEMP_TAG_UP(t)          ((HempU64) (t & HEMP_TAG_MASK) << HEMP_TAG_SHIFT)
+#define HEMP_TAG_DOWN(v)        ((HempU8)  (v >> HEMP_TAG_SHIFT) & HEMP_TAG_MASK)
 #define HEMP_TAG_MAKE(t)        (HEMP_INFINITY | HEMP_TAG_UP(t))
 #define HEMP_TAG_TYPE(v)        HEMP_TAG_DOWN(v.bits)
-#define HEMP_TAG_VALID(v)       ((hemp_bool) ((v.bits & HEMP_INFINITY) == HEMP_INFINITY))
+#define HEMP_TAG_VALID(v)       ((HempBool) ((v.bits & HEMP_INFINITY) == HEMP_INFINITY))
 
 /* internal macros to fetch/test the type identifier in a tagged value */
 #define HEMP_TYPE_ID(v)         (HEMP_TAG_VALID(v) ? HEMP_TAG_TYPE(v) : HEMP_NUMBER_ID)
@@ -179,20 +179,20 @@ extern const hemp_value HempAfter;
 
 /* macros for manipulating identity values */
 #define HEMP_IDENT_MASK         0xFF
-#define HEMP_IDENT_MAKE(t)      ((hemp_value) (HEMP_IDENTITY | t))
+#define HEMP_IDENT_MAKE(t)      ((HempValue) (HEMP_IDENTITY | t))
 
 /* TODO: this isn't right - it doesn't check that the lower 4 bits of the 
  * identity tag are 0.  It works for now because we don't have any type 
  * tags >= 0xFFF8000000000000
  */
-#define HEMP_IDENT_VALID(v)     ((hemp_bool) ((v.bits & HEMP_IDENTITY) == HEMP_IDENTITY))
-#define HEMP_IDENT_VALUE(v)     ((hemp_u8) (v.bits & HEMP_IDENT_MASK))
-#define HEMP_IDENT_ID(v)        ((hemp_u8) HEMP_IDENT_VALID(v) ? HEMP_IDENT_VALUE(v) : 0)
-#define HEMP_IDENT_IS(v,i)      ((hemp_bool) (v.bits == (HEMP_IDENTITY | i)))
-#define HEMP_IDENT_MAX(v,b)     ((hemp_bool) (HEMP_IDENT_ID(v) ^ b))
-#define HEMP_IDENT_ANY(v,b)     ((hemp_bool) (HEMP_IDENT_ID(v) & b))
-#define HEMP_IDENT_ALL(v,b)     ((hemp_bool) (HEMP_IDENT_ANY(v,b) == b))
-#define HEMP_IDENT_NOT(v,b)     ((hemp_bool) (HEMP_IDENT_VALID(v) && (HEMP_IDENT_ANY(v,b) == 0)))
+#define HEMP_IDENT_VALID(v)     ((HempBool) ((v.bits & HEMP_IDENTITY) == HEMP_IDENTITY))
+#define HEMP_IDENT_VALUE(v)     ((HempU8) (v.bits & HEMP_IDENT_MASK))
+#define HEMP_IDENT_ID(v)        ((HempU8) HEMP_IDENT_VALID(v) ? HEMP_IDENT_VALUE(v) : 0)
+#define HEMP_IDENT_IS(v,i)      ((HempBool) (v.bits == (HEMP_IDENTITY | i)))
+#define HEMP_IDENT_MAX(v,b)     ((HempBool) (HEMP_IDENT_ID(v) ^ b))
+#define HEMP_IDENT_ANY(v,b)     ((HempBool) (HEMP_IDENT_ID(v) & b))
+#define HEMP_IDENT_ALL(v,b)     ((HempBool) (HEMP_IDENT_ANY(v,b) == b))
+#define HEMP_IDENT_NOT(v,b)     ((HempBool) (HEMP_IDENT_VALID(v) && (HEMP_IDENT_ANY(v,b) == 0)))
 
 /* Integers are represented in the lower 32 bits */
 #define HEMP_INTEGER_BITS       32
@@ -202,13 +202,13 @@ extern const hemp_value HempAfter;
 #if HEMP_WORD_LENGTH == 32
     #define HEMP_POINTER_BITS   32
     #define HEMP_POINTER_MASK   0xFFFFFFFFL
-    #define HEMP_POINTER(v)     ((hemp_memory)((hemp_u32) v.bits))
-    #define HEMP_POINTER_UP(p)  ((hemp_u64) ((hemp_u32) p & HEMP_POINTER_MASK));
+    #define HEMP_POINTER(v)     ((HempMemory)((HempU32) v.bits))
+    #define HEMP_POINTER_UP(p)  ((HempU64) ((HempU32) p & HEMP_POINTER_MASK));
 #elif HEMP_WORD_LENGTH == 64
     #define HEMP_POINTER_BITS   47
     #define HEMP_POINTER_MASK   0x00007FFFFFFFFFFFLL
-    #define HEMP_POINTER(v)     ((hemp_memory)(v.bits & HEMP_POINTER_MASK))
-    #define HEMP_POINTER_UP(p)  ((hemp_u64) p & HEMP_POINTER_MASK);
+    #define HEMP_POINTER(v)     ((HempMemory)(v.bits & HEMP_POINTER_MASK))
+    #define HEMP_POINTER_UP(p)  ((HempU64) p & HEMP_POINTER_MASK);
 #else
     #error "Invalid word length"
 #endif
@@ -231,7 +231,7 @@ extern const hemp_value HempAfter;
  *--------------------------------------------------------------------------*/
 
 #define hemp_is_tagged(v)       HEMP_TAG_VALID(v)
-#define hemp_is_number(v)       ((hemp_u64) v.bits < HEMP_INFINITY)
+#define hemp_is_number(v)       ((HempU64) v.bits < HEMP_INFINITY)
 #define hemp_is_numeric(v)      HEMP_TYPE_MAX(v, HEMP_INTEGER_ID)
 #define hemp_is_integer(v)      HEMP_TYPE_IS(v, HEMP_INTEGER_ID)
 #define hemp_is_pointer(v)      HEMP_TYPE_IS(v, HEMP_POINTER_ID)
@@ -264,7 +264,7 @@ extern const hemp_value HempAfter;
  * pobtype: pointer to object type (ditto)
  */
 #define hemp_hgtype(v)          (hemp_global_types[HEMP_TYPE_ID(v)])
-#define hemp_obtype(v)          (((hemp_object) HEMP_POINTER(v))->type)
+#define hemp_obtype(v)          (((HempObject) HEMP_POINTER(v))->type)
 #define hemp_pobtype(p)         (p->type)
 #define hemp_vtype(v)           (hemp_is_object(v) ? hemp_obtype(v) : hemp_hgtype(v))
 #define hemp_obcall(v,n,...)    (hemp_obtype(v)->n(v,__VA_ARGS__))
@@ -302,7 +302,7 @@ extern const hemp_value HempAfter;
 
 /*
 #define hemp_to_string(v,c) ({  \                       
-    hemp_value _v = hemp_is_string(v)                   
+    HempValue _v = hemp_is_string(v)                   
         ? v                                             
         : hemp_vtext(v,c,HempNothing)->string;
     _v->string;
@@ -315,10 +315,10 @@ extern const hemp_value HempAfter;
  * 
  *--------------------------------------------------------------------------*/
 
-typedef hemp_text       (* hemp_text_vfn)(hemp_value, hemp_context, hemp_text);
-typedef hemp_value      (* hemp_dot_vfn)(hemp_value, hemp_context, hemp_string);
-typedef void            (* hemp_init_vfn)(hemp_value);
-typedef void            (* hemp_wipe_vfn)(hemp_value);
+typedef HempText       (* hemp_text_vfn)(HempValue, HempContext, HempText);
+typedef HempValue      (* hemp_dot_vfn)(HempValue, HempContext, HempString);
+typedef void            (* hemp_init_vfn)(HempValue);
+typedef void            (* hemp_wipe_vfn)(HempValue);
 
 
 
@@ -326,38 +326,38 @@ typedef void            (* hemp_wipe_vfn)(hemp_value);
  * inline functions to encode native values as tagged values
  *--------------------------------------------------------------------------*/
 
-extern HEMP_INLINE hemp_value     hemp_num_val(hemp_num n);
-extern HEMP_INLINE hemp_value     hemp_int_val(hemp_int i);
-extern HEMP_INLINE hemp_value     hemp_ptr_val(hemp_memory p);
-extern HEMP_INLINE hemp_value     hemp_str_val(hemp_string s);
-extern HEMP_INLINE hemp_value     hemp_text_val(hemp_text t);
-extern HEMP_INLINE hemp_value     hemp_list_val(hemp_list l);
-extern HEMP_INLINE hemp_value     hemp_hash_val(hemp_hash l);
-extern HEMP_INLINE hemp_value     hemp_code_val(hemp_code c);
-extern HEMP_INLINE hemp_value     hemp_params_val(hemp_params p);
-extern HEMP_INLINE hemp_value     hemp_obj_val(hemp_object o);
-extern HEMP_INLINE hemp_value     hemp_bool_val(hemp_bool b);
-extern HEMP_INLINE hemp_value     hemp_ident_val(hemp_u8 i);
-extern HEMP_INLINE hemp_value     hemp_type_val(hemp_type t, hemp_memory p);
-extern HEMP_INLINE hemp_value     hemp_frag_val(hemp_fragment f);
+extern HEMP_INLINE HempValue     hemp_num_val(HempNum n);
+extern HEMP_INLINE HempValue     hemp_int_val(HempInt i);
+extern HEMP_INLINE HempValue     hemp_ptr_val(HempMemory p);
+extern HEMP_INLINE HempValue     hemp_str_val(HempString s);
+extern HEMP_INLINE HempValue     hemp_text_val(HempText t);
+extern HEMP_INLINE HempValue     hemp_list_val(HempList l);
+extern HEMP_INLINE HempValue     hemp_hash_val(HempHash l);
+extern HEMP_INLINE HempValue     hemp_code_val(HempCode c);
+extern HEMP_INLINE HempValue     hemp_params_val(HempParams p);
+extern HEMP_INLINE HempValue     hemp_obj_val(HempObject o);
+extern HEMP_INLINE HempValue     hemp_bool_val(HempBool b);
+extern HEMP_INLINE HempValue     hemp_ident_val(HempU8 i);
+extern HEMP_INLINE HempValue     hemp_type_val(HempType t, HempMemory p);
+extern HEMP_INLINE HempValue     hemp_frag_val(HempFragment f);
 
 
 /*--------------------------------------------------------------------------
  * inline functions to decode tagged values to native values
  *--------------------------------------------------------------------------*/
 
-extern HEMP_INLINE hemp_num       hemp_val_num(hemp_value v);
-extern HEMP_INLINE hemp_int       hemp_val_int(hemp_value v);
-extern HEMP_INLINE hemp_memory    hemp_val_ptr(hemp_value v);
-extern HEMP_INLINE hemp_string    hemp_val_str(hemp_value v);
-extern HEMP_INLINE hemp_text      hemp_val_text(hemp_value v);
-extern HEMP_INLINE hemp_list      hemp_val_list(hemp_value v);
-extern HEMP_INLINE hemp_hash      hemp_val_hash(hemp_value v);
-extern HEMP_INLINE hemp_code      hemp_val_code(hemp_value v);
-extern HEMP_INLINE hemp_params    hemp_val_params(hemp_value v);
-extern HEMP_INLINE hemp_object    hemp_val_obj(hemp_value v);
-extern HEMP_INLINE hemp_bool      hemp_val_bool(hemp_value v);
-extern HEMP_INLINE hemp_fragment  hemp_val_frag(hemp_value v);
+extern HEMP_INLINE HempNum       hemp_val_num(HempValue v);
+extern HEMP_INLINE HempInt       hemp_val_int(HempValue v);
+extern HEMP_INLINE HempMemory    hemp_val_ptr(HempValue v);
+extern HEMP_INLINE HempString    hemp_val_str(HempValue v);
+extern HEMP_INLINE HempText      hemp_val_text(HempValue v);
+extern HEMP_INLINE HempList      hemp_val_list(HempValue v);
+extern HEMP_INLINE HempHash      hemp_val_hash(HempValue v);
+extern HEMP_INLINE HempCode      hemp_val_code(HempValue v);
+extern HEMP_INLINE HempParams    hemp_val_params(HempValue v);
+extern HEMP_INLINE HempObject    hemp_val_obj(HempValue v);
+extern HEMP_INLINE HempBool      hemp_val_bool(HempValue v);
+extern HEMP_INLINE HempFragment  hemp_val_frag(HempValue v);
 
 
 /*--------------------------------------------------------------------------
@@ -366,18 +366,18 @@ extern HEMP_INLINE hemp_fragment  hemp_val_frag(hemp_value v);
 
 void
 hemp_value_free(
-    hemp_value  value
+    HempValue  value
 );
 
-HEMP_INLINE hemp_string
+HEMP_INLINE HempString
 hemp_value_to_string(
-    hemp_value      value,
-    hemp_context    context
+    HempValue      value,
+    HempContext    context
 );
 
 HEMP_INLINE 
-hemp_string hemp_identity_name(
-    hemp_value      value
+HempString hemp_identity_name(
+    HempValue      value
 );
 
 
@@ -429,10 +429,10 @@ extern HEMP_VALUE(hemp_type_identity_compare);
 /* prototypes for text, list and hash are in the respective type/XXX.h files */
 
 /* debugging functions */
-void hemp_dump_u64(hemp_u64 value);
-void hemp_dump_64(hemp_u64 value);
-void hemp_dump_32(hemp_u32 value);
-void hemp_dump_value(hemp_value value);
+void hemp_dump_u64(HempU64 value);
+void hemp_dump_64(HempU64 value);
+void hemp_dump_32(HempU32 value);
+void hemp_dump_value(HempValue value);
 
 
 

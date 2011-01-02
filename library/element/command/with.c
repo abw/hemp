@@ -7,10 +7,10 @@ HEMP_POSTFIX(hemp_element_command_with_postfix);
 HEMP_OUTPUT(hemp_element_command_with_text);
 HEMP_CLEANUP(hemp_element_command_with_cleanup);
 
-hemp_hash
+HempHash
 hemp_element_command_with_params_hash(
-    hemp_fragment   fragment,
-    hemp_context    context
+    HempFragment   fragment,
+    HempContext    context
 );
 
 
@@ -38,7 +38,7 @@ HEMP_ELEMENT(hemp_element_command_with) {
 HEMP_PREFIX(hemp_element_command_with_prefix) {
     hemp_debug_call("hemp_element_command_with_prefix()\n");
 
-    hemp_fragment fragment = *fragptr;
+    HempFragment fragment = *fragptr;
 
     HEMP_PREFIX_PRECEDENCE;
     hemp_set_flag(fragment, HEMP_BE_PREFIX);
@@ -59,7 +59,7 @@ HEMP_PREFIX(hemp_element_command_with_prefix) {
 HEMP_POSTFIX(hemp_element_command_with_postfix) {
     hemp_debug_call("hemp_element_command_with_postfix()\n");
 
-    hemp_fragment fragment = *fragptr;
+    HempFragment fragment = *fragptr;
 
     HEMP_INFIX_LEFT_PRECEDENCE;
     hemp_set_flag(fragment, HEMP_BE_PREFIX);
@@ -82,10 +82,10 @@ HEMP_POSTFIX(hemp_element_command_with_postfix) {
 
 HEMP_OUTPUT(hemp_element_command_with_text) {
     hemp_debug_call("hemp_element_with_text()\n");
-    hemp_hemp     hemp     = context->hemp;
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_hash     params   = hemp_element_command_with_params_hash(fragment, context);
-    hemp_value    body     = hemp_rhs(fragment);
+    Hemp     hemp     = context->hemp;
+    HempFragment fragment = hemp_val_frag(value);
+    HempHash     params   = hemp_element_command_with_params_hash(fragment, context);
+    HempValue    body     = hemp_rhs(fragment);
 
     hemp_context_with(context, params);
     
@@ -107,21 +107,21 @@ HEMP_OUTPUT(hemp_element_command_with_text) {
 
 HEMP_CLEANUP(hemp_element_command_with_cleanup) {
     hemp_debug_call("hemp_element_command_with_clean(%p)\n", fragment);
-    hemp_list params = hemp_val_list(hemp_lhs(fragment));
+    HempList params = hemp_val_list(hemp_lhs(fragment));
     hemp_list_free(params);
 }
 
 
-hemp_hash
+HempHash
 hemp_element_command_with_params_hash(
-    hemp_fragment   fragment,
-    hemp_context    context
+    HempFragment    fragment,
+    HempContext     context
 ) {
-    hemp_list     params   = hemp_val_list(hemp_lhs(fragment));
-    hemp_hash     hash     = hemp_context_tmp_hash(context);
-    hemp_value    vars     = hemp_hash_val(hash);
-    hemp_value    param;
-    hemp_size     n;
+    HempList     params   = hemp_val_list(hemp_lhs(fragment));
+    HempHash     hash     = hemp_context_tmp_hash(context);
+    HempValue    vars     = hemp_hash_val(hash);
+    HempValue    param;
+    HempSize     n;
 
     for (n = 0; n < params->length; n++) {
         param = hemp_list_item(params, n);

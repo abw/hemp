@@ -14,8 +14,8 @@ HEMP_ELEMENT(hemp_element_dotop) {
 
 
 HEMP_POSTFIX(hemp_element_dotop_postfix) {
-    hemp_fragment self = *fragptr;
-    hemp_element  type = self->type;
+    HempFragment self = *fragptr;
+    HempElement  type = self->type;
 
     hemp_debug_call("hemp_element_dotop_postfix()\n");
 
@@ -27,7 +27,7 @@ HEMP_POSTFIX(hemp_element_dotop_postfix) {
     hemp_skip_whitespace(fragptr);
 
     // FIXME: temporary hack to get something working
-    hemp_fragment rhs = hemp_parse_fixed(fragptr, scope, type->lprec, 1);
+    HempFragment rhs = hemp_parse_fixed(fragptr, scope, type->lprec, 1);
 
     if (! rhs)
         hemp_fatal("missing expression on rhs of %s\n", type->start);
@@ -58,10 +58,10 @@ HEMP_VALUE(hemp_element_dotop_value) {
     hemp_debug_call("hemp_element_dotop_value()\n");
 
     /* TODO: Note the temporary hack: rhs is always a pre-evaluated value */
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    lhs      = hemp_lhs(fragment);
-    hemp_value    lval     = hemp_obcall(lhs, value, context);
-    hemp_value    rval     = hemp_rhs(fragment);
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    lhs      = hemp_lhs(fragment);
+    HempValue    lval     = hemp_obcall(lhs, value, context);
+    HempValue    rval     = hemp_rhs(fragment);
 
     if (hemp_is_undefined(lval)) {
         hemp_fatal("TODO: cannot call dotop on undefined value");
@@ -79,10 +79,10 @@ HEMP_INPUT(hemp_element_dotop_assign) {
     hemp_debug_call("hemp_element_dotop_assign()\n");
 
     /* Note the temporary hack: rhs is always a pre-evaluated value */
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    lhs      = hemp_lhs(fragment);
-    hemp_value    lval     = hemp_obcall(lhs, value, context);
-    hemp_value    rval     = hemp_rhs(fragment);
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    lhs      = hemp_lhs(fragment);
+    HempValue    lval     = hemp_obcall(lhs, value, context);
+    HempValue    rval     = hemp_rhs(fragment);
 
     return hemp_store(
         lval, context, rval, 
@@ -99,7 +99,7 @@ HEMP_CLEANUP(hemp_element_dotop_cleanup) {
 //      hemp_debug("cleaning static dotop element...");
 //      TODO: more comprehensive check, probably via type->cleanup
 
-        hemp_value rhs = hemp_rhs(fragment);
+        HempValue rhs = hemp_rhs(fragment);
         if (hemp_is_text(rhs)) {
             // TODO: It appears to be the case that the context is managing
             // the memory allocated by the fixed RHS so we don't need to free

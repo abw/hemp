@@ -11,26 +11,26 @@
  *--------------------------------------------------------------------------*/
 
 #define HEMP_CODEC(f)                               \
-    hemp_codec f(                                   \
-        hemp_hemp   hemp,                           \
-        hemp_string name                            \
+    HempCodec f(                                   \
+        Hemp   hemp,                           \
+        HempString name                            \
     )
 
 #define HEMP_ENCODE_ARGS                            \
-    hemp_codec      codec,                          \
-    hemp_value      input,                          \
-    hemp_context    context
+    HempCodec      codec,                          \
+    HempValue      input,                          \
+    HempContext    context
 
 #define HEMP_DECODE_ARGS                            \
-    hemp_codec      codec,                          \
-    hemp_text       input,                          \
-    hemp_context    context
+    HempCodec      codec,                          \
+    HempText       input,                          \
+    HempContext    context
 
 #define HEMP_ENCODER(f)                             \
-    hemp_text f(HEMP_ENCODE_ARGS)
+    HempText f(HEMP_ENCODE_ARGS)
 
 #define HEMP_DECODER(f)                             \
-    hemp_value f(HEMP_DECODE_ARGS)
+    HempValue f(HEMP_DECODE_ARGS)
 
 #define hemp_codec_encode(codec, input, context)    \
     codec->encoder(codec, input, context)
@@ -43,12 +43,12 @@
  * type definitions
  *--------------------------------------------------------------------------*/
 
-typedef hemp_text  (* hemp_encoder) (HEMP_ENCODE_ARGS);
-typedef hemp_value (* hemp_decoder) (HEMP_DECODE_ARGS);
+typedef HempText  (* hemp_encoder) (HEMP_ENCODE_ARGS);
+typedef HempValue (* hemp_decoder) (HEMP_DECODE_ARGS);
 
 struct hemp_codec {
-    hemp_hemp       hemp;
-    hemp_string     name;
+    Hemp       hemp;
+    HempString     name;
     hemp_encoder    encoder;
     hemp_decoder    decoder;
 };
@@ -61,15 +61,15 @@ struct hemp_codec {
 HEMP_FACTORY(hemp_codec_factory);
 HEMP_HASH_ITERATOR(hemp_codec_cleaner);
 
-hemp_codec
+HempCodec
 hemp_codec_new(
-    hemp_hemp       hemp,
-    hemp_string     name
+    Hemp       hemp,
+    HempString     name
 );
 
 void
 hemp_codec_free(
-    hemp_codec      codec
+    HempCodec      codec
 );
 
 HEMP_ENCODER(hemp_codec_no_encoder);

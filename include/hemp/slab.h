@@ -9,9 +9,9 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_slab {
-    hemp_size       size;               /* size of allocated memory         */
-    hemp_memory     data;               /* pointer to memory                */
-    hemp_slab       next;               /* next slab in linked list         */
+    HempSize       size;               /* size of allocated memory         */
+    HempMemory     data;               /* pointer to memory                */
+    HempSlab       next;               /* next slab in linked list         */
 };
 
 
@@ -19,14 +19,14 @@ struct hemp_slab {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE hemp_slab
+HEMP_INLINE HempSlab
 hemp_slab_new(
-    hemp_size       size
+    HempSize       size
 );
 
 HEMP_INLINE void
 hemp_slab_free(
-    hemp_slab       slab
+    HempSlab       slab
 );
 
 

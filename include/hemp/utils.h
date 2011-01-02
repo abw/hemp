@@ -9,11 +9,11 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_md5 {
-    hemp_u32    i[2];       /* number of _bits_ handled mod 2^64        */
-    hemp_u32    buffer[4];  /* scratch buffer                           */
-    hemp_char   input[64];  /* input buffer                             */
-    hemp_char   digest[16]; /* actual digest after hemp_md5_final call  */
-    hemp_char   output[33]; /* output hex digest string                 */
+    HempU32         i[2];       /* number of _bits_ handled mod 2^64        */
+    HempU32         buffer[4];  /* scratch buffer                           */
+    HempChar        input[64];  /* input buffer                             */
+    HempChar        digest[16]; /* actual digest after hemp_md5_final call  */
+    HempChar        output[33]; /* output hex digest string                 */
 };
 
 
@@ -21,21 +21,21 @@ struct hemp_md5 {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_md5
+HempMD5
 hemp_md5_init(
-    hemp_md5        md5
+    HempMD5         md5
 );
 
 void 
 hemp_md5_update(
-    hemp_md5        md5,
-    hemp_string     input,
-    hemp_size       length
+    HempMD5         md5,
+    HempString      input,
+    HempSize        length
 );
 
 void 
 hemp_md5_final(
-    hemp_md5        md5
+    HempMD5         md5
 );
 
 
@@ -44,12 +44,12 @@ hemp_md5_free();
 
 void 
 hemp_todo(
-    char          * format, 
+    HempString      format,
     ...
 );
 
 void hemp_fatal(
-    char          * format, 
+    HempString      format,
     ...
 );
 

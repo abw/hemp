@@ -7,7 +7,7 @@
 
 HEMP_FACTORY(hemp_element_factory) {
     hemp_debug_init("instantiating element factory\n");
-    hemp_factory factory = hemp_factory_new(hemp, name);
+    HempFactory factory = hemp_factory_new(hemp, name);
     factory->cleaner     = &hemp_element_cleaner;
     factory->autoload    = NULL;        // TODO: load element
     return factory;
@@ -15,7 +15,7 @@ HEMP_FACTORY(hemp_element_factory) {
 
 
 HEMP_HASH_ITERATOR(hemp_element_cleaner) {
-    hemp_element element = (hemp_element) hemp_val_ptr(item->value);
+    HempElement element = (HempElement) hemp_val_ptr(item->value);
     hemp_debug_init("cleaning element: %s\n", element->name);
     hemp_element_free(element);
     return HEMP_TRUE;
@@ -26,13 +26,13 @@ HEMP_HASH_ITERATOR(hemp_element_cleaner) {
  * initialisation and cleanup functions
  *--------------------------------------------------------------------------*/
 
-hemp_element
+HempElement
 hemp_element_new(
-    hemp_string name,
-    hemp_string start,
-    hemp_string end
+    HempString name,
+    HempString start,
+    HempString end
 ) {
-    hemp_element element;
+    HempElement element;
     HEMP_ALLOCATE(element);
 
     /* initialise the basic element details */
@@ -95,7 +95,7 @@ hemp_element_new(
 
 void
 hemp_element_free(
-    hemp_element element
+    HempElement element
 ) {
     /* only free the end token if it's not the same as the start token */
     if ( element->end 
@@ -218,7 +218,7 @@ HEMP_OUTPUT(hemp_element_not_source) {
 
 HEMP_PREFIX(hemp_element_parse_fixed) {
     hemp_debug_call("hemp_element_parse_fixed()\n");
-    hemp_fragment fragment = *fragptr;
+    HempFragment fragment = *fragptr;
 
     /* temporary hack to catch cases where parser backtracks and this function
      * gets called multiple times for an element.
@@ -228,7 +228,7 @@ HEMP_PREFIX(hemp_element_parse_fixed) {
         return fragment;
     }
 
-    hemp_string   string   = hemp_string_extract(
+    HempString   string   = hemp_string_extract(
         fragment->token,
         fragment->token + fragment->length
     );
@@ -255,7 +255,7 @@ HEMP_PREFIX(hemp_element_parse_body) {
      * It forces precedence to CMD_PRECEDENCE and FORCE to 1.  I don't 
      * think we need to do this if we just use the values passed as args.
      */
-    hemp_fragment fragment = hemp_parse_prefix(
+    HempFragment fragment = hemp_parse_prefix(
         fragptr, scope, precedence, force
     );
 
@@ -290,8 +290,8 @@ HEMP_PREFIX(hemp_element_parse_prefix_pair) {
      * start of the expression and returning NULL if not.
      */
 
-    hemp_fragment fragment = *fragptr;
-    hemp_fragment expr     = hemp_parse_prefix(fragptr, scope, precedence, force);
+    HempFragment fragment = *fragptr;
+    HempFragment expr     = hemp_parse_prefix(fragptr, scope, precedence, force);
 
     if (expr && hemp_not_flag(expr, HEMP_BE_PAIRS)) {
         *fragptr = fragment;
@@ -310,9 +310,9 @@ HEMP_PREFIX(hemp_element_parse_prefix_pair) {
  *--------------------------------------------------------------------------*/
 
 HEMP_PREFIX(hemp_element_parse_prefix) {
-    hemp_fragment self = *fragptr;
-    hemp_element  type = self->type;
-    hemp_fragment expr;
+    HempFragment self = *fragptr;
+    HempElement  type = self->type;
+    HempFragment expr;
 
     hemp_debug_call("hemp_element_parse_prefix()\n");
 
@@ -335,7 +335,7 @@ HEMP_PREFIX(hemp_element_parse_prefix) {
 
 HEMP_POSTFIX(hemp_element_parse_postfix) {
     hemp_debug_call("hemp_element_parse_postfix()\n");
-    hemp_fragment self = *fragptr;
+    HempFragment self = *fragptr;
 
     HEMP_INFIX_LEFT_PRECEDENCE;
 
@@ -352,8 +352,8 @@ HEMP_POSTFIX(hemp_element_parse_postfix) {
 
 HEMP_POSTFIX(hemp_element_parse_infix_left) {
     hemp_debug_call("hemp_element_parse_infix_left()\n");
-    hemp_fragment fragment = *fragptr;
-    hemp_fragment rhs;
+    HempFragment fragment = *fragptr;
+    HempFragment rhs;
 
     HEMP_INFIX_LEFT_PRECEDENCE;
 
@@ -380,7 +380,7 @@ HEMP_POSTFIX(hemp_element_parse_infix_left) {
 
 
 HEMP_POSTFIX(hemp_element_parse_infix_right) {
-    hemp_fragment fragment = *fragptr;
+    HempFragment fragment = *fragptr;
 
     hemp_debug_call("hemp_element_parse_infix_right()\n");
 
@@ -424,14 +424,14 @@ HEMP_VALUE(hemp_element_value) {
 
 HEMP_OUTPUT(hemp_element_value_text) {
     hemp_debug_call("hemp_element_value_text()\n");
-    hemp_value result = hemp_obcall(value, value, context);
+    HempValue result = hemp_obcall(value, value, context);
     return hemp_onto_text(result, context, output);
 }
 
 
 HEMP_VALUE(hemp_element_value_number) {
     hemp_debug_call("hemp_element_value_number()\n");
-    hemp_value result = hemp_obcall(value, value, context);
+    HempValue result = hemp_obcall(value, value, context);
     return hemp_is_numeric(result)
         ? result
         : hemp_call(result, number, context);
@@ -443,28 +443,28 @@ HEMP_VALUE(hemp_element_value_number) {
 
 HEMP_VALUE(hemp_element_value_integer) {
     hemp_debug_call("hemp_element_value_integer()\n");
-    hemp_value result = hemp_obcall(value, value, context);
+    HempValue result = hemp_obcall(value, value, context);
     return hemp_to_integer(result, context);
 }
 
 
 HEMP_VALUE(hemp_element_value_boolean) {
     hemp_debug_call("hemp_element_value_boolean()\n");
-    hemp_value result = hemp_obcall(value, value, context);
+    HempValue result = hemp_obcall(value, value, context);
     return hemp_to_boolean(result, context);
 }
 
 
 HEMP_VALUE(hemp_element_value_compare) {
     hemp_debug_call("hemp_element_value_compare()\n");
-    hemp_value result = hemp_obcall(value, value, context);
+    HempValue result = hemp_obcall(value, value, context);
     return hemp_to_compare(result, context);
 }
 
 
 HEMP_OUTPUT(hemp_element_value_values) {
     hemp_debug_call("hemp_element_value_values()\n");
-    hemp_value result = hemp_obcall(value, value, context);
+    HempValue result = hemp_obcall(value, value, context);
     return hemp_values(result, context, output);
 }
 
@@ -476,7 +476,7 @@ HEMP_OUTPUT(hemp_element_value_values) {
 
 void 
 hemp_element_dump(
-    hemp_element element
+    HempElement element
 ) {
     hemp_debug("element at %p\n", element->name, element);
     hemp_debug("       name: %s\n", element->name);

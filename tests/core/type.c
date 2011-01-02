@@ -16,24 +16,24 @@ int main(
 
 
 void test_types() {
-    hemp_hemp hemp            = hemp_new();
-    hemp_context context = hemp_context_instance(hemp);
+    Hemp hemp            = hemp_new();
+    HempContext context = hemp_context_instance(hemp);
 
-    hemp_value number = hemp_num_val(3.14159);
+    HempValue number = hemp_num_val(3.14159);
     ok( hemp_is_number(number), "created a number" );
 
-    hemp_memory method;
+    HempMemory method;
     method = hemp_object_method(number, "name");
     ok( method, "got a pointer to name method");
 
-    hemp_value value = hemp_send(number, "name", context);
+    HempValue value = hemp_send(number, "name", context);
     ok( hemp_is_defined(value), "got result" );
     is( hemp_val_str(value), "Number", "got number name" );
 
     value = hemp_send(number, "no_such_method", context);
     ok( hemp_is_missing(value), "no_such_method is missing" );
 
-    hemp_text text = hemp_text_from_string("hello world!");
+    HempText text = hemp_text_from_string("hello world!");
     value = hemp_send( hemp_text_val(text), "length", context );
     ok( hemp_is_defined(value), "got text length" );
     eq( hemp_val_int(value), 12, "length is 12" );
@@ -56,22 +56,22 @@ void test_types() {
 }
 
 
-hemp_type type1_constructor(
-    hemp_int id,
-    hemp_string name
+HempType type1_constructor(
+    HempInt id,
+    HempString name
 ) {
     return hemp_type_new(id, name);
 }
     
 
 void test_type_registration() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp" );
 
-    hemp_type type1 = hemp_use_type("Type1", &type1_constructor);
+    HempType type1 = hemp_use_type("Type1", &type1_constructor);
     ok( type1, "created custom type 1" );
 
-    hemp_type type2 = hemp_use_type("Type1", &type1_constructor);
+    HempType type2 = hemp_use_type("Type1", &type1_constructor);
     ok( type2, "created custom type 2" );
     ok( type1 == type2, "both the same type" );
 

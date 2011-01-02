@@ -11,10 +11,10 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_fragments {
-    hemp_document   document;
-    hemp_pool       pool;
-    hemp_fragment   head;
-    hemp_fragment   tail;
+    HempDocument   document;
+    HempPool       pool;
+    HempFragment   head;
+    HempFragment   tail;
 };
 
 
@@ -22,54 +22,54 @@ struct hemp_fragments {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_fragments
+HempFragments
 hemp_fragments_new(
-    hemp_document   document,
-    hemp_size       capacity
+    HempDocument   document,
+    HempSize       capacity
 );
 
-hemp_fragment
+HempFragment
 hemp_fragments_create(
-    hemp_fragments  fragments,
-    hemp_element    type,
-    hemp_string     token,
-    hemp_pos        position,
-    hemp_size       length
+    HempFragments  fragments,
+    HempElement    type,
+    HempString     token,
+    HempPos        position,
+    HempSize       length
 );
 
-hemp_fragment
+HempFragment
 hemp_fragments_add_fragment(
-    hemp_fragments  fragments,
-    hemp_element    type,
-    hemp_string     token,
-    hemp_pos        position,
-    hemp_size       length
+    HempFragments  fragments,
+    HempElement    type,
+    HempString     token,
+    HempPos        position,
+    HempSize       length
 );
 
-hemp_fragment
+HempFragment
 hemp_fragments_add_eof(
-    hemp_fragments  fragments,
-    hemp_pos        position
+    HempFragments  fragments,
+    HempPos        position
 );
 
 void 
 hemp_fragments_free(
-    hemp_fragments  fragments
+    HempFragments  fragments
 );
 
-hemp_bool
+HempBool
 hemp_fragments_free_fragment(
-    hemp_memory     item
+    HempMemory     item
 );
 
-HEMP_INLINE hemp_document
+HEMP_INLINE HempDocument
 hemp_fragments_document(
-    hemp_fragments fragments
+    HempFragments fragments
 );
 
 void 
 hemp_fragments_dump(
-    hemp_fragments  fragments
+    HempFragments  fragments
 );
 
 

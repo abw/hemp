@@ -5,7 +5,7 @@
  * global element types
  *--------------------------------------------------------------------------*/
 
-hemp_element HempElementBlock = NULL;
+HempElement HempElementBlock = NULL;
 
 
 HEMP_GLOBAL_ELEMENT(hemp_global_element_block) {
@@ -34,7 +34,7 @@ HEMP_ELEMENT(hemp_element_block) {
 
 HEMP_OUTPUT(hemp_element_block_token) {
     hemp_debug_call("hemp_element_block_token()\n");
-    hemp_text text;
+    HempText text;
     hemp_prepare_text(context, output, text);
     hemp_todo("hemp_element_block_token()");
     return output;
@@ -44,8 +44,8 @@ HEMP_OUTPUT(hemp_element_block_token) {
 HEMP_OUTPUT(hemp_element_block_source) {
     hemp_debug_call("hemp_element_block_source()\n");
 
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_text text;
+    HempFragment fragment = hemp_val_frag(value);
+    HempText text;
     hemp_prepare_text_size(context, output, text, fragment->length);
 
     hemp_todo("hemp_element_block_source()");
@@ -56,12 +56,12 @@ HEMP_OUTPUT(hemp_element_block_source) {
 
 HEMP_OUTPUT(hemp_element_block_text) {
     hemp_debug_call("hemp_element_block_text()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_list     exprs    = hemp_block_exprs_list(fragment);
-    hemp_value    item;
-    hemp_size     n;
+    HempFragment fragment = hemp_val_frag(value);
+    HempList     exprs    = hemp_block_exprs_list(fragment);
+    HempValue    item;
+    HempSize     n;
 
-    hemp_text text;
+    HempText text;
     hemp_prepare_text(context, output, text);
 
     for (n = 0; n < exprs->length; n++) {
@@ -83,11 +83,11 @@ HEMP_VALUE(hemp_element_block_value) {
 
 HEMP_OUTPUT(hemp_element_block_values) {
     hemp_debug_call("hemp_element_block_values()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_list     exprs    = hemp_block_exprs_list(fragment);
-    hemp_value    item;
-    hemp_size     n;
-    hemp_list     values;
+    HempFragment fragment = hemp_val_frag(value);
+    HempList     exprs    = hemp_block_exprs_list(fragment);
+    HempValue    item;
+    HempSize     n;
+    HempList     values;
     hemp_prepare_values(context, output, values);
     
     for (n = 0; n < exprs->length; n++) {
@@ -101,11 +101,11 @@ HEMP_OUTPUT(hemp_element_block_values) {
 
 HEMP_OUTPUT(hemp_element_block_params) {
     hemp_debug_call("hemp_element_block_params()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_list     exprs    = hemp_block_exprs_list(fragment);
-    hemp_value    item;
-    hemp_size     n;
-    hemp_list     values;
+    HempFragment fragment = hemp_val_frag(value);
+    HempList     exprs    = hemp_block_exprs_list(fragment);
+    HempValue    item;
+    HempSize     n;
+    HempList     values;
     hemp_prepare_values(context, output, values);
     
     for (n = 0; n < exprs->length; n++) {
@@ -119,11 +119,11 @@ HEMP_OUTPUT(hemp_element_block_params) {
 
 HEMP_OUTPUT(hemp_element_block_pairs) {
     hemp_debug_call("hemp_element_block_pairs()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_list     exprs    = hemp_block_exprs_list(fragment);
-    hemp_hash     pairs;
-    hemp_value    item;
-    hemp_size     n;
+    HempFragment fragment = hemp_val_frag(value);
+    HempList     exprs    = hemp_block_exprs_list(fragment);
+    HempHash     pairs;
+    HempValue    item;
+    HempSize     n;
     hemp_prepare_pairs(context, output, pairs);
     
     for (n = 0; n < exprs->length; n++) {
@@ -139,7 +139,7 @@ HEMP_OUTPUT(hemp_element_block_pairs) {
 HEMP_CLEANUP(hemp_element_block_cleanup) {
     hemp_debug_call("hemp_element_block_clean(%p)\n", fragment);
 
-    hemp_list exprs = hemp_block_exprs_list(fragment);
+    HempList exprs = hemp_block_exprs_list(fragment);
 
     if (exprs)
         hemp_list_free(exprs);

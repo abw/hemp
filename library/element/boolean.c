@@ -50,9 +50,9 @@ HEMP_ELEMENT(hemp_element_boolean_not) {
 HEMP_VALUE(hemp_element_boolean_not_value) {
     hemp_debug_call("hemp_element_boolean_not_value()\n");
 
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    expr     = hemp_expr(fragment);
-    hemp_value    result   = hemp_obcall(expr, boolean, context);
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    expr     = hemp_expr(fragment);
+    HempValue    result   = hemp_obcall(expr, boolean, context);
 
     return hemp_is_true(result)
         ? HempFalse
@@ -77,15 +77,15 @@ HEMP_ELEMENT(hemp_element_boolean_and) {
 HEMP_VALUE(hemp_element_boolean_and_value) {
     hemp_debug_call("hemp_element_boolean_and_value()\n");
 
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    lhs      = hemp_lhs(fragment);
-    hemp_value    rhs      = hemp_rhs(fragment);
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    lhs      = hemp_lhs(fragment);
+    HempValue    rhs      = hemp_rhs(fragment);
 //  hemp_debug("[and] evaluating LHS (%s) as boolean\n", lhs->type->name);
-    hemp_value lval       = hemp_obcall(lhs, boolean, context);
+    HempValue lval       = hemp_obcall(lhs, boolean, context);
     
     /* TODO: short-circuit if false */
 //  hemp_debug("[and] evaluating RHS (%s) as boolean\n", rhs->type->name);
-    hemp_value rval       = hemp_obcall(rhs, boolean, context);
+    HempValue rval       = hemp_obcall(rhs, boolean, context);
 
     return (hemp_is_true(lval) && hemp_is_true(rval))
         ? HempTrue
@@ -109,11 +109,11 @@ HEMP_ELEMENT(hemp_element_boolean_or) {
 HEMP_VALUE(hemp_element_boolean_or_value) {
     hemp_debug_call("hemp_element_boolean_or_value()\n");
 
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    lhs      = hemp_lhs(fragment);
-    hemp_value    rhs      = hemp_rhs(fragment);
-    hemp_value    lval     = hemp_obcall(lhs, boolean, context);
-    hemp_value    rval     = hemp_obcall(rhs, boolean, context);
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    lhs      = hemp_lhs(fragment);
+    HempValue    rhs      = hemp_rhs(fragment);
+    HempValue    lval     = hemp_obcall(lhs, boolean, context);
+    HempValue    rval     = hemp_obcall(rhs, boolean, context);
 
     return (hemp_is_true(lval) || hemp_is_true(rval))
         ? HempTrue

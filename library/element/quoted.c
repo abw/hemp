@@ -25,13 +25,13 @@ HEMP_ELEMENT(hemp_element_squote) {
 
 
 HEMP_SCANNER(hemp_element_squote_scanner) {
-    hemp_element    element   = (hemp_element) self;
-    hemp_string     src       = document->scanptr;
-    hemp_string     start     = document->scanptr;
-    hemp_string     end       = element->end;
-    hemp_size       endlen    = strlen(end);
-    hemp_bool       is_source = HEMP_TRUE;
-    hemp_fragment   fragment;
+    HempElement    element   = (HempElement) self;
+    HempString     src       = document->scanptr;
+    HempString     start     = document->scanptr;
+    HempString     end       = element->end;
+    HempSize       endlen    = strlen(end);
+    HempBool       is_source = HEMP_TRUE;
+    HempFragment   fragment;
 
     hemp_debug_call("hemp_element_squote_scanner()\n");
 
@@ -63,8 +63,8 @@ HEMP_SCANNER(hemp_element_squote_scanner) {
     }
     else {
         /* we need to create a new string with escapes resolved */
-        hemp_string sqfrom   = start;
-        hemp_string squote   = (hemp_string) hemp_mem_alloc(end - sqfrom + 1);
+        HempString sqfrom   = start;
+        HempString squote   = (HempString) hemp_mem_alloc(end - sqfrom + 1);
         fragment->args.value = hemp_str_val(squote);
                     
         while (sqfrom < end) {
@@ -101,13 +101,13 @@ HEMP_ELEMENT(hemp_element_dquote) {
 
 
 HEMP_SCANNER(hemp_element_dquote_scanner) {
-    hemp_element    element   = (hemp_element) self;
-    hemp_string     src       = document->scanptr;
-    hemp_string     start     = document->scanptr;
-    hemp_string     end       = element->end;
-    hemp_size       endlen    = strlen(end);
-    hemp_bool       is_source = HEMP_TRUE;
-    hemp_fragment   fragment;
+    HempElement    element   = (HempElement) self;
+    HempString     src       = document->scanptr;
+    HempString     start     = document->scanptr;
+    HempString     end       = element->end;
+    HempSize       endlen    = strlen(end);
+    HempBool       is_source = HEMP_TRUE;
+    HempFragment   fragment;
 
     hemp_debug_call("hemp_element_dquote_scanner()\n");
 
@@ -139,8 +139,8 @@ HEMP_SCANNER(hemp_element_dquote_scanner) {
     }
     else {
         /* we need to create a new string with escapes resolved */
-        hemp_string dqfrom   = start;
-        hemp_string dquote   = (hemp_string) hemp_mem_alloc(end - dqfrom + 1);        // CHECK ME
+        HempString dqfrom   = start;
+        HempString dquote   = (HempString) hemp_mem_alloc(end - dqfrom + 1);        // CHECK ME
         fragment->args.value = hemp_str_val(dquote);
                     
         while (dqfrom < end) {
@@ -190,16 +190,16 @@ HEMP_SCANNER(hemp_element_dquote_scanner) {
 
 HEMP_OUTPUT(hemp_element_quoted_text) {
 
-    hemp_fragment fragment = hemp_val_frag(value);
+    HempFragment fragment = hemp_val_frag(value);
     hemp_debug_call("hemp_element_quoted_text(%p) [%s]\n", fragment, fragment->type->name);
-    hemp_text text;
+    HempText text;
     hemp_prepare_text_size(context, output, text, fragment->length);
 
     if (hemp_has_flag(fragment, HEMP_BE_SOURCE)) {
         /* quoted string can be regenerated from source */
-        hemp_element element = fragment->type;
-        hemp_size    slen    = element->start ? strlen(element->start) : 0;
-        hemp_size    elen    = element->end   ? strlen(element->end)   : 0;
+        HempElement element = fragment->type;
+        HempSize    slen    = element->start ? strlen(element->start) : 0;
+        HempSize    elen    = element->end   ? strlen(element->end)   : 0;
 
         /* "pinch" in the ends of the token range to avoid the quotes */
         hemp_text_append_stringn(

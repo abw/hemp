@@ -7,7 +7,7 @@ HEMP_TAG(hemp_tag_outline) {
 //      hemp, type, name, start, end ? end : "", 
 //      grammar ? grammar->name : "no grammar"
 //  );
-    hemp_tag tag = hemp_tag_new(
+    HempTag tag = hemp_tag_new(
         type, name, start, end, grammar
     );
     tag->style   = HEMP_OUTLINE_TAG;
@@ -23,11 +23,11 @@ HEMP_TAG(hemp_tag_outline) {
 
 
 HEMP_SCANNER(hemp_tag_outline_scanner) {
-    hemp_tag        tag     = (hemp_tag) self;
-    hemp_string     src     = document->scanptr,
+    HempTag        tag     = (HempTag) self;
+    HempString     src     = document->scanptr,
                     from    = document->scanptr;
-    hemp_pnode      pnode;
-    hemp_element    element;
+    HempPnode      pnode;
+    HempElement    element;
 
     hemp_debug_call("hemp_tag_outline_tag()\n");
 
@@ -61,7 +61,7 @@ HEMP_SCANNER(hemp_tag_outline_scanner) {
         }
         else if (
             (pnode   = hemp_ptree_root(tag->grammar->operators, src))
-        &&  (element = (hemp_element) hemp_pnode_match_more(pnode, &src))
+        &&  (element = (HempElement) hemp_pnode_match_more(pnode, &src))
         ) {
             hemp_debug_token("OPERATOR", from, src-from);
 

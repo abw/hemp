@@ -19,10 +19,10 @@ HEMP_ELEMENT(hemp_element_assign) {
 
 
 HEMP_POSTFIX(hemp_element_assign_postfix) {
-    hemp_fragment self    = *fragptr;
-    hemp_element  type    = self->type;
+    HempFragment self    = *fragptr;
+    HempElement  type    = self->type;
     hemp_fixup    handler = lhs->type->parse_lvalue;
-    hemp_fragment rhs;
+    HempFragment rhs;
 
     hemp_debug_call("hemp_element_assign_postfix()\n");
 
@@ -70,7 +70,7 @@ HEMP_POSTFIX(hemp_element_assign_postfix) {
 HEMP_OUTPUT(hemp_element_assign_text) {
     hemp_debug_call("hemp_element_assign_text()\n");
     hemp_element_assign_value(value, context);
-    hemp_text text;
+    HempText text;
     hemp_prepare_text(context, output, text);
     return output;
 }
@@ -78,16 +78,16 @@ HEMP_OUTPUT(hemp_element_assign_text) {
 
 HEMP_VALUE(hemp_element_assign_value) {
     hemp_debug_call("hemp_element_assign_value()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    lhs      = hemp_lhs(fragment);
-    hemp_value    rhs      = hemp_rhs(fragment);
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    lhs      = hemp_lhs(fragment);
+    HempValue    rhs      = hemp_rhs(fragment);
     return hemp_obcall(lhs, assign, context, rhs);
 }
 
 
 HEMP_OUTPUT(hemp_element_assign_params) {
     hemp_debug_call("hemp_element_assign_params()\n");
-    hemp_params params;
+    HempParams params;
     hemp_prepare_params(context, output, params);
     hemp_element_assign_value(value, context);
     return output;
@@ -96,12 +96,12 @@ HEMP_OUTPUT(hemp_element_assign_params) {
 
 HEMP_OUTPUT(hemp_element_assign_pairs) {
     hemp_debug_call("hemp_element_assign_pairs()\n");
-    hemp_fragment   fragment = hemp_val_frag(value);
-    hemp_value      lhs      = hemp_lhs(fragment);
-    hemp_value      rhs      = hemp_rhs(fragment);
-    hemp_value      key      = hemp_call(lhs, value, context);
-    hemp_value      rvalue   = hemp_call(rhs, value, context);
-    hemp_hash       pairs;
+    HempFragment   fragment = hemp_val_frag(value);
+    HempValue      lhs      = hemp_lhs(fragment);
+    HempValue      rhs      = hemp_rhs(fragment);
+    HempValue      key      = hemp_call(lhs, value, context);
+    HempValue      rvalue   = hemp_call(rhs, value, context);
+    HempHash       pairs;
     hemp_prepare_pairs(context, output, pairs);
 
     if (! hemp_is_string(key)) {

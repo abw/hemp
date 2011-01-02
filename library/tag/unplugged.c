@@ -8,7 +8,7 @@ HEMP_TAG(hemp_tag_unplugged);
  *--------------------------------------------------------------------------*/
 
 HEMP_TAG(hemp_tag_unplugged) {
-    hemp_tag tag = hemp_tag_new(
+    HempTag tag = hemp_tag_new(
         type, name, start, end, grammar
     );
     tag->style  = HEMP_UNPLUGGED_TAG;

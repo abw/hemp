@@ -10,7 +10,7 @@ HEMP_VALUE(hemp_element_identity_value);
 
 #define HEMP_IDENTITY_ELEMENT(name, result)                     \
     HEMP_VALUE(hemp_element_identity_##name##_value) {          \
-        hemp_fragment fragment = hemp_val_frag(value);          \
+        HempFragment fragment = hemp_val_frag(value);          \
         return hemp_has_flag(fragment, HEMP_BE_FIXED)           \
             ? hemp_expr(fragment)                               \
             : result;                                           \

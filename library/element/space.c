@@ -5,11 +5,11 @@
  * global element types
  *--------------------------------------------------------------------------*/
 
-hemp_element HempElementSpace     = NULL;
-hemp_element HempElementComment   = NULL;
-hemp_element HempElementTagStart  = NULL;
-hemp_element HempElementTagEnd    = NULL;
-hemp_element HempElementEOF       = NULL;
+HempElement HempElementSpace     = NULL;
+HempElement HempElementComment   = NULL;
+HempElement HempElementTagStart  = NULL;
+HempElement HempElementTagEnd    = NULL;
+HempElement HempElementEOF       = NULL;
 
 
 HEMP_GLOBAL_ELEMENT(hemp_global_element_space) {
@@ -160,10 +160,10 @@ HEMP_ELEMENT(hemp_element_terminator) {
 }
 
 
-hemp_bool 
+HempBool 
 hemp_element_terminator_matches(
-    hemp_fragment fragment,
-    hemp_string   match
+    HempFragment fragment,
+    HempString   match
 ) {
     return ( hemp_has_flag(fragment, HEMP_BE_TERMINATOR)
         &&   hemp_stringn_eq(fragment->token, match, strlen(match)) )
@@ -213,7 +213,7 @@ HEMP_POSTFIX(hemp_element_space_postfix) {
      * then we rewind the element pointer back to the start and return the 
      * lhs element, effectively declining the postfix parsing opportunity.
      */
-    hemp_fragment head = *fragptr;
+    HempFragment head = *fragptr;
     
     /* skip the first (current) whitespace element */
     hemp_advance(fragptr);
@@ -264,9 +264,9 @@ HEMP_ELEMENT(hemp_element_comment) {
 HEMP_SCANNER(hemp_element_comment_scanner) {
     hemp_debug_call("hemp_element_comment_scanner()\n");
 
-    hemp_element element = (hemp_element) self;
-    hemp_string  src     = document->scanptr;
-    hemp_tag     tag     = hemp_document_current_tag(document);
+    HempElement element = (HempElement) self;
+    HempString  src     = document->scanptr;
+    HempTag     tag     = hemp_document_current_tag(document);
 
     if (! tag)
         hemp_fatal("Can't scan comment without a tag in scope\n");
@@ -326,7 +326,7 @@ HEMP_ELEMENT(hemp_element_eof) {
 
 HEMP_OUTPUT(hemp_element_eof_token) {
     hemp_debug_call("hemp_element_eof_token()\n");
-    hemp_text text;
+    HempText text;
     hemp_prepare_text_size(context, output, text, 6);
     hemp_text_append_string(text, "--EOF--");     // TMP
     return output;

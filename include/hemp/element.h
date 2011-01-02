@@ -19,14 +19,14 @@ struct hemp_element {
     HEMP_TYPE_BASE
 
     /* an element is bound to a grammar */
-    hemp_grammar    grammar;
+    HempGrammar    grammar;
 
     /* element metadata */
-    hemp_string     start;
-    hemp_string     end;
-    hemp_flags      flags;
-    hemp_oprec      lprec;
-    hemp_oprec      rprec;
+    HempString     start;
+    HempString     end;
+    HempFlags      flags;
+    HempPrec      lprec;
+    HempPrec      rprec;
 
     /* intialisation (on scan) and cleanup methods */
     hemp_scanner    scanner;
@@ -48,14 +48,14 @@ struct hemp_element {
     hemp_output_f   source;
 };
 
-typedef hemp_element 
+typedef HempElement 
 (* hemp_element_f)(
-    hemp_hemp       hemp,
-    hemp_element    element
+    Hemp       hemp,
+    HempElement    element
 );
 
 struct hemp_elements {
-    hemp_string     name;
+    HempString     name;
     hemp_element_f  ctor;
 };
 
@@ -73,22 +73,22 @@ HEMP_HASH_ITERATOR(hemp_element_cleaner);
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_element
+HempElement
 hemp_element_new(
-    hemp_string     name,
-    hemp_string     start,
-    hemp_string     end
+    HempString     name,
+    HempString     start,
+    HempString     end
 );
 
 
 void
 hemp_element_free(
-    hemp_element    element
+    HempElement    element
 );
 
 void 
 hemp_element_dump(
-    hemp_element    element
+    HempElement    element
 );
 
 
@@ -96,16 +96,16 @@ hemp_element_dump(
  * global elements and element constructors
  *--------------------------------------------------------------------------*/
 
-extern hemp_element HempElementSpace;
-extern hemp_element HempElementComment;
-extern hemp_element HempElementTagStart;
-extern hemp_element HempElementTagEnd;
-extern hemp_element HempElementBlock;
-extern hemp_element HempElementText;
-extern hemp_element HempElementWord;
-extern hemp_element HempElementNumber;
-extern hemp_element HempElementInteger;
-extern hemp_element HempElementEOF;
+extern HempElement HempElementSpace;
+extern HempElement HempElementComment;
+extern HempElement HempElementTagStart;
+extern HempElement HempElementTagEnd;
+extern HempElement HempElementBlock;
+extern HempElement HempElementText;
+extern HempElement HempElementWord;
+extern HempElement HempElementNumber;
+extern HempElement HempElementInteger;
+extern HempElement HempElementEOF;
 
 
 HEMP_GLOBAL_ELEMENT(hemp_global_element_space);
@@ -169,7 +169,7 @@ extern HEMP_POSTFIX(hemp_element_space_postfix);
 extern HEMP_PREFIX(hemp_element_space_body);
 extern HEMP_POSTFIX(hemp_element_space_branch);
 
-extern hemp_bool hemp_element_terminator_matches(hemp_fragment, hemp_string);
+extern HempBool hemp_element_terminator_matches(HempFragment, HempString);
 
 /*--------------------------------------------------------------------------
  * tag elements
@@ -211,7 +211,7 @@ extern HEMP_CLEANUP(hemp_element_literal_cleanup);
 
 extern HEMP_ELEMENT(hemp_element_fragment);
 extern HEMP_SCANNER(hemp_element_fragment_scanner);
-extern hemp_bool hemp_match_end_fragment(hemp_fragment *fragptr, hemp_fragment start);
+extern HempBool hemp_match_end_fragment(HempFragment *fragptr, HempFragment start);
 
 
 

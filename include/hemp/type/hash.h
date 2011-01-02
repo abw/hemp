@@ -9,10 +9,10 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_hash {
-    hemp_size       width;      /* number of columns        */
-    hemp_size       size;       /* total number of entries  */
-    hemp_slot     * slots;      /* heads of slot columns    */
-    hemp_hash       parent;     /* parent hash              */
+    HempSize       width;      /* number of columns        */
+    HempSize       size;       /* total number of entries  */
+    HempSlot     * slots;      /* heads of slot columns    */
+    HempHash       parent;     /* parent hash              */
 }; 
 
 
@@ -20,161 +20,161 @@ struct hemp_hash {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_hash
+HempHash
 hemp_hash_init();
 
 HEMP_INLINE void
 hemp_hash_release(
-    hemp_hash       hash
+    HempHash        hash
 );
 
 void
 hemp_hash_free(
-    hemp_hash       hash
+    HempHash        hash
 );
 
 HEMP_INLINE void
 hemp_hash_attach(
-    hemp_hash       child,
-    hemp_hash       parent
+    HempHash        child,
+    HempHash        parent
 );
 
 HEMP_INLINE void
 hemp_hash_detach(
-    hemp_hash       child
+    HempHash        child
 );
 
-HEMP_INLINE hemp_size
+HEMP_INLINE HempSize
 hemp_hash_grow(
-    hemp_hash       hash
+    HempHash        hash
 );
 
-HEMP_INLINE hemp_slot
+HEMP_INLINE HempSlot
 hemp_hash_store_keylen(
-    hemp_hash       hash,
-    hemp_string     key,
-    hemp_value      value,
-    hemp_size       length
+    HempHash        hash,
+    HempString      key,
+    HempValue       value,
+    HempSize        length
 );
 
-hemp_slot
+HempSlot
 hemp_hash_store(
-    hemp_hash       hash,
-    hemp_string     key,
-    hemp_value      value
+    HempHash        hash,
+    HempString      key,
+    HempValue       value
 );
 
 
-HEMP_INLINE hemp_bool 
+HEMP_INLINE HempBool 
 hemp_hash_key_match(
-    hemp_string     key1,
-    hemp_string     key2,
-    hemp_size       length
+    HempString      key1,
+    HempString      key2,
+    HempSize        length
 );
 
-HEMP_INLINE hemp_value
+HEMP_INLINE HempValue
 hemp_hash_fetch_keylen(
-    hemp_hash       hash,
-    hemp_string     name,
-    hemp_size       length
+    HempHash        hash,
+    HempString      name,
+    HempSize        length
 );
 
-HEMP_INLINE hemp_value
+HEMP_INLINE HempValue
 hemp_hash_fetch(
-    hemp_hash       hash,
-    hemp_string     key
+    HempHash        hash,
+    HempString      key
 );
 
-HEMP_INLINE hemp_num
+HEMP_INLINE HempNum
 hemp_hash_fetch_number(
-    hemp_hash       hash,
-    hemp_string     name
+    HempHash        hash,
+    HempString      name
 );
 
-HEMP_INLINE hemp_int
+HEMP_INLINE HempInt
 hemp_hash_fetch_integer(
-    hemp_hash       hash,
-    hemp_string     name
+    HempHash        hash,
+    HempString      name
 );
 
-HEMP_INLINE hemp_memory
+HEMP_INLINE HempMemory
 hemp_hash_fetch_pointer(
-    hemp_hash       hash,
-    hemp_string     key
+    HempHash        hash,
+    HempString      key
 );
 
-HEMP_INLINE hemp_string
+HEMP_INLINE HempString
 hemp_hash_fetch_string(
-    hemp_hash       hash,
-    hemp_string     key
+    HempHash        hash,
+    HempString      key
 );
 
-HEMP_INLINE hemp_text
+HEMP_INLINE HempText
 hemp_hash_fetch_text(
-    hemp_hash       hash,
-    hemp_string     key
+    HempHash        hash,
+    HempString      key
 );
 
-HEMP_INLINE hemp_list
+HEMP_INLINE HempList
 hemp_hash_fetch_list(
-    hemp_hash       hash,
-    hemp_string     name
+    HempHash        hash,
+    HempString      name
 );
 
-HEMP_INLINE hemp_hash
+HEMP_INLINE HempHash
 hemp_hash_fetch_hash(
-    hemp_hash       hash,
-    hemp_string     name
+    HempHash        hash,
+    HempString      name
 );
 
-hemp_value
+HempValue
 hemp_hash_fetch_dotted(
-    hemp_hash       hash,
-    hemp_string     key,
-    hemp_context    context
+    HempHash        hash,
+    HempString      key,
+    HempContext     context
 );
 
-hemp_slot
+HempSlot
 hemp_hash_store_dotted(
-    hemp_hash       hash,
-    hemp_string     name,
-    hemp_value      value,
-    hemp_context    context
+    HempHash        hash,
+    HempString      name,
+    HempValue       value,
+    HempContext     context
 );
 
-HEMP_INLINE hemp_value
+HEMP_INLINE HempValue
 hemp_hash_delete(
-    hemp_hash       hash,
-    hemp_string     key
+    HempHash        hash,
+    HempString      key
 );
 
-hemp_string
+HempString
 hemp_hash_as_string(
-    hemp_hash       hash
+    HempHash        hash
 );
 
-hemp_size
+HempSize
 hemp_hash_function_default(
-    hemp_string     key
+    HempString      key
 );
 
-HEMP_INLINE hemp_size
+HEMP_INLINE HempSize
 hemp_hash_function_jenkins32(
-    hemp_string     key,
-    hemp_size       length
+    HempString      key,
+    HempSize        length
 );
 
 void
 hemp_hash_each(
-    hemp_hash       hash,
+    HempHash        hash,
     hemp_hash_iter  func
 );
 
 // for testing
 
-hemp_text
+HempText
 hemp_hash_dump(
-    hemp_hash       hash
+    HempHash        hash
 );
 
 

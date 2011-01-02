@@ -19,17 +19,17 @@ main(
 
 
 void test_tt3() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
     HEMP_TRY;
-        hemp_language lang = hemp_language_instance(hemp, "tt3");
+        HempLanguage lang = hemp_language_instance(hemp, "tt3");
         ok( lang, "using %s version %0.2f", lang->name, lang->version);
 
-        hemp_dialect dial = hemp_dialect_instance(hemp, "tt3");
+        HempDialect dial = hemp_dialect_instance(hemp, "tt3");
         ok( dial, "got %s dialect", dial->name );
 
-        hemp_document document = hemp_document_instance(
+        HempDocument document = hemp_document_instance(
             hemp, HEMP_TT3, HEMP_TEXT, "Hello World!"
             );
         ok( document , "created document" );

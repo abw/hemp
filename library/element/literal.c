@@ -14,7 +14,7 @@ HEMP_ELEMENT(hemp_element_literal) {
 
 HEMP_PREFIX(hemp_element_literal_prefix) {
     hemp_debug_call("hemp_element_literal_prefix()\n"); 
-    hemp_fragment fragment = *fragptr;
+    HempFragment fragment = *fragptr;
 
     return hemp_advance(fragptr)
         ? hemp_parse_postfix(fragptr, scope, precedence, force, fragment)
@@ -28,8 +28,8 @@ HEMP_OUTPUT(hemp_element_literal_text) {
     /* TODO: merge this with hemp_element_element().  They were 
      * different but are now the same
      */
-    hemp_text text;
-    hemp_fragment fragment = hemp_val_frag(value);
+    HempText text;
+    HempFragment fragment = hemp_val_frag(value);
     hemp_prepare_text_size(context, output, text, fragment->length);
     hemp_text_append_stringn(text, fragment->token, fragment->length);
     return output;
@@ -76,8 +76,8 @@ HEMP_ELEMENT(hemp_element_fragment) {
 HEMP_SCANNER(hemp_element_fragment_scanner) {
     hemp_debug_call("hemp_element_fragment_scanner()\n");
 
-    hemp_element element = (hemp_element) self;
-    hemp_string  src     = document->scanptr;
+    HempElement element = (HempElement) self;
+    HempString  src     = document->scanptr;
 
     while (isalnum(*src) || *src == '_' || * src == '-') {
         src++;
@@ -98,9 +98,9 @@ HEMP_SCANNER(hemp_element_fragment_scanner) {
 
 HEMP_INLINE void
 hemp_buffer_fragcpy(
-    hemp_string     buffer, 
-    hemp_fragment   fragment, 
-    hemp_size       max
+    HempString     buffer, 
+    HempFragment   fragment, 
+    HempSize       max
 ) {
     if (fragment->length < max)
         max = fragment->length;
@@ -111,9 +111,9 @@ hemp_buffer_fragcpy(
 
 HEMP_INLINE void
 hemp_buffer_fragcat(
-    hemp_string     buffer, 
-    hemp_fragment   fragment, 
-    hemp_size       max
+    HempString     buffer, 
+    HempFragment   fragment, 
+    HempSize       max
 ) {
     if (fragment->length < max)
         max = fragment->length;
@@ -121,17 +121,17 @@ hemp_buffer_fragcat(
 }
 
 
-hemp_bool
+HempBool
 hemp_match_end_fragment(
-    hemp_fragment * fragptr,
-    hemp_fragment   start
+    HempFragment * fragptr,
+    HempFragment   start
 ) {
-    static hemp_char    error_buffer[128];
-    static hemp_string  err1 = (hemp_string) error_buffer;
-    static hemp_string  err2 = (hemp_string) error_buffer + 64;
+    static HempChar    error_buffer[128];
+    static HempString  err1 = (HempString) error_buffer;
+    static HempString  err2 = (HempString) error_buffer + 64;
 
-    hemp_fragment   end = *fragptr;
-    hemp_fragment   startfrag, endfrag;
+    HempFragment   end = *fragptr;
+    HempFragment   startfrag, endfrag;
 
     hemp_advance(fragptr);
 
@@ -159,7 +159,7 @@ hemp_match_end_fragment(
         }
     }
     else {
-        hemp_size flen = strlen(endfrag->type->start);
+        HempSize flen = strlen(endfrag->type->start);
         
         if ( endfrag->length - flen != start->length 
           || ! hemp_stringn_eq(endfrag->token + flen, start->token, start->length)

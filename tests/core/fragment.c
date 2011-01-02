@@ -16,8 +16,8 @@ int main(
 
 
 void test_fragment() {
-    hemp_hemp hemp = hemp_new();
-    hemp_fragment fragment = hemp_fragment_new(
+    Hemp hemp = hemp_new();
+    HempFragment fragment = hemp_fragment_new(
         HempElementSpace, NULL, 0, 0
     );
     ok( fragment, "created fragment" );
@@ -27,9 +27,9 @@ void test_fragment() {
 
 
 void test_fragment_factory() {
-    hemp_element element;
+    HempElement element;
 
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp" );
 
     HEMP_TRY;

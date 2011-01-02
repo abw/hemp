@@ -53,7 +53,7 @@ void test_error_jump() {
 
 
 void test_error_macros() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
 
     /* better version with error stack local to hemp interpreter, 
      * but depends on 'hemp' local symbol being visible
@@ -87,7 +87,7 @@ void test_error_macros() {
 
 
 void test_error4() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
 
     HEMP_THROW(HEMP_ERROR_INVALID);
     fail("after throw - this should not happen");
@@ -97,7 +97,7 @@ void test_error4() {
 
 
 void test_error_object() {
-    hemp_error error = hemp_error_init(
+    HempError error = hemp_error_init(
         HEMP_ERROR_INVALID, "Bad badger!"
     );
     ok( error, "got error object" );
@@ -122,7 +122,7 @@ void test_error_object() {
 
 
 void test_hemp_throw() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
 
     HEMP_TRY;
         hemp_throw(
@@ -167,7 +167,7 @@ void thrower(hemp_errno type, char *msg) {
 
 
 void test_error_finally() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     int n = 0;
 
     HEMP_TRY

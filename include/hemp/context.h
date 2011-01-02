@@ -15,14 +15,14 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_context {
-    hemp_hemp       hemp;
-    hemp_hash       vars;
-    hemp_frame      frame;
-    hemp_pool       text_pool;          /* tmp hack */
-    hemp_pool       list_pool;          /* tmp hack */
-    hemp_pool       hash_pool;          /* tmp hack */
-    hemp_pool       code_pool;          /* tmp hack */
-    hemp_pool       params_pool;        /* tmp hack */
+    Hemp       hemp;
+    HempHash       vars;
+    HempFrame      frame;
+    HempPool       text_pool;          /* tmp hack */
+    HempPool       list_pool;          /* tmp hack */
+    HempPool       hash_pool;          /* tmp hack */
+    HempPool       code_pool;          /* tmp hack */
+    HempPool       params_pool;        /* tmp hack */
 };
 
 
@@ -30,114 +30,114 @@ struct hemp_context {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_context
+HempContext
 hemp_context_new(
-    hemp_hemp       hemp
+    Hemp       hemp
 );
 
 void
 hemp_context_free(
-    hemp_context    context
+    HempContext    context
 );
 
-HEMP_INLINE hemp_text
+HEMP_INLINE HempText
 hemp_context_tmp_text(
-    hemp_context    context
+    HempContext    context
 );
 
-HEMP_INLINE hemp_text
+HEMP_INLINE HempText
 hemp_context_tmp_text_size(
-    hemp_context    context,
-    hemp_size       size
+    HempContext    context,
+    HempSize       size
 );
 
-HEMP_INLINE hemp_list
+HEMP_INLINE HempList
 hemp_context_tmp_list(
-    hemp_context    context
+    HempContext    context
 );
 
-HEMP_INLINE hemp_hash
+HEMP_INLINE HempHash
 hemp_context_tmp_hash(
-    hemp_context    context
+    HempContext    context
 );
 
-HEMP_INLINE hemp_code
+HEMP_INLINE HempCode
 hemp_context_tmp_code(
-    hemp_context    context
+    HempContext    context
 );
 
-HEMP_INLINE hemp_params
+HEMP_INLINE HempParams
 hemp_context_tmp_params(
-    hemp_context    context
+    HempContext    context
 );
 
-hemp_bool
+HempBool
 hemp_context_text_pool_cleaner(
-    hemp_memory     item
+    HempMemory     item
 );
 
-hemp_bool
+HempBool
 hemp_context_list_pool_cleaner(
-    hemp_memory     item
+    HempMemory     item
 );
 
-hemp_bool
+HempBool
 hemp_context_hash_pool_cleaner(
-    hemp_memory     item
+    HempMemory     item
 );
 
-hemp_bool
+HempBool
 hemp_context_code_pool_cleaner(
-    hemp_memory     item
+    HempMemory     item
 );
 
-hemp_bool
+HempBool
 hemp_context_params_pool_cleaner(
-    hemp_memory     item
+    HempMemory     item
 );
 
-HEMP_INLINE hemp_frame
+HEMP_INLINE HempFrame
 hemp_context_frame(
-    hemp_context    context
+    HempContext    context
 );
 
-HEMP_INLINE hemp_frame
+HEMP_INLINE HempFrame
 hemp_context_enter(
-    hemp_context    context,
-    hemp_fragment   fragment
+    HempContext    context,
+    HempFragment   fragment
 );
 
-HEMP_INLINE hemp_fragment
+HEMP_INLINE HempFragment
 hemp_context_leave(
-    hemp_context    context
+    HempContext    context
 );
 
 HEMP_INLINE void
 hemp_context_focus_params(
-    hemp_context    context
+    HempContext    context
 );
 
 HEMP_INLINE void
 hemp_context_blur_params(
-    hemp_context    context
+    HempContext    context
 );
 
-hemp_hash
+HempHash
 hemp_context_with(
-    hemp_context    context,
-    hemp_hash       vars
+    HempContext    context,
+    HempHash       vars
 );
 
-hemp_hash
+HempHash
 hemp_context_just(
-    hemp_context    context,
-    hemp_hash       vars
+    HempContext    context,
+    HempHash       vars
 );
 
-hemp_hash
+HempHash
 hemp_context_without(
-    hemp_context    context,
-    hemp_hash       vars
+    HempContext    context,
+    HempHash       vars
 );
 
 

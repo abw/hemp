@@ -28,10 +28,10 @@ HEMP_OUTPUT(hemp_element_ansi_text);
  * Binder function registers the ANSI feature with the hemp instance
  *--------------------------------------------------------------------------*/
 
-hemp_bool
+HempBool
 hemp_module_binder(
-    hemp_module module,
-    hemp_hemp   hemp
+    HempModule module,
+    Hemp   hemp
 ) {
     hemp_register_feature( hemp, "ansi",      &hemp_feature_ansi );
     hemp_register_element( hemp, "hemp.ansi", &hemp_element_ansi );
@@ -91,8 +91,8 @@ HEMP_ELEMENT(hemp_element_ansi) {
 HEMP_PREFIX(hemp_element_ansi_prefix) {
     hemp_debug_msg("hemp_element_ansi_prefix()\n");
 
-    hemp_fragment fragment = *fragptr;
-    hemp_fragment block;
+    HempFragment fragment = *fragptr;
+    HempFragment block;
 
     /* skip past the keyword */
     hemp_advance(fragptr);
@@ -112,8 +112,8 @@ HEMP_PREFIX(hemp_element_ansi_prefix) {
 
 HEMP_VALUE(hemp_element_ansi_value) {
     hemp_debug_msg("hemp_element_ansi_value()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    body     = hemp_rhs(fragment);
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    body     = hemp_rhs(fragment);
     return hemp_call(body, value, context);
 }
 
@@ -125,9 +125,9 @@ HEMP_VALUE(hemp_element_ansi_value) {
 
 HEMP_OUTPUT(hemp_element_ansi_text) {
     hemp_debug_msg("hemp_element_ansi_text()\n");
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_value    body     = hemp_rhs(fragment);
-    hemp_text     text;
+    HempFragment fragment = hemp_val_frag(value);
+    HempValue    body     = hemp_rhs(fragment);
+    HempText     text;
 
     hemp_prepare_text(context, output, text);
     hemp_text_append_string(text, fragment->type->end);

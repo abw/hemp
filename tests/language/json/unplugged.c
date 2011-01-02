@@ -16,10 +16,10 @@ main(
 
 
 void test_unplugged() {
-    hemp_hemp       hemp = hemp_new();
-    hemp_document   document;
-    hemp_context    context;
-    hemp_value      output;
+    Hemp       hemp = hemp_new();
+    HempDocument   document;
+    HempContext    context;
+    HempValue      output;
     ok( hemp, "created hemp object" );
 
     HEMP_TRY;
@@ -35,15 +35,15 @@ void test_unplugged() {
         output  = hemp_document_data(document, context);
 
         ok( hemp_is_list(output), "got data list returned" );
-        hemp_list list = hemp_val_list(output);
+        HempList list = hemp_val_list(output);
         eq( list->length, 3, "three items in json list" );
         
-        hemp_value  item = hemp_list_item(list, 2);
+        HempValue  item = hemp_list_item(list, 2);
         ok( hemp_is_hash(item), "third item is hash" );
-        hemp_hash   hash = hemp_val_hash(item);
+        HempHash   hash = hemp_val_hash(item);
 
         eq( hash->size, 4, "four items in hash in json list" );
-        hemp_value y = hemp_hash_fetch(hash, "y");
+        HempValue y = hemp_hash_fetch(hash, "y");
         ok( hemp_is_false(y), "y is false" );
     
         hemp_context_free(context);

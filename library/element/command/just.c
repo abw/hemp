@@ -4,10 +4,10 @@
 HEMP_ELEMENT(hemp_element_command_just);
 HEMP_OUTPUT(hemp_element_command_just_text);
 
-hemp_hash
+HempHash
 hemp_element_command_with_params_hash(
-    hemp_fragment   fragment,
-    hemp_context    context
+    HempFragment   fragment,
+    HempContext    context
 );
 
 
@@ -25,11 +25,11 @@ HEMP_ELEMENT(hemp_element_command_just) {
 
 HEMP_OUTPUT(hemp_element_command_just_text) {
     hemp_debug_call("hemp_element_just_text()\n");
-    hemp_hemp     hemp     = context->hemp;
-    hemp_fragment fragment = hemp_val_frag(value);
-    hemp_hash     params   = hemp_element_command_with_params_hash(fragment, context);
-    hemp_value    body     = hemp_rhs(fragment);
-    hemp_hash     saved;
+    Hemp     hemp     = context->hemp;
+    HempFragment fragment = hemp_val_frag(value);
+    HempHash     params   = hemp_element_command_with_params_hash(fragment, context);
+    HempValue    body     = hemp_rhs(fragment);
+    HempHash     saved;
 
     saved = hemp_context_just(context, params);
 

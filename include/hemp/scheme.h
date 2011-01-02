@@ -10,12 +10,12 @@
 
 
 /*--------------------------------------------------------------------------
- * typedefs: functions operating on hemp_source data
+ * typedefs: functions operating on HempSource data
  *--------------------------------------------------------------------------*/
 
-typedef void        (* hemp_source_vop)(hemp_source);
-typedef hemp_bool   (* hemp_source_bop)(hemp_source);
-typedef hemp_string (* hemp_source_sop)(hemp_source);
+typedef void        (* hemp_source_vop)(HempSource);
+typedef HempBool   (* hemp_source_bop)(HempSource);
+typedef HempString (* hemp_source_sop)(HempSource);
 
 
 /*--------------------------------------------------------------------------
@@ -23,8 +23,8 @@ typedef hemp_string (* hemp_source_sop)(hemp_source);
  *--------------------------------------------------------------------------*/
 
 struct hemp_scheme {
-    hemp_hemp       hemp;
-    hemp_string     name;
+    Hemp       hemp;
+    HempString     name;
     hemp_source_sop namer;
     hemp_source_bop checker;
     hemp_source_sop reader;
@@ -39,20 +39,20 @@ struct hemp_scheme {
 HEMP_FACTORY(hemp_scheme_factory);
 HEMP_HASH_ITERATOR(hemp_scheme_cleaner);
 
-hemp_scheme
+HempScheme
 hemp_scheme_new(
-    hemp_hemp       hemp,
-    hemp_string     type
+    Hemp       hemp,
+    HempString     type
 );
 
 void
 hemp_scheme_free(
-    hemp_scheme     scheme
+    HempScheme     scheme
 );
 
-hemp_string 
+HempString 
 hemp_scheme_namer( 
-    hemp_source     source
+    HempSource     source
 );
 
 HEMP_AUTOLOAD(hemp_scheme_autoload);

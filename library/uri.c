@@ -1,9 +1,9 @@
 #include <hemp/uri.h>
 
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_init(
-    hemp_uri uri
+    HempUri uri
 ) {
     HEMP_INSTANCE(uri);
     hemp_uri_wipe(uri);
@@ -11,12 +11,12 @@ hemp_uri_init(
 }
 
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_copy(
-    hemp_uri src
+    HempUri src
 ) {
     /* HMMM... no, this isn't right... not used */
-    hemp_uri uri;
+    HempUri uri;
     HEMP_ALLOCATE(uri);
     hemp_mem_copy(src, uri, sizeof(struct hemp_uri));
 
@@ -29,8 +29,8 @@ hemp_uri_copy(
 
 HEMP_INLINE void
 hemp_uri_copy_authority(
-    hemp_uri from,
-    hemp_uri to
+    HempUri from,
+    HempUri to
 ) {
     to->authority   = from->authority;
     to->user        = from->user;
@@ -39,19 +39,19 @@ hemp_uri_copy_authority(
 }
 
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_from_string(
-    hemp_string string
+    HempString string
 ) {
-    hemp_uri uri = hemp_uri_new();
+    HempUri uri = hemp_uri_new();
     hemp_uri_split(uri, string);
     return uri;
 }
 
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_wipe(
-    hemp_uri uri
+    HempUri uri
 ) {
     uri->uri        = NULL;
     uri->buffer     = NULL;
@@ -71,7 +71,7 @@ hemp_uri_wipe(
 
 HEMP_INLINE void
 hemp_uri_release(
-    hemp_uri uri
+    HempUri uri
 ) {
     if (uri->uri)
         hemp_mem_free(uri->uri);
@@ -91,7 +91,7 @@ hemp_uri_release(
 
 HEMP_INLINE void
 hemp_uri_free(
-    hemp_uri uri
+    HempUri uri
 ) {
     hemp_uri_release(uri);
     hemp_mem_free(uri);
@@ -125,10 +125,10 @@ hemp_uri_free(
  * 
  *--------------------------------------------------------------------------*/
 
-hemp_bool
+HempBool
 hemp_uri_split(
-    hemp_uri    uri,
-    hemp_string text
+    HempUri    uri,
+    HempString text
 ) {
     /* clean up any previous data */
     if (uri->buffer)
@@ -146,8 +146,8 @@ hemp_uri_split(
      * NUL characters.  These packed strings are then used as the components
      * in the path list and the keys and values in the parameters hash. 
      */
-    hemp_string source = uri->uri    = hemp_string_clone(text, "uri");
-    hemp_string buffer = uri->buffer = (hemp_string) hemp_mem_alloc( 
+    HempString source = uri->uri    = hemp_string_clone(text, "uri");
+    HempString buffer = uri->buffer = (HempString) hemp_mem_alloc( 
         strlen(text) * 2 + 2    /* a couple extra to account for NULs */
     );
 
@@ -176,9 +176,9 @@ hemp_uri_split(
 
 
 HEMP_URI_MATCHER(hemp_uri_match_scheme) {
-    hemp_string     source = *srcpos;
-    hemp_string     buffer = *bufpos;
-    hemp_bool       ok     = HEMP_FALSE;
+    HempString     source = *srcpos;
+    HempString     buffer = *bufpos;
+    HempBool       ok     = HEMP_FALSE;
 
     hemp_debug_call("matching URI scheme: %s\n", source);
 
@@ -221,7 +221,7 @@ HEMP_URI_MATCHER(hemp_uri_match_scheme) {
 
 
 HEMP_URI_MATCHER(hemp_uri_match_authority) {
-    hemp_string source = *srcpos;
+    HempString source = *srcpos;
 
     hemp_debug_call("matching URI authority: %s\n", source);
 
@@ -239,8 +239,8 @@ HEMP_URI_MATCHER(hemp_uri_match_authority) {
 
 
 HEMP_URI_MATCHER(hemp_uri_match_user) {
-    hemp_string     source = *srcpos;
-    hemp_string     buffer = *bufpos;
+    HempString     source = *srcpos;
+    HempString     buffer = *bufpos;
 
     hemp_debug_call("matching user at %s\n", source);
 
@@ -258,8 +258,8 @@ HEMP_URI_MATCHER(hemp_uri_match_user) {
 
 
 HEMP_URI_MATCHER(hemp_uri_match_host) {
-    hemp_string     source = *srcpos;
-    hemp_string     buffer = *bufpos;
+    HempString     source = *srcpos;
+    HempString     buffer = *bufpos;
 
     hemp_debug_call("matching URI host: %s\n", source);
 
@@ -276,8 +276,8 @@ HEMP_URI_MATCHER(hemp_uri_match_host) {
 
 
 HEMP_URI_MATCHER(hemp_uri_match_port) {
-    hemp_string     source = *srcpos;
-    hemp_string     buffer = *bufpos;
+    HempString     source = *srcpos;
+    HempString     buffer = *bufpos;
 
     hemp_debug_call("matching URI port: %s\n", source);
 
@@ -299,8 +299,8 @@ HEMP_URI_MATCHER(hemp_uri_match_port) {
 
 
 HEMP_URI_MATCHER(hemp_uri_match_path) {
-    hemp_string     source = *srcpos;
-    hemp_string     buffer = *bufpos;
+    HempString     source = *srcpos;
+    HempString     buffer = *bufpos;
 
     hemp_debug_call("matching URI path: %s\n", source);
 
@@ -318,8 +318,8 @@ HEMP_URI_MATCHER(hemp_uri_match_path) {
 
 
 HEMP_URI_MATCHER(hemp_uri_match_query) {
-    hemp_string     source = *srcpos;
-    hemp_string     buffer = *bufpos;
+    HempString     source = *srcpos;
+    HempString     buffer = *bufpos;
 
     hemp_debug_call("matching URI query: %s\n", source);
 
@@ -341,8 +341,8 @@ HEMP_URI_MATCHER(hemp_uri_match_query) {
 
 
 HEMP_URI_MATCHER(hemp_uri_match_fragment) {
-    hemp_string     source = *srcpos;
-    hemp_string     buffer = *bufpos;
+    HempString     source = *srcpos;
+    HempString     buffer = *bufpos;
 
     hemp_debug_call("matching URI fragment: %s\n", source);
 
@@ -363,14 +363,14 @@ HEMP_URI_MATCHER(hemp_uri_match_fragment) {
 }
 
 
-hemp_bool
+HempBool
 hemp_uri_split_path(
-    hemp_uri        uri,
-    hemp_string   * bufpos
+    HempUri        uri,
+    HempString   * bufpos
 ) {
-    hemp_string path   = uri->path;
-    hemp_string buffer = *bufpos;
-    hemp_string name;
+    HempString path   = uri->path;
+    HempString buffer = *bufpos;
+    HempString name;
 
     if (! path)
         return HEMP_FALSE;
@@ -410,14 +410,14 @@ hemp_uri_split_path(
 }
 
 
-hemp_bool
+HempBool
 hemp_uri_split_query(
-    hemp_uri        uri,
-    hemp_string   * bufpos
+    HempUri        uri,
+    HempString   * bufpos
 ) {
-    hemp_string query   = uri->query;
-    hemp_string buffer  = *bufpos;
-    hemp_string key, value;
+    HempString query   = uri->query;
+    HempString buffer  = *bufpos;
+    HempString key, value;
 
     if (uri->params)
         hemp_hash_free(uri->params);
@@ -468,28 +468,28 @@ hemp_uri_split_query(
  * Join
  *--------------------------------------------------------------------------*/
 
-hemp_string
+HempString
 hemp_uri_path_relative(
-    hemp_string base,
-    hemp_string rel
+    HempString base,
+    HempString rel
 ) {
     return hemp_uri_path_join(base, rel, 0);
 }
 
 
-hemp_string
+HempString
 hemp_uri_path_join(
-    hemp_string base,
-    hemp_string rel,
-    hemp_bool   is_dir
+    HempString base,
+    HempString rel,
+    HempBool   is_dir
 ) {
-    hemp_size   baselen  = 0;
-    hemp_string merged   = NULL;
-    hemp_string slash    = NULL;
-    hemp_string src      = rel;
-    hemp_bool   dirslash = HEMP_FALSE;
-    hemp_string dst;
-    hemp_char   next;
+    HempSize   baselen  = 0;
+    HempString merged   = NULL;
+    HempString slash    = NULL;
+    HempString src      = rel;
+    HempBool   dirslash = HEMP_FALSE;
+    HempString dst;
+    HempChar   next;
 
     /* If the relative path is absolute (starts: /) then we can ignore the
      * base path altogether.  Otherwise we can ignore everything after the
@@ -615,15 +615,15 @@ hemp_uri_path_join(
 })
 
 
-hemp_string 
+HempString 
 hemp_uri_join(
-    hemp_uri uri
+    HempUri uri
 ) {
-    hemp_string buffer;
-    hemp_string endpos;
-    hemp_string srcpos;
-    hemp_string bufpos;
-    hemp_size   len = 0;
+    HempString buffer;
+    HempString endpos;
+    HempString srcpos;
+    HempString bufpos;
+    HempSize   len = 0;
 
     len += uri->scheme ? strlen(uri->scheme)     + 1 : 0;   /* +1 for ':'   */
 
@@ -756,26 +756,26 @@ hemp_uri_join(
 
 
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_relative_string(
-    hemp_uri        base,
-    hemp_string     relstr
+    HempUri        base,
+    HempString     relstr
 ) {
-    hemp_uri        rel   = hemp_uri_from_string(relstr);
-    hemp_uri        uri   = hemp_uri_relative_uri(base, rel);
+    HempUri        rel   = hemp_uri_from_string(relstr);
+    HempUri        uri   = hemp_uri_relative_uri(base, rel);
     hemp_uri_free(rel);
     return uri;
 }
 
 
-HEMP_INLINE hemp_uri
+HEMP_INLINE HempUri
 hemp_uri_relative_uri(
-    hemp_uri        base,
-    hemp_uri        rel
+    HempUri        base,
+    HempUri        rel
 ) {
-    hemp_uri        uri    = hemp_uri_new();
-    hemp_string     scheme = NULL;
-    hemp_string     path   = NULL;
+    HempUri        uri    = hemp_uri_new();
+    HempString     scheme = NULL;
+    HempString     path   = NULL;
 
     if (! hemp_uri_schemes_equal(base, rel)) {
         scheme = rel->scheme;
@@ -833,10 +833,10 @@ hemp_uri_relative_uri(
 }
 
 
-HEMP_INLINE hemp_bool
+HEMP_INLINE HempBool
 hemp_uri_schemes_equal(
-    hemp_uri base,
-    hemp_uri rel
+    HempUri base,
+    HempUri rel
 ) {
     if (base->scheme && rel->scheme) {
         /* if both are defined then the string values should match */
@@ -853,14 +853,14 @@ hemp_uri_schemes_equal(
 }
 
 
-hemp_string
+HempString
 hemp_uri_merge_paths(
-    hemp_uri    base,
-    hemp_uri    rel
+    HempUri    base,
+    HempUri    rel
 ) {
-    hemp_string merged  = NULL;
-    hemp_size   baselen = 0;
-    hemp_string slash;
+    HempString merged  = NULL;
+    HempSize   baselen = 0;
+    HempString slash;
 
     /* From rfc 3986:
      *
@@ -910,14 +910,14 @@ hemp_uri_merge_paths(
 }
 
 
-hemp_string
+HempString
 hemp_uri_collapse_path(
-    hemp_string path
+    HempString path
 ) {
-    hemp_string collapsed = hemp_mem_alloc(strlen(path) + 1);
-    hemp_string src       = path;
-    hemp_string dst       = collapsed;
-    hemp_string slash     = NULL;
+    HempString collapsed = hemp_mem_alloc(strlen(path) + 1);
+    HempString src       = path;
+    HempString dst       = collapsed;
+    HempString slash     = NULL;
     
     if (! collapsed)
         hemp_mem_fail("URI path");

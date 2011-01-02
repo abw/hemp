@@ -12,13 +12,13 @@ int main(
 }
 
 void test_fragments() {
-    hemp_hemp hemp = hemp_new();
+    Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
     
-    hemp_fragments fragments = hemp_fragments_new(NULL, 0);
+    HempFragments fragments = hemp_fragments_new(NULL, 0);
     ok( fragments, "created fragments" );
         
-    hemp_fragment eof = hemp_fragments_add_eof(fragments, 0);
+    HempFragment eof = hemp_fragments_add_eof(fragments, 0);
     ok( eof, "got EOF fragment" );
     ok( hemp_has_flag(eof, HEMP_BE_EOF), "HEMP_BE_EOF is set" );
 

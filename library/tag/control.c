@@ -7,7 +7,7 @@ HEMP_TAG(hemp_tag_control) {
 //      hemp, type, name, start, end ? end : "", 
 //      grammar ? grammar->name : "no grammar"
 //  );
-    hemp_tag tag = hemp_tag_inline(
+    HempTag tag = hemp_tag_inline(
         hemp, type, name, start, end, grammar
     );
     

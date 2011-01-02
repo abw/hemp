@@ -13,7 +13,7 @@ int main(
 
 
 void test_string() {
-    hemp_string s = hemp_string_sprintf("Hello %s", "World");
+    HempString s = hemp_string_sprintf("Hello %s", "World");
     ok( s, "hemp_string_sprintf() created string" );
     is( s, "Hello World", "string is 'Hello World'" );
     hemp_string_free(s);

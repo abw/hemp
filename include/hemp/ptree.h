@@ -10,17 +10,17 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_ptree {
-    hemp_pnode    * roots;
-    hemp_size       width;
-    hemp_pool       pool;
+    HempPnode    * roots;
+    HempSize       width;
+    HempPool       pool;
 };
 
 struct hemp_pnode {
-   hemp_string      key;
-   hemp_memory      value;
-   hemp_pnode       before;
-   hemp_pnode       equal;
-   hemp_pnode       after;
+   HempString      key;
+   HempMemory      value;
+   HempPnode       before;
+   HempPnode       equal;
+   HempPnode       after;
 };
 
 
@@ -29,55 +29,55 @@ struct hemp_pnode {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_ptree 
+HempPtree 
 hemp_ptree_new(
-    hemp_size       capacity
+    HempSize       capacity
 );
 
 void
 hemp_ptree_free(
-    hemp_ptree      ptree
+    HempPtree      ptree
 );
 
-HEMP_INLINE hemp_pnode
+HEMP_INLINE HempPnode
 hemp_ptree_node(
-    hemp_ptree      ptree, 
-    hemp_string     key, 
-    hemp_memory     value
+    HempPtree      ptree, 
+    HempString     key, 
+    HempMemory     value
 );
 
-hemp_pnode
+HempPnode
 hemp_ptree_store(
-    hemp_ptree      ptree, 
-    hemp_string     key, 
-    hemp_memory     value
+    HempPtree      ptree, 
+    HempString     key, 
+    HempMemory     value
 );
 
-hemp_memory
+HempMemory
 hemp_ptree_fetch(
-    hemp_ptree      ptree,
-    hemp_string     key
+    HempPtree      ptree,
+    HempString     key
 );
 
-hemp_memory
+HempMemory
 hemp_pnode_match_more(
-    hemp_pnode      pnode, 
-    hemp_string   * srcptr
+    HempPnode      pnode, 
+    HempString   * srcptr
 );
 
 void 
 hemp_ptree_dump(
-    hemp_ptree      ptree
+    HempPtree      ptree
 );
 
 int 
 hemp_ptree_max_depth(
-    hemp_ptree      ptree
+    HempPtree      ptree
 );
 
 int
 hemp_ptree_count_nodes(
-    hemp_ptree      ptree
+    HempPtree      ptree
 );
 
 
@@ -86,7 +86,7 @@ hemp_ptree_count_nodes(
  *--------------------------------------------------------------------------*/
 
 #define hemp_ptree_root(ptree,src) \
-    ptree->roots[(hemp_char) *src % HEMP_PTREE_SIZE]
+    ptree->roots[(HempChar) *src % HEMP_PTREE_SIZE]
 
 
 

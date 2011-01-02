@@ -5,10 +5,10 @@
 #include <hemp.h>
 #include "types.h"
 
-typedef hemp_hemp          Hemp;
-typedef hemp_document Hemp__Template;
-typedef hemp_context  Hemp__Context;
-typedef hemp_text     Hemp__Text;
+typedef Hemp          Hemp;
+typedef HempDocument Hemp__Template;
+typedef HempContext  Hemp__Context;
+typedef HempText     Hemp__Text;
 
 /*
 #--------------------------------------------------------------------------
@@ -100,7 +100,7 @@ render(document, context)
     INIT:
         fprintf(stderr, "Hemp::Template->render()\n");
     CODE:
-        hemp_hemp hemp = context->hemp;
+        Hemp hemp = context->hemp;
         HEMP_TRY;
             RETVAL = hemp_document_render(document, context);
         HEMP_CATCH_ALL;

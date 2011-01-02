@@ -12,10 +12,10 @@
  *-------------------------------------------------------------------------*/
 
 struct hemp_source {
-    hemp_scheme     scheme;         /* e.g. text, file, etc                 */
-    hemp_string     name;           /* path to file or source text          */
-    hemp_string     md5;            /* MD5 hex digest of document uri       */
-    hemp_string     text;           /* file contents or source text         */
+    HempScheme     scheme;         /* e.g. text, file, etc                 */
+    HempString     name;           /* path to file or source text          */
+    HempString     md5;            /* MD5 hex digest of document uri       */
+    HempString     text;           /* file contents or source text         */
 };
 
 
@@ -23,21 +23,21 @@ struct hemp_source {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-hemp_source
+HempSource
 hemp_source_new(
-    hemp_scheme     scheme,
-    hemp_string     name
+    HempScheme     scheme,
+    HempString     name
 );
 
 void
 hemp_source_md5(
-    hemp_source     source,
-    hemp_string     md5
+    HempSource     source,
+    HempString     md5
 );
 
 void
 hemp_source_free(
-    hemp_source     source
+    HempSource     source
 );
 
 
@@ -53,7 +53,7 @@ hemp_source_free(
 )                                           
 
 #define hemp_source_name(source) (              \
-    (hemp_string) source->scheme->namer(source) \
+    (HempString) source->scheme->namer(source) \
 )
 
 

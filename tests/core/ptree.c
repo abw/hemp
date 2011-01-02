@@ -1,10 +1,10 @@
 #include <hemp/test.h>
 
 void test_tree();
-void tree_get(hemp_ptree, char *);
-void tree_set(hemp_ptree tree, char *key, char *value);
-void tree_has(hemp_ptree tree, char *key, char *expect);
-void tree_hasnt(hemp_ptree tree, char *key);
+void tree_get(HempPtree, char *);
+void tree_set(HempPtree tree, char *key, char *value);
+void tree_has(HempPtree tree, char *key, char *expect);
+void tree_hasnt(HempPtree tree, char *key);
 
 
 int main(
@@ -16,7 +16,7 @@ int main(
 }
 
 void test_tree() {
-    hemp_ptree tree = hemp_ptree_new(32);
+    HempPtree tree = hemp_ptree_new(32);
 
     tree_set(tree, "msg", "hello world");
     tree_has(tree, "msg", "hello world");
@@ -47,7 +47,7 @@ void test_tree() {
     tree_hasnt(tree, "forever");
     tree_hasnt(tree, "foreachs");
 
-    hemp_list list = hemp_string_split(
+    HempList list = hemp_string_split(
         "alpha bravo charlie delta echo foxtrot golf hotel india juliet "
         "kilo lima mike november oscar papa quebec romeo sierra tango "
         "umbrella victor whiskey x-ray yankee zulu "
@@ -86,9 +86,9 @@ void test_tree() {
 
 void 
 tree_has(
-    hemp_ptree tree, char *key, char *expect
+    HempPtree tree, char *key, char *expect
 ) {
-    hemp_memory value = hemp_ptree_fetch(tree, key);
+    HempMemory value = hemp_ptree_fetch(tree, key);
     ok( 
         value && hemp_string_eq(value, expect),
         "found %s => %s", key, value
@@ -98,16 +98,16 @@ tree_has(
 
 void 
 tree_hasnt(
-    hemp_ptree tree, char *key
+    HempPtree tree, char *key
 ) {
-    hemp_memory value = hemp_ptree_fetch(tree, key);
+    HempMemory value = hemp_ptree_fetch(tree, key);
     ok( ! value, "no entry for %s", key);
 }
 
 
 void 
 tree_set(
-    hemp_ptree tree, char *key, char *value
+    HempPtree tree, char *key, char *value
 ) {
     ok(
         hemp_ptree_store(tree, key, value),

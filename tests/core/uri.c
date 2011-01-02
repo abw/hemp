@@ -18,11 +18,11 @@ int main(
 
 
 void test_path_match(
-    hemp_string base,
-    hemp_string rel,
-    hemp_string expect
+    HempString base,
+    HempString rel,
+    HempString expect
 ) {
-    hemp_string result = hemp_uri_path_relative(base, rel);
+    HempString result = hemp_uri_path_relative(base, rel);
     ok( 
         hemp_string_eq(result, expect), 
         "path %s + %s = %s", 
@@ -32,7 +32,7 @@ void test_path_match(
 }
 
 void test_path() {
-    hemp_string base = "/foo/bar/baz";
+    HempString base = "/foo/bar/baz";
     test_path_match(base, "/wam/bam", "/wam/bam");
     test_path_match(base, "wam/bam", "/foo/bar/wam/bam");
     test_path_match(base, "./wam/bam", "/foo/bar/wam/bam");
@@ -60,7 +60,7 @@ void test_path() {
 
 
 void test_uri() {
-    hemp_uri uri = hemp_uri_new();
+    HempUri uri = hemp_uri_new();
     ok( uri, "constructed new uri" );
 
     hemp_uri_split(
@@ -75,10 +75,10 @@ void test_uri() {
     is( uri->query,     "animal=badger",    "matched URI query"     );
     is( uri->fragment,  "nose",             "matched URI fragment"  );
 
-    hemp_string s = hemp_hash_fetch_string(uri->params, "animal");
+    HempString s = hemp_hash_fetch_string(uri->params, "animal");
     is( s, "badger", "matched URI parameter" );
 
-    hemp_value v = hemp_list_item(uri->paths, 0);
+    HempValue v = hemp_list_item(uri->paths, 0);
     ok( hemp_is_empty(v), "matched empty zeroth URI path element" );
     
     s = hemp_list_item_string(uri->paths, 1);
@@ -91,12 +91,12 @@ void test_uri() {
 
 
 void test_relative_path() {
-    hemp_uri base = hemp_uri_from_string(
+    HempUri base = hemp_uri_from_string(
         "hemp://abw@badgerpower.com:420/over/there?animal=badger#nose"
     );
     ok( base, "constructed new uri" );
 
-    hemp_uri uri = hemp_uri_relative_string(base, "./here?cheese=cheddar#pickle");
+    HempUri uri = hemp_uri_relative_string(base, "./here?cheese=cheddar#pickle");
     ok( uri, "got relative uri" );
     is( uri->scheme,    "hemp",             "matched rel URI scheme"    );
     is( uri->user,      "abw",              "matched rel URI user"      );
@@ -112,11 +112,11 @@ void test_relative_path() {
 
 
 void test_relative_match(
-    hemp_uri    base,
-    hemp_string rels,
-    hemp_string expect
+    HempUri    base,
+    HempString rels,
+    HempString expect
 ) {
-    hemp_uri relu = hemp_uri_relative_string(base, rels);
+    HempUri relu = hemp_uri_relative_string(base, rels);
 //    hemp_debug_msg("new uri: %p\n", relu->uri);
     ok( 
         hemp_string_eq(relu->path, expect), 
@@ -128,7 +128,7 @@ void test_relative_match(
 
 
 void test_relative_paths() {
-    hemp_uri base = hemp_uri_from_string("/foo/bar/baz");
+    HempUri base = hemp_uri_from_string("/foo/bar/baz");
     ok( base, "constructed new base uri" );
 
     test_relative_match(base, "/wam/bam", "/wam/bam");
