@@ -9,26 +9,26 @@
 
 
 /*--------------------------------------------------------------------------
- * type definitions
+ * Type definitions
  *--------------------------------------------------------------------------*/
 
 struct hemp_tagset {
-   HempDocument    document;
-   HempElement     text_element;
-   HempHash        tags;
-   HempPtree       inline_tags;
-   HempPtree       outline_tags;
-   HempTag         unplugged_tag;
+   HempDocument     document;
+   HempElement      text_element;
+   HempHash         tags;
+   HempPtree        inline_tags;
+   HempPtree        outline_tags;
+   HempTag          unplugged_tag;
 };
 
 
 /*--------------------------------------------------------------------------
- * function prototypes
+ * Function prototypes
  *--------------------------------------------------------------------------*/
 
 HempTagset
 hemp_tagset_new(
-    HempDocument   document
+    HempDocument    document
 );
     
 void
@@ -36,31 +36,31 @@ hemp_tagset_free();
 
 HempTag
 hemp_tagset_add_tag(
-    HempTagset     tagset, 
-    HempTag        tag
+    HempTagset      tagset, 
+    HempTag         tag
 );
 
 HempTag
 hemp_tagset_new_tag(
-    HempTagset     tagset, 
-    HempString     type,
-    HempString     name,
-    HempString     start,
-    HempString     end,
-    HempGrammar    grammar
+    HempTagset      tagset, 
+    HempString      type,
+    HempString      name,
+    HempString      start,
+    HempString      end,
+    HempGrammar     grammar
 );
 
 HempBool
 hemp_tagset_free_tag(
-    HempHash       tags,
-    HempPos        index,
-    HempSlot       item
+    HempHash        tags,
+    HempPos         index,
+    HempSlot        item
 );
 
 HempBool
 hemp_tagset_scanner(
-    HempTagset     tagset,
-    HempDocument   document
+    HempTagset      tagset,
+    HempDocument    document
 );
 
 

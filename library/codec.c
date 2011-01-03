@@ -9,7 +9,7 @@
 HEMP_FACTORY(hemp_codec_factory) {
     hemp_debug_init("instantiating codec factory\n");
     HempFactory factory = hemp_factory_new(hemp, name);
-    factory->cleaner     = hemp_codec_cleaner;
+    factory->cleaner    = hemp_codec_cleaner;
     return factory;
 }
 
@@ -29,8 +29,8 @@ HEMP_HASH_ITERATOR(hemp_codec_cleaner) {
 
 HempCodec
 hemp_codec_new(
-    Hemp       hemp,
-    HempString     name
+    Hemp        hemp,
+    HempString  name
 ) {
     HempCodec codec;
     HEMP_ALLOCATE(codec);

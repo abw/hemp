@@ -25,7 +25,7 @@ HEMP_PREFIX(hemp_parse_block);
  *--------------------------------------------------------------------------*/
 
 #define hemp_at_eof(fp) (                                       \
-    (*fp)->type == HempElementEOF                                \
+    (*fp)->type == HempElementEOF                               \
 )
 
 #define hemp_advance(fp) (                                      \
@@ -62,25 +62,25 @@ HEMP_PREFIX(hemp_parse_block);
  *--------------------------------------------------------------------------*/
 
 #define hemp_expr(frag)                                         \
-    (frag->args.unary.expr)
+    (frag->op.unary.expr)
 
 #define hemp_expr_args(frag)                                    \
-    (frag->args.unary.args)
+    (frag->op.unary.args)
 
 #define hemp_lhs(frag)                                          \
-    (frag->args.binary.lhs)
+    (frag->op.binary.lhs)
 
 #define hemp_rhs(frag)                                          \
-    (frag->args.binary.rhs)
+    (frag->op.binary.rhs)
 
 #define hemp_block_args(frag)                                   \
-    (frag->args.block.args)
+    (frag->op.block.args)
 
 #define hemp_block_exprs(frag)                                  \
-    (frag->args.block.exprs)
+    (frag->op.block.exprs)
 
 #define hemp_block_exprs_list(frag)                             \
-    (hemp_val_list(frag->args.block.exprs))
+    (hemp_val_list(frag->op.block.exprs))
 
 #define hemp_expr_fragment(frag)                                \
     (hemp_val_frag( hemp_expr(frag)) )
@@ -95,22 +95,22 @@ HEMP_PREFIX(hemp_parse_block);
     (hemp_val_frag( hemp_rhs(frag) ))
 
 #define hemp_set_expr(frag, ex)                                 \
-    (frag->args.unary.expr = ex)
+    (frag->op.unary.expr = ex)
 
 #define hemp_set_lhs(frag, ex)                                  \
-    (frag->args.binary.lhs = ex)
+    (frag->op.binary.lhs = ex)
 
 #define hemp_set_rhs(frag, ex)                                  \
-    (frag->args.binary.rhs = ex)
+    (frag->op.binary.rhs = ex)
 
 #define hemp_set_block_args(frag, ex)                           \
-    (frag->args.block.args = ex)
+    (frag->op.block.args = ex)
 
 #define hemp_set_block_exprs(frag, ex)                          \
-    (frag->args.block.exprs = ex)
+    (frag->op.block.exprs = ex)
 
 #define hemp_set_block_exprs_list(frag, li)                     \
-    (frag->args.block.exprs = hemp_list_val(li))
+    (frag->op.block.exprs = hemp_list_val(li))
 
 #define hemp_set_expr_fragment(frag, ex)                        \
     (hemp_set_expr( frag, hemp_frag_val(ex) ))
@@ -162,7 +162,7 @@ HEMP_PREFIX(hemp_parse_block);
  *--------------------------------------------------------------------------*/
 
 #define hemp_parse_lhs_expr(fragment, precedence) ({            \
-    HempFragment _hemp_expr = hemp_parse_prefix(               \
+    HempFragment _hemp_expr = hemp_parse_prefix(                \
         fragptr, scope, precedence, 1                           \
     );                                                          \
     if (! _hemp_expr)                                           \
@@ -179,7 +179,7 @@ HEMP_PREFIX(hemp_parse_block);
 
 
 #define hemp_parse_rhs_expr(fragment, precedence) ({            \
-    HempFragment _hemp_expr = hemp_parse_prefix(               \
+    HempFragment _hemp_expr = hemp_parse_prefix(                \
         fragptr, scope, precedence, 1                           \
     );                                                          \
     if (! _hemp_expr)                                           \
@@ -196,7 +196,7 @@ HEMP_PREFIX(hemp_parse_block);
 
 
 #define hemp_parse_lhs_pairs(fragment, precedence) ({           \
-    HempList _hemp_pairs = hemp_parse_pairs(                   \
+    HempList _hemp_pairs = hemp_parse_pairs(                    \
         fragptr, scope, precedence, 1                           \
     );                                                          \
     hemp_set_lhs(fragment, hemp_list_val(_hemp_pairs));         \
@@ -213,7 +213,7 @@ HEMP_PREFIX(hemp_parse_block);
 /* TODO: check that rhs body always uses rprec */
 
 #define hemp_parse_rhs_body(fragment) ({                        \
-    HempFragment _hemp_expr = hemp_parse_body(                 \
+    HempFragment _hemp_expr = hemp_parse_body(                  \
         fragptr, scope, fragment->type->rprec, 0                \
     );                                                          \
     if (! _hemp_expr)                                           \
@@ -236,7 +236,7 @@ HEMP_PREFIX(hemp_parse_block);
 })
 
 #define hemp_parse_rhs_body_terminated(fragment) ({             \
-    HempFragment _hemp_body = hemp_parse_rhs_body(fragment);   \
+    HempFragment _hemp_body = hemp_parse_rhs_body(fragment);    \
     hemp_parse_body_terminator(fragment, _hemp_body);           \
     _hemp_body;                                                 \
 })

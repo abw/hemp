@@ -47,7 +47,7 @@ struct hemp_type {
 };
 
 struct hemp_object {
-    HempType       type;
+    HempType        type;
 };
 
 /* other stuff to think about adding:

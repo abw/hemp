@@ -3,7 +3,6 @@
 
 #include <hemp/core.h>
 #include <hemp/type.h>
-#include <hemp/value.h>
 
 
 /*--------------------------------------------------------------------------

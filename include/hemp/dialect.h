@@ -11,22 +11,22 @@
 
 typedef HempDialect
 (*  hemp_dialect_f) (
-    Hemp       hemp,
-    HempString     name
+    Hemp            hemp,
+    HempString      name
 );
 
 struct hemp_dialect {
-    Hemp       hemp;
-    HempString     name;
+    Hemp            hemp;
+    HempString      name;
     hemp_doc_prep   prepare;
     hemp_doc_scan   scanner;
     hemp_doc_clean  cleanup;
-//  HempHash       tags;
+//  HempHash        tags;
 //  hemp_tagset_t   tagset;
 };
 
 struct hemp_dialects {
-    HempString     name;
+    HempString      name;
     hemp_dialect_f  ctor;
 };
 
@@ -45,25 +45,25 @@ HEMP_HASH_ITERATOR(hemp_dialect_cleaner);
 
 HempDialect
 hemp_dialect_new(
-    Hemp       hemp,
-    HempString     name
+    Hemp            hemp,
+    HempString      name
 );
 
 void
 hemp_dialect_free(
-    HempDialect    dialect
+    HempDialect     dialect
 );
 
 HempBool
 hemp_dialect_add_tag(
-    HempString     name,
-    HempTag        tag
+    HempString      name,
+    HempTag         tag
 );
 
 HempDocument
 hemp_dialect_document(
-    HempDialect    dialect,
-    HempSource     source
+    HempDialect     dialect,
+    HempSource      source
 );
 
 

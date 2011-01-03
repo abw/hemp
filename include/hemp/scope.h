@@ -10,9 +10,9 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_scope {
-    Hemp       hemp;
-    HempScope      parent;
-    HempContext    context;
+    Hemp            hemp;
+    HempScope       parent;
+    HempContext     context;
 }; 
 
 
@@ -21,14 +21,14 @@ struct hemp_scope {
  *--------------------------------------------------------------------------*/
 
 HempScope
-    hemp_scope_new(
-        Hemp   hemp
-    );
+hemp_scope_new(
+    Hemp            hemp
+);
 
 void
-    hemp_scope_free(
-        HempScope  scope
-    );
+hemp_scope_free(
+    HempScope       scope
+);
 
 
 #endif /* HEMP_SCOPE_H */

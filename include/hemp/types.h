@@ -32,9 +32,17 @@ typedef jmp_buf                   HempJumpBuf;  /* longjmp buffer           */
  * Hemp data types
  *--------------------------------------------------------------------------*/
 
+typedef enum   hemp_errno         HempErrno;
+typedef enum   hemp_jump_type     HempJumpType;
+typedef enum   hemp_tag_style     HempTagStyle;
+
 /* values */
-typedef enum   hemp_tag_style     hemp_tag_style;
+typedef struct hemp_unary_op      HempUnaryOp;
+typedef struct hemp_binary_op     HempBinaryOp;
+typedef struct hemp_block_op      HempBlockOp;
+typedef union  hemp_op            HempOp;
 typedef union  hemp_value         HempValue;
+
 
 /* pointers to hemp data structures */
 typedef struct hemp             * Hemp;

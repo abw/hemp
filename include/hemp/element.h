@@ -19,14 +19,14 @@ struct hemp_element {
     HEMP_TYPE_BASE
 
     /* an element is bound to a grammar */
-    HempGrammar    grammar;
+    HempGrammar     grammar;
 
     /* element metadata */
-    HempString     start;
-    HempString     end;
-    HempFlags      flags;
-    HempPrec      lprec;
-    HempPrec      rprec;
+    HempString      start;
+    HempString      end;
+    HempFlags       flags;
+    HempPrec        lprec;
+    HempPrec        rprec;
 
     /* intialisation (on scan) and cleanup methods */
     hemp_scanner    scanner;
@@ -50,12 +50,12 @@ struct hemp_element {
 
 typedef HempElement 
 (* hemp_element_f)(
-    Hemp       hemp,
-    HempElement    element
+    Hemp            hemp,
+    HempElement     element
 );
 
 struct hemp_elements {
-    HempString     name;
+    HempString      name;
     hemp_element_f  ctor;
 };
 
@@ -75,20 +75,20 @@ HEMP_HASH_ITERATOR(hemp_element_cleaner);
 
 HempElement
 hemp_element_new(
-    HempString     name,
-    HempString     start,
-    HempString     end
+    HempString      name,
+    HempString      start,
+    HempString      end
 );
 
 
 void
 hemp_element_free(
-    HempElement    element
+    HempElement     element
 );
 
 void 
 hemp_element_dump(
-    HempElement    element
+    HempElement     element
 );
 
 

@@ -47,13 +47,13 @@ hemp_scan_number(
         fragment = hemp_document_scanned_to(
             document, HempElementInteger, src
         );
-        fragment->args.value = hemp_int_val(int_val);
+        fragment->op.value = hemp_int_val(int_val);
     }
     else {
         fragment = hemp_document_scanned_to(
             document, HempElementNumber, src
         );
-        fragment->args.value = hemp_num_val(num_val);
+        fragment->op.value = hemp_num_val(num_val);
     }
 }
 

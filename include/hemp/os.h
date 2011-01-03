@@ -88,4 +88,20 @@
 #endif
 
 
+/*--------------------------------------------------------------------------
+ * Thread locking.  Encapsulates a block of code with a locked mutex.
+ * Cargo-culto from Nik Clayton's TAP library, but not really used.  Thread
+ * safety is something that (will|may) come later.
+ *--------------------------------------------------------------------------*/
+
+#ifdef HEMP_HAVE_LIBPTHREAD
+    #include <pthread.h>
+    static  pthread_mutex_t M = PTHREAD_MUTEX_INITIALIZER;
+    #define HEMP_MUTEX_LOCK     pthread_mutex_lock(&M);
+    #define HEMP_MUTEX_UNLOCK   pthread_mutex_unlock(&M);
+#else
+    #define HEMP_MUTEX_LOCK
+    #define HEMP_MUTEX_UNLOCK
+#endif
+
 #endif /* HEMP_OS_H */

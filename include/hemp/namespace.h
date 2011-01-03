@@ -6,11 +6,11 @@
 
 
 struct hemp_namespace {
-    HempU16        id;
-    HempString     path;
-    HempString     name;
-    HempNamespace  parent;
-    HempHash       children;
+    HempU16         id;
+    HempString      path;
+    HempString      name;
+    HempNamespace   parent;
+    HempHash        children;
 };
 
 //struct hemp_namespaces {
@@ -26,34 +26,33 @@ struct hemp_namespace {
 
 HempNamespace
 hemp_namespace_init(
-    HempU16        id,
-    HempString     name,
-    HempNamespace  parent
+    HempU16         id,
+    HempString      name,
+    HempNamespace   parent
 );
 
 HempNamespace
 hemp_namespace_child(
-    HempNamespace  namespace,
-    HempString     name
+    HempNamespace   namespace,
+    HempString      name
 );
 
 HempNamespace
 hemp_resolve_namespace(
-    HempString     path
+    HempString      path
 );
 
 void
 hemp_namespace_free(
-    HempNamespace  namespace
+    HempNamespace   namespace
 );
 
 HempBool
 hemp_namespace_free_child(
-    HempHash       namespaces,
-    HempPos        position,
-    HempSlot       item
+    HempHash        namespaces,
+    HempPos         position,
+    HempSlot        item
 );
-
 
 
 

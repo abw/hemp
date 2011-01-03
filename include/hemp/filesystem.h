@@ -39,47 +39,47 @@ struct hemp_path {
 
 HempFilesystem
 hemp_filesystem_new(
-    Hemp       hemp
+    Hemp            hemp
 );
 
 void
 hemp_filesystem_free(
-    HempFilesystem filesystem
+    HempFilesystem  filesystem
 );
 
 void 
 hemp_filesystem_roots(
-    HempFilesystem filesystem,
-    HempList       roots
+    HempFilesystem  filesystem,
+    HempList        roots
 );
 
 void 
 hemp_filesystem_add_root(
-    HempFilesystem filesystem,
-    HempString     root
+    HempFilesystem  filesystem,
+    HempString      root
 );
 
 void
 hemp_filesystem_set_path(
-    HempFilesystem filesystem, 
-    HempString     path
+    HempFilesystem  filesystem, 
+    HempString      path
 );
 
 HempString
 hemp_filesystem_join_path(
-    HempString     base,
-    HempString     path
+    HempString      base,
+    HempString      path
 );
 
 HempString
 hemp_filesystem_readable_path(
-    HempFilesystem filesystem,
-    HempString     path
+    HempFilesystem  filesystem,
+    HempString      path
 );
     
 HempString 
 hemp_filesystem_read_file(
-    HempString     path
+    HempString      path
 );
 
 

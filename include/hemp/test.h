@@ -41,17 +41,17 @@
 
 
 struct hemp_test_plan_s {
-//  HempUint       skip_all;
-//  HempUint       skip_some;
-    HempUint       planned;
-//  HempUint       expected;
-    HempUint       tested;
-    HempUint       passed;
-    HempUint       failed;
-    HempUint       skipped;
-    HempUint       verbose;
-    HempUint       todo;
-    HempString     todo_msg;
+//  HempUint        skip_all;
+//  HempUint        skip_some;
+    HempUint        planned;
+//  HempUint        expected;
+    HempUint        tested;
+    HempUint        passed;
+    HempUint        failed;
+    HempUint        skipped;
+    HempUint        verbose;
+    HempUint        todo;
+    HempString      todo_msg;
 };
 
 typedef struct hemp_test_plan_s *hemp_test_plan_p;
@@ -65,12 +65,12 @@ hemp_test_global_cleanup();
 
 hemp_test_plan_p 
 hemp_test_global_plan(
-    HempUint       planned
+    HempUint        planned
 );
 
 hemp_test_plan_p 
 hemp_test_plan_setup(
-    HempUint       planned
+    HempUint        planned
 );
 
 void 
@@ -90,37 +90,38 @@ hemp_test_plan_cleanup(
 
 hemp_test_plan_p 
 hemp_test_plan(
-    HempUint       planned
+    HempUint        planned
 );
 
 HempUint
 hemp_test_result(
     hemp_test_plan_p plan,
-    HempBool       ok,         /* true=pass false=fail */
-    HempName       func,        
-    HempName       file,       /* source file          */
-    HempUint       line,       /* line number          */
-    HempName       name,       /* test name            */
+    HempBool        ok,         /* true=pass false=fail */
+    HempName        func,        
+    HempName        file,       /* source file          */
+    HempUint        line,       /* line number          */
+    HempName        name,       /* test name            */
     ...
 );
 
 void 
 hemp_test_output(
-    HempString     name,
-    HempText       output,
-    HempString     expect
+    HempString      name,
+    HempText        output,
+    HempString      expect
 );
 
 void 
 hemp_test_error(
-    HempString     name,
-    HempString     error,
-    HempString     expect
+    HempString      name,
+    HempString      error,
+    HempString      expect
 );
 
 void
 hemp_test_warning(
-    char *fmt, ...
+    HempString      format,
+    ...
 );
 
 int
@@ -134,28 +135,28 @@ void hemp_mem_trace_ok(void);
 
 HempUint
 hemp_test_expect_text(
-    HempString     language,
-    HempString     dialect,
-    HempString     text,
-    HempString     alias,
-    HempContext    context
+    HempString      language,
+    HempString      dialect,
+    HempString      text,
+    HempString      alias,
+    HempContext     context
 );
 
 HempUint
 hemp_test_expect_file(
-    HempString     language,
-    HempString     dialect,
-    HempString     file,
-    HempContext    context
+    HempString      language,
+    HempString      dialect,
+    HempString      file,
+    HempContext     context
 );
 
 HempUint
 hemp_test_expect_script(
-    HempString     language,
-    HempString     dialect,
-    HempString     testdir,
-    HempString     name,
-    HempContext    context
+    HempString      language,
+    HempString      dialect,
+    HempString      testdir,
+    HempString      name,
+    HempContext     context
 );
 
 

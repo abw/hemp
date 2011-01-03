@@ -13,20 +13,20 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_document {
-    Hemp       hemp;
-    HempDialect    dialect;
-    HempSource     source;
-    HempScope      scope;
-    HempFragments  fragments;
-    HempFragment   tree;
-//  HempAction     scanner;
-//  HempTagset     tagset;
+    Hemp            hemp;
+    HempDialect     dialect;
+    HempSource      source;
+    HempScope       scope;
+    HempFragments   fragments;
+    HempFragment    tree;
+//  HempAction      scanner;
+//  HempTagset      tagset;
 
     /* these don't really belong here but it'll do for now */
-    HempString     scanptr;    /* position in source string during scanning */
-    HempString     scantok;    /* start of current token being scanned      */
-    HempPos        scanpos;    /* byte position of scanptr (can we compute this?) */
-    HempStack      scantags;   /* stack of nested tags                 */
+    HempString      scanptr;    /* position in source string during scanning */
+    HempString      scantok;    /* start of current token being scanned      */
+    HempPos         scanpos;    /* byte position of scanptr (can we compute this?) */
+    HempStack       scantags;   /* stack of nested tags                 */
 };
 
 
@@ -36,55 +36,55 @@ struct hemp_document {
 
 HempDocument
 hemp_document_new(
-    HempDialect    dialect,
-    HempSource     source
+    HempDialect     dialect,
+    HempSource      source
 );
 
 void    
 hemp_document_free(
-    HempDocument   document
+    HempDocument    document
 );
 
 HempFragment
 hemp_document_tokens(
-    HempDocument   document
+    HempDocument    document
 );
 
 HempBool
 hemp_document_scan(
-    HempDocument   document
+    HempDocument    document
 );
 
 HempBool
 hemp_document_compile(
-    HempDocument   document
+    HempDocument    document
 );
     
 HempFragment
 hemp_document_tree(
-    HempDocument   document
+    HempDocument    document
 );
 
 
 HempText
 hemp_document_render(
-    HempDocument   document,
-    HempContext    context
+    HempDocument    document,
+    HempContext     context
 );
 
 // quick hack - need to sort out names properly before going too far
 HempText
 hemp_document_process(
-    HempDocument document,
-    HempContext  context,
-    HempText     output
+    HempDocument    document,
+    HempContext     context,
+    HempText        output
 );
 
 
 HempValue
 hemp_document_data(
-    HempDocument   document,
-    HempContext    context
+    HempDocument    document,
+    HempContext     context
 );
 
 HEMP_OUTPUT(hemp_document_pairs);
@@ -111,7 +111,7 @@ HEMP_OUTPUT(hemp_document_pairs);
     )
 
 #define hemp_document_scanned(document, element) ({             \
-    HempFragment _hemp_frag = hemp_document_add_fragment(      \
+    HempFragment _hemp_frag = hemp_document_add_fragment(       \
         document, element                                       \
     );                                                          \
     document->scantok  = document->scanptr;                     \
@@ -121,7 +121,7 @@ HEMP_OUTPUT(hemp_document_pairs);
 
 #define hemp_document_scanned_to(document, element, src) ({     \
     document->scanptr = src;                                    \
-    HempFragment _hemp_frag = hemp_document_add_fragment(      \
+    HempFragment _hemp_frag = hemp_document_add_fragment(       \
         document, element                                       \
     );                                                          \
     document->scantok  = src;                                   \

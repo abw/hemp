@@ -20,28 +20,28 @@ enum hemp_tag_style {
 
 typedef HempTag 
 (* hemp_tag_f)(
-    Hemp       hemp,
-    HempString     type,
-    HempString     name,
-    HempString     start,
-    HempString     end,
-    HempGrammar    grammar
+    Hemp            hemp,
+    HempString      type,
+    HempString      name,
+    HempString      start,
+    HempString      end,
+    HempGrammar     grammar
 );
 
 struct hemp_tag {
-    HempTagset     tagset;
-    HempString     type;
-    HempString     name;
-    hemp_tag_style  style;
-    HempString     start;
-    HempString     end;
-    HempGrammar    grammar;
+    HempTagset      tagset;
+    HempString      type;
+    HempString      name;
+    HempTagStyle    style;
+    HempString      start;
+    HempString      end;
+    HempGrammar     grammar;
     hemp_scanner    scanner;
     hemp_skipper    to_eol;
 };
 
 struct hemp_tags {
-    HempString     name;
+    HempString      name;
     hemp_tag_f      ctor;
 };
 
@@ -60,49 +60,46 @@ HEMP_HASH_ITERATOR(hemp_tag_cleaner);
 
 HempTag
 hemp_tag_new(
-    HempString     type,
-    HempString     name,
-    HempString     start,
-    HempString     end,
-    HempGrammar    grammar
+    HempString      type,
+    HempString      name,
+    HempString      start,
+    HempString      end,
+    HempGrammar     grammar
 );
-
-//    hemp_tag_style  style,
-//    hemp_tag_scan_f scan,
 
 HempTag
 hemp_tag_copy(
-    HempTag        tag
+    HempTag         tag
 );
 
 void
 hemp_tag_set_name(
-    HempTag tag,
-    HempString name
+    HempTag         tag,
+    HempString      name
 );
 
 void
 hemp_tag_set_start(
-    HempTag tag,
-    HempString start
+    HempTag         tag,
+    HempString      start
 );
 
 void
 hemp_tag_set_end(
-    HempTag tag,
-    HempString end
+    HempTag         tag,
+    HempString      end
 );
 
 void
 hemp_tag_set_start_end(
-    HempTag tag,
-    HempString start,
-    HempString end
+    HempTag         tag,
+    HempString      start,
+    HempString      end
 );
 
 void
 hemp_tag_free(
-    HempTag tag
+    HempTag         tag
 );
 
 
@@ -112,8 +109,8 @@ hemp_tag_free(
  *--------------------------------------------------------------------------*/
 
 HempMemory hemp_tag_scanner(
-    HempActor      self,
-    HempDocument   document
+    HempActor       self,
+    HempDocument    document
 );
 
 HEMP_SKIPPER(hemp_tag_to_eol);

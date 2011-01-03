@@ -9,7 +9,7 @@
  *--------------------------------------------------------------------------*/
 
 void        hemp_mem_fail(HempString);
-HempSize   hemp_mem_trace_report(HempBool);
+HempSize    hemp_mem_trace_report(HempBool);
 
 
 /*--------------------------------------------------------------------------
@@ -68,10 +68,10 @@ HempSize   hemp_mem_trace_report(HempBool);
     hemp_mem_trace  hemp_mem_get_trace(HempMemory, HempString, HempPos);
     void            hemp_mem_trace_reset();
 
-    HempMemory     hemp_mem_trace_malloc(HempSize, HempString, HempPos);
-    HempMemory     hemp_mem_trace_realloc(HempMemory, HempSize, HempString, HempPos);
-    HempString     hemp_mem_trace_strdup(HempString, HempString, HempPos);
-    HempMemory     hemp_mem_trace_external(HempMemory, HempSize, HempString, HempPos);
+    HempMemory      hemp_mem_trace_malloc(HempSize, HempString, HempPos);
+    HempMemory      hemp_mem_trace_realloc(HempMemory, HempSize, HempString, HempPos);
+    HempString      hemp_mem_trace_strdup(HempString, HempString, HempPos);
+    HempMemory      hemp_mem_trace_external(HempMemory, HempSize, HempString, HempPos);
 
     void            hemp_mem_trace_free(HempMemory, HempString, HempPos);
 

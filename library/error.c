@@ -51,7 +51,7 @@ hemp_location_free(
 
 HempError
 hemp_error_new(
-    hemp_errno number
+    HempErrno number
 ) {
     HempError error;
     
@@ -72,7 +72,7 @@ hemp_error_new(
 
 HempError
 hemp_error_init(
-    hemp_errno  number,
+    HempErrno  number,
     HempString message
 ) {
     HempError error = hemp_error_new(number);
@@ -94,7 +94,7 @@ hemp_error_init(
 
 HempError
 hemp_error_initf(
-    hemp_errno  number,
+    HempErrno  number,
     HempString format,
     ...
 ) {
@@ -110,7 +110,7 @@ hemp_error_initf(
 
 HempError
 hemp_error_initfv(
-    hemp_errno  number,
+    HempErrno  number,
     HempString format,
     va_list     args
 ) {

@@ -65,7 +65,7 @@ HEMP_SCANNER(hemp_element_squote_scanner) {
         /* we need to create a new string with escapes resolved */
         HempString sqfrom   = start;
         HempString squote   = (HempString) hemp_mem_alloc(end - sqfrom + 1);
-        fragment->args.value = hemp_str_val(squote);
+        fragment->op.value = hemp_str_val(squote);
                     
         while (sqfrom < end) {
             /* skip past the '\' if we've got "\\" or "\'" */
@@ -141,7 +141,7 @@ HEMP_SCANNER(hemp_element_dquote_scanner) {
         /* we need to create a new string with escapes resolved */
         HempString dqfrom   = start;
         HempString dquote   = (HempString) hemp_mem_alloc(end - dqfrom + 1);        // CHECK ME
-        fragment->args.value = hemp_str_val(dquote);
+        fragment->op.value = hemp_str_val(dquote);
                     
         while (dqfrom < end) {
             if (*dqfrom == HEMP_BACKSLASH) {
@@ -210,7 +210,7 @@ HEMP_OUTPUT(hemp_element_quoted_text) {
     }
     else {
         /* TODO: check that it's OK to assume we always have a value */
-        hemp_text_append_string(text, hemp_val_str(fragment->args.value));
+        hemp_text_append_string(text, hemp_val_str(fragment->op.value));
     }
 
     return output;

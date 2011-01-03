@@ -9,9 +9,9 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_stack {
-    HempMemory   * items;          /* memory to store n pointers           */
-    HempSize       capacity;       /* allocated storage capacity           */
-    HempSize       depth;          /* number of records in use             */
+    HempMemory    * items;          /* memory to store n pointers           */
+    HempSize        capacity;       /* allocated storage capacity           */
+    HempSize        depth;          /* number of records in use             */
 };
 
 
@@ -21,29 +21,29 @@ struct hemp_stack {
 
 HEMP_INLINE HempStack
 hemp_stack_init(
-    HempStack      stack,
-    HempSize       capacity
+    HempStack       stack,
+    HempSize        capacity
 );
 
 HEMP_INLINE void
 hemp_stack_push(
-    HempStack      stack,
-    HempMemory     item
+    HempStack       stack,
+    HempMemory      item
 );
 
 HEMP_INLINE HempMemory
 hemp_stack_pop(
-    HempStack      stack
+    HempStack       stack
 );
 
 void 
 hemp_stack_free(
-    HempStack      stack
+    HempStack       stack
 );
 
 void
 hemp_stack_each(
-    HempStack      stack,
+    HempStack       stack,
     hemp_list_iter  func
 );
 

@@ -12,39 +12,39 @@
  * type definitions
  *--------------------------------------------------------------------------*/
 
-typedef struct {
-    HempValue      expr;
-    HempValue      args;
-}   hemp_unop;
+struct hemp_unary_op {
+    HempValue       expr;
+    HempValue       args;
+};
 
-typedef struct {
-    HempValue      lhs;
-    HempValue      rhs;
-}   hemp_binop;
+struct hemp_binary_op {
+    HempValue       lhs;
+    HempValue       rhs;
+};
 
-typedef struct {
-    HempValue      exprs;
-    HempValue      args;
-}   hemp_blkop;
+struct hemp_block_op {
+    HempValue       exprs;
+    HempValue       args;
+};
 
-typedef union {
-    HempValue      value;
-    hemp_unop       unary;
-    hemp_binop      binary;
-    hemp_blkop      block;
-}   hemp_opargs;
+union hemp_op {
+    HempValue       value;
+    HempUnaryOp     unary;
+    HempBinaryOp    binary;
+    HempBlockOp     block;
+};
 
 struct hemp_fragment {
     // TODO: clean this up and remove some superfluous items
-    HempElement    type;
-    HempFragments  fragments;
-    HempFragment   next;
-    HempFragment   branch;
-    HempString     token;
-    HempPos        position;
-    HempSize       length;
-    HempFlags      flags;
-    hemp_opargs     args;   // heap allocate to reduce size to single ptr?
+    HempElement     type;
+    HempFragments   fragments;
+    HempFragment    next;
+    HempFragment    branch;
+    HempString      token;
+    HempPos         position;
+    HempSize        length;
+    HempFlags       flags;
+    HempOp          op;   // heap allocate to reduce size to single ptr?
 };
 
 
@@ -54,69 +54,69 @@ struct hemp_fragment {
 
 HempFragment
 hemp_fragment_init(
-    HempFragment   fragment,
-    HempElement    element,
-    HempString     token,
-    HempPos        position,
-    HempSize       length
+    HempFragment    fragment,
+    HempElement     element,
+    HempString      token,
+    HempPos         position,
+    HempSize        length
 );
 
 void
 hemp_fragment_free(
-    HempFragment   fragment
+    HempFragment    fragment
 );
 
 HEMP_INLINE HempGrammar
 hemp_fragment_grammar(
-    HempFragment fragment
+    HempFragment    fragment
 );
 
 HEMP_INLINE HempFragments
 hemp_fragment_fragments(
-    HempFragment fragment
+    HempFragment    fragment
 );
 
 HEMP_INLINE HempDocument
 hemp_fragment_document(
-    HempFragment fragment
+    HempFragment    fragment
 );
 
 HEMP_INLINE HempElement
 hemp_fragment_grammar_element(
-    HempFragment fragment,
-    HempString   name
+    HempFragment    fragment,
+    HempString      name
 );
 
 HEMP_INLINE HempFragment
 hemp_fragment_new_fragment(
-    HempFragment   fragment,
-    HempString     typename
+    HempFragment    fragment,
+    HempString      typename
 );
 
 HempElement
 hemp_fragment_retype(
-    HempFragment   fragment,
-    HempString     typename
+    HempFragment    fragment,
+    HempString      typename
 );
 
 HempFragment
 hemp_fragment_parse(
-    HempFragment   fragment, 
-    HempScope      scope
+    HempFragment    fragment, 
+    HempScope       scope
 );
 
 HempBool
 hemp_fragment_dump(
-    HempFragment f
+    HempFragment    fragment
 );
 
 void hemp_fragment_dump_exprs(
-    HempList exprs
+    HempList        exprs
 );
 
 void
 hemp_fragment_debug(
-    HempFragment f
+    HempFragment    fragment
 );
 
 

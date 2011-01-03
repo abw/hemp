@@ -98,7 +98,7 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
                     document->fragments, HempElementInteger,
                     from, pos, src - from
                 );
-                fragment->args.value = hemp_int_val(int_val);
+                fragment->op.value = hemp_int_val(int_val);
             }
             else {
                 hemp_debug_token("NUMBER", from, src-from);
@@ -106,7 +106,7 @@ HEMP_SCANNER(hemp_element_tag_inline_scanner) {
                     document->fragments, HempElementNumber,
                     from, pos, src - from
                 );
-                fragment->args.value = hemp_num_val(num_val);
+                fragment->op.value = hemp_num_val(num_val);
             }
         }
         else if (

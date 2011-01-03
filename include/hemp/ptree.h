@@ -10,17 +10,17 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_ptree {
-    HempPnode    * roots;
-    HempSize       width;
-    HempPool       pool;
+    HempPnode     * roots;
+    HempSize        width;
+    HempPool        pool;
 };
 
 struct hemp_pnode {
-   HempString      key;
-   HempMemory      value;
-   HempPnode       before;
-   HempPnode       equal;
-   HempPnode       after;
+   HempString       key;
+   HempMemory       value;
+   HempPnode        before;
+   HempPnode        equal;
+   HempPnode        after;
 };
 
 
@@ -31,53 +31,53 @@ struct hemp_pnode {
 
 HempPtree 
 hemp_ptree_new(
-    HempSize       capacity
+    HempSize        capacity
 );
 
 void
 hemp_ptree_free(
-    HempPtree      ptree
+    HempPtree       ptree
 );
 
 HEMP_INLINE HempPnode
 hemp_ptree_node(
-    HempPtree      ptree, 
-    HempString     key, 
-    HempMemory     value
+    HempPtree       ptree, 
+    HempString      key, 
+    HempMemory      value
 );
 
 HempPnode
 hemp_ptree_store(
-    HempPtree      ptree, 
-    HempString     key, 
-    HempMemory     value
+    HempPtree       ptree, 
+    HempString      key, 
+    HempMemory      value
 );
 
 HempMemory
 hemp_ptree_fetch(
-    HempPtree      ptree,
-    HempString     key
+    HempPtree       ptree,
+    HempString      key
 );
 
 HempMemory
 hemp_pnode_match_more(
-    HempPnode      pnode, 
-    HempString   * srcptr
+    HempPnode       pnode, 
+    HempString    * srcptr
 );
 
 void 
 hemp_ptree_dump(
-    HempPtree      ptree
+    HempPtree       ptree
 );
 
 int 
 hemp_ptree_max_depth(
-    HempPtree      ptree
+    HempPtree       ptree
 );
 
 int
 hemp_ptree_count_nodes(
-    HempPtree      ptree
+    HempPtree       ptree
 );
 
 

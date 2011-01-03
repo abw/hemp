@@ -4,6 +4,30 @@
 #include <hemp/document.h>
 
 
+/*--------------------------------------------------------------------------
+ * Function prototypes
+ *--------------------------------------------------------------------------*/
+
+HempBool
+hemp_scan_text(
+    HempDocument    document
+);
+
+HEMP_INLINE void
+hemp_scan_number(
+    HempDocument    document
+);
+
+HEMP_INLINE void
+hemp_scan_whitespace(
+    HempDocument    document
+);
+
+
+/*--------------------------------------------------------------------------
+ * Macros
+ *--------------------------------------------------------------------------*/
+
 #define hemp_scan_while(src, cmp)       \
     do { src++; } while ( cmp(*src) );
 
@@ -18,32 +42,6 @@
 
 #define hemp_not_char(c1, c2)           \
     (c1 != c2)
-
-
-
-/*--------------------------------------------------------------------------
- * function prototypes
- *--------------------------------------------------------------------------*/
-
-HempBool
-hemp_scan_text(
-    HempDocument   document
-);
-
-HEMP_INLINE void
-hemp_scan_number(
-    HempDocument   document
-);
-
-HEMP_INLINE void
-hemp_scan_whitespace(
-    HempDocument   document
-);
-
-//HempBool
-//hemp_scan_unplugged(
-//    HempDocument   document
-//);
 
 
 

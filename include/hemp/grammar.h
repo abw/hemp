@@ -17,20 +17,20 @@
 
 typedef HempGrammar 
 (*  hemp_grammar_f) (
-    Hemp       hemp,
-    HempString     name
+    Hemp            hemp,
+    HempString      name
 );
 
 struct hemp_grammar {
-    Hemp       hemp;
-    HempString     name;
-    HempHash       elements;
-    HempPtree      operators;
-//  HempHash       keywords;
+    Hemp            hemp;
+    HempString      name;
+    HempHash        elements;
+    HempPtree       operators;
+//  HempHash        keywords;
 };
 
 struct hemp_grammars {
-    HempString     name;
+    HempString      name;
     hemp_grammar_f  ctor;
 };
 
@@ -50,52 +50,51 @@ HEMP_HASH_ITERATOR(hemp_grammar_cleaner);
 
 HempGrammar
 hemp_grammar_new(
-    Hemp       hemp,
-    HempString     name
+    Hemp            hemp,
+    HempString      name
 );
 
 HempElement
 hemp_grammar_new_element(
-    HempGrammar    grammar,
-    HempString     element,
-    HempString     start,
-    HempString     end
+    HempGrammar     grammar,
+    HempString      element,
+    HempString      start,
+    HempString      end
 );
 
 HempElement
 hemp_grammar_add_element(
-    HempGrammar    grammar,
-    HempString     element,
-    HempString     start,
-    HempString     end,
-    HempPrec      lprec,
-    HempPrec      rprec
+    HempGrammar     grammar,
+    HempString      element,
+    HempString      start,
+    HempString      end,
+    HempPrec        lprec,
+    HempPrec        rprec
 );
 
 HEMP_INLINE HempElement
 hemp_grammar_element(
-    HempGrammar    grammar,
-    HempString     name
+    HempGrammar     grammar,
+    HempString      name
 );
 
 void
 hemp_grammar_free(
-    HempGrammar    grammar
+    HempGrammar     grammar
 );
 
 HempBool
 hemp_grammar_free_element(
-    HempHash       grammars,
-    HempPos        position,
-    HempSlot       item
+    HempHash        grammars,
+    HempPos         position,
+    HempSlot        item
 );
 
 HempBool
 hemp_grammar_scanner(
-    HempGrammar    grammar,
-    HempDocument   document
+    HempGrammar     grammar,
+    HempDocument    document
 );
-
 
 
 #endif /* HEMP_GRAMMAR_H */

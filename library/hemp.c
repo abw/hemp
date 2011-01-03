@@ -61,7 +61,7 @@ hemp_init_errors(
     hemp->jump->parent = NULL;
     hemp->jump->depth  = 0;
 
-    hemp_errno e = setjmp(hemp->jump->buffer);
+    HempErrno e = setjmp(hemp->jump->buffer);
 
     if (e) {
         // TODO: proper handling... but if memory serves this is iffy 
@@ -482,7 +482,7 @@ hemp_filesystem_instance(
 HempString
 hemp_error_format(
     Hemp   hemp,
-    hemp_errno  number
+    HempErrno  number
 ) {
     if (number < 0 || number >= HEMP_ERROR_MAX) 
         hemp_fatal("Invalid error number: %d", number);
@@ -503,7 +503,7 @@ hemp_error_format(
 HempError
 hemp_error_message(
     Hemp   hemp,
-    hemp_errno  number,
+    HempErrno  number,
     ...
 ) {
     hemp_debug_call("hemp_error_message()\n");

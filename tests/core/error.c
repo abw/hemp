@@ -9,7 +9,7 @@ void test_error4();
 void test_error_object();
 void test_hemp_throw();
 void test_error_finally();
-void thrower(hemp_errno, char *msg);
+void thrower(HempErrno, char *msg);
 
 
 int main(
@@ -159,7 +159,7 @@ void test_hemp_throw() {
 }
 
 
-void thrower(hemp_errno type, char *msg) {
+void thrower(HempErrno type, char *msg) {
     // hemp_debug("throwing %d: %s\n", type, msg);
     longjmp(state, type);
     hemp_debug("not reachhed\n");

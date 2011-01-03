@@ -10,12 +10,11 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_frame {
-    HempContext    context;
-    HempFrame      parent;
-    HempFragment   fragment;
-    HempParams     params;
-    HempHash       vars;
-//    HempList       args;
+    HempContext     context;
+    HempFrame       parent;
+    HempFragment    fragment;
+    HempParams      params;
+    HempHash        vars;
 };
 
 
@@ -25,12 +24,12 @@ struct hemp_frame {
 
 HempFrame
 hemp_frame_init(
-    HempFrame      frame
+    HempFrame       frame
 );
 
 void
 hemp_frame_free(
-    HempFrame      frame
+    HempFrame       frame
 );
 
 
@@ -38,7 +37,7 @@ hemp_frame_free(
  * macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_frame_new()                        \
+#define hemp_frame_new()    \
     hemp_frame_init(NULL)
 
 

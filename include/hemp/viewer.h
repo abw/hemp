@@ -11,11 +11,11 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_viewer {
-    Hemp       hemp;
-    HempString     name;
-    HempViewer     parent;
+    Hemp            hemp;
+    HempString      name;
+    HempViewer      parent;
     hemp_view_f   * view;
-    HempU16        size;
+    HempU16         size;
 };
 
 
@@ -34,19 +34,19 @@ HEMP_HASH_ITERATOR(hemp_viewer_cleaner);
 
 HempViewer
 hemp_viewer_new(
-    Hemp       hemp,
-    HempString     name
+    Hemp            hemp,
+    HempString      name
 );
 
 void
 hemp_viewer_free( 
-    HempViewer     viewer
+    HempViewer      viewer
 );
 
 HempBool
 hemp_viewer_add_view(
-    HempViewer     viewer,
-    HempString     name,
+    HempViewer      viewer,
+    HempString      name,
     hemp_view_f     view
 );
 

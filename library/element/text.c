@@ -62,7 +62,7 @@ HEMP_CLEANUP(hemp_element_text_cleanup) {
      */
 
     if (hemp_not_flag(fragment, HEMP_BE_SOURCE)) {
-        hemp_mem_free((HempMemory) hemp_val_str(fragment->args.value));
+        hemp_mem_free((HempMemory) hemp_val_str(fragment->op.value));
     }
 }
 

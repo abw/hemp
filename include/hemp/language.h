@@ -11,9 +11,9 @@
  *--------------------------------------------------------------------------*/
 
 struct hemp_language {
-    Hemp       hemp;
-    HempString     name;
-    HempNum        version;
+    Hemp            hemp;
+    HempString      name;
+    HempNum         version;
 };
 
 
@@ -26,14 +26,14 @@ HEMP_HASH_ITERATOR(hemp_language_cleaner);
 
 HempLanguage 
 hemp_language_new(
-    Hemp       hemp,
-    HempString     name,
-    HempNum        version
+    Hemp            hemp,
+    HempString      name,
+    HempNum         version
 );
 
 void 
 hemp_language_free(
-    HempLanguage   language
+    HempLanguage    language
 );
 
 HEMP_FACTORY(hemp_feature_factory);

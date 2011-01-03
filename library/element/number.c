@@ -58,7 +58,7 @@ HEMP_ELEMENT(hemp_element_number) {
 
 HEMP_VALUE(hemp_element_number_value) {
     hemp_debug_call("hemp_element_number_value()\n");
-    return hemp_val_frag(value)->args.value;
+    return hemp_val_frag(value)->op.value;
 }
 
 
@@ -78,7 +78,7 @@ HEMP_ELEMENT(hemp_element_integer) {
 
 HEMP_VALUE(hemp_element_integer_value) {
     hemp_debug_call("hemp_element_integer_value()\n");
-    return hemp_val_frag(value)->args.value;
+    return hemp_val_frag(value)->op.value;
 }
 
 

@@ -10,20 +10,14 @@
  * macros and general definitions
  *--------------------------------------------------------------------------*/
 
-#define HEMP_CODEC(f)                               \
-    HempCodec f(                                   \
-        Hemp   hemp,                           \
-        HempString name                            \
-    )
-
 #define HEMP_ENCODE_ARGS                            \
-    HempCodec      codec,                          \
-    HempValue      input,                          \
+    HempCodec      codec,                           \
+    HempValue      input,                           \
     HempContext    context
 
 #define HEMP_DECODE_ARGS                            \
-    HempCodec      codec,                          \
-    HempText       input,                          \
+    HempCodec      codec,                           \
+    HempText       input,                           \
     HempContext    context
 
 #define HEMP_ENCODER(f)                             \
@@ -47,8 +41,8 @@ typedef HempText  (* hemp_encoder) (HEMP_ENCODE_ARGS);
 typedef HempValue (* hemp_decoder) (HEMP_DECODE_ARGS);
 
 struct hemp_codec {
-    Hemp       hemp;
-    HempString     name;
+    Hemp            hemp;
+    HempString      name;
     hemp_encoder    encoder;
     hemp_decoder    decoder;
 };
@@ -63,13 +57,13 @@ HEMP_HASH_ITERATOR(hemp_codec_cleaner);
 
 HempCodec
 hemp_codec_new(
-    Hemp       hemp,
-    HempString     name
+    Hemp            hemp,
+    HempString      name
 );
 
 void
 hemp_codec_free(
-    HempCodec      codec
+    HempCodec       codec
 );
 
 HEMP_ENCODER(hemp_codec_no_encoder);
