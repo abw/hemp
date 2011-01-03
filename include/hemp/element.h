@@ -29,23 +29,23 @@ struct hemp_element {
     HempPrec        rprec;
 
     /* intialisation (on scan) and cleanup methods */
-    hemp_scanner    scanner;
+    HempScanner     scanner;
     hemp_cleanup    cleanup;            /* NOTE: being replaced by clean */
 
     /* parsing methods */
-    hemp_prefix     parse_prefix;
-    hemp_postfix    parse_postfix;
-    hemp_postfix    parse_branch;
-    hemp_prefix     parse_fixed;
-    hemp_prefix     parse_params;
-    hemp_prefix     parse_pair;
-    hemp_prefix     parse_body;
-    hemp_fixup      parse_lvalue;
-    hemp_fixup      parse_proto;
+    HempPrefix      parse_prefix;
+    HempPostfix     parse_postfix;
+    HempPostfix     parse_branch;
+    HempPrefix      parse_fixed;
+    HempPrefix      parse_params;
+    HempPrefix      parse_pair;
+    HempPrefix      parse_body;
+    HempFixup       parse_lvalue;
+    HempFixup       parse_proto;
 
     /* value methods */
-    hemp_output_f   token;
-    hemp_output_f   source;
+    HempOutput      token;
+    HempOutput      source;
 };
 
 typedef HempElement 

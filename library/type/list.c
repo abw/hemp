@@ -3,7 +3,7 @@
 #include <hemp/type/list.h>
 
 
-HEMP_TYPE_FUNC(hemp_type_list) {
+HEMP_TYPE(hemp_type_list) {
     HempType type   = hemp_type_subtype(HempTypeValue, id, name);
     type->fetch     = &hemp_type_list_fetch;
     type->store     = &hemp_type_list_store;
@@ -312,7 +312,7 @@ HEMP_OUTPUT(hemp_type_list_text) {
 }
 
 
-HEMP_FETCH_FUNC(hemp_type_list_fetch) {
+HEMP_FETCH(hemp_type_list_fetch) {
     hemp_debug_call("hemp_type_list_fetch()\n");
 
     HempInt  index = -1;
@@ -337,7 +337,7 @@ HEMP_FETCH_FUNC(hemp_type_list_fetch) {
 
 
 
-HEMP_STORE_FUNC(hemp_type_list_store) {
+HEMP_STORE(hemp_type_list_store) {
     hemp_debug_call("hemp_type_list_store()\n");
 
     HempInt  index = -1;

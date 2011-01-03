@@ -311,15 +311,13 @@ extern const HempValue HempAfter;
 
 //#define hemp_is_text(v)         HEMP_TYPE_IS(v, HEMP_TYPE_TEXT_ID)
 
-/*--------------------------------------------------------------------------
- * 
- *--------------------------------------------------------------------------*/
 
-typedef HempText       (* hemp_text_vfn)(HempValue, HempContext, HempText);
-typedef HempValue      (* hemp_dot_vfn)(HempValue, HempContext, HempString);
+/*
+typedef HempText        (* hemp_text_vfn)(HempValue, HempContext, HempText);
+typedef HempValue       (* hemp_dot_vfn)(HempValue, HempContext, HempString);
 typedef void            (* hemp_init_vfn)(HempValue);
 typedef void            (* hemp_wipe_vfn)(HempValue);
-
+*/
 
 
 /*--------------------------------------------------------------------------
@@ -366,18 +364,18 @@ extern HEMP_INLINE HempFragment  hemp_val_frag(HempValue v);
 
 void
 hemp_value_free(
-    HempValue  value
+    HempValue       value
 );
 
 HEMP_INLINE HempString
 hemp_value_to_string(
-    HempValue      value,
-    HempContext    context
+    HempValue       value,
+    HempContext     context
 );
 
 HEMP_INLINE 
 HempString hemp_identity_name(
-    HempValue      value
+    HempValue       value
 );
 
 
@@ -386,7 +384,7 @@ extern HEMP_VALUE(hemp_value_no_op);
 extern HEMP_VALUE(hemp_value_self);
 extern HEMP_VALUE(hemp_value_true);
 extern HEMP_VALUE(hemp_value_false);
-extern HEMP_FETCH_FUNC(hemp_value_dot);
+extern HEMP_FETCH(hemp_value_dot);
 
 extern HEMP_INPUT(hemp_value_apply);
 
@@ -402,9 +400,9 @@ extern HEMP_VALUE(hemp_value_not_integer);
 extern HEMP_VALUE(hemp_value_not_boolean);
 extern HEMP_VALUE(hemp_value_not_compare);
 extern HEMP_VALUE(hemp_value_not_defined);
-extern HEMP_FETCH_FUNC(hemp_value_not_fetch);
-extern HEMP_STORE_FUNC(hemp_value_not_store);
-extern HEMP_FETCH_FUNC(hemp_value_not_dot);
+extern HEMP_FETCH(hemp_value_not_fetch);
+extern HEMP_STORE(hemp_value_not_store);
+extern HEMP_FETCH(hemp_value_not_dot);
 
 /* number -> xxx conversion */
 extern HEMP_OUTPUT(hemp_type_number_text);

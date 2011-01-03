@@ -73,7 +73,7 @@ hemp_perl_value(
  * Type constructor and methods for Perl scalar value
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_perl_scalar) {
+HEMP_TYPE(hemp_type_perl_scalar) {
     HempType type = hemp_type_subtype(HempValue, id, name);
     type->text    = &hemp_perl_scalar_text;      /* perl -> text         */
     type->number  = &hemp_perl_scalar_number;    /* perl -> number       */
@@ -152,7 +152,7 @@ HEMP_VALUE(hemp_perl_scalar_length) {
  * Type constructor and methods for Perl array value
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_perl_array) {
+HEMP_TYPE(hemp_type_perl_array) {
     HempType type = hemp_type_subtype(HempValue, id, name);
     type->text    = &hemp_perl_scalar_text;      /* perl -> text         */
     type->boolean = &hemp_perl_array_boolean;    /* false if empty       */
@@ -181,7 +181,7 @@ HEMP_VALUE(hemp_perl_array_length) {
 }
 
 
-HEMP_FETCH_FUNC(hemp_perl_array_fetch) {
+HEMP_FETCH(hemp_perl_array_fetch) {
     hemp_debug_perl("hemp_perl_array_fetch()\n");
 
     HempUint index;
@@ -252,7 +252,7 @@ HEMP_FETCH_FUNC(hemp_perl_array_fetch) {
  * Type constructor and methods for Perl hash value
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_perl_hash) {
+HEMP_TYPE(hemp_type_perl_hash) {
     HempType type = hemp_type_subtype(HempValue, id, name);
     type->text    = &hemp_perl_scalar_text;      /* perl -> text         */
     type->boolean = &hemp_perl_hash_boolean;     /* false if empty       */
@@ -281,7 +281,7 @@ HEMP_VALUE(hemp_perl_hash_length) {
 }
 
 
-HEMP_FETCH_FUNC(hemp_perl_hash_fetch) {
+HEMP_FETCH(hemp_perl_hash_fetch) {
     HempBool kmine  = HEMP_FALSE;
     HempText ktext;
     SV **       result;
@@ -326,7 +326,7 @@ HEMP_FETCH_FUNC(hemp_perl_hash_fetch) {
  * Type constructor and methods for Perl code (subroutine references)
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_perl_code) {
+HEMP_TYPE(hemp_type_perl_code) {
     HempType type = hemp_type_subtype(HempValue, id, name);
     type->apply   = &hemp_perl_code_apply;          /* call a function      */
     type->text    = &hemp_perl_code_text;           /* perl -> text         */
@@ -366,7 +366,7 @@ HEMP_VALUE(hemp_perl_code_apply) {
  * Type constructor and methods for Perl objects
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_perl_object) {
+HEMP_TYPE(hemp_type_perl_object) {
     HempType type = hemp_type_subtype(HempValue, id, name);
     type->text    = &hemp_perl_scalar_text;      /* perl -> text         */
     type->boolean = &hemp_perl_true;             /* implicitly true      */

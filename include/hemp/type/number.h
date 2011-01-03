@@ -3,6 +3,5 @@
 
 #include <hemp/type.h>
 
-
 #endif /* HEMP_TYPE_NUMBER_H */
 

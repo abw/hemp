@@ -21,7 +21,7 @@ HEMP_ELEMENT(hemp_element_assign) {
 HEMP_POSTFIX(hemp_element_assign_postfix) {
     HempFragment self    = *fragptr;
     HempElement  type    = self->type;
-    hemp_fixup    handler = lhs->type->parse_lvalue;
+    HempFixup    handler = lhs->type->parse_lvalue;
     HempFragment rhs;
 
     hemp_debug_call("hemp_element_assign_postfix()\n");

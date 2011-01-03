@@ -3,7 +3,7 @@
 #include <hemp/type/list.h>
 
 
-HEMP_TYPE_FUNC(hemp_type_string) {
+HEMP_TYPE(hemp_type_string) {
     HempType type   = hemp_type_subtype(HempTypeValue, id, name);
     type->text      = &hemp_type_string_text;     /* string -> text       */
     type->number    = &hemp_type_string_number;   /* string -> number     */

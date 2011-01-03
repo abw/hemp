@@ -9,55 +9,53 @@
 
 
 /*--------------------------------------------------------------------------
- * type definitions
+ * Type definitions
  *--------------------------------------------------------------------------*/
 
 struct hemp_params {
-    HempList       ordinals;
-    HempHash       nominals;
+    HempList        ordinals;
+    HempHash        nominals;
 }; 
 
 
 /*--------------------------------------------------------------------------
- * function prototypes
+ * Function prototypes
  *--------------------------------------------------------------------------*/
 
 HempParams
 hemp_params_init(
-    HempParams     params
+    HempParams      params
 );
 
 HEMP_INLINE void
 hemp_params_release(
-    HempParams params
+    HempParams      params
 );
 
 void
 hemp_params_free(
-    HempParams     params
+    HempParams      params
 );
 
 
 /*--------------------------------------------------------------------------
- * type functions and methods
+ * Type functions and methods
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_params);
-HEMP_FETCH_FUNC(hemp_type_params_fetch);
-HEMP_STORE_FUNC(hemp_type_params_store);
+HEMP_TYPE(hemp_type_params);
+HEMP_FETCH(hemp_type_params_fetch);
+HEMP_STORE(hemp_type_params_store);
 
-//HEMP_OUTPUT(hemp_type_params_text);
-//HEMP_VALUE(hemp_method_list_length);
-//HEMP_VALUE(hemp_method_list_text);
 
 /*--------------------------------------------------------------------------
- * macros
+ * Macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_params_new()               \
+#define hemp_params_new()                   \
     hemp_params_init(NULL)
 
-#define hemp_params_push(params, value) \
+#define hemp_params_push(params, value)     \
     hemp_list_push(params->ordinals, value)
+
 
 #endif /* HEMP_PARAMS_H */

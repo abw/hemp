@@ -5,7 +5,7 @@
 HEMP_OUTPUT(hemp_type_code_text);
 HEMP_INPUT(hemp_type_code_apply);
 
-HEMP_TYPE_FUNC(hemp_type_code) {
+HEMP_TYPE(hemp_type_code) {
     HempType type   = hemp_type_subtype(HempTypeValue, id, name);
     type->text      = &hemp_type_code_text; 
     type->apply     = &hemp_type_code_apply;

@@ -36,8 +36,8 @@ struct hemp_tag {
     HempString      start;
     HempString      end;
     HempGrammar     grammar;
-    hemp_scanner    scanner;
-    hemp_skipper    to_eol;
+    HempScanner     scanner;
+    HempSkipper     to_eol;
 };
 
 struct hemp_tags {

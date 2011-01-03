@@ -39,7 +39,7 @@ hemp_primes[] = {
  * Type constructor
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_hash) {
+HEMP_TYPE(hemp_type_hash) {
     HempType type   = hemp_type_subtype(HempTypeValue, id, name);
     type->text      = &hemp_type_hash_text;
     type->fetch     = &hemp_type_hash_fetch;
@@ -688,7 +688,7 @@ HEMP_OUTPUT(hemp_type_hash_text) {
 }
 
 
-HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
+HEMP_FETCH(hemp_type_hash_fetch) {
     HempBool kmine  = HEMP_FALSE;
     HempText ktext;
 
@@ -722,7 +722,7 @@ HEMP_FETCH_FUNC(hemp_type_hash_fetch) {
 }
 
 
-HEMP_STORE_FUNC(hemp_type_hash_store) {
+HEMP_STORE(hemp_type_hash_store) {
     hemp_debug_call("hemp_type_hash_store()\n");
     HempString keystr  = hemp_to_string(key, context);
     HempSlot   slot    = hemp_hash_store(
@@ -736,7 +736,7 @@ HEMP_STORE_FUNC(hemp_type_hash_store) {
 }
 
 
-HEMP_FETCH_FUNC(hemp_type_hash_dot) {
+HEMP_FETCH(hemp_type_hash_dot) {
     HempBool kmine  = HEMP_FALSE;
     HempText ktext;
 

@@ -4,20 +4,20 @@
 #include <hemp/scheme.h>
 
 
-HempScheme 
+HempScheme
 hemp_scheme_text_new( 
-    Hemp       hemp, 
-    HempString     name
+    Hemp            hemp,
+    HempString      name
 );
 
 HempString 
 hemp_scheme_text_reader(
-    HempSource     source
+    HempSource      source
 );
 
 HempBool
 hemp_scheme_text_checker(
-    HempSource     source
+    HempSource      source
 );
 
 

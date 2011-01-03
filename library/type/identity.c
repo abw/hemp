@@ -2,7 +2,7 @@
 #include <hemp/context.h>
 
 
-HEMP_TYPE_FUNC(hemp_type_identity) {
+HEMP_TYPE(hemp_type_identity) {
     HempType type   = hemp_type_subtype(HempTypeValue, id, name);
     type->text      = &hemp_type_identity_text;    /* identity -> text    */
     type->number    = &hemp_type_identity_number;  /* identity -> number  */

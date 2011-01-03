@@ -5,19 +5,19 @@
 
 
 /*--------------------------------------------------------------------------
- * type definitions
+ * Type definitions
  *--------------------------------------------------------------------------*/
 
 struct hemp_hash {
-    HempSize       width;      /* number of columns        */
-    HempSize       size;       /* total number of entries  */
-    HempSlot     * slots;      /* heads of slot columns    */
-    HempHash       parent;     /* parent hash              */
+    HempSize        width;      /* number of columns        */
+    HempSize        size;       /* total number of entries  */
+    HempSlot      * slots;      /* heads of slot columns    */
+    HempHash        parent;     /* parent hash              */
 }; 
 
 
 /*--------------------------------------------------------------------------
- * function prototypes
+ * Function prototypes
  *--------------------------------------------------------------------------*/
 
 HempHash
@@ -179,47 +179,47 @@ hemp_hash_dump(
 
 
 /*--------------------------------------------------------------------------
- * type functions and methods
+ * Type functions and methods
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_hash);
+HEMP_TYPE(hemp_type_hash);
 HEMP_OUTPUT(hemp_type_hash_text);
-HEMP_FETCH_FUNC(hemp_type_hash_fetch);
-HEMP_STORE_FUNC(hemp_type_hash_store);
-HEMP_FETCH_FUNC(hemp_type_hash_dot);
+HEMP_FETCH(hemp_type_hash_fetch);
+HEMP_STORE(hemp_type_hash_store);
+HEMP_FETCH(hemp_type_hash_dot);
 HEMP_OUTPUT(hemp_type_hash_pairs);
 HEMP_VALUE(hemp_method_hash_length);
 
 
 /*--------------------------------------------------------------------------
- * patch in the hash function we want to use and define some other macros
+ * Patch in the hash function we want to use and define some other macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_hash_function(string, len)       \
+#define hemp_hash_function(string, len)         \
     hemp_hash_function_jenkins32(string, len)
 
-#define hemp_hash_store_number(h, k, n)     \
+#define hemp_hash_store_number(h, k, n)         \
     hemp_hash_store(h, k, hemp_num_val(n))
 
-#define hemp_hash_store_integer(h, k, i)    \
+#define hemp_hash_store_integer(h, k, i)        \
     hemp_hash_store(h, k, hemp_int_val(i))
 
-#define hemp_hash_store_pointer(h, k, p)    \
+#define hemp_hash_store_pointer(h, k, p)        \
     hemp_hash_store(h, k, hemp_ptr_val(p))
 
-#define hemp_hash_store_string(h, k, s)     \
+#define hemp_hash_store_string(h, k, s)         \
     hemp_hash_store(h, k, hemp_str_val(s))
 
-#define hemp_hash_store_text(h, k, t)       \
+#define hemp_hash_store_text(h, k, t)           \
     hemp_hash_store(h, k, hemp_text_val(t))
 
-#define hemp_hash_store_list(h, k, l)       \
+#define hemp_hash_store_list(h, k, l)           \
     hemp_hash_store(h, k, hemp_list_val(l))
 
-#define hemp_hash_store_hash(h, k, v)       \
+#define hemp_hash_store_hash(h, k, v)           \
     hemp_hash_store(h, k, hemp_hash_val(v))
 
-#define hemp_hash_new() \
+#define hemp_hash_new()                         \
     hemp_hash_init(NULL)
 
 

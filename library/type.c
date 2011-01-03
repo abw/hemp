@@ -234,7 +234,7 @@ hemp_use_type(
  * Base type definitions
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_type) {
+HEMP_TYPE(hemp_type_type) {
     HempType type = hemp_type_new(id, name);
 
     /* add text method to display the type name, e.g. foo.type */

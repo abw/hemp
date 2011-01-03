@@ -154,8 +154,8 @@ hemp_module_load(
 
 //  hemp_debug_msg("loaded module: %s\n", module->name);
 
-    module->loader = (hemp_loader) dlsym(module->handle, HEMP_MODULE_LOADER);
-    module->binder = (hemp_binder) dlsym(module->handle, HEMP_MODULE_BINDER);
+    module->loader = (HempLoader) dlsym(module->handle, HEMP_MODULE_LOADER);
+    module->binder = (HempBinder) dlsym(module->handle, HEMP_MODULE_BINDER);
 
     /* customer loader can augment module and/or perform initialisation */    
     if (module->loader) {

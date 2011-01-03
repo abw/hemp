@@ -26,8 +26,8 @@ struct hemp_module {
     HempString          name;
     HempString          error;
     HempMemory          handle;
-    hemp_loader         loader;
-    hemp_binder         binder;
+    HempLoader          loader;
+    HempBinder          binder;
 //  hemp_module_status  status;
 };
 

@@ -17,18 +17,18 @@
     hemp_value_f    boolean;        \
     hemp_value_f    compare;        \
     hemp_value_f    defined;        \
-    hemp_input_f    apply;          \
-    hemp_input_f    assign;         \
-    hemp_output_f   text;           \
-    hemp_output_f   values;         \
-    hemp_output_f   pairs;          \
-    hemp_output_f   params;         \
-    hemp_fetch_f    dot;            \
-    hemp_fetch_f    fetch;          \
-    hemp_store_f    store;          \
-    hemp_clean_f    clean;
+    HempInput       apply;          \
+    HempInput       assign;         \
+    HempOutput      text;           \
+    HempOutput      values;         \
+    HempOutput      pairs;          \
+    HempOutput      params;         \
+    HempFetch       dot;            \
+    HempFetch       fetch;          \
+    HempStore       store;          \
+    HempClean       clean;
 
-//  hemp_output_f       list;       \   /* superfluous? */
+//  HempOutput       list;       \   /* superfluous? */
 //  hemp_method_f       method;         /* TODO: method auto-generator */
 
 
@@ -123,11 +123,11 @@ hemp_global_types_free(
 );
 
 
-HEMP_TYPE_FUNC(hemp_type_type);
-HEMP_TYPE_FUNC(hemp_type_number);
-HEMP_TYPE_FUNC(hemp_type_integer);
-HEMP_TYPE_FUNC(hemp_type_identity);
-HEMP_TYPE_FUNC(hemp_type_object);
+HEMP_TYPE(hemp_type_type);
+HEMP_TYPE(hemp_type_number);
+HEMP_TYPE(hemp_type_integer);
+HEMP_TYPE(hemp_type_identity);
+HEMP_TYPE(hemp_type_object);
 
 HEMP_VALUE(hemp_method_value_name);
 HEMP_VALUE(hemp_method_value_text);

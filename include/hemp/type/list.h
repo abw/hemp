@@ -6,50 +6,40 @@
 
 
 /*--------------------------------------------------------------------------
- * type definitions
+ * Type definitions
  *--------------------------------------------------------------------------*/
 
 struct hemp_list {
-    HempValue    * items;
-    HempSize       capacity;
-    HempSize       length;
+    HempValue     * items;
+    HempSize        capacity;
+    HempSize        length;
     hemp_list_iter  cleaner;
 }; 
 
 
 /*--------------------------------------------------------------------------
- * function prototypes
+ * Function prototypes
  *--------------------------------------------------------------------------*/
 
 HempList 
 hemp_list_init(
-    HempList       list
+    HempList        list
 );
-/*
-#define hemp_list_init(list) ({             \
-    HempList _l = hemp_list_init_(list);   \
-    hemp_debug_msg(                         \
-        "LIST: :%p at line %d of %s\n",     \
-        _l, __LINE__, __FILE__              \
-    );                                      \
-    _l;                                     \
-})
-*/
 
 HEMP_INLINE void
 hemp_list_release(
-    HempList       list
+    HempList        list
 );
 
 void
 hemp_list_free(
-    HempList       list
+    HempList        list
 );
 
 HempSize
 hemp_list_resize(
-    HempList       list, 
-    HempSize       new_size
+    HempList        list, 
+    HempSize        new_size
 );
 
 HempList
@@ -59,87 +49,88 @@ hemp_list_copy(
 
 HempList 
 hemp_list_push(
-    HempList       list, 
-    HempValue      item
+    HempList        list, 
+    HempValue       item
 );
 
 HempList
 hemp_list_push_list(
-    HempList   list, 
-    HempList   values
+    HempList        list, 
+    HempList        values
 );
 
 
 HempValue
 hemp_list_shift(
-    HempList       list
+    HempList        list
 );
 
 HempValue
 hemp_list_pop(
-    HempList   list
+    HempList        list
 );
     
 
 HempPos 
 hemp_list_each(
-    HempList       list,
+    HempList        list,
     hemp_list_iter  func
 );
 
 HempBool
 hemp_list_each_free(
-    HempList       list, 
-    HempPos        index,
-    HempValue      value
+    HempList        list, 
+    HempPos         index,
+    HempValue       value
 );
 
 HEMP_INLINE HempBool 
 hemp_list_index(
-    HempContext  context,
-    HempValue    key,
-    HempInt     *index
+    HempContext     context,
+    HempValue       key,
+    HempInt       * index
 );
     
 
 // tmp hack for debugging
 HempText
 hemp_list_dump(
-    HempList       list
+    HempList        list
 );
 
 
 /*--------------------------------------------------------------------------
- * type functions and methods
+ * Type functions and methods
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_list);
-HEMP_FETCH_FUNC(hemp_type_list_fetch);
-HEMP_STORE_FUNC(hemp_type_list_store);
+HEMP_TYPE(hemp_type_list);
+HEMP_FETCH(hemp_type_list_fetch);
+HEMP_STORE(hemp_type_list_store);
 HEMP_OUTPUT(hemp_type_list_text);
 HEMP_VALUE(hemp_method_list_length);
 HEMP_VALUE(hemp_method_list_text);
 
+
 /*--------------------------------------------------------------------------
- * macros
+ * Macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_list_new()                 \
+#define hemp_list_new()                         \
     hemp_list_init(NULL)
 
-#define hemp_list_item(list, n)         \
+#define hemp_list_item(list, n)                 \
     list->items[n]
 
-#define hemp_list_item_string(list, n)  \
+#define hemp_list_item_string(list, n)          \
     hemp_val_str( hemp_list_item(list, n) )
 
-#define hemp_list_push_number(list, n)  \
+#define hemp_list_push_number(list, n)          \
     hemp_list_push( list, hemp_num_val(n) )
 
-#define hemp_list_push_integer(list, i)  \
+#define hemp_list_push_integer(list, i)         \
     hemp_list_push( list, hemp_int_val(i) )
 
-#define hemp_list_push_string(list, s)  \
+#define hemp_list_push_string(list, s)          \
     hemp_list_push( list, hemp_str_val(s) )
 
 

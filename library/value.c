@@ -23,7 +23,7 @@ hemp_value_free(
     HempValue  value
 ) {
     hemp_debug_call("hemp_value_free()\n");
-    hemp_clean_f cleaner = hemp_tfunc(value, clean);
+    HempClean cleaner = hemp_tfunc(value, clean);
 
     if (cleaner) {
 //      hemp_debug_msg("calling cleaner function for %s: %p\n", hemp_type_name(value), cleaner);
@@ -308,7 +308,7 @@ HEMP_OUTPUT(hemp_value_pairs) {
 }
 
 
-HEMP_FETCH_FUNC(hemp_value_dot) {
+HEMP_FETCH(hemp_value_dot) {
     hemp_debug_call("hemp_value_dot(%s)\n", hemp_type_name(container));
     HempValue result = HempMissing;
 
@@ -444,7 +444,7 @@ HEMP_VALUE(hemp_value_not_defined) {
 }
 
 
-HEMP_FETCH_FUNC(hemp_value_not_fetch) {
+HEMP_FETCH(hemp_value_not_fetch) {
     HEMP_FETCH_ERROR(
         context, 
         hemp_type_name(container),
@@ -454,7 +454,7 @@ HEMP_FETCH_FUNC(hemp_value_not_fetch) {
 }
 
 
-HEMP_STORE_FUNC(hemp_value_not_store) {
+HEMP_STORE(hemp_value_not_store) {
     HEMP_STORE_ERROR(
         context, 
         hemp_type_name(container),
@@ -464,7 +464,7 @@ HEMP_STORE_FUNC(hemp_value_not_store) {
 }
 
 
-HEMP_FETCH_FUNC(hemp_value_not_dot) {
+HEMP_FETCH(hemp_value_not_dot) {
     HEMP_FETCH_ERROR(
         context, 
         hemp_type_name(container),

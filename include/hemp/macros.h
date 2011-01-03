@@ -91,16 +91,6 @@
         HempGrammar     grammar         \
     )
 
-#define HEMP_TAG(f)                     \
-    HempTag f(                          \
-        Hemp            hemp,           \
-        HempString      type,           \
-        HempString      name,           \
-        HempString      start,          \
-        HempString      end,            \
-        HempGrammar     grammar         \
-    )
-
 #define HEMP_SCANNER(f)                 \
     HempBool f(                         \
         HempMemory      self,           \
@@ -111,6 +101,22 @@
     HempString f(                       \
         HempTag         tag,            \
         HempString      src             \
+    )
+
+#define HEMP_TAG(f)                     \
+    HempTag f(                          \
+        Hemp            hemp,           \
+        HempString      type,           \
+        HempString      name,           \
+        HempString      start,          \
+        HempString      end,            \
+        HempGrammar     grammar         \
+    )
+
+#define HEMP_TYPE(f)                    \
+    HempType f(                         \
+        HempInt    id,                  \
+        HempString name                 \
     )
 
 #define HEMP_VIEW(f)                    \
@@ -273,20 +279,6 @@
 #define hemp_tag_construct(hemp, type, name, start, end, grammar) (         \
     (HempTag) hemp_construct(hemp, tag, type, name, start, end, grammar)    \
 )
-
-
-
-/*--------------------------------------------------------------------------
- * Macros for getting and setting configuration values
- *--------------------------------------------------------------------------*/
-
-#define hemp_config_get(hemp, name)         \
-    hemp_hash_fetch_dotted(hemp->config, name, hemp->context)
-
-#define hemp_config_set(hemp, name, value)  \
-    hemp_hash_store_dotted(hemp->config, name, value, hemp->context)
-
-
 
 
 /*--------------------------------------------------------------------------
@@ -464,13 +456,6 @@
 })
 
 
-/*--------------------------------------------------------------------------
- * Views
- *--------------------------------------------------------------------------*/
-
-#define HEMP_USE_VIEW(name, view)           \
-    hemp_viewer_add_view(viewer, name, view);
-
 
 /*--------------------------------------------------------------------------
  * Values
@@ -504,14 +489,14 @@
         HempValue       output              \
     )
 
-#define HEMP_FETCH_FUNC(f)                  \
+#define HEMP_FETCH(f)                       \
     HEMP_INLINE HempValue f(                \
         HempValue       container,          \
         HempContext     context,            \
         HempValue       key                 \
     )
 
-#define HEMP_STORE_FUNC(f)                  \
+#define HEMP_STORE(f)                       \
     HEMP_INLINE HempValue f(                \
         HempValue       container,          \
         HempContext     context,            \
@@ -581,17 +566,6 @@
 
 
 /*--------------------------------------------------------------------------
- * Data types
- *--------------------------------------------------------------------------*/
-
-#define HEMP_TYPE_FUNC(f)                   \
-    HempType f(                             \
-        HempInt    id,                      \
-        HempString name                     \
-    )
-
-
-/*--------------------------------------------------------------------------
  * flag manipulation for elements, symbols or anything else with flags
  *--------------------------------------------------------------------------*/
 
@@ -609,7 +583,7 @@
 
 
 /*--------------------------------------------------------------------------
- * other stuff
+ * Macros for preparing output values
  *--------------------------------------------------------------------------*/
 
 #define hemp_prepare_text(context, output, text)                    \
@@ -658,9 +632,25 @@
     }
 
 
+
+/*--------------------------------------------------------------------------
+ * Macros for getting and setting configuration values
+ *--------------------------------------------------------------------------*/
+
+#define hemp_config_get(hemp, name)         \
+    hemp_hash_fetch_dotted(hemp->config, name, hemp->context)
+
+#define hemp_config_set(hemp, name, value)  \
+    hemp_hash_store_dotted(hemp->config, name, value, hemp->context)
+
+
+
+/*--------------------------------------------------------------------------
+ * Other stuff
+ *--------------------------------------------------------------------------*/
+
 /* shut up "unused variable" compiler warnings */
 #define HEMP_UNUSED(x)  ((void) x)
-
 
 
 #endif /* HEMP_MACROS_H */

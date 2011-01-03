@@ -1,7 +1,7 @@
 #include <hemp/type/params.h>
 
 
-HEMP_TYPE_FUNC(hemp_type_params) {
+HEMP_TYPE(hemp_type_params) {
     HempType type   = hemp_type_subtype(HempTypeValue, id, name);
     type->fetch     = &hemp_type_params_fetch;
     type->store     = &hemp_type_params_store;
@@ -49,7 +49,7 @@ hemp_params_free(
  * runtime evaluation functions
  *--------------------------------------------------------------------------*/
 
-HEMP_FETCH_FUNC(hemp_type_params_fetch) {
+HEMP_FETCH(hemp_type_params_fetch) {
     hemp_debug_msg("hemp_type_params_fetch()\n");
 
     HempInt    index;
@@ -70,7 +70,7 @@ HEMP_FETCH_FUNC(hemp_type_params_fetch) {
 
 
 
-HEMP_STORE_FUNC(hemp_type_params_store) {
+HEMP_STORE(hemp_type_params_store) {
     hemp_debug_msg("hemp_type_params_store()\n");
 
     HempInt    index;

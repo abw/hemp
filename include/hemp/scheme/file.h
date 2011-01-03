@@ -7,28 +7,28 @@
 
 HempScheme
 hemp_scheme_file_new(
-    Hemp       hemp,
-    HempString     name
+    Hemp            hemp,
+    HempString      name
 );
 
 HempString
 hemp_scheme_file_namer(
-    HempSource     source
+    HempSource      source
 );
 
 HempString
 hemp_scheme_file_reader(
-    HempSource     source
+    HempSource      source
 );
 
 HempBool
 hemp_scheme_file_checker(
-    HempSource     source
+    HempSource      source
 );
 
 void
 hemp_scheme_file_cleaner(
-    HempSource     source
+    HempSource      source
 );
 
 

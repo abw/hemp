@@ -43,7 +43,6 @@ typedef struct hemp_block_op      HempBlockOp;
 typedef union  hemp_op            HempOp;
 typedef union  hemp_value         HempValue;
 
-
 /* pointers to hemp data structures */
 typedef struct hemp             * Hemp;
 typedef struct hemp_action      * HempAction;
@@ -95,15 +94,21 @@ typedef struct hemp_uri         * HempUri;
 typedef struct hemp_viewer      * HempViewer;
 
 
-
 /*--------------------------------------------------------------------------
  * main hemp data structure
  *--------------------------------------------------------------------------*/
 
 struct hemp {
-    HempGlobal      global;
-    HempFactory     factory;
+    HempGlobal      global;             /* pointer to global data           */
+    HempFactory     factory;            /* new meta-factory                 */
 
+    HempCache       cache;              /* cache for compiled documents     */
+    HempHash        config;             /* configuration items              */
+    HempContext     context;            /* default runtime context          */
+    HempHash        documents;          /* OLD: documents hash (-> cache)   */
+    HempFilesystem  filesystem;         /* abstraction of file system       */
+
+    /* all these factories are being merged into the new meta-factory */
     HempFactory     codec;
     HempFactory     dialect;
     HempFactory     element;
@@ -114,18 +119,12 @@ struct hemp {
     HempFactory     tag;
     HempFactory     viewer;
                     
-    HempContext     context;
-    HempHash        config;
-    HempFilesystem  filesystem;
 
-    HempCache       cache;
-
-//  HempHash        tags;
-    HempHash        documents;
-//  HempDialect     dialect;
-                    
+    /* TODO: create one flags item */
     HempBool        verbose;
     HempBool        debug;
+
+    /* jump/error handling */
     HempJump        jump;
     HempError       error;
     HempString    * errmsg;
@@ -160,13 +159,13 @@ typedef HempMemory
  *--------------------------------------------------------------------------*/
 
 typedef HempBool
-(* hemp_binder)(
+(* HempBinder)(
     HempModule      module,
     Hemp            hemp
 );
 
 typedef HempBool
-(* hemp_loader)(
+(* HempLoader)(
     HempModule      module
 );
 
@@ -196,13 +195,13 @@ typedef void
  *--------------------------------------------------------------------------*/
 
 typedef HempBool
-(* hemp_scanner)(
+(* HempScanner)(
     HempMemory      self,
     HempDocument    document
 );
 
 typedef HempString
-(* hemp_skipper)(
+(* HempSkipper)(
     HempTag         tag,
     HempString      src
 );
@@ -213,7 +212,7 @@ typedef HempString
  *--------------------------------------------------------------------------*/
 
 typedef HempFragment
-(* hemp_prefix)(                    /* parse start of expression            */
+(* HempPrefix)(                    /* parse start of expression            */
     HempFragment  * fragptr,        /* pointer to current element pointer   */
     HempScope       scope,          /* current lexical scope                */
     HempPrec        precedence,     /* operator precedence level            */
@@ -221,7 +220,7 @@ typedef HempFragment
 );
 
 typedef HempFragment
-(* hemp_postfix)(                   /* parse continuation of expression     */
+(* HempPostfix)(                   /* parse continuation of expression     */
     HempFragment  * fragptr,        /* pointer to current element pointer   */
     HempScope       scope,          /* current lexical scope                */
     HempPrec        precedence,     /* operator precedence level            */
@@ -230,7 +229,7 @@ typedef HempFragment
 );
 
 typedef HempFragment
-(* hemp_fixup)(                     /* general purpose fixup parser handler */
+(* HempFixup)(                     /* general purpose fixup parser handler */
     HempFragment    fragptr,        /* pointer to element                   */
     HempScope       scope,          /* current lexical scope                */
     HempValue       fixative        /* optional argument                    */
@@ -240,6 +239,11 @@ typedef HempFragment
 /*--------------------------------------------------------------------------
  * Iterator functions
  *--------------------------------------------------------------------------*/
+
+typedef HempBool
+(* HempEach)(                       /* iterate over values, e.g. in list    */
+    HempValue       value
+);
 
 typedef HempBool
 (* hemp_hash_iter)(                 /* iterator over hash items             */
@@ -282,14 +286,14 @@ typedef HempValue
 );
 
 typedef HempValue 
-(* hemp_input_f)(
+(* HempInput)(
     HempValue       value,
     HempContext     context,
     HempValue       input
 );
 
 typedef HempValue 
-(* hemp_output_f)(
+(* HempOutput)(
     HempValue       value,
     HempContext     context,
     HempValue       output
@@ -304,14 +308,14 @@ typedef HempValue
 );
 
 typedef HempValue
-(* hemp_fetch_f)(
+(* HempFetch)(
     HempValue       container,      /* value to operate on                  */
     HempContext     context,        /* runtime context                      */
     HempValue       key             /* key of item to fetch                 */
 );
 
 typedef HempValue
-(* hemp_store_f)(
+(* HempStore)(
     HempValue       container,      /* value to operate on                  */
     HempContext     context,        /* runtime context                      */
     HempValue       key,            /* key to store item under              */
@@ -331,7 +335,7 @@ typedef HempMemory
 );
 
 typedef void
-(* hemp_clean_f)(
+(* HempClean)(
     HempValue       value
 );
 

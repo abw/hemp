@@ -7,21 +7,20 @@
 
 
 /*--------------------------------------------------------------------------
- * type definitions
+ * Type definitions
  *--------------------------------------------------------------------------*/
 
 struct hemp_code {
-    HempValue      body;
-    HempProto      proto;
-//    HempValue      args;
+    HempValue       body;
+    HempProto       proto;
+//  HempValue       args;
 //  hemp_scope_t    scope;
 //  hemp_element_t  source;
 }; 
 
 
-
 /*--------------------------------------------------------------------------
- * function prototypes
+ * Function prototypes
  *--------------------------------------------------------------------------*/
 
 HEMP_INLINE HempCode
@@ -29,30 +28,30 @@ hemp_code_init();
 
 HEMP_INLINE void
 hemp_code_release(
-    HempCode       code
+    HempCode        code
 );
 
 HEMP_INLINE void
 hemp_code_free(
-    HempCode       code
+    HempCode        code
 );
 
 HEMP_INLINE HempProto
 hemp_code_proto(
-    HempCode       code
+    HempCode        code
 );
 
+
 /*--------------------------------------------------------------------------
- * type functions and methods
+ * Type functions and methods
  *--------------------------------------------------------------------------*/
 
-HEMP_TYPE_FUNC(hemp_type_code);
+HEMP_TYPE(hemp_type_code);
 HEMP_OUTPUT(hemp_type_code_text);
 
 
-
 /*--------------------------------------------------------------------------
- * macros
+ * Macros
  *--------------------------------------------------------------------------*/
 
 #define hemp_code_new()                         \
