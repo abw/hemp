@@ -775,7 +775,7 @@ HEMP_FETCH(hemp_type_hash_dot) {
         );
         
         if (hemp_is_found(result)) {
-            hemp_value_f method = (hemp_value_f) hemp_val_ptr(result);
+            HempEval method = (HempEval) hemp_val_ptr(result);
             result = method(container, context);
         }
     }

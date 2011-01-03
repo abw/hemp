@@ -40,7 +40,7 @@
  *--------------------------------------------------------------------------*/
 
 
-struct hemp_test_plan_s {
+struct hemp_test_plan {
 //  HempUint        skip_all;
 //  HempUint        skip_some;
     HempUint        planned;
@@ -54,8 +54,7 @@ struct hemp_test_plan_s {
     HempString      todo_msg;
 };
 
-typedef struct hemp_test_plan_s *hemp_test_plan_p;
-typedef struct hemp_test *hemp_test;
+typedef struct hemp_test_plan   * HempTestPlan;
 
 void
 hemp_test_global_setup();
@@ -63,39 +62,39 @@ hemp_test_global_setup();
 void
 hemp_test_global_cleanup();
 
-hemp_test_plan_p 
+HempTestPlan
 hemp_test_global_plan(
     HempUint        planned
 );
 
-hemp_test_plan_p 
+HempTestPlan
 hemp_test_plan_setup(
     HempUint        planned
 );
 
 void 
 hemp_test_plan_summary(
-    hemp_test_plan_p plan
+    HempTestPlan    plan
 );
 
 HempUint
 hemp_test_plan_result(
-    hemp_test_plan_p plan
+    HempTestPlan    plan
 );
 
 void    
 hemp_test_plan_cleanup(
-    hemp_test_plan_p plan
+    HempTestPlan    plan
 );
 
-hemp_test_plan_p 
+HempTestPlan 
 hemp_test_plan(
     HempUint        planned
 );
 
 HempUint
 hemp_test_result(
-    hemp_test_plan_p plan,
+    HempTestPlan    plan,
     HempBool        ok,         /* true=pass false=fail */
     HempName        func,        
     HempName        file,       /* source file          */
@@ -126,7 +125,7 @@ hemp_test_warning(
 
 int
 hemp_test_all_done(
-    hemp_test_plan_p plan
+    HempTestPlan    plan
 );
 
 

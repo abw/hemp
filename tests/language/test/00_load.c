@@ -29,7 +29,7 @@ int test_language() {
 
     hemp_language_instance(hemp, "test");
 
-    hemp_test_plan_p plan = hemp_test_plan(5);
+    HempTestPlan plan = hemp_test_plan(5);
 
     HEMP_TRY;
         document = hemp_document_instance(

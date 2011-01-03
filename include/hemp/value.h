@@ -277,13 +277,13 @@ extern const HempValue HempAfter;
 #define hemp_fetch(v,c,k)       (hemp_tfunc(v,fetch)(v,c,k))
 #define hemp_store(v,c,k,i)     (hemp_tfunc(v,store)(v,c,k,i))
 #define hemp_type_name(v)       (hemp_vtype(v)->name)
-#define hemp_type_method(t,m)   ((hemp_value_f) hemp_hash_fetch_pointer(t->methods, m))
+#define hemp_type_method(t,m)   ((HempEval) hemp_hash_fetch_pointer(t->methods, m))
 #define hemp_type_extend(t,m,f) hemp_hash_store_pointer(t->methods, m, f)
 #define hemp_object_method(o,m) hemp_type_method(hemp_vtype(o), m)
 #define hemp_send(o,m,c) ({                             \
-    hemp_value_f method = hemp_object_method(o, m);     \
-    method                                              \
-        ? method(o,c)                                   \
+    HempEval _hemp_method = hemp_object_method(o, m);   \
+    _hemp_method                                        \
+        ? _hemp_method(o,c)                             \
         : HempMissing;                                  \
 })
 

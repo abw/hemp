@@ -11,12 +11,12 @@
     HempString      name;           \
     HempNamespace   namespace;      \
     HempHash        methods;        \
-    hemp_value_f    value;          \
-    hemp_value_f    number;         \
-    hemp_value_f    integer;        \
-    hemp_value_f    boolean;        \
-    hemp_value_f    compare;        \
-    hemp_value_f    defined;        \
+    HempEval        value;          \
+    HempEval        number;         \
+    HempEval        integer;        \
+    HempEval        boolean;        \
+    HempEval        compare;        \
+    HempEval        defined;        \
     HempInput       apply;          \
     HempInput       assign;         \
     HempOutput      text;           \

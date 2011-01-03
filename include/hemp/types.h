@@ -280,7 +280,7 @@ typedef void
  *--------------------------------------------------------------------------*/
 
 typedef HempValue
-(* hemp_value_f)(
+(* HempEval)(
     HempValue       value,
     HempContext     context
 );

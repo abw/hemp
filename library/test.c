@@ -35,7 +35,7 @@
  *--------------------------------------------------------------------------*/
 
 
-hemp_test_plan_p hemp_global_test_plan = NULL;
+HempTestPlan hemp_global_test_plan = NULL;
 
 
 /*--------------------------------------------------------------------------
@@ -71,7 +71,7 @@ hemp_test_global_cleanup() {
 }
 
 
-hemp_test_plan_p 
+HempTestPlan 
 hemp_test_global_plan(
     HempUint planned
 ) {
@@ -93,14 +93,14 @@ hemp_test_global_plan(
  * Test plan initialisation and cleanup
  *--------------------------------------------------------------------------*/
 
-hemp_test_plan_p 
+HempTestPlan 
 hemp_test_plan_setup(
     HempUint planned
 ) {
     hemp_test_global_setup();
 
-    hemp_test_plan_p plan = (hemp_test_plan_p) hemp_mem_alloc(
-        sizeof(struct hemp_test_plan_s)
+    HempTestPlan plan = (HempTestPlan) hemp_mem_alloc(
+        sizeof(struct hemp_test_plan)
     );
     
     if (! plan)
@@ -122,7 +122,7 @@ hemp_test_plan_setup(
 
 void 
 hemp_test_plan_summary(
-    hemp_test_plan_p plan
+    HempTestPlan plan
 ) {
     if (plan->planned < plan->tested) {
         hemp_test_warning(
@@ -152,7 +152,7 @@ hemp_test_plan_summary(
 
 HempUint
 hemp_test_plan_result(
-    hemp_test_plan_p plan
+    HempTestPlan plan
 ) {
     HempUint r;
 
@@ -173,7 +173,7 @@ hemp_test_plan_result(
 
 void 
 hemp_test_plan_cleanup(
-    hemp_test_plan_p plan
+    HempTestPlan plan
 ) {
     hemp_mem_free(plan);
 
@@ -190,7 +190,7 @@ hemp_test_plan_cleanup(
 
 HempUint
 hemp_test_result(
-    hemp_test_plan_p  plan,
+    HempTestPlan  plan,
     HempBool         ok,         /* true=pass false=fail */
     HempName         func,        
     HempName         file,       /* source file          */
@@ -308,7 +308,7 @@ hemp_test_result(
  * 
  *--------------------------------------------------------------------------*/
 
-hemp_test_plan_p
+HempTestPlan
 hemp_test_plan(
     HempUint planned
 ) {
@@ -318,7 +318,7 @@ hemp_test_plan(
 
 int
 hemp_test_done(
-    hemp_test_plan_p plan
+    HempTestPlan plan
 ) {
     if (! plan)
         plan = hemp_global_test_plan;
@@ -336,7 +336,7 @@ hemp_test_done(
 
 int
 hemp_test_all_done(
-    hemp_test_plan_p plan
+    HempTestPlan plan
 ) {
     int result = hemp_test_done(plan);
     hemp_mem_trace_ok();
@@ -559,7 +559,7 @@ hemp_test_expect_script(
 void 
 hemp_test_output(
     HempString  name,
-    HempText output,
+    HempText    output,
     HempString  expect
 ) {
     hemp_string_chomp(output->string);
