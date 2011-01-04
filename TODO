@@ -32,8 +32,6 @@ An incomplete list of things TODO, in no particular order.
 
 * Add arrows.  a => 10, b -> 10, list.each <- block(x) { ...x... }
 
-* hemp_test_plan_p vs hemp_test_plan()
-
 * hemp_element_parse_block() and various other methods need access to the 
   elements factory.  I think this should probably be encapsulated in the 
   scope object.
@@ -64,7 +62,7 @@ An incomplete list of things TODO, in no particular order.
   source position / scope for parse errors.
 
 * Add a fallback mechanism to the various factories.  e.g. if a tt3 dialect
-  is requested and not found then the fallback should call hemp_language_instance("tt3")
+  is requested and not found then the fallback should call hemp_language("tt3")
   to give it a chance to load it.  Just got to be careful we don't end up in
   a deathly spiral if we then re-attempt the lookup and it fails again.
 
@@ -259,3 +257,22 @@ Let's start by making json a plugin language and have it autoload...[DONE]
 Then create a JSON codec to read JSON data [DONE]
 
 Rendering error messages via templates.
+
+
+---
+
+cleanup -> clean
+
+doc_prep
+doc_scan
+doc_clean
+hemp_cleanup
+
+pool_iter
+hash_iter/each
+list_iter
+
+source_vop
+source_bop
+view_f
+hemp_view_f

@@ -9,9 +9,9 @@
 
 HempPool
 hemp_pool_init(
-    HempPool       pool, 
-    HempSize       size, 
-    HempSize       capacity,
+    HempPool        pool, 
+    HempSize        size, 
+    HempSize        capacity,
     hemp_pool_iter  cleaner
 ) {
     HEMP_INSTANCE(pool);
