@@ -17,7 +17,7 @@ int main(
 
 void test_types() {
     Hemp hemp            = hemp_new();
-    HempContext context = hemp_context_instance(hemp);
+    HempContext context = hemp_context(hemp);
 
     HempValue number = hemp_num_val(3.14159);
     ok( hemp_is_number(number), "created a number" );

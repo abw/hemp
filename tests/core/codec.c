@@ -23,7 +23,7 @@ void test_codec() {
         is( codec->name, "hemp.codec.test", "codec name" );
         hemp_codec_free(codec);
 
-        codec = hemp_codec_instance(hemp, "uri");
+        codec = hemp_codec(hemp, "uri");
         ok( codec, "fetched uri codec" );
         is( codec->name, "uri", "codec name" );
 

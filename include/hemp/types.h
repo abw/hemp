@@ -153,6 +153,13 @@ typedef HempMemory
     ...
 );
 
+typedef HempBool 
+(* HempAutoload)(
+    HempFactory     factory,
+    HempString      name
+);
+
+
 
 /*--------------------------------------------------------------------------
  * Module loading and binding function pointers
@@ -205,6 +212,17 @@ typedef HempString
     HempTag         tag,
     HempString      src
 );
+
+typedef HempTag 
+(* HempTagdef)(
+    Hemp            hemp,
+    HempString      type,
+    HempString      name,
+    HempString      start,
+    HempString      end,
+    HempGrammar     grammar
+);
+
 
 
 /*--------------------------------------------------------------------------
@@ -323,21 +341,22 @@ typedef HempValue
 );
 
 typedef HempType
-(* hemp_type_f)(
+(* HempTypedef)(
     HempInt         id,             /* numerical id                         */
     HempString      name            /* unique type name                     */
-);
-
-typedef HempMemory
-(* hemp_method_f)(
-    HempType        type,           /* pointer to type                      */
-    HempString      name            /* method name                          */
 );
 
 typedef void
 (* HempClean)(
     HempValue       value
 );
+
+
+//typedef HempMemory
+//(* hemp_method_f)(
+//    HempType        type,           /* pointer to type                      */
+//    HempString      name            /* method name                          */
+//);
 
 
 

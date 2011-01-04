@@ -101,7 +101,7 @@ int main(
     HempText       input, output;
     int             result = 0;
     
-    hemp_language_instance(hemp, "tt3");
+    hemp_language(hemp, "tt3");
     hemp_prompt_init();
     hemp_getopt(hemp, argc, argv);
 
@@ -129,7 +129,7 @@ int main(
                 hemp_text_append_string(input, " ");
             }
             // hemp_verbose(hemp, "loaded text: %s", input->string);
-            document = hemp_document_instance(
+            document = hemp_document(
                 hemp, HEMP_TT3, HEMP_TEXT, input->string
             );
             
@@ -151,7 +151,7 @@ int main(
                 filename = argv[optind++];
                 hemp_verbose(hemp, "loading file: %s", filename);
 
-                document = hemp_document_instance(hemp, HEMP_TT3, HEMP_FILE, filename);
+                document = hemp_document(hemp, HEMP_TT3, HEMP_FILE, filename);
                 if (! document)
                     hemp_fatal("could not load document: %s", filename);
 
@@ -469,7 +469,7 @@ hemp_cmd_expr(
 
     HEMP_TRY;
         // hemp_verbose(hemp, "loaded text: %s", input->string);
-        hemplate = hemp_document_instance(
+        hemplate = hemp_document(
             hemp, HEMP_TT3, HEMP_TEXT, input->string
         );
         
@@ -530,10 +530,10 @@ hemp_cmd_test(
     if (! *test)
         return HEMP_FALSE;
 
-    hemp_language_instance(hemp, "test");
+    hemp_language(hemp, "test");
 
     HEMP_TRY;
-        document = hemp_document_instance(
+        document = hemp_document(
             hemp, "test", HEMP_FILE, test
         );
         // TODO: create child context
@@ -641,7 +641,7 @@ hemp_getopt(
             case 'f':
                 HEMP_TRY;
                     /* TODO: make config dialect configurable */
-                    hemp_language_instance(hemp, "json");
+                    hemp_language(hemp, "json");
                     hemp_configure_from(hemp, "json", "file", optarg);
                 HEMP_CATCH_ALL;
                     hemp_error_report(hemp);

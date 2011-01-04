@@ -100,7 +100,7 @@ hemp_factory_constructor(
     
     static HempChar    wildname[HEMP_BUFFER_SIZE];
     HempList           splits;
-    hemp_autoload       autoload;
+    HempAutoload       autoload;
     
     HempAction constructor = (HempAction) hemp_hash_fetch_pointer(
         factory->constructors, name

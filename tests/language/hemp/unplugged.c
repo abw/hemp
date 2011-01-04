@@ -22,11 +22,11 @@ void test_unplugged() {
     HempText       output;
     ok( hemp, "created hemp object" );
 
-    hemp_language_instance(hemp, "tt3");
+    hemp_language(hemp, "tt3");
     hemp_debug_msg("got tt3 langauge\n"); 
 
     HEMP_TRY;
-        document = hemp_document_instance(
+        document = hemp_document(
             hemp, "tt3.unplugged", HEMP_TEXT, "a=10; 'a is '; a"
         );
         ok( document , "created document" );

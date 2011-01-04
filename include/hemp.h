@@ -71,8 +71,8 @@ void            hemp_free_filesystem(Hemp);
 HempBool        hemp_free_dialect (HempHash, HempPos, HempSlot);
 HempBool        hemp_free_document(HempHash, HempPos, HempSlot);
 
-HempContext     hemp_context_instance(Hemp);
-HempDocument    hemp_document_instance(Hemp, HempString, HempString, HempString);
+HempContext     hemp_context(Hemp);
+HempDocument    hemp_document(Hemp, HempString, HempString, HempString);
 HempFilesystem  hemp_filesystem_instance(Hemp);
 
 void            hemp_register_dialects(Hemp, HempDialects);

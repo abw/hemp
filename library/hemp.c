@@ -27,7 +27,7 @@ hemp_new() {
 
     // YUK.  We have to do this to force all the hemp stuff to be loaded.
     // Needs work to make this more auto-load on demand.
-    hemp_language_instance(hemp, "hemp");
+    hemp_language(hemp, "hemp");
 //  hemp_debug_msg("LANGUAGE: %s v%0.2f\n", language->name, language->version);
 
     return hemp;
@@ -351,7 +351,7 @@ hemp_register_elements(
  *--------------------------------------------------------------------------*/
 
 HempDocument
-hemp_document_instance(
+hemp_document(
     Hemp   hemp,
     HempString dialect,
     HempString scheme,
@@ -385,11 +385,11 @@ hemp_document_instance(
     /* NOTE: do this first - otherwise there's a potential memory leak 
      * in the instantiated source instance.
      */
-    HempDialect dialect_inst = hemp_dialect_instance(hemp, dialect);
+    HempDialect dialect_inst = hemp_dialect(hemp, dialect);
 
     document = hemp_dialect_document(
         dialect_inst,
-        hemp_source_instance(hemp, scheme, source)
+        hemp_source(hemp, scheme, source)
     );
 
 //  hemp_debug("caching new document\n");
@@ -407,7 +407,7 @@ hemp_document_instance(
  *--------------------------------------------------------------------------*/
 
 HempContext
-hemp_context_instance(
+hemp_context(
     Hemp   hemp
 ) {
     return hemp_context_new(hemp);
@@ -436,7 +436,7 @@ hemp_configure_from(
     HempString scheme,
     HempString source
 ) {
-    HempDocument document = hemp_document_instance(
+    HempDocument document = hemp_document(
         hemp, dialect, scheme, source
     );
 
@@ -596,7 +596,7 @@ hemp_encode(
     HempValue      input,
     HempContext    context
 ) {
-    HempCodec      codec = hemp_codec_instance(hemp, name);
+    HempCodec      codec = hemp_codec(hemp, name);
 
     return hemp_codec_encode(
         codec,
@@ -613,7 +613,7 @@ hemp_decode(
     HempText       input,
     HempContext    context
 ) {
-    HempCodec      codec = hemp_codec_instance(hemp, name);
+    HempCodec      codec = hemp_codec(hemp, name);
 
     return hemp_codec_decode(
         codec,

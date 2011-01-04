@@ -102,10 +102,10 @@ hemp_test_plan_setup(
     HempTestPlan plan = (HempTestPlan) hemp_mem_alloc(
         sizeof(struct hemp_test_plan)
     );
-    
+
     if (! plan)
         hemp_mem_fail("test plan");
-    
+
     plan->planned  = planned;
     plan->tested   =
     plan->failed   =
@@ -147,7 +147,6 @@ hemp_test_plan_summary(
         );
     }
 }
-
 
 
 HempUint
@@ -401,7 +400,7 @@ hemp_test_expect_text(
     HempSize       n;
 
     HEMP_TRY;
-        hemp_language_instance(hemp, language);
+        hemp_language(hemp, language);
     HEMP_CATCH_ALL;
         hemp_fatal("Failed to load hemp language '%s': %s", language, hemp->error->message);
     HEMP_END;
@@ -471,7 +470,7 @@ hemp_test_expect_text(
 
         HEMP_TRY;
 
-            document = hemp_document_instance(
+            document = hemp_document(
                 hemp,
                 HEMP_TT3,
                 HEMP_TEXT, 

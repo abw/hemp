@@ -125,16 +125,16 @@ hemp_global_init_symbols(
         return;
 
     /* construct the global symbol objects */
-    HempElementSpace     = hemp_global_element_space();
-    HempElementComment   = hemp_global_element_comment();
-    HempElementTagStart  = hemp_global_element_tag_start();
-    HempElementTagEnd    = hemp_global_element_tag_end();
-    HempElementBlock     = hemp_global_element_block();
-    HempElementText      = hemp_global_element_text();
-    HempElementWord      = hemp_global_element_word();
-    HempElementNumber    = hemp_global_element_number();
-    HempElementInteger   = hemp_global_element_integer();
-    HempElementEOF       = hemp_global_element_eof();
+    HempElementSpace     = hemp_global_element_space(global);
+    HempElementComment   = hemp_global_element_comment(global);
+    HempElementTagStart  = hemp_global_element_tag_start(global);
+    HempElementTagEnd    = hemp_global_element_tag_end(global);
+    HempElementBlock     = hemp_global_element_block(global);
+    HempElementText      = hemp_global_element_text(global);
+    HempElementWord      = hemp_global_element_word(global);
+    HempElementNumber    = hemp_global_element_number(global);
+    HempElementInteger   = hemp_global_element_integer(global);
+    HempElementEOF       = hemp_global_element_eof(global);
 }
 
 

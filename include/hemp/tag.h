@@ -18,16 +18,6 @@ enum hemp_tag_style {
     HEMP_UNPLUGGED_TAG = 3
 };
 
-typedef HempTag 
-(* hemp_tag_f)(
-    Hemp            hemp,
-    HempString      type,
-    HempString      name,
-    HempString      start,
-    HempString      end,
-    HempGrammar     grammar
-);
-
 struct hemp_tag {
     HempTagset      tagset;
     HempString      type;
@@ -42,7 +32,7 @@ struct hemp_tag {
 
 struct hemp_tags {
     HempString      name;
-    hemp_tag_f      ctor;
+    HempTagdef      ctor;
 };
 
 

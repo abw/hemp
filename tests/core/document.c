@@ -20,11 +20,11 @@ void test_document() {
     Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
-    hemp_language_instance(hemp, "tt3");
+    hemp_language(hemp, "tt3");
     
     hemp_debug_msg("got tt3 langauge\n"); 
 
-    HempDocument document = hemp_document_instance(
+    HempDocument document = hemp_document(
         hemp, HEMP_TT3, HEMP_TEXT, "Hello World!"
     );
     ok( document , "created document" );
@@ -32,7 +32,7 @@ void test_document() {
     HempBool scanned = hemp_document_scan(document);
     ok( scanned, "scanned document" );
 
-    HempDocument document2 = hemp_document_instance(
+    HempDocument document2 = hemp_document(
         hemp, HEMP_TT3, HEMP_TEXT, "Hello World!"
     );
     ok( document2 , "created same document" );

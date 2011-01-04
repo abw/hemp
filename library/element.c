@@ -37,7 +37,7 @@ hemp_element_new(
 
     /* initialise the basic element details */
     element->name            = name;    // should be const?
-    element->namespace       = hemp_namespace_instance(name);
+    element->namespace       = hemp_namespace(name);
     element->flags           = 0;
     element->lprec           = 0;
     element->rprec           = 0;

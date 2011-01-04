@@ -614,8 +614,12 @@ hemp_hash_function_default(
 
 /* Define an initial seed value and some type aliases */
 static HempSize hemp_hash_jenkins32_seed = 42;
-typedef  unsigned long int  u4;   
-typedef  unsigned     char  u1;
+
+#define hemp_keychar(k,i,s) \
+    ((HempU32) k[i] << s)
+
+#define hemp_keychars(k,a,b,c,d) \
+    (k[a] + hemp_keychar(k,b,8) + hemp_keychar(k,c,16) + hemp_keychar(k,d,24))
 
 /* The mixing step */
 #define hemp_hash_jenkins32_mix(a,b,c) {    \
@@ -635,8 +639,8 @@ hemp_hash_function_jenkins32(
     register HempString key,
     register HempSize   length
 ) {
-    register u4 a, b, c;
-    register HempSize remain = length;
+    register HempU32    a, b, c;
+    register HempSize   remain = length;
 
    /* Set up the internal state */
     a = b = 0x9e3779b9;
@@ -644,9 +648,9 @@ hemp_hash_function_jenkins32(
 
     /* handle all but the last 11 bytes */
     while (remain >= 12) {
-        a = a+(key[0]+((u4)key[1]<<8)+((u4)key[ 2]<<16)+((u4)key[ 3]<<24));
-        b = b+(key[4]+((u4)key[5]<<8)+((u4)key[ 6]<<16)+((u4)key[ 7]<<24));
-        c = c+(key[8]+((u4)key[9]<<8)+((u4)key[10]<<16)+((u4)key[11]<<24));
+        a = a + hemp_keychars(key, 0, 1, 2, 3);
+        b = b + hemp_keychars(key, 4, 5, 6, 7);
+        c = c + hemp_keychars(key, 8, 9, 10, 11);
         hemp_hash_jenkins32_mix(a,b,c);
         key    = key    + 12; 
         remain = remain - 12;
@@ -656,18 +660,18 @@ hemp_hash_function_jenkins32(
     c = c + length;
     switch(remain) {
         /* all the case statements fall through */
-        case 11: c=c+((u4)key[10]<<24);
-        case 10: c=c+((u4)key[9]<<16);
-        case 9 : c=c+((u4)key[8]<<8);
+        case 11: c = c + hemp_keychar(key, 10, 24);
+        case 10: c = c + hemp_keychar(key,  9, 16);
+        case 9 : c = c + hemp_keychar(key,  8, 8);
         /* the first byte of c is reserved for the length */
-        case 8 : b=b+((u4)key[7]<<24);
-        case 7 : b=b+((u4)key[6]<<16);
-        case 6 : b=b+((u4)key[5]<<8);
-        case 5 : b=b+key[4];
-        case 4 : a=a+((u4)key[3]<<24);
-        case 3 : a=a+((u4)key[2]<<16);
-        case 2 : a=a+((u4)key[1]<<8);
-        case 1 : a=a+key[0];
+        case 8 : b = b + hemp_keychar(key,  7, 24);
+        case 7 : b = b + hemp_keychar(key,  6, 16);
+        case 6 : b = b + hemp_keychar(key,  5,  8);
+        case 5 : b = b + key[4];
+        case 4 : a = a + hemp_keychar(key,  3, 24);
+        case 3 : a = a + hemp_keychar(key,  2, 16);
+        case 2 : a = a + hemp_keychar(key,  1,  8);
+        case 1 : a = a + key[0];
         /* case 0: nothing left to add */
     }
     hemp_hash_jenkins32_mix(a,b,c);

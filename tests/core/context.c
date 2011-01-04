@@ -15,7 +15,7 @@ void test_context() {
     Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
-    HempContext context = hemp_context_instance(hemp);
+    HempContext context = hemp_context(hemp);
     ok( context, "created hemp context" );
     ok( context->hemp == hemp, "context->hemp points at hemp" );
 

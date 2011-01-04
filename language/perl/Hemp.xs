@@ -47,7 +47,7 @@ language(hemp, language)
     INIT:
         fprintf(stderr, "Hemp->language('%s')\n", language); 
     PPCODE:
-        hemp_language_instance(hemp, language);
+        hemp_language(hemp, language);
 
 
 Hemp::Template
@@ -59,7 +59,7 @@ document(hemp, dialect, scheme, source)
     INIT:
         fprintf(stderr, "Hemp->document('%s', '%s', '%s')\n", dialect, scheme, source);
     CODE:
-        RETVAL = hemp_document_instance(hemp, dialect, scheme, source);
+        RETVAL = hemp_document(hemp, dialect, scheme, source);
     OUTPUT:
         RETVAL
 
@@ -70,7 +70,7 @@ context(hemp)
     INIT:
         fprintf(stderr, "Hemp->context()\n");
     CODE:
-        RETVAL = hemp_context_instance(hemp);
+        RETVAL = hemp_context(hemp);
     OUTPUT:
         RETVAL
 

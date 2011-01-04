@@ -24,7 +24,7 @@ void test_HempFilesystem() {
     Hemp hemp = hemp_new();
     ok( hemp, "created hemp" );
 
-    hemp_language_instance(hemp, "json");
+    hemp_language(hemp, "json");
 
     HEMP_TRY;
         hemp_configure_from(

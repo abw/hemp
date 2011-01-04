@@ -76,7 +76,7 @@ void test_hemp() {
         test_hemp_config(hemp, "hemp.version",  version);
 
         /* read configuration from a file */
-        hemp_language_instance(hemp, "json");  // FIXME
+        hemp_language(hemp, "json");  // FIXME
         hemp_configure_from(hemp, "json", "file", HEMP_TEST_DIR "/data/config1.json");
         test_hemp_config(hemp, "hemp.dir",      "/dir/from/config1");
         test_hemp_config(hemp, "hemp.animal",   "badger");
@@ -101,7 +101,7 @@ void test_hemp_text_config() {
     Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
-    hemp_language_instance(hemp, "json");
+    hemp_language(hemp, "json");
 
     HEMP_TRY;
         hemp_configure_from(
@@ -111,7 +111,7 @@ void test_hemp_text_config() {
         pass("configured from text");
         test_hemp_config(hemp, "hemp.dir",  "/else/where");
         //test_hemp_config(hemp, "hemp.path", "here/there");
-        hemp_codec_instance(hemp, "uri");
+        hemp_codec(hemp, "uri");
 
     HEMP_CATCH_ALL;
         fail("caught error: %s", hemp->error->message);

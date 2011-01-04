@@ -33,11 +33,11 @@ void test_fragment_factory() {
     ok( hemp, "created hemp" );
 
     HEMP_TRY;
-        element = hemp_element_instance(hemp, "hemp.number.plus", "+", NULL);
+        element = hemp_element(hemp, "hemp.number.plus", "+", NULL);
         ok( element, "got %s element", element->name );
         hemp_element_free(element);
 
-        element = hemp_element_instance(hemp, "hemp.number.plus", "+", NULL);
+        element = hemp_element(hemp, "hemp.number.plus", "+", NULL);
         ok( element, "got it again" );
         hemp_element_free(element);
     HEMP_CATCH_ALL;
@@ -45,7 +45,7 @@ void test_fragment_factory() {
     HEMP_END;
 
     HEMP_TRY;
-        element = hemp_element_instance(hemp, "blah.blah", "dud", NULL);
+        element = hemp_element(hemp, "blah.blah", "dud", NULL);
     HEMP_CATCH(HEMP_ERROR_INVALID);
         pass("error as expected: %s", hemp->error->message);
     HEMP_CATCH_ALL;

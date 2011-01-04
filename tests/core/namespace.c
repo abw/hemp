@@ -17,7 +17,7 @@ void test_namespace() {
     Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
-    HempNamespace foo = hemp_namespace_instance("foo");
+    HempNamespace foo = hemp_namespace("foo");
     ok( foo, "created foo namespace" );
     is( foo->name, "foo", "name is set: foo" );
 
@@ -28,11 +28,11 @@ void test_namespace() {
     ok( bar->parent == foo, "bar parent is foo" );
     is( bar->parent->name, "foo", "bar's parent is foo" );
 
-    HempNamespace foobar = hemp_namespace_instance("foo.bar");
+    HempNamespace foobar = hemp_namespace("foo.bar");
     ok( foobar, "fetched foo.bar namespace" );
     ok( foobar->id == bar->id, "foo.bar id is correct" );
 
-    HempNamespace wam = hemp_namespace_instance("foo.bar.baz.wam");
+    HempNamespace wam = hemp_namespace("foo.bar.baz.wam");
     ok( wam, "fetched foo.bar.baz.wam namespace" );
     is( wam->path, "foo.bar.baz.wam", "wam path");
     ok( 
@@ -40,7 +40,7 @@ void test_namespace() {
         "foo.bar.baz.wam has correct grandparent" 
     );
 
-    HempNamespace bam = hemp_namespace_instance("foo.bar.baz.bam");
+    HempNamespace bam = hemp_namespace("foo.bar.baz.bam");
     ok( bam, "fetched foo.bar.baz.bam namespace" );
     ok( 
         bam->parent->parent->id == bar->id, 

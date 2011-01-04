@@ -16,7 +16,7 @@ int main(
 void test_tagset() {
     Hemp       hemp        = hemp_new();
     HempDialect    dialect     = hemp_dialect_new(hemp, "test.dialect");
-    HempSource     source      = hemp_source_instance(hemp, "text", "Hello world");
+    HempSource     source      = hemp_source(hemp, "text", "Hello world");
     HempDocument   document    = hemp_document_new(dialect, source);
     HempTag        inline_tag, outline_tag;
     HempTagset     tagset = NULL;

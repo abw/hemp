@@ -23,10 +23,10 @@ void test_unplugged() {
     ok( hemp, "created hemp object" );
 
     HEMP_TRY;
-        hemp_language_instance(hemp, "json");
+        hemp_language(hemp, "json");
         pass("got json langauge"); 
 
-        document = hemp_document_instance(
+        document = hemp_document(
             hemp, "json", HEMP_TEXT, "[10, 20, {w:10,x:null,y:false,z:true}]"
         );
         ok( document , "created document" );

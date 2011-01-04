@@ -17,22 +17,22 @@ void test_viewer() {
     Hemp hemp = hemp_new();
     ok( hemp, "created hemp object" );
 
-    hemp_language_instance(hemp, "tt3");
+    hemp_language(hemp, "tt3");
 
-    HempDocument document = hemp_document_instance(
+    HempDocument document = hemp_document(
         hemp, HEMP_TT3, HEMP_TEXT, "Hello [% name %]!"
     );
     ok( document , "created document" );
     
-    HempContext context = hemp_context_instance(hemp);
+    HempContext context = hemp_context(hemp);
     ok( context, "created hemp context" );
     ok( hemp_context_set_string(context, "name", "World"), "set name" );
 
-    HempViewer text = hemp_viewer_instance(hemp, "text");
+    HempViewer text = hemp_viewer(hemp, "text");
     ok( text, "created text view" );
     is( text->name, "text", "name is set: text" );
 
-    text = hemp_viewer_instance(hemp, "text");
+    text = hemp_viewer(hemp, "text");
     ok( text, "fetched text view again" );
 
     HempText output;

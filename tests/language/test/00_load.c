@@ -14,7 +14,7 @@ int main(
 
 int test_language() {
     Hemp       hemp    = hemp_new();
-    HempContext    context = hemp_context_instance(hemp);
+    HempContext    context = hemp_context(hemp);
     HempString     name    = "test1";
     HempDocument   document;
     HempText       output;
@@ -27,12 +27,12 @@ int test_language() {
 
 //    hemp_debug("text: %s\n", text);
 
-    hemp_language_instance(hemp, "test");
+    hemp_language(hemp, "test");
 
     HempTestPlan plan = hemp_test_plan(5);
 
     HEMP_TRY;
-        document = hemp_document_instance(
+        document = hemp_document(
             hemp, "test", HEMP_TEXT, text
         );
         output = hemp_document_render(document, context);

@@ -20,10 +20,10 @@
     }                                               \
 })
 
-#define HEMP_ALLOCATE(name)                         \
+#define HEMP_ALLOCATE(name)             \
     HEMP_TYPE_ALLOCATE(name, name)
 
-#define HEMP_INSTANCE(name)                         \
+#define HEMP_INSTANCE(name)             \
     HEMP_TYPE_INSTANCE(name, name)
 
 
@@ -83,7 +83,9 @@
     )
 
 #define HEMP_GLOBAL_ELEMENT(f)          \
-    HempElement f()
+    HempElement f(                      \
+        HempGlobal      global          \
+    )
 
 #define HEMP_FEATURE(f)                 \
     HempGrammar f(                      \
@@ -155,12 +157,12 @@
  * Macros for registering component constructors and instantiating components
  *--------------------------------------------------------------------------*/
 
-#define hemp_register(hemp, type, name, ctor)                               \
-    hemp_factory_register(                                                  \
-        hemp->type,                                                         \
-        name,                                                               \
-        (HempActor) ctor,                                                   \
-        hemp                                                                \
+#define hemp_register(hemp, type, name, ctor)                       \
+    hemp_factory_register(                                          \
+        hemp->type,                                                 \
+        name,                                                       \
+        (HempActor) ctor,                                           \
+        hemp                                                        \
     )
 
 /* 
@@ -170,110 +172,110 @@
  * code in the calling scope - see hemp_register_dialects(), etc., in hemp.c
  */
 
-#define hemp_register_all(hemp, type, item) ({                              \
-    while (item && item->name) {                                            \
-        hemp_factory_register(                                              \
-            hemp->type,                                                     \
-            item->name,                                                     \
-            (HempActor) item->ctor,                                        \
-            hemp                                                            \
-        );                                                                  \
-        item++;                                                             \
-    }                                                                       \
+#define hemp_register_all(hemp, type, item) ({                      \
+    while (item && item->name) {                                    \
+        hemp_factory_register(                                      \
+            hemp->type,                                             \
+            item->name,                                             \
+            (HempActor) item->ctor,                                 \
+            hemp                                                    \
+        );                                                          \
+        item++;                                                     \
+    }                                                               \
 })
 
-#define hemp_constructor(hemp, type, name) ({                               \
-    HempAction _hemp_cons = hemp_factory_constructor(                       \
-        hemp->type,                                                         \
-        name                                                                \
-    );                                                                      \
-    if (! _hemp_cons)                                                       \
-        hemp_throw(hemp, HEMP_ERROR_INVALID, #type, name);                  \
-    _hemp_cons;                                                             \
+#define hemp_constructor(hemp, type, name) ({                       \
+    HempAction _hemp_cons = hemp_factory_constructor(               \
+        hemp->type,                                                 \
+        name                                                        \
+    );                                                              \
+    if (! _hemp_cons)                                               \
+        hemp_throw(hemp, HEMP_ERROR_INVALID, #type, name);          \
+    _hemp_cons;                                                     \
 })
 
-#define hemp_construct(hemp, type, name, ...) ({                            \
-    HempAction _hemp_cons = hemp_constructor(hemp, type, name);             \
-    hemp_action_run(_hemp_cons, name, __VA_ARGS__);                         \
+#define hemp_construct(hemp, type, name, ...) ({                    \
+    HempAction _hemp_cons = hemp_constructor(hemp, type, name);     \
+    hemp_action_run(_hemp_cons, name, __VA_ARGS__);                 \
 })
 
-#define hemp_instance(hemp, type, name) ({                                  \
-    HempMemory _hemp_item = hemp_factory_instance(                          \
-        hemp->type,                                                         \
-        name                                                                \
-    );                                                                      \
-    if (! _hemp_item)                                                       \
-        hemp_throw(hemp, HEMP_ERROR_INVALID, #type, name);                  \
-    _hemp_item;                                                             \
+#define hemp_instance(hemp, type, name) ({                          \
+    HempMemory _hemp_item = hemp_factory_instance(                  \
+        hemp->type,                                                 \
+        name                                                        \
+    );                                                              \
+    if (! _hemp_item)                                               \
+        hemp_throw(hemp, HEMP_ERROR_INVALID, #type, name);          \
+    _hemp_item;                                                     \
 })
 
 
-#define hemp_register_codec(hemp, name, constructor)                        \
+#define hemp_register_codec(hemp, name, constructor)                \
     hemp_register(hemp, codec, name, constructor)
 
-#define hemp_register_dialect(hemp, name, constructor)                      \
+#define hemp_register_dialect(hemp, name, constructor)              \
     hemp_register(hemp, dialect, name, constructor)
 
-#define hemp_register_element(hemp, name, constructor)                      \
+#define hemp_register_element(hemp, name, constructor)              \
     hemp_register(hemp, element, name, constructor)
 
-#define hemp_register_feature(hemp, name, constructor)                      \
+#define hemp_register_feature(hemp, name, constructor)              \
     hemp_register(hemp, feature, name, constructor)
 
-#define hemp_register_grammar(hemp, name, constructor)                      \
+#define hemp_register_grammar(hemp, name, constructor)              \
     hemp_register(hemp, grammar, name, constructor)
 
-#define hemp_register_language(hemp, name, constructor)                     \
+#define hemp_register_language(hemp, name, constructor)             \
     hemp_register(hemp, language, name, constructor)
 
-#define hemp_register_scheme(hemp, name, constructor)                       \
+#define hemp_register_scheme(hemp, name, constructor)               \
     hemp_register(hemp, scheme, name, constructor)
 
-#define hemp_register_tag(hemp, name, constructor)                          \
+#define hemp_register_tag(hemp, name, constructor)                  \
     hemp_register(hemp, tag, name, constructor)
 
-#define hemp_register_viewer(hemp, name, constructor)                       \
+#define hemp_register_viewer(hemp, name, constructor)               \
     hemp_register(hemp, viewer, name, constructor)
 
 
-#define hemp_codec_instance(hemp, name)                                     \
+#define hemp_codec(hemp, name)                                      \
     hemp_instance(hemp, codec, name)
 
-#define hemp_dialect_instance(hemp, name)                                   \
+#define hemp_dialect(hemp, name)                                    \
     hemp_instance(hemp, dialect, name)
 
-#define hemp_grammar_instance(hemp, name)                                   \
+#define hemp_grammar(hemp, name)                                    \
     hemp_instance(hemp, grammar, name)
 
-#define hemp_language_instance(hemp, name)                                  \
+#define hemp_language(hemp, name)                                   \
     hemp_instance(hemp, language, name)
 
-#define hemp_scheme_instance(hemp, name)                                    \
+#define hemp_scheme(hemp, name)                                     \
     hemp_instance(hemp, scheme, name)
 
-#define hemp_viewer_instance(hemp, name)                                    \
+#define hemp_viewer(hemp, name)                                     \
     hemp_instance(hemp, viewer, name)
 
-#define hemp_grammar_feature(hemp, grammar, name) ({                        \
-    HempAction _hemp_cons = hemp_constructor(hemp, feature, name);          \
-    hemp_action_run(_hemp_cons, grammar);                                   \
+#define hemp_grammar_feature(hemp, grammar, name) ({                \
+    HempAction _hemp_cons = hemp_constructor(hemp, feature, name);  \
+    hemp_action_run(_hemp_cons, grammar);                           \
 })
 
-#define hemp_element_instance(hemp,type,start,end) ({                       \
-    HempAction _hemp_cons = (HempAction) hemp_factory_constructor(          \
-        hemp->element, type                                                 \
-    );                                                                      \
-    if (! _hemp_cons)                                                       \
-        hemp_throw(hemp, HEMP_ERROR_INVALID, "element", type);              \
-    (HempElement) hemp_action_run(                                          \
-        _hemp_cons, hemp_element_new(type, start, end)                      \
-    );                                                                      \
+#define hemp_element(hemp,type,start,end) ({                        \
+    HempAction _hemp_cons = (HempAction) hemp_factory_constructor(  \
+        hemp->element, type                                         \
+    );                                                              \
+    if (! _hemp_cons)                                               \
+        hemp_throw(hemp, HEMP_ERROR_INVALID, "element", type);      \
+    (HempElement) hemp_action_run(                                  \
+        _hemp_cons, hemp_element_new(type, start, end)              \
+    );                                                              \
 })
 
-#define hemp_source_instance(hemp, scheme, source)                          \
-    hemp_source_new(                                                        \
-        hemp_scheme_instance(hemp, scheme),                                 \
-        source                                                              \
+#define hemp_source(hemp, scheme, source)                           \
+    hemp_source_new(                                                \
+        hemp_scheme(hemp, scheme),                                  \
+        source                                                      \
     )
 
 #define hemp_tag_construct(hemp, type, name, start, end, grammar) (         \
@@ -342,14 +344,14 @@
  * Scanning
  *--------------------------------------------------------------------------*/
 
-#define hemp_document_errmsg(doc, error_no, ...) ({         \
-    HempError _hemp_err = hemp_error_message(               \
-        doc->dialect->hemp,                                 \
-        error_no,                                           \
-        __VA_ARGS__                                         \
-    );                                                      \
-    _hemp_err->document = doc;                              \
-    hemp_error_throw(doc->dialect->hemp, _hemp_err);        \
+#define hemp_document_errmsg(doc, error_no, ...) ({                 \
+    HempError _hemp_err = hemp_error_message(                       \
+        doc->dialect->hemp,                                         \
+        error_no,                                                   \
+        __VA_ARGS__                                                 \
+    );                                                              \
+    _hemp_err->document = doc;                                      \
+    hemp_error_throw(doc->dialect->hemp, _hemp_err);                \
 })
 
 
@@ -419,40 +421,40 @@
 
 #define HEMP_FPTYPE ((*fragptr)->type)
 
-#define HEMP_PREFIX_DEBUG                                                   \
-    hemp_debug_parse(                                                       \
-        "prefix precedence reqd is %d  OP:%s is %d\n",                      \
-        precedence,                                                         \
-        (*fragptr)->type->name, (*fragptr)->type->rprec                     \
+#define HEMP_PREFIX_DEBUG                                           \
+    hemp_debug_parse(                                               \
+        "prefix precedence reqd is %d  OP:%s is %d\n",              \
+        precedence,                                                 \
+        (*fragptr)->type->name, (*fragptr)->type->rprec             \
     )
 
-#define HEMP_INFIX_DEBUG                                                    \
-    hemp_debug_parse(                                                       \
-        "infix precedence LHS:%s is %d  OP:%s is %d\n",                     \
-        lhs->type->name, precedence,                                        \
-        (*fragptr)->type->name, (*fragptr)->type->lprec                     \
+#define HEMP_INFIX_DEBUG                                            \
+    hemp_debug_parse(                                               \
+        "infix precedence LHS:%s is %d  OP:%s is %d\n",             \
+        lhs->type->name, precedence,                                \
+        (*fragptr)->type->name, (*fragptr)->type->lprec             \
     )
 
 
-#define HEMP_PREFIX_PRECEDENCE ({                                           \
-    HEMP_PREFIX_DEBUG;                                                      \
-    if (precedence && HEMP_FPTYPE->lprec <= precedence && ! force) {        \
-        return NULL;                                                        \
-    }                                                                       \
+#define HEMP_PREFIX_PRECEDENCE ({                                   \
+    HEMP_PREFIX_DEBUG;                                              \
+    if (precedence && HEMP_FPTYPE->lprec <= precedence && ! force) {\
+        return NULL;                                                \
+    }                                                               \
 })
 
-#define HEMP_INFIX_LEFT_PRECEDENCE ({                                       \
-    HEMP_INFIX_DEBUG;                                                       \
-    if (precedence && HEMP_FPTYPE->lprec <= precedence) {                   \
-        return lhs;                                                         \
-    }                                                                       \
+#define HEMP_INFIX_LEFT_PRECEDENCE ({                               \
+    HEMP_INFIX_DEBUG;                                               \
+    if (precedence && HEMP_FPTYPE->lprec <= precedence) {           \
+        return lhs;                                                 \
+    }                                                               \
 })
 
-#define HEMP_INFIX_RIGHT_PRECEDENCE ({                                      \
-    HEMP_INFIX_DEBUG;                                                       \
-    if (precedence && HEMP_FPTYPE->lprec < precedence) {                    \
-        return lhs;                                                         \
-    }                                                                       \
+#define HEMP_INFIX_RIGHT_PRECEDENCE ({                              \
+    HEMP_INFIX_DEBUG;                                               \
+    if (precedence && HEMP_FPTYPE->lprec < precedence) {            \
+        return lhs;                                                 \
+    }                                                               \
 })
 
 
@@ -504,6 +506,11 @@
         HempValue       value               \
     )
 
+#define HEMP_CLEAN(f)                       \
+    HEMP_INLINE void f(                     \
+        HempValue       value               \
+    )
+
 #define HEMP_CLEANUP(f)                     \
     HEMP_INLINE void f(                     \
         HempFragment    fragment            \
@@ -514,54 +521,54 @@
  * error handling
  *--------------------------------------------------------------------------*/
 
-#define HEMP_UNDEF_ERROR(context,type)      \
-    hemp_error_throw(                       \
-        context->hemp,                      \
-        hemp_error_message(                 \
-            context->hemp,                  \
-            HEMP_ERROR_UNDEF,               \
-            type                            \
-        )                                   \
+#define HEMP_UNDEF_ERROR(context,type)                              \
+    hemp_error_throw(                                               \
+        context->hemp,                                              \
+        hemp_error_message(                                         \
+            context->hemp,                                          \
+            HEMP_ERROR_UNDEF,                                       \
+            type                                                    \
+        )                                                           \
     )
 
-#define HEMP_CONVERT_ERROR(context,from,to,val) \
-    hemp_error_throw(                       \
-        context->hemp,                      \
-        hemp_error_message(                 \
-            context->hemp,                  \
-            HEMP_ERROR_CONVERT,             \
-            from, to, val                   \
-        )                                   \
+#define HEMP_CONVERT_ERROR(context,from,to,val)                     \
+    hemp_error_throw(                                               \
+        context->hemp,                                              \
+        hemp_error_message(                                         \
+            context->hemp,                                          \
+            HEMP_ERROR_CONVERT,                                     \
+            from, to, val                                           \
+        )                                                           \
     )
 
-#define HEMP_OVERFLOW_ERROR(context,text)   \
-    hemp_error_throw(                       \
-        context->hemp,                      \
-        hemp_error_message(                 \
-            context->hemp,                  \
-            HEMP_ERROR_OVERFLOW,            \
-            text                            \
-        )                                   \
+#define HEMP_OVERFLOW_ERROR(context,text)                           \
+    hemp_error_throw(                                               \
+        context->hemp,                                              \
+        hemp_error_message(                                         \
+            context->hemp,                                          \
+            HEMP_ERROR_OVERFLOW,                                    \
+            text                                                    \
+        )                                                           \
     )
 
-#define HEMP_FETCH_ERROR(context,container,key) \
-    hemp_error_throw(                       \
-        context->hemp,                      \
-        hemp_error_message(                 \
-            context->hemp,                  \
-            HEMP_ERROR_FETCH,               \
-            key, container                  \
-        )                                   \
+#define HEMP_FETCH_ERROR(context,container,key)                     \
+    hemp_error_throw(                                               \
+        context->hemp,                                              \
+        hemp_error_message(                                         \
+            context->hemp,                                          \
+            HEMP_ERROR_FETCH,                                       \
+            key, container                                          \
+        )                                                           \
     )
 
-#define HEMP_STORE_ERROR(context,container,key) \
-    hemp_error_throw(                       \
-        context->hemp,                      \
-        hemp_error_message(                 \
-            context->hemp,                  \
-            HEMP_ERROR_STORE,               \
-            key, container                  \
-        )                                   \
+#define HEMP_STORE_ERROR(context,container,key)                     \
+    hemp_error_throw(                                               \
+        context->hemp,                                              \
+        hemp_error_message(                                         \
+            context->hemp,                                          \
+            HEMP_ERROR_STORE,                                       \
+            key, container                                          \
+        )                                                           \
     )
 
 

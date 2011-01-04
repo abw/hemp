@@ -10,19 +10,13 @@
  * type definitions
  *--------------------------------------------------------------------------*/
 
-typedef HempBool 
-(* hemp_autoload)(
-    HempFactory     factory,
-    HempString      name
-);
-
 struct hemp_factory {
     Hemp            hemp;
     HempString      name;
     HempHash        instances;
     HempHash        constructors;
     hemp_hash_iter  cleaner;
-    hemp_autoload   autoload;
+    HempAutoload    autoload;
 }; 
 
 

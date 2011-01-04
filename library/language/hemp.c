@@ -39,7 +39,7 @@ static struct hemp_elements hemp_elements_hemp_identity[] = {
     { NULL, NULL },
 };
 
-//static struct hemp_elements hemp_elements_hemp_autoload[] = {
+//static struct hemp_elements hemp_elements_HempAutoload[] = {
 //  { "hemp.bracket.*",             &hemp_element_brackets              },
 //  { "hemp.boolean.*",             &hemp_element_booleans              },
 //  { "hemp.number.*",              &hemp_element_numbers               },
@@ -127,7 +127,7 @@ HEMP_LANGUAGE(hemp_language_hemp_new) {
     /* register all the basic symbols */
     hemp_register_elements(hemp, hemp_elements_hemp_core);
 
-//    hemp_register_elements(hemp, hemp_elements_hemp_autoload);
+//    hemp_register_elements(hemp, hemp_elements_HempAutoload);
 
     /* register factories for bracket, boolean, number and text operator symbols */
     hemp_register_element(hemp, "hemp.operator.assign.*",  &hemp_element_assign_elements);

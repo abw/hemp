@@ -20,7 +20,7 @@ void test_source() {
     ok( hemp, "created hemp object" );
 
     ok(
-        (source = hemp_source_instance(hemp, HEMP_TEXT, "source/text.html")),
+        (source = hemp_source(hemp, HEMP_TEXT, "source/text.html")),
         "created text source"
     );
     ok( 
@@ -38,7 +38,7 @@ void test_source() {
     HempString path  = hemp_filesystem_join_path(HEMP_TEST_DIR, "data/file1");
 
     ok(
-        (source = hemp_source_instance(hemp, HEMP_FILE, path)),
+        (source = hemp_source(hemp, HEMP_FILE, path)),
         "created file source"
     );
     ok( 

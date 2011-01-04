@@ -108,7 +108,7 @@ hemp_type_free(
 HempType
 hemp_use_type(
     HempString      name,
-    hemp_type_f     constructor
+    HempTypedef     constructor
 );
 
 

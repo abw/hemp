@@ -5,7 +5,7 @@ int main(
     int argc, char **argv, char **env
 ) {
     Hemp      hemp    = hemp_new();
-    HempContext context = hemp_context_instance(hemp);
+    HempContext context = hemp_context(hemp);
     int         result;
 
     hemp_context_set_number(context, "a", 2);

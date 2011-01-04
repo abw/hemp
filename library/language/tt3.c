@@ -50,8 +50,8 @@ HEMP_DOC_SCAN(hemp_dialect_tt3_scanner) {
 
     Hemp    hemp    = document->hemp;
     HempTagset  tagset  = hemp_tagset_new(document);
-    HempGrammar command = hemp_grammar_instance(hemp, "tt3.command");
-    HempGrammar control = hemp_grammar_instance(hemp, "tt3.control");
+    HempGrammar command = hemp_grammar(hemp, "tt3.command");
+    HempGrammar control = hemp_grammar(hemp, "tt3.control");
     HempBool    result;
 
     hemp_tagset_new_tag(tagset, "hemp.comment",  "comment",  "[#",   "#]", NULL);
@@ -88,7 +88,7 @@ HEMP_DOC_SCAN(hemp_dialect_tt3_unplugged_scanner) {
     hemp_debug_msg("hemp_dialect_tt3_unplugged_scanner(%p)\n", document);
 
     return hemp_grammar_scanner(
-        hemp_grammar_instance(document->hemp, "tt3.command"),
+        hemp_grammar(document->hemp, "tt3.command"),
         document
     );
 }

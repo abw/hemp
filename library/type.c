@@ -200,7 +200,7 @@ hemp_global_types_free(
 HempType
 hemp_use_type(
     HempString  name,
-    hemp_type_f constructor
+    HempTypedef constructor
 ) {
     HempInt  n;
     HempInt  empty = 0;

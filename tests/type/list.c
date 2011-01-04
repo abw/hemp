@@ -44,7 +44,7 @@ void test_list() {
     );
 
     /* test methods */
-    HempContext context = hemp_context_instance(hemp);
+    HempContext context = hemp_context(hemp);
     HempValue   value   = hemp_list_val(list);
     ok( hemp_is_list(value), "value is a list" );
     

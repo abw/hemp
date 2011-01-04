@@ -7,7 +7,7 @@ int main(
     Hemp       hemp    = hemp_new();
     HempList       list    = hemp_list_new();
     HempHash       hash    = hemp_hash_new();
-    HempContext    context = hemp_context_instance(hemp);
+    HempContext    context = hemp_context(hemp);
     int             result;
 
     HempText message = hemp_text_from_string("Hello World!");

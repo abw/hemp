@@ -66,7 +66,7 @@ HEMP_GRAMMAR(hemp_grammar_json) {
 
 HEMP_DOC_SCAN(hemp_dialect_json_scanner) {
     return hemp_grammar_scanner(
-        hemp_grammar_instance(document->hemp, "json"),
+        hemp_grammar(document->hemp, "json"),
         document
     );
 }

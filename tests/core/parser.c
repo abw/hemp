@@ -25,16 +25,16 @@ void test_punctuation() {
     HempElement space, comma, semicolon, terminator;
     
     HEMP_TRY;
-        space = hemp_element_instance(hemp, "hemp.space", " ", NULL);
+        space = hemp_element(hemp, "hemp.space", " ", NULL);
         ok( space, "got %s symbol", space->name );
 
-        comma = hemp_element_instance(hemp, "hemp.delimiter", ",", NULL);
+        comma = hemp_element(hemp, "hemp.delimiter", ",", NULL);
         ok( comma, "got %s symbol", comma->name );
 
-        semicolon = hemp_element_instance(hemp, "hemp.separator", ";", NULL);
+        semicolon = hemp_element(hemp, "hemp.separator", ";", NULL);
         ok( semicolon, "got %s symbol", semicolon->name );
 
-        terminator = hemp_element_instance(hemp, "hemp.terminator", ".", NULL);
+        terminator = hemp_element(hemp, "hemp.terminator", ".", NULL);
         ok( terminator, "got %s symbol", terminator->name );
 
     HEMP_CATCH_ALL;

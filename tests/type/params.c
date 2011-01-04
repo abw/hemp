@@ -18,7 +18,7 @@ void test_params() {
     pass("created params");
 
     /* test methods */
-    HempContext context = hemp_context_instance(hemp);
+    HempContext context = hemp_context(hemp);
     HempValue   value   = hemp_params_val(params);
     ok( hemp_is_params(value), "value is params" );
     

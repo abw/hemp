@@ -69,14 +69,14 @@ hemp_namespace_free_child(
         HempGlobalData.namespace, name                          \
     )
 
-#define hemp_namespace_instance(name) (                         \
+#define hemp_namespace(name) (                         \
     strchr(name, HEMP_DOT)                                      \
         ? hemp_resolve_namespace(name)                          \
         : hemp_namespace_root(name)                             \
 )
 
 #define hemp_namespace_id(name) (                               \
-    hemp_namespace_instance(name)->id                           \
+    hemp_namespace(name)->id                           \
 )
 
 

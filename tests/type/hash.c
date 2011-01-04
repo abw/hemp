@@ -215,7 +215,7 @@ void test_hash_methods() {
     HempHash  hash    = hemp_hash_new();
 //  HempText  text    = hemp_text_from_string("Hello World!");
     HempValue value   = hemp_hash_val(hash);
-    HempContext  context = hemp_context_instance(hemp); 
+    HempContext  context = hemp_context(hemp); 
     
     hemp_hash_store_string(hash, "message", "Hello World");
     hemp_hash_store_integer(hash, "answer", 42);

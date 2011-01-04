@@ -155,7 +155,7 @@ HEMP_DOC_SCAN(hemp_dialect_test_scanner) {
 
     Hemp    hemp    = hemp_document_hemp(document);
     HempTagset  tagset  = hemp_tagset_new(document);
-    HempGrammar grammar = hemp_grammar_instance(hemp, dialect->name);
+    HempGrammar grammar = hemp_grammar(hemp, dialect->name);
     HempBool    result;
 
     hemp_tagset_new_tag(tagset, "hemp.outline", "outline", "--", NULL, grammar);
@@ -261,7 +261,7 @@ HEMP_VALUE(hemp_element_test_language_value) {
     HempText       text        = hemp_text_new();
     hemp_call(name, text, context, hemp_text_val(text));
 //  hemp_debug_msg("LANGUAGE: [%s]\n", text->string);
-    hemp_language_instance(context->hemp, text->string);
+    hemp_language(context->hemp, text->string);
     hemp_text_free(text);
     return hemp_blank();
 }
@@ -409,7 +409,7 @@ HEMP_OUTPUT(hemp_element_test_input_text) {
 
     HEMP_TRY;
         /* render the input block as a document */
-        HempDocument document = hemp_document_instance(
+        HempDocument document = hemp_document(
             context->hemp,
             dialect,
             HEMP_TEXT, 
