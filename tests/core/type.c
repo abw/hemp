@@ -26,21 +26,21 @@ void test_types() {
     method = hemp_object_method(number, "name");
     ok( method, "got a pointer to name method");
 
-    HempValue value = hemp_send(number, "name", context);
+    HempValue value = hemp_send(number, "name", context, NULL);
     ok( hemp_is_defined(value), "got result" );
     is( hemp_val_str(value), "Number", "got number name" );
 
-    value = hemp_send(number, "no_such_method", context);
+    value = hemp_send(number, "no_such_method", context, NULL);
     ok( hemp_is_missing(value), "no_such_method is missing" );
 
     HempText text = hemp_text_from_string("hello world!");
-    value = hemp_send( hemp_text_val(text), "length", context );
+    value = hemp_send( hemp_text_val(text), "length", context, NULL );
     ok( hemp_is_defined(value), "got text length" );
     eq( hemp_val_int(value), 12, "length is 12" );
     hemp_text_free(text);
     
     /* try converting number to text */
-    value = hemp_send(value, "text", context);
+    value = hemp_send(value, "text", context, NULL);
     if (hemp_is_missing(value)) {
         fail("No text method?");
         exit(1);

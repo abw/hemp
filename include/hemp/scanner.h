@@ -28,20 +28,29 @@ hemp_scan_whitespace(
  * Macros
  *--------------------------------------------------------------------------*/
 
-#define hemp_scan_while(src, cmp)       \
-    do { src++; } while ( cmp(*src) );
-
-#define hemp_scan_until(src, val)       \
-    do { src++; } while ( cmp(*src) );
-
-#define hemp_scan_to(src, c)            \
-    do { src++; } while ( *src && *src != c );
-
 #define hemp_is_char(c1, c2)            \
     (c1 == c2)
 
 #define hemp_not_char(c1, c2)           \
     (c1 != c2)
+
+#define hemp_is_ident(c)                \
+    (isalnum(c) || c == HEMP_UNDERSCORE)
+
+#define hemp_scan_while(src, cmp)       \
+    do { src++; } while ( cmp(*src) );
+
+#define hemp_scan_until(src, val)       \
+    do { src++; } while ( cmp(*src) )
+
+#define hemp_scan_to(src, c)            \
+    do { src++; } while ( *src && *src != c )
+
+#define hemp_scan_ident(src)            \
+    do { src++; } while ( hemp_is_ident(*src) )
+
+
+
 
 
 

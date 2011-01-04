@@ -62,9 +62,9 @@ HEMP_PREFIX(hemp_element_sub_prefix) {
     if (params) {
         /* construct a code value to wrap around the block and handle params */
         hemp_set_flag(fragment, HEMP_BE_ARGS);
-        HempCode   code    = hemp_code_new();
-        HempProto  proto   = hemp_code_proto(code);
-        HempValue  protov  = hemp_ptr_val(proto);
+        HempCode    code    = hemp_code_new();
+        HempProto   proto   = hemp_code_proto(code);
+        HempValue   protov  = hemp_ptr_val(proto);
         code->body          = hemp_frag_val(block);
         params->type->parse_proto(params, scope, protov);
         hemp_set_rhs(fragment, hemp_code_val(code));

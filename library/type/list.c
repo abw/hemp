@@ -13,6 +13,7 @@ HEMP_TYPE(hemp_type_list) {
 
     hemp_type_extend(type, "length", &hemp_method_list_length);
     hemp_type_extend(type, "text",   &hemp_method_list_text);
+    hemp_type_extend(type, "each",   &hemp_method_list_each);
 
     return type;
 };
@@ -210,7 +211,7 @@ hemp_list_pop(
 HempPos
 hemp_list_each(
     HempList         list, 
-    hemp_list_iter    func
+    hemp_list_iter   func
 ) {
     HempPos pos = 0;
     
@@ -387,6 +388,43 @@ HEMP_VALUE(hemp_method_list_text) {
     return hemp_type_list_text(value, context, HempNothing);
 }
 
+
+HEMP_METHOD(hemp_method_list_each) {
+    HempList  list    = hemp_val_list(value);
+    HempList  results = hemp_context_tmp_list(context);
+    HempValue result;
+    HempValue callback;
+    HempValue item;
+    HempSize  pos;
+
+    if (! params)
+        params = context->frame->params;
+
+    if (! params)
+        hemp_fatal("No params for list.each (TODO)\n");
+
+//    hemp_params_dump(params);
+
+    if (params->ordinals->length < 1)
+        hemp_fatal("No callback for list.each (TODO)\n");
+
+    callback = hemp_list_item(params->ordinals, 0);
+
+//  hemp_debug_msg("list.each  callback: %s\n", hemp_type_name(callback));
+
+    for (pos = 0; pos < list->length; pos++) {
+        // Yuk!  Need a proper stack
+        HempFrame frame = hemp_context_enter(context, NULL);
+        item = hemp_list_item(list, pos);
+        hemp_params_push(frame->params, item);
+//        hemp_debug_msg("calling %s->apply with value: %s\n", hemp_type_name(callback), hemp_type_name(item));
+        result = hemp_call(callback, apply, context, HempMissing);
+        hemp_list_push(results, result);
+        hemp_context_leave(context);
+    }
+
+    return hemp_list_val(results);
+}
 
 
 /*--------------------------------------------------------------------------

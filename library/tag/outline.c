@@ -94,7 +94,7 @@ HEMP_SCANNER(hemp_tag_outline_scanner) {
         else if (isalpha(*src)) {
 bareword:
             /* word */
-            hemp_scan_while(src, isalnum);
+            hemp_scan_ident(src);
             // TODO: check for ':' following after, e.g. file:/blah/blah
             hemp_document_scanned_to(
                 document, HempElementWord, src

@@ -441,6 +441,7 @@ extern HEMP_ELEMENT(hemp_element_command_elsif);
 
 extern HEMP_ELEMENT(hemp_element_command_with);
 extern HEMP_ELEMENT(hemp_element_command_just);
+extern HEMP_ELEMENT(hemp_element_command_each);
 
 extern HEMP_ELEMENT(hemp_element_apply);
 

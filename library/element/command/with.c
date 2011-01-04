@@ -62,7 +62,7 @@ HEMP_POSTFIX(hemp_element_command_with_postfix) {
     HempFragment fragment = *fragptr;
 
     HEMP_INFIX_LEFT_PRECEDENCE;
-    hemp_set_flag(fragment, HEMP_BE_PREFIX);
+    hemp_set_flag(fragment, HEMP_BE_INFIX);
 
     /* expression on lhs becomes the body */
     hemp_set_rhs_fragment(fragment, lhs);

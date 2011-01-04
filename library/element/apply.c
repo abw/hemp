@@ -57,8 +57,8 @@ HEMP_FIXUP(hemp_element_apply_lvalue) {
 
 
 HEMP_VALUE(hemp_element_apply_value) {
-    hemp_debug_call("hemp_element_apply_value()\n");
     HempFragment fragment = hemp_val_frag(value);
+    hemp_debug_call("hemp_element_apply_value(%s)\n", hemp_type_name(hemp_lhs(fragment)));
     
     if (hemp_has_flag(fragment, HEMP_BE_LVALUE)) {
         // TODO

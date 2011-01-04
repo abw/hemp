@@ -2,6 +2,7 @@
 
 
 static struct hemp_elements hemp_elements_tt3_command[] = {
+    { "tt3.command.each",   &hemp_element_command_each    },
     { "tt3.command.if",     &hemp_element_command_if      },
     { "tt3.command.else",   &hemp_element_command_else    },
     { "tt3.command.elsif",  &hemp_element_command_elsif   },
@@ -119,6 +120,7 @@ HEMP_GRAMMAR(hemp_grammar_tt3_command) {
     hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     HempGrammar grammar = hemp_grammar_tt3_core(hemp, name);
 
+//  HEMP_USE_COMMAND2("tt3.command.each",  "each", "end");
     HEMP_USE_COMMAND2("tt3.command.if",    "if",   "end");
     HEMP_USE_COMMAND1("tt3.command.elsif", "elsif");
     HEMP_USE_COMMAND1("tt3.command.else",  "else");
