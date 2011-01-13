@@ -5,10 +5,10 @@
 #include <hemp.h>
 #include "types.h"
 
-typedef Hemp          Hemp;
-typedef HempDocument Hemp__Template;
-typedef HempContext  Hemp__Context;
-typedef HempText     Hemp__Text;
+typedef Hemp            Hemp__Hemp;
+typedef HempDocument    Hemp__Template;
+typedef HempContext     Hemp__Context;
+typedef HempText        Hemp__Text;
 
 /*
 #--------------------------------------------------------------------------

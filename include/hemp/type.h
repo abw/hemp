@@ -93,7 +93,7 @@ hemp_type_new(
     HempString      name
 );
 
-HempType 
+HempType
 hemp_type_subtype(
     HempType        base,
     HempInt         id,

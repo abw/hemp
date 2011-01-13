@@ -10,7 +10,7 @@ void            hemp_perl_init();
 HempValue    hemp_perl_value(SV *);
 
 #define hemp_debug_perl(format, ...)    \
-        hemp_debug_col(HEMP_ANSI_CYAN, format, ##__VA_ARGS__)
+        hemp_debug_col(__FILE__, __LINE__, HEMP_ANSI_CYAN, format, ##__VA_ARGS__)
 
 
 HEMP_TYPE(hemp_type_perl_scalar);

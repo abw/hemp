@@ -33,7 +33,7 @@ HEMP_CODEC(hemp_codec_uri) {
 
 
 HEMP_ENCODER(hemp_codec_uri_encoder) {
-    hemp_debug_msg("hemp_codec_uri_encoder()\n");
+    hemp_debug_call("hemp_codec_uri_encoder()\n");
 
     HempString string  = hemp_to_string(input, context);
     HempText   output  = hemp_context_tmp_text_size(context, strlen(string) + 1);
@@ -50,7 +50,7 @@ HEMP_ENCODER(hemp_codec_uri_encoder) {
 
 
 HEMP_DECODER(hemp_codec_uri_decoder) {
-    hemp_debug_msg("hemp_codec_uri_decoder()\n");
+    hemp_debug_call("hemp_codec_uri_decoder()\n");
 
     HempString string  = input->string;
     HempText   output  = hemp_context_tmp_text_size(context, strlen(string) + 1);

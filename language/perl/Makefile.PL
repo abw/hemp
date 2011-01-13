@@ -7,7 +7,8 @@ use Config;
 # CCFLAGS
 my $LIBRARY  = 'hemp';
 my $INCDIR   = 'include';
-my $LIBDIR   = 'library/.libs';     # weird shit that libtool does
+my $LIBDIR   = 'library';
+#my $LIBDIR   = 'library';
 my $HEMPDIR  = Bin->parent(1);
 my (@INCDIRS, @LIBDIRS, @INCLUDES, @CCFLAGS, $LIBFLAGS, $INCFLAGS, $CCFLAGS);
 
@@ -17,6 +18,7 @@ my (@INCDIRS, @LIBDIRS, @INCLUDES, @CCFLAGS, $LIBFLAGS, $INCFLAGS, $CCFLAGS);
 
 $LIBFLAGS = join(" ", (map { "-L$_" } @LIBDIRS), "-l$LIBRARY");
 $INCFLAGS = join(" ",  map { "-I$_" } @INCDIRS);
+@CCFLAGS   = qw( -Wall );
 $CCFLAGS  = join(" ", @CCFLAGS);
 
 print "INCFLAGS: $INCFLAGS\n";
