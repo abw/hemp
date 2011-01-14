@@ -117,6 +117,7 @@ extern HempElement HempElementTagStart;
 extern HempElement HempElementTagEnd;
 extern HempElement HempElementBlock;
 extern HempElement HempElementText;
+extern HempElement HempElementLiteral;
 extern HempElement HempElementWord;
 extern HempElement HempElementNumber;
 extern HempElement HempElementInteger;
@@ -129,6 +130,7 @@ HEMP_GLOBAL_ELEMENT(hemp_global_element_tag_start);
 HEMP_GLOBAL_ELEMENT(hemp_global_element_tag_end);
 HEMP_GLOBAL_ELEMENT(hemp_global_element_block);
 HEMP_GLOBAL_ELEMENT(hemp_global_element_text);
+HEMP_GLOBAL_ELEMENT(hemp_global_element_literal);
 HEMP_GLOBAL_ELEMENT(hemp_global_element_word);
 HEMP_GLOBAL_ELEMENT(hemp_global_element_number);
 HEMP_GLOBAL_ELEMENT(hemp_global_element_integer);
@@ -219,6 +221,7 @@ extern HEMP_ELEMENT(hemp_element_identity_equal);
 // have to be declared as extern (and in fact, they should all be)
 
 extern HEMP_ELEMENT(hemp_element_literal);
+extern HEMP_PREFIX(hemp_element_literal_fixed);
 extern HEMP_PREFIX(hemp_element_literal_prefix);
 extern HEMP_OUTPUT(hemp_element_literal_text);
 extern HEMP_VALUE(hemp_element_literal_value);

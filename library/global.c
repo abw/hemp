@@ -131,6 +131,7 @@ hemp_global_init_symbols(
     HempElementTagEnd    = hemp_global_element_tag_end(global);
     HempElementBlock     = hemp_global_element_block(global);
     HempElementText      = hemp_global_element_text(global);
+    HempElementLiteral   = hemp_global_element_literal(global);
     HempElementWord      = hemp_global_element_word(global);
     HempElementNumber    = hemp_global_element_number(global);
     HempElementInteger   = hemp_global_element_integer(global);
@@ -149,6 +150,7 @@ hemp_global_free_symbols(
     hemp_element_free(HempElementTagEnd);     HempElementTagEnd    = NULL;
     hemp_element_free(HempElementBlock);      HempElementBlock     = NULL;
     hemp_element_free(HempElementText);       HempElementText      = NULL;
+    hemp_element_free(HempElementLiteral);    HempElementLiteral   = NULL;
     hemp_element_free(HempElementWord);       HempElementWord      = NULL;
     hemp_element_free(HempElementNumber);     HempElementNumber    = NULL;
     hemp_element_free(HempElementInteger);    HempElementInteger   = NULL;

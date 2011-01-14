@@ -20,7 +20,6 @@
 -- expect
 n is 420
 
--- start
 -- test anonymous each command on a single item
 %% each 420 '8-)'
 -- expect

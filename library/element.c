@@ -270,6 +270,7 @@ HEMP_PREFIX(hemp_element_parse_fixed) {
     hemp_set_flag(fragment, HEMP_BE_FIXED | HEMP_BE_ALLOCATED);
     hemp_set_expr(fragment, hemp_str_val(string));
     hemp_advance(fragptr);
+
     return fragment;
 }
 

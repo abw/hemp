@@ -1,14 +1,44 @@
 #include <hemp/element.h>
 
+HempElement HempElementLiteral = NULL;
+
+
+HEMP_GLOBAL_ELEMENT(hemp_global_element_literal) {
+    return hemp_element_word(
+        NULL,
+        hemp_element_new("hemp.literal", NULL, NULL)
+    );
+}
+
 
 HEMP_ELEMENT(hemp_element_literal) {
-    element->parse_fixed = &hemp_element_parse_fixed;
+    element->parse_fixed = &hemp_element_literal_fixed;
     element->token       = &hemp_element_literal_text;
     element->source      = &hemp_element_literal_text;
     element->text        = &hemp_element_literal_text;
     element->value       = &hemp_element_literal_value;
     element->cleanup     = &hemp_element_literal_cleanup;
     return element;
+}
+
+
+HEMP_PREFIX(hemp_element_literal_fixed) {
+    hemp_debug_call("hemp_element_parse_fixed()\n");
+    HempFragment fragment = hemp_element_parse_fixed(HEMP_PREFIX_ARG_NAMES);
+
+//  hemp_debug_msg("reblessing %s to word\n", fragment->type->name);
+
+    /* "re-bless" fragment into the literal element class.  This allows
+     * keywords to be used in places where fixed words are expected.
+     * e.g. "list.each(...)".  Here the 'each' keyword has the fixed()
+     * method called on it by the dotop and, assuming that the element
+     * vtable for 'each' maps the prefix() method to this function, the
+     * fragment representing the 'each' word will be downgraded to a plain
+     * old literal word token.
+     */
+    fragment->type = HempElementLiteral;
+
+    return fragment;
 }
 
 
