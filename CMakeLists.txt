@@ -16,7 +16,7 @@ set(HEMP_MODULE_DIR             "modules")
 set(HEMP_MODULE_EXT             ".hso")
 
 set(CMAKE_MODULE_PATH           ${PROJECT_SOURCE_DIR}/cmake)
-set(CMAKE_C_FLAGS               "${CMAKE_C_FLAGS} -g -Wall")
+set(CMAKE_C_FLAGS               "${CMAKE_C_FLAGS} -g -O3 -Wall")
 
 include(CheckIncludeFile)
 check_include_file(dirent.h     HEMP_HAVE_DIRENT_H)
