@@ -45,4 +45,13 @@ y: [% y %]
 y: 2
 y: 3
 y: 5
--- stop 
+
+-- test each command on a list
+%% each y in [2, 3, 5]
+y: [% y %]
+%% end
+-- expect
+y: 2
+y: 3
+y: 5
+
