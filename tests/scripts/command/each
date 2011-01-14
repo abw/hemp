@@ -15,6 +15,35 @@
 11 is prime
 13 is prime
 
+-- test n.each
+%% 420.each( sub(n) { "n is " n "\n" } )
+-- expect
+n is 420
+
+-- start
+-- test anonymous each command on a single item
+%% each 420 '8-)'
+-- expect
+8-)
+
+-- test anonymous each command on a list
+%% each [4, 2, 0] 'x'
+-- expect
+xxx
+
+-- test each command on single item
+%% each y in 420
+y: [% y %]
+%% end
+-- expect
+y: 420
+
+-- test each command on a list
+%% each y in [2, 3, 5]
+y: [% y %]
+%% end
+-- expect
+y: 2
+y: 3
+y: 5
 -- stop 
--- test each command
-% each n in [2,3,5,7,11,13]

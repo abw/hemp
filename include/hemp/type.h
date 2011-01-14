@@ -4,6 +4,12 @@
 #include <hemp/core.h>
 
 
+/* This defines the members of the HempType data structure.
+ * It's written this way so that other structures (e.g. HempElement)
+ * can incorporate it to emulate an extended class built upon a 
+ * HempType "base class".
+ */
+
 #define HEMP_TYPE_BASE              \
     HempType        type;           \
     HempType        base;           \
@@ -17,7 +23,7 @@
     HempEval        boolean;        \
     HempEval        compare;        \
     HempEval        defined;        \
-    HempInput       apply;          \
+    HempEval        apply;          \
     HempInput       assign;         \
     HempOutput      text;           \
     HempOutput      values;         \
@@ -77,6 +83,7 @@ extern HempType HempTypeText;
 extern HempType HempTypeList;
 extern HempType HempTypeHash;
 extern HempType HempTypeObject;
+extern HempType HempTypeElement;
 extern HempType HempTypeIdentity;
 extern HempType HempTypeReserved;
 extern HempType HempTypeUnused;
@@ -88,9 +95,17 @@ extern HempType hemp_global_types[HEMP_TYPES_SIZE];
  *--------------------------------------------------------------------------*/
 
 HempType
-hemp_type_new(
+hemp_type_init(
+    HempType        type,
     HempInt         id,
     HempString      name
+);
+
+
+void 
+hemp_type_isa(
+    HempType    type,
+    HempType    base
 );
 
 HempType
@@ -98,6 +113,11 @@ hemp_type_subtype(
     HempType        base,
     HempInt         id,
     HempString      name
+);
+
+HEMP_INLINE void 
+hemp_type_wipe(
+    HempType type
 );
 
 void
@@ -136,11 +156,20 @@ HEMP_VALUE(hemp_method_value_integer);
 HEMP_VALUE(hemp_method_value_boolean);
 HEMP_VALUE(hemp_method_value_defined);
 HEMP_VALUE(hemp_method_value_type);
+HEMP_VALUE(hemp_method_value_each);
 
-HEMP_OUTPUT(hemp_valueype_text);
+
+HEMP_OUTPUT(hemp_method_type_text);
 HEMP_VALUE(hemp_method_type_name);
 HEMP_VALUE(hemp_method_type_id);
 
+
+/*--------------------------------------------------------------------------
+ * Macros
+ *--------------------------------------------------------------------------*/
+
+#define hemp_type_new(id, name)     \
+    hemp_type_init(NULL, id, name)
 
 
 #endif /* HEMP_TYPE_H */

@@ -223,12 +223,12 @@ void test_hash_methods() {
     
     ok( hemp_is_hash(value), "value is a hash" );
     
-    HempValue length = hemp_send(value, "length", context, NULL);
+    HempValue length = hemp_send(value, "length", context);
     ok( hemp_is_defined(length), "got defined length" );
     ok( hemp_is_integer(length), "got an integer length" );
     eq( hemp_val_int(length), 3, "hash length is 3" );
 
-    HempValue htext = hemp_send(value, "text", context, NULL);
+    HempValue htext = hemp_send(value, "text", context);
     ok( hemp_is_text(htext), "got hash as text" );
 
     hemp_context_free(context);

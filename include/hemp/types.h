@@ -298,13 +298,6 @@ typedef void
  *--------------------------------------------------------------------------*/
 
 typedef HempValue
-(* HempMethod)(
-    HempValue       value,
-    HempContext     context,
-    HempParams      params
-);
-
-typedef HempValue
 (* HempEval)(
     HempValue       value,
     HempContext     context

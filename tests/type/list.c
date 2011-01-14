@@ -48,7 +48,7 @@ void test_list() {
     HempValue   value   = hemp_list_val(list);
     ok( hemp_is_list(value), "value is a list" );
     
-    HempValue   length  = hemp_send(value, "length", context, NULL);
+    HempValue   length  = hemp_send(value, "length", context);
     ok( hemp_is_defined(length), "got define length" );
     ok( hemp_is_integer(length), "got an integer length" );
     eq( hemp_val_int(length), 2, "list length is 2" );

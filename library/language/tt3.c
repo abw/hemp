@@ -106,6 +106,7 @@ HEMP_GRAMMAR(hemp_grammar_tt3_core) {
     HEMP_USE_ELEMENT1("hemp.identity.true",  "True");
     HEMP_USE_ELEMENT1("hemp.identity.false", "False");
     HEMP_USE_ELEMENT2("hemp.squote", "q<<", ">>");
+    HEMP_USE_OPERATOR1("hemp.in", "in", 130, 130);
     HEMP_USE_OPERATOR1("hemp.terminator", "end", 0, 0);
 
 /*  just testing
@@ -120,7 +121,7 @@ HEMP_GRAMMAR(hemp_grammar_tt3_command) {
     hemp_debug_call("hemp_grammar_tt3_command(%p, %s)\n", hemp, name);
     HempGrammar grammar = hemp_grammar_tt3_core(hemp, name);
 
-//  HEMP_USE_COMMAND2("tt3.command.each",  "each", "end");
+    HEMP_USE_COMMAND2("tt3.command.each",  "each", "end");
     HEMP_USE_COMMAND2("tt3.command.if",    "if",   "end");
     HEMP_USE_COMMAND1("tt3.command.elsif", "elsif");
     HEMP_USE_COMMAND1("tt3.command.else",  "else");

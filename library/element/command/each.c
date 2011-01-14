@@ -13,24 +13,24 @@ HEMP_OUTPUT(hemp_element_command_each_text_item);
  *--------------------------------------------------------------------------*/
 
 HEMP_ELEMENT(hemp_element_command_each) {
-    hemp_debug_msg("hemp_element_command_each()\n");
+    hemp_debug_call("hemp_element_command_each()\n");
     hemp_element_literal(hemp, element);
     element->parse_prefix    = &hemp_element_command_each_prefix;
     element->parse_postfix   = &hemp_element_command_each_postfix;
     element->text            = &hemp_element_command_each_text;
-//    element->cleanup         = &hemp_element_command_each_cleanup;
     element->value           = &hemp_element_text_value;
     element->number          = &hemp_element_value_number;
     element->integer         = &hemp_element_value_integer;
     element->boolean         = &hemp_element_value_boolean;
     element->compare         = &hemp_element_value_compare;
     element->flags           = HEMP_BE_SOURCE;
+
     return element;
 }
 
 
 HEMP_PREFIX(hemp_element_command_each_prefix) {
-    hemp_debug_msg("hemp_element_command_each_prefix()\n");
+    hemp_debug_call("hemp_element_command_each_prefix()\n");
 
     HempFragment fragment = *fragptr;
 
@@ -51,7 +51,7 @@ HEMP_PREFIX(hemp_element_command_each_prefix) {
 
 
 HEMP_POSTFIX(hemp_element_command_each_postfix) {
-    hemp_debug_msg("hemp_element_command_each_postfix()\n");
+    hemp_debug_call("hemp_element_command_each_postfix()\n");
 
     HempFragment fragment = *fragptr;
 
@@ -76,29 +76,33 @@ HEMP_POSTFIX(hemp_element_command_each_postfix) {
 
 HEMP_OUTPUT(hemp_element_command_each_text) {
     hemp_debug_call("hemp_element_each_text()\n");
-    Hemp         hemp     = context->hemp;
+
     HempFragment fragment = hemp_val_frag(value);
-    HempValue    items    = hemp_lhs(fragment);
-    HempValue    body     = hemp_rhs(fragment);
-    HempValue    lhs      = hemp_call(items, value, context);
+    HempValue    lhs      = hemp_lhs(fragment);
+    HempValue    rhs      = hemp_rhs(fragment);
+    HempValue    result;
+    HempFrame    frame;
     HempText     text;
-    HempList     list;
 
     hemp_prepare_text(context, output, text);
-    hemp_debug_msg("TODO: hemp_element_each_text()\n");
 
-    // quick hack to get something working
-    hemp_debug_msg("LHS: %s\n", hemp_type_name(lhs));
+    hemp_debug_call(
+        "each command calling %s->each with value: %s\n", 
+        hemp_type_name(lhs), hemp_type_name(rhs)
+    );
 
-    if (! hemp_is_list(lhs)) {
-        hemp_debug_msg("TODO: proper iterators so we can handle things other than lists\n");
-        hemp_text_append_string(text, "<TODO>");
-        return output;
-    }
+    /* create a new caller frame and push the rhs on as an argument */
+    frame  = hemp_context_enter(context, NULL);
+    hemp_params_push(frame->params, rhs);
 
-    list = hemp_val_list(items);
+    /* call the each() method on the LHS */
+    result = hemp_send(lhs, "each", context);
 
-    return output;
+    /* leave the caller frame */
+    hemp_context_leave(context);
+
+    /* coerce the result to text */
+    return hemp_vtext(result, context, output);
 }
 
 

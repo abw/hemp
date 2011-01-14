@@ -17,6 +17,7 @@ HempType  HempTypeHash     = NULL;
 HempType  HempTypeCode     = NULL;
 HempType  HempTypeParams   = NULL;
 HempType  HempTypeObject   = NULL;
+HempType  HempTypeElement  = NULL;
 HempType  HempTypeIdentity = NULL;
 HempType  hemp_global_types[HEMP_TYPES_SIZE];
 
@@ -26,21 +27,23 @@ HempType  hemp_global_types[HEMP_TYPES_SIZE];
  * General purpose functions for managing types
  *--------------------------------------------------------------------------*/
 
-HempType 
-hemp_type_new(
-    HempInt    id,
-    HempString name
+HempType
+hemp_type_init(
+    HempType    type,
+    HempInt     id,
+    HempString  name
 ) {
-    HempType type;
-    HEMP_ALLOCATE(type);
+    HEMP_INSTANCE(type);
+
+    hemp_debug_init("initialising type: %s\n", name);
 
     type->type      = HempTypeType;   /* allows types to be treated like objects  */
     type->id        = id;
     type->name      = hemp_string_clone(name, "type name");
+    type->methods   = hemp_hash_new();
     type->namespace = NULL;
     type->base      = NULL;
     type->clean     = NULL;
-    type->methods   = hemp_hash_new();
     type->value     = &hemp_value_self;
     type->values    = &hemp_value_values;
     type->pairs     = &hemp_value_not_pairs;
@@ -60,25 +63,43 @@ hemp_type_new(
 }
 
 
+void 
+hemp_type_isa(
+    HempType    type,
+    HempType    base
+) {
+    hemp_debug_call("%s isa %s\n", type->name, base->name);
+    type->base = base;
+    hemp_hash_attach(type->methods, base->methods);
+}
+
+
 HempType 
 hemp_type_subtype(
-    HempType base,
-    HempInt  id,
+    HempType    base,
+    HempInt     id,
     HempString  name
 ) {
     HempType type = hemp_type_new(id, name);
-    type->base = base;
-    hemp_hash_attach(type->methods, base->methods);
+    hemp_type_isa(type, base);
     return type;
 }
 
+
+HEMP_INLINE void 
+hemp_type_wipe(
+    HempType type
+) {
+    hemp_debug_call("wiping type: %s\n", type->name);
+    hemp_mem_free(type->name);
+    hemp_hash_free(type->methods);
+}
 
 void 
 hemp_type_free(
     HempType type
 ) {
-    hemp_mem_free(type->name);
-    hemp_hash_free(type->methods);
+    hemp_type_wipe(type);
     hemp_mem_free(type);
 }
 
@@ -116,6 +137,14 @@ hemp_global_types_init(
     HempTypeObject   = hemp_type_object  ( HEMP_OBJECT_ID,   HEMP_STR_OBJECT   );
     HempTypeIdentity = hemp_type_identity( HEMP_IDENTITY_ID, HEMP_STR_IDENTITY );
 
+    /* HempTypeElement is something of a special case.  It is a subclass of 
+     * HempTypeObject and uses the same object->type mechanism to resolve the
+     * type from an object pointer.  It doesn't need an entry in the global
+     * types table (further below).
+     */
+    HempTypeElement  = hemp_type_element ( HEMP_OBJECT_ID,   HEMP_STR_ELEMENT  );
+    hemp_type_isa(HempTypeElement, HempTypeObject);
+
     /* add methods to base value types */
     hemp_type_extend(HempTypeValue, "name",    &hemp_method_value_name);
     hemp_type_extend(HempTypeValue, "type",    &hemp_method_value_type);
@@ -126,6 +155,7 @@ hemp_global_types_init(
     hemp_type_extend(HempTypeValue, "integer", &hemp_method_value_integer);
     hemp_type_extend(HempTypeValue, "true",    &hemp_method_value_boolean);
     hemp_type_extend(HempTypeValue, "boolean", &hemp_method_value_boolean);
+    hemp_type_extend(HempTypeValue, "each",    &hemp_method_value_each);
 
 
     /* The first 16 type entries are reserved for hemp's internal use */
@@ -138,8 +168,10 @@ hemp_global_types_init(
         hemp_global_types[n] = HempTypeUnused;
     }
 
-    /* add the builtin types to the type table - we don't add HempValue 
-     * because it's the uber base type and not directly instantiable 
+    /* Add the builtin types to the type table - we don't add HempValue 
+     * because it's the uber base type and not directly instantiable.  Nor
+     * do we add HempTypeElement because it's essentially a "subclass" of
+     * HempTypeObject (for a somewhat loose definition of "subclass").
      */
     hemp_global_types[ HempTypeNumber->id   ] = HempTypeNumber;
     hemp_global_types[ HempTypeInteger->id  ] = HempTypeInteger;
@@ -193,6 +225,7 @@ hemp_global_types_free(
     hemp_type_free(HempTypeCode);       HempTypeCode     = NULL;
     hemp_type_free(HempTypeParams);     HempTypeParams   = NULL;
     hemp_type_free(HempTypeObject);     HempTypeObject   = NULL;
+    hemp_type_free(HempTypeElement);    HempTypeElement  = NULL;
     hemp_type_free(HempTypeIdentity);   HempTypeIdentity = NULL;
 }
 
@@ -238,7 +271,7 @@ HEMP_TYPE(hemp_type_type) {
     HempType type = hemp_type_new(id, name);
 
     /* add text method to display the type name, e.g. foo.type */
-    type->text = &hemp_valueype_text;
+    type->text = &hemp_method_type_text;
 
     /* add methods to lookup the type name or id, e.g. foo.type.name  */
     hemp_type_extend(type, "name", &hemp_method_type_name);
@@ -248,7 +281,7 @@ HEMP_TYPE(hemp_type_type) {
 };
 
 
-HEMP_OUTPUT(hemp_valueype_text) {                          // HUH?
+HEMP_OUTPUT(hemp_method_type_text) {
     HempType type = (HempType) hemp_val_ptr(value);
     HempText text;
     
@@ -309,4 +342,44 @@ HEMP_VALUE(hemp_method_value_boolean) {
 
 HEMP_VALUE(hemp_method_value_defined) {
     return hemp_call(value, defined, context);
+}
+
+
+HEMP_VALUE(hemp_method_value_each) {
+    HempList    results = hemp_context_tmp_list(context);
+    HempParams  params  = context->frame->params;
+    HempValue   result;
+    HempValue   callback;
+
+    hemp_debug_call("hemp_method_value_each()\n");
+
+    if (! params)
+        hemp_fatal("No params for each (TODO)\n");
+
+//  hemp_params_dump(params);
+
+    if (params->ordinals->length < 1)
+        hemp_fatal("No callback for each (TODO)\n");
+
+    callback = hemp_list_item(params->ordinals, 0);
+
+    /* This is horribly wasteful compared to more efficient approaches that
+     * are used in "traditional" programming language (e.g. a single caller
+     * stack onto which frames/arguments are pushed.  On the other hand, I
+     * would think nothing of creating a hash/list on the fly in Perl, say,
+     * to capture the arguments passed to a subroutine/method, so why should 
+     * I be so cautious in C?  In the end, this works today and can be made 
+     * better tomorrow.
+     */
+    HempFrame frame = hemp_context_enter(context, NULL);
+    hemp_params_push(frame->params, value);
+
+    hemp_debug_call("calling %s->apply with value: %s\n", hemp_type_name(callback), hemp_type_name(value));
+
+    result = hemp_call(callback, apply, context);
+    hemp_list_push(results, result);
+
+    hemp_context_leave(context);
+
+    return hemp_list_val(results);
 }

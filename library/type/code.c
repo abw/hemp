@@ -3,7 +3,7 @@
 #include <hemp/type/code.h>
 
 HEMP_OUTPUT(hemp_type_code_text);
-HEMP_INPUT(hemp_type_code_apply);
+HEMP_VALUE(hemp_type_code_apply);
 
 HEMP_TYPE(hemp_type_code) {
     HempType type   = hemp_type_subtype(HempTypeValue, id, name);
@@ -143,7 +143,7 @@ hemp_type_code_resolve_proto(
 }
 
 
-HEMP_INPUT(hemp_type_code_apply) {
+HEMP_VALUE(hemp_type_code_apply) {
     hemp_debug_call("hemp_type_code_apply()\n");
     HempCode   code    = hemp_val_code(value);
     HempValue  body    = code->body;
@@ -155,9 +155,7 @@ HEMP_INPUT(hemp_type_code_apply) {
     if (code->proto) {
         hemp_type_code_resolve_proto(
             code, context, 
-            hemp_is_defined(input)
-                ? hemp_val_params(input)
-                : context->frame->params
+            context->frame->params
         );
     }
 

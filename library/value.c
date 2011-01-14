@@ -256,7 +256,7 @@ HEMP_VALUE(hemp_value_false) {
 }
 
 
-HEMP_INPUT(hemp_value_apply) {
+HEMP_VALUE(hemp_value_apply) {
     /* 
      * The default behaviour for an element evaluated in a function application
      * is to return iteself.
@@ -324,13 +324,13 @@ HEMP_FETCH(hemp_value_dot) {
     /* if we didn't find anything then look for a method */
     if (hemp_is_text(key)) {
         /* we got a text key */
-        result = hemp_send(container, hemp_val_text(key)->string, context, NULL);
+        result = hemp_send(container, hemp_val_text(key)->string, context);
     }
     else {
         /* otherwise we have to convert the key to text */
         HempText ktext = hemp_text_new_size(16);
         hemp_onto_text(key, context, hemp_text_val(ktext));
-        result = hemp_send(container, ktext->string, context, NULL);
+        result = hemp_send(container, ktext->string, context);
         hemp_text_free(ktext);
     }
 

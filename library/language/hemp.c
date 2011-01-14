@@ -22,6 +22,7 @@ static struct hemp_elements hemp_elements_hemp_core[] = {
     { "hemp.dquote",                &hemp_element_dquote                },
     { "hemp.block",                 &hemp_element_block                 },
     { "hemp.apply",                 &hemp_element_apply                 },
+    { "hemp.in",                    &hemp_element_in                    },
     { "hemp.dotop",                 &hemp_element_dotop                 },
     { "hemp.eof",                   &hemp_element_eof                   },
     { NULL, NULL },
@@ -356,6 +357,7 @@ hemp_grammar_add_hemp_bravo(
     HEMP_USE_OPERATOR1("hemp.boolean.and",          "and",      115,    0);
     HEMP_USE_OPERATOR1("hemp.boolean.or",           "or",       110,    0);
 //  HEMP_USE_OPERATOR1("hemp.boolean.nor",          "nor",      110,    0);
+
 
 //    # grouping constructs...
     HEMP_USE_OPERATOR2("hemp.bracket.parens",       "(", ")",     0,    0);

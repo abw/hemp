@@ -305,7 +305,9 @@ hemp_mem_trace_report(
             hmt->status == HEMP_MEM_FREE     ? "FREE"     : 
             "????"
         );
-        if (verbose) {
+        /* TODO: make this optional */
+//      if (verbose) {
+        if (verbose && hmt->status == HEMP_MEM_MALLOC) {
             hemp_debug(
                 "%s%-4lu %6s  %8lu %14p  line %3d of %-12s [%s]\n", 
                 hmt->status == HEMP_MEM_MALLOC ? HEMP_ANSI_RED : HEMP_ANSI_GREEN,

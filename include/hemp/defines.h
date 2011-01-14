@@ -43,6 +43,7 @@
 #define HEMP_STR_PARAMS     "Params"
 #define HEMP_STR_PAIRS      "Pairs"
 #define HEMP_STR_OBJECT     "Object"
+#define HEMP_STR_ELEMENT    "Element"
 #define HEMP_STR_IDENTITY   "Identity"
 #define HEMP_STR_RESERVED   "Reserved"
 #define HEMP_STR_UNUSED     "Unused"

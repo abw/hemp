@@ -389,21 +389,20 @@ HEMP_VALUE(hemp_method_list_text) {
 }
 
 
-HEMP_METHOD(hemp_method_list_each) {
-    HempList  list    = hemp_val_list(value);
-    HempList  results = hemp_context_tmp_list(context);
-    HempValue result;
-    HempValue callback;
-    HempValue item;
-    HempSize  pos;
-
-    if (! params)
-        params = context->frame->params;
+HEMP_VALUE(hemp_method_list_each) {
+    hemp_debug_call("hemp_method_list_each()\n");
+    HempList    list    = hemp_val_list(value);
+    HempList    results = hemp_context_tmp_list(context);
+    HempParams  params  = context->frame->params;
+    HempValue   result;
+    HempValue   callback;
+    HempValue   item;
+    HempSize    pos;
 
     if (! params)
         hemp_fatal("No params for list.each (TODO)\n");
 
-//    hemp_params_dump(params);
+//  hemp_params_dump(params);
 
     if (params->ordinals->length < 1)
         hemp_fatal("No callback for list.each (TODO)\n");
@@ -413,12 +412,12 @@ HEMP_METHOD(hemp_method_list_each) {
 //  hemp_debug_msg("list.each  callback: %s\n", hemp_type_name(callback));
 
     for (pos = 0; pos < list->length; pos++) {
-        // Yuk!  Need a proper stack
+        /* can we re-use the same frame (or have the context pool them)? */
         HempFrame frame = hemp_context_enter(context, NULL);
         item = hemp_list_item(list, pos);
         hemp_params_push(frame->params, item);
-//        hemp_debug_msg("calling %s->apply with value: %s\n", hemp_type_name(callback), hemp_type_name(item));
-        result = hemp_call(callback, apply, context, HempMissing);
+//      hemp_debug_msg("calling %s->apply with value: %s\n", hemp_type_name(callback), hemp_type_name(item));
+        result = hemp_call(callback, apply, context);
         hemp_list_push(results, result);
         hemp_context_leave(context);
     }

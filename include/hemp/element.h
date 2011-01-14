@@ -18,19 +18,12 @@ struct hemp_element {
     /* an element is an extended object type */
     HEMP_TYPE_BASE
 
-    /* an element is bound to a grammar */
-    HempGrammar     grammar;
-
     /* element metadata */
     HempString      start;
     HempString      end;
     HempFlags       flags;
     HempPrec        lprec;
     HempPrec        rprec;
-
-    /* intialisation (on scan) and cleanup methods */
-    HempScanner     scanner;
-    hemp_cleanup    cleanup;            /* NOTE: being replaced by clean */
 
     /* parsing methods */
     HempPrefix      parse_prefix;
@@ -42,6 +35,13 @@ struct hemp_element {
     HempPrefix      parse_body;
     HempFixup       parse_lvalue;
     HempFixup       parse_proto;
+
+    /* intialisation (on scan) and cleanup methods */
+    HempScanner     scanner;
+    hemp_cleanup    cleanup;            /* NOTE: being replaced by clean */
+
+    /* an element is bound to a grammar */
+    HempGrammar     grammar;
 
     /* value methods */
     HempOutput      token;
@@ -62,6 +62,14 @@ struct hemp_elements {
 
 
 /*--------------------------------------------------------------------------
+ * Type and methods
+ *--------------------------------------------------------------------------*/
+
+HEMP_TYPE(hemp_type_element);
+HEMP_VALUE(hemp_method_element_each);
+
+
+/*--------------------------------------------------------------------------
  * Factory prototypes
  *--------------------------------------------------------------------------*/
 
@@ -72,6 +80,7 @@ HEMP_HASH_ITERATOR(hemp_element_cleaner);
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
+
 
 HempElement
 hemp_element_new(
@@ -90,6 +99,12 @@ void
 hemp_element_dump(
     HempElement     element
 );
+
+
+/*--------------------------------------------------------------------------
+ * methods
+ *--------------------------------------------------------------------------*/
+
 
 
 /*--------------------------------------------------------------------------
@@ -434,6 +449,9 @@ extern HEMP_PREFIX(hemp_element_sub_prefix);
 extern HEMP_VALUE(hemp_element_sub_value);
 extern HEMP_OUTPUT(hemp_element_sub_text);
 extern HEMP_CLEANUP(hemp_element_sub_cleanup);
+
+extern HEMP_ELEMENT(hemp_element_in);
+extern HEMP_VALUE(hemp_element_in_apply);
 
 extern HEMP_ELEMENT(hemp_element_command_if);
 extern HEMP_ELEMENT(hemp_element_command_else);

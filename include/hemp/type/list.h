@@ -109,7 +109,7 @@ HEMP_STORE(hemp_type_list_store);
 HEMP_OUTPUT(hemp_type_list_text);
 HEMP_VALUE(hemp_method_list_length);
 HEMP_VALUE(hemp_method_list_text);
-HEMP_METHOD(hemp_method_list_each);
+HEMP_VALUE(hemp_method_list_each);
 
 
 /*--------------------------------------------------------------------------

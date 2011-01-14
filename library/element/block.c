@@ -128,7 +128,6 @@ HEMP_OUTPUT(hemp_element_block_pairs) {
     
     for (n = 0; n < exprs->length; n++) {
         item = hemp_list_item(exprs, n);
-//      hemp_debug_msg("block calling pairs on %s\n", hemp_type_name(item));
         hemp_call(item, pairs, context, output);
     }
 

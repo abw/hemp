@@ -1,5 +1,22 @@
 #include <hemp/element.h>
 
+/*--------------------------------------------------------------------------
+ * Type definition function.  In OO terminology, elements are essentially 
+ * object classes which are subclasses of the base class HempTypeElement 
+ * class, which the following function instantiates.  Except we call them
+ * "types" not "classes".  The object instances are HempFragment pointers.
+ * So "element" == "class" and "fragment" == "object", roughly speaking.
+ *--------------------------------------------------------------------------*/
+
+HEMP_TYPE(hemp_type_element) {
+    HempType type = hemp_type_subtype(HempTypeValue, id, name);
+
+    /* Add method(s) to element base class */
+    hemp_type_extend(type, "each", &hemp_method_element_each);
+
+    return type;
+};
+
 
 /*--------------------------------------------------------------------------
  * Factory functions for loading elements
@@ -32,12 +49,22 @@ hemp_element_new(
     HempString start,
     HempString end
 ) {
-    HempElement element;
+    HempNamespace   namespace = hemp_namespace(name);
+    HempElement     element;
     HEMP_ALLOCATE(element);
 
+    /* The lower part of the element structure contains the same members as
+     * the type structure.  This can be thought of as the "base class" part
+     * of the extended element class.  We call hemp_type_xxx() functions using
+     * a HempType typecast so the compiler knows that we know what we're doing.
+     */
+
+    HempType type = (HempType) element;
+    hemp_type_init(type, HEMP_OBJECT_ID, name);
+    hemp_type_isa(type, HempTypeElement);
+
     /* initialise the basic element details */
-    element->name            = name;    // should be const?
-    element->namespace       = hemp_namespace(name);
+    element->namespace       = namespace;
     element->flags           = 0;
     element->lprec           = 0;
     element->rprec           = 0;
@@ -102,9 +129,14 @@ hemp_element_free(
     && ( (! element->start) || (element->start != element->end) ) ) 
         hemp_mem_free(element->end);
 
+    /* start token is optional, so this may be NULL */
     if (element->start)
         hemp_mem_free(element->start);
 
+    /* cleanup any memory allocated for the type "base class" */
+    hemp_type_wipe((HempType) element);
+
+    /* free the element data structure and we're done! */
     hemp_mem_free(element);
 }
 
@@ -468,6 +500,18 @@ HEMP_OUTPUT(hemp_element_value_values) {
     return hemp_values(result, context, output);
 }
 
+
+
+/*--------------------------------------------------------------------------
+ * Methods
+ *--------------------------------------------------------------------------*/
+
+HEMP_VALUE(hemp_method_element_each) {
+    hemp_debug_call("hemp_method_element_each()\n");
+    HempValue result = hemp_obcall(value, value, context);
+//  hemp_debug_msg("element value: %s->each\n", hemp_type_name(result));
+    return hemp_send(result, "each", context);
+}
 
 
 /*--------------------------------------------------------------------------

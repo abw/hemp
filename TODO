@@ -178,6 +178,14 @@ An incomplete list of things TODO, in no particular order.
     Either that or we need to explicitly call cleanup() for any and all
     elements between the backtrack and current points that define them.
 
+* Standardise on free/cleanup function, e.g. hemp_type_wipe() and 
+  hemp_type_free() vs hemp_text_release()
+
+* Fix the bug that stops keywords being used as fixed words.  
+  e.g. list.each fails when .each is a keyword.  It parses OK (because 
+  it inherits the parse_fixed method from literal), but the runtime 
+  doesn't account for it.  The parse_fixed method should be changed to
+  "re-bless" the fragment to a static word element.
 
 
 Expressions

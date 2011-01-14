@@ -27,7 +27,7 @@ hemp_fragment_init(
     fragment->position   = position;
     fragment->length     = length;
     fragment->flags      = type->flags;
-    fragment->op.value = HempMissing;
+    fragment->op.value   = HempMissing;
 
     return fragment;
 }

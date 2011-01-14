@@ -45,9 +45,9 @@ HEMP_FIXUP(hemp_element_apply_lvalue) {
      */
     HempFragment parens = hemp_rhs_fragment(fragment);
     HempFragment assign = hemp_val_frag(fixative);
-    HempCode    code    = hemp_code_new();
-    HempProto   proto   = hemp_code_proto(code);
-    code->body           = hemp_rhs(assign);
+    HempCode     code   = hemp_code_new();
+    HempProto    proto  = hemp_code_proto(code);
+    code->body          = hemp_rhs(assign);
 
     parens->type->parse_proto(parens, scope, hemp_ptr_val(proto));
     hemp_set_rhs(assign, hemp_code_val(code));
@@ -84,7 +84,7 @@ HEMP_VALUE(hemp_element_apply_value) {
      */
     result = hemp_call(lhs, value, context);
 //  hemp_debug_msg("apply result: %s\n", hemp_type_name(result));
-    result = hemp_call(result, apply, context, params);
+    result = hemp_call(result, apply, context);
 
     hemp_context_leave(context);
 

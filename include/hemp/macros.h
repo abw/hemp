@@ -516,13 +516,6 @@
         HempFragment    fragment            \
     )
 
-#define HEMP_METHOD(f)                      \
-    HEMP_INLINE HempValue f(                \
-        HempValue       value,              \
-        HempContext     context,            \
-        HempParams      params              \
-    )
-
 
 
 /*--------------------------------------------------------------------------
