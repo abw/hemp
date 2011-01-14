@@ -1,4 +1,5 @@
 An incomplete list of things TODO, in no particular order.
+---------------------------------------------------------
 
 * Clean up all the include declaration and definitions.  According to the
   C99 and GNU99 standards, they probably shouldn't work because of the 
@@ -66,7 +67,8 @@ An incomplete list of things TODO, in no particular order.
   to give it a chance to load it.  Just got to be careful we don't end up in
   a deathly spiral if we then re-attempt the lookup and it fails again.
 
-* Perl CODE
+* Perl CODE - we can call Perl code refs, but we don't pass any arguments
+  yet.  Also need to handle multiple return values.
 
 * change function names in type/* from hemp_value_XXX_YYY to hemp_type_XXX_YYY
 
@@ -74,12 +76,6 @@ An incomplete list of things TODO, in no particular order.
 
 * Clean up all the macros and inline functions so that they're consistently
   name, e.g. HEMP_IS_NUM() and so on.  Change 'num' to 'number' and so on.
-
-* Number ops:
-   - Add ++ and -- auto-increment operator
-
-* Text ops:
-   - textify prefix operator: ~
 
 * figure out what to do with number/integer operators that return boolean
   values (e.g. less than).  Is it an error to ask for those as int/num?
@@ -185,15 +181,43 @@ An incomplete list of things TODO, in no particular order.
   e.g. list.each fails when .each is a keyword.  It parses OK (because 
   it inherits the parse_fixed method from literal), but the runtime 
   doesn't account for it.  The parse_fixed method should be changed to
-  "re-bless" the fragment to a static word element.
+  "re-bless" the fragment to a static word element
+  UPDATE: now fixed, but there may be consequences.  Lots of elements 
+  default to using hemp_element_literal() as a base class, so will need
+  to explicitly clear/reset the parse_fixed() method if they don't already..
 
 
-Expressions
------------
+Operators
+---------
 
-* Parameter arrow: =>
-* Function arrow: ->
-* Applicative arrow: <-
+* Number ops:
+    - Add ++ and -- auto-increment operator
+
+* Text ops:
+    - textify prefix operator: ~
+
+* Range ops:
+
+    -   "to" and "by"
+
+        %% 1 to 10
+        %% 5 to 100 by 5     # 5, 10, 15 ... 90, 95, 100
+        %% 5 by 5            # 5, 10, 15 ...
+
+        Initial approach can coerce to numerics just to get something working.
+        Ultimately, rangeability/enumerability/whatever-you-wanna-call-it should
+        be a facet/role/feature/whatever-you-wanna-call-it of the underlying 
+        data type.
+
+* Boolean ops:
+    -   'in' as a boolean existential operator
+
+        %% if x in y { ... }
+
+* Arrow ops
+    - Parameter arrow: =>
+    - Function arrow: ->
+    - Applicative arrow: <-
 
 
 Commands
@@ -267,7 +291,8 @@ Then create a JSON codec to read JSON data [DONE]
 Rendering error messages via templates.
 
 
----
+A bunch of things that haven't been renamed/refactored yet
+----------------------------------------------------------
 
 cleanup -> clean
 
