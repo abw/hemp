@@ -186,6 +186,9 @@ An incomplete list of things TODO, in no particular order.
   default to using hemp_element_literal() as a base class, so will need
   to explicitly clear/reset the parse_fixed() method if they don't already..
 
+* Fix tokeniser(s) (json is broken, probably others) so that it accepts
+  underscores in unquoted words (hash keys).
+
 
 Operators
 ---------
@@ -309,3 +312,41 @@ source_vop
 source_bop
 view_f
 hemp_view_f
+
+
+"config" branch
+---------------
+
+Working on configuration from a json file.  Define default document 
+configuration (added to Hemp).  Document providers also define their
+own configs, with a parent on the Hemp config.  Then each document gets
+its own config with a parent to the provider's config.
+
+There will be occasions when we want to fetch all values in a config chain.
+e.g. when adding features, we should find all features defines.  Add 
+functions to hash: fetch_all() (returns list of all values found) and 
+fetch_list() (merges them all into a single list, like Badger::Class
+list_vars()).
+
+Need to add value->items method to expand lists to items.  Consider
+document_path.  Might be any of these:
+
+    document_path: '/path/to/docs'
+    document_path: 'file:/path/to/docs'
+    document_path: { type: 'file', path: '/path/to/docs' }
+
+Or could be a list:
+
+    document_path: [
+        '/path/to/docs',
+        { ... },
+    ]
+
+Furthermore we can have chained config hashes.  So the fetch_list() function
+must merge the values it finds into a single list.  However, it's not 
+sufficient to simply test if the value isa list or text, because we also need
+to support extensible data types (e.g. Perl scalar/list/object, Python, etc).
+So the function calls the item->items() method against each item it finds.
+This is like item->values(), except that the existing list object returns a
+scalar reference to itself so that lists don't auto-collapse.  It'll also
+be required for the '@' expansion sigil.

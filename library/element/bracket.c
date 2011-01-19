@@ -203,7 +203,7 @@ HEMP_ELEMENT(hemp_element_hash) {
 
 
 HEMP_PREFIX(hemp_element_hash_prefix) {
-    hemp_debug_msg("hemp_element_hash_prefix()  precedence: %d  force: %s\n", precedence, force ? "true" : "false");
+    hemp_debug_call("hemp_element_hash_prefix()  precedence: %d  force: %s\n", precedence, force ? "true" : "false");
 
 //  HEMP_PREFIX_PRECEDENCE;
 

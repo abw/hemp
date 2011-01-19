@@ -421,8 +421,8 @@ hemp_context(
 
 void
 hemp_configure(
-    Hemp   hemp,
-    HempValue  config
+    Hemp        hemp,
+    HempValue   config
 ) {
     /* ask the config value to yield pairs (x => y) into the config hash */
     hemp_call(config, pairs, hemp->context, hemp_hash_val(hemp->config));
@@ -431,10 +431,10 @@ hemp_configure(
 
 void
 hemp_configure_from(
-    Hemp   hemp,
-    HempString dialect,
-    HempString scheme,
-    HempString source
+    Hemp        hemp,
+    HempString  dialect,
+    HempString  scheme,
+    HempString  source
 ) {
     HempDocument document = hemp_document(
         hemp, dialect, scheme, source
@@ -451,8 +451,8 @@ hemp_configure_from(
 
 HempString
 hemp_config_get_string(
-    Hemp   hemp,
-    HempString name
+    Hemp        hemp,
+    HempString  name
 ) {
     HempValue  value  = hemp_config_get(hemp, name);
     HempString string = NULL;

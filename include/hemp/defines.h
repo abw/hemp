@@ -81,6 +81,7 @@
 #define HEMP_CONFIG_MODDIR  "hemp.module_dir"
 #define HEMP_CONFIG_MODEXT  "hemp.module_ext"
 #define HEMP_CONFIG_MODPATH "hemp.module_path"
+#define HEMP_CONFIG_DOCPATH "document_path"
 
 
 /* dummy arguments(s) as a fallback for generating error messages */
@@ -136,6 +137,13 @@
 #define HEMP_BE_TERMINATED  0x20000  /* element body has been terminated     */
 #define HEMP_BE_ALLOCATED   0x40000  /* element has memory allocated         */
 #define HEMP_BE_EOF         0x80000  /* special marker for end of file/text  */
+
+
+/*
+ * Various runtime flags.
+ */
+#define HEMP_OPT_DEBUG      0x0001
+#define HEMP_OPT_VERBOSE    0x0002
 
 
 #endif /* HEMP_DEFINES_H */

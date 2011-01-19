@@ -19,9 +19,9 @@ void        hemp_warn(char *format, ...);
 void        hemp_error_report(Hemp);
 void        hemp_getopt(Hemp hemp, int argc, char **argv);
 void        hemp_interactive(Hemp hemp);
-HempString hemp_prompt_init();
+HempString  hemp_prompt_init();
 void        hemp_prompt_free();
-HempString hemp_input_read(HempString prompt);
+HempString  hemp_input_read(HempString prompt);
 void        hemp_input_free();
 char **     hemp_completion(const char *, int, int);
 char *      hemp_command_generator(const char *, int);
@@ -77,11 +77,15 @@ hemp_command *hemp_command_lookup(HempString name);
 
 
 
-#define hemp_nl()                           \
+#define hemp_nl()                               \
     fprintf(stderr, "\n");
 
-#define hemp_verbose(hemp, format, ...)     \
-    if (hemp->verbose) hemp_say(format, ##__VA_ARGS__)
+#define hemp_verbose(hemp)                      \
+    (hemp_has_flag(hemp, HEMP_OPT_VERBOSE))
+
+#define hemp_verbose_msg(hemp, format, ...)     \
+    if (hemp_verbose(hemp))                     \
+        hemp_say(format, ##__VA_ARGS__)
 
 
 
@@ -95,10 +99,10 @@ int main(
     char **argv, 
     char **env
 ) {
-    Hemp       hemp = hemp_new();
-    HempString     filename;
-    HempDocument   document;
-    HempText       input, output;
+    Hemp            hemp = hemp_new();
+    HempString      filename;
+    HempDocument    document;
+    HempText        input, output;
     int             result = 0;
     
     hemp_language(hemp, "tt3");
@@ -108,7 +112,7 @@ int main(
     if (! be_quiet)
         hemp_banner();
     
-    if (hemp->verbose)
+    if (hemp_verbose(hemp))
         hemp_info(hemp);
 
     if (execute) {
@@ -128,7 +132,7 @@ int main(
                 hemp_text_append_string(input, filename);
                 hemp_text_append_string(input, " ");
             }
-            // hemp_verbose(hemp, "loaded text: %s", input->string);
+            hemp_verbose_msg(hemp, "loaded text: %s", input->string);
             document = hemp_document(
                 hemp, HEMP_TT3, HEMP_TEXT, input->string
             );
@@ -149,7 +153,7 @@ int main(
         else {
             while (optind < argc) {
                 filename = argv[optind++];
-                hemp_verbose(hemp, "loading file: %s", filename);
+                hemp_verbose_msg(hemp, "loading file: %s", filename);
 
                 document = hemp_document(hemp, HEMP_TT3, HEMP_FILE, filename);
                 if (! document)
@@ -273,6 +277,7 @@ void hemp_info(
     Hemp hemp
 ) {
     HempString dir = hemp_config_get_string(hemp, HEMP_CONFIG_DIR);
+    HempValue  doc = hemp_config_get(hemp, HEMP_CONFIG_DOCPATH);
     
     if (! dir)
         dir = HEMP_DIR;
@@ -284,6 +289,28 @@ void hemp_info(
         dir,
         HEMP_ANSI_RESET
     );
+
+    if (hemp_is_found(doc)) {
+        if (hemp_is_list(doc)) {
+            hemp_debug_msg("found document_path list\n");
+        }
+        else {
+            hemp_debug_msg("found document_path, not a list: %s\n", hemp_type_name(doc));
+        }
+    }
+    else {
+        hemp_debug_msg("document_path not found\n");
+    }
+    
+    HempText text = hemp_hash_dump(hemp->config);
+    fprintf(
+        stderr, "%sconfig: %s%s%s\n",
+        HEMP_ANSI_YELLOW,
+        HEMP_ANSI_CYAN,
+        text->string,
+        HEMP_ANSI_RESET
+    );
+    hemp_text_free(text);
 }
 
 
@@ -468,7 +495,7 @@ hemp_cmd_expr(
     output   = NULL;
 
     HEMP_TRY;
-        // hemp_verbose(hemp, "loaded text: %s", input->string);
+        hemp_verbose_msg(hemp, "loaded text: %s", input->string);
         hemplate = hemp_document(
             hemp, HEMP_TT3, HEMP_TEXT, input->string
         );
@@ -619,11 +646,11 @@ hemp_getopt(
                 break;
 
             case 'v':
-                hemp->verbose = HEMP_TRUE;
+                hemp_set_flag(hemp, HEMP_OPT_VERBOSE);
                 break;
 
             case 'd':
-                hemp->debug = HEMP_TRUE;
+                hemp_set_flag(hemp, HEMP_OPT_DEBUG);
                 break;
 
             case 'e':

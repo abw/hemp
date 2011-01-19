@@ -22,7 +22,10 @@ void test_punctuation() {
     HempFragments fragments = hemp_fragments_new(NULL, 0);
     ok( fragments, "created fragments" );
 
-    HempElement space, comma, semicolon, terminator;
+    HempElement space      = NULL, 
+                comma      = NULL, 
+                semicolon  = NULL, 
+                terminator = NULL;
     
     HEMP_TRY;
         space = hemp_element(hemp, "hemp.space", " ", NULL);

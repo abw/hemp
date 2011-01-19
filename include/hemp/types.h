@@ -101,6 +101,7 @@ typedef struct hemp_viewer      * HempViewer;
 struct hemp {
     HempGlobal      global;             /* pointer to global data           */
     HempFactory     factory;            /* new meta-factory                 */
+    HempFlags       flags;              /* runtime options                  */
 
     HempCache       cache;              /* cache for compiled documents     */
     HempHash        config;             /* configuration items              */
