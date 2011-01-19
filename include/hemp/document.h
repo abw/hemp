@@ -1,5 +1,5 @@
-#ifndef HEMP_TEMPLATE_H
-#define HEMP_TEMPLATE_H
+#ifndef HEMP_DOCUMENT_H
+#define HEMP_DOCUMENT_H
 
 #include <hemp/dialect.h>
 #include <hemp/source.h>
