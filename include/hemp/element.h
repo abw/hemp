@@ -69,18 +69,10 @@ HEMP_TYPE(hemp_type_element);
 HEMP_VALUE(hemp_method_element_each);
 
 
-/*--------------------------------------------------------------------------
- * Factory prototypes
- *--------------------------------------------------------------------------*/
-
-HEMP_FACTORY(hemp_element_factory);
-HEMP_HASH_ITERATOR(hemp_element_cleaner);
-
 
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
-
 
 HempElement
 hemp_element_new(

@@ -78,6 +78,7 @@ add_subdirectory(programs)
 add_subdirectory(modules/codec)
 add_subdirectory(modules/feature)
 add_subdirectory(modules/language)
+add_subdirectory(modules/factory)
 
 # nothing in here yet
 #add_subdirectory(modules/tag)

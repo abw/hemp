@@ -13,6 +13,7 @@
 struct hemp_factory {
     Hemp            hemp;
     HempString      name;
+    HempHash        config;
     HempHash        instances;
     HempHash        constructors;
     hemp_hash_iter  cleaner;
@@ -31,6 +32,12 @@ HempFactory
 hemp_factory_new(
     Hemp            hemp,
     HempString      name
+);
+
+HempHash
+hemp_factory_config_hash(
+    HempFactory     factory,
+    HempValue       config
 );
 
 void

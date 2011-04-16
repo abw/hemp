@@ -6,56 +6,57 @@
  * Memory allocation
  *--------------------------------------------------------------------------*/
 
-#define HEMP_TYPE_ALLOCATE(type, name) ({           \
-    name = (struct hemp_##type *) hemp_mem_alloc(   \
-        sizeof(struct hemp_##type)                  \
-    );                                              \
-    if (! name)                                     \
-        hemp_mem_fail(#type);                       \
+#define HEMP_TYPE_ALLOCATE(type, name) ({                                   \
+    name = (struct hemp_##type *) hemp_mem_alloc(                           \
+        sizeof(struct hemp_##type)                                          \
+    );                                                                      \
+    if (! name)                                                             \
+        hemp_mem_fail(#type);                                               \
 })
 
-#define HEMP_TYPE_INSTANCE(type, name) ({           \
-    if (! name) {                                   \
-        HEMP_TYPE_ALLOCATE(type, name);             \
-    }                                               \
+#define HEMP_TYPE_INSTANCE(type, name) ({                                   \
+    if (! name) {                                                           \
+        HEMP_TYPE_ALLOCATE(type, name);                                     \
+    }                                                                       \
 })
 
-#define HEMP_ALLOCATE(name)             \
+#define HEMP_ALLOCATE(name)                                                 \
     HEMP_TYPE_ALLOCATE(name, name)
 
-#define HEMP_INSTANCE(name)             \
+#define HEMP_INSTANCE(name)                                                 \
     HEMP_TYPE_INSTANCE(name, name)
+
 
 
 /*--------------------------------------------------------------------------
  * Macros for declaring constructor functions for factory components.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_DECLARE(type, func)        \
-    type func(                          \
-        Hemp        hemp,               \
-        HempString  name                \
+#define HEMP_DECLARE(type, func)                                            \
+    type func(                                                              \
+        Hemp        hemp,                                                   \
+        HempString  name                                                    \
     )
 
-#define HEMP_CACHE(f)                   \
+#define HEMP_CACHE(f)                                                       \
     HEMP_DECLARE(HempCache, f)
 
-#define HEMP_CODEC(f)                   \
+#define HEMP_CODEC(f)                                                       \
     HEMP_DECLARE(HempCodec, f)
 
-#define HEMP_DIALECT(f)                 \
+#define HEMP_DIALECT(f)                                                     \
     HEMP_DECLARE(HempDialect, f)
 
-#define HEMP_FACTORY(f)                 \
+#define HEMP_FACTORY(f)                                                     \
     HEMP_DECLARE(HempFactory, f)
 
-#define HEMP_GRAMMAR(f)                 \
+#define HEMP_GRAMMAR(f)                                                     \
     HEMP_DECLARE(HempGrammar, f)
 
-#define HEMP_LANGUAGE(f)                \
+#define HEMP_LANGUAGE(f)                                                    \
     HEMP_DECLARE(HempLanguage, f)
 
-#define HEMP_VIEWER(f)                  \
+#define HEMP_VIEWER(f)                                                      \
     HEMP_DECLARE(HempViewer, f)
 
 
@@ -64,223 +65,250 @@
  * Macros for other components.
  *--------------------------------------------------------------------------*/
 
-#define HEMP_AUTOLOAD(f)                \
-    HempBool f(                         \
-        HempFactory     factory,        \
-        HempString      name            \
+#define HEMP_AUTOLOAD(f)                                                    \
+    HempBool f(                                                             \
+        HempFactory     factory,                                            \
+        HempString      name                                                \
     )
 
-#define HEMP_ELEMENT(f)                 \
-    HempElement f(                      \
-        Hemp            hemp,           \
-        HempElement     element         \
+#define HEMP_ELEMENT(f)                                                     \
+    HempElement f(                                                          \
+        Hemp            hemp,                                               \
+        HempElement     element                                             \
     )
 
-#define HEMP_ELEMENTS(f)                \
-    HempAction f(                       \
-        Hemp            hemp,           \
-        HempString      name            \
+#define HEMP_ELEMENTS(f)                                                    \
+    HempAction f(                                                           \
+        Hemp            hemp,                                               \
+        HempString      name                                                \
     )
 
-#define HEMP_GLOBAL_ELEMENT(f)          \
-    HempElement f(                      \
-        HempGlobal      global          \
+#define HEMP_GLOBAL_ELEMENT(f)                                              \
+    HempElement f(                                                          \
+        HempGlobal      global                                              \
     )
 
-#define HEMP_FEATURE(f)                 \
-    HempGrammar f(                      \
-        Hemp            hemp,           \
-        HempGrammar     grammar         \
+#define HEMP_FEATURE(f)                                                     \
+    HempGrammar f(                                                          \
+        Hemp            hemp,                                               \
+        HempGrammar     grammar                                             \
     )
 
-#define HEMP_SCANNER(f)                 \
-    HempBool f(                         \
-        HempMemory      self,           \
-        HempDocument    document        \
+#define HEMP_SCANNER(f)                                                     \
+    HempBool f(                                                             \
+        HempMemory      self,                                               \
+        HempDocument    document                                            \
     )
 
-#define HEMP_SKIPPER(f)                 \
-    HempString f(                       \
-        HempTag         tag,            \
-        HempString      src             \
+#define HEMP_SKIPPER(f)                                                     \
+    HempString f(                                                           \
+        HempTag         tag,                                                \
+        HempString      src                                                 \
     )
 
-#define HEMP_TAG(f)                     \
-    HempTag f(                          \
-        Hemp            hemp,           \
-        HempString      type,           \
-        HempString      name,           \
-        HempString      start,          \
-        HempString      end,            \
-        HempGrammar     grammar         \
+#define HEMP_TAG(f)                                                         \
+    HempTag f(                                                              \
+        Hemp            hemp,                                               \
+        HempString      type,                                               \
+        HempString      name,                                               \
+        HempString      start,                                              \
+        HempString      end,                                                \
+        HempGrammar     grammar                                             \
     )
 
-#define HEMP_TYPE(f)                    \
-    HempType f(                         \
-        HempInt    id,                  \
-        HempString name                 \
+#define HEMP_TYPE(f)                                                        \
+    HempType f(                                                             \
+        HempInt    id,                                                      \
+        HempString name                                                     \
     )
 
-#define HEMP_VIEW(f)                    \
-    HEMP_INLINE HempValue f(            \
-        HempViewer      viewer,         \
-        HempFragment    fragment,       \
-        HempContext     context,        \
-        HempValue       output          \
+#define HEMP_VIEW(f)                                                        \
+    HEMP_INLINE HempValue f(                                                \
+        HempViewer      viewer,                                             \
+        HempFragment    fragment,                                           \
+        HempContext     context,                                            \
+        HempValue       output                                              \
     )
 
-#define HEMP_DOC_PREP(f)                \
-    HempDocument f(                     \
-        HempDocument    document        \
+#define HEMP_DOC_PREP(f)                                                    \
+    HempDocument f(                                                         \
+        HempDocument    document                                            \
     )
 
-#define HEMP_DOC_SCAN(f)                \
-    HempBool f(                         \
-        HempDocument    document        \
+#define HEMP_DOC_SCAN(f)                                                    \
+    HempBool f(                                                             \
+        HempDocument    document                                            \
     )
 
-#define HEMP_DOC_CLEAN(f)               \
-    void f(                             \
-        HempDocument    document        \
+#define HEMP_DOC_CLEAN(f)                                                   \
+    void f(                                                                 \
+        HempDocument    document                                            \
     )
 
-#define HEMP_HASH_ITERATOR(f)           \
-    HempBool f(                         \
-        HempHash hash,                  \
-        HempPos  position,              \
-        HempSlot item                   \
+#define HEMP_HASH_ITERATOR(f)                                               \
+    HempBool f(                                                             \
+        HempHash        hash,                                               \
+        HempPos         position,                                           \
+        HempSlot        item                                                \
     )
 
 
 
 /*--------------------------------------------------------------------------
- * Macros for registering component constructors and instantiating components
+ * Factories
+ *
+ * A factory module is responsible for managing a particular kind of resource.
+ * Hemp includes factories for languages, dialects, grammars, tags, elements,
+ * and so on.  A factory will attempt to dynamically load a module to 
+ * satisfy a request for a resource.  In many (but not all) cases, we use
+ * factories to maintain singleton instances of various resources.
  *--------------------------------------------------------------------------*/
 
-#define hemp_register(hemp, type, name, ctor)                       \
-    hemp_factory_register(                                          \
-        hemp->type,                                                 \
-        name,                                                       \
-        (HempActor) ctor,                                           \
-        hemp                                                        \
+#define hemp_register_factory(hemp, name, constructor)                      \
+    hemp_factory_register(                                                  \
+        hemp->factory,                                                      \
+        name,                                                               \
+        (HempActor) constructor,                                            \
+        hemp                                                                \
     )
 
-/* 
- * Calls to this macro should be wrapped in a dedicated function to provide 
- * static type checking of the resource list and to ensure that a local item
- * variable is provided that the macro can increment without affecting the 
- * code in the calling scope - see hemp_register_dialects(), etc., in hemp.c
- */
-
-#define hemp_register_all(hemp, type, item) ({                      \
-    while (item && item->name) {                                    \
-        hemp_factory_register(                                      \
-            hemp->type,                                             \
-            item->name,                                             \
-            (HempActor) item->ctor,                                 \
-            hemp                                                    \
-        );                                                          \
-        item++;                                                     \
-    }                                                               \
+#define hemp_factory(hemp, name) ({                                         \
+    HempFactory _hemp_factory = (HempFactory) hemp_factory_instance(        \
+        hemp->factory,                                                      \
+        name                                                                \
+    );                                                                      \
+    if (! _hemp_factory)                                                    \
+        hemp_throw(hemp, HEMP_ERROR_INVALID, HEMP_FACTORY_FACTORY, name);   \
+    _hemp_factory;                                                          \
 })
 
-#define hemp_constructor(hemp, type, name) ({                       \
-    HempAction _hemp_cons = hemp_factory_constructor(               \
-        hemp->type,                                                 \
-        name                                                        \
-    );                                                              \
-    if (! _hemp_cons)                                               \
-        hemp_throw(hemp, HEMP_ERROR_INVALID, #type, name);          \
-    _hemp_cons;                                                     \
+#define hemp_register(hemp, type, name, ctor)                               \
+    hemp_factory_register(                                                  \
+        hemp_factory(hemp, type),                                           \
+        name,                                                               \
+        (HempActor) ctor,                                                   \
+        hemp                                                                \
+    )
+
+#define hemp_register_all(hemp, type, item) ({                              \
+    HempFactory _hemp_fact = hemp_factory(hemp, type);                      \
+    while (item && item->name) {                                            \
+        hemp_factory_register(                                              \
+            _hemp_fact,                                                     \
+            item->name,                                                     \
+            (HempActor) item->ctor,                                         \
+            hemp                                                            \
+        );                                                                  \
+        item++;                                                             \
+    }                                                                       \
 })
 
-#define hemp_construct(hemp, type, name, ...) ({                    \
-    HempAction _hemp_cons = hemp_constructor(hemp, type, name);     \
-    hemp_action_run(_hemp_cons, name, __VA_ARGS__);                 \
+#define hemp_constructor(hemp, type, name) ({                               \
+    HempAction _hemp_cons = hemp_factory_constructor(                       \
+        hemp_factory(hemp, type),                                           \
+        name                                                                \
+    );                                                                      \
+    if (! _hemp_cons)                                                       \
+        hemp_throw(hemp, HEMP_ERROR_INVALID, type, name);                   \
+    _hemp_cons;                                                             \
 })
 
-#define hemp_instance(hemp, type, name) ({                          \
-    HempMemory _hemp_item = hemp_factory_instance(                  \
-        hemp->type,                                                 \
-        name                                                        \
-    );                                                              \
-    if (! _hemp_item)                                               \
-        hemp_throw(hemp, HEMP_ERROR_INVALID, #type, name);          \
-    _hemp_item;                                                     \
+#define hemp_construct(hemp, type, name, ...) ({                            \
+    HempAction _hemp_cons = hemp_constructor(hemp, type, name);             \
+    hemp_action_run(_hemp_cons, name, __VA_ARGS__);                         \
 })
 
+#define hemp_instance(hemp, type, name) ({                                  \
+    HempMemory _hemp_item = hemp_factory_instance(                          \
+        hemp_factory(hemp, type),                                           \
+        name                                                                \
+    );                                                                      \
+    if (! _hemp_item)                                                       \
+        hemp_throw(hemp, HEMP_ERROR_INVALID, type, name);                   \
+    _hemp_item;                                                             \
+})
+
+
+/*--------------------------------------------------------------------------
+ * Additional macros for registering resources with specific factories
+ *--------------------------------------------------------------------------*/
 
 #define hemp_register_codec(hemp, name, constructor)                \
-    hemp_register(hemp, codec, name, constructor)
+    hemp_register(hemp, HEMP_FACTORY_CODEC, name, constructor)
 
 #define hemp_register_dialect(hemp, name, constructor)              \
-    hemp_register(hemp, dialect, name, constructor)
+    hemp_register(hemp, HEMP_FACTORY_DIALECT, name, constructor)
+
+#define hemp_register_dialects(hemp, dialects)                      \
+    hemp_register_all(hemp, HEMP_FACTORY_DIALECT, dialects)
 
 #define hemp_register_element(hemp, name, constructor)              \
-    hemp_register(hemp, element, name, constructor)
+    hemp_register(hemp, HEMP_FACTORY_ELEMENT, name, constructor)
 
 #define hemp_register_feature(hemp, name, constructor)              \
-    hemp_register(hemp, feature, name, constructor)
+    hemp_register(hemp, HEMP_FACTORY_FEATURE, name, constructor)
 
 #define hemp_register_grammar(hemp, name, constructor)              \
-    hemp_register(hemp, grammar, name, constructor)
+    hemp_register(hemp, HEMP_FACTORY_GRAMMAR, name, constructor)
 
 #define hemp_register_language(hemp, name, constructor)             \
-    hemp_register(hemp, language, name, constructor)
+    hemp_register(hemp, HEMP_FACTORY_LANGUAGE, name, constructor)
 
 #define hemp_register_scheme(hemp, name, constructor)               \
-    hemp_register(hemp, scheme, name, constructor)
+    hemp_register(hemp, HEMP_FACTORY_SCHEME, name, constructor)
 
 #define hemp_register_tag(hemp, name, constructor)                  \
-    hemp_register(hemp, tag, name, constructor)
+    hemp_register(hemp, HEMP_FACTORY_TAG, name, constructor)
 
 #define hemp_register_viewer(hemp, name, constructor)               \
-    hemp_register(hemp, viewer, name, constructor)
+    hemp_register(hemp, HEMP_FACTORY_VIEWER, name, constructor)
 
+
+
+/*--------------------------------------------------------------------------
+ * Macros for fetching and instantiating resources via specific factories
+ *--------------------------------------------------------------------------*/
 
 #define hemp_codec(hemp, name)                                      \
-    hemp_instance(hemp, codec, name)
+    hemp_instance(hemp, HEMP_FACTORY_CODEC, name)
 
 #define hemp_dialect(hemp, name)                                    \
-    hemp_instance(hemp, dialect, name)
+    hemp_instance(hemp, HEMP_FACTORY_DIALECT, name)
 
 #define hemp_grammar(hemp, name)                                    \
-    hemp_instance(hemp, grammar, name)
+    hemp_instance(hemp, HEMP_FACTORY_GRAMMAR, name)
 
 #define hemp_language(hemp, name)                                   \
-    hemp_instance(hemp, language, name)
+    hemp_instance(hemp, HEMP_FACTORY_LANGUAGE, name)
 
 #define hemp_scheme(hemp, name)                                     \
-    hemp_instance(hemp, scheme, name)
+    hemp_instance(hemp, HEMP_FACTORY_SCHEME, name)
+
+#define hemp_tag(hemp, type, name, start, end, grammar) (           \
+    (HempTag) hemp_construct(hemp, HEMP_FACTORY_TAG, type, name, start, end, grammar)    \
+)
 
 #define hemp_viewer(hemp, name)                                     \
-    hemp_instance(hemp, viewer, name)
-
-#define hemp_grammar_feature(hemp, grammar, name) ({                \
-    HempAction _hemp_cons = hemp_constructor(hemp, feature, name);  \
-    hemp_action_run(_hemp_cons, grammar);                           \
-})
+    hemp_instance(hemp, HEMP_FACTORY_VIEWER, name)
 
 #define hemp_element(hemp,type,start,end) ({                        \
-    HempAction _hemp_cons = (HempAction) hemp_factory_constructor(  \
-        hemp->element, type                                         \
-    );                                                              \
-    if (! _hemp_cons)                                               \
-        hemp_throw(hemp, HEMP_ERROR_INVALID, "element", type);      \
+    HempAction _hemp_cons = hemp_constructor(hemp, HEMP_FACTORY_ELEMENT, type); \
     (HempElement) hemp_action_run(                                  \
         _hemp_cons, hemp_element_new(type, start, end)              \
     );                                                              \
 })
+
+#define hemp_grammar_feature(hemp, grammar, name) ({                \
+    HempAction _hemp_cons = hemp_constructor(hemp, HEMP_FACTORY_FEATURE, name);  \
+    hemp_action_run(_hemp_cons, grammar);                           \
+})
+
 
 #define hemp_source(hemp, scheme, source)                           \
     hemp_source_new(                                                \
         hemp_scheme(hemp, scheme),                                  \
         source                                                      \
     )
-
-#define hemp_tag_construct(hemp, type, name, start, end, grammar) (         \
-    (HempTag) hemp_construct(hemp, tag, type, name, start, end, grammar)    \
-)
 
 
 /*--------------------------------------------------------------------------

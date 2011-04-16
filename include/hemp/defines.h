@@ -58,6 +58,18 @@
 #define HEMP_STR_STAR       "*"
 #define HEMP_STR_NAMESEP    "."
 
+/* factory types */
+#define HEMP_FACTORY_CODEC      "codec"
+#define HEMP_FACTORY_DIALECT    "dialect"
+#define HEMP_FACTORY_ELEMENT    "element"
+#define HEMP_FACTORY_FACTORY    "factory"
+#define HEMP_FACTORY_FEATURE    "feature"
+#define HEMP_FACTORY_GRAMMAR    "grammar"
+#define HEMP_FACTORY_LANGUAGE   "language"
+#define HEMP_FACTORY_SCHEME     "scheme"
+#define HEMP_FACTORY_TAG        "tag"
+#define HEMP_FACTORY_VIEWER     "viewer"
+
 /* format strings */
 #define HEMP_FMT_INT        "%d"
 #define HEMP_FMT_NUM        "%g"

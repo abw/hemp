@@ -21,9 +21,6 @@ struct hemp_language {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-HEMP_FACTORY(hemp_language_factory);
-HEMP_HASH_ITERATOR(hemp_language_cleaner);
-
 HempLanguage 
 hemp_language_new(
     Hemp            hemp,
@@ -35,7 +32,5 @@ void
 hemp_language_free(
     HempLanguage    language
 );
-
-HEMP_FACTORY(hemp_feature_factory);
 
 #endif /* HEMP_LANGUAGE_H */

@@ -1,29 +1,9 @@
 #include <hemp/language.h>
 
-/*--------------------------------------------------------------------------
- * Factory functions for loading languages
- *--------------------------------------------------------------------------*/
-
-HEMP_FACTORY(hemp_language_factory) {
-    hemp_debug_init("instantiating language factory\n");
-    HempFactory factory = hemp_factory_new(hemp, name);
-    factory->cleaner     = hemp_language_cleaner;
-    return factory;
-}
-
-
-HEMP_HASH_ITERATOR(hemp_language_cleaner) {
-    HempLanguage language = (HempLanguage) hemp_val_ptr(item->value);
-    hemp_debug_init("cleaning language: %s\n", language->name);
-    hemp_language_free(language);
-    return HEMP_TRUE;
-}
-
 
 /*--------------------------------------------------------------------------
- * 
+ * Object methods
  *--------------------------------------------------------------------------*/
-
 
 HempLanguage
 hemp_language_new(
@@ -49,17 +29,3 @@ hemp_language_free(
     hemp_mem_free(language->name);
     hemp_mem_free(language);
 }
-
-
-
-
-/*--------------------------------------------------------------------------
- * Language features
- *--------------------------------------------------------------------------*/
-
-HEMP_FACTORY(hemp_feature_factory) {
-    hemp_debug_init("instantiating feature factory\n");
-    HempFactory factory = hemp_factory_new(hemp, name);
-    return factory;
-}
-

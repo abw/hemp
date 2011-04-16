@@ -1,28 +1,5 @@
 #include <hemp/codec.h>
 
-
-/*--------------------------------------------------------------------------
- * Factory functions for loading codecs
- *--------------------------------------------------------------------------*/
-
-
-HEMP_FACTORY(hemp_codec_factory) {
-    hemp_debug_init("instantiating codec factory\n");
-    HempFactory factory = hemp_factory_new(hemp, name);
-    factory->cleaner    = hemp_codec_cleaner;
-    return factory;
-}
-
-
-HEMP_HASH_ITERATOR(hemp_codec_cleaner) {
-    HempCodec codec = (HempCodec) hemp_val_ptr(item->value);
-    hemp_debug_init("cleaning codec: %s\n", codec->name);
-    hemp_codec_free(codec);
-    return HEMP_TRUE;
-}
-
-
-
 /*--------------------------------------------------------------------------
  * Codec object functions
  *--------------------------------------------------------------------------*/

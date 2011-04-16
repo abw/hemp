@@ -13,16 +13,21 @@ hemp_new() {
     if (! hemp)
         hemp_mem_fail("Hemp");
 
-    hemp->global     = hemp_global_init();
-    hemp->context    = hemp_context_new(hemp);
-    hemp->filesystem = NULL;    /* prepared on demand, after configuration */
+    hemp->global            = hemp_global_init();
+    hemp->context           = hemp_context_new(hemp);
+    hemp->config            = hemp_hash_new();
+    hemp->config->parent    = hemp->global->config;
+    hemp->filesystem        = NULL;    /* prepared on demand, after configuration */
+    hemp->documents         = NULL;
+
+    /* temporary hack, being replaced by hemp->documents */
+    hemp->tmp_docs_hash = hemp_hash_new();
+
 
     hemp_init_errors(hemp);
-    hemp_init_config(hemp);
     hemp_init_factories(hemp);
     hemp_init_schemes(hemp);
     hemp_init_languages(hemp);
-    hemp_init_documents(hemp);
     hemp_init_viewers(hemp);
 
     // YUK.  We have to do this to force all the hemp stuff to be loaded.
@@ -72,15 +77,6 @@ hemp_init_errors(
 
 
 void
-hemp_init_config(
-    Hemp   hemp
-) {
-    hemp->config            = hemp_hash_new();
-    hemp->config->parent    = hemp->global->config;
-}
-
-
-void
 hemp_init_factories(
     Hemp   hemp
 ) {
@@ -90,17 +86,9 @@ hemp_init_factories(
      */
     hemp->factory   = hemp_meta_factory(hemp, "factory");
 
-    /* create new factory objects to manage resources */
-    /* This is OLD code */
-    hemp->codec     = hemp_codec_factory    (hemp, "codec");
-    hemp->dialect   = hemp_dialect_factory  (hemp, "dialect");
-    hemp->element   = hemp_element_factory  (hemp, "element");
-    hemp->feature   = hemp_feature_factory  (hemp, "feature");
-    hemp->grammar   = hemp_grammar_factory  (hemp, "grammar");
-    hemp->language  = hemp_language_factory (hemp, "language");
-    hemp->scheme    = hemp_scheme_factory   (hemp, "scheme");
-    hemp->tag       = hemp_tag_factory      (hemp, "tag");
-    hemp->viewer    = hemp_viewer_factory   (hemp, "viewer");
+    /* tmp hack to keep old code working that expect hemp->element */
+    hemp->element   = hemp_factory(hemp, HEMP_FACTORY_ELEMENT);
+
 }
 
 
@@ -129,14 +117,6 @@ hemp_init_languages(
     hemp_register_language(
         hemp, HEMP_TT3, &hemp_language_tt3
     );
-}
-
-
-void
-hemp_init_documents(
-    Hemp hemp
-) {
-    hemp->documents = hemp_hash_new();
 }
 
 
@@ -223,8 +203,13 @@ void
 hemp_free_documents(
     Hemp hemp
 ) {
-    hemp_hash_each(hemp->documents, &hemp_free_document);
-    hemp_hash_free(hemp->documents);
+    /* these clean the old temporary docs hash... */
+    hemp_hash_each(hemp->tmp_docs_hash, &hemp_free_document);
+    hemp_hash_free(hemp->tmp_docs_hash);
+
+    /* ... which is being superceded by the new spangy HempDocuments */
+    if (hemp->documents)
+        hemp_documents_free(hemp->documents);
 }
 
 
@@ -233,15 +218,6 @@ hemp_free_factories(
     Hemp hemp
 ) {
     hemp_factory_free(hemp->factory);
-    hemp_factory_free(hemp->viewer);
-    hemp_factory_free(hemp->element);
-    hemp_factory_free(hemp->grammar);
-    hemp_factory_free(hemp->feature);
-    hemp_factory_free(hemp->tag);
-    hemp_factory_free(hemp->dialect);
-    hemp_factory_free(hemp->language);
-    hemp_factory_free(hemp->scheme);
-    hemp_factory_free(hemp->codec);
 }
 
 
@@ -302,53 +278,48 @@ HEMP_HASH_ITERATOR(hemp_free_document) {
  * dialect, tag and element management
  *--------------------------------------------------------------------------*/
 
-
-void 
-hemp_register_dialects(
-    Hemp       hemp,
-    HempDialects   dialect
-) {
-    hemp_register_all(hemp, dialect, dialect);
-}
-
-
 void 
 hemp_register_tags(
-    Hemp   hemp,
-    HempTags   tag
+    Hemp        hemp,
+    HempTags    tags
 ) {
-    hemp_register_all(hemp, tag, tag);
+    hemp_register_all(hemp, HEMP_FACTORY_TAG, tags);
 }
 
 
 void 
 hemp_register_grammars(
-    Hemp       hemp,
-    HempGrammars   grammar
+    Hemp            hemp,
+    HempGrammars    grammars
 ) {
-    hemp_register_all(hemp, grammar, grammar);
+    hemp_register_all(hemp, HEMP_FACTORY_GRAMMAR, grammars);
 }
 
 
-/* TODO: sort out the names: element/symbols */
 void 
 hemp_register_elements(
-    Hemp       hemp,
-    HempElements   elements
+    Hemp            hemp,
+    HempElements    elements
 ) {
-    while (elements && elements->name) {
-        hemp_factory_register(
-            hemp->element, elements->name, (HempActor) elements->ctor, hemp
-        );
-        elements++;
-    }
+    hemp_register_all(hemp, HEMP_FACTORY_ELEMENT, elements);
 }
-
 
 
 /*--------------------------------------------------------------------------
  * document functions
  *--------------------------------------------------------------------------*/
+
+HempDocuments
+hemp_documents(
+    Hemp   hemp
+) {
+    if (! hemp->documents) {
+        hemp_debug_msg("initialise documents\n");
+        hemp->documents = hemp_documents_new(hemp);
+    }
+    return hemp->documents;
+}
+
 
 HempDocument
 hemp_document(
@@ -367,7 +338,7 @@ hemp_document(
     
 //  hemp_debug("MD5 for %s document [%s] is %s\n", scheme, source, md5.output);
 
-    document = hemp_hash_fetch_pointer(hemp->documents, (HempString) md5.output);
+    document = hemp_hash_fetch_pointer(hemp->tmp_docs_hash, (HempString) md5.output);
 
     if (document) {
         if (hemp_string_eq(document->source->scheme->name, scheme)
@@ -396,7 +367,7 @@ hemp_document(
 
     /* let the source allocate memory for storing md5 permanently */
     hemp_source_md5(document->source, (HempString) md5.output);
-    hemp_hash_store_pointer(hemp->documents, document->source->md5, document);
+    hemp_hash_store_pointer(hemp->tmp_docs_hash, document->source->md5, document);
     
     return document;
 }
@@ -481,8 +452,8 @@ hemp_filesystem_instance(
 
 HempString
 hemp_error_format(
-    Hemp   hemp,
-    HempErrno  number
+    Hemp        hemp,
+    HempErrno   number
 ) {
     if (number < 0 || number >= HEMP_ERROR_MAX) 
         hemp_fatal("Invalid error number: %d", number);

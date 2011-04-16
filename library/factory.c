@@ -9,7 +9,7 @@
 HEMP_FACTORY(hemp_meta_factory) {
     hemp_debug_msg("instantiating meta factory\n");
     HempFactory factory = hemp_factory_new(hemp, name);
-    factory->cleaner     = hemp_meta_factory_cleaner;
+    factory->cleaner    = hemp_meta_factory_cleaner;
     return factory;
 }
 
@@ -21,8 +21,8 @@ HEMP_FACTORY(hemp_meta_factory) {
 
 HempFactory
 hemp_factory_new(
-    Hemp   hemp,
-    HempString name
+    Hemp        hemp,
+    HempString  name
 ) {
     HempFactory factory;
     HEMP_ALLOCATE(factory);
@@ -33,7 +33,19 @@ hemp_factory_new(
     factory->cleaner      = NULL;
 //  factory->autoload     = NULL;
     factory->autoload     = &hemp_factory_autoload;
+//  factory->config       = hemp_factory_config_hash(factory, config);
     return factory;
+}
+
+
+HempHash
+hemp_factory_config_hash(
+    HempFactory factory,
+    HempValue   config
+) {
+    HempHash    hash = hemp_hash_new();
+    /* TODO: grok config type and coerce to hash */
+    return      hash;
 }
 
 

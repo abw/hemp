@@ -89,7 +89,7 @@ hemp_tagset_new_tag(
 ) {
     return hemp_tagset_add_tag(
         tagset,
-        hemp_tag_construct(
+        hemp_tag(
             tagset->document->hemp,
             type, name, start, end, grammar
         )

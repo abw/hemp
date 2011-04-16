@@ -1,22 +1,6 @@
 #include <hemp/tag.h>
 
 
-HEMP_FACTORY(hemp_tag_factory) {
-    hemp_debug_init("instantiating tag factory: %s\n", name);
-    HempFactory factory = hemp_factory_new(hemp, name);
-    factory->cleaner     = hemp_tag_cleaner;
-    return factory;
-}
-
-
-HEMP_HASH_ITERATOR(hemp_tag_cleaner) {
-    HempTag tag = (HempTag) hemp_val_ptr(item->value);
-    hemp_debug_init("cleaning tag: %s\n", tag->name);
-    hemp_tag_free(tag);
-    return HEMP_TRUE;
-}
-
-
 HempTag
 hemp_tag_new(
     HempString     type,
@@ -142,12 +126,5 @@ HEMP_SKIPPER(hemp_tag_to_eol) {
     }
 
     return src;
-}
-
-
-HEMP_AUTOLOAD(hemp_tag_autoload) {
-    return hemp_use_module(factory->hemp, "tag", name)
-        ? HEMP_TRUE
-        : HEMP_FALSE;
 }
 

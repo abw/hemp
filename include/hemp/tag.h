@@ -117,8 +117,6 @@ HEMP_SCANNER(hemp_tag_outline_scanner);
 HEMP_SCANNER(hemp_tag_control_scanner);
 HEMP_SCANNER(hemp_tag_comment_scanner);
 
-HEMP_AUTOLOAD(hemp_tag_autoload);
-
 
 /*--------------------------------------------------------------------------
  * macros

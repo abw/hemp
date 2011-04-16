@@ -2,27 +2,6 @@
 
 
 /*--------------------------------------------------------------------------
- * Factory functions for loading grammars
- *--------------------------------------------------------------------------*/
-
-HEMP_FACTORY(hemp_grammar_factory) {
-    hemp_debug_init("instantiating grammar factory\n");
-    HempFactory factory = hemp_factory_new(hemp, name);
-    factory->cleaner     = &hemp_grammar_cleaner;
-    factory->autoload    = NULL;        // TODO: load language
-    return factory;
-}
-
-
-HEMP_HASH_ITERATOR(hemp_grammar_cleaner) {
-    HempGrammar grammar = (HempGrammar) hemp_val_ptr(item->value);
-    hemp_debug_init("cleaning grammar: %s\n", grammar->name);
-    hemp_grammar_free(grammar);
-    return HEMP_TRUE;
-}
-
-
-/*--------------------------------------------------------------------------
  * Grammar functions
  *--------------------------------------------------------------------------*/
 

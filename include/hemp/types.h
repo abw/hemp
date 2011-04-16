@@ -53,6 +53,7 @@ typedef struct hemp_context     * HempContext;
 typedef struct hemp_dialect     * HempDialect;
 typedef struct hemp_dialects    * HempDialects;
 typedef struct hemp_document    * HempDocument;
+typedef struct hemp_documents   * HempDocuments;
 typedef struct hemp_element     * HempElement;
 typedef struct hemp_elements    * HempElements;
 typedef struct hemp_error       * HempError;
@@ -106,20 +107,15 @@ struct hemp {
     HempCache       cache;              /* cache for compiled documents     */
     HempHash        config;             /* configuration items              */
     HempContext     context;            /* default runtime context          */
-    HempHash        documents;          /* OLD: documents hash (-> cache)   */
+    HempDocuments   documents;          /* document manager                 */
     HempFilesystem  filesystem;         /* abstraction of file system       */
 
-    /* all these factories are being merged into the new meta-factory */
-    HempFactory     codec;
-    HempFactory     dialect;
+    HempHash        tmp_docs_hash;      /* OLD: documents hash (-> cache)   */
+
+    /* this one currently has a whole bunch of dependencies, e.g. in 
+     * hemp_element_number_elements() in language/hemp.c 
+     */
     HempFactory     element;
-    HempFactory     feature;
-    HempFactory     grammar;
-    HempFactory     language;
-    HempFactory     scheme;
-    HempFactory     tag;
-    HempFactory     viewer;
-                    
 
     /* TODO: create one flags item */
     HempBool        verbose;

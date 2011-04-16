@@ -11,6 +11,8 @@ extern "C" {
 #include <hemp/codec.h>
 #include <hemp/context.h>
 #include <hemp/dialect.h>
+#include <hemp/document.h>
+#include <hemp/documents.h>
 #include <hemp/element.h>
 #include <hemp/factory.h>
 #include <hemp/filesystem.h>
@@ -31,7 +33,6 @@ extern "C" {
 #include <hemp/stack.h>
 #include <hemp/tag.h>
 #include <hemp/tagset.h>
-#include <hemp/document.h>
 #include <hemp/uri.h>
 #include <hemp/value.h>
 #include <hemp/viewer.h>
@@ -57,7 +58,6 @@ void            hemp_init_config(Hemp);
 void            hemp_init_factories(Hemp);
 void            hemp_init_schemes(Hemp);
 void            hemp_init_languages(Hemp);
-void            hemp_init_documents(Hemp);
 void            hemp_init_viewers(Hemp);
 void            hemp_init_filesystem(Hemp);
 
@@ -72,10 +72,10 @@ HempBool        hemp_free_dialect (HempHash, HempPos, HempSlot);
 HempBool        hemp_free_document(HempHash, HempPos, HempSlot);
 
 HempContext     hemp_context(Hemp);
+HempDocuments   hemp_documents(Hemp);
 HempDocument    hemp_document(Hemp, HempString, HempString, HempString);
 HempFilesystem  hemp_filesystem_instance(Hemp);
 
-void            hemp_register_dialects(Hemp, HempDialects);
 void            hemp_register_tags(Hemp, HempTags);
 void            hemp_register_grammars(Hemp, HempGrammars);
 void            hemp_register_elements(Hemp, HempElements);

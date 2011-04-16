@@ -1,0 +1,11 @@
+include(HempModule)
+
+hemp_module(factory codec)
+hemp_module(factory dialect)
+hemp_module(factory element)
+hemp_module(factory feature)
+hemp_module(factory grammar)
+hemp_module(factory language)
+hemp_module(factory scheme)
+hemp_module(factory tag)
+hemp_module(factory viewer)
