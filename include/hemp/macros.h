@@ -123,7 +123,7 @@
     )
 
 #define HEMP_VIEW(f)                                                        \
-    HEMP_INLINE HempValue f(                                                \
+    HempValue f(                                                            \
         HempViewer      viewer,                                             \
         HempFragment    fragment,                                           \
         HempContext     context,                                            \
@@ -159,7 +159,7 @@
  *
  * A factory module is responsible for managing a particular kind of resource.
  * Hemp includes factories for languages, dialects, grammars, tags, elements,
- * and so on.  A factory will attempt to dynamically load a module to 
+ * and so on.  A factory will attempt to dynamically load a module to
  * satisfy a request for a resource.  In many (but not all) cases, we use
  * factories to maintain singleton instances of various resources.
  *--------------------------------------------------------------------------*/
@@ -314,28 +314,28 @@
 /*--------------------------------------------------------------------------
  * Elements
  *
- * A language grammar maps input tokens (words, numbers, punctuation 
+ * A language grammar maps input tokens (words, numbers, punctuation
  * characters, etc) to elements.  An element entry is effectively a vtable
- * containing functions that implement the behaviours for a particular 
- * kind of document element (a chunk of text, number, variable, operator, 
+ * containing functions that implement the behaviours for a particular
+ * kind of document element (a chunk of text, number, variable, operator,
  * keyword, etc) along with a few other flags and values for housekeeping
  * purpose.
  *
- * A grammar is constructed by asking hemp to create elements to represent 
- * the different element types (e.g. via hemp_grammar_add_symbol()).  A 
- * unique name is used to identify the element type (e.g. hemp.numop.multiply 
- * to represent numerical multiplication).  The relevant token (e.g. '*' or 
- * perhaps 'x') and left/right precedence levels are also specified, where 
+ * A grammar is constructed by asking hemp to create elements to represent
+ * the different element types (e.g. via hemp_grammar_add_symbol()).  A
+ * unique name is used to identify the element type (e.g. hemp.numop.multiply
+ * to represent numerical multiplication).  The relevant token (e.g. '*' or
+ * perhaps 'x') and left/right precedence levels are also specified, where
  * appropriate (used to implement operator precedence parsing).
  *
- * HEMP_USE_ELEMENT0(...), HEMP_USE_ELEMENT1(...) and HEMP_USE_ELEMENT2(...) can be used as 
- * shortcuts for registering a symbol with a grammar.  The first is for 
+ * HEMP_USE_ELEMENT0(...), HEMP_USE_ELEMENT1(...) and HEMP_USE_ELEMENT2(...) can be used as
+ * shortcuts for registering a symbol with a grammar.  The first is for
  * symbols that don't have any particular start or end token (e.g. number,
  * word, text), the second is for those that have a unique start token, (e.g.
- * '+', '#', 'if', etc) and the third is for those that have start and end 
+ * '+', '#', 'if', etc) and the third is for those that have start and end
  * tokens (e.g. quoted strings like "...", '...', q{...}, etc).
  *
- * HEMP_USE_OPERATOR1(...) and HEMP_USE_OPERATOR2(...) do similar things, but add 
+ * HEMP_USE_OPERATOR1(...) and HEMP_USE_OPERATOR2(...) do similar things, but add
  * left and rightward precedence levels as options.
  *
  * See library/language/XXX.c for examples of these in action.
@@ -387,18 +387,18 @@
 /*--------------------------------------------------------------------------
  * Parsing
  *
- * After the scanner has done its thing we have a single linked list of 
- * elements representing the raw tokens in the document.  We use parse 
+ * After the scanner has done its thing we have a single linked list of
+ * elements representing the raw tokens in the document.  We use parse
  * functions to build a tree representation of the document.  We skip over
  * any elements that don't generate output (whitespace, comments, tag markers,
  * etc) and organise the rest into the appropriate structure using top-down
- * operator precedence parsing.  See Ch.9 of "Beautiful Code" (O'Reilly, 
+ * operator precedence parsing.  See Ch.9 of "Beautiful Code" (O'Reilly,
  * ISBN-13: 978-0-596-51004-6) for a good introduction to the subject.
  *
- * HEMP_PREFIX() and HEMP_POSTFIX() can be used to declare and 
+ * HEMP_PREFIX() and HEMP_POSTFIX() can be used to declare and
  * define expression parsing functions for this purpose.  A prefix function
- * is called when an element appears at the start of an expression.  A 
- * postfix function is called when it appears following a preceding 
+ * is called when an element appears at the start of an expression.  A
+ * postfix function is called when it appears following a preceding
  * expression element.
  *--------------------------------------------------------------------------*/
 
@@ -412,19 +412,19 @@
     fragptr, scope, precedence, force
 
 #define HEMP_PREFIX(f)                      \
-    HEMP_INLINE HempFragment f(             \
+    HempFragment f(                         \
         HEMP_PREFIX_ARGS                    \
     )
 
 #define HEMP_POSTFIX_ARGS                   \
     HEMP_PREFIX_ARGS,                       \
-    HempFragment    lhs 
+    HempFragment    lhs
 
 #define HEMP_POSTFIX_ARG_NAMES              \
     fragptr, scope, precedence, force, lhs
 
 #define HEMP_POSTFIX(f)                     \
-    HEMP_INLINE HempFragment f(             \
+    HempFragment f(                         \
         HEMP_POSTFIX_ARGS                   \
     )
 
@@ -438,7 +438,7 @@
     HEMP_POSTFIX(f)
 
 #define HEMP_FIXUP(f)                       \
-    HEMP_INLINE HempFragment f(             \
+    HempFragment f(                         \
         HempFragment    fragment,           \
         HempScope       scope,              \
         HempValue       fixative            \
@@ -494,40 +494,40 @@
  * to text) and other methods that can be called on values, e.g. text.length
  *
  * HEMP_VALUE() can be used to declare and define value functions.
- * HEMP_OUTPUT() is a special case for text yielding functions where we 
- * allow an existing text/list object to be passed as an extra argument for 
+ * HEMP_OUTPUT() is a special case for text yielding functions where we
+ * allow an existing text/list object to be passed as an extra argument for
  * the function to append the value onto.
  *--------------------------------------------------------------------------*/
 
 #define HEMP_VALUE(f)                       \
-    HEMP_INLINE HempValue f(                \
+    HempValue f(                            \
         HempValue       value,              \
         HempContext     context             \
     )
 
 #define HEMP_INPUT(f)                       \
-    HEMP_INLINE HempValue f(                \
+    HempValue f(                            \
         HempValue       value,              \
         HempContext     context,            \
         HempValue       input               \
     )
 
 #define HEMP_OUTPUT(f)                      \
-    HEMP_INLINE HempValue f(                \
+    HempValue f(                            \
         HempValue       value,              \
         HempContext     context,            \
         HempValue       output              \
     )
 
 #define HEMP_FETCH(f)                       \
-    HEMP_INLINE HempValue f(                \
+    HempValue f(                            \
         HempValue       container,          \
         HempContext     context,            \
         HempValue       key                 \
     )
 
 #define HEMP_STORE(f)                       \
-    HEMP_INLINE HempValue f(                \
+    HempValue f(                            \
         HempValue       container,          \
         HempContext     context,            \
         HempValue       key,                \
@@ -535,12 +535,12 @@
     )
 
 #define HEMP_CLEAN(f)                       \
-    HEMP_INLINE void f(                     \
+    void f(                                 \
         HempValue       value               \
     )
 
 #define HEMP_CLEANUP(f)                     \
-    HEMP_INLINE void f(                     \
+    void f(                                 \
         HempFragment    fragment            \
     )
 

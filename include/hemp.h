@@ -86,7 +86,7 @@ void            hemp_ready(Hemp);
 HempString      hemp_version();
 
 
-HEMP_INLINE HempText
+HempText
 hemp_encode(
     Hemp            hemp,
     HempString      name,
@@ -95,7 +95,7 @@ hemp_encode(
 );
 
 
-HEMP_INLINE HempValue
+HempValue
 hemp_decode(
     Hemp            hemp,
     HempString      name,
@@ -109,4 +109,3 @@ hemp_decode(
 #endif
 
 #endif /* HEMP_H */
-

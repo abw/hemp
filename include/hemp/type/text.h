@@ -12,23 +12,23 @@ struct hemp_text {
     HempString      string;
     HempSize        capacity;
     HempSize        length;
-}; 
+};
 
 
 /*--------------------------------------------------------------------------
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-HempText 
+HempText
 hemp_text_init_size(
-    HempText        text, 
+    HempText        text,
     HempSize        capacity
 );
 
-HempText 
+HempText
 hemp_text_init_format(
-    HempText        text, 
-    HempString      format, 
+    HempText        text,
+    HempString      format,
     ...
 );
 
@@ -49,49 +49,49 @@ hemp_text_from_string(
 
 HempText
 hemp_text_append_text(
-    HempText        text, 
+    HempText        text,
     HempText        append
 );
 
 HempText
 hemp_text_append_string(
-    HempText        text, 
+    HempText        text,
     HempString      append
 );
 
 HempText
 hemp_text_append_stringn(
-    HempText        text, 
-    HempString      append, 
+    HempText        text,
+    HempString      append,
     HempSize        length
 );
 
 HempText
 hemp_text_insert_string(
-    HempText        text, 
-    HempOffset      position, 
+    HempText        text,
+    HempOffset      position,
     HempString      insert
 );
 
 HempText
 hemp_text_replace_string(
-    HempText        text, 
+    HempText        text,
     HempString      replace
 );
 
 HempText
 hemp_text_truncate(
-    HempText        text, 
+    HempText        text,
     HempPos         length
 );
 
 
-void     
+void
 hemp_text_release(
     HempText        text
 );
 
-HEMP_INLINE void
+void
 hemp_text_clean(
     HempValue       value
 );

@@ -3,7 +3,7 @@
 
 
 /*--------------------------------------------------------------------------
- * Generic data types.  We use HempBlah data types internally for the sake 
+ * Generic data types.  We use HempBlah data types internally for the sake
  * of consistency, simplicity and to abstract away any differences between
  * platforms.
  *--------------------------------------------------------------------------*/
@@ -112,8 +112,8 @@ struct hemp {
 
     HempHash        tmp_docs_hash;      /* OLD: documents hash (-> cache)   */
 
-    /* this one currently has a whole bunch of dependencies, e.g. in 
-     * hemp_element_number_elements() in language/hemp.c 
+    /* this one currently has a whole bunch of dependencies, e.g. in
+     * hemp_element_number_elements() in language/hemp.c
      */
     HempFactory     element;
 
@@ -130,7 +130,7 @@ struct hemp {
 
 
 /*--------------------------------------------------------------------------
- * Note that HempValue is defined here and not in value.h or we end up in 
+ * Note that HempValue is defined here and not in value.h or we end up in
  * circular header dependency hell.
  *--------------------------------------------------------------------------*/
 
@@ -150,7 +150,7 @@ typedef HempMemory
     ...
 );
 
-typedef HempBool 
+typedef HempBool
 (* HempAutoload)(
     HempFactory     factory,
     HempString      name
@@ -178,7 +178,7 @@ typedef HempBool
  * Dialect/document function pointers
  *--------------------------------------------------------------------------*/
 
-typedef HempDocument 
+typedef HempDocument
 (* hemp_doc_prep)(
     HempDocument    document        /* pointer to document to prepare       */
 );
@@ -210,7 +210,7 @@ typedef HempString
     HempString      src
 );
 
-typedef HempTag 
+typedef HempTag
 (* HempTagdef)(
     Hemp            hemp,
     HempString      type,
@@ -300,21 +300,21 @@ typedef HempValue
     HempContext     context
 );
 
-typedef HempValue 
+typedef HempValue
 (* HempInput)(
     HempValue       value,
     HempContext     context,
     HempValue       input
 );
 
-typedef HempValue 
+typedef HempValue
 (* HempOutput)(
     HempValue       value,
     HempContext     context,
     HempValue       output
 );
 
-typedef HempValue 
+typedef HempValue
 (* hemp_view_f)(
     HempViewer      viewer,         /* pointer to viewer                    */
     HempFragment    fragment,       /* pointer to element                   */

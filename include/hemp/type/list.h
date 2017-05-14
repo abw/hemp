@@ -14,19 +14,19 @@ struct hemp_list {
     HempSize        capacity;
     HempSize        length;
     hemp_list_iter  cleaner;
-}; 
+};
 
 
 /*--------------------------------------------------------------------------
  * Function prototypes
  *--------------------------------------------------------------------------*/
 
-HempList 
+HempList
 hemp_list_init(
     HempList        list
 );
 
-HEMP_INLINE void
+void
 hemp_list_release(
     HempList        list
 );
@@ -38,7 +38,7 @@ hemp_list_free(
 
 HempSize
 hemp_list_resize(
-    HempList        list, 
+    HempList        list,
     HempSize        new_size
 );
 
@@ -47,15 +47,15 @@ hemp_list_copy(
     HempList src
 );
 
-HempList 
+HempList
 hemp_list_push(
-    HempList        list, 
+    HempList        list,
     HempValue       item
 );
 
 HempList
 hemp_list_push_list(
-    HempList        list, 
+    HempList        list,
     HempList        values
 );
 
@@ -69,9 +69,9 @@ HempValue
 hemp_list_pop(
     HempList        list
 );
-    
 
-HempPos 
+
+HempPos
 hemp_list_each(
     HempList        list,
     hemp_list_iter  func
@@ -79,18 +79,18 @@ hemp_list_each(
 
 HempBool
 hemp_list_each_free(
-    HempList        list, 
+    HempList        list,
     HempPos         index,
     HempValue       value
 );
 
-HEMP_INLINE HempBool 
+HempBool 
 hemp_list_index(
     HempContext     context,
     HempValue       key,
     HempInt       * index
 );
-    
+
 
 // tmp hack for debugging
 HempText

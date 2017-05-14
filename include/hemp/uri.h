@@ -2,6 +2,7 @@
 #define HEMP_URI_H
 
 #include <hemp/core.h>
+#include <hemp/type/hash.h>
 
 struct hemp_uri {
     HempString      uri;
@@ -19,50 +20,50 @@ struct hemp_uri {
 };
 
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_init(
     HempUri         uri
 );
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_from_string(
     HempString      string
 );
 
-HEMP_INLINE void
+void
 hemp_uri_copy_authority(
     HempUri         from,
     HempUri         to
 );
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_relative_string(
     HempUri         base,
     HempString      rel
 );
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_relative_uri(
     HempUri         base,
     HempUri         rel
 );
 
-void 
+void
 hemp_uri_buffer(
     HempUri         uri
 );
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_wipe(
     HempUri         uri
 );
 
-HEMP_INLINE void
+void
 hemp_uri_release(
     HempUri         uri
 );
 
-HEMP_INLINE void
+void
 hemp_uri_free(
     HempUri         uri
 );
@@ -91,7 +92,7 @@ hemp_uri_join(
 );
 
 
-HEMP_INLINE HempBool
+HempBool
 hemp_uri_schemes_equal(
     HempUri         base,
     HempUri         rel

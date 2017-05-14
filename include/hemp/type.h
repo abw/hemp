@@ -1,12 +1,12 @@
 #ifndef HEMP_TYPE_H
 #define HEMP_TYPE_H
 
-#include <hemp/core.h>
+//#include <hemp/core.h>
 
 
 /* This defines the members of the HempType data structure.
  * It's written this way so that other structures (e.g. HempElement)
- * can incorporate it to emulate an extended class built upon a 
+ * can incorporate it to emulate an extended class built upon a
  * HempType "base class".
  */
 
@@ -38,13 +38,11 @@
 //  hemp_method_f       method;         /* TODO: method auto-generator */
 
 
-
-
 /*--------------------------------------------------------------------------
  * Data structures
  *
  * A hemp data type defines a core set of functions for manipulating the
- * data and converting it to other core data types.  A hemp object is 
+ * data and converting it to other core data types.  A hemp object is
  * loosely defined as any data structure starting with a type pointer.
  *--------------------------------------------------------------------------*/
 
@@ -55,6 +53,7 @@ struct hemp_type {
 struct hemp_object {
     HempType        type;
 };
+
 
 /* other stuff to think about adding:
     # memory management
@@ -72,7 +71,7 @@ struct hemp_object {
 /*--------------------------------------------------------------------------
  * core types
  *--------------------------------------------------------------------------*/
- 
+
 extern HempType HempTypeType;
 extern HempType HempTypeValue;
 extern HempType HempTypeNumber;
@@ -102,7 +101,7 @@ hemp_type_init(
 );
 
 
-void 
+void
 hemp_type_isa(
     HempType    type,
     HempType    base
@@ -115,7 +114,7 @@ hemp_type_subtype(
     HempString      name
 );
 
-HEMP_INLINE void 
+void
 hemp_type_wipe(
     HempType type
 );
@@ -132,12 +131,12 @@ hemp_use_type(
 );
 
 
-void 
+void
 hemp_global_types_init(
     HempGlobal      global
 );
 
-void 
+void
 hemp_global_types_free(
     HempGlobal      global
 );
@@ -173,4 +172,3 @@ HEMP_VALUE(hemp_method_type_id);
 
 
 #endif /* HEMP_TYPE_H */
-

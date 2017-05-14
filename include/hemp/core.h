@@ -2,12 +2,12 @@
 #define HEMP_CORE_H
 
 /*--------------------------------------------------------------------------
- * This header file includes all the other core header files that are 
+ * This header file includes all the other core header files that are
  * required by most, if not all of the library source files.
  *--------------------------------------------------------------------------*/
 
 #define _GNU_SOURCE
- 
+
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
@@ -29,7 +29,11 @@
 #include <hemp/global.h>            /* global hemp configuration            */
 #include <hemp/utils.h>             /* misc utils                           */
 #include <hemp/macros.h>            /* macros sprinkling syntactic sugar    */
+#include <hemp/type.h>             /*      */
+#include <hemp/value.h>             /*      */
 #include <hemp/type/string.h>       /* functions for handling C strings     */
+#include <hemp/type/text.h>         /* functions for handling text     */
+//#include <hemp/type/hash.h>         /* functions for hash arrays            */
 
 
 /* This is defined in hemp.c, but we don't want to put it in hemp.h because

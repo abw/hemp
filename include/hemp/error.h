@@ -10,7 +10,7 @@
  *--------------------------------------------------------------------------*/
 
 
-typedef enum { 
+typedef enum {
     /* NOT USED... changed my mind, but keeping for reference */
     /* general error types */
     HEMP_ERRTYPE_NONE       = 0x01,
@@ -28,14 +28,14 @@ typedef enum {
     HEMP_ERRTYPE_DATA       = 0x20,
 } hemp_error_type;
 
-enum hemp_jump_type { 
+enum hemp_jump_type {
     HEMP_JUMP_NONE          = 0,
     HEMP_JUMP_INTERNAL      = 1,
     HEMP_JUMP_ERROR         = 2,
     HEMP_JUMP_FLOW          = 3
 };
-    
-enum hemp_errno { 
+
+enum hemp_errno {
     HEMP_ERROR_NONE = 0,
     HEMP_ERROR_UNKNOWN,
     HEMP_ERROR_MEMORY,
@@ -139,10 +139,10 @@ hemp_error_text(
     HempError       error
 );
 
-HempError    
+HempError
 hemp_error_message(
-    Hemp            hemp, 
-    HempErrno       number, 
+    Hemp            hemp,
+    HempErrno       number,
     ...
 );
 
@@ -152,14 +152,14 @@ hemp_error_free(
 );
 
 
-HEMP_INLINE HempError
+HempError
 hemp_error_document(
     HempError       error,
     HempDocument    document
 );
 
 
-HEMP_INLINE HempError
+HempError
 hemp_error_location(
     HempError       error,
     HempString      source,
@@ -167,7 +167,7 @@ hemp_error_location(
 );
 
 
-HEMP_INLINE HempError
+HempError
 hemp_error_document_location(
     HempError       error,
     HempDocument    document,

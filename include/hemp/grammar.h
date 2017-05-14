@@ -15,7 +15,7 @@
  * type definitions
  *--------------------------------------------------------------------------*/
 
-typedef HempGrammar 
+typedef HempGrammar
 (*  hemp_grammar_f) (
     Hemp            hemp,
     HempString      name
@@ -72,7 +72,7 @@ hemp_grammar_add_element(
     HempPrec        rprec
 );
 
-HEMP_INLINE HempElement
+HempElement
 hemp_grammar_element(
     HempGrammar     grammar,
     HempString      name

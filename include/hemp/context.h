@@ -40,33 +40,33 @@ hemp_context_free(
     HempContext     context
 );
 
-HEMP_INLINE HempText
+HempText
 hemp_context_tmp_text(
     HempContext     context
 );
 
-HEMP_INLINE HempText
+HempText
 hemp_context_tmp_text_size(
     HempContext     context,
     HempSize        size
 );
 
-HEMP_INLINE HempList
+HempList
 hemp_context_tmp_list(
     HempContext     context
 );
 
-HEMP_INLINE HempHash
+HempHash
 hemp_context_tmp_hash(
     HempContext     context
 );
 
-HEMP_INLINE HempCode
+HempCode
 hemp_context_tmp_code(
     HempContext     context
 );
 
-HEMP_INLINE HempParams
+HempParams
 hemp_context_tmp_params(
     HempContext     context
 );
@@ -96,28 +96,28 @@ hemp_context_params_pool_cleaner(
     HempMemory      item
 );
 
-HEMP_INLINE HempFrame
+HempFrame
 hemp_context_frame(
     HempContext     context
 );
 
-HEMP_INLINE HempFrame
+HempFrame
 hemp_context_enter(
     HempContext     context,
     HempFragment    fragment
 );
 
-HEMP_INLINE HempFragment
+HempFragment
 hemp_context_leave(
     HempContext     context
 );
 
-HEMP_INLINE void
+void
 hemp_context_focus_params(
     HempContext     context
 );
 
-HEMP_INLINE void
+void
 hemp_context_blur_params(
     HempContext     context
 );

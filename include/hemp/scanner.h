@@ -13,12 +13,12 @@ hemp_scan_text(
     HempDocument    document
 );
 
-HEMP_INLINE void
+void
 hemp_scan_number(
     HempDocument    document
 );
 
-HEMP_INLINE void
+void
 hemp_scan_whitespace(
     HempDocument    document
 );

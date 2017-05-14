@@ -19,24 +19,24 @@ struct hemp_stack {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE HempStack
+HempStack
 hemp_stack_init(
     HempStack       stack,
     HempSize        capacity
 );
 
-HEMP_INLINE void
+void
 hemp_stack_push(
     HempStack       stack,
     HempMemory      item
 );
 
-HEMP_INLINE HempMemory
+HempMemory
 hemp_stack_pop(
     HempStack       stack
 );
 
-void 
+void
 hemp_stack_free(
     HempStack       stack
 );
@@ -63,4 +63,3 @@ hemp_stack_each(
 
 
 #endif /* HEMP_STACK_H */
-

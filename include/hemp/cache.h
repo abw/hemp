@@ -2,6 +2,7 @@
 #define HEMP_CACHE_H
 
 #include <hemp/core.h>
+#include <hemp/type/hash.h>
 
 
 /*--------------------------------------------------------------------------
@@ -65,7 +66,7 @@ hemp_cache_free(
 );
 
 
-HempValue 
+HempValue
 hemp_cache_no_fetch(
     HempCache       cache,
     HempString      key
@@ -121,7 +122,7 @@ hemp_cache_lru_new(
     HempSize        size
 );
 
-HempValue 
+HempValue
 hemp_cache_lru_fetch(
     HempCache       cache,
     HempString      key
@@ -180,4 +181,3 @@ hemp_cache_lru_freshen_slot(
 
 
 #endif /* HEMP_CACHE_H */
-  

@@ -66,7 +66,7 @@ hemp_module_unload(
     HempModule      module
 );
 
-HEMP_INLINE HempBool
+HempBool
 hemp_module_failed(
     HempModule      module,
     HempString      error,

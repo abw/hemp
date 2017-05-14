@@ -22,8 +22,8 @@ struct hemp_slot {
  * function prototypes
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE HempSlot
-hemp_slot_init(  
+HempSlot
+hemp_slot_init(
     HempValue       parent,
     HempSize        index,
     HempString      name,

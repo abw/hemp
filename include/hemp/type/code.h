@@ -16,27 +16,27 @@ struct hemp_code {
 //  HempValue       args;
 //  hemp_scope_t    scope;
 //  hemp_element_t  source;
-}; 
+};
 
 
 /*--------------------------------------------------------------------------
  * Function prototypes
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE HempCode
+HempCode
 hemp_code_init();
 
-HEMP_INLINE void
+void
 hemp_code_release(
     HempCode        code
 );
 
-HEMP_INLINE void
+void
 hemp_code_free(
     HempCode        code
 );
 
-HEMP_INLINE HempProto
+HempProto
 hemp_code_proto(
     HempCode        code
 );

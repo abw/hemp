@@ -58,57 +58,57 @@ hemp_string_trim(
     HempString      string
 );
 
-HEMP_INLINE void
+void
 hemp_string_chomp(
     HempString      string
 );
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_wordlike(
     HempString      string
 );
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_intlike(
     HempString      string
 );
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_numlike(
     HempString      string
 );
 
-HEMP_INLINE HempString
+HempString
 hemp_string_next_space(
     HempString      string
 );
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_to_next_space(
     HempString    * string
 );
 
-HEMP_INLINE HempString
+HempString
 hemp_string_next_nonspace(
     HempString      string
 );
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_to_next_nonspace(
     HempString    * string
 );
 
-HEMP_INLINE HempString
+HempString
 hemp_string_next_line(
     HempString      string
 );
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_to_next_line(
     HempString    * string
 );
 
-HEMP_INLINE HempList
+HempList
 hemp_string_words(
     HempString      string
 );

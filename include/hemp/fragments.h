@@ -52,7 +52,7 @@ hemp_fragments_add_eof(
     HempPos         position
 );
 
-void 
+void
 hemp_fragments_free(
     HempFragments   fragments
 );
@@ -62,12 +62,12 @@ hemp_fragments_free_fragment(
     HempMemory      item
 );
 
-HEMP_INLINE HempDocument
+HempDocument
 hemp_fragments_document(
     HempFragments   fragments
 );
 
-void 
+void
 hemp_fragments_dump(
     HempFragments   fragments
 );

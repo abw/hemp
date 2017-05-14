@@ -66,28 +66,28 @@ hemp_fragment_free(
     HempFragment    fragment
 );
 
-HEMP_INLINE HempGrammar
+HempGrammar
 hemp_fragment_grammar(
     HempFragment    fragment
 );
 
-HEMP_INLINE HempFragments
+HempFragments
 hemp_fragment_fragments(
     HempFragment    fragment
 );
 
-HEMP_INLINE HempDocument
+HempDocument
 hemp_fragment_document(
     HempFragment    fragment
 );
 
-HEMP_INLINE HempElement
+HempElement
 hemp_fragment_grammar_element(
     HempFragment    fragment,
     HempString      name
 );
 
-HEMP_INLINE HempFragment
+HempFragment
 hemp_fragment_new_fragment(
     HempFragment    fragment,
     HempString      typename
@@ -101,7 +101,7 @@ hemp_fragment_retype(
 
 HempFragment
 hemp_fragment_parse(
-    HempFragment    fragment, 
+    HempFragment    fragment,
     HempScope       scope
 );
 

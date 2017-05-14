@@ -15,7 +15,7 @@
 struct hemp_params {
     HempList        ordinals;
     HempHash        nominals;
-}; 
+};
 
 
 /*--------------------------------------------------------------------------
@@ -27,7 +27,7 @@ hemp_params_init(
     HempParams      params
 );
 
-HEMP_INLINE void
+void
 hemp_params_release(
     HempParams      params
 );
@@ -38,7 +38,7 @@ hemp_params_free(
 );
 
 
-void 
+void
 hemp_params_dump(
     HempParams params
 );
