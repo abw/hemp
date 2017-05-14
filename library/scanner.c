@@ -1,7 +1,7 @@
 #include <hemp/scanner.h>
 
 
-HEMP_INLINE void
+void
 hemp_scan_number(
     HempDocument   document
 ) {
@@ -18,12 +18,12 @@ hemp_scan_number(
     int_val = strtol(document->scanptr, &src, 0);
     is_int  = HEMP_TRUE;
 
-    /* If there's a decimal point and a digit following then it's a 
+    /* If there's a decimal point and a digit following then it's a
     ** floating point number.  We also look out for e/E which also
     ** indicate fp numbers in scientific notation, e.g. 1.23e6.
-    ** Note that we don't accept the decimal point if the next 
+    ** Note that we don't accept the decimal point if the next
     ** character is not a digit.  This is required to support methods
-    ** called against numeric constants, e.g. 12345.hex 
+    ** called against numeric constants, e.g. 12345.hex
     */
     if ( ( *src == '.' && isdigit(*(src + 1)) )
       || ( *src == 'e' || *src == 'E' )
@@ -37,8 +37,8 @@ hemp_scan_number(
         hemp_throw(document->hemp, HEMP_ERROR_OVERFLOW, document->scanptr);
     }
     else if (errno) {
-        /* should never happen (famous last words) as we pre-check 
-        ** that there is at least one valid digit available to be 
+        /* should never happen (famous last words) as we pre-check
+        ** that there is at least one valid digit available to be
         ** parsed, but we check anyway
         */
         hemp_fatal("Unknown number parsing error: %d", errno);
@@ -58,7 +58,7 @@ hemp_scan_number(
 }
 
 
-HEMP_INLINE void
+void
 hemp_scan_whitespace(
     HempDocument   document
 ) {
@@ -72,4 +72,3 @@ hemp_scan_whitespace(
         );
     }
 }
-

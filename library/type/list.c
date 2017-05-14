@@ -37,7 +37,7 @@ hemp_list_init(
 }
 
 
-HEMP_INLINE void
+void
 hemp_list_release(
     HempList list
 ) {
@@ -63,7 +63,7 @@ hemp_list_free(
 
 HempSize
 hemp_list_grow(
-    HempList   list, 
+    HempList   list,
     HempSize   min_size
 ) {
     HempU16    old_size = list->capacity;
@@ -80,7 +80,7 @@ hemp_list_grow(
         return new_size;
 
     list->items = hemp_mem_resize(
-        list->items, 
+        list->items,
         new_size * sizeof(HempValue)
     );
     if (! list->items)
@@ -95,7 +95,7 @@ hemp_list_grow(
 
 HempSize
 hemp_list_resize(
-    HempList   list, 
+    HempList   list,
     HempSize   new_size
 ) {
     HempU16    old_size = list->length;
@@ -109,7 +109,7 @@ hemp_list_resize(
     }
 
     /* In all other cases (new_size < old_size) and (new_size == old_size)
-     * it suffices to simply reset the list length to the new value.  
+     * it suffices to simply reset the list length to the new value.
      * TODO: if the list has a cleaner then run it against truncated items.
      */
 
@@ -126,7 +126,7 @@ hemp_list_copy(
     HempList list = hemp_list_new();
     hemp_list_grow(list, src->length);
 //    hemp_debug_msg(
-//        "copying %d bytes from %p to $p\n", 
+//        "copying %d bytes from %p to $p\n",
 //        src->length * sizeof(HempValue),
 //        src->items, list->items
 //    );
@@ -138,7 +138,7 @@ hemp_list_copy(
 
 HempList
 hemp_list_push(
-    HempList   list, 
+    HempList   list,
     HempValue  value
 ) {
     if (list->length == list->capacity) {
@@ -152,7 +152,7 @@ hemp_list_push(
 
 HempList
 hemp_list_push_list(
-    HempList   list, 
+    HempList   list,
     HempList   values
 ) {
     HempSize   length = list->length + values->length;
@@ -210,22 +210,22 @@ hemp_list_pop(
 
 HempPos
 hemp_list_each(
-    HempList         list, 
+    HempList         list,
     hemp_list_iter   func
 ) {
     HempPos pos = 0;
-    
+
     for (pos = 0; pos < list->length; pos++) {
         if (! func(list, pos, list->items[pos]))
             break;
     }
-    
+
     // returns number of items visited
     return pos;
 }
 
 
-HEMP_INLINE HempBool 
+HempBool
 hemp_list_index(
     HempContext  context,
     HempValue    key,
@@ -259,15 +259,15 @@ hemp_list_index(
 
         if (hemp_string_intlike(ktext->string)) {
 //          hemp_debug("got numlike string\n");
-            *index = hemp_val_int( 
-                hemp_type_string_integer( hemp_str_val(ktext->string), context) 
+            *index = hemp_val_int(
+                hemp_type_string_integer( hemp_str_val(ktext->string), context)
             );
             found = HEMP_TRUE;
         }
         else {
 //          hemp_debug("text index is not numlike: %s\n", ktext->string);
         }
-        
+
         if (kmine)
             hemp_text_free(ktext);
     }
@@ -276,10 +276,10 @@ hemp_list_index(
 }
 
 
-HempBool 
+HempBool
 hemp_list_each_free(
-    HempList     list, 
-    HempPos      pos, 
+    HempList     list,
+    HempPos      pos,
     HempValue    item
 ) {
 //  hemp_debug_mem("freeing list item %d at %p\n", pos, hemp_val_ptr(item));
@@ -331,7 +331,7 @@ HEMP_FETCH(hemp_type_list_fetch) {
         return HempMissing;
     }
 
-    return found 
+    return found
         ? hemp_list_item( hemp_val_list(container), index )
         : HempMissing;
 }
@@ -344,7 +344,7 @@ HEMP_STORE(hemp_type_list_store) {
     HempInt  index = -1;
     HempBool found = hemp_list_index(context, key, &index);
     HempList list  = hemp_val_list(container);
-    
+
     if (! found) {
 //      hemp_debug("no index key\n");
         return HempMissing;
@@ -365,10 +365,10 @@ HEMP_STORE(hemp_type_list_store) {
         list->items[list->length++] = HempNothing;
     }
     list->items[index] = value;
-    
+
     if (index >= list->length)
         list->length = index + 1;
-    
+
 //  hemp_debug_msg("new length is %d, capacity is %d\n", list->length, list->capacity);
     return value;
 }
@@ -431,11 +431,11 @@ HEMP_VALUE(hemp_method_list_each) {
  *--------------------------------------------------------------------------*/
 
 HempText hemp_list_dump_buffer = NULL;
- 
-HempBool 
+
+HempBool
 hemp_list_dump_item(
     HempList     list,
-    HempPos      pos, 
+    HempPos      pos,
     HempValue    item
 ) {
     hemp_text_append_string(hemp_list_dump_buffer, "    ");
@@ -454,7 +454,7 @@ hemp_list_dump_item(
 }
 
 
-void 
+void
 hemp_list_dump_list(
     HempList list
 ) {

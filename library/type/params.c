@@ -14,7 +14,7 @@ HEMP_TYPE(hemp_type_params) {
  * General purpose list functions
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE HempParams
+HempParams
 hemp_params_init(
     HempParams params
 ) {
@@ -25,7 +25,7 @@ hemp_params_init(
 }
 
 
-HEMP_INLINE void
+void
 hemp_params_release(
     HempParams params
 ) {
@@ -91,7 +91,7 @@ HEMP_STORE(hemp_type_params_store) {
 }
 
 
-void 
+void
 hemp_params_dump(
     HempParams params
 ) {
@@ -130,4 +130,3 @@ hemp_params_dump(
 //    return hemp_type_list_text(value, context, HempNothing);
 //}
 //
-

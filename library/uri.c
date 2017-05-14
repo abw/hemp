@@ -1,7 +1,7 @@
 #include <hemp/uri.h>
 
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_init(
     HempUri uri
 ) {
@@ -11,7 +11,7 @@ hemp_uri_init(
 }
 
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_copy(
     HempUri src
 ) {
@@ -27,7 +27,7 @@ hemp_uri_copy(
 }
 
 
-HEMP_INLINE void
+void
 hemp_uri_copy_authority(
     HempUri from,
     HempUri to
@@ -39,7 +39,7 @@ hemp_uri_copy_authority(
 }
 
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_from_string(
     HempString string
 ) {
@@ -49,7 +49,7 @@ hemp_uri_from_string(
 }
 
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_wipe(
     HempUri uri
 ) {
@@ -69,7 +69,7 @@ hemp_uri_wipe(
 }
 
 
-HEMP_INLINE void
+void
 hemp_uri_release(
     HempUri uri
 ) {
@@ -89,7 +89,7 @@ hemp_uri_release(
 }
 
 
-HEMP_INLINE void
+void
 hemp_uri_free(
     HempUri uri
 ) {
@@ -102,9 +102,9 @@ hemp_uri_free(
 
 /*--------------------------------------------------------------------------
  * This implements a quick-and-dirty URI splitter based on the Badger::URL
- * Perl module.  It splits well-formed URIs but does NOT validate them in 
- * any way.  It identifies the  basic components of URL-like syntaxes: 
- * scheme, user, host, port, path, query and fragment by splitting the URI on 
+ * Perl module.  It splits well-formed URIs but does NOT validate them in
+ * any way.  It identifies the  basic components of URL-like syntaxes:
+ * scheme, user, host, port, path, query and fragment by splitting the URI on
  * the delimiting characters ':', '/', '@', '?' and '#'.
  *
  *   foo://example.com:8042/over/there?name=ferret#nose
@@ -115,14 +115,14 @@ hemp_uri_free(
  *   / \ /                        \
  *   urn:example:animal:ferret:nose
  *
- * See http://labs.apache.org/webarch/uri/rfc/rfc3986.html#regexp for an 
+ * See http://labs.apache.org/webarch/uri/rfc/rfc3986.html#regexp for an
  * overview of the algorithm in use.
  *
- * The path component is greedy and will consume all characters in the 
+ * The path component is greedy and will consume all characters in the
  * absence of any recognised delimiters.  e.g. "*" is considered a "valid"
- * URI path. The query part is also greedy up to any '#' character.  The 
- * fragment greedily consumes the remainder of the URI.  
- * 
+ * URI path. The query part is also greedy up to any '#' character.  The
+ * fragment greedily consumes the remainder of the URI.
+ *
  *--------------------------------------------------------------------------*/
 
 HempBool
@@ -134,27 +134,27 @@ hemp_uri_split(
     if (uri->buffer)
         hemp_uri_release(uri);
 
-    /* We clone the original uri and allocate a new string buffer twice as 
-     * long as the URI.  This gives us a buffer large enough to store all the 
-     * component parts of the URI separated by NUL characters.  This allows 
+    /* We clone the original uri and allocate a new string buffer twice as
+     * long as the URI.  This gives us a buffer large enough to store all the
+     * component parts of the URI separated by NUL characters.  This allows
      * us to allocate (and free) all the memory in one go instead of doing
      * it many times over.  Each part of the URI (scheme, user, host, port,
      * path, query, fragment) is copied into this buffer and the uri->XXX
      * pointers set to the appropriate offset.  The path is then copied into
-     * the buffer, followed by the query string if present.  The original 
-     * delimiters in the path and query string are then replaced with NUL 
+     * the buffer, followed by the query string if present.  The original
+     * delimiters in the path and query string are then replaced with NUL
      * NUL characters.  These packed strings are then used as the components
-     * in the path list and the keys and values in the parameters hash. 
+     * in the path list and the keys and values in the parameters hash.
      */
     HempString source = uri->uri    = hemp_string_clone(text, "uri");
-    HempString buffer = uri->buffer = (HempString) hemp_mem_alloc( 
+    HempString buffer = uri->buffer = (HempString) hemp_mem_alloc(
         strlen(text) * 2 + 2    /* a couple extra to account for NULs */
     );
 
     if (! buffer)
         hemp_mem_fail("uri buffer");
 
-    /* Note that the path is greedy any will consume all characters, so 
+    /* Note that the path is greedy any will consume all characters, so
      * there's no such thing as an invalid URI as far as we're concerned.
      * That's not to say that all the characters in the URI are valid
      * characters...
@@ -194,7 +194,7 @@ HEMP_URI_MATCHER(hemp_uri_match_scheme) {
                     /* these are all legal characters */
                     *buffer++ = *source++;
                     break;
-                    
+
                 default:
                     if (isalnum(*source))
                         *buffer++ = *source++;
@@ -203,8 +203,8 @@ HEMP_URI_MATCHER(hemp_uri_match_scheme) {
             }
         }
 
-        /* the only valid reason to exit the above loop (or bypass it 
-         * altogether in the degenerate case) is when the next character 
+        /* the only valid reason to exit the above loop (or bypass it
+         * altogether in the degenerate case) is when the next character
          * is ':', otherwise we haven't matched a proper scheme
          */
         ok = (*source == ':');
@@ -283,7 +283,7 @@ HEMP_URI_MATCHER(hemp_uri_match_port) {
 
     if (*source && *source == ':') {
         source++;
-        
+
         while (*source && isdigit(*source)) {
             *buffer++ = *source++;
         }
@@ -293,7 +293,7 @@ HEMP_URI_MATCHER(hemp_uri_match_port) {
         HEMP_URI_MATCHED(port);
         return HEMP_TRUE;
     }
-    
+
     return HEMP_FALSE;
 }
 
@@ -325,7 +325,7 @@ HEMP_URI_MATCHER(hemp_uri_match_query) {
 
     if (*source && *source == '?') {
         source++;
-        
+
         while (*source && *source != '#') {
             *buffer++ = *source++;
         }
@@ -348,7 +348,7 @@ HEMP_URI_MATCHER(hemp_uri_match_fragment) {
 
     if (*source && *source == '#') {
         source++;
-        
+
         while (*source) {
             *buffer++ = *source++;
         }
@@ -377,7 +377,7 @@ hemp_uri_split_path(
 
     if (uri->paths)
         hemp_list_free(uri->paths);
-    
+
     uri->paths = hemp_list_new();
 
     while (*path) {
@@ -421,7 +421,7 @@ hemp_uri_split_query(
 
     if (uri->params)
         hemp_hash_free(uri->params);
-    
+
     uri->params = hemp_hash_new();
 
     while (*query) {
@@ -440,7 +440,7 @@ hemp_uri_split_query(
         }
 
         // Maybe we should delay parsing params until something asks for them
-        // at which point we create a hash and then effectively invalidate the 
+        // at which point we create a hash and then effectively invalidate the
         // query string.  Then we re-generate the query string on demand from
         // the hash as required.  Or just dup the query string onto the end of
         // the buffer and use that...
@@ -451,7 +451,7 @@ hemp_uri_split_query(
         while (*query && *query != '&' && *query != ';') {
             *buffer++ = *query++;
         }
-        
+
         *buffer = HEMP_NUL;
         hemp_hash_store_string(uri->params, key, value);
 //      hemp_debug_msg("parsed param: [%s] => [%s]\n", key, value);
@@ -510,7 +510,7 @@ hemp_uri_path_join(
         }
     }
 
-    /* allocate one extra in case we're adding trailing '/' to base, and 
+    /* allocate one extra in case we're adding trailing '/' to base, and
      * another for the terminating NUL
      */
     merged  = hemp_mem_alloc(baselen + strlen(rel) + 2);
@@ -615,7 +615,7 @@ hemp_uri_path_join(
 })
 
 
-HempString 
+HempString
 hemp_uri_join(
     HempUri uri
 ) {
@@ -756,7 +756,7 @@ hemp_uri_join(
 
 
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_relative_string(
     HempUri        base,
     HempString     relstr
@@ -768,7 +768,7 @@ hemp_uri_relative_string(
 }
 
 
-HEMP_INLINE HempUri
+HempUri
 hemp_uri_relative_uri(
     HempUri        base,
     HempUri        rel
@@ -795,7 +795,7 @@ hemp_uri_relative_uri(
         }
         else {
             if (hemp_uri_no_path(rel)) {
-                uri->path  = base->path;  
+                uri->path  = base->path;
                 uri->query = rel->query
                     ? rel->query
                     : base->query;
@@ -833,7 +833,7 @@ hemp_uri_relative_uri(
 }
 
 
-HEMP_INLINE HempBool
+HempBool
 hemp_uri_schemes_equal(
     HempUri base,
     HempUri rel
@@ -864,22 +864,22 @@ hemp_uri_merge_paths(
 
     /* From rfc 3986:
      *
-     * If the base URI has a defined authority component and an empty path, 
-     * then return a string consisting of "/" concatenated with the 
-     * reference's path; 
-     * 
-     * Otherwise, return a string consisting of the reference's path 
-     * component appended to all but the last segment of the base URI's path 
-     * (i.e., excluding any characters after the right-most "/" in the base 
-     * URI path, or excluding the entire base URI path if it does not contain 
-     * any "/" characters). 
+     * If the base URI has a defined authority component and an empty path,
+     * then return a string consisting of "/" concatenated with the
+     * reference's path;
+     *
+     * Otherwise, return a string consisting of the reference's path
+     * component appended to all but the last segment of the base URI's path
+     * (i.e., excluding any characters after the right-most "/" in the base
+     * URI path, or excluding the entire base URI path if it does not contain
+     * any "/" characters).
      */
 
 //  hemp_debug_msg("[%s] + [%s]\n", base->path, rel->path);
 
     if (base->authority && hemp_uri_no_path(base)) {
         merged = hemp_mem_alloc(strlen(rel->path) + 2);
-        if (! merged) 
+        if (! merged)
             hemp_mem_fail("URI path");
 
         strcpy(merged, "/");
@@ -892,9 +892,9 @@ hemp_uri_merge_paths(
             slash++;
             baselen = slash - base->path;
         }
-        
+
         merged = hemp_mem_alloc(baselen + strlen(rel->path) + 1);
-        if (! merged) 
+        if (! merged)
             hemp_mem_fail("URI path");
 
         if (baselen) {
@@ -918,7 +918,7 @@ hemp_uri_collapse_path(
     HempString src       = path;
     HempString dst       = collapsed;
     HempString slash     = NULL;
-    
+
     if (! collapsed)
         hemp_mem_fail("URI path");
 
@@ -930,16 +930,16 @@ hemp_uri_collapse_path(
      * A If the input buffer begins with a prefix of "../" or "./",
      *   then remove that prefix from the input buffer; otherwise,
      * B if the input buffer begins with a prefix of "/./" or "/.",
-     *   where "." is a complete path segment, then replace that prefix 
+     *   where "." is a complete path segment, then replace that prefix
      *   with "/" in the input buffer; otherwise,
      * C if the input buffer begins with a prefix of "/../" or "/..",
-     *   where ".." is a complete path segment, then replace that prefix 
-     *   with "/" in the input buffer and remove the last segment and 
+     *   where ".." is a complete path segment, then replace that prefix
+     *   with "/" in the input buffer and remove the last segment and
      *   its preceding "/" (if any) from the output buffer; otherwise,
      * D if the input buffer consists only of "." or "..", then remove
      *   that from the input buffer; otherwise,
      * E move the first path segment in the input buffer to the end of
-     *   the output buffer, including the initial "/" character (if any) 
+     *   the output buffer, including the initial "/" character (if any)
      *   and any subsequent characters up to, but not including, the next
      *   "/" character or the end of the input buffer.
      */
@@ -1009,7 +1009,7 @@ hemp_uri_collapse_path(
     *dst = HEMP_NUL;
 
 //  hemp_debug_msg("collapsed: %s\n", collapsed);
-    
+
     return collapsed;
 }
 
@@ -1023,7 +1023,7 @@ hemp_uri_collapse_path(
  * parsing library (e.g. liburiparse).  It would be nice to be able to parse
  * unquoted URIs in documents and intelligently detect the end of the URI,
  * but I don't think it's possible because so many different characters are
- * permitted in URIs.  e.g.  In "foo(file:blah)" the closing ')' is a valid 
+ * permitted in URIs.  e.g.  In "foo(file:blah)" the closing ')' is a valid
  * path character in the file:blah) URI.  So I think here we have to mandate
  * the use of explit < > quote characters than can be pre-scanned to identify
  * the start and end of the uri, e.g. foo(<file:blah>).  In which case we can
@@ -1049,6 +1049,5 @@ hemp_uri_collapse_path(
  *   gen-delims  = ":" / "/" / "?" / "#" / "[" / "]" / "@"
  *   sub-delims  = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
  *   pct-encoded = "%" HEXDIG HEXDIG
- * 
+ *
  *--------------------------------------------------------------------------*/
-

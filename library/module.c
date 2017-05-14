@@ -105,7 +105,7 @@ hemp_module_free(
 }
 
 
-HEMP_INLINE HempBool
+HempBool
 hemp_module_failed(
     HempModule     module,
     HempString     error,
@@ -147,7 +147,7 @@ hemp_module_load(
 //      hemp_debug_msg("module failed: %s\n", module->name);
         return hemp_module_failed(
             module,
-            "Failed to load %s module: %s", 
+            "Failed to load %s module: %s",
             module->name, dlerror()
         );
     }
@@ -157,14 +157,14 @@ hemp_module_load(
     module->loader = (HempLoader) dlsym(module->handle, HEMP_MODULE_LOADER);
     module->binder = (HempBinder) dlsym(module->handle, HEMP_MODULE_BINDER);
 
-    /* customer loader can augment module and/or perform initialisation */    
+    /* customer loader can augment module and/or perform initialisation */
     if (module->loader) {
         hemp_debug_call("calling module loader: %s", HEMP_MODULE_LOADER);
         if (! module->loader(module)) {
             return HEMP_FALSE;
         }
     }
-    
+
     if (! module->binder) {
         return hemp_module_failed(
             module,
@@ -197,10 +197,9 @@ hemp_module_unload(
         hemp_module_failed(module, dlerror());
         // TODO: should this be a fatal error or is it too late to care?
         hemp_debug_msg(
-            "Failed to close '%s' module library: %s \n", 
+            "Failed to close '%s' module library: %s \n",
             module->name, module->error
         );
         return HEMP_FALSE;
     }
 }
-

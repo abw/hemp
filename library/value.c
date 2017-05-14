@@ -18,7 +18,7 @@ const HempValue  HempEqual   = HEMP_IDENT_MAKE(HEMP_IDENT_EQUAL);
  * Destructor function
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE void
+void
 hemp_value_free(
     HempValue  value
 ) {
@@ -32,206 +32,9 @@ hemp_value_free(
 }
 
 
-/*--------------------------------------------------------------------------
- * inline functions to encode native values as tagged values
- *--------------------------------------------------------------------------*/
-
-HEMP_INLINE HempValue
-hemp_num_val(HempNum n) {
-    HempValue v;
-    v.number = n;
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_int_val(HempInt i) {
-    HempValue v;
-    v.bits = HEMP_INTEGER_TAG | ((HempU64) i & HEMP_INTEGER_MASK);
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_ptr_val(HempMemory p) {
-    HempValue v;
-    v.bits = HEMP_POINTER_TAG | HEMP_POINTER_UP(p);
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_str_val(HempString s) {
-    HempValue v;
-    v.bits = HEMP_STRING_TAG | HEMP_POINTER_UP(s);
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_text_val(HempText t) {
-    HempValue v;
-    v.bits = HEMP_TEXT_TAG | HEMP_POINTER_UP(t);
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_list_val(HempList t) {
-    HempValue v;
-    v.bits = HEMP_LIST_TAG | HEMP_POINTER_UP(t);
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_hash_val(HempHash t) {
-    HempValue v;
-    v.bits = HEMP_HASH_TAG | HEMP_POINTER_UP(t);
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_code_val(HempCode c) {
-    HempValue v;
-    v.bits = HEMP_CODE_TAG | HEMP_POINTER_UP(c);
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_params_val(HempParams p) {
-    HempValue v;
-    v.bits = HEMP_PARAMS_TAG | HEMP_POINTER_UP(p);
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_obj_val(HempObject t) {
-    HempValue v;
-    v.bits = HEMP_OBJECT_TAG | HEMP_POINTER_UP(t);
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_ident_val(HempU8 i) {
-    HempValue v;
-    v.bits = HEMP_IDENTITY_TAG | ((HempU64) i & HEMP_IDENT_MASK);
-    return v;
-}
-
-
-HEMP_INLINE HempValue
-hemp_bool_val(HempBool b) {
-    return b
-        ? HempTrue
-        : HempFalse;
-}
-
-
-HEMP_INLINE HempValue
-hemp_frag_val(HempFragment f) {
-    return hemp_obj_val((HempObject) f);
-}
-
-
-HEMP_INLINE HempValue
-hemp_type_val(
-    HempType type, 
-    HempMemory  ptr
-) {
-    HempValue v;
-    v.bits = HEMP_TAG_MAKE(type->id) | HEMP_POINTER_UP(ptr);
-    return v;
-}
-
 
 /*--------------------------------------------------------------------------
- * inline functions to decode tagged values to native values
- *--------------------------------------------------------------------------*/
-
-HEMP_INLINE HempNum
-hemp_val_num(HempValue v) {
-    return v.number;
-}
-
-
-HEMP_INLINE HempInt
-hemp_val_int(HempValue v) {
-    return (HempInt)(v.bits & HEMP_INTEGER_MASK);
-}
-
-
-HEMP_INLINE HempMemory
-hemp_val_ptr(HempValue v) {
-    return (HempMemory) HEMP_POINTER(v);
-}
-
-
-HEMP_INLINE HempString
-hemp_val_str(HempValue v) {
-    return (HempString) HEMP_POINTER(v);
-}
-
-
-HEMP_INLINE HempText
-hemp_val_text(HempValue v) {
-    return (HempText) HEMP_POINTER(v);
-}
-
-
-HEMP_INLINE HempList
-hemp_val_list(HempValue v) {
-    return (HempList) HEMP_POINTER(v);
-}
-
-
-HEMP_INLINE HempHash
-hemp_val_hash(HempValue v) {
-    return (HempHash) HEMP_POINTER(v);
-}
-
-
-HEMP_INLINE HempCode
-hemp_val_code(HempValue v) {
-    return (HempCode) HEMP_POINTER(v);
-}
-
-
-HEMP_INLINE HempParams
-hemp_val_params(HempValue v) {
-    return (HempParams) HEMP_POINTER(v);
-}
-
-
-HEMP_INLINE HempObject
-hemp_val_obj(HempValue v) {
-    return (HempObject) HEMP_POINTER(v);
-}
-
-
-HEMP_INLINE HempFragment
-hemp_val_frag(HempValue v) {
-    return (HempFragment) HEMP_POINTER(v);
-}
-
-
-HEMP_INLINE HempBool
-hemp_val_bool(HempValue v) {
-    return hemp_is_true(v)
-        ? HEMP_TRUE
-        : HEMP_FALSE;
-}
-
-
-
-
-
-/*--------------------------------------------------------------------------
- * Generic purpose conversion, literal and no-op functions, most of which are 
+ * Generic purpose conversion, literal and no-op functions, most of which are
  * syntactic sugar so that our type vtables are more self-documenting.
  *--------------------------------------------------------------------------*/
 
@@ -257,7 +60,7 @@ HEMP_VALUE(hemp_value_false) {
 
 
 HEMP_VALUE(hemp_value_apply) {
-    /* 
+    /*
      * The default behaviour for an element evaluated in a function application
      * is to return iteself.
      */
@@ -267,7 +70,7 @@ HEMP_VALUE(hemp_value_apply) {
 
 
 HEMP_OUTPUT(hemp_value_values) {
-    /* 
+    /*
      * The default behaviour for an element evaluated in a list of values is
      * to add itself to the value list
      */
@@ -281,8 +84,8 @@ HEMP_OUTPUT(hemp_value_values) {
 
 
 HEMP_OUTPUT(hemp_value_params) {
-    /* 
-     * The default behaviour for an element evalauated as a parameter is to 
+    /*
+     * The default behaviour for an element evalauated as a parameter is to
      * add itself to the parameter's positional args, params->ordinals
      */
     hemp_debug_call("hemp_value_params()\n");
@@ -296,9 +99,9 @@ HEMP_OUTPUT(hemp_value_params) {
 
 // This looks wrong.  In fact all these are wrong - they should be specific
 // to elements, rather than for generic values.  Also there's the chance
-// of an infinite loop if a value's value() method returns itself.  The 
+// of an infinite loop if a value's value() method returns itself.  The
 // function below then calls params() on it again...
-// 
+//
 
 HEMP_OUTPUT(hemp_value_pairs) {
     hemp_debug_call("hemp_value_pairs()\n");
@@ -338,7 +141,7 @@ HEMP_FETCH(hemp_value_dot) {
 }
 
 
-HEMP_INLINE HempString
+HempString
 hemp_value_to_string(
     HempValue      value,
     HempContext    context
@@ -369,7 +172,7 @@ hemp_value_to_string(
 
 HEMP_OUTPUT(hemp_value_not_text) {
     HEMP_CONVERT_ERROR(
-        context, 
+        context,
         hemp_type_name(value),
         HEMP_STR_TEXT,
         HEMP_STR_BLANK
@@ -391,7 +194,7 @@ HEMP_OUTPUT(hemp_value_not_pairs) {
 
 HEMP_VALUE(hemp_value_not_number) {
     HEMP_CONVERT_ERROR(
-        context, 
+        context,
         hemp_type_name(value),
         HEMP_STR_NUMBER,
         HEMP_STR_BLANK
@@ -402,7 +205,7 @@ HEMP_VALUE(hemp_value_not_number) {
 
 HEMP_VALUE(hemp_value_not_integer) {
     HEMP_CONVERT_ERROR(
-        context, 
+        context,
         hemp_type_name(value),
         HEMP_STR_INTEGER,
         HEMP_STR_BLANK
@@ -413,7 +216,7 @@ HEMP_VALUE(hemp_value_not_integer) {
 
 HEMP_VALUE(hemp_value_not_boolean) {
     HEMP_CONVERT_ERROR(
-        context, 
+        context,
         hemp_type_name(value),
         HEMP_STR_BOOLEAN,
         HEMP_STR_BLANK
@@ -424,7 +227,7 @@ HEMP_VALUE(hemp_value_not_boolean) {
 
 HEMP_VALUE(hemp_value_not_compare) {
     HEMP_CONVERT_ERROR(
-        context, 
+        context,
         hemp_type_name(value),
         HEMP_STR_COMPARE,
         HEMP_STR_BLANK
@@ -435,7 +238,7 @@ HEMP_VALUE(hemp_value_not_compare) {
 
 HEMP_VALUE(hemp_value_not_defined) {
     HEMP_CONVERT_ERROR(
-        context, 
+        context,
         hemp_type_name(value),
         HEMP_STR_DEFINED,
         HEMP_STR_BLANK
@@ -446,7 +249,7 @@ HEMP_VALUE(hemp_value_not_defined) {
 
 HEMP_FETCH(hemp_value_not_fetch) {
     HEMP_FETCH_ERROR(
-        context, 
+        context,
         hemp_type_name(container),
         "Cannot fetch"
     );
@@ -456,7 +259,7 @@ HEMP_FETCH(hemp_value_not_fetch) {
 
 HEMP_STORE(hemp_value_not_store) {
     HEMP_STORE_ERROR(
-        context, 
+        context,
         hemp_type_name(container),
         "Cannot store"
     );
@@ -466,7 +269,7 @@ HEMP_STORE(hemp_value_not_store) {
 
 HEMP_FETCH(hemp_value_not_dot) {
     HEMP_FETCH_ERROR(
-        context, 
+        context,
         hemp_type_name(container),
         "Cannot dot"
     );
@@ -558,4 +361,3 @@ void hemp_dump_32(
     }
     printf("\n");
 }
-

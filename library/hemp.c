@@ -39,7 +39,7 @@ hemp_new() {
 }
 
 
-void 
+void
 hemp_ready(
     Hemp hemp
 ) {
@@ -62,14 +62,14 @@ hemp_init_errors(
     );
     if (! hemp->jump)
         hemp_mem_fail("jump buffer");
-    
+
     hemp->jump->parent = NULL;
     hemp->jump->depth  = 0;
 
     HempErrno e = setjmp(hemp->jump->buffer);
 
     if (e) {
-        // TODO: proper handling... but if memory serves this is iffy 
+        // TODO: proper handling... but if memory serves this is iffy
         // because we've lost the hemp reference.
         hemp_fatal("uncaught error code: %d", e);
     }
@@ -151,9 +151,9 @@ hemp_init_filesystem(
         hemp_debug_msg("looking for paths\n");
         hemp_values(path, hemp->context, hemp_list_val(paths));
         hemp_debug_msg("got %d paths\n", paths->length);
-        
+
         // I think these should be relative to cwd rather than base
-        
+
         int n;
         for (n = 0; n < paths->length; n++) {
             HempValue  v = hemp_list_item(paths, n);
@@ -278,7 +278,7 @@ HEMP_HASH_ITERATOR(hemp_free_document) {
  * dialect, tag and element management
  *--------------------------------------------------------------------------*/
 
-void 
+void
 hemp_register_tags(
     Hemp        hemp,
     HempTags    tags
@@ -287,7 +287,7 @@ hemp_register_tags(
 }
 
 
-void 
+void
 hemp_register_grammars(
     Hemp            hemp,
     HempGrammars    grammars
@@ -296,7 +296,7 @@ hemp_register_grammars(
 }
 
 
-void 
+void
 hemp_register_elements(
     Hemp            hemp,
     HempElements    elements
@@ -335,7 +335,7 @@ hemp_document(
     hemp_md5_update_string(&md5, scheme);
     hemp_md5_update_string(&md5, source);
     hemp_md5_final(&md5);
-    
+
 //  hemp_debug("MD5 for %s document [%s] is %s\n", scheme, source, md5.output);
 
     document = hemp_hash_fetch_pointer(hemp->tmp_docs_hash, (HempString) md5.output);
@@ -353,7 +353,7 @@ hemp_document(
         }
     }
 
-    /* NOTE: do this first - otherwise there's a potential memory leak 
+    /* NOTE: do this first - otherwise there's a potential memory leak
      * in the instantiated source instance.
      */
     HempDialect dialect_inst = hemp_dialect(hemp, dialect);
@@ -368,7 +368,7 @@ hemp_document(
     /* let the source allocate memory for storing md5 permanently */
     hemp_source_md5(document->source, (HempString) md5.output);
     hemp_hash_store_pointer(hemp->tmp_docs_hash, document->source->md5, document);
-    
+
     return document;
 }
 
@@ -455,7 +455,7 @@ hemp_error_format(
     Hemp        hemp,
     HempErrno   number
 ) {
-    if (number < 0 || number >= HEMP_ERROR_MAX) 
+    if (number >= HEMP_ERROR_MAX) 
         hemp_fatal("Invalid error number: %d", number);
 
     HempString format = hemp->errmsg[number];
@@ -466,7 +466,7 @@ hemp_error_format(
 
     if (! format)
         hemp_fatal("No error message format for error number %d", number);
-        
+
     return format;
 }
 
@@ -497,13 +497,13 @@ hemp_error_text(
     HempText     text;
     HempLocation location;
     HempString   buffer;
-    
+
     if (doc) {
         // new way - caller sets location
         location = error->location;
-        
+
         if (! location) {
-            hemp_debug_msg("WARNING: using old-school scan position for error\n"); 
+            hemp_debug_msg("WARNING: using old-school scan position for error\n");
             // old way - only works for scan time errors
             location = error->location = hemp_string_location(
                 doc->source->text,
@@ -524,10 +524,10 @@ hemp_error_text(
         *x = HEMP_NUL;
 
         asprintf(
-            &buffer, 
+            &buffer,
             "Error at line %ld, column %ld of %s:\n   Error: %s\n  Source: %s\n%*s^ here\n",
             location->line, location->column,
-            hemp_source_name(doc->source), 
+            hemp_source_name(doc->source),
             error->message, (HempString) extract,
             (int) (10 + location->column), " "
         );
@@ -537,12 +537,12 @@ hemp_error_text(
     else {
         text = hemp_text_from_string(error->message);
     }
-    
+
     return text;
 }
 
 
-void 
+void
 hemp_error_throw(
     Hemp   hemp,
     HempError  error
@@ -557,7 +557,7 @@ hemp_error_throw(
 
 
 /*--------------------------------------------------------------------------
- * Codecs 
+ * Codecs
  *--------------------------------------------------------------------------*/
 
 HEMP_INLINE HempText
@@ -606,4 +606,3 @@ HempString
 hemp_version() {
     return HEMP_VERSION;
 }
-

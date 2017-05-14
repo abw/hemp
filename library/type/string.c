@@ -64,7 +64,7 @@ hemp_string_extract(
 ) {
     HempSize   size = to - from;
     HempString str  = hemp_mem_alloc(size + 1);
-    
+
     if (! str)
         hemp_mem_fail("string extract");
 
@@ -129,7 +129,7 @@ hemp_string_splits(
     HempString  from  = source, to;
     HempPos  pos  = 0;
     hemp_str_split split;
-    
+
     /* we're dynamically allocating memory for each directory so we must
      * ensure that the list has a cleaner function associated with it that
      * will free the memory for each item when the list is destroyed
@@ -142,7 +142,7 @@ hemp_string_splits(
 
         /* Allocate a single block of memory to hold the split header and a
          * copy of the text string immediately after it.  It's a win because
-         * we only need one call to malloc() and another to free() (called by 
+         * we only need one call to malloc() and another to free() (called by
          * the generic list cleaner installed above.
          */
         split = (hemp_str_split) hemp_mem_alloc(
@@ -162,7 +162,7 @@ hemp_string_splits(
         hemp_list_free(list);
         list = NULL;
     }
-    
+
     return list;
 };
 
@@ -191,7 +191,7 @@ hemp_string_trim(
 }
 
 
-HEMP_INLINE void
+void
 hemp_string_chomp(
     HempString string
 ) {
@@ -201,13 +201,13 @@ hemp_string_chomp(
     /* go to the end of the string */
     while (*s)
         s++;
-    
+
     /* then walk back while the preceding character is whitespace */
     while (s > string && isspace(*--s))
         *s = HEMP_NUL;
 }
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_wordlike(
     HempString string
 ) {
@@ -221,7 +221,7 @@ hemp_string_wordlike(
 }
 
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_intlike(
     HempString string
 ) {
@@ -236,13 +236,13 @@ hemp_string_intlike(
 }
 
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_numlike(
     HempString string
 ) {
     // should use strtod() instead
     hemp_debug_msg("WARNING: hemp_string_numlike() doesn't accept floating point numbers\n");
-    
+
     /* not strictly correct, but good enough for integer list indexes */
     while (isdigit(*string))
         string++;
@@ -254,7 +254,7 @@ hemp_string_numlike(
 }
 
 
-HEMP_INLINE HempString
+HempString
 hemp_string_next_space(
     HempString string
 ) {
@@ -265,7 +265,7 @@ hemp_string_next_space(
 }
 
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_to_next_space(
     HempString *string
 ) {
@@ -281,7 +281,7 @@ hemp_string_to_next_space(
 }
 
 
-HEMP_INLINE HempString
+HempString
 hemp_string_next_nonspace(
     HempString string
 ) {
@@ -292,7 +292,7 @@ hemp_string_next_nonspace(
 }
 
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_to_next_nonspace(
     HempString *string
 ) {
@@ -308,7 +308,7 @@ hemp_string_to_next_nonspace(
 }
 
 
-HEMP_INLINE HempString
+HempString
 hemp_string_next_line(
     HempString string
 ) {
@@ -329,7 +329,7 @@ hemp_string_next_line(
 }
 
 
-HEMP_INLINE HempBool
+HempBool
 hemp_string_to_next_line(
     HempString *string
 ) {
@@ -345,7 +345,7 @@ hemp_string_to_next_line(
 }
 
 
-HEMP_INLINE HempList
+HempList
 hemp_string_words(
     HempString string
 ) {
@@ -367,18 +367,18 @@ hemp_string_nwords(
     while (from && hemp_string_to_next_nonspace(&from)) {
         /* If the user has requested a maximum number of word splits and if
          * this will be the maxth word then consume everything to the end of
-         * the string as the final "word".  Otherwise we only consume up to 
+         * the string as the final "word".  Otherwise we only consume up to
          * the next whitespace character.  But if there isn't another space
          * in the remaining text then 'to' is also NULL and we consume all
          * the remaining text
-         */ 
+         */
         size++;
-         
+
         if (max && size >= max)
             to = NULL;
         else
             to = hemp_string_next_space(from);
-        
+
         if (to) {
             item = hemp_string_extract(from, to);
             from = to;
@@ -387,11 +387,11 @@ hemp_string_nwords(
             item = hemp_string_clone(from, "word");
             from = NULL;
         }
-        
+
         hemp_list_push_string(list, item);
-        
+
     }
-    
+
     if (! size) {
         hemp_list_free(list);
         list = NULL;
@@ -426,7 +426,7 @@ hemp_string_location(
     location->column = marker - location->extract;
 
 //  hemp_debug_msg(
-//      "position for string from %p to %p is pos:%ld  line:%ld  col:%ld\n", 
+//      "position for string from %p to %p is pos:%ld  line:%ld  col:%ld\n",
 //      string, marker, str_pos.position, str_pos.line, str_pos.column
 //  );
 
@@ -478,10 +478,10 @@ HEMP_VALUE(hemp_type_string_number) {
     HempString str = hemp_val_str(value);
     HempString end;
     HempNum nval;
-    
+
     if (! str || ! *str) {
         HEMP_CONVERT_ERROR(
-            context, 
+            context,
             HEMP_STR_NO_TEXT,
             HEMP_STR_NUMBER,
             HEMP_STR_BLANK
@@ -490,18 +490,18 @@ HEMP_VALUE(hemp_type_string_number) {
 
     errno = 0;
     nval  = strtod(str, &end);
-    
+
     if (*end || (errno == EINVAL)) {
         HEMP_CONVERT_ERROR(
-            context, 
-            HEMP_STR_STRING, 
+            context,
+            HEMP_STR_STRING,
             HEMP_STR_NUMBER,
             str
         );
     }
     else if (errno == ERANGE) {
         HEMP_OVERFLOW_ERROR(
-            context, 
+            context,
             str
         );
     }
@@ -537,4 +537,3 @@ HEMP_VALUE(hemp_type_string_boolean) {
 HEMP_VALUE(hemp_method_string_length) {
     return hemp_int_val( strlen( hemp_val_str(value) ) );
 }
-

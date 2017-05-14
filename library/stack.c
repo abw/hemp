@@ -1,7 +1,7 @@
 #include "hemp/stack.h"
 
 
-HEMP_INLINE HempStack
+HempStack
 hemp_stack_init(
     HempStack      stack,
     HempSize       capacity
@@ -11,7 +11,7 @@ hemp_stack_init(
     stack->depth    = 0;
     stack->capacity = capacity;
     stack->items    = hemp_mem_alloc(capacity * sizeof(HempMemory));
-    
+
     if (! stack->items)
         hemp_mem_fail("stack items");
 
@@ -19,7 +19,7 @@ hemp_stack_init(
 }
 
 
-HEMP_INLINE void
+void
 hemp_stack_grow(
     HempStack  stack
 ) {
@@ -29,7 +29,7 @@ hemp_stack_grow(
         capacity = HEMP_STACK_SIZE;
 
     stack->items = hemp_mem_resize(
-        stack->items, 
+        stack->items,
         capacity * sizeof(HempMemory)
     );
     if (! stack->items)
@@ -41,7 +41,7 @@ hemp_stack_grow(
 }
 
 
-HEMP_INLINE void
+void
 hemp_stack_push(
     HempStack  stack,
     HempMemory item
@@ -55,7 +55,7 @@ hemp_stack_push(
 }
 
 
-HEMP_INLINE HempMemory
+HempMemory
 hemp_stack_pop(
     HempStack  stack
 ) {
@@ -65,16 +65,15 @@ hemp_stack_pop(
         return stack->items[--stack->depth];
     else
         hemp_fatal("Stack underflow! (TODO: dynamically expand stack)\n");
-    
+
     return NULL;
 }
 
 
-HEMP_INLINE void
+void
 hemp_stack_free(
     HempStack stack
 ) {
     hemp_mem_free(stack->items);
     hemp_mem_free(stack);
 }
-

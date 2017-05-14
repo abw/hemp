@@ -7,7 +7,7 @@ HEMP_VALUE(hemp_type_code_apply);
 
 HEMP_TYPE(hemp_type_code) {
     HempType type   = hemp_type_subtype(HempTypeValue, id, name);
-    type->text      = &hemp_type_code_text; 
+    type->text      = &hemp_type_code_text;
     type->apply     = &hemp_type_code_apply;
     type->value     = &hemp_value_self;
     type->values    = &hemp_value_values;
@@ -28,7 +28,7 @@ HEMP_TYPE(hemp_type_code) {
  * constructor/destructor functions.
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE HempCode
+HempCode
 hemp_code_init(
     HempCode code
 ) {
@@ -41,7 +41,7 @@ hemp_code_init(
 }
 
 
-HEMP_INLINE void
+void
 hemp_code_release(
     HempCode code
 ) {
@@ -51,7 +51,7 @@ hemp_code_release(
 }
 
 
-HEMP_INLINE void
+void
 hemp_code_free(
     HempCode code
 ) {
@@ -61,7 +61,7 @@ hemp_code_free(
 }
 
 
-HEMP_INLINE HempProto
+HempProto
 hemp_code_proto(
     HempCode code
 ) {
@@ -76,7 +76,7 @@ hemp_code_proto(
  * runtime evaluation methods
  *--------------------------------------------------------------------------*/
 
-void 
+void
 hemp_type_code_resolve_proto(
     HempCode       code,
     HempContext    context,
@@ -96,15 +96,15 @@ hemp_type_code_resolve_proto(
     HempValue  item, value;
     HempString name;
     HempSize   n;
-    
+
 //  hemp_debug("proto:\n");
 //  hemp_proto_dump(proto);
-    
+
     for (n = 0; n < items->length; n++) {
         item    = hemp_list_item(items, n);
         name    = hemp_val_str(item);
         value   = hemp_hash_fetch(params->nominals, name);
-        
+
         if (hemp_is_found(value)) {
             nom++;
 //          hemp_debug_msg("found nominal value for %s: %s\n", name, hemp_type_name(value));
@@ -119,7 +119,7 @@ hemp_type_code_resolve_proto(
         }
         hemp_hash_store(context->vars, name, value);
     }
-    
+
     if (ord < params->ordinals->length) {
         if (proto->list) {
             hemp_todo("store remaining ordinal params in %s\n", proto->list);
@@ -129,7 +129,7 @@ hemp_type_code_resolve_proto(
             hemp_fatal("%d extra ordinal parameter%s provided", x, x == 1 ? "" : "s");
         }
     }
-    
+
     if (nom < params->nominals->size) {
         if (proto->hash) {
             hemp_todo("store remaining nominal params in %s\n", proto->hash);
@@ -149,12 +149,12 @@ HEMP_VALUE(hemp_type_code_apply) {
     HempValue  body    = code->body;
 
     /* We may have been passed params as the input value, otherwise we use
-     * the params for the current context frame - but be warned that this 
+     * the params for the current context frame - but be warned that this
      * could also be NULL
      */
     if (code->proto) {
         hemp_type_code_resolve_proto(
-            code, context, 
+            code, context,
             context->frame->params
         );
     }
@@ -179,4 +179,3 @@ HEMP_OUTPUT(hemp_type_code_text) {
     hemp_call(body, text, context, output);
     return output;
 }
-

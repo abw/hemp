@@ -11,9 +11,9 @@ hemp_fragments_new(
 
     if (! capacity)
         capacity = HEMP_FRAGMENTS_SIZE;
-    
+
     fragments->pool = hemp_pool_new(
-        sizeof(struct hemp_fragment), 
+        sizeof(struct hemp_fragment),
         capacity,
         NULL
     );
@@ -42,7 +42,7 @@ hemp_fragments_free_fragment(
 ) {
     HempFragment f = (HempFragment) item;
     hemp_fragment_cleanup(f);
-    
+
     return HEMP_TRUE;
 }
 
@@ -89,7 +89,7 @@ hemp_fragments_add_fragment(
     );
 
 //  hemp_fragment_debug(fragment);
-    
+
     if (fragments->tail) {
         fragments->tail->next = fragment;
     }
@@ -114,7 +114,7 @@ hemp_fragments_add_eof(
     );
 }
 
-HEMP_INLINE HempDocument
+HempDocument
 hemp_fragments_document(
     HempFragments fragments
 ) {
@@ -124,7 +124,7 @@ hemp_fragments_document(
 }
 
 
-void 
+void
 hemp_fragments_dump(
     HempFragments   fragments
 ) {

@@ -8,15 +8,15 @@
 HempFragment
 hemp_fragment_init(
     HempFragment   fragment,
-    HempElement    type, 
-    HempString     token, 
-    HempPos        position, 
+    HempElement    type,
+    HempString     token,
+    HempPos        position,
     HempSize       length
 ) {
     HEMP_INSTANCE(fragment);
 
-    /* NOTE: this function isn't used in the general case because 
-     * fragments are slab-allocated by the fragments module - see 
+    /* NOTE: this function isn't used in the general case because
+     * fragments are slab-allocated by the fragments module - see
      * hemp_fragments_new_fragment() in fragments.c
      */
     fragment->fragments  = NULL;
@@ -41,13 +41,13 @@ hemp_fragment_free(
 }
 
 
-HEMP_INLINE HempGrammar
+HempGrammar
 hemp_fragment_grammar(
     HempFragment fragment
 ) {
     if (! fragment->type->grammar)
         hemp_fatal(
-            "No grammar defined for %s fragment", 
+            "No grammar defined for %s fragment",
             fragment->type->name
         );
 
@@ -55,13 +55,13 @@ hemp_fragment_grammar(
 }
 
 
-HEMP_INLINE HempFragments
+HempFragments
 hemp_fragment_fragments(
     HempFragment fragment
 ) {
     if (! fragment->fragments)
         hemp_fatal(
-            "No fragments defined for %s fragment", 
+            "No fragments defined for %s fragment",
             fragment->type->name
     );
 
@@ -69,7 +69,7 @@ hemp_fragment_fragments(
 }
 
 
-HEMP_INLINE HempDocument
+HempDocument
 hemp_fragment_document(
     HempFragment fragment
 ) {
@@ -81,8 +81,7 @@ hemp_fragment_document(
 }
 
 
-
-HEMP_INLINE HempElement
+HempElement
 hemp_fragment_grammar_element(
     HempFragment fragment,
     HempString   name
@@ -93,8 +92,7 @@ hemp_fragment_grammar_element(
     );
 }
 
-
-HEMP_INLINE HempFragment
+HempFragment
 hemp_fragment_new_fragment(
     HempFragment fragment,
     HempString   typename
@@ -107,7 +105,7 @@ hemp_fragment_new_fragment(
 }
 
 
-HempElement 
+HempElement
 hemp_fragment_retype(
     HempFragment fragment,
     HempString   typename
@@ -152,12 +150,12 @@ hemp_fragment_parse(
     HempFragment block = hemp_parse_block(
         current,
         scope,
-        0, 
+        0,
         HEMP_FALSE
     );
 
     HempFragment next_frag = *current;
-    
+
     if (next_frag->type != HempElementEOF) {
         // TODO: should print token, not element type
         HEMP_PARSE_ERROR(next_frag, HEMP_ERROR_UNEXPECTED, next_frag->type->name);
@@ -190,10 +188,10 @@ hemp_fragment_dump(
 
     HempText text  = hemp_val_text(output);
     HempString string = text ? text->string : "-- NO OUTPUT --";
-    
+
     hemp_debug(
         "%p %03d:%02d %-20s %s[%s%s%s]%s\n", f,
-        (int) f->position, (int) f->length, f->type->name, 
+        (int) f->position, (int) f->length, f->type->name,
         HEMP_ANSI_BLUE, HEMP_ANSI_YELLOW, string, HEMP_ANSI_BLUE, HEMP_ANSI_RESET
     );
 
@@ -209,7 +207,7 @@ void hemp_fragment_dump_exprs(
     HempList exprs
 ) {
     HempSize n;
-    
+
     hemp_debug("\n-- exprs --\n");
 
     for (n = 0; n < exprs->length; n++) {
@@ -234,10 +232,10 @@ hemp_fragment_debug(
 
     hemp_debug(
         "%s%03d:%02d %s%-20s %s[%s%s%s]%s\n",
-        HEMP_ANSI_CYAN, (int) f->position, (int) f->length, 
-        HEMP_ANSI_BLUE, f->type->name, 
-        HEMP_ANSI_BLUE, HEMP_ANSI_RESET, 
-        buffer, 
+        HEMP_ANSI_CYAN, (int) f->position, (int) f->length,
+        HEMP_ANSI_BLUE, f->type->name,
+        HEMP_ANSI_BLUE, HEMP_ANSI_RESET,
+        buffer,
         HEMP_ANSI_BLUE, HEMP_ANSI_RESET
     );
 }

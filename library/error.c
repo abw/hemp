@@ -30,7 +30,7 @@ HempLocation
 hemp_location_new() {
     HempLocation location;
     HEMP_ALLOCATE(location);
-    
+
     location->position  = 0;
     location->line      = 0;
     location->column    = 0;
@@ -54,8 +54,8 @@ hemp_error_new(
     HempErrno number
 ) {
     HempError error;
-    
-    if (number < 0 || number >= HEMP_ERROR_MAX) 
+
+    if (number >= HEMP_ERROR_MAX)
         hemp_fatal("Invalid error number: %d", number);
 
     HEMP_ALLOCATE(error);
@@ -77,7 +77,7 @@ hemp_error_init(
 ) {
     HempError error = hemp_error_new(number);
 
-    /* We use strdup() to deliberately avoid the memory trace that is wrapped 
+    /* We use strdup() to deliberately avoid the memory trace that is wrapped
      * around mem_string_copy() and friend when memory debugging is enabled.
      * This is because the vasprintf() functions called below also avoid our
      * basic memory allocation tracking.  So we call free() not hemp_mem_free()
@@ -87,7 +87,7 @@ hemp_error_init(
 
     if (! error->message)
         hemp_mem_fail("error message");
-    
+
     return error;
 }
 
@@ -120,7 +120,7 @@ hemp_error_initfv(
 }
 
 
-HEMP_INLINE HempError
+HempError
 hemp_error_document(
     HempError    error,
     HempDocument document
@@ -130,7 +130,7 @@ hemp_error_document(
 }
 
 
-HEMP_INLINE HempError
+HempError
 hemp_error_location(
     HempError      error,
     HempString     source,
@@ -146,7 +146,7 @@ hemp_error_location(
 }
 
 
-HEMP_INLINE HempError
+HempError
 hemp_error_document_location(
     HempError      error,
     HempDocument   document,
@@ -162,7 +162,7 @@ void
 hemp_error_free(
     HempError error
 ) {
-    /* memory allocated by vasprintf() so don't use hemp_mem_free() because 
+    /* memory allocated by vasprintf() so don't use hemp_mem_free() because
      * we're not tracking it and it'll blow a fuse when debugging memory
      */
     // TODO: add code to notify the memory tracker so we don't need this...
@@ -174,4 +174,3 @@ hemp_error_free(
 
     hemp_mem_free(error);
 }
-

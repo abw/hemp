@@ -23,12 +23,12 @@ hemp_context_new(
         &hemp_context_text_pool_cleaner
     );
     context->list_pool = hemp_pool_new(
-        sizeof(struct hemp_list), 
+        sizeof(struct hemp_list),
         HEMP_TMP_POOL_SIZE,
         &hemp_context_list_pool_cleaner
     );
     context->hash_pool = hemp_pool_new(
-        sizeof(struct hemp_hash), 
+        sizeof(struct hemp_hash),
         HEMP_TMP_POOL_SIZE,
         &hemp_context_hash_pool_cleaner
     );
@@ -68,7 +68,7 @@ hemp_context_free(
 }
 
 
-HEMP_INLINE HempFrame
+HempFrame
 hemp_context_enter(
     HempContext  context,
     HempFragment fragment
@@ -88,8 +88,8 @@ hemp_context_enter(
     context->vars       = frame->vars;
 
 //  hemp_debug_msg(
-//      "entered new frame for %s: %p  vars: %p\n", 
-//      element ? element->type->name : "NULL element", 
+//      "entered new frame for %s: %p  vars: %p\n",
+//      element ? element->type->name : "NULL element",
 //      frame, context->vars
 //  );
 
@@ -97,7 +97,7 @@ hemp_context_enter(
 }
 
 
-HEMP_INLINE HempFrame
+HempFrame
 hemp_context_frame(
     HempContext context
 ) {
@@ -108,7 +108,7 @@ hemp_context_frame(
 }
 
 
-HEMP_INLINE HempFragment
+HempFragment
 hemp_context_leave(
     HempContext context
 ) {
@@ -121,13 +121,13 @@ hemp_context_leave(
     context->vars  = frame->vars->parent;
 
 //  hemp_debug_msg(
-//      "left frame for %s: %p  vars: %p\n", 
-//      element ? element->type->name : "NULL element", 
+//      "left frame for %s: %p  vars: %p\n",
+//      element ? element->type->name : "NULL element",
 //      frame, context->vars
 //  );
 
     hemp_frame_free(frame);
-    
+
     return fragment;
 }
 
@@ -174,18 +174,18 @@ hemp_context_without(
 
 /*--------------------------------------------------------------------------
  * Shoot me now. This is an ugly hack to temporarily patch the named
- * parameter hash (params->nominals) in the current context frame into 
- * the context vars.  This is so that we can evaluate a parameter list as 
- * usual, but capture any side-effects from variables being set.  e.g. For 
- * a call like foo(a=10), we evaluate the (a=10) params which results in the 
- * variable 'a' being set to 10.  Except that it's set in the params->nominal 
+ * parameter hash (params->nominals) in the current context frame into
+ * the context vars.  This is so that we can evaluate a parameter list as
+ * usual, but capture any side-effects from variables being set.  e.g. For
+ * a call like foo(a=10), we evaluate the (a=10) params which results in the
+ * variable 'a' being set to 10.  Except that it's set in the params->nominal
  * hash, effectively making it a named parameter instead of a regular variable.
- * We attach the old context->vars hash as the parent of the params hash so 
- * that a) we can still lookup all other runtime variables and b) we can 
+ * We attach the old context->vars hash as the parent of the params hash so
+ * that a) we can still lookup all other runtime variables and b) we can
  * restore the original vars in hemp_context_blur_params().
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE void
+void
 hemp_context_focus_params(
     HempContext context
 ) {
@@ -199,7 +199,7 @@ hemp_context_focus_params(
 }
 
 
-HEMP_INLINE void
+void
 hemp_context_blur_params(
     HempContext context
 ) {
@@ -218,7 +218,7 @@ hemp_context_blur_params(
  * TODO: needs cleaning up and generalising
  *--------------------------------------------------------------------------*/
 
-HEMP_INLINE HempText
+HempText
 hemp_context_tmp_text(
     HempContext context
 ) {
@@ -228,8 +228,7 @@ hemp_context_tmp_text(
     return text;
 }
 
-
-HEMP_INLINE HempText
+HempText
 hemp_context_tmp_text_size(
     HempContext context,
     HempSize    size
@@ -239,8 +238,7 @@ hemp_context_tmp_text_size(
     return hemp_text_init_size(text, size);
 }
 
-
-HEMP_INLINE HempList
+HempList
 hemp_context_tmp_list(
     HempContext context
 ) {
@@ -249,8 +247,7 @@ hemp_context_tmp_list(
     return hemp_list_init(list);
 }
 
-
-HEMP_INLINE HempHash
+HempHash
 hemp_context_tmp_hash(
     HempContext context
 ) {
@@ -259,8 +256,7 @@ hemp_context_tmp_hash(
     return hemp_hash_init(hash);
 }
 
-
-HEMP_INLINE HempCode
+HempCode
 hemp_context_tmp_code(
     HempContext context
 ) {
@@ -269,8 +265,7 @@ hemp_context_tmp_code(
     return hemp_code_init(code);
 }
 
-
-HEMP_INLINE HempParams
+HempParams
 hemp_context_tmp_params(
     HempContext context
 ) {
@@ -328,4 +323,3 @@ hemp_context_params_pool_cleaner(
     hemp_params_release((HempParams) item);
     return HEMP_TRUE;
 }
-

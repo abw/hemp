@@ -1,3 +1,4 @@
+#include <hemp/core.h>
 #include <hemp/type.h>
 #include <hemp/type/hash.h>
 #include <hemp/context.h>
@@ -49,7 +50,7 @@ hemp_type_init(
     type->pairs     = &hemp_value_not_pairs;
     type->params    = &hemp_value_params;
     type->apply     = &hemp_value_apply;
-    type->text      = &hemp_value_not_text; 
+    type->text      = &hemp_value_not_text;
     type->number    = &hemp_value_not_number;
     type->integer   = &hemp_value_not_integer;
     type->boolean   = &hemp_value_not_boolean;
@@ -63,7 +64,7 @@ hemp_type_init(
 }
 
 
-void 
+void
 hemp_type_isa(
     HempType    type,
     HempType    base
@@ -74,7 +75,7 @@ hemp_type_isa(
 }
 
 
-HempType 
+HempType
 hemp_type_subtype(
     HempType    base,
     HempInt     id,
@@ -86,7 +87,7 @@ hemp_type_subtype(
 }
 
 
-HEMP_INLINE void 
+void
 hemp_type_wipe(
     HempType type
 ) {
@@ -95,7 +96,7 @@ hemp_type_wipe(
     hemp_hash_free(type->methods);
 }
 
-void 
+void
 hemp_type_free(
     HempType type
 ) {
@@ -137,7 +138,7 @@ hemp_global_types_init(
     HempTypeObject   = hemp_type_object  ( HEMP_OBJECT_ID,   HEMP_STR_OBJECT   );
     HempTypeIdentity = hemp_type_identity( HEMP_IDENTITY_ID, HEMP_STR_IDENTITY );
 
-    /* HempTypeElement is something of a special case.  It is a subclass of 
+    /* HempTypeElement is something of a special case.  It is a subclass of
      * HempTypeObject and uses the same object->type mechanism to resolve the
      * type from an object pointer.  It doesn't need an entry in the global
      * types table (further below).
@@ -168,7 +169,7 @@ hemp_global_types_init(
         hemp_global_types[n] = HempTypeUnused;
     }
 
-    /* Add the builtin types to the type table - we don't add HempValue 
+    /* Add the builtin types to the type table - we don't add HempValue
      * because it's the uber base type and not directly instantiable.  Nor
      * do we add HempTypeElement because it's essentially a "subclass" of
      * HempTypeObject (for a somewhat loose definition of "subclass").
@@ -237,7 +238,7 @@ hemp_use_type(
 ) {
     HempInt  n;
     HempInt  empty = 0;
-    
+
     for (n = HEMP_TYPES_RESERVED + 1; n < HEMP_TYPES_SIZE; n++) {
         /* look for non-empty slot matching name */
         if (hemp_global_types[n] == HempTypeUnused) {
@@ -284,7 +285,7 @@ HEMP_TYPE(hemp_type_type) {
 HEMP_OUTPUT(hemp_method_type_text) {
     HempType type = (HempType) hemp_val_ptr(value);
     HempText text;
-    
+
 //    hemp_prepare_text_size(context, output, text, strlen(type->name));
 
     if (hemp_is_undef(output)) {
@@ -367,8 +368,8 @@ HEMP_VALUE(hemp_method_value_each) {
      * are used in "traditional" programming language (e.g. a single caller
      * stack onto which frames/arguments are pushed.  On the other hand, I
      * would think nothing of creating a hash/list on the fly in Perl, say,
-     * to capture the arguments passed to a subroutine/method, so why should 
-     * I be so cautious in C?  In the end, this works today and can be made 
+     * to capture the arguments passed to a subroutine/method, so why should
+     * I be so cautious in C?  In the end, this works today and can be made
      * better tomorrow.
      */
     HempFrame frame = hemp_context_enter(context, NULL);

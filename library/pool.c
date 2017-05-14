@@ -1,6 +1,6 @@
-/* A pool performs block memory allocation for multiple records of a fixed 
- * size.  It stores the head of a linked list of memory slabs and bits of 
- * housekeeping data including the records size, number of records currently 
+/* A pool performs block memory allocation for multiple records of a fixed
+ * size.  It stores the head of a linked list of memory slabs and bits of
+ * housekeeping data including the records size, number of records currently
  * in use and the record capacity for which memory has been pre-allocated.
  */
 
@@ -9,8 +9,8 @@
 
 HempPool
 hemp_pool_init(
-    HempPool        pool, 
-    HempSize        size, 
+    HempPool        pool,
+    HempSize        size,
     HempSize        capacity,
     hemp_pool_iter  cleaner
 ) {
@@ -25,20 +25,20 @@ hemp_pool_init(
 
 /*
     hemp_debug_mem(
-        "Allocated pool buffer of %d x %d = %d bytes\n", 
+        "Allocated pool buffer of %d x %d = %d bytes\n",
         size, capacity, size * capacity
     );
     hemp_debug_mem(
-        "pool slab data is from %p to %p\n", 
+        "pool slab data is from %p to %p\n",
         pool->next, pool->next + size * capacity
     );
 */
-    
+
     return pool;
 }
 
 
-HEMP_INLINE HempMemory
+HempMemory
 hemp_pool_take(
     HempPool pool
 ) {
@@ -58,37 +58,37 @@ hemp_pool_take(
 }
 
 
-HEMP_INLINE void
+void
 hemp_pool_give(
     HempPool   pool,
     HempMemory item
 ) {
     hemp_debug_mem("giving %p to pool at %p with slab at %p\n", item, pool, pool->slab);
 
-    /* This hasn't been tested yet... I implemented it and then realised 
-     * that it wasn't going to be suitable for the use I had in mind, so 
-     * it lies semi-abandonded.  The difficulty in restored returning items 
-     * across slab boundaries and/or out of order makes me thing we would 
+    /* This hasn't been tested yet... I implemented it and then realised
+     * that it wasn't going to be suitable for the use I had in mind, so
+     * it lies semi-abandonded.  The difficulty in restored returning items
+     * across slab boundaries and/or out of order makes me thing we would
      * be better off with a different data structure.  So it's on the back
      * burner for now.
      */
 
     if (pool->next == item + pool->size) {
         /* The simple case where the item returned is the last one taken,
-         * immediately preceding the next item in memory.  We call any 
+         * immediately preceding the next item in memory.  We call any
          * cleanup function and then update the next/used values
          */
         hemp_debug_msg("item returned to pool is the last item taken\n");
 
         if (pool->cleaner)
             pool->cleaner(item);
-        
+
         pool->used--;
         pool->next = item;
     }
     else {
         /* Otherwise we'll barf for now... I don't have a pressing need (yet)
-         * to use this for anything other than a strict last-out, first-in 
+         * to use this for anything other than a strict last-out, first-in
          * stack for scanning nested tags, which the above case handles.
          */
         hemp_fatal("Unable to return item to pool (that functionality is TODO)\n");
@@ -96,11 +96,11 @@ hemp_pool_give(
 }
 
 
-HEMP_INLINE void 
+void
 hemp_pool_grow(
     HempPool pool
 ) {
-    /* 
+    /*
     ** create a new slab as large as our current capacity (so the pool size
     ** doubles on each growth) and insert it at the head of the slab list
     */
@@ -138,7 +138,7 @@ hemp_pool_each(
     HempSlab   slab = pool->slab;
     HempMemory item;
     HempSize   size;
-    
+
     while (slab) {
         item = slab->data;
         size = slab->size / pool->size;

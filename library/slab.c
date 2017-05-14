@@ -1,20 +1,20 @@
 #include "hemp/slab.h"
 
 
-HEMP_INLINE HempSlab
+HempSlab
 hemp_slab_new(
     HempSize   size
 ) {
-    /* 
-    ** Perform a single memory allocation for the requested block size plus 
-    ** the size of the housekeeping record.  Then set the data pointer in the 
+    /*
+    ** Perform a single memory allocation for the requested block size plus
+    ** the size of the housekeeping record.  Then set the data pointer in the
     ** housekeeping record to reference the first byte after the header
     */
-    HempSlab slab = (HempSlab) hemp_mem_alloc( 
-        size + sizeof(struct hemp_slab) 
+    HempSlab slab = (HempSlab) hemp_mem_alloc(
+        size + sizeof(struct hemp_slab)
     );
 
-    if (! slab) 
+    if (! slab)
         hemp_mem_fail("slab");
 
     slab->size  = size;
@@ -25,7 +25,7 @@ hemp_slab_new(
 }
 
 
-HEMP_INLINE void
+void
 hemp_slab_free(
     HempSlab slab
 ) {
@@ -37,4 +37,3 @@ hemp_slab_free(
         slab = next_slab;
     }
 }
-
